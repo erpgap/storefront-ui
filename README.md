@@ -13,7 +13,7 @@ Template base to start new odoo vsf projects using vsf SDK
 
 ```sh
 2. yarn install
-3. copy apps/web/.env_example to apps/web/.env
+3. copy apps/web/.env.example to apps/web/.env
 4. yarn dev
 5. You can access with http://localhost:3000
 ```
