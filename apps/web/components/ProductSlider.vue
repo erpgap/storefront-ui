@@ -6,108 +6,12 @@ defineProps({
   text: String,
 });
 
-const products = ref([
-  {
-    id: 1,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-  {
-    id: 2,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-  {
-    id: 3,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-  {
-    id: 4,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-  {
-    id: 5,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-  {
-    id: 6,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-  {
-    id: 7,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-  {
-    id: 8,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-  {
-    id: 9,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-  {
-    id: 10,
-    name: 'Athletic mens walking sneakers',
-    image: '/images/product.webp',
-    slug: '/images/product.webp',
-    imageAlt: 'imageAlt',
-    rating: 4,
-    ratingCount: 26,
-    price: 89.95,
-  },
-]);
+const { loadProductTemplateList, loading, productTemplateList } = useProductTemplate('');
+const { getRegularPrice, getSpecialPrice } = useProductAttributes();
+
+
+const numOfProducts = 10;
+await loadProductTemplateList({pageSize: numOfProducts});
 </script>
 
 <template>
@@ -124,18 +28,19 @@ const products = ref([
     buttons-placement="floating"
     class="items-center pb-4"
     data-testid="product-slider"
+    v-if="productTemplateList.length > 0"
   >
-    <UiProductCard
-      v-for="product in products"
+    <LazyUiProductCard
+      v-for="productTemplate in productTemplateList"
       class="min-w-[190px]"
-      :key="product.id"
-      :slug="product.slug"
-      :name="product.name"
-      :image-url="product.image"
-      :image-alt="product.image"
-      :regular-price="product.price"
-      :rating-count="product.ratingCount"
-      :rating="product.rating"
+      :key="productTemplate.id"
+      :slug="productTemplate?.slug || ''"
+      :name="productTemplate?.name || ''"
+      :image-url="$getImage(String(productTemplate.image), 370, 370, String(productTemplate.imageFilename))"
+      :image-alt="productTemplate?.name || ''"
+      :regular-price="getRegularPrice((productTemplate.firstVariant as Product))"
+      :rating-count="productTemplate.ratingCount"
+      :rating="productTemplate.rating"
     />
   </SfScrollable>
 </template>
