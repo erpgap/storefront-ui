@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SfScrollable } from '@storefront-ui/vue';
+import { Product } from '~/graphql';
 
 defineProps({
   heading: String,
@@ -39,8 +40,11 @@ await loadProductTemplateList({pageSize: numOfProducts});
       :image-url="$getImage(String(productTemplate.image), 370, 370, String(productTemplate.imageFilename))"
       :image-alt="productTemplate?.name || ''"
       :regular-price="getRegularPrice((productTemplate.firstVariant as Product))"
+      :special-price="getSpecialPrice((productTemplate.firstVariant as Product))"
+      :is-in-wishlist="productTemplate?.isInWishlist || false"
       :rating-count="productTemplate.ratingCount"
       :rating="productTemplate.rating"
+      :first-variant="(productTemplate.firstVariant as Product)"
     />
   </SfScrollable>
 </template>
