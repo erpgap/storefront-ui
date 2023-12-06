@@ -18,41 +18,45 @@ import {
 } from '@storefront-ui/vue';
 import { LocationQueryRaw } from 'vue-router';
 import { useToast } from 'vue-toastification';
+import { useProductVariant } from '~/composables/useProductVariant';
 
 const route = useRoute();
 const router = useRouter();
-const { loadProductDetails, loadProductVariant } = useProduct();
+const { loadProduct, product } = useProduct();
+const { loadProductVariant, productVariant } = useProductVariant();
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 const { WishlistAddItem } = useWishlist();
 const { cartAdd } = useCart();
 
-const { product } = await loadProductDetails({
-  slug: `/product/${route.params.slug}`,
-});
+// const { product } = await loadProductDetails({
+//   slug: `/product/${route.params.slug}`,
+// });
 
-const params = {
-  combinationId: product.attributeValues.map((item: { id: number }) => item.id),
-  productTemplateId: product.combinationInfo.product_template_id,
-};
-// await loadProductVariant(params);
+// const params = computed(() => {
+//   console.log(product?.value.attributeValues);
+//   return {
+//     combinationId: product?.value.attributeValues?.map((item: { id: number }) => item.id),
+//     productTemplateId: product?.value.combinationInfo?.product_template_id,
+//   };
+// });
 
 const breadcrumbs = computed(() => {
   return [
     { name: 'Home', link: '/' },
     { name: 'product' },
-    { name: product?.name, link: `product/${product?.name}` },
+    { name: product?.value.name, link: `product/${product?.value.name}` },
   ];
 });
 const toast = useToast();
 
-const withBase = (filepath: string) =>
+const withBase = (filepath: string | null) =>
   `https://vsfdemo15.labs.odoogap.com${filepath}`;
 const images = computed(() => {
   return [
     {
-      imageSrc: withBase(product?.image),
-      imageThumbSrc: withBase(product?.image),
-      alt: product?.name,
+      imageSrc: withBase(product?.value.image),
+      imageThumbSrc: withBase(product?.value.image),
+      alt: product?.value.name,
     },
   ];
 });
@@ -64,10 +68,10 @@ const productDetailsOpen = ref(true);
 const quantitySelectorValue = ref(1);
 
 const getAllSizes = computed(() => {
-  const sizes = product?.attributeValues?.filter((item: any) => {
+  const sizes = product?.value.attributeValues?.filter((item: any) => {
     return item.attribute.name === 'Size';
   });
-  return sizes.map((item: any) => {
+  return sizes?.map((item: any) => {
     return {
       value: item.id,
       label: item.name,
@@ -75,10 +79,10 @@ const getAllSizes = computed(() => {
   });
 });
 const getAllColors = computed(() => {
-  const colors = product?.attributeValues?.filter((item: any) => {
+  const colors = product?.value.attributeValues?.filter((item: any) => {
     return item.attribute.name === 'Color';
   });
-  return colors.map((item: any) => {
+  return colors?.map((item: any) => {
     return {
       value: item.id,
       label: item.name,
@@ -86,10 +90,10 @@ const getAllColors = computed(() => {
   });
 });
 const getAllMaterials = computed(() => {
-  const materials = product?.attributeValues?.filter((item: any) => {
+  const materials = product?.value.attributeValues?.filter((item: any) => {
     return item.attribute.name === 'Material';
   });
-  return materials.map((item: any) => {
+  return materials?.map((item: any) => {
     return {
       value: item.id,
       label: item.name,
@@ -105,7 +109,7 @@ const updateFilter = (filter: LocationQueryRaw | undefined) => {
 
 const addToCart = async () => {
   const response = await cartAdd(
-    product.firstVariant.id,
+    product?.value.id,
     quantitySelectorValue.value
   );
 };
@@ -118,6 +122,9 @@ const addToWishlist = async (firstVariant: any) => {
     toast.warning('Product has already been added to wishlist');
   }
 };
+
+await loadProduct({ slug: `/product/${route.params.slug}`});
+// await loadProductVariant(params.value);
 </script>
 
 <template>
