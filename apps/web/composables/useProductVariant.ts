@@ -9,7 +9,6 @@ export const useProductVariant = (combinationId?: number, productTemplateId?: nu
   const productVariant = useState<ProductVariant>(`product-${combinationId}-${productTemplateId}`, () => ({} as Product));
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
-    console.log(params);
     loading.value = true;
     const { data } = await $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>({queryName: QueryName.ProductVariantQuery}, params);
     loading.value = false;
