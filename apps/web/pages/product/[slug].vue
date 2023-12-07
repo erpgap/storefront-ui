@@ -21,41 +21,19 @@ import { useToast } from 'vue-toastification';
 
 const route = useRoute();
 const router = useRouter();
-const { loadProductDetails, loadProductVariant } = useProduct();
-const { getRegularPrice, getSpecialPrice } = useProductAttributes();
+const { loadProduct, product, breadcrumbs, images, getAllSizes, getAllColors, getAllMaterials, specialPrice, regularPrice } = useProduct();
+const { loadProductVariant, productVariant } = useProductVariant();
 const { WishlistAddItem } = useWishlist();
 const { cartAdd } = useCart();
 
-const { product } = await loadProductDetails({
-  slug: `/product/${route.params.slug}`,
-});
+// const params = computed(() => {
+//   return {
+//     combinationId: product?.value.attributeValues?.map((item: { id: number }) => item.id),
+//     productTemplateId: product?.value.combinationInfo?.product_template_id,
+//   };
+// });
 
-const params = {
-  combinationId: product.attributeValues.map((item: { id: number }) => item.id),
-  productTemplateId: product.combinationInfo.product_template_id,
-};
-// await loadProductVariant(params);
-
-const breadcrumbs = computed(() => {
-  return [
-    { name: 'Home', link: '/' },
-    { name: 'product' },
-    { name: product?.name, link: `product/${product?.name}` },
-  ];
-});
 const toast = useToast();
-
-const withBase = (filepath: string) =>
-  `https://vsfdemo15.labs.odoogap.com${filepath}`;
-const images = computed(() => {
-  return [
-    {
-      imageSrc: withBase(product?.image),
-      imageThumbSrc: withBase(product?.image),
-      alt: product?.name,
-    },
-  ];
-});
 
 const selectedSize = computed(() => route.query.Size);
 const selectedColor = computed(() => route.query.Color);
@@ -63,39 +41,6 @@ const selectedMaterial = computed(() => route.query.Material);
 const productDetailsOpen = ref(true);
 const quantitySelectorValue = ref(1);
 
-const getAllSizes = computed(() => {
-  const sizes = product?.attributeValues?.filter((item: any) => {
-    return item.attribute.name === 'Size';
-  });
-  return sizes.map((item: any) => {
-    return {
-      value: item.id,
-      label: item.name,
-    };
-  });
-});
-const getAllColors = computed(() => {
-  const colors = product?.attributeValues?.filter((item: any) => {
-    return item.attribute.name === 'Color';
-  });
-  return colors.map((item: any) => {
-    return {
-      value: item.id,
-      label: item.name,
-    };
-  });
-});
-const getAllMaterials = computed(() => {
-  const materials = product?.attributeValues?.filter((item: any) => {
-    return item.attribute.name === 'Material';
-  });
-  return materials.map((item: any) => {
-    return {
-      value: item.id,
-      label: item.name,
-    };
-  });
-});
 const updateFilter = (filter: LocationQueryRaw | undefined) => {
   router.push({
     path: route.path,
@@ -105,7 +50,7 @@ const updateFilter = (filter: LocationQueryRaw | undefined) => {
 
 const addToCart = async () => {
   const response = await cartAdd(
-    product.firstVariant.id,
+    product?.value.id,
     quantitySelectorValue.value
   );
 };
@@ -118,6 +63,9 @@ const addToWishlist = async (firstVariant: any) => {
     toast.warning('Product has already been added to wishlist');
   }
 };
+
+await loadProduct({ slug: `/product/${route.params.slug}`});
+// await loadProductVariant(params.value);
 </script>
 
 <template>
@@ -141,23 +89,23 @@ const addToWishlist = async (firstVariant: any) => {
           class="mb-1 font-bold typography-headline-4"
           data-testid="product-name"
         >
-          {{ product.name }}
+          {{ product?.name }}
         </h1>
         <div
           class="my-1"
           v-if="
-            product.firstVariant &&
-            product.firstVariant.combinationInfoVariant.has_discounted_price
+            product?.firstVariant &&
+            product?.firstVariant.combinationInfoVariant.has_discounted_price
           "
         >
           <span
             class="mr-2 text-secondary-700 font-bold font-headings text-2xl"
             data-testid="price"
           >
-            ${{ getSpecialPrice(product.firstVariant) }}
+            ${{ specialPrice }}
           </span>
           <span class="text-base font-normal text-neutral-500 line-through">
-            ${{ getRegularPrice(product.firstVariant) }}
+            ${{ regularPrice }}
           </span>
         </div>
         <div v-else class="my-1">
@@ -165,7 +113,7 @@ const addToWishlist = async (firstVariant: any) => {
             class="mr-2 text-secondary-700 font-bold font-headings text-2xl"
             data-testid="price"
           >
-            ${{ getRegularPrice(product.firstVariant) }}
+            ${{ regularPrice }}
           </span>
         </div>
         <div class="inline-flex items-center mt-4 mb-2">
@@ -183,7 +131,7 @@ const addToWishlist = async (firstVariant: any) => {
           class="mb-4 font-normal typography-text-sm"
           data-testid="product-description"
         >
-          {{ product.description }}
+          {{ product?.description }}
         </p>
         <div class="py-4 mb-4 border-gray-200 border-y">
           <div
@@ -220,8 +168,8 @@ const addToWishlist = async (firstVariant: any) => {
               type="button"
               size="sm"
               variant="tertiary"
-              :class="product.isInWishlist ? 'bg-primary-100' : 'bg-white'"
-              @click="addToWishlist(product.firstVariant)"
+              :class="product?.isInWishlist ? 'bg-primary-100' : 'bg-white'"
+              @click="addToWishlist(product?.firstVariant)"
             >
               <SfIconFavorite size="sm" />
               Add to wishlist
@@ -376,7 +324,7 @@ const addToWishlist = async (firstVariant: any) => {
             </h2>
           </template>
           <p>
-            {{ product.description }}
+            {{ product?.description }}
           </p>
         </UiAccordionItem>
         <UiDivider class="my-4" />

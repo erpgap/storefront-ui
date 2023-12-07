@@ -31,3 +31,22 @@ export type ProductTemplateListResponse = _AsyncData<
   },
   H3Error
 >;
+
+export type ProductResponse = _AsyncData<
+  {
+    product: Product
+  },
+  H3Error
+>;
+
+export type ProductVariantResponse = _AsyncData<
+  {
+    product: Product;
+    productTemplateId: string;
+    displayName: string;
+    price: number;
+    listPrice: string;
+    hasDiscountedPrice: boolean;
+  },
+  H3Error
+>;

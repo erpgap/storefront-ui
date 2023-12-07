@@ -4,7 +4,7 @@ import StockLotsQuery from './StockLotsQuery';
 import GetCategories from './GetCategories';
 import GetCategory from './GetCategory';
 import GetProductTemplateList from './GetProductTemplateList';
-import { DocumentNode } from '@apollo/client';
+import GetProduct from './GetProduct';
 
 enum QueryName {
   ProductVariantQuery = 'ProductVariantQuery',
@@ -13,6 +13,7 @@ enum QueryName {
   GetCategories = 'GetCategories',
   GetCategory = 'GetCategory',
   GetProductTemplateList = 'GetProductTemplateList',
+  GetProduct = 'GetProduct'
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
@@ -21,7 +22,8 @@ const Queries: Record<QueryName, DocumentNode> = {
   StockLotsQuery,
   GetCategories,
   GetCategory,
-  GetProductTemplateList
+  GetProductTemplateList,
+  GetProduct
 };
 
 export { Queries, QueryName };
