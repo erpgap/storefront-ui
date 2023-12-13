@@ -12,7 +12,7 @@ export const useProduct = (slug?: string) => {
   const product = useState<Product>(`product-${slug}`, () => ({} as Product));
 
   const breadcrumbs = computed(() => {
-    if (product?.value.categories) {
+    if (product?.value?.categories) {
       const category = product?.value?.categories[0];
       return [
         { name: 'Home', link: '/' },
@@ -76,26 +76,34 @@ export const useProduct = (slug?: string) => {
   });
 
   const specialPrice = computed(() => {
-    return getSpecialPrice(product?.value?.firstVariant);
+    if (!product.value.firstVariant) {
+      return;
+    }
+    return getSpecialPrice(product?.value.firstVariant);
   });
 
   const regularPrice = computed(() => {
-    return getRegularPrice(product?.value?.firstVariant);
+    if (!product.value.firstVariant) {
+      return;
+    }
+    return getRegularPrice(product?.value.firstVariant);
   });
 
-  const fetchProduct = async(params: QueryProductArgs) : Promise<Product> => {
+  const loadProduct = async(params: QueryProductArgs) => {
     loading.value = true;
     try {
-      const { data, error } = await $sdk().odoo.query<QueryProductArgs, ProductResponse>(
-        {queryName: QueryName.GetProduct}, params);
+      const {data} = await useAsyncData(`product-${slug}`, async () => {
+        const {data} = await $sdk().odoo.query<QueryProductArgs, ProductResponse>(
+          {queryName: QueryName.GetProduct}, params);
+        return data.value;
+      });
 
-      return data.value.product;
+      if (data?.value?.product)
+        product.value = data?.value?.product;
     } finally {
       loading.value = false;
     }
   };
-
-  const loadProduct = async (params: QueryProductArgs) => product.value = await fetchProduct(params);
 
   return {
     loading,
@@ -107,6 +115,6 @@ export const useProduct = (slug?: string) => {
     getAllColors,
     getAllMaterials,
     regularPrice,
-    specialPrice,
+    specialPrice
   };
 };

@@ -21,10 +21,12 @@ import { useToast } from 'vue-toastification';
 
 const route = useRoute();
 const router = useRouter();
-const { loadProduct, product, breadcrumbs, images, getAllSizes, getAllColors, getAllMaterials, specialPrice, regularPrice } = useProduct();
+const { loadProduct, product, breadcrumbs, images, getAllSizes, getAllColors, getAllMaterials, regularPrice, specialPrice} = useProduct();
 const { loadProductVariant, productVariant } = useProductVariant();
+const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 const { WishlistAddItem } = useWishlist();
 const { cartAdd } = useCart();
+const cart = ref([]);
 
 // const params = computed(() => {
 //   return {
@@ -48,7 +50,14 @@ const updateFilter = (filter: LocationQueryRaw | undefined) => {
   });
 };
 
+const productsInCart = computed(() => {
+  return cart.value.length;
+});
+
 const addToCart = async () => {
+  if (product?.value) {
+    cart.value.push(product.value.id);
+  }
   const response = await cartAdd(
     product?.value.id,
     quantitySelectorValue.value
@@ -135,10 +144,11 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
         </p>
         <div class="py-4 mb-4 border-gray-200 border-y">
           <div
+            v-show="productsInCart"
             class="w-full mb-4 bg-primary-200 p-2 rounded-md text-center text-primary-700"
           >
             <SfIconShoppingCartCheckout />
-            1 product in cart
+            {{ productsInCart }} products in cart
           </div>
           <div class="flex flex-col md:flex-row flex-wrap gap-4">
             <UiQuantitySelector
