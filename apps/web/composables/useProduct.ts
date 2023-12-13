@@ -12,9 +12,18 @@ export const useProduct = (slug?: string) => {
   const product = useState<Product>(`product-${slug}`, () => ({} as Product));
 
   const breadcrumbs = computed(() => {
+    if (product?.value.categories) {
+      const category = product?.value?.categories[0];
+      return [
+        { name: 'Home', link: '/' },
+        { name: category.name, link: `/category/${category.id}` },
+        { name: product?.value?.name, link: `product/${product?.value?.name}` },
+      ];
+    }
+
     return [
       { name: 'Home', link: '/' },
-      { name: 'product' },
+      { name: 'Product'},
       { name: product?.value?.name, link: `product/${product?.value?.name}` },
     ];
   });
