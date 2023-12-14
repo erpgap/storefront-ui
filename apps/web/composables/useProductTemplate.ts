@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { AttributeValue, Category, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql';
 import { QueryName } from '~/server/queries';
-import { uniqBy } from 'lodash';
+import pkg from 'lodash';
 export const useProductTemplate = (categoryId: string) => {
   const { $sdk } = useNuxtApp();
 
@@ -13,13 +13,22 @@ export const useProductTemplate = (categoryId: string) => {
 
   const loadProductTemplateList = async (params: QueryProductsArgs) => {
     loading.value = true;
-    const { data } = await $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>({queryName: QueryName.GetProductTemplateList }, params);
-    loading.value = false;
+    const {uniqBy} = pkg;
+    try {
+      const {data} = await useAsyncData(`product-template-list-${categoryId}`, async () => {
+        const { data } = await $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>({queryName: QueryName.GetProductTemplateList }, params);
+        return data.value;
+      });
 
-    productTemplateList.value = data.value?.products?.products || [];
-    attributes.value = data.value.products?.attributeValues || [];
-    totalItems.value = data.value?.products?.totalCount || 0;
-    categories.value = uniqBy(data.value.products?.products?.map(product => product?.categories || []).flat(), 'id');
+      if (data?.value?.products) {
+        productTemplateList.value = data.value?.products?.products || [];
+        attributes.value = data.value.products?.attributeValues || [];
+        totalItems.value = data.value?.products?.totalCount || 0;
+        categories.value = uniqBy(data.value.products?.products?.map(product => product?.categories || []).flat(), 'id');
+      }
+    } finally {
+      loading.value = false;
+    }
   };
 
   const organizedAttributes = computed(() => {

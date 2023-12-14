@@ -28,6 +28,8 @@ const route: any = useRoute();
 const router: any = useRouter();
 const { changeFilters, facetsFromUrlToFilter } = useUiHelpers();
 
+const sort = ref(route.query?.sort ? route.query?.sort : '');
+
 const parent = computed(() => {
   return {
     label: props.categories?.label?.toLowerCase(),
@@ -38,11 +40,11 @@ const getSortOptions = (searchData: { input: any }) => ({
   options: sortOptions,
   selected: searchData.input.sort || 'name asc',
 });
-const changeSorting = async (sort: string) => {
-  router.push({ query: { ...route.query, sort } });
+const changeSorting = async (newSort: string) => {
+  sort.value = newSort;
 };
 const sortBy = computed(() =>
-  getSortOptions({ input: { sort: route.query?.sort } })
+  getSortOptions({ input: { sort: sort.value } })
 );
 const selectedFilters = ref<any>([]);
 const isFilterSelected = (option: any) => {
@@ -120,7 +122,7 @@ const applyFilters = () => {
   const filters = selectedFilters.value.filter((item: any) => {
     return typeof item === 'object';
   });
-  changeFilters(filters);
+  changeFilters(filters, sort.value);
   emit('close');
   facetsFromUrlToFilter();
 };
