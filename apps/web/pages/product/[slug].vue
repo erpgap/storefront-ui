@@ -78,7 +78,7 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
 </script>
 
 <template>
-  <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-10" />
+  <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-10 cursor-pointer" />
   <div class="md:grid grid-areas-product-page grid-cols-product-page gap-x-6">
     <section class="grid-in-left-top md:h-full xl:max-h-[700px]">
       <LazyUiGallery :images="images" />
