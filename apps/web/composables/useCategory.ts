@@ -10,15 +10,37 @@ export const useCategory = (categorySlug?: string) => {
   const category = useState<Category>(`category-${categorySlug}`, () => ({} as Category));
 
   const loadCategory = async (params: QueryCategoryArgs) => {
-    const { data } = await $sdk().odoo.query<QueryCategoryArgs, CategoryResponse >({queryName: QueryName.GetCategory}, params);
+    loading.value = true;
+    try {
+      const {data} = await useAsyncData(`category-list-${categorySlug}`, async () => {
+        const { data } = await $sdk().odoo.query<QueryCategoryArgs, CategoryResponse >({queryName: QueryName.GetCategory}, params);
+        return data.value;
+      });
 
-    category.value = data.value.category;
+      if (data?.value?.category) {
+        category.value = data.value.category;
+      }
+    } finally {
+      loading.value = false;
+    }
+
   };
 
   const loadCategoryList = async (params: QueryCategoriesArgs) => {
-    const { data, error } = await $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse >({queryName: QueryName.GetCategories}, params);
+    loading.value = true;
+    try {
+      const {data} = await useAsyncData(`category-list-${categorySlug}`, async () => {
+        const { data, error } = await $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse >({queryName: QueryName.GetCategories}, params);
+        return data.value;
+      });
 
-    categories.value = data.value.categories?.categories;
+      if (data?.value?.categories) {
+        categories.value = data.value.categories?.categories;
+      }
+    } finally {
+      loading.value = false;
+    }
+
   };
 
   const buildTree = (categories: any) => {
