@@ -11,7 +11,7 @@
     "build": "cd apps/web && yarn build",
     "build:analyze": "turbo run build:analyze",
     "dev": "turbo run dev",
-    "start": "turbo run start",
+    "start": "node apps/web/.output/server/index.mjs",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{ts,vue,css,scss,md}\"",
