@@ -85,7 +85,7 @@ export const useUiHelpers = () => {
     return formattedFilters;
   };
 
-  const changeFilters = (filters: any[]) => {
+  const changeFilters = (filters: any[], sort: string) => {
     const formattedFilters: any = {};
     filters.forEach((element) => {
       if (element.filterName === 'Size') {
@@ -115,8 +115,8 @@ export const useUiHelpers = () => {
       }
     }
 
-    if (query.sort) {
-      allQuery.sort = query.sort;
+    if (sort) {
+      allQuery.sort = sort;
     }
 
     delete allQuery.page;
