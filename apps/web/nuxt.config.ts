@@ -33,7 +33,8 @@ export default defineNuxtConfig({
         defaultLocale: 'en',
       },
     ],
-    '@storyblok/nuxt'
+    '@storyblok/nuxt',
+    'nuxt-lodash'
   ],
   storyblok: {
     accessToken: process.env.NUXT_STORYBLOK_TOKEN,
