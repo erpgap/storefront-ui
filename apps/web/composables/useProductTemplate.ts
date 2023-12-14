@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { AttributeValue, Category, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql';
 import { QueryName } from '~/server/queries';
-import { uniqBy } from 'lodash';
+import pkg from 'lodash';
 export const useProductTemplate = (categoryId: string) => {
   const { $sdk } = useNuxtApp();
 
@@ -13,6 +13,7 @@ export const useProductTemplate = (categoryId: string) => {
 
   const loadProductTemplateList = async (params: QueryProductsArgs) => {
     loading.value = true;
+    const {uniqBy} = pkg;
     try {
       const {data} = await useAsyncData(`product-template-list-${categoryId}`, async () => {
         const { data } = await $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>({queryName: QueryName.GetProductTemplateList }, params);

@@ -2,7 +2,6 @@
 import { AttributeValue, Category, Product, ProductResponse, ProductTemplateListResponse, ProductVariant, ProductVariantData, QueryProductArgs, QueryProductVariantArgs, QueryProductsArgs } from '~/graphql';
 import { QueryName } from '~/server/queries';
 import { useProductAttributes } from './useProductAttributes';
-import { uniqBy } from 'lodash';
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 export const useProduct = (slug?: string) => {
