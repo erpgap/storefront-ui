@@ -1,0 +1,13 @@
+name: Build VSF
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deployment:
+    runs-on: self-hosted
+    steps:
+    - run: |
+        echo "-------- Deploying https://vsfsdk.labs.odoogap.com "
+        /home/ubuntu/.deploy-vsf-1
