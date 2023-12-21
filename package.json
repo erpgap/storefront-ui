@@ -51,6 +51,7 @@
     "husky": "^7.0.4",
     "is-ci": "^1.0.0",
     "lint-staged": "^13.2.1",
+    "nuxt-lodash": "^2.5.3",
     "postcss": "^8.4.31",
     "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
