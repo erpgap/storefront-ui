@@ -5,6 +5,7 @@ import GetCategories from './GetCategories';
 import GetCategory from './GetCategory';
 import GetProductTemplateList from './GetProductTemplateList';
 import GetProduct from './GetProduct';
+import GetWishlist from './GetWishlist';
 
 enum QueryName {
   ProductVariantQuery = 'ProductVariantQuery',
@@ -13,7 +14,8 @@ enum QueryName {
   GetCategories = 'GetCategories',
   GetCategory = 'GetCategory',
   GetProductTemplateList = 'GetProductTemplateList',
-  GetProduct = 'GetProduct'
+  GetProduct = 'GetProduct',
+  GetWishlist = 'GetWishlist'
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
@@ -23,7 +25,8 @@ const Queries: Record<QueryName, DocumentNode> = {
   GetCategories,
   GetCategory,
   GetProductTemplateList,
-  GetProduct
+  GetProduct,
+  GetWishlist
 };
 
 export { Queries, QueryName };

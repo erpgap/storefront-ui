@@ -50,3 +50,11 @@ export type ProductVariantResponse = _AsyncData<
   },
   H3Error
 >;
+
+export type WishlistResponse = _AsyncData<
+  {
+    totalCount: number;
+    product: Product;
+  },
+  H3Error
+>;
