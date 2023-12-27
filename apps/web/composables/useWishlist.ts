@@ -1,15 +1,23 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { WishlistItems, WishlistResponse } from '~/graphql';
+import { QueryName } from '~/server/queries';
 
 export const useWishlist = () => {
+  const { $sdk } = useNuxtApp();
   const loading = ref(false);
 
   const currentWishlist = ref<any>({});
 
   const loadWishlist = async () => {
+    loading.value = true;
     try {
-      loading.value = true;
-      const { data }: any = await sdk.odoo.wishlistLoad();
-      currentWishlist.value = data.wishlistItems;
-      return data.wishlistItems;
+      const {data} = await useAsyncData('wishlist', async () => {
+        const { data } = await $sdk().odoo.query<any, WishlistResponse>({queryName: QueryName.GetWishlist });
+        return data.value;
+      });
+
+      if (data?.value)
+        currentWishlist.value = data?.value;
     } catch (err) {
       console.log(err);
     } finally {
@@ -38,7 +46,7 @@ export const useWishlist = () => {
       const removeItemParams: any = {
         wishId: id,
       };
-      const { data }: any = await sdk.odoo.wishlistRemove(removeItemParams, {
+      const { data }: any = await $sdk.odoo.wishlistRemove(removeItemParams, {
         wishlistRemove: 'customQuery',
       });
       return data.wishlistRemoveItem;
