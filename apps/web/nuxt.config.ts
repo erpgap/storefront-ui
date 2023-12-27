@@ -72,5 +72,8 @@ export default defineNuxtConfig({
     public: {
       odooBaseUrl: ''
     }
+  },
+  nitro: {
+    compressPublicAssets: true
   }
 });
