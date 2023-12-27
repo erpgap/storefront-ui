@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html {
-    font-family: 'Red Hat Display', sans-serif;
-    font-family: 'Red Hat Text', sans-serif;
-  }
-}
 
 @layer components {
   .narrow-container {

@@ -2,17 +2,8 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      title: 'Vue Storefront',
-      link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700&display=swap',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@300;400;500;700&display=swap',
-        },
-      ],
+      viewport: 'minimum-scale=1, initial-scale=1, width=device-width',
+      title: 'Vue Storefront'
     },
   },
   delayHydration: {
@@ -22,6 +13,15 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
     'nuxt-delay-hydration',
+    [
+      '@nuxtjs/google-fonts',
+      {
+        families: {
+          'Red Hat Display': [400, 500, 700],
+          'Red Hat Text': [300, 400, 500, 700],
+        },
+      },
+    ],
     '@nuxtjs/fontaine',
     [
       '@nuxtjs/i18n',
@@ -77,9 +77,12 @@ export default defineNuxtConfig({
       odooBaseUrl: ''
     }
   },
-  $production: {
-    nitro: {
-      compressPublicAssets: true
-    }
+  routeRules: {
+    '/_ipx/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    '/icons/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    '/favicon.ico': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+  },
+  nitro: {
+    compressPublicAssets: true,
   }
 });

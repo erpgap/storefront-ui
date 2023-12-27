@@ -12,6 +12,7 @@
           class="h-auto w-full object-cover object-left"
           width="764"
           height="600"
+          sizes="100vw sm:50vw md:764px"
           fetchpriority="high"
           format="webp"
           preload
