@@ -15,9 +15,13 @@ export default defineNuxtConfig({
       ],
     },
   },
+  delayHydration: {
+    mode: 'init'
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
+    'nuxt-delay-hydration',
     '@nuxtjs/fontaine',
     [
       '@nuxtjs/i18n',
@@ -34,7 +38,7 @@ export default defineNuxtConfig({
       },
     ],
     '@storyblok/nuxt',
-    'nuxt-lodash'
+    // 'nuxt-lodash'
   ],
   storyblok: {
     accessToken: process.env.NUXT_STORYBLOK_TOKEN,
@@ -73,7 +77,9 @@ export default defineNuxtConfig({
       odooBaseUrl: ''
     }
   },
-  nitro: {
-    compressPublicAssets: true
+  $production: {
+    nitro: {
+      compressPublicAssets: true
+    }
   }
 });
