@@ -6,6 +6,8 @@ import GetCategory from './GetCategory';
 import GetProductTemplateList from './GetProductTemplateList';
 import GetProduct from './GetProduct';
 import GetWishlist from './GetWishlist';
+import LoadCart from './LoadCart';
+import { DocumentNode } from 'graphql/language';
 
 enum QueryName {
   ProductVariantQuery = 'ProductVariantQuery',
@@ -15,7 +17,8 @@ enum QueryName {
   GetCategory = 'GetCategory',
   GetProductTemplateList = 'GetProductTemplateList',
   GetProduct = 'GetProduct',
-  GetWishlist = 'GetWishlist'
+  GetWishlist = 'GetWishlist',
+  LoadCart = 'LoadCart'
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
@@ -26,7 +29,8 @@ const Queries: Record<QueryName, DocumentNode> = {
   GetCategory,
   GetProductTemplateList,
   GetProduct,
-  GetWishlist
+  GetWishlist,
+  LoadCart
 };
 
 export { Queries, QueryName };

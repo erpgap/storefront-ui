@@ -85,5 +85,10 @@ export default defineNuxtConfig({
   },
   nitro: {
     compressPublicAssets: true,
-  }
+  },
+  vite: {
+    optimizeDeps: {
+      include: ['lodash-es'],
+    },
+  },
 });

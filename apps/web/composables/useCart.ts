@@ -1,16 +1,18 @@
+import { Cart, CartResponse } from '~/graphql';
+import { QueryName } from '~/server/queries';
 
 export const useCart = () => {
+  const { $sdk } = useNuxtApp();
+  const cart = useState<Cart>('cart', () => ({} as Cart));
+
   const loading = ref(false);
 
   const loadCart = async () => {
+    loading.value = true;
+
     try {
-      loading.value = true;
-      const { data } = await sdk.odoo.cartLoad();
-      return {
-        data
-      };
-    } catch (err) {
-      console.log(err);
+      const { data } = await $sdk().odoo.query<null, CartResponse >({queryName: QueryName.LoadCart});
+      cart.value = data.value;
     } finally {
       loading.value = false;
     }
@@ -19,7 +21,7 @@ export const useCart = () => {
   const cartAdd = async (productId: number, quantity: number) => {
     try {
 
-      const { data } = await sdk.odoo.cartAdd(
+      const { data } = await $sdk().odoo.cartAdd(
         { productId, quantity },
         { cartAdd: '123' }
       );
