@@ -39,6 +39,7 @@ onClickOutside(menuRef, () => {
 const filteredCategories = computed(() =>
   categories?.value?.filter((category: any) => category.name === 'WOMEN' || category.name === 'MEN')
 );
+const cartCounter = useCookie<number>('cart-counter');
 
 const inputValue = ref('');
 const search = () => {
@@ -296,7 +297,7 @@ await loadCategoryList({ filter: { parent: true } });
               <Component :is="icon" />
               <SfBadge
                 v-if="badge"
-                content="3"
+                :content="cartCounter || 0"
                 class="outline outline-primary-700 bg-white !text-neutral-900 group-hover:outline-primary-800 group-active:outline-primary-900 flex justify-center"
                 data-testid="cart-badge"
               />

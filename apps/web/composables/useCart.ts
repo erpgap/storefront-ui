@@ -4,6 +4,7 @@ import { QueryName } from '~/server/queries';
 import { useToast } from 'vue-toastification';
 
 export const useCart = () => {
+  const cartCounter = useCookie<number>('cart-counter');
   const { $sdk } = useNuxtApp();
   const toast = useToast();
   const cart = useState<Cart>('cart', () => ({} as Cart));
@@ -28,16 +29,18 @@ export const useCart = () => {
     loading.value = false;
 
     if (error.value) {
-      return toast.error('Something went wrong');
+      return toast.error(error.value.data.message);
     }
 
     cart.value = data.value;
+    cartCounter.value = (Number(cartCounter?.value) || 0) + 1;
     toast.success('Product has been added to cart');
   };
 
   return {
     loading,
     loadCart,
-    cartAdd
+    cartAdd,
+    cart
   };
 };
