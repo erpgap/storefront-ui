@@ -1,19 +1,6 @@
 <script lang="ts" setup>
-import {
-  SfRating,
-  SfCounter,
-  SfLink,
-  SfButton,
-  SfIconShoppingCart,
-  SfIconFavorite,
-} from '@storefront-ui/vue';
+import { SfRating, SfCounter, SfLink, SfButton, SfIconShoppingCart, SfIconFavorite } from '@storefront-ui/vue';
 import { useToast } from 'vue-toastification';
-
-const NuxtLink = resolveComponent('NuxtLink');
-
-const { cartAdd } = useCart();
-const { WishlistAddItem } = useWishlist();
-const toast = useToast();
 
 defineProps({
   imageUrl: {
@@ -62,9 +49,9 @@ defineProps({
   },
 });
 
-const addToCart = async (firstVariant: any) => {
-  const response = await cartAdd(firstVariant.id, 1);
-};
+const { cartAdd } = useCart();
+const { WishlistAddItem } = useWishlist();
+const toast = useToast();
 
 const addToWishlist = async (firstVariant: any) => {
   const response = await WishlistAddItem(firstVariant.id);
@@ -111,7 +98,6 @@ const addToWishlist = async (firstVariant: any) => {
         <SfLink
           to="#"
           variant="secondary"
-          :tag="NuxtLink"
           class="ml-1 no-underline"
         >
           <SfCounter size="xs">{{ ratingCount }}</SfCounter>
@@ -135,7 +121,7 @@ const addToWishlist = async (firstVariant: any) => {
         type="button"
         class="absolute bottom-2"
         size="sm"
-        @click="addToCart(firstVariant)"
+        @click="cartAdd(firstVariant?.id, 1)"
       >
         <template #prefix>
           <SfIconShoppingCart size="sm" />
