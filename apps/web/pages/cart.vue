@@ -69,29 +69,19 @@ await loadCart();
           v-for="orderLine in cart.order?.orderLines"
           :key="orderLine?.id"
         >
-          <CartCollectedProductCard
-            :attributes="attributes"
-            :image-url="orderLine?.product?.image"
-            :image-alt="orderLine?.product?.imageFilename"
-            :name="orderLine?.name || `-`"
-            :price="String(orderLine?.priceTotal)"
-            :special-price="String(orderLine?.priceSubtotal)"
-            :max-value="10"
-            :min-value="1"
-            :value="Number(orderLine.quantity)"
-            :slug="slug"
-          />
+          <CartCollectedProductCard :order-line="orderLine" />
         </div>
       </div>
 
       <UiOrderSummary :cart="cart" class="col-span-5 md:sticky md:top-20 h-fit">
-        <SfButton
-          to="/checkout"
-          size="lg"
-          class="w-full mb-4 md:mb-0"
-        >
-          {{ $t('goToCheckout') }}
-        </SfButton>
+        <NuxtLink to="/checkout">
+          <SfButton
+            size="lg"
+            class="w-full mb-4 md:mb-0"
+          >
+            {{ $t('goToCheckout') }}
+          </SfButton>
+        </NuxtLink>
       </UiOrderSummary>
     </div>
   </div>

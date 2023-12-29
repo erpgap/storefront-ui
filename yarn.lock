@@ -3403,9 +3403,9 @@
   resolved "https://registry.npmjs.org/@storefront-ui/typography/-/typography-2.4.0.tgz"
   integrity sha512-Ee99FjlUwjadei7wP1ZZcGzmkYu+Ece6aXcbDz4dcNbrVnfCC0RtbPZVqPFkA2e9ZIeppZILI+fFYUQK+vGAaA==
 
-"@storefront-ui/vue@^2.5.0":
+"@storefront-ui/vue@^2.6.0":
   version "2.6.0"
-  resolved "https://registry.npmjs.org/@storefront-ui/vue/-/vue-2.6.0.tgz"
+  resolved "https://registry.yarnpkg.com/@storefront-ui/vue/-/vue-2.6.0.tgz#2021527090aa47e535b70faa684b23b8376a1ea7"
   integrity sha512-XYRp+WlqJsW/NhG6RtuNg/wBj9Tcx8VenhJSCNQ0ynjYeoVMXXvxwysA5pJzDG/5CZ34kAvWE+1OJQa6pikLgg==
   dependencies:
     "@floating-ui/vue" "^0.2.1"
