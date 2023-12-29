@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { SfLink, SfIconSell, SfIconRemove, SfIconRemoveShoppingCart } from '@storefront-ui/vue';
 import { OrderLine } from '~/graphql';
+const NuxtLink = resolveComponent('NuxtLink');
 
 defineProps({
   orderLine: {
@@ -19,7 +20,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
     data-testid="cart-product-card"
   >
     <div class="relative overflow-hidden rounded-md w-[100px] sm:w-[176px]">
-      <SfLink to="/product/1">
+      <SfLink :to="orderLine.product?.slug" :tag="NuxtLink">
         <NuxtImg
           class="w-full h-auto border rounded-md border-neutral-200"
           :src="$getImage(String(orderLine.product?.image), 370, 370, String(orderLine.product?.imageFilename))"
@@ -40,11 +41,12 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
     <div class="flex flex-col pl-4 min-w-[180px] flex-1">
       <div class="flex justify-between">
         <SfLink
-        :to="orderLine.product?.slug"
-        variant="secondary"
-        class="no-underline typography-text-sm sm:typography-text-lg cursor-pointer"
+          :tag="NuxtLink"
+          :to="orderLine.product?.slug"
+          variant="secondary"
+          class="no-underline typography-text-sm sm:typography-text-lg cursor-pointer"
         >
-          {{ orderLine.product?.name }}
+           {{ orderLine.product?.name }}
         </SfLink>
         <SfIconRemoveShoppingCart class="cursor-pointer" @click="removeItemFromCart(orderLine.id)"/>
       </div>
@@ -81,6 +83,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
         <UiQuantitySelector
           :min-value="1"
           :max-value="Number(orderLine.product?.qty)"
+          :value="Number(orderLine.quantity)"
           class="mt-4 sm:mt-0"
           @update:value="updateItemQuantity(orderLine.id, $event)"
         />
