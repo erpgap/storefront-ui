@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SfLink, SfIconSell } from '@storefront-ui/vue';
+import { SfLink, SfIconSell, SfIconRemove, SfIconRemoveShoppingCart } from '@storefront-ui/vue';
 import { OrderLine } from '~/graphql';
 
 defineProps({
@@ -9,7 +9,7 @@ defineProps({
   },
 });
 
-const { updateItemQuantity } = useCart();
+const { updateItemQuantity, removeItemFromCart } = useCart();
 
 </script>
 
@@ -38,13 +38,16 @@ const { updateItemQuantity } = useCart();
       </div>
     </div>
     <div class="flex flex-col pl-4 min-w-[180px] flex-1">
-      <SfLink
+      <div class="flex justify-between">
+        <SfLink
         :to="orderLine.product?.slug"
         variant="secondary"
         class="no-underline typography-text-sm sm:typography-text-lg cursor-pointer"
-      >
-        {{ orderLine.product?.name }}
-      </SfLink>
+        >
+          {{ orderLine.product?.name }}
+        </SfLink>
+        <SfIconRemoveShoppingCart class="cursor-pointer" @click="removeItemFromCart(orderLine.id)"/>
+      </div>
       <div class="my-2 sm:mb-0">
         <ul
           class="text-xs font-normal leading-5 sm:typography-text-sm text-neutral-700"

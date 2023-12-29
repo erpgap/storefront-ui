@@ -72,3 +72,10 @@ export type CartUpdateItemResponse = _AsyncData<
   },
   H3Error
 >;
+
+export type CartRemoveItemResponse = _AsyncData<
+  {
+    cartRemoveItem: Cart
+  },
+  H3Error
+>;
