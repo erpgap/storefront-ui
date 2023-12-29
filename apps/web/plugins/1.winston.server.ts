@@ -8,15 +8,15 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
   loggerWinston = createLogger({
     format: combine(
-        timestamp(),
-        prettyPrint()
+      timestamp(),
+      prettyPrint()
     ),
     transports: [
-        new transports.Console()
-      ]
+      new transports.Console()
+    ]
   });
 
-  (process as any).winstonLog = loggerWinston
+  (process as any).winstonLog = loggerWinston;
 
   return {
     provide: {

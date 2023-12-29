@@ -11,6 +11,7 @@ order {
   websiteOrderLine {
     id
     name
+    priceSubtotal
     product {
       id
       name
@@ -25,6 +26,7 @@ order {
   orderLines {
     id
     name
+    priceSubtotal
     product {
       id
       name

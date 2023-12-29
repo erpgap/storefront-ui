@@ -16,7 +16,8 @@ export const useCart = () => {
 
     try {
       const { data } = await $sdk().odoo.query<null, CartResponse >({queryName: QueryName.LoadCart});
-      cart.value = data.value;
+
+      cart.value = data.value.cart;
     } finally {
       loading.value = false;
     }

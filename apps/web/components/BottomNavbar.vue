@@ -14,7 +14,7 @@ const {
   toggle: wishlistToggle,
   close: wishlistClose,
 } = useDisclosure();
-const { loadWishlist, wishlistItems } = useWishlist();
+const { wishlistItems } = useWishlist();
 const NuxtLink = resolveComponent('NuxtLink');
 
 const collectedProducts: any = ref('');
@@ -32,7 +32,6 @@ const handleWishlistSideBar = async () => {
   setIsActive(true);
 };
 
-await loadWishlist();
 </script>
 
 <template>

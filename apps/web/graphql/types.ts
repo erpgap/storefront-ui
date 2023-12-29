@@ -60,6 +60,8 @@ export type WishlistResponse = _AsyncData<
 >;
 
 export type CartResponse = _AsyncData<
-  Cart,
+  {
+    cart: Cart
+  },
   H3Error
 >;

@@ -33,7 +33,7 @@ const NuxtLink = resolveComponent('NuxtLink');
       <SfLink :tag="NuxtLink" to="/product/1">
         <NuxtImg
           class="w-full h-auto border rounded-md border-neutral-200"
-          :src="imageUrl ?? '/images/product.webp'"
+          :src="$getImage(String(imageUrl), 370, 370, String(imageAlt))"
           :alt="imageAlt ?? ''"
           width="300"
           height="300"

@@ -22,7 +22,7 @@ defineProps<{ filled?: boolean }>();
 const { loadCategoryList, categories } = useCategory();
 const { isOpen, toggle, close } = useDisclosure();
 const { isOpen: wishlistIsOpen, toggle: wishlistToggle, close: wishlistClose,} = useDisclosure();
-const { loadWishlist, wishlistItems } = useWishlist();
+const { wishlistItems } = useWishlist();
 const NuxtLink = resolveComponent('NuxtLink');
 
 const menuRef = ref();
@@ -80,7 +80,6 @@ const handleWishlistSideBar = async () => {
   wishlistToggle();
 };
 
-await loadWishlist();
 await loadCategoryList({ filter: { parent: true } });
 
 </script>

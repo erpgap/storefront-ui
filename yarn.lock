@@ -1273,10 +1273,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@erpgap/odoo-sdk-api-client@^0.4.9":
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/@erpgap/odoo-sdk-api-client/-/odoo-sdk-api-client-0.4.9.tgz#12161178ad99fae40e5dc6daaa6187669e3f6380"
-  integrity sha512-HhiMvbvDpBEwcvPIQw5rB+Rg/xEOLxoHNjuUuiqm6F+U29iyo/nBbP1CGh12R8/mlcJV+9svUnczHy5M30B/QQ==
+"@erpgap/odoo-sdk-api-client@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@erpgap/odoo-sdk-api-client/-/odoo-sdk-api-client-0.5.0.tgz#15cc096d7bdfa88260ea7af349a7a15bf9da0b65"
+  integrity sha512-uzmTPNdF9D5YzYgC+BnLIHNWCy9fsgvj0LWpyYRO3aiEOHqvsN2DyqXRuxJn1t4C4C3LePHZO/dRzqYTlcpqVQ==
   dependencies:
     "@apollo/client" "^3.7.16"
     "@vue-storefront/middleware" "3.5.1"
@@ -1286,10 +1286,10 @@
     request-ip "^3.3.0"
     winston "^3.9.0"
 
-"@erpgap/odoo-sdk@^0.4.9":
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/@erpgap/odoo-sdk/-/odoo-sdk-0.4.9.tgz#50eb605e825cc2d2823e020220dde722bccccab2"
-  integrity sha512-PzSttWifZ6fcmYLmDlGsV+FXU5xk+u+1cWxHT772psC7dJANEcGJm2dLZEyxv9N2URu9PRwZx0TCscsJuEjT6A==
+"@erpgap/odoo-sdk@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@erpgap/odoo-sdk/-/odoo-sdk-0.5.0.tgz#b3e1dfb6652b8e707f27d2d38cb8ec23e86867ad"
+  integrity sha512-mq8MFy6ZRe1ThiWkk83yBgeDxffpINITddmkY4CBmKI6ZqLca+Cj4kxOmLKm4TucPQ4aYYq5xeL3xe0ut6HVqQ==
   dependencies:
     "@apollo/client" "^3.7.16"
     axios "^1.4.0"

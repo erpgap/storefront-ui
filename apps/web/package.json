@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
-    "@erpgap/odoo-sdk": "^0.4.9",
-    "@erpgap/odoo-sdk-api-client": "^0.4.9",
+    "@erpgap/odoo-sdk": "^0.5.0",
+    "@erpgap/odoo-sdk-api-client": "^0.5.0",
     "@nuxt/devtools": "^1.0.0",
     "@nuxt/image": "^1.0.0",
     "@nuxtjs/fontaine": "^0.4.1",

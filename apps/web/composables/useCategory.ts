@@ -31,6 +31,9 @@ export const useCategory = (categorySlug?: string) => {
     try {
       const {data} = await useAsyncData(`category-list-${categorySlug}`, async () => {
         const { data, error } = await $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse >({queryName: QueryName.GetCategories}, params);
+
+        // console.log(data.value);
+
         return data.value;
       });
 

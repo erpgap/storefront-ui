@@ -73,12 +73,12 @@ await loadCart();
             :attributes="attributes"
             :image-url="orderLine?.product?.image"
             :image-alt="orderLine?.product?.imageFilename"
-            :name="orderLine?.product?.name || `-`"
-            :price="orderLine?.product?.name"
-            :special-price="orderLine?.product?.name"
+            :name="orderLine?.name || `-`"
+            :price="String(orderLine?.priceTotal)"
+            :special-price="String(orderLine?.priceSubtotal)"
             :max-value="10"
             :min-value="1"
-            :value="orderLine.quantity"
+            :value="Number(orderLine.quantity)"
             :slug="slug"
           />
         </div>

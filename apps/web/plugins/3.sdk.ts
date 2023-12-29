@@ -1,6 +1,6 @@
 import { defineNuxtPlugin } from '#app';
 import { initSDK, buildModule } from '@vue-storefront/sdk';
-import { OdooModule,  OdooModuleType } from '@erpgap/odoo-sdk';
+import { OdooModule, OdooModuleType } from '@erpgap/odoo-sdk';
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const config = useRuntimeConfig();
