@@ -39,19 +39,19 @@ const { updateItemQuantity } = useCart();
     </div>
     <div class="flex flex-col pl-4 min-w-[180px] flex-1">
       <SfLink
-        to="/product/1"
+        :to="orderLine.product?.slug"
         variant="secondary"
-        class="no-underline typography-text-sm sm:typography-text-lg"
+        class="no-underline typography-text-sm sm:typography-text-lg cursor-pointer"
       >
-        {{ orderLine.name }}
+        {{ orderLine.product?.name }}
       </SfLink>
       <div class="my-2 sm:mb-0">
         <ul
           class="text-xs font-normal leading-5 sm:typography-text-sm text-neutral-700"
         >
-          <li v-for="attribute in orderLine.product?.attributeValues" :key="attribute.id">
-            <span class="mr-1">{{ attribute }}:</span>
-            <span class="font-medium">{{ attribute.label }}</span>
+          <li v-for="attribute in orderLine.product?.variantAttributeValues" :key="attribute.id">
+            <span class="mr-1">{{ attribute.attribute?.name }}:</span>
+            <span class="font-medium">{{ attribute.name }}</span>
           </li>
         </ul>
       </div>

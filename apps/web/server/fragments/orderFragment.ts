@@ -21,7 +21,7 @@ order {
       displayName
       combinationInfo
       slug
-      attributeValues{
+      variantAttributeValues{
         id
         name
         attribute{
@@ -44,7 +44,7 @@ order {
       displayName
       combinationInfo
       slug
-      attributeValues{
+      variantAttributeValues{
         id
         name
         attribute{
