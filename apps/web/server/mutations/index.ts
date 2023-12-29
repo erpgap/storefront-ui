@@ -6,6 +6,7 @@ import SendResetPasswordMutation from './SendResetPasswordMutation';
 import UpdatePasswordMutation from './UpdatePasswordMutation';
 import ChangePasswordMutation from './ChangePasswordMutation';
 import CartAddItem from './CartAddItem';
+import CartUpdateQuantity from './CartUpdateQuantity';
 
 enum MutationName {
     LoginMutation = 'LoginMutation',
@@ -14,7 +15,8 @@ enum MutationName {
     SendResetPasswordMutation = 'SendResetPasswordMutation',
     UpdatePasswordMutation = 'UpdatePasswordMutation',
     ChangePasswordMutation = 'ChangePasswordMutation',
-    CartAddItem = 'CartAddItem'
+    CartAddItem = 'CartAddItem',
+    CartUpdateQuantity = 'CartUpdateQuantity'
   }
 
 const Mutations : Record<MutationName, DocumentNode> = {
@@ -24,7 +26,8 @@ const Mutations : Record<MutationName, DocumentNode> = {
   SendResetPasswordMutation,
   UpdatePasswordMutation,
   ChangePasswordMutation,
-  CartAddItem
+  CartAddItem,
+  CartUpdateQuantity
 };
 
 export {

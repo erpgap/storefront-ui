@@ -8,6 +8,9 @@ defineProps({
     required: true,
   },
 });
+
+const { updateItemQuantity } = useCart();
+
 </script>
 
 <template>
@@ -76,6 +79,7 @@ defineProps({
           :min-value="1"
           :max-value="Number(orderLine.product?.qty)"
           class="mt-4 sm:mt-0"
+          @update:value="updateItemQuantity(orderLine.id, $event)"
         />
       </div>
     </div>

@@ -65,3 +65,10 @@ export type CartResponse = _AsyncData<
   },
   H3Error
 >;
+
+export type CartUpdateItemResponse = _AsyncData<
+  {
+    cartUpdateItem: Cart
+  },
+  H3Error
+>;
