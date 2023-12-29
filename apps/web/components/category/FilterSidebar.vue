@@ -131,6 +131,12 @@ const clearFilters = () => {
   router.push({ query: {} });
   emit('close');
 };
+
+const changeCategory = (categoryId: number) => {
+  clearFilters();
+  router.push({path: `/category/${categoryId}`});
+};
+
 onMounted(() => {
   selectedFilters.value = facetsFromUrlToFilter();
   const priceFilter = selectedFilters.value?.find((item: ProductFilterType) => {
@@ -188,7 +194,8 @@ onMounted(() => {
         ]"
         data-testid="category-tree-item"
       >
-          <span class="flex gap-2 items-center">
+          <span @click="changeCategory(category.id)"
+ class="flex gap-2 items-center">
             <span
               class="text-base md:text-sm capitalize flex items-center"
               data-testid="list-item-menu-label"
