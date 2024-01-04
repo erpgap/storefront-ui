@@ -1,5 +1,5 @@
 import { H3Error } from 'h3';
-import { AttributeValue, Cart, Categories, Category, Product, Products } from './gql/graphql';
+import { AttributeValue, Cart, Categories, Category, Partner, Product, Products } from './gql/graphql';
 import { _AsyncData } from 'nuxt/dist/app/composables/asyncData';
 
 export type CategoryListResponse = _AsyncData<
@@ -76,6 +76,30 @@ export type CartUpdateItemResponse = _AsyncData<
 export type CartRemoveItemResponse = _AsyncData<
   {
     cartRemoveItem: Cart
+  },
+  H3Error
+>;
+
+export type LoadUserQueryResponse = _AsyncData<
+  {
+    partner: Partner
+  },
+  H3Error
+>;
+
+export type RegisterUserResponse = _AsyncData<
+  {
+    id: number,
+    name: string,
+    email: string,
+    partner: Partner
+  },
+  H3Error
+>;
+
+export type LoginUserResponse = _AsyncData<
+  {
+    partner: Partner
   },
   H3Error
 >;
