@@ -1,4 +1,4 @@
-import { LoadUserQueryResponse, MutationLoginArgs, MutationRegisterArgs, Partner, RegisterUserResponse } from '~/graphql';
+import { LoadUserQueryResponse, MutationChangePasswordArgs, MutationLoginArgs, MutationRegisterArgs, Partner, RegisterUserResponse } from '~/graphql';
 import { MutationName } from '~/server/mutations';
 import { QueryName } from '~/server/queries';
 
@@ -49,9 +49,16 @@ export const useUser = () => {
     user.value = data.value.partner;
   };
 
+  const changePassword = async (params: MutationChangePasswordArgs) => {
+    console.log('Mocked: changePasswod');
+  };
+
   return {
     signup,
     logout,
-    loadUser
+    login,
+    loadUser,
+    changePassword,
+    user,
   };
 };
