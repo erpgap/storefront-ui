@@ -7,6 +7,8 @@ export const useUser = () => {
   const user = useCookie<Partner | null>('odoo-user');
 
   const loading = ref(false);
+  const loginError = ref(false);
+  const signupError = ref(false);
 
   const loadUser = async () => {
     loading.value = true;
@@ -31,7 +33,8 @@ export const useUser = () => {
     loading.value = false;
 
     if (error.value) {
-      console.log(error);
+      signupError.value = true;
+      return;
     }
 
     user.value = data.value.partner;
@@ -43,7 +46,8 @@ export const useUser = () => {
       {mutationName: MutationName.LoginMutation}, {...params}
     );
     if (error.value) {
-      console.log(error);
+      loginError.value = true;
+      return;
     }
 
     user.value = data.value.partner;
@@ -60,5 +64,8 @@ export const useUser = () => {
     loadUser,
     changePassword,
     user,
+    loading,
+    loginError,
+    signupError,
   };
 };
