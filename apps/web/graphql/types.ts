@@ -103,3 +103,12 @@ export type LoginUserResponse = _AsyncData<
   },
   H3Error
 >;
+
+export type ResetPasswordResponse = _AsyncData<
+  {
+    id: number,
+    name: string,
+    email: string,
+  },
+  H3Error
+>;

@@ -36,6 +36,11 @@ definePageMeta({
   layout: false,
 });
 
+const { successResetEmail } = useUser();
 const NuxtLink = resolveComponent('NuxtLink');
-const email = ref('hieronim.anonim@gmail.com');
+const email = ref('');
+
+onBeforeMount(() => {
+  email.value = successResetEmail();
+});
 </script>

@@ -1,4 +1,4 @@
-import { LoadUserQueryResponse, MutationChangePasswordArgs, MutationLoginArgs, MutationRegisterArgs, Partner, RegisterUserResponse } from '~/graphql';
+import { LoadUserQueryResponse, MutationLoginArgs, MutationRegisterArgs, MutationResetPasswordArgs, Partner, RegisterUserResponse, ResetPasswordResponse } from '~/graphql';
 import { MutationName } from '~/server/mutations';
 import { QueryName } from '~/server/queries';
 
@@ -9,6 +9,8 @@ export const useUser = () => {
   const loading = ref(false);
   const loginError = ref(false);
   const signupError = ref(false);
+  const resetPasswordError = ref(false);
+  const resetEmail = useCookie<string>('reset-email');
 
   const loadUser = async () => {
     loading.value = true;
@@ -53,8 +55,23 @@ export const useUser = () => {
     user.value = data.value.partner;
   };
 
-  const changePassword = async (params: MutationChangePasswordArgs) => {
-    console.log('Mocked: changePasswod');
+  const resetPassword = async (params: MutationResetPasswordArgs) => {
+    loading.value = true;
+    const { error } = await $sdk().odoo.mutation<MutationResetPasswordArgs, ResetPasswordResponse>(
+      {mutationName: MutationName.SendResetPasswordMutation}, {...params}
+    );
+    if (error.value) {
+      resetPasswordError.value = true;
+    }
+
+    resetEmail.value = params.email;
+  };
+
+  const successResetEmail = () => {
+    const result = resetEmail.value;
+    resetEmail.value = '';
+
+    return result;
   };
 
   return {
@@ -62,10 +79,12 @@ export const useUser = () => {
     logout,
     login,
     loadUser,
-    changePassword,
+    resetPassword,
     user,
     loading,
     loginError,
     signupError,
+    resetPasswordError,
+    successResetEmail
   };
 };
