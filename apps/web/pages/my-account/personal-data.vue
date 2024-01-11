@@ -6,7 +6,7 @@
     :button-text="$t('account.accountSettings.personalData.edit')"
     @on-click="openModal('yourName')"
   >
-    Mahade Hasan
+    {{ user?.name }}
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <AccountProfileData
@@ -15,7 +15,7 @@
     :button-text="$t('account.accountSettings.personalData.edit')"
     @on-click="openModal('contactInformation')"
   >
-    mahade@gmail.com
+    {{ user?.email }}
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <AccountProfileData
@@ -85,6 +85,7 @@ definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
+const { loadUser, user } = useUser();
 const lastActiveElement = ref();
 const modalElement = ref();
 const openedForm = ref('');
@@ -100,4 +101,6 @@ const closeModal = () => {
   close();
   lastActiveElement.value.focus();
 };
+
+await loadUser();
 </script>
