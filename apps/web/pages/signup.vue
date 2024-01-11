@@ -200,10 +200,10 @@ const { isOpen, open } = useDisclosure();
 const { signup, loading, signupError } = useUser();
 const router = useRouter();
 
-const fullName = computed(() => firstNameModel.value + lastNameModel.value);
+const fullName = computed(() => `${firstNameModel.value} ${lastNameModel.value}`);
 
 const handleSignup = async () => {
-  await signup({email: emailModel.value, name: fullName.value, password: passwordModel.value, subscribeNewsletter: subscriptionsModel.value});
+  await signup({email: emailModel.value, name: fullName.value, password: passwordModel.value, subscribeNewsletter: (subscriptionsModel.value === true)});
   if (!signupError.value) {
     open();
   }
