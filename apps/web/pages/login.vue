@@ -26,8 +26,6 @@ const handleLogin = async () => {
     router.push('/');
   }
 
-  console.log(loginError.value);
-
 };
 </script>
 
