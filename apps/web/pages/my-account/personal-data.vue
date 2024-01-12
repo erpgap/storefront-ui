@@ -55,12 +55,14 @@
       </header>
       <AccountFormsName
         v-if="openedForm === 'yourName'"
-        @on-save="closeModal"
+        :full-name="user?.name"
+        @on-save="saveNewName"
         @on-cancel="closeModal"
       />
       <FormContactInformation
         v-else-if="openedForm === 'contactInformation'"
-        @on-save="closeModal"
+        :email="user?.email"
+        @on-save="saveNewEmail"
         @on-cancel="closeModal"
       />
       <AccountFormsPassword
@@ -85,7 +87,7 @@ definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
-const { loadUser, user } = useUser();
+const { loadUser, user, updateAccount } = useUser();
 const lastActiveElement = ref();
 const modalElement = ref();
 const openedForm = ref('');
@@ -100,6 +102,16 @@ const openModal = async (modalName: string) => {
 const closeModal = () => {
   close();
   lastActiveElement.value.focus();
+};
+
+const saveNewName = async (newName: string) => {
+  await updateAccount({myaccount: {id: user.value?.id, email: user.value?.email, name: newName}});
+  closeModal();
+};
+
+const saveNewEmail = async (newEmail: string) => {
+  await updateAccount({myaccount: {id: user.value?.id, email: newEmail, name: user.value?.name}});
+  closeModal();
 };
 
 await loadUser();

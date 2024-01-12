@@ -9,6 +9,7 @@ import CartAddItem from './CartAddItem';
 import CartUpdateQuantity from './CartUpdateQuantity';
 import CartRemoveItem from './CartRemoveItem';
 import RegisterUserMutation from './RegisterUserMutation';
+import UpdateMyAccountMutation from './UpdateMyAccountMutation';
 
 enum MutationName {
     LoginMutation = 'LoginMutation',
@@ -20,7 +21,8 @@ enum MutationName {
     CartAddItem = 'CartAddItem',
     CartUpdateQuantity = 'CartUpdateQuantity',
     CartRemoveItem = 'CartRemoveItem',
-    RegisterUserMutation = 'RegisterUserMutation'
+    RegisterUserMutation = 'RegisterUserMutation',
+    UpdateMyAccountMutation = 'UpdateMyAccountMutation'
   }
 
 const Mutations : Record<MutationName, DocumentNode> = {
@@ -33,7 +35,8 @@ const Mutations : Record<MutationName, DocumentNode> = {
   CartAddItem,
   CartUpdateQuantity,
   CartRemoveItem,
-  RegisterUserMutation
+  RegisterUserMutation,
+  UpdateMyAccountMutation
 };
 
 export {

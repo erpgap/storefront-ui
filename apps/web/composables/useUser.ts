@@ -1,4 +1,4 @@
-import { LoadUserQueryResponse, MutationLoginArgs, MutationRegisterArgs, MutationResetPasswordArgs, Partner, RegisterUserResponse, ResetPasswordResponse } from '~/graphql';
+import { LoadUserQueryResponse, MutationLoginArgs, MutationRegisterArgs, MutationResetPasswordArgs, MutationUpdateMyAccountArgs, Partner, PartnerResponse, RegisterUserResponse, ResetPasswordResponse, UpdateMyAccountParams } from '~/graphql';
 import { MutationName } from '~/server/mutations';
 import { QueryName } from '~/server/queries';
 
@@ -74,6 +74,19 @@ export const useUser = () => {
     return result;
   };
 
+  const updateAccount = async (params: MutationUpdateMyAccountArgs) => {
+    loading.value = true;
+    const { data, error } = await $sdk().odoo.mutation<MutationUpdateMyAccountArgs, PartnerResponse>(
+      {mutationName: MutationName.UpdateMyAccountMutation}, {...params}
+    );
+    if (error.value) {
+      loginError.value = true;
+    }
+
+    user.value = data.value.updateMyAccount;
+
+  };
+
   return {
     signup,
     logout,
@@ -85,6 +98,7 @@ export const useUser = () => {
     loginError,
     signupError,
     resetPasswordError,
-    successResetEmail
+    successResetEmail,
+    updateAccount
   };
 };

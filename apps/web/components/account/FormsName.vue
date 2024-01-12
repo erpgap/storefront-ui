@@ -1,25 +1,14 @@
 <template>
-  <form @submit.prevent="$emit('on-save')" data-testid="account-forms-name">
+  <form @submit.prevent="$emit('on-save', userData.fullName)" data-testid="account-forms-name">
     <div class="md:flex justify-between gap-4">
       <label class="block flex-1">
         <UiFormLabel>{{
-          $t('account.accountSettings.personalData.firstName')
+          $t('account.accountSettings.personalData.yourName')
         }}</UiFormLabel>
         <SfInput
-          name="firstname"
+          name="fullname"
           type="text"
-          v-model="userData.firstName"
-          required
-        />
-      </label>
-      <label class="block flex-1 mt-4 md:mt-0">
-        <UiFormLabel>{{
-          $t('account.accountSettings.personalData.lastName')
-        }}</UiFormLabel>
-        <SfInput
-          name="lastname"
-          type="text"
-          v-model="userData.lastName"
+          v-model="userData.fullName"
           required
         />
       </label>
@@ -38,15 +27,13 @@
 import { SfButton, SfInput } from '@storefront-ui/vue';
 
 type AccountFormsNameProps = {
-  firstName?: SfCustomer['firstName'];
-  lastName?: SfCustomer['lastName'];
+  fullName?: string;
 };
 
 const props = defineProps<AccountFormsNameProps>();
-const { firstName, lastName } = toRefs(props);
+const { fullName } = toRefs(props);
 defineEmits(['on-save', 'on-cancel']);
 const userData = ref({
-  firstName: firstName?.value ?? '',
-  lastName: lastName?.value ?? '',
+  fullName: fullName?.value ?? '',
 });
 </script>

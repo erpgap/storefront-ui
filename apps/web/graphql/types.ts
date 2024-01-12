@@ -112,3 +112,8 @@ export type ResetPasswordResponse = _AsyncData<
   },
   H3Error
 >;
+
+export type PartnerResponse = _AsyncData<
+  Partner,
+  H3Error
+>;
