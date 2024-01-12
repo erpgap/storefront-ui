@@ -67,7 +67,7 @@
       />
       <AccountFormsPassword
         v-else-if="openedForm === 'passwordChange'"
-        @on-save="closeModal"
+        @on-save="saveNewPassword"
         @on-cancel="closeModal"
       />
     </SfModal>
@@ -87,7 +87,7 @@ definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
-const { loadUser, user, updateAccount } = useUser();
+const { loadUser, user, updateAccount, updatePassword, updatePasswordError } = useUser();
 const lastActiveElement = ref();
 const modalElement = ref();
 const openedForm = ref('');
@@ -112,6 +112,15 @@ const saveNewName = async (newName: string) => {
 const saveNewEmail = async (newEmail: string) => {
   await updateAccount({myaccount: {id: user.value?.id, email: newEmail, name: user.value?.name}});
   closeModal();
+};
+
+const saveNewPassword = async (passwords: any) => {
+  if (passwords.firstNewPassword === passwords.secondNewPassword) {
+    await updatePassword({currentPassword: passwords.oldPassword, newPassword: passwords.firstNewPassword});
+    if (!updatePasswordError.value) {
+      closeModal();
+    }
+  }
 };
 
 await loadUser();

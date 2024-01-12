@@ -1,4 +1,4 @@
-import { LoadUserQueryResponse, MutationLoginArgs, MutationRegisterArgs, MutationResetPasswordArgs, MutationUpdateMyAccountArgs, Partner, PartnerResponse, RegisterUserResponse, ResetPasswordResponse, UpdateMyAccountParams } from '~/graphql';
+import { LoadUserQueryResponse, MutationLoginArgs, MutationRegisterArgs, MutationResetPasswordArgs, MutationUpdateMyAccountArgs, MutationUpdatePasswordArgs, Partner, PartnerResponse, RegisterUserResponse, ResetPasswordResponse, UpdateMyAccountParams } from '~/graphql';
 import { MutationName } from '~/server/mutations';
 import { QueryName } from '~/server/queries';
 
@@ -9,16 +9,20 @@ export const useUser = () => {
   const loading = ref(false);
   const loginError = ref(false);
   const signupError = ref(false);
+  const updateAccountError = ref(false);
+  const updatePasswordError = ref(false);
   const resetPasswordError = ref(false);
   const resetEmail = useCookie<string>('reset-email');
 
   const loadUser = async () => {
     loading.value = true;
-    loading.value = false;
+
     if (!user.value) {
       const { data } = await $sdk().odoo.query<null, LoadUserQueryResponse>({queryName: QueryName.LoadUserQuery});
       user.value = data.value.partner;
     }
+
+    loading.value = false;
 
   };
 
@@ -62,6 +66,7 @@ export const useUser = () => {
     );
     if (error.value) {
       resetPasswordError.value = true;
+      return;
     }
 
     resetEmail.value = params.email;
@@ -80,11 +85,28 @@ export const useUser = () => {
       {mutationName: MutationName.UpdateMyAccountMutation}, {...params}
     );
     if (error.value) {
-      loginError.value = true;
+      updateAccountError.value = true;
+      return;
     }
 
     user.value = data.value.updateMyAccount;
 
+  };
+
+  const updatePassword = async (params: MutationUpdatePasswordArgs) => {
+    if (updatePasswordError.value) {
+      updatePasswordError.value = false;
+    }
+    loading.value = true;
+    const { data, error } = await $sdk().odoo.mutation<MutationUpdatePasswordArgs, LoadUserQueryResponse>(
+      {mutationName: MutationName.UpdatePasswordMutation}, {...params}
+    );
+    if (error.value) {
+      updatePasswordError.value = true;
+      return;
+    }
+
+    user.value = data.value.updatePassword.partner;
   };
 
   return {
@@ -98,7 +120,11 @@ export const useUser = () => {
     loginError,
     signupError,
     resetPasswordError,
+    updateAccountError,
+    updatePasswordError,
     successResetEmail,
-    updateAccount
+    updateAccount,
+    updatePassword,
+
   };
 };
