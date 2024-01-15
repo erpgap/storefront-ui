@@ -1,7 +1,5 @@
-import billingAddressFragment from './billingAddressFragment';
-
 export default `
-partner{
+billingAddress{
     id
     name
     street
@@ -19,6 +17,5 @@ partner{
     }
     email
     phone
-    ${billingAddressFragment}
   }
 `;

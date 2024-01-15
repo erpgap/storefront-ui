@@ -17,10 +17,8 @@ export const useUser = () => {
   const loadUser = async () => {
     loading.value = true;
 
-    if (!user.value) {
-      const { data } = await $sdk().odoo.query<null, LoadUserQueryResponse>({queryName: QueryName.LoadUserQuery});
-      user.value = data.value.partner;
-    }
+    const { data } = await $sdk().odoo.query<null, LoadUserQueryResponse>({queryName: QueryName.LoadUserQuery});
+    user.value = data.value.partner;
 
     loading.value = false;
 

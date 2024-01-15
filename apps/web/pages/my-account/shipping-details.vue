@@ -7,13 +7,13 @@
     @on-click="open"
   >
     <p>
-      {{ userShippingAddress.firstName }} {{ userShippingAddress.lastName }}
+      {{ user?.name }}
     </p>
-    <p>{{ userShippingAddress.phoneNumber }}</p>
-    <p>{{ userShippingAddress.address1 }} {{ userShippingAddress.address2 }}</p>
+    <p>{{ user?.phone }}</p>
+    <p>{{ user?.street }} {{ user?.street2 }}</p>
     <p>
-      {{ userShippingAddress.city }}, {{ userShippingAddress.state }}
-      {{ userShippingAddress.postalCode }}
+      {{ user?.city }}, {{ user?.state?.name }}
+      {{ user?.zip }}
     </p>
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
@@ -42,7 +42,7 @@
         </h3>
       </header>
       <FormAddAddress
-        :saved-address="userShippingAddress"
+        :saved-address="user"
         type="shippingAddress"
         @on-save="close"
         @on-close="close"
@@ -63,17 +63,7 @@ definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
+const { user, loadUser } = useUser();
 
-const userShippingAddress = ref({
-  firstName: 'Hieronim',
-  lastName: 'Anonim',
-  address1: 'Oak Drive',
-  address2: '3633',
-  city: 'Colonie',
-  country: 'US',
-  phoneNumber: '+1 321 765 0987',
-  postalCode: '12205',
-  state: 'NY',
-  titleCode: '',
-});
+await loadUser();
 </script>
