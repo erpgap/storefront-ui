@@ -1,6 +1,6 @@
 export default `
-billingAddress{
     id
+    addressType
     name
     street
     street2
@@ -17,5 +17,4 @@ billingAddress{
     }
     email
     phone
-  }
 `;

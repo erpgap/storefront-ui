@@ -117,3 +117,10 @@ export type PartnerResponse = _AsyncData<
   Partner,
   H3Error
 >;
+
+export type AddressesResponse = _AsyncData<
+  {
+    addresses: Partner[],
+  },
+  H3Error
+>;

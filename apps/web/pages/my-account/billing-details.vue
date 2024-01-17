@@ -1,19 +1,20 @@
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-  <AccountProfileData
+  <div v-for="address in billingAddresses" :key="address.id">
+    <AccountProfileData
     class="col-span-3"
     :header="$t('account.accountSettings.billingDetails.billingAddress')"
     :button-text="$t('account.accountSettings.billingDetails.edit')"
     @on-click="open"
   >
     <p>
-      {{ user?.billingAddress?.name }}
+      {{ address?.name }}
     </p>
-    <p>{{ user?.billingAddress?.phone }}</p>
-    <p>{{ user?.billingAddress?.street }} {{ user?.billingAddress?.street2 }}</p>
+    <p>{{ address?.phone }}</p>
+    <p>{{ address?.street }} {{ address?.street2 }}</p>
     <p>
-      {{ user?.billingAddress?.city }}, {{ user?.billingAddress?.state?.name }}
-      {{ user?.billingAddress?.zip }}
+      {{ address?.city }}, {{ address?.state?.name }}
+      {{ address?.zip }}
     </p>
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
@@ -42,13 +43,14 @@
         </h3>
       </header>
       <FormAddAddress
-        :saved-address="user?.billingAddress"
+        :saved-address="address"
         type="billingAddress"
         @on-save="close"
         @on-close="close"
       />
     </SfModal>
   </UiOverlay>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -58,12 +60,13 @@ import {
   SfModal,
   useDisclosure,
 } from '@storefront-ui/vue';
+import { AddressEnum } from '~/graphql';
 
 definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
-const { user, loadUser } = useUser();
+const { billingAddresses, loadAddressesByType } = useAddresses();
 
-await loadUser();
+await loadAddressesByType(AddressEnum.Billing);
 </script>
