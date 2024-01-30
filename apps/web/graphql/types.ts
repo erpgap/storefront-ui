@@ -1,5 +1,5 @@
 import { H3Error } from 'h3';
-import { AttributeValue, Cart, Categories, Category, Partner, Product, Products } from './gql/graphql';
+import { AttributeValue, Cart, Categories, Category, CountryList, Partner, Product, Products } from './gql/graphql';
 import { _AsyncData } from 'nuxt/dist/app/composables/asyncData';
 
 export type CategoryListResponse = _AsyncData<
@@ -121,6 +121,24 @@ export type PartnerResponse = _AsyncData<
 export type AddressesResponse = _AsyncData<
   {
     addresses: Partner[],
+  },
+  H3Error
+>;
+
+export type CountryListResponse = _AsyncData<
+  {
+    countries: CountryList
+  },
+  H3Error
+>;
+
+export type CountryStatesResponse = _AsyncData<
+  {
+    states: {
+      id: number,
+      name: string,
+      code: string,
+    }
   },
   H3Error
 >;

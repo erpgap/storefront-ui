@@ -9,6 +9,8 @@ import GetWishlist from './GetWishlist';
 import LoadCart from './LoadCart';
 import { DocumentNode } from 'graphql/language';
 import GetAddresses from './GetAddresses';
+import GetCountries from './GetCountries';
+import GetCountryState from './GetCountryState';
 
 enum QueryName {
   ProductVariantQuery = 'ProductVariantQuery',
@@ -20,7 +22,9 @@ enum QueryName {
   GetProduct = 'GetProduct',
   GetWishlist = 'GetWishlist',
   LoadCart = 'LoadCart',
-  GetAddresses = 'GetAddresses'
+  GetAddresses = 'GetAddresses',
+  GetCountries = 'GetCountries',
+  GetCountryState = 'GetCountryState'
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
@@ -33,7 +37,9 @@ const Queries: Record<QueryName, DocumentNode> = {
   GetProduct,
   GetWishlist,
   LoadCart,
-  GetAddresses
+  GetAddresses,
+  GetCountries,
+  GetCountryState
 };
 
 export { Queries, QueryName };

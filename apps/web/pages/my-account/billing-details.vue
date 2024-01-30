@@ -42,8 +42,8 @@
           {{ $t('account.accountSettings.billingDetails.billingAddress') }}
         </h3>
       </header>
-      <FormAddAddress
-        :saved-address="address"
+      <AccountFormsAddress
+        :address="address"
         type="billingAddress"
         @on-save="close"
         @on-close="close"

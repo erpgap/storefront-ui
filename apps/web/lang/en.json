@@ -282,6 +282,17 @@
         "currentPassword": "Current password",
         "passwordHelp": "Use 8 or more characters with a mix of letters, numbers and symbols."
       },
+      "addresses": {
+        "name": "Name",
+        "street": "Street Line 1",
+        "street2": "Street Line 2",
+        "city": "City",
+        "zip": "Postcode",
+        "country": "Country",
+        "state": "State",
+        "phone": "Phone Number",
+        "email": "E-Mail"
+      },
       "billingDetails": {
         "billingAddress": "Billing address",
         "edit": "Edit",

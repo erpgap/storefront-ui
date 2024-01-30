@@ -1,6 +1,7 @@
 export default `
     id
     addressType
+    zip
     name
     street
     street2

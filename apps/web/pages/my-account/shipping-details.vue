@@ -42,8 +42,8 @@
           {{ $t('account.accountSettings.shippingDetails.shippingAddress') }}
         </h3>
       </header>
-      <FormAddAddress
-        :saved-address="address"
+      <AccountFormsAddress
+        :address="address"
         type="shippingAddress"
         @on-save="close"
         @on-close="close"
@@ -60,13 +60,27 @@ import {
   SfModal,
   useDisclosure,
 } from '@storefront-ui/vue';
-import { AddressEnum } from '~/graphql';
+import { AddressEnum, Partner } from '~/graphql';
 
 definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
 const { mailingAddresses, loadAddressesByType } = useAddresses();
+
+const addressProps = (address: Partner) => {
+  return {
+    name: address.name,
+    street: address.street,
+    street2: address.street2,
+    zip: address.zip,
+    city: address.city,
+    stateId: address.state?.id,
+    countryId: address.country?.id,
+    phone: address.phone,
+    email: address.email,
+  };
+};
 
 await loadAddressesByType(AddressEnum.Shipping);
 </script>
