@@ -1,3 +1,4 @@
+import { DocumentNode } from 'graphql/language';
 import LoadUserQuery from './LoadUserQuery';
 import ProductVariantQuery from './ProductVariantQuery';
 import StockLotsQuery from './StockLotsQuery';
@@ -5,9 +6,8 @@ import GetCategories from './GetCategories';
 import GetCategory from './GetCategory';
 import GetProductTemplateList from './GetProductTemplateList';
 import GetProduct from './GetProduct';
-import GetWishlist from './GetWishlist';
+import WishlistLoadQuery from './WishlistLoadQuery';
 import LoadCart from './LoadCart';
-import { DocumentNode } from 'graphql/language';
 import GetAddresses from './GetAddresses';
 
 enum QueryName {
@@ -20,7 +20,8 @@ enum QueryName {
   GetProduct = 'GetProduct',
   GetWishlist = 'GetWishlist',
   LoadCart = 'LoadCart',
-  GetAddresses = 'GetAddresses'
+  GetAddresses = 'GetAddresses',
+  WishlistLoadQuery = 'WishlistLoadQuery'
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
@@ -31,7 +32,7 @@ const Queries: Record<QueryName, DocumentNode> = {
   GetCategory,
   GetProductTemplateList,
   GetProduct,
-  GetWishlist,
+  WishlistLoadQuery,
   LoadCart,
   GetAddresses
 };

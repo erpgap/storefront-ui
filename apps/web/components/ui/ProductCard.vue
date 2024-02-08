@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { SfRating, SfCounter, SfLink, SfButton, SfIconShoppingCart, SfIconFavorite } from '@storefront-ui/vue';
+import { SfRating, SfCounter, SfLink, SfButton, SfIconShoppingCart, SfIconFavorite, SfIconFavoriteFilled } from '@storefront-ui/vue';
 import { useToast } from 'vue-toastification';
+import { Product } from '~/graphql';
 
 defineProps({
   imageUrl: {
@@ -39,10 +40,6 @@ defineProps({
     type: Number,
     required: false,
   },
-  isInWishlist: {
-    type: Boolean,
-    required: false,
-  },
   firstVariant: {
     type: Object,
     required: false,
@@ -50,16 +47,14 @@ defineProps({
 });
 
 const { cartAdd } = useCart();
-const { WishlistAddItem } = useWishlist();
-const toast = useToast();
+const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist();
 
-const addToWishlist = async (firstVariant: any) => {
-  const response = await WishlistAddItem(firstVariant.id);
-  if (response) {
-    toast.success('Product has been added to wishlist');
-  } else {
-    toast.warning('Product has already been added to wishlist');
-  }
+const handleWishlistAddItem = async (firstVariant: Product) => {
+  await wishlistAddItem(firstVariant.id);
+};
+
+const handleWishlistRemoveItem = async (firstVariant: Product) => {
+  await wishlistRemoveItem(firstVariant.id);
 };
 </script>
 <template>
@@ -74,6 +69,7 @@ const addToWishlist = async (firstVariant: any) => {
           class="rounded-md"
         />
       </SfLink>
+
       <SfButton
         type="button"
         variant="tertiary"
@@ -81,12 +77,13 @@ const addToWishlist = async (firstVariant: any) => {
         square
         :class="[
           'absolute bottom-0 right-0 mr-2 mb-2 bg-white border border-neutral-200 !rounded-full',
-          { '!bg-green-200': isInWishlist },
+          { '!bg-green-200': isInWishlist(firstVariant?.id) },
         ]"
         aria-label="Add to wishlist"
-        @click="addToWishlist(firstVariant)"
+        @click="isInWishlist(firstVariant?.id) ? handleWishlistRemoveItem(firstVariant as Product) : handleWishlistAddItem(firstVariant as Product)"
       >
-        <SfIconFavorite size="sm" />
+        <SfIconFavoriteFilled size="sm" v-if="isInWishlist(firstVariant?.id)" />
+        <SfIconFavorite size="sm" v-else />
       </SfButton>
     </div>
     <div class="p-2 border-t border-neutral-200 typography-text-sm">

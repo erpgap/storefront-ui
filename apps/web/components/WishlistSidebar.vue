@@ -2,21 +2,17 @@
 import { SfDrawer, SfButton, SfIconClose } from '@storefront-ui/vue';
 import { onClickOutside } from '@vueuse/core';
 import { useToast } from 'vue-toastification';
+import { WishlistItem } from '~/graphql';
 
 const props = defineProps({
   isOpen: {
     type: Boolean,
     required: true,
-  },
-  collectedProducts: {
-    type: [String, Object],
-    required: true,
-    default: {},
-  },
+  }
 });
 const emit = defineEmits(['close', 'wishlistCount']);
 
-const { loadWishlist, loading, WishlistRemoveItem } = useWishlist();
+const { wishlist, wishlistRemoveItem, wishlistTotalItems } = useWishlist();
 const { isOpen } = toRefs(props);
 const toast = useToast();
 
@@ -24,25 +20,9 @@ const WishlistRef = ref();
 onClickOutside(WishlistRef, () => {
   emit('close');
 });
-const wishlistItems = ref<any[]>([]);
 
-watch(isOpen, async (val) => {
-  if (val) {
-    const res = await loadWishlist();
-    if (res && res.wishlistItems) {
-      wishlistItems.value = res.wishlistItems;
-      emit('wishlistCount', wishlistItems.value?.length);
-    }
-  }
-});
-
-const removeFromWishlist = async (id: number) => {
-  const response = await WishlistRemoveItem(id);
-  if (response && response.wishlistItems) {
-    wishlistItems.value = response.wishlistItems;
-    emit('wishlistCount', wishlistItems.value?.length);
-    toast.success('Product has been removed from wishlist');
-  }
+const handleWishlistRemoveItem = async (firstVariant: Product) => {
+  await wishlistRemoveItem(firstVariant.id);
 };
 
 const withBase = (filepath: string) =>
@@ -88,27 +68,27 @@ const withBase = (filepath: string) =>
             </div>
             <div v-if="!loading">
               <div
-                v-if="wishlistItems"
+                v-if="wishlistTotalItems > 0"
                 class="overflow-y-scroll h-[800px] p-4 text-black"
               >
                 <div class="flex items-center font-medium pb-6">
                   <p class="text-gray-600 mr-1">Number of products :</p>
-                  {{ wishlistItems?.length }}
+                  {{ wishlistTotalItems }}
                 </div>
-                <div v-for="{ product, id } in wishlistItems" :key="id">
+                <div v-for="item in wishlist.wishlistItems" :key="item?.id">
                   <WishlistCollectedProductCard
-                    :id="id"
-                    :image-url="withBase(product.image)"
-                    :image-alt="product.name"
-                    :name="product.name ?? ''"
+                    :id="item?.id"
+                    :image-url="withBase(item?.product?.image)"
+                    :image-alt="item?.product?.name"
+                    :name="item?.product?.name ?? ''"
                     :price="
-                      product?.firstVariant?.combinationInfoVariant?.list_price
+                      item?.product?.firstVariant?.combinationInfoVariant?.list_price
                     "
                     :special-price="
-                      product?.firstVariant?.combinationInfoVariant?.price
+                      item?.product?.firstVariant?.combinationInfoVariant?.price
                     "
-                    :slug="product.slug"
-                    @removeFromWishlist="removeFromWishlist"
+                    :slug="item?.product?.slug"
+                    @removeFromWishlist="handleWishlistRemoveItem(item?.product)"
                   />
                 </div>
               </div>

@@ -3,31 +3,6 @@ import { SfButton, SfIconArrowBack } from '@storefront-ui/vue';
 
 const { cart, loadCart } = useCart();
 
-const data:any = ref([
-  {
-    id: 1,
-    attributes: [
-      {
-        name: 'Size',
-        label: '40',
-      },
-      {
-        name: 'Color',
-        label: 'White',
-      },
-    ],
-    imageUrl: null,
-    imageAlt: 'athletic-mens-walking-sneakers',
-    maxValue: 20,
-    minValue: 1,
-    name: 'athletic-mens-walking-sneakers',
-    price: '89.95',
-    specialPrice: '100.99',
-    quantity: 10,
-    slug: '/product/1',
-  },
-]);
-
 await loadCart();
 
 </script>
