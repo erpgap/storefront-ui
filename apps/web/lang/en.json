@@ -296,11 +296,15 @@
       "billingDetails": {
         "billingAddress": "Billing address",
         "edit": "Edit",
-        "shippingAddress": "Shipping address"
+        "shippingAddress": "Shipping address",
+        "delete": "Delete",
+        "addAddress": "Add new Address"
       },
       "shippingDetails": {
         "edit": "Edit",
-        "shippingAddress": "Shipping address"
+        "shippingAddress": "Shipping address",
+        "delete": "Delete",
+        "addAddress": "Add new Address"
       }
     },
     "ordersAndReturns": {

@@ -1,6 +1,7 @@
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <div v-for="address in mailingAddresses">
+    <SfRadio />
     <AccountProfileData
     class="col-span-3"
     :header="$t('account.accountSettings.shippingDetails.shippingAddress')"
@@ -58,6 +59,7 @@ import {
   SfButton,
   SfIconClose,
   SfModal,
+  SfRadio,
   useDisclosure,
 } from '@storefront-ui/vue';
 import { AddressEnum, Partner } from '~/graphql';
