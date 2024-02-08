@@ -3,31 +3,6 @@ import { SfButton, SfIconArrowBack } from '@storefront-ui/vue';
 
 const { cart, loadCart } = useCart();
 
-const data:any = ref([
-  {
-    id: 1,
-    attributes: [
-      {
-        name: 'Size',
-        label: '40',
-      },
-      {
-        name: 'Color',
-        label: 'White',
-      },
-    ],
-    imageUrl: null,
-    imageAlt: 'athletic-mens-walking-sneakers',
-    maxValue: 20,
-    minValue: 1,
-    name: 'athletic-mens-walking-sneakers',
-    price: '89.95',
-    specialPrice: '100.99',
-    quantity: 10,
-    slug: '/product/1',
-  },
-]);
-
 await loadCart();
 
 </script>
@@ -69,29 +44,19 @@ await loadCart();
           v-for="orderLine in cart.order?.orderLines"
           :key="orderLine?.id"
         >
-          <CartCollectedProductCard
-            :attributes="attributes"
-            :image-url="orderLine?.product?.image"
-            :image-alt="orderLine?.product?.imageFilename"
-            :name="orderLine?.name || `-`"
-            :price="String(orderLine?.priceTotal)"
-            :special-price="String(orderLine?.priceSubtotal)"
-            :max-value="10"
-            :min-value="1"
-            :value="Number(orderLine.quantity)"
-            :slug="slug"
-          />
+          <CartCollectedProductCard :order-line="orderLine" />
         </div>
       </div>
 
       <UiOrderSummary :cart="cart" class="col-span-5 md:sticky md:top-20 h-fit">
-        <SfButton
-          to="/checkout"
-          size="lg"
-          class="w-full mb-4 md:mb-0"
-        >
-          {{ $t('goToCheckout') }}
-        </SfButton>
+        <NuxtLink to="/checkout">
+          <SfButton
+            size="lg"
+            class="w-full mb-4 md:mb-0"
+          >
+            {{ $t('goToCheckout') }}
+          </SfButton>
+        </NuxtLink>
       </UiOrderSummary>
     </div>
   </div>

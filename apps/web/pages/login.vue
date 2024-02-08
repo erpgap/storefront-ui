@@ -18,14 +18,14 @@ const router = useRouter();
 const email = ref('');
 const password = ref('');
 const rememberMe = ref<boolean>();
-const isLoading = ref<boolean>();
+const { login, loading, loginError } = useUser();
 
-const login = () => {
-  isLoading.value = true;
-  // mimics waiting an async api call
-  setTimeout(() => {
-    void router.push('/').then(() => (isLoading.value = false));
-  }, 4000);
+const handleLogin = async () => {
+  await login({email: email.value, password: password.value});
+  if (!loginError.value) {
+    router.push('/');
+  }
+
 };
 </script>
 
@@ -33,7 +33,7 @@ const login = () => {
   <div>
     <NuxtLayout name="auth" :heading="$t('auth.login.heading')">
       <form
-        @submit.prevent="login"
+        @submit.prevent="handleLogin"
         class="border-neutral-200 md:border flex flex-col gap-4 md:p-6 rounded-md"
       >
         <label>
@@ -62,9 +62,9 @@ const login = () => {
           {{ $t('auth.login.rememberMeLabel') }}
         </label>
 
-        <SfButton type="submit" class="mt-2" :disabled="isLoading">
+        <SfButton type="submit" class="mt-2" :disabled="loading">
           <SfLoaderCircular
-            v-if="isLoading"
+            v-if="loading"
             class="flex justify-center items-center"
             size="base"
           />

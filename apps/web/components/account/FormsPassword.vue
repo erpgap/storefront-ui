@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="$emit('on-save')" data-testid="account-forms-password">
+  <form @submit.prevent="$emit('on-save', userPasswords)" data-testid="account-forms-password">
     <label class="block">
       <UiFormLabel>{{
         $t('account.accountSettings.personalData.currentPassword')

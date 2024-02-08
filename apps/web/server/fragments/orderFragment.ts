@@ -5,6 +5,7 @@ order {
   amountTotal
   amountTax
   amountDelivery
+  amountSubtotal
   dateOrder
   orderUrl
   stage
@@ -19,6 +20,14 @@ order {
       imageFilename
       displayName
       combinationInfo
+      slug
+      variantAttributeValues{
+        id
+        name
+        attribute{
+          name
+        }
+      }
     }
     quantity
     priceTotal
@@ -34,6 +43,14 @@ order {
       imageFilename
       displayName
       combinationInfo
+      slug
+      variantAttributeValues{
+        id
+        name
+        attribute{
+          name
+        }
+      }
     }
     quantity
     priceTotal

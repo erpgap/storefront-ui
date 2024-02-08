@@ -1,27 +1,17 @@
 <script setup lang="ts">
-import { SfLink, SfIconSell } from '@storefront-ui/vue';
-
-interface Attribute {
-  label: string;
-  name: string;
-  value: string;
-}
-
-type CartProductCardProps = {
-  attributes: Attribute[];
-  imageUrl?: string | null;
-  imageAlt?: string | null;
-  maxValue: number;
-  minValue: number;
-  name: string;
-  price: string;
-  specialPrice: string;
-  value: number;
-  slug: string;
-};
-
-defineProps<CartProductCardProps>();
+import { SfLink, SfIconSell, SfIconRemove, SfIconRemoveShoppingCart } from '@storefront-ui/vue';
+import { OrderLine } from '~/graphql';
 const NuxtLink = resolveComponent('NuxtLink');
+
+defineProps({
+  orderLine: {
+    type: Object as PropType<OrderLine>,
+    required: true,
+  },
+});
+
+const { updateItemQuantity, removeItemFromCart } = useCart();
+
 </script>
 
 <template>
@@ -30,11 +20,11 @@ const NuxtLink = resolveComponent('NuxtLink');
     data-testid="cart-product-card"
   >
     <div class="relative overflow-hidden rounded-md w-[100px] sm:w-[176px]">
-      <SfLink :tag="NuxtLink" to="/product/1">
+      <SfLink :to="orderLine.product?.slug" :tag="NuxtLink">
         <NuxtImg
           class="w-full h-auto border rounded-md border-neutral-200"
-          :src="$getImage(String(imageUrl), 370, 370, String(imageAlt))"
-          :alt="imageAlt ?? ''"
+          :src="$getImage(String(orderLine.product?.image), 370, 370, String(orderLine.product?.imageFilename))"
+          :alt="orderLine.product?.imageFilename ?? ''"
           width="300"
           height="300"
           loading="lazy"
@@ -49,21 +39,24 @@ const NuxtLink = resolveComponent('NuxtLink');
       </div>
     </div>
     <div class="flex flex-col pl-4 min-w-[180px] flex-1">
-      <SfLink
-        :tag="NuxtLink"
-        to="/product/1"
-        variant="secondary"
-        class="no-underline typography-text-sm sm:typography-text-lg"
-      >
-        {{ name }}
-      </SfLink>
+      <div class="flex justify-between">
+        <SfLink
+          :tag="NuxtLink"
+          :to="orderLine.product?.slug"
+          variant="secondary"
+          class="no-underline typography-text-sm sm:typography-text-lg cursor-pointer"
+        >
+           {{ orderLine.product?.name }}
+        </SfLink>
+        <SfIconRemoveShoppingCart class="cursor-pointer" @click="removeItemFromCart(orderLine.id)"/>
+      </div>
       <div class="my-2 sm:mb-0">
         <ul
           class="text-xs font-normal leading-5 sm:typography-text-sm text-neutral-700"
         >
-          <li v-for="attribute in attributes" :key="attribute.name">
-            <span class="mr-1">{{ attribute.name }}:</span>
-            <span class="font-medium">{{ attribute.label }}</span>
+          <li v-for="attribute in orderLine.product?.variantAttributeValues" :key="attribute.id">
+            <span class="mr-1">{{ attribute.attribute?.name }}:</span>
+            <span class="font-medium">{{ attribute.name }}</span>
           </li>
         </ul>
       </div>
@@ -71,26 +64,28 @@ const NuxtLink = resolveComponent('NuxtLink');
         class="items-start sm:items-center sm:mt-auto flex flex-col sm:flex-row"
       >
         <span
-          v-if="specialPrice"
+          v-if="orderLine.priceSubtotal"
           class="text-secondary-700 sm:order-1 font-bold typography-text-sm sm:typography-text-lg sm:ml-auto"
         >
-          ${{ specialPrice }}
+          ${{ orderLine.priceSubtotal }}
           <span
             class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
           >
-            ${{ price }}
+            ${{ orderLine.priceTotal }}
           </span>
         </span>
         <span
           v-else
           class="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg"
         >
-          ${{ price }}
+          ${{ orderLine.priceTotal }}
         </span>
         <UiQuantitySelector
-          :min-value="minValue"
-          :max-value="maxValue"
+          :min-value="1"
+          :max-value="Number(orderLine.product?.qty)"
+          :value="Number(orderLine.quantity)"
           class="mt-4 sm:mt-0"
+          @update:value="updateItemQuantity(orderLine.id, $event)"
         />
       </div>
     </div>

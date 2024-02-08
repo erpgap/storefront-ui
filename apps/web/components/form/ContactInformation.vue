@@ -1,14 +1,14 @@
 <template>
   <form
     data-testid="contact-information-form"
-    @submit.prevent="$emit('on-save')"
+    @submit.prevent="$emit('on-save', contactInfo.email)"
   >
     <label>
       <FormLabel>{{ $t('contactInfo.email') }}</FormLabel>
       <SfInput
         name="email"
         type="email"
-        v-model="cart.customerEmail"
+        v-model="contactInfo.email"
         required
       />
     </label>
@@ -27,11 +27,17 @@
     </div>
   </form>
 </template>
-<script setup>
+<script lang="ts" setup>
 import { SfButton, SfInput } from '@storefront-ui/vue';
 
+type FormContactInformationProps = {
+  email?: string;
+};
+
+const props = defineProps<FormContactInformationProps>();
+const { email } = toRefs(props);
 defineEmits(['on-save', 'on-cancel']);
-const cart = ref({
-  customerEmail: '',
+const contactInfo = ref({
+  email: email?.value ?? '',
 });
 </script>

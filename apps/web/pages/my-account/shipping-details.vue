@@ -1,19 +1,20 @@
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-  <AccountProfileData
+  <div v-for="address in mailingAddresses">
+    <AccountProfileData
     class="col-span-3"
     :header="$t('account.accountSettings.shippingDetails.shippingAddress')"
     :button-text="$t('account.accountSettings.personalData.edit')"
     @on-click="open"
   >
     <p>
-      {{ userShippingAddress.firstName }} {{ userShippingAddress.lastName }}
+      {{ address?.name }}
     </p>
-    <p>{{ userShippingAddress.phoneNumber }}</p>
-    <p>{{ userShippingAddress.address1 }} {{ userShippingAddress.address2 }}</p>
+    <p>{{ address?.phone }}</p>
+    <p>{{ address?.street }} {{ address?.street2 }}</p>
     <p>
-      {{ userShippingAddress.city }}, {{ userShippingAddress.state }}
-      {{ userShippingAddress.postalCode }}
+      {{ address?.city }}, {{ address?.state?.name }}
+      {{ address?.zip }}
     </p>
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
@@ -42,13 +43,14 @@
         </h3>
       </header>
       <FormAddAddress
-        :saved-address="userShippingAddress"
+        :saved-address="address"
         type="shippingAddress"
         @on-save="close"
         @on-close="close"
       />
     </SfModal>
   </UiOverlay>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -58,22 +60,13 @@ import {
   SfModal,
   useDisclosure,
 } from '@storefront-ui/vue';
+import { AddressEnum } from '~/graphql';
 
 definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
+const { mailingAddresses, loadAddressesByType } = useAddresses();
 
-const userShippingAddress = ref({
-  firstName: 'Hieronim',
-  lastName: 'Anonim',
-  address1: 'Oak Drive',
-  address2: '3633',
-  city: 'Colonie',
-  country: 'US',
-  phoneNumber: '+1 321 765 0987',
-  postalCode: '12205',
-  state: 'NY',
-  titleCode: '',
-});
+await loadAddressesByType(AddressEnum.Shipping);
 </script>

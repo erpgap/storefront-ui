@@ -79,7 +79,7 @@
             <ul>
               <SfListItem
                 :tag="NuxtLink"
-                to="/"
+                @click="handleLogout"
                 class="py-4 md:py-2 mt-4 rounded-md active:bg-primary-100 !text-neutral-900"
               >
                 <template #prefix><SfIconBase /></template>
@@ -109,6 +109,7 @@ import { SfIconBase, SfIconPerson, SfIconShoppingCart, SfListItem, SfButton, SfI
 const NuxtLink = resolveComponent('NuxtLink');
 const { t } = useI18n();
 const router = useRouter();
+const { logout } = useUser();
 const sections = [
   {
     title: t('account.accountSettings.heading'),
@@ -157,4 +158,9 @@ const breadcrumbs = computed(() => [
   { name: t('account.heading'), link: '/my-account' },
   ...(isRoot.value ? [] : [{ name: findCurrentPage.value?.label, link: currentPath.value }]),
 ]);
+
+const handleLogout = async () => {
+  await logout();
+  router.push('/');
+};
 </script>

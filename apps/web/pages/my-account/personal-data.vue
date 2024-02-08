@@ -6,7 +6,7 @@
     :button-text="$t('account.accountSettings.personalData.edit')"
     @on-click="openModal('yourName')"
   >
-    Mahade Hasan
+    {{ user?.name }}
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <AccountProfileData
@@ -15,7 +15,7 @@
     :button-text="$t('account.accountSettings.personalData.edit')"
     @on-click="openModal('contactInformation')"
   >
-    mahade@gmail.com
+    {{ user?.email }}
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <AccountProfileData
@@ -55,17 +55,19 @@
       </header>
       <AccountFormsName
         v-if="openedForm === 'yourName'"
-        @on-save="closeModal"
+        :full-name="user?.name"
+        @on-save="saveNewName"
         @on-cancel="closeModal"
       />
       <FormContactInformation
         v-else-if="openedForm === 'contactInformation'"
-        @on-save="closeModal"
+        :email="user?.email"
+        @on-save="saveNewEmail"
         @on-cancel="closeModal"
       />
       <AccountFormsPassword
         v-else-if="openedForm === 'passwordChange'"
-        @on-save="closeModal"
+        @on-save="saveNewPassword"
         @on-cancel="closeModal"
       />
     </SfModal>
@@ -85,6 +87,7 @@ definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
+const { loadUser, user, updateAccount, updatePassword, updatePasswordError } = useUser();
 const lastActiveElement = ref();
 const modalElement = ref();
 const openedForm = ref('');
@@ -100,4 +103,25 @@ const closeModal = () => {
   close();
   lastActiveElement.value.focus();
 };
+
+const saveNewName = async (newName: string) => {
+  await updateAccount({myaccount: {id: user.value?.id, email: user.value?.email, name: newName}});
+  closeModal();
+};
+
+const saveNewEmail = async (newEmail: string) => {
+  await updateAccount({myaccount: {id: user.value?.id, email: newEmail, name: user.value?.name}});
+  closeModal();
+};
+
+const saveNewPassword = async (passwords: any) => {
+  if (passwords.firstNewPassword === passwords.secondNewPassword) {
+    await updatePassword({currentPassword: passwords.oldPassword, newPassword: passwords.firstNewPassword});
+    if (!updatePasswordError.value) {
+      closeModal();
+    }
+  }
+};
+
+await loadUser();
 </script>

@@ -21,7 +21,7 @@
       <form
         data-testid="signup-form"
         class="flex flex-col md:border md:border-neutral-200 rounded-md gap-4 md:p-6"
-        @submit.prevent="open"
+        @submit.prevent="handleSignup"
       >
         <label>
           <FormLabel>{{ $t('form.firstNameLabel') }} *</FormLabel>
@@ -197,4 +197,17 @@ const subscriptionsModel = ref<boolean>();
 
 const NuxtLink = resolveComponent('NuxtLink');
 const { isOpen, open } = useDisclosure();
+const { signup, loading, signupError } = useUser();
+const router = useRouter();
+
+const fullName = computed(() => `${firstNameModel.value} ${lastNameModel.value}`);
+
+const handleSignup = async () => {
+  await signup({email: emailModel.value, name: fullName.value, password: passwordModel.value, subscribeNewsletter: (subscriptionsModel.value === true)});
+  if (!signupError.value) {
+    open();
+  }
+
+};
+
 </script>

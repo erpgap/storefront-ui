@@ -1,7 +1,6 @@
-
 export default `
-partner{
     id
+    addressType
     name
     street
     street2
@@ -18,5 +17,4 @@ partner{
     }
     email
     phone
-  }
 `;
