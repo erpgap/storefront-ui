@@ -45,30 +45,26 @@ const { cart } = useCart();
           <p>${{ cart?.order?.amountTax }}</p>
         </div>
       </div>
-      <div class="flex items-center py-4 border-t border-neutral-200">
+      <!-- <div class="flex items-center py-4 border-t border-neutral-200">
         <p>{{ $t('promoCode') }}</p>
         <SfButton size="sm" variant="tertiary" class="ml-auto mr-2">
           {{ $t('remove') }}
         </SfButton>
         <p>${{ cart?.totalCouponDiscounts }}</p>
-      </div>
-      <div class="flex gap-x-2 py-4 border-y border-neutral-200 mb-4">
+      </div> -->
+      <!-- <div class="flex gap-x-2 py-4 border-y border-neutral-200 mb-4">
         <SfInput
           wrapper-class="grow"
           :placeholder="$t('promoCodePlaceholder')"
         />
         <SfButton variant="secondary">{{ $t('apply') }}</SfButton>
-      </div>
-      <div
-        class="px-3 py-3 bg-secondary-100 text-secondary-700 typography-text-sm rounded-md text-center mb-4"
-      >
+      </div> -->
+      <!-- <div class="px-3 py-3 bg-secondary-100 text-secondary-700 typography-text-sm rounded-md text-center mb-4" >
         <div class="w-full">
           {{ $t('savingsTag', { amount: 0 }) }}
         </div>
-      </div>
-      <div
-        class="flex justify-between typography-headline-4 md:typography-headline-3 font-bold pb-4 mb-4"
-      >
+      </div> -->
+      <div class="flex justify-between typography-headline-4 md:typography-headline-3 font-bold pb-4 mb-4">
         <p>{{ $t('total') }}</p>
         <p data-testid="total">${{ cart?.order?.amountTotal }}</p>
       </div>

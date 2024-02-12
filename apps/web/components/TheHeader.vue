@@ -22,7 +22,7 @@ defineProps<{ filled?: boolean }>();
 const { loadCategoryList, categories } = useCategory();
 const { isOpen, toggle, close } = useDisclosure();
 const { isOpen: wishlistIsOpen, toggle: wishlistToggle, close: wishlistClose,} = useDisclosure();
-const { wishlistItems } = useWishlist();
+const { wishlistTotalItems, loadWishlist, wishlist } = useWishlist();
 const NuxtLink = resolveComponent('NuxtLink');
 
 const menuRef = ref();
@@ -70,17 +70,12 @@ const bannerDetails = {
   title: 'New in designer watches',
 };
 
-const wishlistTotalItems: any = ref();
-
-const setWishlistCount = async (count: number) => {
-  wishlistTotalItems.value = count;
-};
-
 const handleWishlistSideBar = async () => {
   wishlistToggle();
 };
 
 await loadCategoryList({ filter: { parent: true } });
+await loadWishlist();
 
 </script>
 
@@ -268,7 +263,6 @@ await loadCategoryList({ filter: { parent: true } });
               <template #prefix>
                 <SfIconFavorite class="text-white" />
                 <SfBadge
-                  v-if="wishlistTotalItems"
                   :content="wishlistTotalItems"
                   class="outline outline-primary-700 bg-white !text-neutral-900 group-hover:outline-primary-800 group-active:outline-primary-900 flex justify-center"
                   data-testid="wishlist-badge"
@@ -277,9 +271,7 @@ await loadCategoryList({ filter: { parent: true } });
             </SfButton>
             <WishlistSidebar
               :is-open="wishlistIsOpen"
-              :collected-products="wishlistItems"
               @close="wishlistClose"
-              @wishlistCount="setWishlistCount"
             />
           </div>
           <SfButton

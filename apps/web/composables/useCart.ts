@@ -1,4 +1,4 @@
-import { Cart, CartData, CartRemoveItemResponse, CartResponse, CartUpdateItemResponse, MutationCartAddItemArgs, MutationCartRemoveItemArgs, MutationCartUpdateItemArgs } from '~/graphql';
+import { Cart, CartRemoveItemResponse, CartResponse, CartUpdateItemResponse, MutationCartAddItemArgs, MutationCartRemoveItemArgs, MutationCartUpdateItemArgs } from '~/graphql';
 import { MutationName } from '~/server/mutations';
 import { QueryName } from '~/server/queries';
 import { useToast } from 'vue-toastification';

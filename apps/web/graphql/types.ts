@@ -1,5 +1,5 @@
 import { H3Error } from 'h3';
-import { AttributeValue, Cart, Categories, Category, CountryList, Partner, Product, Products } from './gql/graphql';
+import { AttributeValue, Cart, Categories, Category, Partner, Product, Products, WishlistData } from './gql/graphql';
 import { _AsyncData } from 'nuxt/dist/app/composables/asyncData';
 
 export type CategoryListResponse = _AsyncData<
@@ -51,10 +51,23 @@ export type ProductVariantResponse = _AsyncData<
   H3Error
 >;
 
-export type WishlistResponse = _AsyncData<
+export type WishlistLoadResponse = _AsyncData<
   {
-    totalCount: number;
-    product: Product;
+    wishlistItems: WishlistData
+  },
+  H3Error
+>;
+
+export type WishlistAddItemResponse = _AsyncData<
+  {
+    wishlistAddItem: WishlistData
+  },
+  H3Error
+>;
+
+export type WishlistRemoveItemResponse = _AsyncData<
+  {
+    wishlistRemoveItem: WishlistData
   },
   H3Error
 >;
