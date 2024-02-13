@@ -1,11 +1,11 @@
 import { DocumentNode } from 'graphql/language';
 import LoadUserQuery from './LoadUserQuery';
-import ProductVariantQuery from './ProductVariantQuery';
+import GetProductVariantQuery from './GetProductVariantQuery';
 import StockLotsQuery from './StockLotsQuery';
 import GetCategories from './GetCategories';
 import GetCategory from './GetCategory';
 import GetProductTemplateList from './GetProductTemplateList';
-import GetProduct from './GetProduct';
+import GetProductTemplate from './GetProductTemplate';
 import WishlistLoadQuery from './WishlistLoadQuery';
 import LoadCart from './LoadCart';
 import GetAddresses from './GetAddresses';
@@ -13,13 +13,13 @@ import GetCountries from './GetCountries';
 import GetCountryState from './GetCountryState';
 
 enum QueryName {
-  ProductVariantQuery = 'ProductVariantQuery',
+  GetProductVariantQuery = 'GetProductVariantQuery',
   LoadUserQuery = 'LoadUserQuery',
   StockLotsQuery = 'StockLotsQuery',
   GetCategories = 'GetCategories',
   GetCategory = 'GetCategory',
   GetProductTemplateList = 'GetProductTemplateList',
-  GetProduct = 'GetProduct',
+  GetProductTemplate = 'GetProductTemplate',
   GetWishlist = 'GetWishlist',
   LoadCart = 'LoadCart',
   GetAddresses = 'GetAddresses',
@@ -29,13 +29,13 @@ enum QueryName {
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
-  ProductVariantQuery,
+  GetProductVariantQuery,
   LoadUserQuery,
   StockLotsQuery,
   GetCategories,
   GetCategory,
   GetProductTemplateList,
-  GetProduct,
+  GetProductTemplate,
   WishlistLoadQuery,
   LoadCart,
   GetAddresses,

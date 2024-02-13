@@ -1,4 +1,4 @@
-import { Cart, CartRemoveItemResponse, CartResponse, CartUpdateItemResponse, MutationCartAddItemArgs, MutationCartRemoveItemArgs, MutationCartUpdateItemArgs } from '~/graphql';
+import { Cart, CartAddItemResponse, CartRemoveItemResponse, CartResponse, CartUpdateItemResponse, MutationCartAddItemArgs, MutationCartRemoveItemArgs, MutationCartUpdateItemArgs } from '~/graphql';
 import { MutationName } from '~/server/mutations';
 import { QueryName } from '~/server/queries';
 import { useToast } from 'vue-toastification';
@@ -23,14 +23,14 @@ export const useCart = () => {
   const cartAdd = async (productId: number, quantity: number) => {
     loading.value = true;
 
-    const { data, error } = await $sdk().odoo.mutation<MutationCartAddItemArgs, CartResponse >({ mutationName: MutationName.CartAddItem }, { productId, quantity });
+    const { data, error } = await $sdk().odoo.mutation<MutationCartAddItemArgs, CartAddItemResponse>({ mutationName: MutationName.CartAddItem }, { productId, quantity });
     loading.value = false;
 
     if (error.value) {
       return toast.error(error.value.data.message);
     }
 
-    cart.value = data.value.cart;
+    cart.value = data.value.cartAddItem;
     cartCounter.value = (Number(cartCounter?.value) || 0) + 1;
     toast.success('Product has been added to cart');
   };

@@ -2,7 +2,7 @@
 import { SfDrawer, SfButton, SfIconClose } from '@storefront-ui/vue';
 import { onClickOutside } from '@vueuse/core';
 import { useToast } from 'vue-toastification';
-import { WishlistItem } from '~/graphql';
+import { Product, WishlistItem } from '~/graphql';
 
 const props = defineProps({
   isOpen: {
@@ -12,7 +12,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['close', 'wishlistCount']);
 
-const { wishlist, wishlistRemoveItem, wishlistTotalItems } = useWishlist();
+const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading } = useWishlist();
 const { isOpen } = toRefs(props);
 const toast = useToast();
 
