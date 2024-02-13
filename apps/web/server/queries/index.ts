@@ -9,6 +9,7 @@ import GetProduct from './GetProduct';
 import WishlistLoadQuery from './WishlistLoadQuery';
 import LoadCart from './LoadCart';
 import GetAddresses from './GetAddresses';
+import GetCountries from './GetCountries';
 
 enum QueryName {
   ProductVariantQuery = 'ProductVariantQuery',
@@ -21,7 +22,8 @@ enum QueryName {
   GetWishlist = 'GetWishlist',
   LoadCart = 'LoadCart',
   GetAddresses = 'GetAddresses',
-  WishlistLoadQuery = 'WishlistLoadQuery'
+  WishlistLoadQuery = 'WishlistLoadQuery',
+  GetCountries = 'GetCountries'
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
@@ -34,7 +36,8 @@ const Queries: Record<QueryName, DocumentNode> = {
   GetProduct,
   WishlistLoadQuery,
   LoadCart,
-  GetAddresses
+  GetAddresses,
+  GetCountries
 };
 
 export { Queries, QueryName };

@@ -11,6 +11,7 @@ import {
   SfRadio,
   SfLink,
 } from '@storefront-ui/vue';
+import { AddressEnum } from '~/graphql';
 
 enum PaymentMethod {
   CreditCard = 'credit-card',
@@ -21,34 +22,28 @@ enum PaymentMethod {
 
 const NuxtLink = resolveComponent('NuxtLink');
 const { isOpen, open, close } = useDisclosure();
-const cart = ref({
-  customerEmail: '',
-});
+
+const { cart, loadCart } = useCart();
+const { loadAddressesByType, mailingAddresses, billingAddresses } = useAddresses();
+const { loadCountryList } = useCountry();
+const { updatePartner } = usePartner();
+
+await loadCart();
+await loadAddressesByType(AddressEnum.Shipping);
+await loadAddressesByType(AddressEnum.Billing);
+
+await loadCountryList();
+
+const savedMailingAddress = computed(() => mailingAddresses.value[0] || null);
+const savedBillingAddress = computed(() => billingAddresses.value[0] || null);
+const partnerEmail = cart.value.order?.partner?.email || undefined;
 const isLoading = false;
-const shippingAddress = ref({
-  firstName: 'Hieronim',
-  lastName: 'Anonim',
-  address1: 'Oak Drive',
-  address2: '3633',
-  city: 'Colonie',
-  country: 'US',
-  phoneNumber: '+1 321 765 0987',
-  postalCode: '12205',
-  state: 'NY',
-  titleCode: '',
-});
-const billingAddress = ref({
-  firstName: 'Hieronim',
-  lastName: 'Anonim',
-  address1: 'Oak Drive',
-  address2: '3633',
-  city: 'Colonie',
-  country: 'US',
-  phoneNumber: '+1 321 765 0987',
-  postalCode: '12205',
-  state: 'NY',
-  titleCode: '',
-});
+
+const updatePartnerEmail = async (email: string) => {
+  await updatePartner({ email });
+  close();
+};
+
 const shippingMethods = ref([
   {
     id: '1',
@@ -112,7 +107,7 @@ const data = ref({
                 {{ $t('contactInfo.heading') }}
               </h2>
               <SfButton
-                v-if="cart.customerEmail"
+                v-if="partnerEmail"
                 size="sm"
                 variant="tertiary"
                 @click="open"
@@ -120,8 +115,8 @@ const data = ref({
                 {{ $t('contactInfo.edit') }}
               </SfButton>
             </div>
-            <div v-if="cart.customerEmail" class="mt-2 md:w-[520px]">
-              <p>{{ cart.customerEmail }}</p>
+            <div v-if="partnerEmail" class="mt-2 md:w-[520px]">
+              <p>{{ partnerEmail }}</p>
             </div>
             <div v-else class="w-full md:max-w-[520px]">
               <p>{{ $t('contactInfo.description') }}</p>
@@ -157,7 +152,7 @@ const data = ref({
                   {{ $t('contactInfo.heading') }}
                 </h3>
               </header>
-              <FormContactInformation on-save="close" @on-cancel="close" />
+              <FormContactInformation :email="partnerEmail" @on-save="updatePartnerEmail" @on-cancel="close" />
             </SfModal>
           </div>
 
@@ -166,7 +161,7 @@ const data = ref({
             :heading="$t('shipping.heading')"
             :description="$t('shipping.description')"
             :button-text="$t('shipping.addButton')"
-            :saved-address="shippingAddress"
+            :saved-address="savedMailingAddress"
             type="shippingAddress"
           />
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
@@ -174,7 +169,7 @@ const data = ref({
             :heading="$t('billing.heading')"
             :description="$t('billing.description')"
             :button-text="$t('billing.addButton')"
-            :saved-address="billingAddress"
+            :saved-address="savedBillingAddress"
             type="billingAddress"
           />
 

@@ -6,18 +6,13 @@ const { cart } = useCart();
 </script>
 
 <template>
-  <div
-    class="shadow-lg md:rounded-md md:border md:border-neutral-100"
-    data-testid="order-summary"
-  >
-    <div
-      class="flex justify-between items-end py-2 px-4 md:px-6 md:pt-6 md:pb-4"
-    >
+  <div class="shadow-lg md:rounded-md md:border md:border-neutral-100" data-testid="order-summary">
+    <div class="flex justify-between items-end py-2 px-4 md:px-6 md:pt-6 md:pb-4">
       <p class="typography-headline-4 font-bold md:typography-headline-3">
         {{ $t('orderSummary') }}
       </p>
       <p class="typography-text-base font-medium" data-testid="total-in-cart">
-        {{ $t('itemsInCart') }} {{ cart?.order?.websiteOrderLine?.length }}
+        {{ $t('itemsInCart', { count: cart?.order?.websiteOrderLine?.length }) }}
       </p>
     </div>
     <div class="px-4 pb-4 mt-3 md:px-6 md:pb-6 md:mt-0">
