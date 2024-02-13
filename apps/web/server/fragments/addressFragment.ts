@@ -5,6 +5,7 @@ export default `
     street
     street2
     city
+    zip
     state
     {
       id
