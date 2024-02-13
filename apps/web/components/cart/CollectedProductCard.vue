@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SfLink, SfIconSell, SfIconRemove, SfIconRemoveShoppingCart } from '@storefront-ui/vue';
-import { OrderLine } from '~/graphql';
+import { OrderLine, Product } from '~/graphql';
 const NuxtLink = resolveComponent('NuxtLink');
 
 defineProps({
@@ -42,7 +42,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
       <div class="flex justify-between">
         <SfLink
           :tag="NuxtLink"
-          :to="orderLine.product?.slug"
+          :to="mountUrlSlugForProductVariant((orderLine.product) as Product)"
           variant="secondary"
           class="no-underline typography-text-sm sm:typography-text-lg cursor-pointer"
         >
@@ -71,7 +71,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
           <span
             class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
           >
-            ${{ orderLine.priceTotal }}
+            ${{ orderLine.product?.combinationInfo?.list_price }}
           </span>
         </span>
         <span

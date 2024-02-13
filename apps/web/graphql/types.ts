@@ -1,6 +1,6 @@
 import { H3Error } from 'h3';
-import { AttributeValue, Cart, Categories, Category, Partner, Product, Products, WishlistData } from './gql/graphql';
 import { _AsyncData } from 'nuxt/dist/app/composables/asyncData';
+import { AttributeValue, Cart, Category, Partner, Product, ProductVariant, WishlistData } from './gql/graphql';
 
 export type CategoryListResponse = _AsyncData<
   {
@@ -39,17 +39,9 @@ export type ProductResponse = _AsyncData<
   H3Error
 >;
 
-export type ProductVariantResponse = _AsyncData<
-  {
-    product: Product;
-    productTemplateId: string;
-    displayName: string;
-    price: number;
-    listPrice: string;
-    hasDiscountedPrice: boolean;
-  },
-  H3Error
->;
+export type ProductVariantResponse = _AsyncData< {
+  productVariant: ProductVariant
+}, H3Error>;
 
 export type WishlistLoadResponse = _AsyncData<
   {
@@ -79,6 +71,12 @@ export type CartResponse = _AsyncData<
   H3Error
 >;
 
+export type CartAddItemResponse = _AsyncData<
+  {
+    cartAddItem: Cart
+  },
+  H3Error
+>;
 export type CartUpdateItemResponse = _AsyncData<
   {
     cartUpdateItem: Cart

@@ -1,91 +1,69 @@
 <script setup lang="ts">
 
-import {
-  SfButton,
-  SfCounter,
-  SfLink,
-  SfRating,
-  SfIconSafetyCheck,
-  SfIconCompareArrows,
-  SfIconWarehouse,
-  SfIconPackage,
-  SfIconFavorite,
-  SfIconSell,
-  SfIconShoppingCartCheckout,
-  SfIconShoppingCart,
-  SfChip,
-  SfThumbnail,
-} from '@storefront-ui/vue';
+import { SfButton, SfChip, SfCounter, SfIconCompareArrows, SfIconFavorite, SfIconFavoriteFilled, SfIconPackage, SfThumbnail,
+  SfIconSafetyCheck, SfIconSell, SfIconShoppingCart, SfIconShoppingCartCheckout, SfIconWarehouse, SfLink, SfRating} from '@storefront-ui/vue';
 import { LocationQueryRaw } from 'vue-router';
 import { useToast } from 'vue-toastification';
+import { OrderLine, Product } from '~/graphql';
 
 const route = useRoute();
 const router = useRouter();
-const { loadProduct, product, breadcrumbs, images, getAllSizes, getAllColors, getAllMaterials, regularPrice, specialPrice} = useProduct();
-const { loadProductVariant, productVariant } = useProductVariant();
-const { getRegularPrice, getSpecialPrice } = useProductAttributes();
-const { WishlistAddItem } = useWishlist();
-const { cartAdd } = useCart();
-const cart = ref([]);
+const { loadProductTemplate, productTemplate } = useProduct();
+const { cart, cartAdd } = useCart();
+const { loadProductVariant, productVariant, getAllColors, getAllMaterials, getAllSizes, getImages, breadcrumbs, getRegularPrice, getSpecialPrice } = useProductVariant();
+const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist();
 
-// const params = computed(() => {
-//   return {
-//     combinationId: product?.value.attributeValues?.map((item: { id: number }) => item.id),
-//     productTemplateId: product?.value.combinationInfo?.product_template_id,
-//   };
-// });
+const params = computed(() => ({
+  combinationId: Object.values(route.query)?.map((value) => parseInt(value as string)),
+  productTemplateId: productTemplate?.value.id,
+}));
 
 const toast = useToast();
 
-const selectedSize = computed(() => route.query.Size);
-const selectedColor = computed(() => route.query.Color);
-const selectedMaterial = computed(() => route.query.Material);
+const selectedSize = computed(() => Number(route.query.Size));
+const selectedColor = computed(() => Number(route.query.Color));
+const selectedMaterial = computed(() => Number(route.query.Material));
 const productDetailsOpen = ref(true);
 const quantitySelectorValue = ref(1);
 
-const updateFilter = (filter: LocationQueryRaw | undefined) => {
+const updateFilter = async (filter: LocationQueryRaw | undefined) => {
   router.push({
     path: route.path,
     query: { ...route.query, ...filter },
   });
+  await loadProductVariant(params.value);
 };
 
 const productsInCart = computed(() => {
-  return cart.value.length;
+  return cart.value.order?.orderLines
+    ?.find((orderLine: OrderLine) => orderLine.product?.id === productVariant?.value.id)?.quantity || 0;
 });
 
-const addToCart = async () => {
-  if (product?.value) {
-    cart.value.push(product.value.id);
-  }
-  const response = await cartAdd(
-    product?.value.id,
-    quantitySelectorValue.value
-  );
+const handleCartAdd = async () => {
+  const response = await cartAdd(productVariant?.value.id, quantitySelectorValue.value);
 };
 
-const addToWishlist = async (firstVariant: any) => {
-  const response = await WishlistAddItem(firstVariant.id);
-  if (response) {
-    toast.success('Product has been added to wishlist');
-  } else {
-    toast.warning('Product has already been added to wishlist');
-  }
+const handleWishlistAddItem = async (firstVariant: Product) => {
+  await wishlistAddItem(firstVariant.id);
 };
 
-await loadProduct({ slug: `/product/${route.params.slug}`});
-// await loadProductVariant(params.value);
+const handleWishlistRemoveItem = async (firstVariant: Product) => {
+  await wishlistRemoveItem(firstVariant.id);
+};
+
+await loadProductTemplate({ slug: route.path });
+await loadProductVariant(params.value);
 </script>
 
 <template>
   <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-10 cursor-pointer" />
   <div class="md:grid grid-areas-product-page grid-cols-product-page gap-x-6">
     <section class="grid-in-left-top md:h-full xl:max-h-[700px]">
-      <LazyUiGallery :images="images" />
+      <LazyUiGallery :images="getImages" />
     </section>
     <section class="col-span-5 grid-in-right md:mb-0">
       <div
-        class="pt-6 xl:p-6 md:border md:border-neutral-100 md:shadow-lg md:rounded-md md:sticky md:top-20"
+        class="p-6 xl:p-6 md:border md:border-neutral-100 md:shadow-lg md:rounded-md md:sticky md:top-20"
         data-testid="purchase-card"
       >
         <div
@@ -98,23 +76,23 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
           class="mb-1 font-bold typography-headline-4"
           data-testid="product-name"
         >
-          {{ product?.name }}
+          {{ productVariant?.name }}
         </h1>
         <div
           class="my-1"
           v-if="
-            product?.firstVariant &&
-            product?.firstVariant.combinationInfoVariant.has_discounted_price
+            productVariant &&
+            productVariant?.combinationInfoVariant?.has_discounted_price
           "
         >
           <span
             class="mr-2 text-secondary-700 font-bold font-headings text-2xl"
             data-testid="price"
           >
-            ${{ specialPrice }}
+            ${{ getSpecialPrice }}
           </span>
           <span class="text-base font-normal text-neutral-500 line-through">
-            ${{ regularPrice }}
+            ${{ getRegularPrice }}
           </span>
         </div>
         <div v-else class="my-1">
@@ -122,7 +100,7 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
             class="mr-2 text-secondary-700 font-bold font-headings text-2xl"
             data-testid="price"
           >
-            ${{ regularPrice }}
+            ${{ getRegularPrice }}
           </span>
         </div>
         <div class="inline-flex items-center mt-4 mb-2">
@@ -140,7 +118,7 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
           class="mb-4 font-normal typography-text-sm"
           data-testid="product-description"
         >
-          {{ product?.description }}
+          {{ productVariant?.description }}
         </p>
         <div class="py-4 mb-4 border-gray-200 border-y">
           <div
@@ -156,7 +134,7 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
               class="min-w-[145px] flex-grow flex-shrink-0 basis-0"
             />
             <SfButton
-              @click="addToCart"
+              @click="handleCartAdd"
               type="button"
               size="lg"
               class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap"
@@ -178,11 +156,13 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
               type="button"
               size="sm"
               variant="tertiary"
-              :class="product?.isInWishlist ? 'bg-primary-100' : 'bg-white'"
-              @click="addToWishlist(product?.firstVariant)"
+              :class="productVariant?.isInWishlist ? 'bg-primary-100' : 'bg-white'"
+              @click="isInWishlist(productVariant?.id as number) ? handleWishlistRemoveItem(productVariant) : handleWishlistAddItem(productVariant)"
             >
-              <SfIconFavorite size="sm" />
-              Add to wishlist
+
+            <SfIconFavoriteFilled size="sm" v-if="isInWishlist(productVariant?.id as number)" />
+            <SfIconFavorite size="sm" v-else />
+            {{ isInWishlist(productVariant?.id as number) ? $t('wishlist.removeFromWishlist') : $t('wishlist.addToWishlist') }}
             </SfButton>
           </div>
         </div>
@@ -235,9 +215,7 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
       <UiDivider class="mt-10 mb-6" />
       <div class="lg:px-4" data-testid="product-properties">
         <fieldset v-if="getAllSizes && getAllSizes?.length" class="pb-4 flex">
-          <legend
-            class="block mb-2 text-base font-medium leading-6 text-neutral-900"
-          >
+          <legend class="block mb-2 text-base font-medium leading-6 text-neutral-900">
             Size
           </legend>
           <span
@@ -248,9 +226,7 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
             <SfChip
               class="min-w-[48px]"
               size="sm"
-              :input-props="{
-                onClick: (e) => value == selectedSize && e.preventDefault(),
-              }"
+              :v-model="value"
               :model-value="value == selectedSize"
               @update:model-value="
                 value != selectedSize &&
@@ -275,9 +251,7 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
             <SfChip
               class="min-w-[48px]"
               size="sm"
-              :input-props="{
-                onClick: (e) => value == selectedColor && e.preventDefault(),
-              }"
+              :v-model="value"
               :model-value="value == selectedColor"
               @update:model-value="
                 value != selectedColor &&
@@ -308,9 +282,7 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
             <SfChip
               class="min-w-[48px]"
               size="sm"
-              :input-props="{
-                onClick: (e) => value == selectedMaterial && e.preventDefault(),
-              }"
+              :v-model="value"
               :model-value="value == selectedMaterial"
               @update:model-value="
                 value != selectedMaterial &&
@@ -334,7 +306,7 @@ await loadProduct({ slug: `/product/${route.params.slug}`});
             </h2>
           </template>
           <p>
-            {{ product?.description }}
+            {{ productVariant?.description }}
           </p>
         </UiAccordionItem>
         <UiDivider class="my-4" />

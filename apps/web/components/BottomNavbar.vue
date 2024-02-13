@@ -84,7 +84,7 @@ const handleWishlistSideBar = async () => {
           />
         </div>
       </template>
-      {{ $t('wishlist') }}
+      {{ $t('wishlist.wishlist') }}
     </SfButton>
     <SfButton
       key="cart"

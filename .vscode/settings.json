@@ -5,7 +5,8 @@
     "extensions": [ ".js", ".html" ]
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
+    "source.fixAll": "explicit",
+    "source.organizeImports": "never"
   },
   "[typescriptreact]": {
     "editor.codeActionsOnSave": {
