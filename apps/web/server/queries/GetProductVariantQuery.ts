@@ -24,17 +24,6 @@ export default gql`
                     }
                     }
                 }
-                attributeValues {
-                    id
-                    name
-                    displayType
-                    priceExtra
-                    attribute {
-                    id
-                    name
-                    }
-                    search
-                }
             }
             productTemplateId
             displayName

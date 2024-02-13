@@ -5,7 +5,7 @@ import { Product } from '~/graphql';
 const route = useRoute();
 
 const { isOpen, open, close } = useDisclosure();
-const { loadProductTemplateList, organizedAttributes, loading, productTemplateList, totalItems, categories } = useProductTemplate(String(route.params.id));
+const { loadProductTemplateList, organizedAttributes, loading, productTemplateList, totalItems, categories } = useProductTemplateList(String(route.params.id));
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 const { getFacetsFromURL } = useUiHelpers();
 

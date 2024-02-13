@@ -1,80 +1,88 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { AttributeValue, Category, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql';
+import { AttributeValue, Category, Product, ProductResponse, ProductTemplateListResponse, ProductVariant, ProductVariantData, QueryProductArgs, QueryProductVariantArgs, QueryProductsArgs } from '~/graphql';
 import { QueryName } from '~/server/queries';
+import { useProductAttributes } from './useProductAttributes';
 
-export const useProductTemplate = (categoryId: string) => {
+const { getRegularPrice, getSpecialPrice } = useProductAttributes();
+export const useProductTemplate = (slug?: string) => {
   const { $sdk } = useNuxtApp();
 
   const loading = ref(false);
-  const totalItems = ref(0);
-  const productTemplateList = useState<Product[]>(`products-category${categoryId}`, () => ([]));
-  const attributes = useState<AttributeValue[]>(`attributes${categoryId}`, () => ([]));
-  const categories = useState<Category[]>(`categories-from-product-${categoryId}`, () => ([]));
+  const productTemplate = useState<Product>(`product-${slug}`, () => ({} as Product));
 
-  const loadProductTemplateList = async (params: QueryProductsArgs) => {
-    loading.value = true;
-    try {
-      const {data} = await useAsyncData(`product-template-list-${categoryId}`, async () => {
-        const { data } = await $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>({queryName: QueryName.GetProductTemplateList }, params);
-        return data.value;
-      });
+  const withBase = (filepath: string | null) => `https://vsfdemo15.labs.odoogap.com${filepath}`;
 
-      if (data?.value?.products) {
-        productTemplateList.value = data.value?.products?.products || [];
-        attributes.value = data.value.products?.attributeValues || [];
-        totalItems.value = data.value?.products?.totalCount || 0;
-        categories.value = useUniqBy(data.value.products?.products?.map(product => product?.categories || []).flat(), 'id');
-      }
-    } finally {
-      loading.value = false;
+  const images = computed(() => {
+    return [
+      {
+        imageSrc: withBase(productTemplate?.value?.image),
+        imageThumbSrc: withBase(productTemplate?.value?.image),
+        alt: productTemplate?.value?.name,
+      },
+    ];
+  });
+
+  const specialPrice = computed(() => {
+    if (!productTemplate.value.firstVariant) {
+      return;
     }
+    return getSpecialPrice(productTemplate?.value.firstVariant);
+  });
+
+  const regularPrice = computed(() => {
+    if (!productTemplate.value.firstVariant) {
+      return;
+    }
+    return getRegularPrice(productTemplate?.value.firstVariant);
+  });
+
+  const loadProductTemplate = async(params: QueryProductArgs) => {
+    if (productTemplate.value?.id) {
+      return;
+    }
+    loading.value = true;
+    const { data } = await $sdk().odoo.query<QueryProductArgs, ProductResponse>({queryName: QueryName.GetProductTemplate}, params);
+    loading.value = false;
+
+    productTemplate.value = data?.value.product as Product;
   };
 
-  const organizedAttributes = computed(() => {
-    if (!productTemplateList.value) return [];
+  const getAllSizes = computed(() => {
+    return productTemplate?.value?.attributeValues
+      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Size')
+      ?.map((item: AttributeValue) => ({
+        value: item.id,
+        label: item.name,
+      }));
+  });
 
-    const data: any = [];
+  const getAllColors = computed(() => {
+    return productTemplate?.value?.attributeValues
+      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Color')
+      ?.map((item: AttributeValue) => ({
+        value: item.id,
+        label: item.name,
+      }));
+  });
 
-    attributes.value?.forEach((item: any) => {
-      const current = data.find(
-        (itemData: { attributeName: any }) =>
-          itemData.attributeName === item.attribute?.name
-      );
-
-      if (!current) {
-        data.push({
-          id: String(item.attribute.id),
-          label: item.attribute?.name,
-          attributeName: item.attribute?.name,
-          type: item.displayType,
-          count: 0,
-          options: [],
-        });
-      }
-
-      data
-        .find(
-          (itemData: { attributeName: any }) =>
-            itemData.attributeName === item.attribute?.name
-        )
-        .options.push({
-          id: String(item.search),
-          value: item.id,
-          label: item.name,
-          metadata: item.search,
-          htmlColor: item.htmlColor,
-        });
-    });
-
-    return data;
+  const getAllMaterials = computed(() => {
+    return productTemplate?.value?.attributeValues
+      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Material')
+      ?.map((item: AttributeValue) => ({
+        value: item.id,
+        label: item.name,
+      }));
   });
 
   return {
     loading,
-    loadProductTemplateList,
-    productTemplateList,
-    organizedAttributes,
-    totalItems,
-    categories
+    loadProductTemplate,
+    productTemplate,
+    images,
+    regularPrice,
+    specialPrice,
+    getAllColors,
+    getAllMaterials,
+    getAllSizes
   };
 };

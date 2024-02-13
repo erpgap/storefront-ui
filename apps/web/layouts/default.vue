@@ -16,7 +16,7 @@ const {
 <template>
   <TheHeader @search-modal-open="searchModalOpen" filled />
   <main class="w-full narrow-container bg-white">
-      <NuxtPage />
+      <NuxtPage :pageKey="route => route.fullPath" />
   </main>
 
   <Newsletter />

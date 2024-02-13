@@ -2,18 +2,21 @@
 import { AttributeValue, Product, ProductVariantResponse, QueryProductVariantArgs } from '~/graphql';
 import { QueryName } from '~/server/queries';
 
-export const useProductVariant = (combinationId?: number, productTemplateId?: number) => {
+export const useProductVariant = (slugWithCombinationIds: string) => {
   const { $sdk } = useNuxtApp();
 
-  const loading = ref(false);
-  const productVariant = useState<Product>(`product-${combinationId}-${productTemplateId}`, () => ({} as Product));
+  const loadingProductVariant = ref(false);
+  const productVariant = useState<Product>(`product-${slugWithCombinationIds}`, () => ({} as Product));
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
-    loading.value = true;
-    const { data } = await $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>({queryName: QueryName.GetProductVariantQuery}, params);
-    loading.value = false;
+    // await clearNuxtState();
+    // if (productVariant.value?.id) return;
 
-    productVariant.value = data?.value.productVariant.product as Product;
+    loadingProductVariant.value = true;
+    const { data } = await $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>({queryName: QueryName.GetProductVariantQuery}, params);
+    loadingProductVariant.value = false;
+
+    productVariant.value = data?.value?.productVariant.product as Product;
   };
 
   const breadcrumbs = computed(() => {
@@ -34,42 +37,12 @@ export const useProductVariant = (combinationId?: number, productTemplateId?: nu
     ];
   });
 
-  const getAllSizes = computed(() => {
-    return productVariant?.value?.attributeValues
-      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Size')
-      ?.map((item: AttributeValue) => ({
-        value: item.id,
-        label: item.name,
-      }));
-  });
-
-  const getAllColors = computed(() => {
-    return productVariant?.value?.attributeValues
-      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Color')
-      ?.map((item: AttributeValue) => ({
-        value: item.id,
-        label: item.name,
-      }));
-  });
-
-  const getAllMaterials = computed(() => {
-    return productVariant?.value?.attributeValues
-      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Material')
-      ?.map((item: AttributeValue) => ({
-        value: item.id,
-        label: item.name,
-      }));
-  });
-
   const getRegularPrice = computed(() => productVariant.value?.combinationInfoVariant?.list_price || 0);
   const getSpecialPrice = computed(() => productVariant.value?.combinationInfoVariant?.price || 0);
 
   return {
-    loading,
+    loadingProductVariant,
     productVariant,
-    getAllColors,
-    getAllMaterials,
-    getAllSizes,
     getImages,
     breadcrumbs,
     getRegularPrice,

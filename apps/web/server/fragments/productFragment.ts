@@ -7,6 +7,10 @@ export default `
     variantAttributeValues{
       id
       name
+      displayType
+      name
+      htmlColor
+      search
       attribute{
         id
         name
