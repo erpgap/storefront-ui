@@ -74,6 +74,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      odooBaseImageUrl: '',
       odooBaseUrl: ''
     }
   },
@@ -91,4 +92,12 @@ export default defineNuxtConfig({
       include: ['lodash-es'],
     },
   },
+  image: {
+    providers: {
+      odooProvider: {
+        name: 'odooProvider',
+        provider: '~/providers/odoo-provider.ts'
+      }
+    }
+  }
 });

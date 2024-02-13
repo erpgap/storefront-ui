@@ -7,11 +7,12 @@
         class="flex flex-col justify-center md:basis-2/4 md:items-stretch md:overflow-hidden"
       >
         <NuxtImg
-          src="/images/hero.png"
+          provider="odooProvider"
+          src="/web/image/product.template/94/image_1920/"
           alt="Hero"
           class="h-auto w-full object-cover object-left"
-          width="764"
-          height="600"
+          width="575"
+          height="451"
           sizes="100vw sm:50vw md:764px"
           fetchpriority="high"
           format="webp"
@@ -29,18 +30,18 @@
         <h1
           class="typography-headline-2 md:typography-headline-1 md:leading-[67.5px] font-bold mt-2 mb-4"
         >
-          Sneaker hot drops
+          Jackets hot drops
         </h1>
         <p class="typography-text-base md:typography-text-lg">
-          This fashionable sneaker collection features various colors, comfort
+          This fashionable jackets collection features various colors, comfort
           and style.
         </p>
         <div class="flex flex-col md:flex-row gap-4 mt-6">
-          <SfButton size="lg" :tag="NuxtLink" to="/"> Order Now </SfButton>
+          <SfButton size="lg" :tag="NuxtLink" to="/product/leather-jacket-d-r-o-w-s-black-94?Size=189&Material=188&Color=191"> Order Now </SfButton>
           <SfButton
             size="lg"
             :tag="NuxtLink"
-            to="/"
+            to="/category/53"
             class="bg-white"
             variant="secondary"
           >

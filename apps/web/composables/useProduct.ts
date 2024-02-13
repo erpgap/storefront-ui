@@ -8,111 +8,47 @@ export const useProduct = (slug?: string) => {
   const { $sdk } = useNuxtApp();
 
   const loading = ref(false);
-  const product = useState<Product>(`product-${slug}`, () => ({} as Product));
-
-  const breadcrumbs = computed(() => {
-    if (product?.value?.categories) {
-      const category = product?.value?.categories[0];
-      return [
-        { name: 'Home', link: '/' },
-        { name: category.name, link: `/category/${category.id}` },
-        { name: product?.value?.name, link: `product/${product?.value?.name}` },
-      ];
-    }
-
-    return [
-      { name: 'Home', link: '/' },
-      { name: 'Product'},
-      { name: product?.value?.name, link: `product/${product?.value?.name}` },
-    ];
-  });
+  const productTemplate = useState<Product>(`product-${slug}`, () => ({} as Product));
 
   const withBase = (filepath: string | null) => `https://vsfdemo15.labs.odoogap.com${filepath}`;
 
   const images = computed(() => {
     return [
       {
-        imageSrc: withBase(product?.value?.image),
-        imageThumbSrc: withBase(product?.value?.image),
-        alt: product?.value?.name,
+        imageSrc: withBase(productTemplate?.value?.image),
+        imageThumbSrc: withBase(productTemplate?.value?.image),
+        alt: productTemplate?.value?.name,
       },
     ];
   });
 
-  const getAllSizes = computed(() => {
-    const sizes = product?.value?.attributeValues?.filter((item: any) => {
-      return item.attribute.name === 'Size';
-    });
-    return sizes?.map((item: any) => {
-      return {
-        value: item.id,
-        label: item.name,
-      };
-    });
-  });
-
-  const getAllColors = computed(() => {
-    const colors = product?.value?.attributeValues?.filter((item: any) => {
-      return item.attribute.name === 'Color';
-    });
-    return colors?.map((item: any) => {
-      return {
-        value: item.id,
-        label: item.name,
-      };
-    });
-  });
-  const getAllMaterials = computed(() => {
-    const materials = product?.value?.attributeValues?.filter((item: any) => {
-      return item.attribute.name === 'Material';
-    });
-    return materials?.map((item: any) => {
-      return {
-        value: item.id,
-        label: item.name,
-      };
-    });
-  });
-
   const specialPrice = computed(() => {
-    if (!product.value.firstVariant) {
+    if (!productTemplate.value.firstVariant) {
       return;
     }
-    return getSpecialPrice(product?.value.firstVariant);
+    return getSpecialPrice(productTemplate?.value.firstVariant);
   });
 
   const regularPrice = computed(() => {
-    if (!product.value.firstVariant) {
+    if (!productTemplate.value.firstVariant) {
       return;
     }
-    return getRegularPrice(product?.value.firstVariant);
+    return getRegularPrice(productTemplate?.value.firstVariant);
   });
 
-  const loadProduct = async(params: QueryProductArgs) => {
+  const loadProductTemplate = async(params: QueryProductArgs) => {
     loading.value = true;
-    try {
-      const {data} = await useAsyncData(`product-${slug}`, async () => {
-        const {data} = await $sdk().odoo.query<QueryProductArgs, ProductResponse>(
-          {queryName: QueryName.GetProduct}, params);
-        return data.value;
-      });
+    const { data } = await $sdk().odoo.query<QueryProductArgs, ProductResponse>({queryName: QueryName.GetProductTemplate}, params);
+    loading.value = false;
 
-      if (data?.value?.product)
-        product.value = data?.value?.product;
-    } finally {
-      loading.value = false;
-    }
+    productTemplate.value = data?.value.product as Product;
   };
 
   return {
     loading,
-    loadProduct,
-    product,
-    breadcrumbs,
+    loadProductTemplate,
+    productTemplate,
     images,
-    getAllSizes,
-    getAllColors,
-    getAllMaterials,
     regularPrice,
     specialPrice
   };
