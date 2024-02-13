@@ -7,9 +7,8 @@ defineProps({
   text: String,
 });
 
-const { loadProductTemplateList, loading, productTemplateList } = useProductTemplate('');
+const { loadProductTemplateList, loading, productTemplateList } = useProductTemplateList('');
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
-
 
 const numOfProducts = 10;
 await loadProductTemplateList({pageSize: numOfProducts});

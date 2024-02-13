@@ -8,9 +8,9 @@ import { OrderLine, Product } from '~/graphql';
 
 const route = useRoute();
 const router = useRouter();
-const { loadProductTemplate, productTemplate } = useProduct();
+const { loadProductTemplate, productTemplate, getAllColors, getAllMaterials, getAllSizes } = useProductTemplate();
 const { cart, cartAdd } = useCart();
-const { loadProductVariant, productVariant, getAllColors, getAllMaterials, getAllSizes, getImages, breadcrumbs, getRegularPrice, getSpecialPrice } = useProductVariant();
+const { loadProductVariant, loadingProductVariant, productVariant, getImages, breadcrumbs, getRegularPrice, getSpecialPrice } = useProductVariant(route.fullPath);
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist();
 
 const params = computed(() => ({
@@ -31,7 +31,6 @@ const updateFilter = async (filter: LocationQueryRaw | undefined) => {
     path: route.path,
     query: { ...route.query, ...filter },
   });
-  await loadProductVariant(params.value);
 };
 
 const productsInCart = computed(() => {
@@ -135,6 +134,7 @@ await loadProductVariant(params.value);
             />
             <SfButton
               @click="handleCartAdd"
+              :disabled="loadingProductVariant"
               type="button"
               size="lg"
               class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap"
