@@ -42,14 +42,13 @@ export default defineNuxtConfig({
     'nuxt-lodash'
   ],
   basicAuth: {
-    enabled: true,
+    enabled: false,
     users: [
       {
         username: 'erpgap',
         password: '!qaZXsw2',
       },
     ],
-    // Optional: Whitelist routes
     allowedRoutes: ['/api/mutation/', '/api/query/'],
   },
   storyblok: {
