@@ -88,7 +88,7 @@
         <p
           class="flex items-center justify-center py-2 pb-14 md:pb-2 leading-5 text-center typography-text-sm text-white/50 font-body md:ml-6"
         >
-          @2023 Vue Storefront
+          @{{ new Date().getFullYear() }} Vue Storefront
         </p>
       </div>
     </div>
