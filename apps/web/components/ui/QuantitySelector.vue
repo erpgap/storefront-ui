@@ -1,3 +1,37 @@
+<script setup lang="ts">
+import { SfButton, SfIconAdd, SfIconRemove, useId } from '@storefront-ui/vue';
+
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    required: true,
+  },
+  maxQty: {
+    type: Number,
+    required: false,
+    default: 10,
+  }
+});
+const emit = defineEmits(['update:modelValue']);
+
+const increment = () => {
+  if (props.modelValue < props.maxQty) {
+    emit('update:modelValue', props.modelValue + 1);
+  }
+};
+
+const decrement = () => {
+  if (props.modelValue > 1) {
+    emit('update:modelValue', props.modelValue - 1);
+  }
+};
+
+const handleUpdate = (event: Event) => {
+  if (props.modelValue < props.maxQty && props.modelValue > 1) {
+    emit('update:modelValue', (event?.target as any)?.value);
+  }
+};
+</script>
 <template>
   <div
     class="inline-flex flex-col items-center"
@@ -7,81 +41,35 @@
       <SfButton
         type="button"
         variant="tertiary"
-        :disabled="count <= minValue"
         square
         class="rounded-r-none"
-        :aria-controls="inputId"
         aria-label="Decrease value"
         data-testid="quantity-selector-decrease-button"
-        @click="dec()"
+        @click="decrement"
       >
         <SfIconRemove />
       </SfButton>
       <input
-        :id="inputId"
-        v-model="count"
+      class="appearance-none flex-1 mx-2 w-8 text-center bg-transparent font-medium [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-inner-spin-button]:display-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:display-none [&::-webkit-outer-spin-button]:m-0 [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none disabled:placeholder-disabled-900 focus-visible:outline focus-visible:outline-offset focus-visible:rounded-sm"
+      :max="props.maxQty"
+      :value="props.modelValue"
         type="number"
         role="spinbutton"
-        :class="inputClasses"
-        :min="minValue"
-        :max="maxValue"
         data-testid="quantity-selector-input"
         aria-label="Quantity Selector"
-        @input="handleOnChange"
+        @input="handleUpdate"
       />
       <SfButton
         type="button"
         variant="tertiary"
-        :disabled="count >= maxValue"
         square
         class="rounded-l-none"
-        :aria-controls="inputId"
         aria-label="Increase value"
         data-testid="quantity-selector-increase-button"
-        @click="inc()"
+        @click="increment"
       >
         <SfIconAdd />
       </SfButton>
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { clamp } from '@storefront-ui/shared';
-import { SfButton, SfIconAdd, SfIconRemove, useId } from '@storefront-ui/vue';
-import { useCounter } from '@vueuse/core';
-
-interface QuantitySelectorProps {
-  value?: number;
-  minValue?: number;
-  maxValue?: number;
-}
-
-const { value, minValue, maxValue } = withDefaults(
-  defineProps<QuantitySelectorProps>(),
-  {
-    value: 1,
-    minValue: 1,
-    maxValue: 10,
-  }
-);
-
-const emits = defineEmits(['update:value']);
-const inputId = useId();
-const { count, inc, dec, set } = useCounter(value);
-const inputClasses = computed(
-  () =>
-    'appearance-none flex-1 mx-2 w-8 text-center bg-transparent font-medium [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-inner-spin-button]:display-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:display-none [&::-webkit-outer-spin-button]:m-0 [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none disabled:placeholder-disabled-900 focus-visible:outline focus-visible:outline-offset focus-visible:rounded-sm'
-);
-
-watch(
-  () => count.value,
-  () => emits('update:value', count.value)
-);
-
-const handleOnChange = (event: Event) => {
-  const currentValue = (event.target as HTMLInputElement)?.value;
-  const nextValue = Number.parseFloat(currentValue);
-  set(clamp(nextValue, minValue, maxValue));
-};
-</script>

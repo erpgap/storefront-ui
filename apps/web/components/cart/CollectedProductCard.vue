@@ -20,7 +20,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
     data-testid="cart-product-card"
   >
     <div class="relative overflow-hidden rounded-md w-[100px] sm:w-[176px]">
-      <SfLink :to="orderLine.product?.slug" :tag="NuxtLink">
+      <SfLink :to="mountUrlSlugForProductVariant((orderLine.product) as Product)" :tag="NuxtLink">
         <NuxtImg
           class="w-full h-auto border rounded-md border-neutral-200"
           :src="$getImage(String(orderLine.product?.image), 370, 370, String(orderLine.product?.imageFilename))"
@@ -83,9 +83,10 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
         <UiQuantitySelector
           :min-value="1"
           :max-value="Number(orderLine.product?.qty)"
+          v-model="orderLine.quantity"
           :value="Number(orderLine.quantity)"
           class="mt-4 sm:mt-0"
-          @update:value="updateItemQuantity(orderLine.id, $event)"
+          @update:model-value="updateItemQuantity(orderLine.id, $event)"
         />
       </div>
     </div>

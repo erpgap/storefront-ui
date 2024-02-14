@@ -39,7 +39,7 @@ const productsInCart = computed(() => {
 });
 
 const handleCartAdd = async () => {
-  const response = await cartAdd(productVariant?.value.id, quantitySelectorValue.value);
+  await cartAdd(productVariant?.value.id, quantitySelectorValue.value);
 };
 
 const handleWishlistAddItem = async (firstVariant: Product) => {
@@ -129,7 +129,9 @@ await loadProductVariant(params.value);
           </div>
           <div class="flex flex-col md:flex-row flex-wrap gap-4">
             <UiQuantitySelector
+              v-model="quantitySelectorValue"
               :value="quantitySelectorValue"
+
               class="min-w-[145px] flex-grow flex-shrink-0 basis-0"
             />
             <SfButton
@@ -227,6 +229,9 @@ await loadProductVariant(params.value);
               class="min-w-[48px]"
               size="sm"
               :v-model="value"
+              :input-props="{
+                onClick: (e) => value == selectedSize && e.preventDefault(),
+              }"
               :model-value="value == selectedSize"
               @update:model-value="
                 value != selectedSize &&
@@ -252,6 +257,9 @@ await loadProductVariant(params.value);
               class="min-w-[48px]"
               size="sm"
               :v-model="value"
+              :input-props="{
+                onClick: (e) => value == selectedColor && e.preventDefault(),
+              }"
               :model-value="value == selectedColor"
               @update:model-value="
                 value != selectedColor &&
@@ -283,6 +291,9 @@ await loadProductVariant(params.value);
               class="min-w-[48px]"
               size="sm"
               :v-model="value"
+              :input-props="{
+                onClick: (e) => value == selectedMaterial && e.preventDefault(),
+              }"
               :model-value="value == selectedMaterial"
               @update:model-value="
                 value != selectedMaterial &&

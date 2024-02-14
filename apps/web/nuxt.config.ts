@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
+    '@kgierke/nuxt-basic-auth',
     'nuxt-delay-hydration',
     [
       '@nuxtjs/google-fonts',
@@ -40,6 +41,17 @@ export default defineNuxtConfig({
     '@storyblok/nuxt',
     'nuxt-lodash'
   ],
+  basicAuth: {
+    enabled: true,
+    users: [
+      {
+        username: 'erpgap',
+        password: '!qaZXsw2',
+      },
+    ],
+    // Optional: Whitelist routes
+    allowedRoutes: ['/api/mutation/', '/api/query/'],
+  },
   storyblok: {
     accessToken: process.env.NUXT_STORYBLOK_TOKEN,
     bridge: true,
