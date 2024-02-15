@@ -90,6 +90,7 @@
     "description": "Add your email and phone number to communicate with the store.",
     "add": "Add contact information",
     "email": "Email",
+    "name": "Name",
     "phone": "Phone number",
     "phonePlaceholder": "eg. 123 456 7890",
     "cancel": "Cancel",
