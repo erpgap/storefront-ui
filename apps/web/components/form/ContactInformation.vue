@@ -4,7 +4,7 @@
       <FormLabel>{{ $t('contactInfo.name') }}</FormLabel>
       <SfInput name="name" type="text" v-model="contactInfo.name" required />
     </label>
-    <br />
+    <div class="mt-4"></div>
     <label>
       <FormLabel>{{ $t('contactInfo.email') }}</FormLabel>
       <SfInput name="email" type="email" v-model="contactInfo.email" required />
