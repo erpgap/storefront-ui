@@ -17,10 +17,7 @@ wishlistItems {
           name
         }
       }
-      firstVariant{
-        id
-        combinationInfoVariant
-      }
+      combinationInfoVariant
       slug
     }
   }
