@@ -7,7 +7,7 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 export const useProductTemplate = (slug?: string) => {
   const { $sdk } = useNuxtApp();
 
-  const loading = ref(false);
+  const loadingProductTemplate = ref(false);
   const productTemplate = useState<Product>(`product-${slug}`, () => ({} as Product));
 
   const withBase = (filepath: string | null) => `https://vsfdemo15.labs.odoogap.com${filepath}`;
@@ -23,28 +23,29 @@ export const useProductTemplate = (slug?: string) => {
   });
 
   const specialPrice = computed(() => {
-    if (!productTemplate.value.firstVariant) {
+    if (!productTemplate.value?.firstVariant) {
       return;
     }
-    return getSpecialPrice(productTemplate?.value.firstVariant);
+    return getSpecialPrice(productTemplate.value?.firstVariant);
   });
 
   const regularPrice = computed(() => {
-    if (!productTemplate.value.firstVariant) {
+    if (!productTemplate.value?.firstVariant) {
       return;
     }
-    return getRegularPrice(productTemplate?.value.firstVariant);
+    return getRegularPrice(productTemplate.value?.firstVariant);
   });
 
   const loadProductTemplate = async(params: QueryProductArgs) => {
     if (productTemplate.value?.id) {
       return;
     }
-    loading.value = true;
-    const { data } = await $sdk().odoo.query<QueryProductArgs, ProductResponse>({queryName: QueryName.GetProductTemplate}, params);
-    loading.value = false;
+    loadingProductTemplate.value = true;
+    const { data, error } = await $sdk().odoo.query<QueryProductArgs, ProductResponse>({queryName: QueryName.GetProductTemplate}, params);
 
-    productTemplate.value = data?.value.product as Product;
+    loadingProductTemplate.value = false;
+
+    productTemplate.value = data?.value?.product as Product || {};
   };
 
   const getAllSizes = computed(() => {
@@ -75,7 +76,7 @@ export const useProductTemplate = (slug?: string) => {
   });
 
   return {
-    loading,
+    loadingProductTemplate,
     loadProductTemplate,
     productTemplate,
     images,

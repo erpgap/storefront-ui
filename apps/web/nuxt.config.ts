@@ -3,7 +3,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       viewport: 'minimum-scale=1, initial-scale=1, width=device-width',
-      title: 'Vue Storefront'
+      title: 'Vue Storefront',
+      htmlAttrs: {
+        lang: 'en'
+      },
     },
   },
   delayHydration: {
@@ -38,7 +41,7 @@ export default defineNuxtConfig({
         defaultLocale: 'en',
       },
     ],
-    '@storyblok/nuxt',
+    // '@storyblok/nuxt',
     'nuxt-lodash'
   ],
   basicAuth: {

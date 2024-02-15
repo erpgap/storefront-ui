@@ -113,7 +113,7 @@ onMounted(() => {
         </template>
         <template v-else>
           <div class="w-full text-center">Loading Products...
-            <SfLoaderCircular size="sm" />
+
           </div>
         </template>
       </div>

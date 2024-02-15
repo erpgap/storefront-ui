@@ -70,6 +70,7 @@ await loadCart();
       :alt="$t('emptyCartImgAlt')"
       width="192"
       height="192"
+      loading="lazy"
     />
     <h2 class="mt-8">{{ $t('emptyCart') }}</h2>
   </div>

@@ -49,7 +49,7 @@ const items = ref([
           <NuxtImg
             v-if="name == 'WOMEN'"
             :src="items[0].image"
-            :alt="name"
+            :alt="name || 'women'"
             width="240"
             height="240"
             loading="lazy"
@@ -58,7 +58,7 @@ const items = ref([
           <NuxtImg
             v-if="name == 'MEN'"
             :src="items[1].image"
-            :alt="name"
+            :alt="name || 'men'"
             width="240"
             height="240"
             loading="lazy"
