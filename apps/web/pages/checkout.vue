@@ -33,12 +33,12 @@ await loadCountryList();
 const savedMailingAddress = computed(() => mailingAddresses.value[0] || null);
 const savedBillingAddress = computed(() => billingAddresses.value[0] || null);
 
-const email = cart.value.order?.partner?.email || '';
-const name = cart.value.order?.partner?.name || '';
 const partnerData = computed(() => {
+  const email = cart.value.order?.partner?.email || '';
+  const name = cart.value.order?.partner?.name || '';
   return {
-    email: email.includes('newEmail') ? '' : name ?? '',
-    name: name.includes('newName') ? '' : email ?? ''
+    email: email.includes('newEmail') ? '' : email ?? '',
+    name: name.includes('newName') ? '' : name ?? ''
   };
 });
 const isLoading = false;
