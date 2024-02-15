@@ -51,12 +51,12 @@ export default defineNuxtConfig({
     ],
     allowedRoutes: ['/api/mutation/', '/api/query/'],
   },
-  storyblok: {
-    accessToken: process.env.NUXT_STORYBLOK_TOKEN,
-    bridge: true,
-    devtools: true,
-    apiOptions: {},
-  },
+  // storyblok: {
+  //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
+  //   bridge: true,
+  //   devtools: true,
+  //   apiOptions: {},
+  // },
   image: {
     screens: {
       '2xl': 1536,

@@ -75,7 +75,7 @@ const withBase = (filepath: string) =>
                   <p class="text-gray-600 mr-1">Number of products :</p>
                   {{ wishlistTotalItems }}
                 </div>
-                <div v-for="item in wishlist.wishlistItems" :key="item?.id">
+                <div v-for="item in wishlist?.wishlistItems || []" :key="item?.id">
                   <WishlistCollectedProductCard
                     :product="(item?.product as Product)"
                     @removeFromWishlist="handleWishlistRemoveItem(item?.product as Product)"
