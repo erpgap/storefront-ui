@@ -88,5 +88,10 @@ order {
     name
     price
   }
+  partner {
+    id
+    email
+    name
+  }
 }
 `;
