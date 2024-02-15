@@ -2,14 +2,14 @@
 import { AttributeValue, Category, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql';
 import { QueryName } from '~/server/queries';
 
-export const useProductTemplateList = (categoryId: string) => {
+export const useProductTemplateList = (stateIndex: string) => {
   const { $sdk } = useNuxtApp();
 
   const loading = ref(false);
-  const totalItems = useState<number>(`total-items${categoryId}`, () => 0);
-  const productTemplateList = useState<Product[]>(`products-category${categoryId}`, () => ([]));
-  const attributes = useState<AttributeValue[]>(`attributes${categoryId}`, () => ([]));
-  const categories = useState<Category[]>(`categories-from-product-${categoryId}`, () => ([]));
+  const totalItems = useState<number>(`total-items${stateIndex}`, () => 0);
+  const productTemplateList = useState<Product[]>(`products-category${stateIndex}`, () => ([]));
+  const attributes = useState<AttributeValue[]>(`attributes${stateIndex}`, () => ([]));
+  const categories = useState<Category[]>(`categories-from-product-${stateIndex}`, () => ([]));
 
   const loadProductTemplateList = async (params: QueryProductsArgs) => {
     if (productTemplateList.value.length > 0) return;

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { SfButton, SfIconTune, useDisclosure } from '@storefront-ui/vue';
+import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefront-ui/vue';
 import { Product } from '~/graphql';
 
 const route = useRoute();
 
 const { isOpen, open, close } = useDisclosure();
-const { loadProductTemplateList, organizedAttributes, loading, productTemplateList, totalItems, categories } = useProductTemplateList(String(route.params.id));
+const { loadProductTemplateList, organizedAttributes, loading, productTemplateList, totalItems, categories } = useProductTemplateList(String(route.fullPath));
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 const { getFacetsFromURL } = useUiHelpers();
 
@@ -24,12 +24,13 @@ watch(isTabletScreen, (value) => {
   }
 });
 
-watch(() => route.fullPath, async(value) => {
-  await loadProductTemplateList(getFacetsFromURL(route.query));
-}, {deep: true });
+watch(() => route,
+  async() => {
+    await loadProductTemplateList(getFacetsFromURL(route.query));
+  }, {deep: true, immediate: true});
 
 const pagination = computed(() => ({
-  currentPage: 1,
+  currentPage: route?.query?.page ? Number(route.query.page) : 1,
   totalPages: Math.ceil(totalItems.value / 12) || 1,
   totalItems: totalItems.value,
   itemsPerPage: 12,
@@ -40,7 +41,6 @@ onMounted(() => {
   setMaxVisiblePages(isWideScreen.value);
 });
 
-await loadProductTemplateList(getFacetsFromURL(route.query));
 </script>
 <template>
   <div class="pb-20">
@@ -112,7 +112,9 @@ await loadProductTemplateList(getFacetsFromURL(route.query));
           />
         </template>
         <template v-else>
-          <div class="w-full text-center">Loading Products...</div>
+          <div class="w-full text-center">Loading Products...
+            <SfLoaderCircular size="sm" />
+          </div>
         </template>
       </div>
     </div>
