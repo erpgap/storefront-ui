@@ -14,7 +14,7 @@ export const usePartner = () => {
         const { data } = await $sdk().odoo.query<
           MutationCreateUpdatePartnerArgs,
           PartnerResponse
-        >({ queryName: MutationName.CreateNewAccountMutation }, params);
+        >({ queryName: MutationName.CreateUpdatePartner }, params);
         return data.value;
       });
 
