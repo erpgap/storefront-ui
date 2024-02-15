@@ -32,10 +32,13 @@ await loadCountryList();
 
 const savedMailingAddress = computed(() => mailingAddresses.value[0] || null);
 const savedBillingAddress = computed(() => billingAddresses.value[0] || null);
+
+const email = cart.value.order?.partner?.email || '';
+const name = cart.value.order?.partner?.name || '';
 const partnerData = computed(() => {
   return {
-    email: cart.value.order?.partner?.email || undefined,
-    name: cart.value.order?.partner?.name || undefined
+    email: email.includes('newEmail') ? '' : name ?? '',
+    name: name.includes('newName') ? '' : email ?? ''
   };
 });
 const isLoading = false;
