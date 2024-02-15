@@ -11,8 +11,10 @@ export default defineEventHandler(async (event) => {
     if ((response.data as any)?.cookie) {
       appendResponseHeader(event, 'Set-cookie', (response.data as any)?.cookie);
     }
+
     if (response.errors) {
-      throw createError(response.errors[0].message);
+      console.log(response.errors);
+      throw createError({ statusCode: 500, data: response.errors, message: response.errors[0].message });
     }
 
     return response.data;

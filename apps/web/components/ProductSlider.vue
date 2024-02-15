@@ -34,7 +34,7 @@ await loadProductTemplateList({pageSize: numOfProducts});
       v-for="productTemplate in productTemplateList"
       class="min-w-[190px]"
       :key="productTemplate.id"
-      :slug="productTemplate?.slug || ''"
+      :slug="mountUrlSlugForProductVariant(productTemplate.firstVariant as Product) || ''"
       :name="productTemplate?.name || ''"
       :image-url="$getImage(String(productTemplate.image), 370, 370, String(productTemplate.imageFilename))"
       :image-alt="productTemplate?.name || ''"
