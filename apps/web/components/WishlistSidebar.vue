@@ -75,20 +75,10 @@ const withBase = (filepath: string) =>
                   <p class="text-gray-600 mr-1">Number of products :</p>
                   {{ wishlistTotalItems }}
                 </div>
-                <div v-for="item in wishlist.wishlistItems" :key="item?.id">
+                <div v-for="item in wishlist?.wishlistItems || []" :key="item?.id">
                   <WishlistCollectedProductCard
-                    :id="item?.id"
-                    :image-url="withBase(item?.product?.image)"
-                    :image-alt="item?.product?.name"
-                    :name="item?.product?.name ?? ''"
-                    :price="
-                      item?.product?.firstVariant?.combinationInfoVariant?.list_price
-                    "
-                    :special-price="
-                      item?.product?.firstVariant?.combinationInfoVariant?.price
-                    "
-                    :slug="item?.product?.slug"
-                    @removeFromWishlist="handleWishlistRemoveItem(item?.product)"
+                    :product="(item?.product as Product)"
+                    @removeFromWishlist="handleWishlistRemoveItem(item?.product as Product)"
                   />
                 </div>
               </div>

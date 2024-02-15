@@ -14,7 +14,7 @@ export const useWishlist = () => {
     const { data } = await $sdk().odoo.query<MutationWishlistAddItemArgs, WishlistLoadResponse >({ queryName: QueryName.WishlistLoadQuery });
     loading.value = false;
 
-    wishlist.value = data?.value.wishlistItems;
+    wishlist.value = data?.value?.wishlistItems || [];
   };
 
   const wishlistAddItem = async (productId: number) => {

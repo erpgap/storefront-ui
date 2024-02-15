@@ -3,7 +3,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       viewport: 'minimum-scale=1, initial-scale=1, width=device-width',
-      title: 'Vue Storefront'
+      title: 'Vue Storefront',
+      htmlAttrs: {
+        lang: 'en'
+      },
     },
   },
   delayHydration: {
@@ -38,7 +41,7 @@ export default defineNuxtConfig({
         defaultLocale: 'en',
       },
     ],
-    '@storyblok/nuxt',
+    // '@storyblok/nuxt',
     'nuxt-lodash'
   ],
   basicAuth: {
@@ -51,12 +54,12 @@ export default defineNuxtConfig({
     ],
     allowedRoutes: ['/api/mutation/', '/api/query/'],
   },
-  storyblok: {
-    accessToken: process.env.NUXT_STORYBLOK_TOKEN,
-    bridge: true,
-    devtools: true,
-    apiOptions: {},
-  },
+  // storyblok: {
+  //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
+  //   bridge: true,
+  //   devtools: true,
+  //   apiOptions: {},
+  // },
   image: {
     screens: {
       '2xl': 1536,

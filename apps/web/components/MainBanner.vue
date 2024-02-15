@@ -8,7 +8,7 @@
       >
         <NuxtImg
           provider="odooProvider"
-          src="/web/image/product.template/94/image_1920/"
+          src="/web/image/product.template/94/image_1920"
           alt="Hero"
           class="h-auto w-full object-cover object-left"
           width="575"

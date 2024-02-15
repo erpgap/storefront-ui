@@ -6,32 +6,36 @@ import {
   usePagination,
 } from '@storefront-ui/vue';
 
-const props = defineProps({
-  currentPage: Number,
-  pageSize: Number,
-  totalItems: Number,
-  maxVisiblePages: Number,
-});
 const route = useRoute();
 const router = useRouter();
 
-const {
-  currentPage,
-  pageSize,
-  totalItems,
-  maxVisiblePages: maxVisiblePagesProperty,
-}: any = toRefs(props);
+const props = defineProps({
+  currentPage: {
+    type: Number,
+    required: true,
+  },
+  pageSize: {
+    type: Number,
+    required: true,
+  },
+  totalItems: {
+    type: Number,
+    required: true,
+  },
+  maxVisiblePages: {
+    type: Number,
+    required: true,
+  },
+});
 
-const pagination = computed<any>(() =>
-  reactive(
-    usePagination({
-      totalItems: totalItems.value,
-      currentPage: currentPage.value,
-      pageSize: pageSize.value,
-      maxPages: maxVisiblePagesProperty.value,
-    })
-  )
-);
+const pagination = computed<any>(() => reactive(
+  usePagination({
+    totalItems: props?.totalItems,
+    currentPage: props?.currentPage,
+    pageSize: props?.pageSize,
+    maxPages: props?.maxVisiblePages,
+  })
+));
 
 const setParams = (filter: any) => {
   router.push({ query: { ...route.query, ...filter } });

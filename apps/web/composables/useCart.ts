@@ -31,7 +31,8 @@ export const useCart = () => {
     }
 
     cart.value = data.value.cartAddItem;
-    cartCounter.value = (Number(cartCounter?.value) || 0) + 1;
+    cartCounter.value = Number(cart.value?.order?.orderLines?.length);
+
     toast.success('Product has been added to cart');
   };
 
@@ -45,7 +46,7 @@ export const useCart = () => {
     }
 
     cart.value = data.value.cartUpdateItem;
-    cartCounter.value = Number(data.value.cartUpdateItem.order?.orderLines?.length);
+    cartCounter.value = Number(cart.value?.order?.orderLines?.length);
     toast.success('Product updated successfully');
   };
 
@@ -59,7 +60,7 @@ export const useCart = () => {
     }
 
     cart.value = data.value.cartRemoveItem;
-    cartCounter.value = Number(data.value.cartRemoveItem.order?.orderLines?.length);
+    cartCounter.value = Number(cart.value?.order?.orderLines?.length);
     toast.success('Product removed successfully');
   };
 

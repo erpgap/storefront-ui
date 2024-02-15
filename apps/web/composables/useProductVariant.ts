@@ -9,8 +9,6 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   const productVariant = useState<Product>(`product-${slugWithCombinationIds}`, () => ({} as Product));
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
-    // await clearNuxtState();
-    // if (productVariant.value?.id) return;
 
     loadingProductVariant.value = true;
     const { data } = await $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>({queryName: QueryName.GetProductVariantQuery}, params);

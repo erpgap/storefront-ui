@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { SfLink, SfButton, SfIconClose } from '@storefront-ui/vue';
+import { PropType } from 'nuxt/dist/app/compat/capi';
+import { Product } from '~/graphql';
 
 const NuxtLink = resolveComponent('NuxtLink');
-type WishlistProductCardProps = {
-  id: number;
-  imageUrl?: string | null;
-  imageAlt?: string | null;
-  name: string;
-  price: number;
-  specialPrice: number;
-  slug: string;
-};
 
-const props = defineProps<WishlistProductCardProps>();
-const { id, imageUrl, imageAlt, name, price, specialPrice, slug } =
-  toRefs(props);
+const props = defineProps({
+  product: {
+    type: Object as PropType<Product>,
+    required: true,
+  },
+});
+
 </script>
 
 <template>
@@ -23,13 +20,14 @@ const { id, imageUrl, imageAlt, name, price, specialPrice, slug } =
     data-testid="cart-product-card"
   >
     <div class="min-w-[114px] w-[114px] overflow-hidden rounded-md">
-      <SfLink :to="slug" :tag="NuxtLink">
+      <SfLink :to="mountUrlSlugForProductVariant(product)" :tag="NuxtLink">
         <NuxtImg
+          provider="odooProvider"
           class="border rounded-md border-neutral-200"
-          :src="imageUrl ?? '/images/product.webp'"
-          :alt="imageAlt ?? ''"
+          :src="product?.image ?? '/images/product.webp'"
+          :alt="product?.imageFilename ?? ''"
           width="114"
-          height="236"
+          height="151"
           loading="lazy"
         />
       </SfLink>
@@ -38,29 +36,29 @@ const { id, imageUrl, imageAlt, name, price, specialPrice, slug } =
       <div class="flex flex-col min-w-[180px] flex-1">
         <SfLink
           :tag="NuxtLink"
-          :to="slug"
+          :to="mountUrlSlugForProductVariant(product)"
           variant="secondary"
           class="no-underline typography-text-sm sm:typography-text-lg"
         >
-          {{ name }}
+          {{ product?.name }}
         </SfLink>
         <div class="flex">
           <span
-            v-if="specialPrice"
+            v-if="product?.combinationInfoVariant?.price"
             class="text-secondary-700 sm:order-1 font-bold typography-text-sm sm:typography-text-lg"
           >
-            ${{ specialPrice }}
+            ${{ product?.combinationInfoVariant?.price }}
             <span
               class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
             >
-              ${{ price }}
+              ${{ product?.combinationInfoVariant?.list_price }}
             </span>
           </span>
           <span
             v-else
             class="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg"
           >
-            ${{ price }}
+            ${{ product?.combinationInfoVariant?.list_price }}
           </span>
         </div>
       </div>
@@ -71,7 +69,7 @@ const { id, imageUrl, imageAlt, name, price, specialPrice, slug } =
         type="button"
         variant="tertiary"
         size="sm"
-        @click="$emit('removeFromWishlist', id)"
+        @click="$emit('removeFromWishlist', product.id)"
       >
         <SfIconClose />
       </SfButton>

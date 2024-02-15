@@ -2,34 +2,26 @@
 import { AttributeValue, Category, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql';
 import { QueryName } from '~/server/queries';
 
-export const useProductTemplateList = (categoryId: string) => {
+export const useProductTemplateList = (stateIndex: string) => {
   const { $sdk } = useNuxtApp();
 
   const loading = ref(false);
-  const totalItems = ref(0);
-  const productTemplateList = useState<Product[]>(`products-category${categoryId}`, () => ([]));
-  const attributes = useState<AttributeValue[]>(`attributes${categoryId}`, () => ([]));
-  const categories = useState<Category[]>(`categories-from-product-${categoryId}`, () => ([]));
+  const totalItems = useState<number>(`total-items${stateIndex}`, () => 0);
+  const productTemplateList = useState<Product[]>(`products-category${stateIndex}`, () => ([]));
+  const attributes = useState<AttributeValue[]>(`attributes${stateIndex}`, () => ([]));
+  const categories = useState<Category[]>(`categories-from-product-${stateIndex}`, () => ([]));
 
   const loadProductTemplateList = async (params: QueryProductsArgs) => {
     if (productTemplateList.value.length > 0) return;
 
     loading.value = true;
-    try {
-      const {data} = await useAsyncData(`product-template-list-${categoryId}`, async () => {
-        const { data } = await $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>({queryName: QueryName.GetProductTemplateList }, params);
-        return data.value;
-      });
+    const { data } = await $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>({queryName: QueryName.GetProductTemplateList }, params);
+    loading.value = false;
 
-      if (data?.value?.products) {
-        productTemplateList.value = data.value?.products?.products || [];
-        attributes.value = data.value.products?.attributeValues || [];
-        totalItems.value = data.value?.products?.totalCount || 0;
-        categories.value = useUniqBy(data.value.products?.products?.map(product => product?.categories || []).flat(), 'id');
-      }
-    } finally {
-      loading.value = false;
-    }
+    productTemplateList.value = data.value?.products?.products || [];
+    attributes.value = data.value?.products?.attributeValues || [];
+    totalItems.value = data.value?.products?.totalCount || 0;
+    categories.value = useUniqBy(data.value?.products?.products?.map(product => product?.categories || []).flat(), 'id');
   };
 
   const organizedAttributes = computed(() => {
