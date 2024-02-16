@@ -18,7 +18,7 @@ const props = defineProps({
   type: String,
   savedAddress: {
     type: Object,
-    required: true,
+    default: () => {},
   },
 });
 

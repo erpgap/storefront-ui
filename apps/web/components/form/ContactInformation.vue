@@ -31,7 +31,7 @@ const props = defineProps<FormContactInformationProps>();
 const { email, name } = toRefs(props);
 defineEmits(['on-save', 'on-cancel']);
 const contactInfo = ref({
-  email: email?.value ?? '',
-  name: name?.value ?? ''
+  email: email?.value?.includes('newEmail') ? '' : email?.value ?? '',
+  name: name?.value?.includes('newName') ? '' : name?.value ?? ''
 });
 </script>

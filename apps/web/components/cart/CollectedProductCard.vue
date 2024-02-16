@@ -71,7 +71,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
           <span
             class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
           >
-            ${{ orderLine.product?.combinationInfo?.list_price }}
+            ${{ (orderLine.product?.combinationInfo?.list_price * orderLine.quantity) }}
           </span>
         </span>
         <span
