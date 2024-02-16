@@ -19,9 +19,6 @@ const { cart } = useCart();
       <div class="flex justify-between typography-text-base pb-4">
         <div class="flex flex-col grow pr-2">
           <p>{{ $t('itemsSubtotal') }}</p>
-          <p class="typography-text-xs text-neutral-500">
-            {{ $t('originalPrice') }}
-          </p>
           <!-- <p class="typography-text-xs text-secondary-700">
             {{ $t('savings') }}
           </p> -->
@@ -30,9 +27,6 @@ const { cart } = useCart();
         </div>
         <div class="flex flex-col text-right">
           <p data-testid="special-price">${{ cart?.order?.amountSubtotal || 0 }}</p>
-          <p class="typography-text-xs text-neutral-500">
-            ${{ cart?.order?.amountTotal }}
-          </p>
           <!-- <p class="typography-text-xs text-secondary-700">
             ${{ cart?.order?.shippingMethod?.price || 0 }}
           </p> -->
