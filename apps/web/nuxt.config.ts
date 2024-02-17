@@ -12,9 +12,6 @@ export default defineNuxtConfig({
   delayHydration: {
     mode: 'init'
   },
-  experimental: {
-    componentIslands: true,
-  },
   modules: [
     'nuxt-lazy-hydrate',
     '@nuxtjs/critters',

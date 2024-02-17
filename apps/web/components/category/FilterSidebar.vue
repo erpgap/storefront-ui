@@ -156,30 +156,7 @@ onMounted(() => {
     >
       {{ $t('category') }}
     </div>
-    <div v-if="parent">
-      <SfListItem
-        size="lg"
-        :class="[
-          'md:sf-list-item-sm md:py-1.5 sf-list-item',
-          {
-            'bg-primary-100 hover:bg-primary-100 active:bg-primary-100 font-medium': true,
-          },
-        ]"
-        data-testid="category-tree-item"
-      >
-        <NuxtLink @click="router.back()">
-          <span class="flex gap-2 items-center">
-            <span
-              class="text-base md:text-sm capitalize flex items-center"
-              data-testid="list-item-menu-label"
-            >
-              <SfIconArrowBack size="sm" class="text-neutral-500 mr-2" />
-              {{ parent?.label }}
-            </span>
-          </span>
-        </NuxtLink>
-      </SfListItem>
-    </div>
+
     <ul class="mt-4 mb-6 md:mt-2" data-testid="categories">
       <SfListItem
         v-for="(category, index) in categories"
@@ -199,6 +176,9 @@ onMounted(() => {
             <span
               class="text-base md:text-sm capitalize flex items-center"
               data-testid="list-item-menu-label"
+              :class="{
+                'font-bold': category.slug === route.path,
+              }"
             >
               <slot />
               {{ category.name }}
@@ -262,6 +242,7 @@ onMounted(() => {
                       class="flex items-center"
                       name="radio-price"
                       :value="values"
+
                       @click="priceModel = priceModel === values ? '' : values"
                       @update:model-value="selectPrice(values)"
                     />
