@@ -8,8 +8,12 @@ await loadCategoryList({ filter: { parent: true } });
 <template>
   <LazyMainBanner />
   <LazyCategoryCard :categories="categories" />
-  <LazyDisplay />
+  <NuxtLazyHydrate when-visible>
+    <LazyDisplay />
+  </NuxtLazyHydrate>
   <section class="pb-16">
-    <LazyProductSlider heading="Inspired by your picks" />
+    <NuxtLazyHydrate when-visible>
+      <LazyProductSlider heading="Inspired by your picks" />
+    </NuxtLazyHydrate>
   </section>
 </template>

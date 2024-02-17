@@ -92,6 +92,7 @@ const withBase = (filepath: string) =>
                   :alt="$t('emptyCartImgAlt')"
                   width="192"
                   height="192"
+                  loading="lazy"
                 />
                 <h2 class="mt-8 font-medium">Your Wishlist is empty</h2>
               </div>

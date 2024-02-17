@@ -11,6 +11,7 @@ const {
   open: searchModalOpen,
   close: searchModalClose,
 } = useDisclosure();
+
 </script>
 
 <template>
@@ -19,9 +20,14 @@ const {
       <NuxtPage :pageKey="route => route.fullPath" />
   </main>
 
-  <Newsletter />
-  <BottomNavbar />
-  <TheFooter />
+  <LazyNewsletter />
+  <NuxtLazyHydrate when-visible>
+    <LazyBottomNavbar />
+  </NuxtLazyHydrate>
+  <NuxtLazyHydrate when-visible>
+    <LazyTheFooter />
+  </NuxtLazyHydrate>
+
   <SfModal
     v-model="isSearchModalOpen"
     class="w-full h-full z-50"

@@ -10,6 +10,7 @@
       width="192"
       height="192"
       class="mx-auto"
+      loading="lazy"
     />
     <h3 class="typography-headline-3 font-bold mb-4 mt-6">
       {{ $t('account.ordersAndReturns.noOrders') }}
