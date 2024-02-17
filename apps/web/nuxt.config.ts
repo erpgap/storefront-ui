@@ -12,7 +12,12 @@ export default defineNuxtConfig({
   delayHydration: {
     mode: 'init'
   },
+  experimental: {
+    componentIslands: true,
+  },
   modules: [
+    'nuxt-lazy-hydrate',
+    '@nuxtjs/critters',
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
     '@kgierke/nuxt-basic-auth',
@@ -21,8 +26,7 @@ export default defineNuxtConfig({
       '@nuxtjs/google-fonts',
       {
         families: {
-          'Red Hat Display': [400, 500, 700],
-          'Red Hat Text': [300, 400, 500, 700],
+          'Red Hat Display': [400, 500, 700]
         },
       },
     ],

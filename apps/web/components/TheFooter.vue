@@ -69,7 +69,7 @@
             :href="link"
             :aria-label="`Go to ${label} page`"
           >
-            <component :is="icon" />
+            <component :is="icon" loading="lazy"/>
           </SfButton>
         </div>
         <div

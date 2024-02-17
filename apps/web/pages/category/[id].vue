@@ -91,6 +91,7 @@ onMounted(() => {
               v-for="productTemplate in productTemplateList"
               :key="productTemplate.id"
               :name="productTemplate?.name || ''"
+              loading="eager"
               :slug="mountUrlSlugForProductVariant((productTemplate.firstVariant || productTemplate) as Product)"
               :image-url="$getImage(String(productTemplate.image), 370, 370, String(productTemplate.imageFilename))"
               :image-alt="productTemplate?.name || ''"

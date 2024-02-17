@@ -44,6 +44,11 @@ defineProps({
     type: Object,
     required: false,
   },
+  loading: {
+    type: String as PropType<'eager' | 'lazy' | undefined>,
+    required: false,
+    default: 'lazy',
+  },
 });
 
 const { cartAdd } = useCart();
@@ -67,6 +72,7 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
           :width="370"
           :height="370"
           class="rounded-md"
+          :loading="loading"
         />
       </SfLink>
 
