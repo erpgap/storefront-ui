@@ -1,7 +1,7 @@
 import { PaymentAcquirer, PaymentMethodListResponse } from '~/graphql';
 import { QueryName } from '~/server/queries';
 
-export const usePaymentMethod = () => {
+export const usePayment = () => {
   const { $sdk } = useNuxtApp();
 
   const loading = ref(false);

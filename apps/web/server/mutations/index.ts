@@ -15,6 +15,11 @@ import WishlistRemoveItem from './WishlistRemoveItem';
 import AddAddress from './AddAddress';
 import UpdateAddress from './UpdateAddress';
 import CreateUpdatePartner from './CreateUpdatePartner';
+import AdyenTransaction from './AdyenTransaction';
+import AdyenAcquierInfo from './AdyenAcquirerInfo';
+import AdyenPaymentMethods from './AdyenPaymentMethods';
+import AdyenPaymentDetails from './AdyenPaymentDetails';
+import AdyenPayments from './AdyenPayments';
 
 enum MutationName {
     LoginMutation = 'LoginMutation',
@@ -32,7 +37,12 @@ enum MutationName {
     WishlistRemoveItem = 'WishlistRemoveItem',
     AddAddress = 'AddAddress',
     UpdateAddress = 'UpdateAddress',
-    CreateUpdatePartner = 'CreateUpdatePartner'
+    CreateUpdatePartner = 'CreateUpdatePartner',
+    AdyenTransaction = 'AdyenTransaction',
+    AdyenAcquierInfo = 'AdyenAcquierInfo',
+    AdyenPaymentMethods = 'AdyenPaymentMethods',
+    AdyenPaymentDetails = 'AdyenPaymentDetails',
+    AdyenPayments = 'AdyenPayments'
   }
 
 const Mutations : Record<MutationName, DocumentNode> = {
@@ -51,7 +61,12 @@ const Mutations : Record<MutationName, DocumentNode> = {
   WishlistRemoveItem,
   AddAddress,
   UpdateAddress,
-  CreateUpdatePartner
+  CreateUpdatePartner,
+  AdyenTransaction,
+  AdyenAcquierInfo,
+  AdyenPaymentMethods,
+  AdyenPaymentDetails,
+  AdyenPayments
 };
 
 export {

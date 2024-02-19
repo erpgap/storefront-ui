@@ -13,6 +13,7 @@ import {
 } from '@storefront-ui/vue';
 import { useDeliveryMethod } from '~/composables/useDeliveryMethod';
 import { AddressEnum } from '~/graphql';
+import '@adyen/adyen-web/dist/adyen.css';
 
 const NuxtLink = resolveComponent('NuxtLink');
 const { isOpen, open, close } = useDisclosure();
@@ -21,7 +22,9 @@ const { loadAddressesByType, mailingAddresses, billingAddresses } = useAddresses
 const { loadCountryList } = useCountry();
 const { updatePartner } = usePartner();
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
-const { loadPaymentMethods, paymentMethods } = usePaymentMethod();
+const { loadPaymentMethods, paymentMethods } = usePayment();
+
+const dropinDivElement = ref(null);
 
 await loadCart();
 await loadAddressesByType(AddressEnum.Shipping);
@@ -81,6 +84,7 @@ const activePayment = ref(1);
       <SfLoaderCircular size="3xl" />
     </span>
     <div v-else>
+      <div id="dropin-container" ref="dropinDivElement" />
       <div class="lg:grid lg:grid-cols-12 md:gap-x-6">
         <div class="col-span-7 mb-10 md:mb-0">
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
