@@ -7,6 +7,17 @@
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
+"@adyen/adyen-web@4.7.3":
+  version "4.7.3"
+  resolved "https://registry.yarnpkg.com/@adyen/adyen-web/-/adyen-web-4.7.3.tgz#bbb56dea272f9afc5b11677068ac893096c6c115"
+  integrity sha512-PScBuaIxFlVPOs50z5Yu2tknTQUJzPCboXzVHaFLpJzQrohgOkkCXjvbPgUif5qdvWz8Pj/Jbu4G6fDr/DOB8Q==
+  dependencies:
+    "@types/applepayjs" "^3.0.2"
+    "@types/googlepay" "^0.6.2"
+    classnames "^2.3.1"
+    core-js "^3.14.0"
+    preact "^10.5.13"
+
 "@alloc/quick-lru@^5.2.0":
   version "5.2.0"
   resolved "https://registry.npmjs.org/@alloc/quick-lru/-/quick-lru-5.2.0.tgz"
@@ -3675,10 +3686,20 @@
     "@tufjs/canonical-json" "2.0.0"
     minimatch "^9.0.3"
 
+"@types/applepayjs@^3.0.2":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@types/applepayjs/-/applepayjs-3.0.4.tgz#9806a4b3ccd73dcf169c61a34be7a39f91d77540"
+  integrity sha512-RqaVZWy1Kj4e1PoUoOI8uA+4UuuLpicQFxfU9Y/xWJFZFT6mFB4PiiY911iDxFk7pdvaj5HKH7VsWRisRca1Rg==
+
 "@types/estree@*", "@types/estree@^1.0.0":
   version "1.0.4"
   resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.4.tgz"
   integrity sha512-2JwWnHK9H+wUZNorf2Zr6ves96WHoWDJIftkcxPKsS7Djta6Zu519LarhRNljPXkpsZR2ZMwNCPeW7omW07BJw==
+
+"@types/googlepay@^0.6.2":
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/@types/googlepay/-/googlepay-0.6.4.tgz#e0b06ae1f12496c4fa43e52d35e76411dbbee135"
+  integrity sha512-PTt/UCllzl8z5HmhymPpSj6uENZvVKZvCBYdDVmbBVJnLStitxtWrterAOQZkKGlqVdzxNXYeif5hOAMNMS5mw==
 
 "@types/http-proxy@^1.17.13":
   version "1.17.13"
@@ -5814,6 +5835,11 @@ citty@^0.1.5:
   dependencies:
     consola "^3.2.3"
 
+classnames@^2.3.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
+  integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
+
 clean-regexp@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/clean-regexp/-/clean-regexp-1.0.0.tgz"
@@ -6281,6 +6307,11 @@ core-js@^2.4.0:
   version "2.6.12"
   resolved "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
+
+core-js@^3.14.0:
+  version "3.36.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.36.0.tgz#e752fa0b0b462a0787d56e9d73f80b0f7c0dde68"
+  integrity sha512-mt7+TUBbTFg5+GngsAxeKBTl5/VS0guFeJacYge9OmHb+m058UwwIm41SE9T4Den7ClatV57B6TYTuJ0CX1MAw==
 
 core-util-is@1.0.2:
   version "1.0.2"
@@ -12346,6 +12377,11 @@ postcss@^8.4.32:
     nanoid "^3.3.7"
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
+
+preact@^10.5.13:
+  version "10.19.5"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.19.5.tgz#ed220be0d3273102b5c97dd0163468164064d9f1"
+  integrity sha512-OPELkDmSVbKjbFqF9tgvOowiiQ9TmsJljIzXRyNE8nGiis94pwv1siF78rQkAP1Q1738Ce6pellRg/Ns/CtHqQ==
 
 prebuild-install@^7.1.1:
   version "7.1.1"
