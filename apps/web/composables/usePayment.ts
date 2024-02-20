@@ -29,9 +29,14 @@ export const usePayment = () => {
     }
   };
 
+  const getPaymentConfirmation = () => {
+    return true;
+  };
+
   return {
     loadPaymentMethods,
     paymentMethods,
+    getPaymentConfirmation,
     loading,
   };
 };
