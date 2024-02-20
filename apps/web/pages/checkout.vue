@@ -13,7 +13,6 @@ import {
 } from '@storefront-ui/vue';
 import { useDeliveryMethod } from '~/composables/useDeliveryMethod';
 import { AddressEnum } from '~/graphql';
-import '@adyen/adyen-web/dist/adyen.css';
 
 const NuxtLink = resolveComponent('NuxtLink');
 const { isOpen, open, close } = useDisclosure();
@@ -22,9 +21,7 @@ const { loadAddressesByType, mailingAddresses, billingAddresses } = useAddresses
 const { loadCountryList } = useCountry();
 const { updatePartner } = usePartner();
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
-const { loadPaymentMethods, paymentMethods } = usePayment();
-
-const dropinDivElement = ref(null);
+const { loadPaymentMethods, paymentMethods, loading: paymentLoading } = usePayment();
 
 await loadCart();
 await loadAddressesByType(AddressEnum.Shipping);
@@ -46,6 +43,12 @@ const partnerData = computed(() => {
 });
 const isLoading = false;
 
+const showPaymentModal = ref(false);
+const isPaymentReady = ref(false);
+const providerPaymentHandler = ref();
+const methodWithModal = ref();
+const loading = ref(false);
+
 const updatePartnerData = async ({ email, name }: { email: string, name: string }) => {
   await updatePartner({
     email,
@@ -55,6 +58,16 @@ const updatePartnerData = async ({ email, name }: { email: string, name: string 
   await loadCart();
   close();
 };
+
+onMounted(() => {
+  if (paymentMethods.value.length) {
+    showPaymentModal.value = true;
+  }
+});
+
+onBeforeUnmount(() => {
+  showPaymentModal.value = false;
+});
 
 const radioModel = ref('1');
 const activePayment = ref(1);
@@ -84,7 +97,6 @@ const activePayment = ref(1);
       <SfLoaderCircular size="3xl" />
     </span>
     <div v-else>
-      <div id="dropin-container" ref="dropinDivElement" />
       <div class="lg:grid lg:grid-cols-12 md:gap-x-6">
         <div class="col-span-7 mb-10 md:mb-0">
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
@@ -166,7 +178,7 @@ const activePayment = ref(1);
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0 mb-10" />
         </div>
         <UiOrderSummary class="col-span-5 md:sticky md:top-20 h-fit">
-          <SfButton :tag="NuxtLink" to="/checkout" size="lg" class="w-full mb-4 md:mb-0">
+          <SfButton size="lg" class="w-full mb-4 md:mb-0" @click="showPaymentModal = true" :disabled="!isPaymentReady">
             {{ $t('placeOrder') }}
           </SfButton>
           <p class="text-sm text-center mt-4 pb-4 md:pb-0">
@@ -185,6 +197,13 @@ const activePayment = ref(1);
               </template>
             </i18n-t>
           </p>
+          <LazyCheckoutAdyenPaymentProvider
+            :provider="paymentMethods[0]"
+            :cart="cart"
+            v-if="showPaymentModal && paymentMethods[0]"
+            @isPaymentReady="$event => isPaymentReady = $event"
+            @providerPaymentHandler="$event => providerPaymentHandler = $event"
+            @paymentLoading="$event => loading = $event"/>
         </UiOrderSummary>
       </div>
     </div>

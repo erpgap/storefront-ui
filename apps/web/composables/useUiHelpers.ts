@@ -122,9 +122,30 @@ export const useUiHelpers = () => {
     delete allQuery.page;
     router.push({ query: allQuery });
   };
+
+  const getComponentProviderByName = (provider: string): string => {
+    if (!provider) throw new Error('Provider without provider');
+
+    const upperName = provider.toLocaleUpperCase();
+
+    if (upperName === 'ADYEN_OG') {
+      return 'AdyenExternalPaymentProvider';
+    }
+
+    if (upperName === 'ADYEN') {
+      return 'AdyenDirectPaymentProvider';
+    }
+
+    if (upperName.includes('WIRE')) {
+      return 'WireTransferPaymentProvider';
+    }
+
+    throw new Error(`Provider ${name} not implemented!`);
+  };
   return {
     getFacetsFromURL,
     changeFilters,
     facetsFromUrlToFilter,
+    getComponentProviderByName
   };
 };
