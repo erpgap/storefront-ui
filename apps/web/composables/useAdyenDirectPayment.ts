@@ -132,8 +132,10 @@ const useAdyenDirectPayment = (
         { ...params }
       );
 
-      return data.value?.adyenPayments?.adyenPayments || {};
+      return data.value;
     });
+
+    return data?.value?.adyenPayments?.adyenPayments || {};
   };
 
   const setTransaction = (transactionParam: PaymentTransaction) =>

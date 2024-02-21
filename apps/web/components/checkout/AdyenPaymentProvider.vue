@@ -1,14 +1,19 @@
 <template>
     <div>
-        <!-- <SfLoaderCircular :class="{ loader: loading }" :loading="loading" /> -->
         <div id="dropin-container" class="mt-4" ref="dropinDivElement" />
     </div>
 </template>
 
 <script lang="ts" setup>
-import { SfLoaderCircular, } from '@storefront-ui/vue';
 import AdyenCheckout from '@adyen/adyen-web';
 import '@adyen/adyen-web/dist/adyen.css';
+
+interface AdyenDropinType {
+  handleAction: (action: any) => void;
+  unmount: () => void;
+  mount: (selector: string) => void;
+  submit: () => void;
+}
 
 const props = defineProps({
   provider: {
@@ -21,7 +26,7 @@ const props = defineProps({
   }
 });
 const emit = defineEmits(['isPaymentReady', 'providerPaymentHandler', 'paymentLoading']);
-const adyenDropin = ref(null);
+const adyenDropin = ref<AdyenDropinType | null>(null);
 const router = useRouter();
 const dropinDivElement = ref(null);
 const loading = ref(false);
@@ -34,7 +39,8 @@ const {
   paymentMethods,
   acquirerInfo,
   adyenMakeDirectPayment,
-  transaction
+  transaction,
+  getAdyenPaymentDetails
 } = useAdyenDirectPayment(props.provider.id, props.cart?.order?.id);
 
 onMounted(async () => {
@@ -42,8 +48,6 @@ onMounted(async () => {
   await openAdyenTransaction();
   await getAdyenAcquirerInfo();
   await getAdyenPaymentMethods();
-
-  console.log(paymentMethods.value);
 
   const configuration = {
     locale: 'en-EN',
@@ -57,26 +61,27 @@ onMounted(async () => {
       router.push({ name: 'paymentResponse' });
     },
     onError: (error: any, component:any) => {
+      console.log(error);
       if (
         error.errorText !== 'error was cleared' &&
                 error.errorText !== 'incomplete field'
       ) {
-        send({
+
+        /* send({
           message: error?.message || error?.errorI18n || error?.errorText,
           type: 'danger'
-        });
+        }); */
       }
 
       emit('paymentLoading', false);
     },
-
-    /* onAdditionalDetails: (state, dropin) => {
+    onAdditionalDetails: async (state: any) => {
       await getAdyenPaymentDetails({
         acquirerId: props.provider.id,
-        reference: transaction.value.reference,
-        details: state.data
+        transactionReference: transaction.value.reference,
+        paymentDetails: state.data
       });
-    }, */
+    },
     onChange: (state: any, component: { isValid: boolean; }) => {
       if (component.isValid) {
         emit('isPaymentReady', true);
@@ -85,7 +90,7 @@ onMounted(async () => {
       emit('isPaymentReady', false);
     },
 
-    onSubmit: async (state, dropin) => {
+    onSubmit: async (state: any) => {
       emit('isPaymentReady', false);
       emit('paymentLoading', true);
       const response = await adyenMakeDirectPayment({
@@ -145,7 +150,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  adyenDropin.value.unmount();
+  adyenDropin.value?.unmount();
   adyenDropin.value = null;
 
 });

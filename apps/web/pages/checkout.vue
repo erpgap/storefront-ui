@@ -70,7 +70,7 @@ onBeforeUnmount(() => {
 });
 
 const radioModel = ref('1');
-const activePayment = ref(1);
+const selectedProvider = ref(1);
 
 </script>
 
@@ -173,12 +173,12 @@ const activePayment = ref(1);
             </div>
           </div>
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
-          <CheckoutPaymentMethod :active-payment="activePayment" :payment-methods="paymentMethods"
-            @update:active-payment="activePayment = $event" />
+          <CheckoutPaymentMethod :active-payment="selectedProvider" :payment-methods="paymentMethods"
+            @update:active-payment="selectedProvider = $event" />
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0 mb-10" />
         </div>
         <UiOrderSummary class="col-span-5 md:sticky md:top-20 h-fit">
-          <SfButton size="lg" class="w-full mb-4 md:mb-0" @click="showPaymentModal = true" :disabled="!isPaymentReady">
+          <SfButton size="lg" class="w-full mb-4 md:mb-0" @click="providerPaymentHandler" :disabled="!selectedProvider || !isPaymentReady || loading">
             {{ $t('placeOrder') }}
           </SfButton>
           <p class="text-sm text-center mt-4 pb-4 md:pb-0">
