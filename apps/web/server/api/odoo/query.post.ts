@@ -1,7 +1,8 @@
 import { ApolloError } from '@apollo/client';
 import { Endpoints } from '@erpgap/odoo-sdk-api-client';
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
+
   const body = await readBody(event);
   const api: Endpoints = event.context.apolloClient.api;
 
@@ -36,5 +37,10 @@ export default defineEventHandler(async (event) => {
 
     throw createError({ statusCode: 500, data: error?.data, message: error.data?.[0]?.message });
   }
-});
+}, {
+  maxAge: 60 * 60,
+  getKey: async (event) => {
+    const body = await readBody(event);
+    return `${body?.[0].queryName}-${JSON.stringify(body?.[1] || {})}`;
+  }});
 

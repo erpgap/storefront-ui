@@ -12,9 +12,6 @@ export default defineNuxtConfig({
   delayHydration: {
     mode: 'init'
   },
-  experimental: {
-    componentIslands: true,
-  },
   modules: [
     'nuxt-lazy-hydrate',
     '@nuxtjs/critters',
@@ -92,6 +89,10 @@ export default defineNuxtConfig({
     enabled: true,
   },
   runtimeConfig: {
+    redis: {
+      host: 'localhost',
+      port: 6379,
+    },
     public: {
       odooBaseImageUrl: '',
       odooBaseUrl: ''
@@ -105,6 +106,17 @@ export default defineNuxtConfig({
   },
   nitro: {
     compressPublicAssets: true,
+    storage: {
+      cache: {
+        driver: 'redis',
+      }
+    },
+    devStorage: {
+      cache: {
+        driver: 'redis',
+
+      }
+    }
   },
   vite: {
     optimizeDeps: {

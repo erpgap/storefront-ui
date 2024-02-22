@@ -1,20 +1,6 @@
 <script lang="ts" setup>
-import {
-  SfButton,
-  SfDrawer,
-  SfBadge,
-  SfIconShoppingCart,
-  SfIconFavorite,
-  SfIconPerson,
-  SfIconClose,
-  SfIconExpandMore,
-  SfListItem,
-  useDisclosure,
-  useTrapFocus,
-  SfIconMenu,
-  SfInput,
-  SfIconSearch,
-} from '@storefront-ui/vue';
+import { SfButton, SfDrawer, SfBadge, SfIconShoppingCart, SfIconFavorite, SfIconPerson, SfIconClose, SfIconExpandMore,
+  SfListItem, useDisclosure, useTrapFocus, SfIconMenu, SfInput, SfIconSearch,} from '@storefront-ui/vue';
 import { onClickOutside } from '@vueuse/core';
 
 defineProps<{ filled?: boolean }>();
@@ -61,7 +47,7 @@ const actionItems = [
     ariaLabel: 'Log in',
     role: 'login',
     badge: false,
-    link: '/my-account',
+    link: '/login',
   },
 ];
 

@@ -87,7 +87,7 @@ definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
-const { loadUser, user, updateAccount, updatePassword, updatePasswordError } = useUser();
+const { loadUser, user, updatePartner, updatePassword } = useUser();
 const lastActiveElement = ref();
 const modalElement = ref();
 const openedForm = ref('');
@@ -105,21 +105,21 @@ const closeModal = () => {
 };
 
 const saveNewName = async (newName: string) => {
-  await updateAccount({myaccount: {id: user.value?.id, email: user.value?.email, name: newName}});
+  await updatePartner({myaccount: {id: user.value?.id, email: user.value?.email, name: newName}});
   closeModal();
 };
 
 const saveNewEmail = async (newEmail: string) => {
-  await updateAccount({myaccount: {id: user.value?.id, email: newEmail, name: user.value?.name}});
+  await updatePartner({myaccount: {id: user.value?.id, email: newEmail, name: user.value?.name}});
   closeModal();
 };
 
 const saveNewPassword = async (passwords: any) => {
   if (passwords.firstNewPassword === passwords.secondNewPassword) {
     await updatePassword({currentPassword: passwords.oldPassword, newPassword: passwords.firstNewPassword});
-    if (!updatePasswordError.value) {
-      closeModal();
-    }
+    // if (!updatePasswordError.value) {
+    //   closeModal();
+    // }
   }
 };
 

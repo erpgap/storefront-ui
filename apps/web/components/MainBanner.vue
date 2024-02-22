@@ -10,7 +10,6 @@
           provider="odooProvider"
           src="/web/image/product.template/94/image_1920"
           alt="Hero"
-          class="h-auto w-full object-cover object-left"
           width="575"
           height="451"
           sizes="xs:330px sm:330px md:764px lg:764px xl:764px xxl:764px"
