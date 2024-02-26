@@ -1,5 +1,13 @@
 <script lang="ts" setup>
-import { SfRating, SfCounter, SfLink, SfButton, SfIconShoppingCart, SfIconFavorite, SfIconFavoriteFilled } from '@storefront-ui/vue';
+import {
+  SfRating,
+  SfCounter,
+  SfLink,
+  SfButton,
+  SfIconShoppingCart,
+  SfIconFavorite,
+  SfIconFavoriteFilled,
+} from '@storefront-ui/vue';
 import { useToast } from 'vue-toastification';
 import { Product } from '~/graphql';
 
@@ -66,14 +74,7 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
   <div class="relative border border-neutral-200 rounded-md hover:shadow-lg min-h-[350px]">
     <div class="relative">
       <SfLink :href="slug">
-        <NuxtImg
-          :src="imageUrl"
-          :alt="imageAlt"
-          :width="370"
-          :height="370"
-          class="rounded-md"
-          :loading="loading"
-        />
+        <NuxtImg :src="imageUrl" :alt="imageAlt" :width="370" :height="370" class="rounded-md" :loading="loading" />
       </SfLink>
 
       <SfButton
@@ -86,10 +87,14 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
           { '!bg-green-200': isInWishlist(firstVariant?.id) },
         ]"
         aria-label="Add to wishlist"
-        @click="isInWishlist(firstVariant?.id) ? handleWishlistRemoveItem(firstVariant as Product) : handleWishlistAddItem(firstVariant as Product)"
+        @click="
+          isInWishlist(firstVariant?.id)
+            ? handleWishlistRemoveItem(firstVariant as Product)
+            : handleWishlistAddItem(firstVariant as Product)
+        "
       >
-        <SfIconFavoriteFilled size="sm" v-if="isInWishlist(firstVariant?.id)" />
-        <SfIconFavorite size="sm" v-else />
+        <SfIconFavoriteFilled v-if="isInWishlist(firstVariant?.id)" size="sm" />
+        <SfIconFavorite v-else size="sm" />
       </SfButton>
     </div>
     <div class="p-2 border-t border-neutral-200 typography-text-sm">
@@ -98,34 +103,18 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
       </SfLink>
       <div class="flex items-center pt-1">
         <SfRating size="xs" :value="rating ?? 0" :max="5" />
-        <SfLink
-          to="#"
-          variant="secondary"
-          class="ml-1 no-underline"
-        >
+        <SfLink to="#" variant="secondary" class="ml-1 no-underline">
           <SfCounter size="xs">{{ ratingCount }}</SfCounter>
         </SfLink>
       </div>
-      <p
-        v-if="description"
-        class="block py-2 font-normal leading-5 typography-text-sm text-neutral-700"
-      >
+      <p v-if="description" class="block py-2 font-normal leading-5 typography-text-sm text-neutral-700">
         {{ description }}
       </p>
       <div class="block pb-10 pt-3">
         <span class="font-bold typography-text-sm">${{ regularPrice }}</span>
-        <span
-          v-if="specialPrice"
-          class="ml-1.5 font-normal typography-text-xs line-through"
-          >${{ specialPrice }}</span
-        >
+        <span v-if="specialPrice" class="ml-1.5 font-normal typography-text-xs line-through">${{ specialPrice }}</span>
       </div>
-      <SfButton
-        type="button"
-        class="absolute bottom-2"
-        size="sm"
-        @click="cartAdd(firstVariant?.id, 1)"
-      >
+      <SfButton type="button" class="absolute bottom-2" size="sm" @click="cartAdd(firstVariant?.id, 1)">
         <template #prefix>
           <SfIconShoppingCart size="sm" />
         </template>

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { AttributeValue, Category, Product, ProductResponse, ProductTemplateListResponse, ProductVariant, ProductVariantData, QueryProductArgs, QueryProductVariantArgs, QueryProductsArgs } from '~/graphql';
+import { AttributeValue, Product, ProductResponse, QueryProductArgs } from '~/graphql';
 import { QueryName } from '~/server/queries';
 import { useProductAttributes } from './useProductAttributes';
 
@@ -8,7 +8,7 @@ export const useProductTemplate = (slug?: string) => {
   const { $sdk } = useNuxtApp();
 
   const loadingProductTemplate = ref(false);
-  const productTemplate = useState<Product>(`product-${slug}`, () => ({} as Product));
+  const productTemplate = useState<Product>(`product-${slug}`, () => ({}) as Product);
 
   const withBase = (filepath: string | null) => `https://vsfdemo15.labs.odoogap.com${filepath}`;
 
@@ -36,16 +36,19 @@ export const useProductTemplate = (slug?: string) => {
     return getRegularPrice(productTemplate.value?.firstVariant);
   });
 
-  const loadProductTemplate = async(params: QueryProductArgs) => {
+  const loadProductTemplate = async (params: QueryProductArgs) => {
     if (productTemplate.value?.id) {
       return;
     }
     loadingProductTemplate.value = true;
-    const { data, error } = await $sdk().odoo.query<QueryProductArgs, ProductResponse>({queryName: QueryName.GetProductTemplate}, params);
+    const { data } = await $sdk().odoo.query<QueryProductArgs, ProductResponse>(
+      { queryName: QueryName.GetProductTemplate },
+      params,
+    );
 
     loadingProductTemplate.value = false;
 
-    productTemplate.value = data?.value?.product as Product || {};
+    productTemplate.value = (data?.value?.product as Product) || {};
   };
 
   const getAllSizes = computed(() => {
@@ -84,6 +87,6 @@ export const useProductTemplate = (slug?: string) => {
     specialPrice,
     getAllColors,
     getAllMaterials,
-    getAllSizes
+    getAllSizes,
   };
 };

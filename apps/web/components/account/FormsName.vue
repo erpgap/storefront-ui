@@ -1,16 +1,9 @@
 <template>
-  <form @submit.prevent="$emit('on-save', userData.fullName)" data-testid="account-forms-name">
+  <form data-testid="account-forms-name" @submit.prevent="$emit('on-save', userData.fullName)">
     <div class="md:flex justify-between gap-4">
       <label class="block flex-1">
-        <UiFormLabel>{{
-          $t('account.accountSettings.personalData.yourName')
-        }}</UiFormLabel>
-        <SfInput
-          name="fullname"
-          type="text"
-          v-model="userData.fullName"
-          required
-        />
+        <UiFormLabel>{{ $t('account.accountSettings.personalData.yourName') }}</UiFormLabel>
+        <SfInput v-model="userData.fullName" name="fullname" type="text" required />
       </label>
     </div>
     <div class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4">

@@ -1,26 +1,8 @@
 {
-  "eslint.format.enable": true,
-  "eslint.validate": [ "javascript", "html" ],
-  "eslint.options": {
-    "extensions": [ ".js", ".html" ]
-  },
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
-    "source.organizeImports": "never"
-  },
-  "[typescriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit"
-    }
-  },
-  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
-  "javascript.format.placeOpenBraceOnNewLineForControlBlocks": false,
-  "javascript.format.placeOpenBraceOnNewLineForFunctions": false,
-  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
-  "typescript.format.placeOpenBraceOnNewLineForControlBlocks": false,
-  "typescript.format.placeOpenBraceOnNewLineForFunctions": false,
-"debug.javascript.autoAttachFilter": "disabled",
-"[vue]": {
-  "editor.defaultFormatter": "Vue.volar"
-}
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode", 
+  "editor.codeActionsOnSave": [
+    "source.fixAll.eslint"
+  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"]
 }

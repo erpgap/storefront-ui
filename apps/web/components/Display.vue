@@ -32,10 +32,7 @@ const items = ref([
 </script>
 
 <template>
-  <div
-    class="flex flex-col md:flex-row flex-wrap gap-6 mb-10"
-    data-testid="display"
-  >
+  <div class="flex flex-col md:flex-row flex-wrap gap-6 mb-10" data-testid="display">
     <div
       v-for="item in items"
       :key="item.title"
@@ -50,12 +47,8 @@ const items = ref([
           },
         ]"
       >
-        <div
-          class="flex flex-1 flex-col justify-center items-center md:items-start p-6 lg:p-10 max-w-1/2"
-        >
-          <p
-            class="uppercase typography-text-xs block font-bold tracking-widest"
-          >
+        <div class="flex flex-1 flex-col justify-center items-center md:items-start p-6 lg:p-10 max-w-1/2">
+          <p class="uppercase typography-text-xs block font-bold tracking-widest">
             {{ item.subtitle }}
           </p>
           <h2 class="mb-4 mt-2 font-bold typography-headline-3">

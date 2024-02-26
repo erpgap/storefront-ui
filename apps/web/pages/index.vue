@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const { loadCategoryList, categories } = useCategory();
 
 await loadCategoryList({ filter: { parent: true } });

@@ -27,7 +27,7 @@ enum QueryName {
   WishlistLoadQuery = 'WishlistLoadQuery',
   GetCountries = 'GetCountries',
   GetDeliveryMethods = 'GetDeliveryMethods',
-  GetPaymentMethods = 'GetPaymentMethods'
+  GetPaymentMethods = 'GetPaymentMethods',
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
@@ -43,7 +43,7 @@ const Queries: Record<QueryName, DocumentNode> = {
   GetAddresses,
   GetCountries,
   GetDeliveryMethods,
-  GetPaymentMethods
+  GetPaymentMethods,
 };
 
 export { Queries, QueryName };

@@ -17,14 +17,14 @@ export const useUiHelpers = () => {
     return path;
   };
 
-  const getFacetsFromURL = (query: any) : QueryProductsArgs => {
+  const getFacetsFromURL = (query: any): QueryProductsArgs => {
     const filters: string[] = [];
 
     if (query) {
       Object.keys(query).forEach((filterKey) => {
         if (![...queryParamsNotFilters, 'price'].includes(filterKey)) {
           if (query[filterKey].includes(',')) {
-            query[filterKey]?.split(',').forEach((label: string) => {
+            query[filterKey]?.split(',').forEach(() => {
               filters.push(filterKey);
             });
           } else {
@@ -90,9 +90,7 @@ export const useUiHelpers = () => {
     filters.forEach((element) => {
       if (element.filterName === 'Size') {
         if (formattedFilters[element.filterName]) {
-          formattedFilters[
-            element.filterName
-          ] += `,${element.id}-${element.label}`;
+          formattedFilters[element.filterName] += `,${element.id}-${element.label}`;
           return;
         }
         formattedFilters[element.filterName] = `${element.id}-${element.label}`;

@@ -31,10 +31,13 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, data: apolloError.clientErrors, message: apolloError.message });
     }
     if (apolloError.networkError) {
-      throw createError({ statusCode: 500, data: (apolloError.networkError as any)?.result?.errors, message: apolloError.message });
+      throw createError({
+        statusCode: 500,
+        data: (apolloError.networkError as any)?.result?.errors,
+        message: apolloError.message,
+      });
     }
 
     throw createError({ statusCode: 500, data: error?.data, message: error.data?.[0]?.message });
   }
 });
-

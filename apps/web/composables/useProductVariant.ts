@@ -6,12 +6,14 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   const { $sdk } = useNuxtApp();
 
   const loadingProductVariant = ref(false);
-  const productVariant = useState<Product>(`product-${slugWithCombinationIds}`, () => ({} as Product));
+  const productVariant = useState<Product>(`product-${slugWithCombinationIds}`, () => ({}) as Product);
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
-
     loadingProductVariant.value = true;
-    const { data } = await $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>({queryName: QueryName.GetProductVariantQuery}, params);
+    const { data } = await $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>(
+      { queryName: QueryName.GetProductVariantQuery },
+      params,
+    );
     loadingProductVariant.value = false;
 
     productVariant.value = data?.value?.productVariant.product as Product;
@@ -20,7 +22,7 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   const breadcrumbs = computed(() => {
     return [
       { name: 'Home', link: '/' },
-      { name: 'Product'},
+      { name: 'Product' },
       { name: productVariant?.value?.name, link: `product/${productVariant?.value?.name}` },
     ];
   });

@@ -15,10 +15,9 @@ const props = defineProps<{
 </script>
 
 <template>
-    <UiOverlay :visible="modelValue">
-      <SfModal class="md:max-h-[min(calc(100vh-32px),100%)]" v-bind="{ ...$attrs, ...props }">
-        <slot />
-      </SfModal>
-    </UiOverlay>
-  </template>
-
+  <UiOverlay :visible="modelValue">
+    <SfModal class="md:max-h-[min(calc(100vh-32px),100%)]" v-bind="{ ...$attrs, ...props }">
+      <slot />
+    </SfModal>
+  </UiOverlay>
+</template>

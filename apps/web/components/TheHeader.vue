@@ -1,13 +1,27 @@
 <script lang="ts" setup>
-import { SfButton, SfDrawer, SfBadge, SfIconShoppingCart, SfIconFavorite, SfIconPerson, SfIconClose, SfIconExpandMore,
-  SfListItem, useDisclosure, useTrapFocus, SfIconMenu, SfInput, SfIconSearch,} from '@storefront-ui/vue';
+import {
+  SfButton,
+  SfDrawer,
+  SfBadge,
+  SfIconShoppingCart,
+  SfIconFavorite,
+  SfIconPerson,
+  SfIconClose,
+  SfIconExpandMore,
+  SfListItem,
+  useDisclosure,
+  useTrapFocus,
+  SfIconMenu,
+  SfInput,
+  SfIconSearch,
+} from '@storefront-ui/vue';
 import { onClickOutside } from '@vueuse/core';
 
 defineProps<{ filled?: boolean }>();
 
 const { loadCategoryList, categories } = useCategory();
 const { isOpen, toggle, close } = useDisclosure();
-const { isOpen: wishlistIsOpen, toggle: wishlistToggle, close: wishlistClose,} = useDisclosure();
+const { isOpen: wishlistIsOpen, toggle: wishlistToggle, close: wishlistClose } = useDisclosure();
 const { wishlistTotalItems, loadWishlist, wishlist } = useWishlist();
 const NuxtLink = resolveComponent('NuxtLink');
 
@@ -23,7 +37,7 @@ onClickOutside(menuRef, () => {
 });
 
 const filteredCategories = computed(() =>
-  categories?.value?.filter((category: any) => category.name === 'WOMEN' || category.name === 'MEN')
+  categories?.value?.filter((category: any) => category.name === 'WOMEN' || category.name === 'MEN'),
 );
 const cartCounter = useCookie<number>('cart-counter');
 
@@ -62,7 +76,6 @@ const handleWishlistSideBar = async () => {
 
 await loadCategoryList({ filter: { parent: true } });
 await loadWishlist();
-
 </script>
 
 <template>
@@ -79,9 +92,7 @@ await loadWishlist();
         { 'bg-white border-b border-neutral-200': !filled },
       ]"
     >
-      <div
-        class="flex items-center justify-between lg:justify-start h-full w-full narrow-container"
-      >
+      <div class="flex items-center justify-between lg:justify-start h-full w-full narrow-container">
         <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7 -mt-1.5">
           <VsfLogo />
         </NuxtLink>
@@ -98,9 +109,7 @@ await loadWishlist();
           <template #suffix>
             <SfIconExpandMore class="hidden md:inline-flex" />
           </template>
-          <span class="hidden md:inline-flex whitespace-nowrap px-2"
-            >Browse products</span
-          >
+          <span class="hidden md:inline-flex whitespace-nowrap px-2">Browse products</span>
         </SfButton>
         <nav>
           <ul>
@@ -120,17 +129,11 @@ await loadWishlist();
                   placement="top"
                   class="bg-white p-0 max-h-screen overflow-y-auto lg:!absolute lg:!top-[5rem] max-w-full lg:p-6 top-index"
                 >
-                  <div
-                    class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative"
-                  >
+                  <div class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative">
                     <div
                       class="sticky top-0 flex items-center justify-between py-2 px-4 bg-primary-700 lg:hidden w-full"
                     >
-                      <div
-                        class="flex items-center typography-text-lg font-medium text-white"
-                      >
-                        Browse products
-                      </div>
+                      <div class="flex items-center typography-text-lg font-medium text-white">Browse products</div>
                       <SfButton
                         square
                         variant="tertiary"
@@ -155,10 +158,7 @@ await loadWishlist();
                       </h2>
                       <hr class="mb-3.5" />
                       <ul>
-                        <li
-                          v-for="{ name, slug, childs: subcategory } in childs"
-                          :key="name"
-                        >
+                        <li v-for="{ name, slug, childs: subcategory } in childs" :key="name">
                           <SfListItem
                             v-if="subcategory !== null"
                             tag="a"
@@ -175,14 +175,8 @@ await loadWishlist();
                     <div
                       class="flex flex-col items-center justify-center bg-neutral-100 lg:rounded-md border-neutral-300 overflow-hidden grow"
                     >
-                      <NuxtImg
-                        :src="bannerDetails.image"
-                        :alt="bannerDetails.title"
-                        class="object-contain"
-                      />
-                      <p
-                        class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium"
-                      >
+                      <NuxtImg :src="bannerDetails.image" :alt="bannerDetails.title" class="object-contain" />
+                      <p class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium">
                         {{ bannerDetails.title }}
                       </p>
                     </div>
@@ -255,10 +249,7 @@ await loadWishlist();
                 />
               </template>
             </SfButton>
-            <WishlistSidebar
-              :is-open="wishlistIsOpen"
-              @close="wishlistClose"
-            />
+            <WishlistSidebar :is-open="wishlistIsOpen" @close="wishlistClose" />
           </div>
           <SfButton
             v-for="{ ariaLabel, label, icon, link, badge, role } in actionItems"
@@ -279,11 +270,7 @@ await loadWishlist();
                 data-testid="cart-badge"
               />
             </template>
-            <span
-              v-if="role === 'login'"
-              class="hidden lg:inline-flex whitespace-nowrap pr-2"
-              >{{ label }}</span
-            >
+            <span v-if="role === 'login'" class="hidden lg:inline-flex whitespace-nowrap pr-2">{{ label }}</span>
           </SfButton>
         </nav>
         <div v-if="filled">

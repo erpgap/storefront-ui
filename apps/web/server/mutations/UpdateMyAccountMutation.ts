@@ -1,23 +1,21 @@
 import { gql } from '@apollo/client/core';
 import { partnerFragment } from '../fragments';
 export default gql`
-mutation($myaccount: UpdateMyAccountParams){
-    updateMyAccount(myaccount: $myaccount ) {
+  mutation ($myaccount: UpdateMyAccountParams) {
+    updateMyAccount(myaccount: $myaccount) {
+      id
+      name
+      street
+      street2
+      city
+      state {
         id
-        name
-        street
-        street2
-        city
-        state
-        {
+      }
+      country {
         id
-        }
-        country
-        {
-        id
-        }
-        email
-        phone
+      }
+      email
+      phone
     }
   }
 `;

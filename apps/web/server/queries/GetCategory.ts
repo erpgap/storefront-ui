@@ -2,8 +2,8 @@ import { partnerFragment } from '../fragments';
 import { gql } from '@apollo/client/core';
 
 export default gql`
-query($slug: String, $id: Int) {
-  category(slug: $slug, id: $id) {
+  query ($slug: String, $id: Int) {
+    category(slug: $slug, id: $id) {
       id
       name
       slug
@@ -38,5 +38,5 @@ query($slug: String, $id: Int) {
         }
       }
     }
-}
+  }
 `;

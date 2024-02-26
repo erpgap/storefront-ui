@@ -1,16 +1,10 @@
 <template>
-  <SfAccordionItem
-    v-model="internalModelValue"
-    :summary-class="summaryClass"
-    data-testid="accordion-item"
-  >
+  <SfAccordionItem v-model="internalModelValue" :summary-class="summaryClass" data-testid="accordion-item">
     <template #summary>
       <slot name="summary">
         <p>{{ summary }}</p>
       </slot>
-      <SfIconChevronLeft
-        :class="['text-neutral-500', modelValue ? 'rotate-90' : '-rotate-90']"
-      />
+      <SfIconChevronLeft :class="['text-neutral-500', modelValue ? 'rotate-90' : '-rotate-90']" />
     </template>
     <div class="py-2 lg:px-4">
       <slot />

@@ -337,7 +337,7 @@
         "itemsSubtotal": "Items Subtotal",
         "delivery": "Delivery",
         "estimatedTax": "Estimated Sales Tax",
-        "total": "Total", 
+        "total": "Total",
         "billingAddress": "Billing address",
         "paymentMethod": "Payment method",
         "shippingAddress": "Shipping address"

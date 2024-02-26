@@ -11,7 +11,6 @@ const props = defineProps({
     required: true,
   },
 });
-
 </script>
 
 <template>
@@ -48,16 +47,11 @@ const props = defineProps({
             class="text-secondary-700 sm:order-1 font-bold typography-text-sm sm:typography-text-lg"
           >
             ${{ product?.combinationInfoVariant?.price }}
-            <span
-              class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
-            >
+            <span class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal">
               ${{ product?.combinationInfoVariant?.list_price }}
             </span>
           </span>
-          <span
-            v-else
-            class="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg"
-          >
+          <span v-else class="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg">
             ${{ product?.combinationInfoVariant?.list_price }}
           </span>
         </div>

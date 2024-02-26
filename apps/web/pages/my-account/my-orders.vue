@@ -15,16 +15,10 @@
     <h3 class="typography-headline-3 font-bold mb-4 mt-6">
       {{ $t('account.ordersAndReturns.noOrders') }}
     </h3>
-    <SfButton variant="secondary" class="!ring-neutral-200">
-      {{ $t('account.ordersAndReturns.continue') }}</SfButton
-    >
+    <SfButton variant="secondary" class="!ring-neutral-200"> {{ $t('account.ordersAndReturns.continue') }}</SfButton>
   </div>
   <div v-else class="col-span-3">
-    <ul
-      class="md:hidden my-4 last-of-type:mb-0"
-      v-for="{ id, date, paymentAmount, status } in data"
-      :key="id"
-    >
+    <ul v-for="{ id, date, paymentAmount, status } in data" :key="id" class="md:hidden my-4 last-of-type:mb-0">
       <li>
         <p class="block typography-text-sm font-medium">
           {{ $t('account.ordersAndReturns.orderId') }}
@@ -48,12 +42,7 @@
           {{ $t('account.ordersAndReturns.status') }}
         </p>
         <span class="block typography-text-sm flex-1">{{ status }}</span>
-        <SfButton
-          :tag="NuxtLink"
-          size="sm"
-          variant="tertiary"
-          :to="`'/my-account/my-orders/'${id}`"
-        >
+        <SfButton :tag="NuxtLink" size="sm" variant="tertiary" :to="`'/my-account/my-orders/'${id}`">
           {{ $t('account.ordersAndReturns.details') }}</SfButton
         >
       </li>
@@ -81,11 +70,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="{ id, date, paymentAmount, status } in data"
-          :key="id"
-          class="border-b border-neutral-200"
-        >
+        <tr v-for="{ id, date, paymentAmount, status } in data" :key="id" class="border-b border-neutral-200">
           <td class="py-4 pr-4 lg:whitespace-nowrap">{{ id }}</td>
           <td class="p-4 lg:whitespace-nowrap">{{ date }}</td>
           <td class="p-4">${{ paymentAmount }}</td>
@@ -93,11 +78,7 @@
             {{ status }}
           </td>
           <td class="py-1.5 pl-4 text-right w-full">
-            <SfButton
-              :tag="NuxtLink"
-              size="sm"
-              variant="tertiary"
-            >
+            <SfButton :tag="NuxtLink" size="sm" variant="tertiary">
               {{ $t('account.ordersAndReturns.details') }}</SfButton
             >
           </td>

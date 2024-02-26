@@ -5,12 +5,12 @@ export default defineNuxtConfig({
       viewport: 'minimum-scale=1, initial-scale=1, width=device-width',
       title: 'Vue Storefront',
       htmlAttrs: {
-        lang: 'en'
+        lang: 'en',
       },
     },
   },
   delayHydration: {
-    mode: 'init'
+    mode: 'init',
   },
   modules: [
     'nuxt-lazy-hydrate',
@@ -23,7 +23,7 @@ export default defineNuxtConfig({
       '@nuxtjs/google-fonts',
       {
         families: {
-          'Red Hat Display': [400, 500, 700]
+          'Red Hat Display': [400, 500, 700],
         },
       },
     ],
@@ -44,7 +44,7 @@ export default defineNuxtConfig({
       },
     ],
     // '@storyblok/nuxt',
-    'nuxt-lodash'
+    'nuxt-lodash',
   ],
   basicAuth: {
     enabled: false,
@@ -82,8 +82,8 @@ export default defineNuxtConfig({
       '@vue/apollo-option',
       'ts-invariant',
       'vue-toastification',
-      '@erpgap/odoo-sdk-api-client'
-    ]
+      '@erpgap/odoo-sdk-api-client',
+    ],
   },
   devtools: {
     enabled: true,
@@ -95,8 +95,8 @@ export default defineNuxtConfig({
     },
     public: {
       odooBaseImageUrl: '',
-      odooBaseUrl: ''
-    }
+      odooBaseUrl: '',
+    },
   },
   routeRules: {
     '/': { swr: true },
@@ -109,14 +109,13 @@ export default defineNuxtConfig({
     storage: {
       cache: {
         driver: 'redis',
-      }
+      },
     },
     devStorage: {
       cache: {
         driver: 'redis',
-
-      }
-    }
+      },
+    },
   },
   vite: {
     optimizeDeps: {
@@ -127,8 +126,8 @@ export default defineNuxtConfig({
     providers: {
       odooProvider: {
         name: 'odooProvider',
-        provider: '~/providers/odoo-provider.ts'
-      }
-    }
-  }
+        provider: '~/providers/odoo-provider.ts',
+      },
+    },
+  },
 });

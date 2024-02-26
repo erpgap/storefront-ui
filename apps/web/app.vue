@@ -1,5 +1,4 @@
 <script setup>
-
 const nuxtApp = useNuxtApp();
 
 nuxtApp.hook('page:finish', () => {
