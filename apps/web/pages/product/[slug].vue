@@ -24,7 +24,7 @@ const route = useRoute();
 const router = useRouter();
 
 const { loadProductTemplate, productTemplate, loadingProductTemplate, getAllColors, getAllMaterials, getAllSizes } =
-  useProductTemplate();
+  useProductTemplate(route.path);
 const {
   loadProductVariant,
   loadingProductVariant,

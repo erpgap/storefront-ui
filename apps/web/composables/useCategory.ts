@@ -37,8 +37,6 @@ export const useCategory = (categorySlug?: string) => {
           params,
         );
 
-        // console.log(data.value);
-
         return data.value;
       });
 

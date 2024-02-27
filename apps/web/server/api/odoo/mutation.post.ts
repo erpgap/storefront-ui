@@ -17,6 +17,8 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, data: response.errors });
     }
 
+    delete (response.data as any).cookie;
+
     return response.data;
   } catch (error: any) {
     const apolloError = error as ApolloError;
