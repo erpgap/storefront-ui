@@ -3,12 +3,10 @@
     <div class="md:flex md:flex-row-reverse md:justify-center min-h-[600px] max-w-screen-3xl mx-auto">
       <div class="flex flex-col justify-center md:basis-2/4 md:items-stretch md:overflow-hidden">
         <NuxtImg
-          provider="odooProvider"
-          src="/web/image/product.template/94/image_1920"
+          src="/images/main-banner.webp"
           alt="Hero"
-          width="575"
-          height="451"
-          sizes="xs:330px sm:330px md:764px lg:764px xl:764px xxl:764px"
+          width="500"
+          height="400"
           fetchpriority="high"
           format="webp"
           preload
