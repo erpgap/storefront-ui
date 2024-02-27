@@ -110,11 +110,11 @@ export default defineNuxtConfig({
       },
     ],
     compressPublicAssets: true,
-    storage: {
-      cache: {
-        driver: 'redis',
-      },
-    },
+    // storage: {
+    //   cache: {
+    //     driver: 'redis',
+    //   },
+    // },
     devStorage: {
       cache: {
         driver: 'redis',

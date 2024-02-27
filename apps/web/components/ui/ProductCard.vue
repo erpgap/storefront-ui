@@ -2,7 +2,6 @@
 import {
   SfRating,
   SfCounter,
-  SfLink,
   SfButton,
   SfIconShoppingCart,
   SfIconFavorite,
@@ -73,9 +72,9 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
 <template>
   <div class="relative border border-neutral-200 rounded-md hover:shadow-lg min-h-[350px]">
     <div class="relative">
-      <SfLink :href="slug">
+      <NuxtLink :to="slug">
         <NuxtImg :src="imageUrl" :alt="imageAlt" :width="370" :height="370" class="rounded-md" :loading="loading" />
-      </SfLink>
+      </NuxtLink>
 
       <SfButton
         type="button"
@@ -98,14 +97,12 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
       </SfButton>
     </div>
     <div class="p-2 border-t border-neutral-200 typography-text-sm">
-      <SfLink :href="slug" variant="secondary" class="no-underline">
+      <NuxtLink :to="slug" variant="secondary" class="no-underline">
         {{ name }}
-      </SfLink>
+      </NuxtLink>
       <div class="flex items-center pt-1">
         <SfRating size="xs" :value="rating ?? 0" :max="5" />
-        <SfLink to="#" variant="secondary" class="ml-1 no-underline">
-          <SfCounter size="xs">{{ ratingCount }}</SfCounter>
-        </SfLink>
+        <SfCounter size="xs">{{ ratingCount }}</SfCounter>
       </div>
       <p v-if="description" class="block py-2 font-normal leading-5 typography-text-sm text-neutral-700">
         {{ description }}

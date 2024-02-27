@@ -4,7 +4,7 @@ import { QueryName } from '~/server/queries';
 import { useProductAttributes } from './useProductAttributes';
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
-export const useProductTemplate = (slug?: string) => {
+export const useProductTemplate = (slug: string) => {
   const { $sdk } = useNuxtApp();
 
   const loadingProductTemplate = ref(false);
