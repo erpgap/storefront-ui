@@ -57,6 +57,12 @@ const updateFilter = async (filter: LocationQueryRaw | undefined) => {
   });
 };
 
+const tomorrow = computed(() => {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  return date.toDateString().slice(0, 10);
+});
+
 const productsInCart = computed(() => {
   return (
     cart.value?.order?.orderLines?.find((orderLine: OrderLine) => orderLine.product?.id === productVariant?.value.id)
@@ -180,6 +186,9 @@ await loadProductVariant(params.value);
               <SfIconPackage size="sm" class="flex-shrink-0 mr-1 text-neutral-500" />
               <p class="text-sm">
                 <i18n-t keypath="additionalInfo.shipping" scope="global">
+                  <template #date>
+                    {{ tomorrow }}
+                  </template>
                   <template #addAddress>
                     <SfLink href="#" variant="secondary">{{ $t('additionalInfo.addAddress') }}</SfLink>
                   </template>

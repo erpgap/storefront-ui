@@ -5,8 +5,8 @@ await loadCategoryList({ filter: { parent: true } });
 </script>
 
 <template>
-  <LazyMainBanner />
-  <LazyCategoryCard :categories="categories" />
+  <MainBanner />
+  <CategoryCard :categories="categories" />
   <NuxtLazyHydrate when-visible>
     <LazyDisplay />
   </NuxtLazyHydrate>

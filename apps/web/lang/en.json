@@ -245,7 +245,7 @@
   "recommendedProducts": "Recommended with this product",
   "outOfStock": "Out of stock",
   "additionalInfo": {
-    "shipping": "Free shipping, arrives by Thu, Apr 7. Want it faster? {addAddress} to see options",
+    "shipping": "Free shipping, arrives by {date}. Want it faster? {addAddress} to see options",
     "addAddress": "Add an address",
     "pickup": "Pickup not available at Super center. {checkAvailability}",
     "checkAvailability": "Check availability nearby",
