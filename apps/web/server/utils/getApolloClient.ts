@@ -3,9 +3,9 @@ import { createApiClient, MiddlewareConfig } from '@erpgap/odoo-sdk-api-client/s
 class ApolloClientConnection {
   private static _instance: any;
 
-  private constructor() { }
+  private constructor() {}
 
-  static getInstance(config: MiddlewareConfig) : any {
+  static getInstance(config: MiddlewareConfig): any {
     if (this._instance) {
       return this._instance;
     }

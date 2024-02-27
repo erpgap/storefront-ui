@@ -1,16 +1,8 @@
 <template>
   <footer class="pt-10 bg-neutral-100">
-    <div
-      class="grid justify-center grid-cols-[1fr_1fr] md:grid-cols-[repeat(4,1fr)] narrow-container"
-    >
-      <div
-        v-for="{ label, subcategories } in categories"
-        :key="label"
-        class="grid grid-cols xs:pb-4"
-      >
-        <div
-          class="ml-4 text-lg font-medium leading-7 text-neutral-900 font-body"
-        >
+    <div class="grid justify-center grid-cols-[1fr_1fr] md:grid-cols-[repeat(4,1fr)] narrow-container">
+      <div v-for="{ label, subcategories } in categories" :key="label" class="grid grid-cols xs:pb-4">
+        <div class="ml-4 text-lg font-medium leading-7 text-neutral-900 font-body">
           {{ label }}
         </div>
         <SfListItem
@@ -30,11 +22,7 @@
     </div>
     <hr />
     <div class="py-10 md:flex md:mx-auto max-w-[1336px]">
-      <div
-        v-for="{ label, icon, link, details } in contactOptions"
-        :key="label"
-        class="mx-auto my-4 text-center"
-      >
+      <div v-for="{ label, icon, link, details } in contactOptions" :key="label" class="mx-auto my-4 text-center">
         <component :is="icon" size="lg" />
         <p class="py-1 my-2 font-medium typography-text-lg font-body">
           <SfLink
@@ -45,19 +33,13 @@
             {{ label }}
           </SfLink>
         </p>
-        <p
-          v-for="option in details"
-          :key="option"
-          class="leading-5 typography-text-sm text-neutral-600 font-body"
-        >
+        <p v-for="option in details" :key="option" class="leading-5 typography-text-sm text-neutral-600 font-body">
           {{ option }}
         </p>
       </div>
     </div>
     <div class="bg-neutral-900">
-      <div
-        class="px-4 md:px-6 xl:px-8 xxl:px-0 max-w-[1336px] justify-end py-10 md:flex md:py-6 mx-auto"
-      >
+      <div class="px-4 md:px-6 xl:px-8 xxl:px-0 max-w-[1336px] justify-end py-10 md:flex md:py-6 mx-auto">
         <div class="flex justify-center py-2 gap-x-4 md:self-start">
           <SfButton
             v-for="{ label, link, icon } in socialMedia"
@@ -69,12 +51,10 @@
             :href="link"
             :aria-label="`Go to ${label} page`"
           >
-            <component :is="icon" loading="lazy"/>
+            <component :is="icon" loading="lazy" />
           </SfButton>
         </div>
-        <div
-          class="flex items-center justify-center gap-6 py-2 my-4 md:ml-auto md:my-0"
-        >
+        <div class="flex items-center justify-center gap-6 py-2 my-4 md:ml-auto md:my-0">
           <SfLink
             v-for="{ label, link } in bottomLinks"
             :key="label"

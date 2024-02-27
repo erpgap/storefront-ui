@@ -17,25 +17,25 @@ import UpdateAddress from './UpdateAddress';
 import CreateUpdatePartner from './CreateUpdatePartner';
 
 enum MutationName {
-    LoginMutation = 'LoginMutation',
-    LogoutMutation = 'LogoutMutation',
-    CreateNewAccountMutation = 'CreateNewAccountMutation',
-    SendResetPasswordMutation = 'SendResetPasswordMutation',
-    UpdatePasswordMutation = 'UpdatePasswordMutation',
-    ChangePasswordMutation = 'ChangePasswordMutation',
-    CartAddItem = 'CartAddItem',
-    CartUpdateQuantity = 'CartUpdateQuantity',
-    CartRemoveItem = 'CartRemoveItem',
-    RegisterUserMutation = 'RegisterUserMutation',
-    UpdateMyAccountMutation = 'UpdateMyAccountMutation',
-    WishlistAddItem = 'WishlistAddItem',
-    WishlistRemoveItem = 'WishlistRemoveItem',
-    AddAddress = 'AddAddress',
-    UpdateAddress = 'UpdateAddress',
-    CreateUpdatePartner = 'CreateUpdatePartner'
-  }
+  LoginMutation = 'LoginMutation',
+  LogoutMutation = 'LogoutMutation',
+  CreateNewAccountMutation = 'CreateNewAccountMutation',
+  SendResetPasswordMutation = 'SendResetPasswordMutation',
+  UpdatePasswordMutation = 'UpdatePasswordMutation',
+  ChangePasswordMutation = 'ChangePasswordMutation',
+  CartAddItem = 'CartAddItem',
+  CartUpdateQuantity = 'CartUpdateQuantity',
+  CartRemoveItem = 'CartRemoveItem',
+  RegisterUserMutation = 'RegisterUserMutation',
+  UpdateMyAccountMutation = 'UpdateMyAccountMutation',
+  WishlistAddItem = 'WishlistAddItem',
+  WishlistRemoveItem = 'WishlistRemoveItem',
+  AddAddress = 'AddAddress',
+  UpdateAddress = 'UpdateAddress',
+  CreateUpdatePartner = 'CreateUpdatePartner',
+}
 
-const Mutations : Record<MutationName, DocumentNode> = {
+const Mutations: Record<MutationName, DocumentNode> = {
   LoginMutation,
   LogoutMutation,
   CreateNewAccountMutation,
@@ -51,10 +51,7 @@ const Mutations : Record<MutationName, DocumentNode> = {
   WishlistRemoveItem,
   AddAddress,
   UpdateAddress,
-  CreateUpdatePartner
+  CreateUpdatePartner,
 };
 
-export {
-  Mutations,
-  MutationName
-};
+export { Mutations, MutationName };

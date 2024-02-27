@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import {
-  SfButton,
-  SfIconChevronLeft,
-  SfIconChevronRight,
-  usePagination,
-} from '@storefront-ui/vue';
+import { SfButton, SfIconChevronLeft, SfIconChevronRight, usePagination } from '@storefront-ui/vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -28,14 +23,16 @@ const props = defineProps({
   },
 });
 
-const pagination = computed<any>(() => reactive(
-  usePagination({
-    totalItems: props?.totalItems,
-    currentPage: props?.currentPage,
-    pageSize: props?.pageSize,
-    maxPages: props?.maxVisiblePages,
-  })
-));
+const pagination = computed<any>(() =>
+  reactive(
+    usePagination({
+      totalItems: props?.totalItems,
+      currentPage: props?.currentPage,
+      pageSize: props?.pageSize,
+      maxPages: props?.maxVisiblePages,
+    }),
+  ),
+);
 
 const setParams = (filter: any) => {
   router.push({ query: { ...route.query, ...filter } });
@@ -76,8 +73,7 @@ onMounted(() => {
           :class="[
             'flex pt-1 border-t-4 border-transparent',
             {
-              'font-medium border-t-4 !border-primary-500':
-                pagination.selectedPage === 1,
+              'font-medium border-t-4 !border-primary-500': pagination.selectedPage === 1,
             },
           ]"
         >
@@ -96,22 +92,12 @@ onMounted(() => {
       </li>
       <li v-if="pagination.startPage > 2">
         <div class="flex pt-1 border-t-4 border-transparent">
-          <button
-            type="button"
-            disabled
-            aria-hidden="true"
-            class="px-4 py-3 md:w-12 rounded-md text-neutral-500"
-          >
+          <button type="button" disabled aria-hidden="true" class="px-4 py-3 md:w-12 rounded-md text-neutral-500">
             ...
           </button>
         </div>
       </li>
-      <li
-        v-if="
-          maxVisiblePages === 1 &&
-          pagination.selectedPage === pagination.totalPages
-        "
-      >
+      <li v-if="maxVisiblePages === 1 && pagination.selectedPage === pagination.totalPages">
         <div class="flex pt-1 border-t-4 border-transparent">
           <button
             type="button"
@@ -131,8 +117,7 @@ onMounted(() => {
           :class="[
             'flex pt-1 border-t-4 border-transparent',
             {
-              'font-medium border-t-4 !border-primary-700':
-                pagination.selectedPage === page,
+              'font-medium border-t-4 !border-primary-700': pagination.selectedPage === page,
             },
           ]"
         >
@@ -141,8 +126,7 @@ onMounted(() => {
             :class="[
               'px-4 py-3 md:w-12 text-neutral-500 rounded-md hover:bg-primary-100 hover:text-primary-800 active:bg-primary-200 active:text-primary-900',
               {
-                '!text-neutral-900 hover:!text-primary-800 active:!text-primary-900':
-                  pagination.selectedPage === page,
+                '!text-neutral-900 hover:!text-primary-800 active:!text-primary-900': pagination.selectedPage === page,
               },
             ]"
             :aria-current="pagination.selectedPage === page"
@@ -172,12 +156,7 @@ onMounted(() => {
       </li>
       <li v-if="pagination.endPage < pagination.totalPages - 1">
         <div class="flex pt-1 border-t-4 border-transparent">
-          <button
-            type="button"
-            disabled
-            aria-hidden="true"
-            class="px-4 py-3 md:w-12 rounded-md text-neutral-500"
-          >
+          <button type="button" disabled aria-hidden="true" class="px-4 py-3 md:w-12 rounded-md text-neutral-500">
             ...
           </button>
         </div>
@@ -187,8 +166,7 @@ onMounted(() => {
           :class="[
             'flex pt-1 border-t-4 border-transparent',
             {
-              'font-medium border-t-4 !border-primary-500':
-                pagination.selectedPage === pagination.totalPages,
+              'font-medium border-t-4 !border-primary-500': pagination.selectedPage === pagination.totalPages,
             },
           ]"
         >
@@ -225,4 +203,3 @@ onMounted(() => {
     </SfButton>
   </nav>
 </template>
-

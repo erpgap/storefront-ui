@@ -10,4 +10,3 @@ mutation register($email: String!, $name: String!, $password: String!, $subscrib
       ${partnerFragment}
     }
   }`;
-

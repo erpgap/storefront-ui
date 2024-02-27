@@ -1,26 +1,19 @@
-import {
-  ShippingMethod,
-  DeliveryMethodListResponse,
-} from '~/graphql';
+import { ShippingMethod, DeliveryMethodListResponse } from '~/graphql';
 import { QueryName } from '~/server/queries';
 
 export const useDeliveryMethod = () => {
   const { $sdk } = useNuxtApp();
 
   const loading = ref(false);
-  const deliveryMethods = useState<ShippingMethod[]>(
-    'delivery-method',
-    () => []
-  );
+  const deliveryMethods = useState<ShippingMethod[]>('delivery-method', () => []);
 
   const loadDeliveryMethods = async () => {
     loading.value = true;
     try {
       const { data } = await useAsyncData('shipping-methods', async () => {
-        const { data } = await $sdk().odoo.query<
-          any,
-          DeliveryMethodListResponse
-        >({ queryName: QueryName.GetDeliveryMethods });
+        const { data } = await $sdk().odoo.query<any, DeliveryMethodListResponse>({
+          queryName: QueryName.GetDeliveryMethodsQuery,
+        });
         return data.value;
       });
 

@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { SfButton, SfLink, SfCheckbox, SfInput, SfLoaderCircular } from '@storefront-ui/vue';
 
@@ -14,7 +13,7 @@ const rememberMe = ref<boolean>();
 const isLoading = ref<boolean>();
 
 const handleLogin = async () => {
-  await login({email: email.value, password: password.value});
+  await login({ email: email.value, password: password.value });
 };
 
 const NuxtLink = resolveComponent('NuxtLink');
@@ -22,19 +21,19 @@ const NuxtLink = resolveComponent('NuxtLink');
 
 <template>
   <NuxtLayout name="auth" :heading="$t('auth.login.heading')">
-    <form @submit.prevent="handleLogin" class="border-neutral-200 md:border flex flex-col gap-4 md:p-6 rounded-md">
+    <form class="border-neutral-200 md:border flex flex-col gap-4 md:p-6 rounded-md" @submit.prevent="handleLogin">
       <label>
         <UiFormLabel>{{ $t('form.emailLabel') }}</UiFormLabel>
-        <SfInput name="email" type="email" autocomplete="email" v-model="email" required />
+        <SfInput v-model="email" name="email" type="email" autocomplete="email" required />
       </label>
 
       <label>
         <UiFormLabel>{{ $t('form.passwordLabel') }}</UiFormLabel>
-        <UiFormPasswordInput name="password" autocomplete="current-password" v-model="password" required />
+        <UiFormPasswordInput v-model="password" name="password" autocomplete="current-password" required />
       </label>
 
       <label class="mt-2 flex items-center gap-2">
-        <SfCheckbox name="rememberMe" v-model="rememberMe" />
+        <SfCheckbox v-model="rememberMe" name="rememberMe" />
         {{ $t('auth.login.rememberMeLabel') }}
       </label>
 

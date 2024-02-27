@@ -6,14 +6,17 @@ export const useCategory = (categorySlug?: string) => {
   const { $sdk } = useNuxtApp();
 
   const loading = ref(false);
-  const categories = useState<Category[]>('categories', () => ([]));
-  const category = useState<Category>(`category-${categorySlug}`, () => ({} as Category));
+  const categories = useState<Category[]>('categories', () => []);
+  const category = useState<Category>(`category-${categorySlug}`, () => ({}) as Category);
 
   const loadCategory = async (params: QueryCategoryArgs) => {
     loading.value = true;
     try {
-      const {data} = await useAsyncData(`category-list-${categorySlug}`, async () => {
-        const { data } = await $sdk().odoo.query<QueryCategoryArgs, CategoryResponse >({queryName: QueryName.GetCategory}, params);
+      const { data } = await useAsyncData(`category-list-${categorySlug}`, async () => {
+        const { data } = await $sdk().odoo.query<QueryCategoryArgs, CategoryResponse>(
+          { queryName: QueryName.GetCategoryQuery },
+          params,
+        );
         return data.value;
       });
 
@@ -23,14 +26,16 @@ export const useCategory = (categorySlug?: string) => {
     } finally {
       loading.value = false;
     }
-
   };
 
   const loadCategoryList = async (params: QueryCategoriesArgs) => {
     loading.value = true;
     try {
-      const {data} = await useAsyncData(`category-list-${categorySlug}`, async () => {
-        const { data, error } = await $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse >({queryName: QueryName.GetCategories}, params);
+      const { data } = await useAsyncData(`category-list-${categorySlug}`, async () => {
+        const { data, error } = await $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse>(
+          { queryName: QueryName.GetCategoriesQuery },
+          params,
+        );
 
         // console.log(data.value);
 
@@ -43,25 +48,22 @@ export const useCategory = (categorySlug?: string) => {
     } finally {
       loading.value = false;
     }
-
   };
 
   const buildTree = (categories: any) => {
     if (!categories) {
       return [];
     }
-    return categories.map(
-      (category: { name: string; slug: string; childs: any; id: string }) => ({
-        label: category.name,
-        slug: category.slug,
-        items: buildTree(category.childs),
-        isCurrent: false,
-        id: category.id,
-      })
-    );
+    return categories.map((category: { name: string; slug: string; childs: any; id: string }) => ({
+      label: category.name,
+      slug: category.slug,
+      items: buildTree(category.childs),
+      isCurrent: false,
+      id: category.id,
+    }));
   };
 
-  const getCategoryTree = (searchData: { data: { category: any } }) => {
+  const GetCategoryQueryTree = (searchData: { data: { category: any } }) => {
     if (!searchData) {
       return { items: [], label: '', isCurrent: false };
     }
@@ -85,6 +87,6 @@ export const useCategory = (categorySlug?: string) => {
     category,
     loadCategoryList,
     loadCategory,
-    getCategoryTree,
+    GetCategoryQueryTree,
   };
 };

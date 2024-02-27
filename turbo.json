@@ -18,7 +18,7 @@
         "outputs": [],
         "cache": false
       },
-      "lint:fix": {
+      "lintfix": {
         "outputs": []
       },
       "dev": {

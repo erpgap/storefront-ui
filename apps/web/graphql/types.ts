@@ -156,8 +156,8 @@ export type AddAddressResponse = _AsyncData<
 export type UpdatePasswordResponse = _AsyncData<
   {
     updatePassword: {
-      id: number
-    }
+      id: number;
+    };
   },
   H3Error
 >;
