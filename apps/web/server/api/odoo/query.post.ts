@@ -14,7 +14,6 @@ export default defineCachedEventHandler(
       }
 
       if (response.errors) {
-        console.log(response.errors);
         throw createError({ statusCode: 500, data: response.errors, message: response.errors[0].message });
       }
 
@@ -48,5 +47,6 @@ export default defineCachedEventHandler(
       const body = await readBody(event);
       return `${body?.[0].queryName}-${JSON.stringify(body?.[1] || {})}`;
     },
+    varies: ['Etag'],
   },
 );

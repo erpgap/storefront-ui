@@ -12,7 +12,7 @@ export const usePaymentMethod = () => {
     try {
       const { data } = await useAsyncData('payment-methods', async () => {
         const { data } = await $sdk().odoo.query<any, PaymentMethodListResponse>({
-          queryName: QueryName.GetPaymentMethods,
+          queryName: QueryName.GetPaymentMethodsQuery,
         });
         return data.value;
       });

@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
-    "@erpgap/odoo-sdk": "^0.5.0",
-    "@erpgap/odoo-sdk-api-client": "^0.5.0",
+    "@erpgap/odoo-sdk": "^0.6.0",
+    "@erpgap/odoo-sdk-api-client": "^0.6.0",
     "@kgierke/nuxt-basic-auth": "^1.4.0",
     "@nuxt/devtools": "^1.0.0",
     "@nuxt/eslint-config": "^0.2.0",

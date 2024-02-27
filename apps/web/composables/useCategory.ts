@@ -14,7 +14,7 @@ export const useCategory = (categorySlug?: string) => {
     try {
       const { data } = await useAsyncData(`category-list-${categorySlug}`, async () => {
         const { data } = await $sdk().odoo.query<QueryCategoryArgs, CategoryResponse>(
-          { queryName: QueryName.GetCategory },
+          { queryName: QueryName.GetCategoryQuery },
           params,
         );
         return data.value;
@@ -33,7 +33,7 @@ export const useCategory = (categorySlug?: string) => {
     try {
       const { data } = await useAsyncData(`category-list-${categorySlug}`, async () => {
         const { data, error } = await $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse>(
-          { queryName: QueryName.GetCategories },
+          { queryName: QueryName.GetCategoriesQuery },
           params,
         );
 
@@ -63,7 +63,7 @@ export const useCategory = (categorySlug?: string) => {
     }));
   };
 
-  const getCategoryTree = (searchData: { data: { category: any } }) => {
+  const GetCategoryQueryTree = (searchData: { data: { category: any } }) => {
     if (!searchData) {
       return { items: [], label: '', isCurrent: false };
     }
@@ -87,6 +87,6 @@ export const useCategory = (categorySlug?: string) => {
     category,
     loadCategoryList,
     loadCategory,
-    getCategoryTree,
+    GetCategoryQueryTree,
   };
 };

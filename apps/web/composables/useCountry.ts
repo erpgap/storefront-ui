@@ -15,7 +15,7 @@ export const useCountry = () => {
     try {
       const { data } = await useAsyncData('country-list', async () => {
         const { data } = await $sdk().odoo.query<QueryCountriesArgs, CountryListResponse>({
-          queryName: QueryName.GetCountries,
+          queryName: QueryName.GetCountriesQuery,
         });
         return data.value;
       });

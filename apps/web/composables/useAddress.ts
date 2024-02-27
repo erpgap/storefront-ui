@@ -25,7 +25,7 @@ export const useAddresses = () => {
     try {
       const { data } = await useAsyncData(`fetch-${type}-addresses`, async () => {
         const { data } = await $sdk().odoo.query<QueryAddressesArgs, AddressesResponse>(
-          { queryName: QueryName.GetAddresses },
+          { queryName: QueryName.GetAddressesQuery },
           { filter: { addressType: [type] } },
         );
         return data.value;

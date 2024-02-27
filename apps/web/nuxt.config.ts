@@ -17,7 +17,6 @@ export default defineNuxtConfig({
     '@nuxtjs/critters',
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
-    '@kgierke/nuxt-basic-auth',
     'nuxt-delay-hydration',
     [
       '@nuxtjs/google-fonts',
@@ -46,16 +45,6 @@ export default defineNuxtConfig({
     // '@storyblok/nuxt',
     'nuxt-lodash',
   ],
-  basicAuth: {
-    enabled: false,
-    users: [
-      {
-        username: 'erpgap',
-        password: '!qaZXsw2',
-      },
-    ],
-    allowedRoutes: ['/api/mutation/', '/api/query/'],
-  },
   // storyblok: {
   //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
   //   bridge: true,
@@ -105,6 +94,13 @@ export default defineNuxtConfig({
     '/favicon.ico': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
   },
   nitro: {
+    publicAssets: [
+      {
+        baseURL: 'images',
+        dir: 'public/images',
+        maxAge: 31536000,
+      },
+    ],
     compressPublicAssets: true,
     storage: {
       cache: {

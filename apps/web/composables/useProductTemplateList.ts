@@ -16,7 +16,7 @@ export const useProductTemplateList = (stateIndex: string) => {
 
     loading.value = true;
     const { data } = await $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>(
-      { queryName: QueryName.GetProductTemplateList },
+      { queryName: QueryName.GetProductTemplateListQuery },
       params,
     );
     loading.value = false;

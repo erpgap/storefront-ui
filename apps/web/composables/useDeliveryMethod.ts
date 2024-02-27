@@ -12,7 +12,7 @@ export const useDeliveryMethod = () => {
     try {
       const { data } = await useAsyncData('shipping-methods', async () => {
         const { data } = await $sdk().odoo.query<any, DeliveryMethodListResponse>({
-          queryName: QueryName.GetDeliveryMethods,
+          queryName: QueryName.GetDeliveryMethodsQuery,
         });
         return data.value;
       });
