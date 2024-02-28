@@ -107,9 +107,7 @@ onMounted(async () => {
         return;
       }
 
-      const data = await getPaymentConfirmation({
-        customQuery: { paymentConfirmation: 'confirmationPayment' }
-      });
+      const data = await getPaymentConfirmation();
       const paymentSuccess =
                 data?.order?.lastTransaction?.state === 'Authorized' ||
                 data.order?.lastTransaction?.state === 'Confirmed';

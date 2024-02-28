@@ -29,8 +29,21 @@ export const usePayment = () => {
     }
   };
 
-  const getPaymentConfirmation = () => {
-    return true;
+  const getPaymentConfirmation = async () => {
+    loading.value = true;
+    const { data } = await useAsyncData('payment-confirmation', async () => {
+      const { data } = await $sdk().odoo.query<any, any>(
+        {
+          queryName: QueryName.GetPaymentConfirmation,
+        }
+      );
+      return data.value;
+    });
+
+    if (data.value) {
+      return data.value;
+    }
+    loading.value = false;
   };
 
   return {
