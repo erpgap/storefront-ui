@@ -75,7 +75,10 @@ const handleWishlistSideBar = async () => {
 };
 
 await loadCategoryList({ filter: { parent: true } });
-await loadWishlist();
+
+onMounted(async () => {
+  await loadWishlist();
+});
 </script>
 
 <template>

@@ -190,7 +190,7 @@ await loadProductVariant(params.value);
                     {{ tomorrow }}
                   </template>
                   <template #addAddress>
-                    <SfLink href="#" variant="secondary">{{ $t('additionalInfo.addAddress') }}</SfLink>
+                    <SfLink class="ml-1" href="#" variant="secondary">{{ $t('additionalInfo.addAddress') }}</SfLink>
                   </template>
                 </i18n-t>
               </p>
@@ -200,7 +200,9 @@ await loadProductVariant(params.value);
               <p class="text-sm">
                 <i18n-t keypath="additionalInfo.pickup" scope="global">
                   <template #checkAvailability>
-                    <SfLink href="#" variant="secondary">{{ $t('additionalInfo.checkAvailability') }}</SfLink>
+                    <SfLink class="ml-1" href="#" variant="secondary">{{
+                      $t('additionalInfo.checkAvailability')
+                    }}</SfLink>
                   </template>
                 </i18n-t>
               </p>
@@ -209,7 +211,7 @@ await loadProductVariant(params.value);
               <SfIconSafetyCheck size="sm" class="flex-shrink-0 mr-1 text-neutral-500" />
               <i18n-t keypath="additionalInfo.returns" scope="global">
                 <template #details>
-                  <SfLink href="#" variant="secondary">{{ $t('additionalInfo.details') }}</SfLink>
+                  <SfLink class="ml-1" href="#" variant="secondary">{{ $t('additionalInfo.details') }}</SfLink>
                 </template>
               </i18n-t>
             </div>
