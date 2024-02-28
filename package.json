@@ -64,6 +64,9 @@
   "engines": {
     "node": ">=20.0.0"
   },
+  "resolutions": {
+    "sharp": "0.32.6"
+  },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog",

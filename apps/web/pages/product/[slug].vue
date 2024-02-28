@@ -172,8 +172,8 @@ await loadProductVariant(params.value);
                       : handleWishlistAddItem(productVariant)
                   "
                 >
-                  <SfIconFavoriteFilled v-if="isInWishlist(productVariant?.id as number)" size="sm" />
-                  <SfIconFavorite v-else size="sm" />
+                  <SfIconFavoriteFilled v-show="isInWishlist(productVariant?.id as number)" size="sm" />
+                  <SfIconFavorite v-show="!isInWishlist(productVariant?.id as number)" size="sm" />
                   {{
                     isInWishlist(productVariant?.id as number)
                       ? $t('wishlist.removeFromWishlist')
