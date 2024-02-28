@@ -21,7 +21,7 @@ defineProps<{ filled?: boolean }>();
 
 const { loadCategoryList, categories } = useCategory();
 const { isOpen, toggle, close } = useDisclosure();
-const { isOpen: wishlistIsOpen, toggle: wishlistToggle, close: wishlistClose } = useDisclosure();
+const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 const { wishlistTotalItems, loadWishlist, wishlist } = useWishlist();
 const NuxtLink = resolveComponent('NuxtLink');
 
@@ -71,7 +71,7 @@ const bannerDetails = {
 };
 
 const handleWishlistSideBar = async () => {
-  wishlistToggle();
+  toggleWishlistSideBar();
 };
 
 await loadCategoryList({ filter: { parent: true } });
@@ -235,7 +235,7 @@ await loadWishlist();
               class="group relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 mr-1 -ml-0.5 rounded-md"
               type="button"
               :aria-haspopup="true"
-              :aria-expanded="wishlistIsOpen"
+              :aria-expanded="wishlistSidebarIsOpen"
               variant="tertiary"
               square
               @click="handleWishlistSideBar"
@@ -249,7 +249,7 @@ await loadWishlist();
                 />
               </template>
             </SfButton>
-            <WishlistSidebar :is-open="wishlistIsOpen" @close="wishlistClose" />
+            <WishlistSidebar :is-open="wishlistSidebarIsOpen" @close="toggleWishlistSideBar" />
           </div>
           <SfButton
             v-for="{ ariaLabel, label, icon, link, badge, role } in actionItems"

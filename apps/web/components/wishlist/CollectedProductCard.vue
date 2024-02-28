@@ -5,7 +5,9 @@ import { Product } from '~/graphql';
 
 const NuxtLink = resolveComponent('NuxtLink');
 
-const props = defineProps({
+const { toggleWishlistSideBar } = useUiState();
+
+defineProps({
   product: {
     type: Object as PropType<Product>,
     required: true,
@@ -38,6 +40,7 @@ const props = defineProps({
           :to="mountUrlSlugForProductVariant(product)"
           variant="secondary"
           class="no-underline typography-text-sm sm:typography-text-lg"
+          @click="toggleWishlistSideBar"
         >
           {{ product?.name }}
         </SfLink>

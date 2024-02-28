@@ -102,19 +102,19 @@ export default defineNuxtConfig({
     '/favicon.ico': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
   },
   nitro: {
-    publicAssets: [
-      {
-        baseURL: 'images',
-        dir: 'public/images',
-        maxAge: 31536000,
-      },
-    ],
-    compressPublicAssets: true,
-    // storage: {
-    //   cache: {
-    //     driver: 'redis',
+    // publicAssets: [
+    //   {
+    //     baseURL: '/images',
+    //     dir: 'public/images/',
+    //     maxAge: 31536000,
     //   },
-    // },
+    // ],
+    compressPublicAssets: true,
+    storage: {
+      cache: {
+        driver: 'redis',
+      },
+    },
     devStorage: {
       cache: {
         driver: 'redis',
