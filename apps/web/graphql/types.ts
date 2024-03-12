@@ -157,6 +157,30 @@ export type AddAddressResponse = _AsyncData<
   },
   H3Error
 >;
+
+export type UpdatePasswordResponse = _AsyncData<
+  {
+    updatePassword: {
+      id: number;
+    };
+  },
+  H3Error
+>;
+
+export type UpdateMyAccountResponse = _AsyncData<
+  {
+    updateMyAccount: Partner;
+  },
+  H3Error
+>;
+
+export type CreateUpdatePartnerResponse = _AsyncData<
+  {
+    createUpdatePartner: Partner;
+  },
+  H3Error
+>;
+
 export type UpdateAddressResponse = _AsyncData<
   {
     updateAddress: Partner;

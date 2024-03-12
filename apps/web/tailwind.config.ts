@@ -12,13 +12,13 @@ export default <Config>{
     extend: {
       screens: {
         xxl: '1440px',
-        xs: '376px'
+        xs: '376px',
       },
       zIndex: {
         60: '60',
         80: '60',
         100: '100',
-      }
+      },
     },
   },
 };

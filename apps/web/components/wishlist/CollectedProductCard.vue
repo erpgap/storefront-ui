@@ -5,13 +5,14 @@ import { Product } from '~/graphql';
 
 const NuxtLink = resolveComponent('NuxtLink');
 
-const props = defineProps({
+const { toggleWishlistSideBar } = useUiState();
+
+defineProps({
   product: {
     type: Object as PropType<Product>,
     required: true,
   },
 });
-
 </script>
 
 <template>
@@ -39,6 +40,7 @@ const props = defineProps({
           :to="mountUrlSlugForProductVariant(product)"
           variant="secondary"
           class="no-underline typography-text-sm sm:typography-text-lg"
+          @click="toggleWishlistSideBar"
         >
           {{ product?.name }}
         </SfLink>
@@ -48,16 +50,11 @@ const props = defineProps({
             class="text-secondary-700 sm:order-1 font-bold typography-text-sm sm:typography-text-lg"
           >
             ${{ product?.combinationInfoVariant?.price }}
-            <span
-              class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
-            >
+            <span class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal">
               ${{ product?.combinationInfoVariant?.list_price }}
             </span>
           </span>
-          <span
-            v-else
-            class="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg"
-          >
+          <span v-else class="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg">
             ${{ product?.combinationInfoVariant?.list_price }}
           </span>
         </div>

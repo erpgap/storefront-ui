@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { MutationWishlistAddItemArgs, MutationWishlistRemoveItemArgs, WishlistAddItemResponse, WishlistData, WishlistLoadResponse, WishlistRemoveItemResponse } from '~/graphql';
+import {
+  MutationWishlistAddItemArgs,
+  MutationWishlistRemoveItemArgs,
+  WishlistAddItemResponse,
+  WishlistData,
+  WishlistLoadResponse,
+  WishlistRemoveItemResponse,
+} from '~/graphql';
 import { MutationName } from '~/server/mutations';
 import { QueryName } from '~/server/queries';
 
@@ -7,11 +14,13 @@ export const useWishlist = () => {
   const { $sdk } = useNuxtApp();
   const loading = ref(false);
 
-  const wishlist = useState<WishlistData>('wishlist', () => ({} as WishlistData));
+  const wishlist = useState<WishlistData>('wishlist', () => ({}) as WishlistData);
 
   const loadWishlist = async () => {
     loading.value = true;
-    const { data } = await $sdk().odoo.query<MutationWishlistAddItemArgs, WishlistLoadResponse >({ queryName: QueryName.WishlistLoadQuery });
+    const { data } = await $sdk().odoo.queryNoCache<MutationWishlistAddItemArgs, WishlistLoadResponse>({
+      queryName: QueryName.WishlistLoadQuery,
+    });
     loading.value = false;
 
     wishlist.value = data?.value?.wishlistItems || [];
@@ -19,14 +28,17 @@ export const useWishlist = () => {
 
   const wishlistAddItem = async (productId: number) => {
     loading.value = true;
-    const { data } = await $sdk().odoo.mutation<MutationWishlistAddItemArgs, WishlistAddItemResponse >({ mutationName: MutationName.WishlistAddItem }, { productId });
+    const { data } = await $sdk().odoo.mutation<MutationWishlistAddItemArgs, WishlistAddItemResponse>(
+      { mutationName: MutationName.WishlistAddItem },
+      { productId },
+    );
     loading.value = false;
 
     wishlist.value = data?.value.wishlistAddItem;
   };
 
   const getProductFromProductId = (productId: number) => {
-    return wishlist.value?.wishlistItems?.find(item => item?.product?.id === productId);
+    return wishlist.value?.wishlistItems?.find((item) => item?.product?.id === productId);
   };
 
   const wishlistRemoveItem = async (productId: number) => {
@@ -37,7 +49,10 @@ export const useWishlist = () => {
     }
 
     loading.value = true;
-    const { data } = await $sdk().odoo.mutation<MutationWishlistRemoveItemArgs, WishlistRemoveItemResponse >({ mutationName: MutationName.WishlistRemoveItem }, { wishId: wishlistItem.id });
+    const { data } = await $sdk().odoo.mutation<MutationWishlistRemoveItemArgs, WishlistRemoveItemResponse>(
+      { mutationName: MutationName.WishlistRemoveItem },
+      { wishId: wishlistItem.id },
+    );
     loading.value = false;
 
     wishlist.value = data?.value.wishlistRemoveItem;
@@ -48,7 +63,7 @@ export const useWishlist = () => {
   });
 
   const isInWishlist = (productId: number) => {
-    return wishlist.value?.wishlistItems?.some(item => item?.product?.id === productId) || false;
+    return wishlist.value?.wishlistItems?.some((item) => item?.product?.id === productId) || false;
   };
 
   return {

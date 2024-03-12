@@ -29,27 +29,18 @@
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <UiOverlay v-if="isOpen" :visible="isOpen">
     <SfModal
-      v-model="isOpen"
       ref="modalElement"
+      v-model="isOpen"
       tag="section"
       role="dialog"
       class="h-full w-full overflow-auto md:w-[600px] md:h-fit"
       aria-labelledby="address-modal-title"
     >
       <header>
-        <SfButton
-          type="button"
-          square
-          variant="tertiary"
-          class="absolute right-2 top-2"
-          @click="closeModal"
-        >
+        <SfButton type="button" square variant="tertiary" class="absolute right-2 top-2" @click="closeModal">
           <SfIconClose />
         </SfButton>
-        <h3
-          id="address-modal-title"
-          class="text-neutral-900 text-lg md:text-2xl font-bold mb-6"
-        >
+        <h3 id="address-modal-title" class="text-neutral-900 text-lg md:text-2xl font-bold mb-6">
           {{ $t(`account.accountSettings.personalData.${openedForm}`) }}
         </h3>
       </header>
@@ -75,19 +66,14 @@
 </template>
 
 <script setup lang="ts">
-import {
-  SfButton,
-  SfIconClose,
-  SfModal,
-  useDisclosure,
-} from '@storefront-ui/vue';
+import { SfButton, SfIconClose, SfModal, useDisclosure } from '@storefront-ui/vue';
 import { unrefElement } from '@vueuse/core';
 
 definePageMeta({
   layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
-const { loadUser, user, updateAccount, updatePassword, updatePasswordError } = useUser();
+const { loadUser, user, updatePartner, updatePassword } = useUser();
 const lastActiveElement = ref();
 const modalElement = ref();
 const openedForm = ref('');
@@ -105,21 +91,21 @@ const closeModal = () => {
 };
 
 const saveNewName = async (newName: string) => {
-  await updateAccount({myaccount: {id: user.value?.id, email: user.value?.email, name: newName}});
+  await updatePartner({ myaccount: { id: user.value?.id, email: user.value?.email, name: newName } });
   closeModal();
 };
 
 const saveNewEmail = async (newEmail: string) => {
-  await updateAccount({myaccount: {id: user.value?.id, email: newEmail, name: user.value?.name}});
+  await updatePartner({ myaccount: { id: user.value?.id, email: newEmail, name: user.value?.name } });
   closeModal();
 };
 
 const saveNewPassword = async (passwords: any) => {
   if (passwords.firstNewPassword === passwords.secondNewPassword) {
-    await updatePassword({currentPassword: passwords.oldPassword, newPassword: passwords.firstNewPassword});
-    if (!updatePasswordError.value) {
-      closeModal();
-    }
+    await updatePassword({ currentPassword: passwords.oldPassword, newPassword: passwords.firstNewPassword });
+    // if (!updatePasswordError.value) {
+    //   closeModal();
+    // }
   }
 };
 

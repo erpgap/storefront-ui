@@ -1,13 +1,11 @@
 <template>
-  <form @submit.prevent="$emit('on-save', userPasswords)" data-testid="account-forms-password">
+  <form data-testid="account-forms-password" @submit.prevent="$emit('on-save', userPasswords)">
     <label class="block">
-      <UiFormLabel>{{
-        $t('account.accountSettings.personalData.currentPassword')
-      }}</UiFormLabel>
+      <UiFormLabel>{{ $t('account.accountSettings.personalData.currentPassword') }}</UiFormLabel>
       <SfInput
+        v-model="userPasswords.oldPassword"
         name="password"
         :type="passwordVisible ? 'text' : 'password'"
-        v-model="userPasswords.oldPassword"
         required
       >
         <template #suffix>
@@ -18,45 +16,31 @@
       </SfInput>
     </label>
     <label class="block my-4">
-      <UiFormLabel>{{
-        $t('account.accountSettings.personalData.newPassword')
-      }}</UiFormLabel>
+      <UiFormLabel>{{ $t('account.accountSettings.personalData.newPassword') }}</UiFormLabel>
       <SfInput
+        v-model="userPasswords.firstNewPassword"
         name="password"
         :type="firstNewPasswordVisible ? 'text' : 'password'"
-        v-model="userPasswords.firstNewPassword"
         required
       >
         <template #suffix>
-          <button
-            type="button"
-            @click="firstNewPasswordVisible = !firstNewPasswordVisible"
-          >
+          <button type="button" @click="firstNewPasswordVisible = !firstNewPasswordVisible">
             <SfIconVisibility />
           </button>
         </template>
       </SfInput>
-      <UiFormHelperText class="block">
-        {{
-          $t('account.accountSettings.personalData.passwordHelp')
-        }}</UiFormHelperText
-      >
+      <UiFormHelperText class="block"> {{ $t('account.accountSettings.personalData.passwordHelp') }}</UiFormHelperText>
     </label>
     <label class="block">
-      <UiFormLabel>{{
-        $t('account.accountSettings.personalData.newPasswordAgain')
-      }}</UiFormLabel>
+      <UiFormLabel>{{ $t('account.accountSettings.personalData.newPasswordAgain') }}</UiFormLabel>
       <SfInput
+        v-model="userPasswords.secondNewPassword"
         name="password"
         :type="secondNewPasswordVisible ? 'text' : 'password'"
-        v-model="userPasswords.secondNewPassword"
         required
       >
         <template #suffix>
-          <button
-            type="button"
-            @click="secondNewPasswordVisible = !secondNewPasswordVisible"
-          >
+          <button type="button" @click="secondNewPasswordVisible = !secondNewPasswordVisible">
             <SfIconVisibility />
           </button>
         </template>

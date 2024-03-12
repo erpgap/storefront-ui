@@ -2,7 +2,6 @@
 import { SfButton, SfInput } from '@storefront-ui/vue';
 
 const { cart } = useCart();
-
 </script>
 
 <template>
@@ -62,4 +61,3 @@ const { cart } = useCart();
     </div>
   </div>
 </template>
-

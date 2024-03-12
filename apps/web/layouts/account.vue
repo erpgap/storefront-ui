@@ -1,110 +1,100 @@
 <template>
   <TheHeader filled />
-      <main class="narrow-container">
-        <UiBreadcrumb :breadcrumbs="breadcrumbs" class="mt-5 mb-10" />
-        <div
-        :class="mb-20"
-        data-testid="account-layout"
-      >
-        <h1
-          v-if="isRoot"
-          class="mb-10 md:mb-10 md:mx-0 font-bold typography-headline-3 md:typography-headline-2"
-        >
-          {{ $t('account.heading') }}
-        </h1>
-        <div v-else class="flex justify-start items-center mb-10 mt-4">
-          <div v-for="({ subsections }, i) in sections" :key="i">
-            <div
-              v-for="{ label, link } in subsections"
-              :key="label"
-              class="font-bold typography-headline-3"
-            >
-              <h1 v-if="currentPath === link">{{ label }}</h1>
-            </div>
+  <main class="narrow-container">
+    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="mt-5 mb-10" />
+    <div :class="mb - 20" data-testid="account-layout">
+      <h1 v-if="isRoot" class="mb-10 md:mb-10 md:mx-0 font-bold typography-headline-3 md:typography-headline-2">
+        {{ $t('account.heading') }}
+      </h1>
+      <div v-else class="flex justify-start items-center mb-10 mt-4">
+        <div v-for="({ subsections }, i) in sections" :key="i">
+          <div v-for="{ label, link } in subsections" :key="label" class="font-bold typography-headline-3">
+            <h1 v-if="currentPath === link">{{ label }}</h1>
           </div>
-          <SfButton
-            :tag="NuxtLink"
-            to="/my-account"
-            class="flex md:hidden whitespace-nowrap"
-            size="sm"
-            variant="tertiary"
-          >
-            <template #prefix>
-              <SfIconArrowBack />
-            </template>
-            {{ $t('account.back') }}
-          </SfButton>
         </div>
-        <div class="md:flex gap-10 pb-20" data-testid="account-page-sidebar">
-          <div
-            :class="[
-              'border-t md:border border-neutral-200 pt-4 pb-4 md:p-4 md:rounded-md min-w-[300px] md:block',
-              { hidden: !isRoot },
-            ]"
-          >
-            <ul
-              class="[&:not(:last-child)]:mb-4"
-              v-for="{ title, icon, subsections } in sections"
-              :key="title"
-            >
-              <SfListItem
-                class="py-4 md:py-2 hover:!bg-transparent font-medium !cursor-auto px-0 md:px-4"
-              >
-                <template #prefix><component :is="icon" /></template>
-                {{ title }}
-              </SfListItem>
-              <li v-for="{ label, link } in subsections" :key="label">
-                <SfListItem
-                  :tag="NuxtLink"
-                  :to="link"
-                  :class="[
-                    'first-of-type:py-4 md:first-of-type:px-4 md:first-of-type:py-2 px-0 md:px-4 rounded-md active:bg-primary-100 !text-neutral-900',
-                    {
-                      'font-medium bg-primary-100':
-                        router.currentRoute.value.path === link,
-                    },
-                  ]"
-                >
-                  <template #prefix><SfIconBase /></template>
-                  {{ label }}
-                  <template  #suffix
-                    ><div class="block md:hidden">
-                      <SfIconChevronRight
-                    />
-                    </div></template>
-                </SfListItem>
-              </li>
-            </ul>
-            <UiDivider />
-            <ul>
+        <SfButton
+          :tag="NuxtLink"
+          to="/my-account"
+          class="flex md:hidden whitespace-nowrap"
+          size="sm"
+          variant="tertiary"
+        >
+          <template #prefix>
+            <SfIconArrowBack />
+          </template>
+          {{ $t('account.back') }}
+        </SfButton>
+      </div>
+      <div class="md:flex gap-10 pb-20" data-testid="account-page-sidebar">
+        <div
+          :class="[
+            'border-t md:border border-neutral-200 pt-4 pb-4 md:p-4 md:rounded-md min-w-[300px] md:block',
+            { hidden: !isRoot },
+          ]"
+        >
+          <ul v-for="{ title, icon, subsections } in sections" :key="title" class="[&:not(:last-child)]:mb-4">
+            <SfListItem class="py-4 md:py-2 hover:!bg-transparent font-medium !cursor-auto px-0 md:px-4">
+              <template #prefix><component :is="icon" /></template>
+              {{ title }}
+            </SfListItem>
+            <li v-for="{ label, link } in subsections" :key="label">
               <SfListItem
                 :tag="NuxtLink"
-                @click="handleLogout"
-                class="py-4 md:py-2 mt-4 rounded-md active:bg-primary-100 !text-neutral-900"
+                :to="link"
+                :class="[
+                  'first-of-type:py-4 md:first-of-type:px-4 md:first-of-type:py-2 px-0 md:px-4 rounded-md active:bg-primary-100 !text-neutral-900',
+                  {
+                    'font-medium bg-primary-100': router.currentRoute.value.path === link,
+                  },
+                ]"
               >
                 <template #prefix><SfIconBase /></template>
-                {{ $t('account.logout') }}
+                {{ label }}
+                <template #suffix
+                  ><div class="block md:hidden">
+                    <SfIconChevronRight /></div
+                ></template>
               </SfListItem>
-            </ul>
-          </div>
-          <div class="flex-1">
-            <section
-              class="grid grid-cols-1 2xs:grid-cols-2 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 md:mb-5"
-              data-testid="category-grid"
+            </li>
+          </ul>
+          <UiDivider />
+          <ul>
+            <SfListItem
+              :tag="NuxtLink"
+              class="py-4 md:py-2 mt-4 rounded-md active:bg-primary-100 !text-neutral-900"
+              @click="handleLogout"
             >
-              <slot />
-            </section>
-          </div>
+              <template #prefix><SfIconBase /></template>
+              {{ $t('account.logout') }}
+            </SfListItem>
+          </ul>
+        </div>
+        <div class="flex-1">
+          <section
+            class="grid grid-cols-1 2xs:grid-cols-2 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 md:mb-5"
+            data-testid="category-grid"
+          >
+            <slot />
+          </section>
         </div>
       </div>
-      </main>
-      <Newsletter />
+    </div>
+  </main>
+  <Newsletter />
   <TheFooter />
   <BottomNavbar />
 </template>
 
 <script setup>
-import { SfIconBase, SfIconPerson, SfIconShoppingCart, SfListItem, SfButton, SfIconArrowBack, SfIconChevronRight } from '@storefront-ui/vue';
+import {
+  SfIconBase,
+  SfIconPerson,
+  SfIconShoppingCart,
+  SfListItem,
+  SfButton,
+  SfIconArrowBack,
+  SfIconChevronRight,
+} from '@storefront-ui/vue';
 
 const NuxtLink = resolveComponent('NuxtLink');
 const { t } = useI18n();

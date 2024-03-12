@@ -63,8 +63,9 @@ const submitAddress = () => {
   close();
 };
 
-const states = computed(() => countries.value.find((country: any) => country.id === defaultValues.value.countryId)?.states || []);
-
+const states = computed(
+  () => countries.value.find((country: any) => country.id === defaultValues.value.countryId)?.states || [],
+);
 </script>
 
 <template>
@@ -79,7 +80,7 @@ const states = computed(() => countries.value.find((country: any) => country.id 
     </div>
 
     <div v-if="savedAddress" class="mt-2 md:w-[520px]">
-      <p>{{ `${savedAddress.name}, ${savedAddress.street}`}}</p>
+      <p>{{ `${savedAddress.name}, ${savedAddress.street}` }}</p>
       <p>{{ savedAddress.phone }}</p>
       <p>{{ `${savedAddress.country.name}` }}</p>
       <p>{{ `${savedAddress.state?.name}` }}</p>
@@ -93,8 +94,13 @@ const states = computed(() => countries.value.find((country: any) => country.id 
       </SfButton>
     </div>
 
-    <SfModal v-model="isOpen" tag="section" role="dialog" class="h-full w-full overflow-auto md:w-[600px] md:h-fit z-50"
-      aria-labelledby="address-modal-title">
+    <SfModal
+      v-model="isOpen"
+      tag="section"
+      role="dialog"
+      class="h-full w-full overflow-auto md:w-[600px] md:h-fit z-50"
+      aria-labelledby="address-modal-title"
+    >
       <header>
         <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
           <SfIconClose />
@@ -103,24 +109,32 @@ const states = computed(() => countries.value.find((country: any) => country.id 
           {{ heading }}
         </h3>
       </header>
-      <form class="grid grid-cols-1 md:grid-cols-[50%_1fr_120px] gap-4" data-testid="address-form"
-        @submit.prevent="submitAddress">
+      <form
+        class="grid grid-cols-1 md:grid-cols-[50%_1fr_120px] gap-4"
+        data-testid="address-form"
+        @submit.prevent="submitAddress"
+      >
         <label>
           <FormLabel>{{ $t('form.NameLabel') }}</FormLabel>
-          <SfInput name="name" autocomplete="given-name" v-model="defaultValues.name" required />
+          <SfInput v-model="defaultValues.name" name="name" autocomplete="given-name" required />
         </label>
         <label class="md:col-span-2">
           <FormLabel>{{ $t('form.streetNameLabel') }}</FormLabel>
-          <SfInput name="streetName" autocomplete="family-name" v-model="defaultValues.street" required />
+          <SfInput v-model="defaultValues.street" name="streetName" autocomplete="family-name" required />
         </label>
         <label class="md:col-span-3">
           <FormLabel>{{ $t('form.phoneLabel') }}</FormLabel>
-          <SfInput name="phone" type="tel" autocomplete="tel" v-model="defaultValues.phone" required />
+          <SfInput v-model="defaultValues.phone" name="phone" type="tel" autocomplete="tel" required />
         </label>
         <label class="md:col-span-3">
           <FormLabel>{{ $t('form.countryLabel') }}</FormLabel>
-          <SfSelect v-model="defaultValues.countryId" name="country" :placeholder="$t('form.selectPlaceholder')"
-            autocomplete="country-name" required>
+          <SfSelect
+            v-model="defaultValues.countryId"
+            name="country"
+            :placeholder="$t('form.selectPlaceholder')"
+            autocomplete="country-name"
+            required
+          >
             <option v-for="country in countries" :key="country.id" :value="country.id">
               {{ country.name }}
             </option>
@@ -128,19 +142,25 @@ const states = computed(() => countries.value.find((country: any) => country.id 
         </label>
         <label class="md:col-span-3">
           <FormLabel>{{ $t('form.stateLabel') }}</FormLabel>
-          <SfSelect v-model="defaultValues.stateId" name="state" :placeholder="$t('form.selectPlaceholder')"
-            autocomplete="state-name" :disabled="!states.length" required>
+          <SfSelect
+            v-model="defaultValues.stateId"
+            name="state"
+            :placeholder="$t('form.selectPlaceholder')"
+            autocomplete="state-name"
+            :disabled="!states.length"
+            required
+          >
             <option v-for="state in states" :key="state.id" :value="state.id">{{ state.name }}</option>
           </SfSelect>
         </label>
 
         <label class="md:col-span-2">
           <FormLabel>{{ $t('form.cityLabel') }}</FormLabel>
-          <SfInput name="city" autocomplete="address-level2" v-model="defaultValues.city" required />
+          <SfInput v-model="defaultValues.city" name="city" autocomplete="address-level2" required />
         </label>
         <label>
           <FormLabel>{{ $t('form.postalCodeLabel') }}</FormLabel>
-          <SfInput name="postalCode" autocomplete="postal-code" v-model="defaultValues.zip" required />
+          <SfInput v-model="defaultValues.zip" name="postalCode" autocomplete="postal-code" required />
         </label>
 
         <label v-if="props.type === 'billingAddress'" class="md:col-span-3 flex items-center gap-2">

@@ -26,21 +26,13 @@ const props = withDefaults(defineProps<AlertProps>(), {
 
 const classes = computed(() => [
   sizeClasses[props.size],
-  props.strong
-    ? 'text-white font-medium rounded-none'
-    : 'rounded-md font-normal',
+  props.strong ? 'text-white font-medium rounded-none' : 'rounded-md font-normal',
   {
-    [`text-primary-800 ${props.strong ? 'bg-primary-600' : 'bg-primary-100'}`]:
-      props.variant === 'primary',
-    [`text-secondary-800 ${
-      props.strong ? 'bg-secondary-800' : 'bg-secondary-100'
-    }`]: props.variant === 'secondary',
-    [`text-negative-800 ${
-      props.strong ? 'bg-negative-600' : 'bg-negative-100'
-    }`]: props.variant === 'negative',
-    [`text-neutral-900 border border-neutral-200 ${
-      props.strong ? 'bg-neutral-600' : 'bg-neutral-100'
-    }`]: props.variant === 'neutral',
+    [`text-primary-800 ${props.strong ? 'bg-primary-600' : 'bg-primary-100'}`]: props.variant === 'primary',
+    [`text-secondary-800 ${props.strong ? 'bg-secondary-800' : 'bg-secondary-100'}`]: props.variant === 'secondary',
+    [`text-negative-800 ${props.strong ? 'bg-negative-600' : 'bg-negative-100'}`]: props.variant === 'negative',
+    [`text-neutral-900 border border-neutral-200 ${props.strong ? 'bg-neutral-600' : 'bg-neutral-100'}`]:
+      props.variant === 'neutral',
   },
 ]);
 </script>

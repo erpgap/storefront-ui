@@ -31,14 +31,7 @@ const images = computed<any[]>(() => props.images);
         :aria-current="activeIndex === 0"
         class="md:w-[78px] md:h-auto relative shrink-0 pb-1 mx-4 border-b-4 snap-start cursor-pointer focus-visible:outline focus-visible:outline-offset transition-colors flex-grow md:flex-grow-0 border-primary-700"
       >
-        <NuxtImg
-          provider="odooProvider"
-          :alt="alt"
-          class="object-cover"
-          width="78"
-          height="78"
-          :src="imageThumbSrc"
-        />
+        <NuxtImg provider="odooProvider" :alt="alt" class="object-cover" width="78" height="78" :src="imageThumbSrc" />
       </button>
     </SfScrollable>
     <SfScrollable

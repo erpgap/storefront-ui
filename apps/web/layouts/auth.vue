@@ -10,7 +10,7 @@
     <h1 v-if="heading" class="font-bold mb-10 typography-headline-3 md:typography-headline-2">{{ heading }}</h1>
     <slot />
   </main>
-  <TheFooter/>
+  <TheFooter />
 </template>
 
 <script setup lang="ts">

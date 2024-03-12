@@ -1,43 +1,60 @@
-import { LoadUserQueryResponse, MutationLoginArgs, MutationRegisterArgs, MutationResetPasswordArgs, MutationUpdateMyAccountArgs, MutationUpdatePasswordArgs, Partner, PartnerResponse, RegisterUserResponse, ResetPasswordResponse, UpdateMyAccountParams } from '~/graphql';
+import { useToast } from 'vue-toastification';
+import {
+  LoadUserQueryResponse,
+  MutationLoginArgs,
+  MutationRegisterArgs,
+  MutationResetPasswordArgs,
+  MutationUpdateMyAccountArgs,
+  MutationUpdatePasswordArgs,
+  Partner,
+  RegisterUserResponse,
+  ResetPasswordResponse,
+  UpdateMyAccountResponse,
+  UpdatePasswordResponse,
+} from '~/graphql';
 import { MutationName } from '~/server/mutations';
 import { QueryName } from '~/server/queries';
 
 export const useUser = () => {
   const { $sdk } = useNuxtApp();
-  const user = useCookie<Partner | null>('odoo-user');
+  const router = useRouter();
+  const userCookie = useCookie<Partner | null>('odoo-user');
+  const user = useState<Partner>('user', () => ({}) as Partner);
+
+  const toast = useToast();
 
   const loading = ref(false);
-  const loginError = ref(false);
-  const signupError = ref(false);
-  const updateAccountError = ref(false);
-  const updatePasswordError = ref(false);
-  const resetPasswordError = ref(false);
   const resetEmail = useCookie<string>('reset-email');
 
   const loadUser = async () => {
     loading.value = true;
 
-    const { data } = await $sdk().odoo.query<null, LoadUserQueryResponse>({queryName: QueryName.LoadUserQuery});
+    const { data } = await $sdk().odoo.query<null, LoadUserQueryResponse>({ queryName: QueryName.LoadUserQuery });
+
+    userCookie.value = data.value.partner;
     user.value = data.value.partner;
 
     loading.value = false;
-
   };
 
   const logout = async () => {
-    user.value = null;
-    await $sdk().odoo.mutation<null, null>({mutationName: MutationName.LogoutMutation});
+    userCookie.value = null;
+    user.value = {} as Partner;
+    await $sdk().odoo.mutation<null, null>({ mutationName: MutationName.LogoutMutation });
   };
 
   const signup = async (params: MutationRegisterArgs) => {
     loading.value = true;
-    const { data, error } = await $sdk().odoo.mutation<MutationRegisterArgs, RegisterUserResponse>({
-      mutationName: MutationName.RegisterUserMutation
-    }, {...params});
+    const { data, error } = await $sdk().odoo.mutation<MutationRegisterArgs, RegisterUserResponse>(
+      {
+        mutationName: MutationName.RegisterUserMutation,
+      },
+      { ...params },
+    );
     loading.value = false;
 
     if (error.value) {
-      signupError.value = true;
+      toast.error(error.value?.data?.message);
       return;
     }
 
@@ -47,23 +64,26 @@ export const useUser = () => {
   const login = async (params: MutationLoginArgs) => {
     loading.value = true;
     const { data, error } = await $sdk().odoo.mutation<MutationLoginArgs, LoadUserQueryResponse>(
-      {mutationName: MutationName.LoginMutation}, {...params}
+      { mutationName: MutationName.LoginMutation },
+      { ...params },
     );
     if (error.value) {
-      loginError.value = true;
+      toast.error(error.value?.data?.message);
       return;
     }
 
     user.value = data.value.partner;
+    router.push('/my-account');
   };
 
   const resetPassword = async (params: MutationResetPasswordArgs) => {
     loading.value = true;
     const { error } = await $sdk().odoo.mutation<MutationResetPasswordArgs, ResetPasswordResponse>(
-      {mutationName: MutationName.SendResetPasswordMutation}, {...params}
+      { mutationName: MutationName.SendResetPasswordMutation },
+      { ...params },
     );
     if (error.value) {
-      resetPasswordError.value = true;
+      toast.error(error.value?.data?.message);
       return;
     }
 
@@ -79,32 +99,30 @@ export const useUser = () => {
 
   const updateAccount = async (params: MutationUpdateMyAccountArgs) => {
     loading.value = true;
-    const { data, error } = await $sdk().odoo.mutation<MutationUpdateMyAccountArgs, PartnerResponse>(
-      {mutationName: MutationName.UpdateMyAccountMutation}, {...params}
+    const { data, error } = await $sdk().odoo.mutation<MutationUpdateMyAccountArgs, UpdateMyAccountResponse>(
+      { mutationName: MutationName.UpdateMyAccountMutation },
+      { ...params },
     );
     if (error.value) {
-      updateAccountError.value = true;
+      toast.error(error.value?.data?.message);
       return;
     }
 
     user.value = data.value.updateMyAccount;
-
   };
 
   const updatePassword = async (params: MutationUpdatePasswordArgs) => {
-    if (updatePasswordError.value) {
-      updatePasswordError.value = false;
-    }
     loading.value = true;
-    const { data, error } = await $sdk().odoo.mutation<MutationUpdatePasswordArgs, LoadUserQueryResponse>(
-      {mutationName: MutationName.UpdatePasswordMutation}, {...params}
+    const { data, error } = await $sdk().odoo.mutation<MutationUpdatePasswordArgs, UpdatePasswordResponse>(
+      { mutationName: MutationName.UpdatePasswordMutation },
+      params,
     );
     if (error.value) {
-      updatePasswordError.value = true;
+      toast.error(error.value?.data?.message);
       return;
     }
 
-    user.value = data.value.updatePassword.partner;
+    toast.success('Password updated successfully');
   };
 
   return {
@@ -115,14 +133,8 @@ export const useUser = () => {
     resetPassword,
     user,
     loading,
-    loginError,
-    signupError,
-    resetPasswordError,
-    updateAccountError,
-    updatePasswordError,
     successResetEmail,
     updateAccount,
     updatePassword,
-
   };
 };

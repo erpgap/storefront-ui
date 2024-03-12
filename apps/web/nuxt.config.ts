@@ -5,25 +5,32 @@ export default defineNuxtConfig({
       viewport: 'minimum-scale=1, initial-scale=1, width=device-width',
       title: 'Vue Storefront',
       htmlAttrs: {
-        lang: 'en'
+        lang: 'en',
       },
     },
   },
   delayHydration: {
-    mode: 'init'
+    mode: 'init',
+  },
+  components: {
+    dirs: [
+      {
+        isAsync: true,
+        path: 'components',
+      },
+    ],
   },
   modules: [
     'nuxt-lazy-hydrate',
     '@nuxtjs/critters',
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
-    '@kgierke/nuxt-basic-auth',
     'nuxt-delay-hydration',
     [
       '@nuxtjs/google-fonts',
       {
         families: {
-          'Red Hat Display': [400, 500, 700]
+          'Red Hat Display': [400, 500, 700],
         },
       },
     ],
@@ -44,18 +51,8 @@ export default defineNuxtConfig({
       },
     ],
     // '@storyblok/nuxt',
-    'nuxt-lodash'
+    'nuxt-lodash',
   ],
-  basicAuth: {
-    enabled: false,
-    users: [
-      {
-        username: 'erpgap',
-        password: '!qaZXsw2',
-      },
-    ],
-    allowedRoutes: ['/api/mutation/', '/api/query/'],
-  },
   // storyblok: {
   //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
   //   bridge: true,
@@ -82,8 +79,8 @@ export default defineNuxtConfig({
       '@vue/apollo-option',
       'ts-invariant',
       'vue-toastification',
-      '@erpgap/odoo-sdk-api-client'
-    ]
+      '@erpgap/odoo-sdk-api-client',
+    ],
   },
   devtools: {
     enabled: true,
@@ -95,8 +92,8 @@ export default defineNuxtConfig({
     },
     public: {
       odooBaseImageUrl: '',
-      odooBaseUrl: ''
-    }
+      odooBaseUrl: '',
+    },
   },
   routeRules: {
     '/': { swr: true },
@@ -105,18 +102,24 @@ export default defineNuxtConfig({
     '/favicon.ico': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
   },
   nitro: {
+    // publicAssets: [
+    //   {
+    //     baseURL: '/images',
+    //     dir: 'public/images/',
+    //     maxAge: 31536000,
+    //   },
+    // ],
     compressPublicAssets: true,
     storage: {
       cache: {
         driver: 'redis',
-      }
+      },
     },
     devStorage: {
       cache: {
         driver: 'redis',
-
-      }
-    }
+      },
+    },
   },
   vite: {
     optimizeDeps: {
@@ -127,8 +130,8 @@ export default defineNuxtConfig({
     providers: {
       odooProvider: {
         name: 'odooProvider',
-        provider: '~/providers/odoo-provider.ts'
-      }
-    }
-  }
+        provider: '~/providers/odoo-provider.ts',
+      },
+    },
+  },
 });

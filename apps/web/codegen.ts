@@ -4,13 +4,12 @@ const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
-      'https://vsfdemo15.labs.odoogap.com/graphql/vsf': {
-      },
+      'https://vsfdemo15.labs.odoogap.com/graphql/vsf': {},
     },
   ],
   config: {
     preResolveTypes: true,
-    avoidOptionals: true
+    avoidOptionals: true,
   },
   ignoreNoDocuments: true,
   generates: {
@@ -19,10 +18,9 @@ const config: CodegenConfig = {
       preset: 'client',
       config: {
         preResolveTypes: true,
-        avoidOptionals: true
-      }
+        avoidOptionals: true,
+      },
     },
-
   },
 };
 

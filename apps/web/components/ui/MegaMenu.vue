@@ -14,14 +14,8 @@
       placement="top"
       class="grid grid-cols-1 md:gap-x-6 md:grid-cols-4 bg-white max-w-xs shadow-lg p-0 !fixed max-h-screen overflow-y-auto md:!absolute md:!top-[5rem] md:max-w-full md:p-6"
     >
-      <div
-        class="flex items-center justify-between py-2 px-4 bg-primary-700 md:hidden"
-      >
-        <div
-          class="flex items-center typography-text-lg font-medium text-white"
-        >
-          Browse products
-        </div>
+      <div class="flex items-center justify-between py-2 px-4 bg-primary-700 md:hidden">
+        <div class="flex items-center typography-text-lg font-medium text-white">Browse products</div>
         <SfButton
           square
           variant="tertiary"
@@ -33,11 +27,7 @@
           <SfIconClose />
         </SfButton>
       </div>
-      <div
-        v-for="{ heading, items } in categoriesContent"
-        :key="heading"
-        class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0"
-      >
+      <div v-for="{ heading, items } in categoriesContent" :key="heading" class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0">
         <h2
           role="presentation"
           class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 md:py-1.5"
@@ -62,11 +52,7 @@
       <div
         class="flex flex-col items-center justify-center bg-neutral-100 md:rounded-md border-neutral-300 overflow-hidden grow"
       >
-        <NuxtImg
-          :src="bannerDetails.image"
-          :alt="bannerDetails.title"
-          class="object-contain"
-        />
+        <NuxtImg :src="bannerDetails.image" :alt="bannerDetails.title" class="object-contain" />
         <p class="mb-4 mt-4 px-4 text-center typography-text-base font-medium">
           {{ bannerDetails.title }}
         </p>
@@ -134,8 +120,7 @@ const actionItems = [
   },
 ];
 const bannerDetails = {
-  image:
-    'https://storage.googleapis.com/sfui_docs_artifacts_bucket_public/production/watch.png',
+  image: 'https://storage.googleapis.com/sfui_docs_artifacts_bucket_public/production/watch.png',
   title: 'New in designer watches',
 };
 

@@ -30,11 +30,7 @@ defineEmits<CategorySidebarEmits>();
       <div class="grid grid-rows-category-sidebar h-full lg:block">
         <div class="p-4 flex justify-between items-center lg:hidden">
           <span class="font-bold text-lg">Filter</span>
-          <SfButton
-            variant="tertiary"
-            @click="$emit('close')"
-            :aria-label="$t('closeListSettings')"
-          >
+          <SfButton variant="tertiary" :aria-label="$t('closeListSettings')" @click="$emit('close')">
             <template #prefix>
               <SfIconClose class="text-neutral-500" />
             </template>
