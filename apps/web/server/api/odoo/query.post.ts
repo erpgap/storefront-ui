@@ -1,5 +1,6 @@
 import { ApolloError } from '@apollo/client';
 import { Endpoints } from '@erpgap/odoo-sdk-api-client';
+import { useNuxtApp } from 'nuxt/app';
 
 export default defineCachedEventHandler(
   async (event) => {
@@ -48,6 +49,18 @@ export default defineCachedEventHandler(
     getKey: async (event) => {
       const body = await readBody(event);
       return `${body?.[0].queryName}-${JSON.stringify(body?.[1] || {})}`;
+    },
+    shouldBypassCache: async (event) => {
+      const config = useRuntimeConfig(event);
+      const body = await readBody(event);
+
+      const checkIfQueryNameIsEqual = (queryName: string) => queryName === body?.[0].queryName;
+
+      if (config?.shouldByPassCacheQueryNames?.some(checkIfQueryNameIsEqual)) {
+        return true;
+      }
+
+      return false;
     },
   },
 );

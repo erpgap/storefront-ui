@@ -22,7 +22,7 @@ export const useCart = () => {
 
   const loadCart = async () => {
     loading.value = true;
-    const { data } = await $sdk().odoo.queryNoCache<null, CartResponse>({ queryName: QueryName.LoadCartQuery });
+    const { data } = await $sdk().odoo.query<null, CartResponse>({ queryName: QueryName.LoadCartQuery });
     loading.value = false;
 
     cart.value = data.value.cart;

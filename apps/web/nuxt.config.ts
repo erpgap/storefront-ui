@@ -60,6 +60,12 @@ export default defineNuxtConfig({
   //   apiOptions: {},
   // },
   image: {
+    providers: {
+      odooProvider: {
+        name: 'odooProvider',
+        provider: '~/providers/odoo-provider.ts',
+      },
+    },
     screens: {
       '2xl': 1536,
       xxl: 1440,
@@ -90,6 +96,7 @@ export default defineNuxtConfig({
       host: 'localhost',
       port: 6379,
     },
+    shouldByPassCacheQueryNames: ['LoadCartQuery', 'WishlistLoadQuery'],
     public: {
       odooBaseImageUrl: '',
       odooBaseUrl: '',
@@ -102,13 +109,6 @@ export default defineNuxtConfig({
     '/favicon.ico': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
   },
   nitro: {
-    // publicAssets: [
-    //   {
-    //     baseURL: '/images',
-    //     dir: 'public/images/',
-    //     maxAge: 31536000,
-    //   },
-    // ],
     compressPublicAssets: true,
     storage: {
       cache: {
@@ -124,14 +124,6 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: ['lodash-es'],
-    },
-  },
-  image: {
-    providers: {
-      odooProvider: {
-        name: 'odooProvider',
-        provider: '~/providers/odoo-provider.ts',
-      },
     },
   },
 });
