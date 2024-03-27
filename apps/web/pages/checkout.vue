@@ -42,8 +42,8 @@ const partnerData = computed(() => {
   const email = cart.value.order?.partner?.email || "";
   const name = cart.value.order?.partner?.name || "";
   return {
-    email: email.includes("newEmail") ? "" : email ?? "",
-    name: name.includes("newName") ? "" : name ?? "",
+    email: email.toLowerCase().includes("newemail") ? "" : email ?? "",
+    name: name.toLowerCase().includes("newname") ? "" : name ?? "",
   };
 });
 const isLoading = false;
@@ -174,7 +174,7 @@ const selectedProvider = ref(1);
                   {{ $t("contactInfo.heading") }}
                 </h3>
               </header>
-              <FormContactInformation
+              <CheckoutContactInformation
                 :email="partnerData.email"
                 :name="partnerData.name"
                 @on-save="updatePartnerData"
@@ -248,8 +248,8 @@ const selectedProvider = ref(1);
           <SfButton
             size="lg"
             class="w-full mb-4 md:mb-0"
-            @click="providerPaymentHandler"
             :disabled="!selectedProvider || !isPaymentReady || loading"
+            @click="providerPaymentHandler"
           >
             {{ $t("placeOrder") }}
           </SfButton>
@@ -274,14 +274,14 @@ const selectedProvider = ref(1);
             </i18n-t>
           </p>
           <LazyCheckoutAdyenPaymentProvider
+            v-if="showPaymentModal && paymentMethods[0]"
             :provider="paymentMethods[0]"
             :cart="cart"
-            v-if="showPaymentModal && paymentMethods[0]"
-            @isPaymentReady="($event) => (isPaymentReady = $event)"
-            @providerPaymentHandler="
+            @is-payment-ready="($event) => (isPaymentReady = $event)"
+            @provider-payment-handler="
               ($event) => (providerPaymentHandler = $event)
             "
-            @paymentLoading="($event) => (loading = $event)"
+            @payment-loading="($event) => (loading = $event)"
           />
         </UiOrderSummary>
       </div>
