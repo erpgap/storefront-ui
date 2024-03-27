@@ -14,8 +14,8 @@ import {
   SfIconMenu,
   SfInput,
   SfIconSearch,
-} from '@storefront-ui/vue';
-import { onClickOutside } from '@vueuse/core';
+} from "@storefront-ui/vue";
+import { onClickOutside } from "@vueuse/core";
 
 defineProps<{ filled?: boolean }>();
 
@@ -23,51 +23,59 @@ const { loadCategoryList, categories } = useCategory();
 const { isOpen, toggle, close } = useDisclosure();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 const { wishlistTotalItems, loadWishlist, wishlist } = useWishlist();
-const NuxtLink = resolveComponent('NuxtLink');
+
+const { result, search: algoliaSearch } = useAlgoliaSearch("header");
+
+const NuxtLink = resolveComponent("NuxtLink");
 
 const menuRef = ref();
 const drawerRef = ref();
 useTrapFocus(drawerRef, {
   activeState: isOpen,
   arrowKeysUpDown: true,
-  initialFocus: 'container',
+  initialFocus: "container",
 });
 onClickOutside(menuRef, () => {
   close();
 });
 
 const filteredCategories = computed(() =>
-  categories?.value?.filter((category: any) => category.name === 'WOMEN' || category.name === 'MEN'),
+  categories?.value?.filter(
+    (category: any) => category.name === "WOMEN" || category.name === "MEN"
+  )
 );
-const cartCounter = useCookie<number>('cart-counter');
+const cartCounter = useCookie<number>("cart-counter");
 
-const inputValue = ref('');
-const search = () => {
-  // eslint-disable-next-line no-alert
-  alert(`Successfully found 10 results for ${inputValue.value}`);
+const inputValue = ref("");
+
+const search = async (event: Event) => {
+  await algoliaSearch({
+    query: (event.target as HTMLInputElement).value,
+  });
+  console.log(result.value);
 };
 const actionItems = [
   {
     icon: SfIconShoppingCart,
-    label: '',
-    ariaLabel: 'Cart',
-    role: 'button',
+    label: "",
+    ariaLabel: "Cart",
+    role: "button",
     badge: true,
-    link: '/cart',
+    link: "/cart",
   },
   {
     icon: SfIconPerson,
-    label: 'Log in',
-    ariaLabel: 'Log in',
-    role: 'login',
+    label: "Log in",
+    ariaLabel: "Log in",
+    role: "login",
     badge: false,
-    link: '/login',
+    link: "/login",
   },
 ];
 
 const bannerDetails = {
-  image: '/images/watch.png',
-  title: 'New in designer watches',
+  image: "/images/watch.png",
+  title: "New in designer watches",
 };
 
 const handleWishlistSideBar = async () => {
@@ -95,7 +103,9 @@ onMounted(async () => {
         { 'bg-white border-b border-neutral-200': !filled },
       ]"
     >
-      <div class="flex items-center justify-between lg:justify-start h-full w-full narrow-container">
+      <div
+        class="flex items-center justify-between lg:justify-start h-full w-full narrow-container"
+      >
         <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7 -mt-1.5">
           <VsfLogo />
         </NuxtLink>
@@ -112,7 +122,9 @@ onMounted(async () => {
           <template #suffix>
             <SfIconExpandMore class="hidden md:inline-flex" />
           </template>
-          <span class="hidden md:inline-flex whitespace-nowrap px-2">Browse products</span>
+          <span class="hidden md:inline-flex whitespace-nowrap px-2"
+            >Browse products</span
+          >
         </SfButton>
         <nav>
           <ul>
@@ -132,11 +144,17 @@ onMounted(async () => {
                   placement="top"
                   class="bg-white p-0 max-h-screen overflow-y-auto lg:!absolute lg:!top-[5rem] max-w-full lg:p-6 top-index"
                 >
-                  <div class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative">
+                  <div
+                    class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative"
+                  >
                     <div
                       class="sticky top-0 flex items-center justify-between py-2 px-4 bg-primary-700 lg:hidden w-full"
                     >
-                      <div class="flex items-center typography-text-lg font-medium text-white">Browse products</div>
+                      <div
+                        class="flex items-center typography-text-lg font-medium text-white"
+                      >
+                        Browse products
+                      </div>
                       <SfButton
                         square
                         variant="tertiary"
@@ -161,7 +179,10 @@ onMounted(async () => {
                       </h2>
                       <hr class="mb-3.5" />
                       <ul>
-                        <li v-for="{ name, slug, childs: subcategory } in childs" :key="name">
+                        <li
+                          v-for="{ name, slug, childs: subcategory } in childs"
+                          :key="name"
+                        >
                           <SfListItem
                             v-if="subcategory !== null"
                             tag="a"
@@ -178,8 +199,14 @@ onMounted(async () => {
                     <div
                       class="flex flex-col items-center justify-center bg-neutral-100 lg:rounded-md border-neutral-300 overflow-hidden grow"
                     >
-                      <NuxtImg :src="bannerDetails.image" :alt="bannerDetails.title" class="object-contain" />
-                      <p class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium">
+                      <NuxtImg
+                        :src="bannerDetails.image"
+                        :alt="bannerDetails.title"
+                        class="object-contain"
+                      />
+                      <p
+                        class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium"
+                      >
                         {{ bannerDetails.title }}
                       </p>
                     </div>
@@ -203,7 +230,6 @@ onMounted(async () => {
           v-if="filled"
           role="search"
           class="hidden lg:flex flex-[100%] mt-2 md:mt-0 md:ml-10 pb-2 md:pb-0"
-          @submit.prevent="search"
         >
           <SfInput
             v-model="inputValue"
@@ -212,6 +238,7 @@ onMounted(async () => {
             placeholder="Search"
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
+            @input="search"
           >
             <template #suffix>
               <span class="flex items-center">
@@ -252,7 +279,10 @@ onMounted(async () => {
                 />
               </template>
             </SfButton>
-            <WishlistSidebar :is-open="wishlistSidebarIsOpen" @close="toggleWishlistSideBar" />
+            <WishlistSidebar
+              :is-open="wishlistSidebarIsOpen"
+              @close="toggleWishlistSideBar"
+            />
           </div>
           <SfButton
             v-for="{ ariaLabel, label, icon, link, badge, role } in actionItems"
@@ -273,7 +303,11 @@ onMounted(async () => {
                 data-testid="cart-badge"
               />
             </template>
-            <span v-if="role === 'login'" class="hidden lg:inline-flex whitespace-nowrap pr-2">{{ label }}</span>
+            <span
+              v-if="role === 'login'"
+              class="hidden lg:inline-flex whitespace-nowrap pr-2"
+              >{{ label }}</span
+            >
           </SfButton>
         </nav>
         <div v-if="filled">
