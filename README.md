@@ -8,13 +8,12 @@ Template base to start new odoo vsf projects using vsf SDK
 2. VSF 2
 3. SFUI-2
 
-
 ## How to start ?
 
 ```sh
 2. yarn install
-3. copy apps/web/.env.example to apps/web/.env
-4. yarn dev
-5. You can access with http://localhost:3000
+3. cp -f .env.example apps/web/.env
+4. export $(cat apps/web/.env | grep -v \#)
+5. yarn dev
+6. You can access with http://localhost:3000
 ```
-
