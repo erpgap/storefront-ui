@@ -13,10 +13,10 @@ import {
   AdyenAcquirerInfoResult,
   AdyenPaymentMethodsResult,
   AdyenPaymentDetailsResult,
-  AdyenPaymentsResult
-} from './gql/graphql';
-import { H3Error } from 'h3';
-import { _AsyncData } from 'nuxt/dist/app/composables/asyncData';
+  AdyenPaymentsResult,
+} from "./gql/graphql";
+import { H3Error } from "h3";
+import { _AsyncData } from "nuxt/dist/app/composables/asyncData";
 
 export type CategoryListResponse = _AsyncData<
   {
