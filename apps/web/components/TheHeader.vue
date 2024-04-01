@@ -36,6 +36,11 @@ const menuRef = ref();
 const drawerRef = ref();
 const searchRef = ref();
 const showSearchClerkRef = ref();
+const highlightedIndex = ref(-1);
+
+onMounted(async () => {
+  await loadWishlist();
+});
 
 useTrapFocus(drawerRef, {
   activeState: isOpen,
@@ -57,31 +62,6 @@ const filteredCategories = computed(() =>
   )
 );
 
-const searchHits = computed(() => result.value?.hits || []);
-
-const selectHit = (hit: AlgoliaHitType) => {
-  router.push(`/search?q=${hit.name?.toLowerCase()}`);
-};
-
-const cartCounter = useCookie<number>("cart-counter");
-
-const inputValue = ref("");
-
-const search = async (event: Event) => {
-  const query = (event.target as HTMLInputElement).value;
-  if (!query) {
-    showSearchClerkRef.value = false;
-    return;
-  }
-  await algoliaSearch({
-    query: (event.target as HTMLInputElement).value,
-  });
-  showSearchClerkRef.value = true;
-};
-
-const openSearchClerk = computed(
-  () => result.value?.hits?.length > 0 && showSearchClerkRef.value
-);
 const actionItems = [
   {
     icon: SfIconShoppingCart,
@@ -112,9 +92,54 @@ const handleWishlistSideBar = async () => {
 
 await loadCategoryList({ filter: { parent: true } });
 
-onMounted(async () => {
-  await loadWishlist();
-});
+const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
+
+const selectHit = (hit: AlgoliaHitType) => {
+  router.push(`/search?q=${hit.name?.toLowerCase()}`);
+};
+
+const cartCounter = useCookie<number>("cart-counter");
+
+const inputValue = ref("");
+
+const search = async (event: Event) => {
+  const query = (event.target as HTMLInputElement).value;
+  if (!query) {
+    showSearchClerkRef.value = false;
+    return;
+  }
+  await algoliaSearch({
+    query: (event.target as HTMLInputElement).value,
+  });
+  showSearchClerkRef.value = true;
+  highlightedIndex.value = -1;
+};
+
+const openSearchClerk = computed(
+  () => searchHits.value?.length > 0 && showSearchClerkRef.value
+);
+
+const setInputValue = (value: string) => {
+  inputValue.value = value;
+};
+
+const highlightPrevious = () => {
+  if (highlightedIndex.value === 0) {
+    highlightedIndex.value = searchHits.value.length - 1;
+  } else {
+    highlightedIndex.value -= 1;
+  }
+  setInputValue(searchHits.value[highlightedIndex.value]?.name);
+};
+
+const highlightNext = () => {
+  if (highlightedIndex.value === searchHits.value.length - 1) {
+    highlightedIndex.value = 0;
+  } else {
+    highlightedIndex.value += 1;
+  }
+  setInputValue(searchHits.value[highlightedIndex.value]?.name);
+};
 </script>
 
 <template>
@@ -259,6 +284,7 @@ onMounted(async () => {
           ref="searchRef"
           role="search"
           class="hidden lg:flex flex-[100%] mt-2 md:mt-0 md:ml-10 pb-2 md:pb-0 relative w-full"
+          @submit.prevent
         >
           <SfInput
             v-model="inputValue"
@@ -268,6 +294,9 @@ onMounted(async () => {
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
             @input="search"
+            @keydown.up.prevent="highlightPrevious"
+            @keydown.down.prevent="highlightNext"
+            @keydown.enter.prevent="selectHit(searchHits[highlightedIndex])"
           >
             <template #suffix>
               <span class="flex items-center">
@@ -295,6 +324,7 @@ onMounted(async () => {
             <SearchClerk
               v-if="openSearchClerk"
               :hits="searchHits"
+              :highlighted-index="highlightedIndex"
               @select="selectHit"
             />
           </transition>
