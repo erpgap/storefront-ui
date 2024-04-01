@@ -16,7 +16,7 @@ import {
   SfIconSearch,
 } from "@storefront-ui/vue";
 import { onClickOutside } from "@vueuse/core";
-import { useRouter } from "#vue-router";
+import { useRouter, useRoute } from "#vue-router";
 import { AlgoliaHitType } from "@/types/algolia";
 
 defineProps<{ filled?: boolean }>();
@@ -31,6 +31,7 @@ const { result, search: algoliaSearch } = useAlgoliaSearch("header");
 const NuxtLink = resolveComponent("NuxtLink");
 
 const router = useRouter();
+const route = useRoute();
 
 const menuRef = ref();
 const drawerRef = ref();
@@ -95,12 +96,14 @@ await loadCategoryList({ filter: { parent: true } });
 const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
 
 const selectHit = (hit: AlgoliaHitType) => {
-  router.push(`/search?q=${hit.name?.toLowerCase()}`);
+  router.push(`/search?search=${hit?.name || inputValue.value}`);
+  showSearchClerkRef.value = false;
+  inputValue.value = hit.name;
 };
 
 const cartCounter = useCookie<number>("cart-counter");
 
-const inputValue = ref("");
+const inputValue = ref(route.query?.search || "");
 
 const search = async (event: Event) => {
   const query = (event.target as HTMLInputElement).value;
