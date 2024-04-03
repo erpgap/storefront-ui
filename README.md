@@ -18,3 +18,18 @@ Template base to start new odoo vsf projects using vsf SDK
 5. You can access with http://localhost:3000
 ```
 
+## Docker
+
+
+Test docker build:
+
+```bash
+cat .env.docker | grep -v '^#' | xargs -I {} echo --build-arg {} | xargs docker build . -t vsf-test
+```
+
+Production mode with docker-compose
+
+```bash
+# Test docker build
+cd .docker && docker-compose up --build -d
+```
