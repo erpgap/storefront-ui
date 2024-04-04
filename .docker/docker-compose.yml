@@ -25,6 +25,7 @@ services:
         NUXT_PUBLIC_MIDDLEWARE_PORT: 8443
         REDIS_HOST: "redis"
         REDIS_PORT: "6379"
+        REDIS_URL: "redis://redis:6379"
         NUXT_ALGOLIA_API_KEY: "change_api_key"
         NUXT_ALGOLIA_APPLICATION_ID: "change_application_id"
 
