@@ -1,6 +1,5 @@
 import { ApolloError } from '@apollo/client';
 import { Endpoints } from '@erpgap/odoo-sdk-api-client';
-import { useNuxtApp } from 'nuxt/app';
 
 export default defineCachedEventHandler(
   async (event) => {
@@ -62,5 +61,13 @@ export default defineCachedEventHandler(
 
       return false;
     },
+    // transform: async (entry, args) => {
+    //   const newEntry = { ...entry };
+    //   delete entry.value.headers['Set-cookie'];
+    //   newEntry.value.headers.test = 123;
+    //   console.log(args);
+
+    //   return newEntry.value;
+    // },
   },
 );
