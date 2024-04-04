@@ -102,10 +102,6 @@ export default defineNuxtConfig({
     enabled: true,
   },
   runtimeConfig: {
-    redis: {
-      host: 'localhost',
-      port: 6379,
-    },
     shouldByPassCacheQueryNames: ['LoadCartQuery', 'WishlistLoadQuery'],
     public: {
       odooBaseImageUrl: '',
@@ -129,6 +125,7 @@ export default defineNuxtConfig({
     storage: {
       cache: {
         driver: 'redis',
+        url: process.env.REDIS_URL,
       },
     },
     devStorage: {
