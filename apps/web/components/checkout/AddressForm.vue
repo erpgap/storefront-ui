@@ -8,8 +8,8 @@ import {
   SfInput,
   SfLoaderCircular,
   SfSelect,
-} from '@storefront-ui/vue';
-import { AddressEnum } from '~/graphql';
+} from "@storefront-ui/vue";
+import { AddressEnum } from "~/graphql";
 
 const props = defineProps({
   heading: String,
@@ -30,14 +30,14 @@ const { countries } = useCountry();
 const isCartUpdateLoading = false;
 
 const defaultValues = ref({
-  name: props.savedAddress?.name ?? '',
-  street: props.savedAddress?.street ?? '',
-  street2: props.savedAddress?.street2 ?? '',
-  phone: props.savedAddress?.phone ?? '',
+  name: props.savedAddress?.name ?? "",
+  street: props.savedAddress?.street ?? "",
+  street2: props.savedAddress?.street2 ?? "",
+  phone: props.savedAddress?.phone ?? "",
   countryId: props.savedAddress?.country?.id ?? null,
-  city: props.savedAddress?.city ?? '',
+  city: props.savedAddress?.city ?? "",
   stateId: props.savedAddress?.state?.id ?? null,
-  zip: props.savedAddress?.zip ?? '',
+  zip: props.savedAddress?.zip ?? "",
 });
 
 const submitAddress = () => {
@@ -53,7 +53,10 @@ const submitAddress = () => {
     email: props.savedAddress?.email,
   };
 
-  const addressType = props.type === 'billingAddress' ? AddressEnum.Billing : AddressEnum.Shipping;
+  const addressType =
+    props.type === "billingAddress"
+      ? AddressEnum.Billing
+      : AddressEnum.Shipping;
 
   if (props.savedAddress?.id) {
     updateAddress({ id: props.savedAddress.id, ...addressInput }, addressType);
@@ -64,7 +67,10 @@ const submitAddress = () => {
 };
 
 const states = computed(
-  () => countries.value.find((country: any) => country.id === defaultValues.value.countryId)?.states || [],
+  () =>
+    countries.value.find(
+      (country: any) => country.id === defaultValues.value.countryId
+    )?.states || []
 );
 </script>
 
@@ -75,7 +81,7 @@ const states = computed(
         {{ props.heading }}
       </h2>
       <SfButton v-if="savedAddress" size="sm" variant="tertiary" @click="open">
-        {{ $t('contactInfo.edit') }}
+        {{ $t("contactInfo.edit") }}
       </SfButton>
     </div>
 
@@ -102,10 +108,18 @@ const states = computed(
       aria-labelledby="address-modal-title"
     >
       <header>
-        <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
+        <SfButton
+          square
+          variant="tertiary"
+          class="absolute right-2 top-2"
+          @click="close"
+        >
           <SfIconClose />
         </SfButton>
-        <h3 id="address-modal-title" class="text-neutral-900 text-lg md:text-2xl font-bold mb-4">
+        <h3
+          id="address-modal-title"
+          class="text-neutral-900 text-lg md:text-2xl font-bold mb-4"
+        >
           {{ heading }}
         </h3>
       </header>
@@ -115,67 +129,121 @@ const states = computed(
         @submit.prevent="submitAddress"
       >
         <label>
-          <FormLabel>{{ $t('form.NameLabel') }}</FormLabel>
-          <SfInput v-model="defaultValues.name" name="name" autocomplete="given-name" required />
+          <UiFormLabel>{{ $t("form.NameLabel") }}</UiFormLabel>
+          <SfInput
+            v-model="defaultValues.name"
+            name="name"
+            autocomplete="given-name"
+            required
+            :placeholder="$t('form.NameLabel')"
+          />
         </label>
         <label class="md:col-span-2">
-          <FormLabel>{{ $t('form.streetNameLabel') }}</FormLabel>
-          <SfInput v-model="defaultValues.street" name="streetName" autocomplete="family-name" required />
+          <UiFormLabel>{{ $t("form.streetNameLabel") }}</UiFormLabel>
+          <SfInput
+            v-model="defaultValues.street"
+            name="streetName"
+            autocomplete="family-name"
+            required
+            :placeholder="$t('form.streetNameLabel')"
+          />
         </label>
         <label class="md:col-span-3">
-          <FormLabel>{{ $t('form.phoneLabel') }}</FormLabel>
-          <SfInput v-model="defaultValues.phone" name="phone" type="tel" autocomplete="tel" required />
+          <UiFormLabel>{{ $t("form.phoneLabel") }}</UiFormLabel>
+          <SfInput
+            v-model="defaultValues.phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            required
+            :placeholder="$t('form.phoneLabel')"
+          />
         </label>
         <label class="md:col-span-3">
-          <FormLabel>{{ $t('form.countryLabel') }}</FormLabel>
+          <UiFormLabel>{{ $t("form.countryLabel") }}</UiFormLabel>
           <SfSelect
             v-model="defaultValues.countryId"
             name="country"
-            :placeholder="$t('form.selectPlaceholder')"
             autocomplete="country-name"
             required
           >
-            <option v-for="country in countries" :key="country.id" :value="country.id">
+            <option key="placeholder" :value="null">
+              {{ $t("form.selectPlaceholder") }}
+            </option>
+            <option
+              v-for="country in countries"
+              :key="country.id"
+              :value="country.id"
+            >
               {{ country.name }}
             </option>
           </SfSelect>
         </label>
         <label class="md:col-span-3">
-          <FormLabel>{{ $t('form.stateLabel') }}</FormLabel>
+          <UiFormLabel>{{ $t("form.stateLabel") }}</UiFormLabel>
           <SfSelect
             v-model="defaultValues.stateId"
             name="state"
-            :placeholder="$t('form.selectPlaceholder')"
             autocomplete="state-name"
             :disabled="!states.length"
             required
           >
-            <option v-for="state in states" :key="state.id" :value="state.id">{{ state.name }}</option>
+            <option key="placeholder" :value="null">
+              {{ $t("form.selectPlaceholder") }}
+            </option>
+            <option v-for="state in states" :key="state.id" :value="state.id">
+              {{ state.name }}
+            </option>
           </SfSelect>
         </label>
 
         <label class="md:col-span-2">
-          <FormLabel>{{ $t('form.cityLabel') }}</FormLabel>
-          <SfInput v-model="defaultValues.city" name="city" autocomplete="address-level2" required />
+          <UiFormLabel>{{ $t("form.cityLabel") }}</UiFormLabel>
+          <SfInput
+            v-model="defaultValues.city"
+            name="city"
+            autocomplete="address-level2"
+            required
+            :placeholder="$t('form.cityLabel')"
+          />
         </label>
         <label>
-          <FormLabel>{{ $t('form.postalCodeLabel') }}</FormLabel>
-          <SfInput v-model="defaultValues.zip" name="postalCode" autocomplete="postal-code" required />
+          <UiFormLabel>{{ $t("form.postalCodeLabel") }}</UiFormLabel>
+          <SfInput
+            v-model="defaultValues.zip"
+            name="postalCode"
+            autocomplete="postal-code"
+            required
+            :placeholder="$t('form.postalCodeLabel')"
+          />
         </label>
 
-        <label v-if="props.type === 'billingAddress'" class="md:col-span-3 flex items-center gap-2">
+        <label
+          v-if="props.type === 'billingAddress'"
+          class="md:col-span-3 flex items-center gap-2"
+        >
           <SfCheckbox name="useAsShipping" />
-          {{ $t('form.useAsShippingLabel') }}
+          {{ $t("form.useAsShippingLabel") }}
         </label>
 
-        <div class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4">
+        <div
+          class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4"
+        >
           <SfButton type="reset" class="" variant="secondary" @click="close">
-            {{ $t('contactInfo.cancel') }}
+            {{ $t("contactInfo.cancel") }}
           </SfButton>
-          <SfButton type="submit" class="min-w-[120px]" :disabled="isCartUpdateLoading">
-            <SfLoaderCircular v-if="isCartUpdateLoading" class="flex justify-center items-center" size="sm" />
+          <SfButton
+            type="submit"
+            class="min-w-[120px]"
+            :disabled="isCartUpdateLoading"
+          >
+            <SfLoaderCircular
+              v-if="isCartUpdateLoading"
+              class="flex justify-center items-center"
+              size="sm"
+            />
             <span v-else>
-              {{ $t('contactInfo.save') }}
+              {{ $t("contactInfo.save") }}
             </span>
           </SfButton>
         </div>

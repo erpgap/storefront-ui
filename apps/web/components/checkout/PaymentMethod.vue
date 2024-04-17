@@ -2,10 +2,14 @@
   <div data-testid="checkout-payment" class="md:px-4 py-6">
     <fieldset>
       <legend class="text-neutral-900 text-lg font-bold mb-4">
-        {{ $t('checkoutPayment.heading') }}
+        {{ $t("checkoutPayment.heading") }}
       </legend>
       <div class="grid gap-4 grid-cols-2">
-        <label v-for="method in paymentMethods" :key="method.id" class="relative">
+        <label
+          v-for="method in paymentMethods"
+          :key="method.id"
+          class="relative"
+        >
           <input
             type="radio"
             name="payment_method"
@@ -45,18 +49,18 @@
 </template>
 
 <script setup lang="ts">
-import { SfIconCreditCard } from '@storefront-ui/vue';
-import { PaymentAcquirer } from '~/graphql';
+import { PaymentAcquirer } from "~/graphql";
 
 type CheckoutPaymentProps = {
   activePayment: number;
   paymentMethods: PaymentAcquirer[];
 };
 
-type CheckoutPaymentEmits = (event: 'update:activePayment', parameter: number) => void;
+type CheckoutPaymentEmits = (
+  event: "update:activePayment",
+  parameter: number
+) => void;
 
-const props = defineProps<CheckoutPaymentProps>();
+defineProps<CheckoutPaymentProps>();
 defineEmits<CheckoutPaymentEmits>();
-
-const { t } = useI18n();
 </script>

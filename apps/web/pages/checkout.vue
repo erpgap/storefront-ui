@@ -10,18 +10,23 @@ import {
   SfListItem,
   SfRadio,
   SfLink,
-} from '@storefront-ui/vue';
-import { useDeliveryMethod } from '~/composables/useDeliveryMethod';
-import { AddressEnum } from '~/graphql';
+} from "@storefront-ui/vue";
+import { useDeliveryMethod } from "~/composables/useDeliveryMethod";
+import { AddressEnum } from "~/graphql";
 
-const NuxtLink = resolveComponent('NuxtLink');
+const NuxtLink = resolveComponent("NuxtLink");
 const { isOpen, open, close } = useDisclosure();
 const { cart, loadCart } = useCart();
-const { loadAddressesByType, mailingAddresses, billingAddresses } = useAddresses();
+const { loadAddressesByType, mailingAddresses, billingAddresses } =
+  useAddresses();
 const { loadCountryList } = useCountry();
 const { updatePartner } = usePartner();
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
-const { loadPaymentMethods, paymentMethods } = usePaymentMethod();
+const {
+  loadPaymentMethods,
+  paymentMethods,
+  loading: paymentLoading,
+} = usePayment();
 
 await loadCart();
 await loadAddressesByType(AddressEnum.Shipping);
@@ -34,16 +39,28 @@ const savedMailingAddress = computed(() => mailingAddresses.value[0] || null);
 const savedBillingAddress = computed(() => billingAddresses.value[0] || null);
 
 const partnerData = computed(() => {
-  const email = cart.value.order?.partner?.email || '';
-  const name = cart.value.order?.partner?.name || '';
+  const email = cart.value.order?.partner?.email || "";
+  const name = cart.value.order?.partner?.name || "";
   return {
-    email: email.includes('newEmail') ? '' : email ?? '',
-    name: name.includes('newName') ? '' : name ?? '',
+    email: email.toLowerCase().includes("newemail") ? "" : email ?? "",
+    name: name.toLowerCase().includes("newname") ? "" : name ?? "",
   };
 });
 const isLoading = false;
 
-const updatePartnerData = async ({ email, name }: { email: string; name: string }) => {
+const showPaymentModal = ref(false);
+const isPaymentReady = ref(false);
+const providerPaymentHandler = ref();
+const methodWithModal = ref();
+const loading = ref(false);
+
+const updatePartnerData = async ({
+  email,
+  name,
+}: {
+  email: string;
+  name: string;
+}) => {
   await updatePartner({
     email,
     name: name,
@@ -53,25 +70,48 @@ const updatePartnerData = async ({ email, name }: { email: string; name: string 
   close();
 };
 
-const radioModel = ref('1');
-const activePayment = ref(1);
+onMounted(() => {
+  if (paymentMethods.value.length) {
+    showPaymentModal.value = true;
+  }
+});
+
+onBeforeUnmount(() => {
+  showPaymentModal.value = false;
+});
+
+const radioModel = ref("1");
+const selectedProvider = ref(1);
 </script>
 
 <template>
   <div class="md:px-0 mb-20">
     <div class="flex justify-between mt-8 mb-10">
-      <h1 class="font-bold typography-headline-3 md:typography-headline-2">Checkout</h1>
-      <SfButton :tag="NuxtLink" to="/cart" class="flex md:hidden whitespace-nowrap" size="sm" variant="tertiary">
+      <h1 class="font-bold typography-headline-3 md:typography-headline-2">
+        Checkout
+      </h1>
+      <SfButton
+        :tag="NuxtLink"
+        to="/cart"
+        class="flex md:hidden whitespace-nowrap"
+        size="sm"
+        variant="tertiary"
+      >
         <template #prefix>
           <SfIconArrowBack />
         </template>
-        {{ $t('back') }}
+        {{ $t("back") }}
       </SfButton>
-      <SfButton :tag="NuxtLink" to="/cart" class="hidden md:flex" variant="tertiary">
+      <SfButton
+        :tag="NuxtLink"
+        to="/cart"
+        class="hidden md:flex"
+        variant="tertiary"
+      >
         <template #prefix>
           <SfIconArrowBack />
         </template>
-        {{ $t('backToCart') }}
+        {{ $t("backToCart") }}
       </SfButton>
     </div>
     <span v-if="isLoading" class="!flex justify-center my-40 h-24">
@@ -85,10 +125,15 @@ const activePayment = ref(1);
           <div data-testid="contact-information" class="md:px-4 py-6">
             <div class="flex justify-between items-center">
               <h2 class="text-neutral-900 text-lg font-bold mb-4">
-                {{ $t('contactInfo.heading') }}
+                {{ $t("contactInfo.heading") }}
               </h2>
-              <SfButton v-if="partnerData?.email" size="sm" variant="tertiary" @click="open">
-                {{ $t('contactInfo.edit') }}
+              <SfButton
+                v-if="partnerData?.email"
+                size="sm"
+                variant="tertiary"
+                @click="open"
+              >
+                {{ $t("contactInfo.edit") }}
               </SfButton>
             </div>
             <div v-if="partnerData?.email" class="mt-2 md:w-[520px]">
@@ -96,9 +141,13 @@ const activePayment = ref(1);
               <p>{{ partnerData?.email }}</p>
             </div>
             <div v-else class="w-full md:max-w-[520px]">
-              <p>{{ $t('contactInfo.description') }}</p>
-              <SfButton class="mt-4 w-full md:w-auto" variant="secondary" @click="open">
-                {{ $t('contactInfo.add') }}
+              <p>{{ $t("contactInfo.description") }}</p>
+              <SfButton
+                class="mt-4 w-full md:w-auto"
+                variant="secondary"
+                @click="open"
+              >
+                {{ $t("contactInfo.add") }}
               </SfButton>
             </div>
 
@@ -110,14 +159,22 @@ const activePayment = ref(1);
               aria-labelledby="contact-modal-title"
             >
               <header>
-                <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
+                <SfButton
+                  square
+                  variant="tertiary"
+                  class="absolute right-2 top-2"
+                  @click="close"
+                >
                   <SfIconClose />
                 </SfButton>
-                <h3 id="contact-modal-title" class="text-neutral-900 text-lg md:text-2xl font-bold mb-4">
-                  {{ $t('contactInfo.heading') }}
+                <h3
+                  id="contact-modal-title"
+                  class="text-neutral-900 text-lg md:text-2xl font-bold mb-4"
+                >
+                  {{ $t("contactInfo.heading") }}
                 </h3>
               </header>
-              <FormContactInformation
+              <CheckoutContactInformation
                 :email="partnerData.email"
                 :name="partnerData.name"
                 @on-save="updatePartnerData"
@@ -147,11 +204,15 @@ const activePayment = ref(1);
           <div data-testid="shipping-method" class="md:px-4 my-6">
             <div class="flex justify-between items-center">
               <h3 class="text-neutral-900 text-lg font-bold">
-                {{ $t('shippingMethod.heading') }}
+                {{ $t("shippingMethod.heading") }}
               </h3>
             </div>
             <div class="mt-4">
-              <ul v-if="deliveryMethods.length" class="grid gap-y-4 md:grid-cols-2 md:gap-x-4" role="radiogroup">
+              <ul
+                v-if="deliveryMethods.length"
+                class="grid gap-y-4 md:grid-cols-2 md:gap-x-4"
+                role="radiogroup"
+              >
                 <SfListItem
                   v-for="{ id, name, price } in deliveryMethods"
                   :key="id"
@@ -171,21 +232,26 @@ const activePayment = ref(1);
 
               <div v-else class="flex mb-6">
                 <SfIconBlock class="mr-2 text-neutral-500" />
-                <p>{{ $t('shippingMethod.description') }}</p>
+                <p>{{ $t("shippingMethod.description") }}</p>
               </div>
             </div>
           </div>
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
           <CheckoutPaymentMethod
-            :active-payment="activePayment"
+            :active-payment="selectedProvider"
             :payment-methods="paymentMethods"
-            @update:active-payment="activePayment = $event"
+            @update:active-payment="selectedProvider = $event"
           />
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0 mb-10" />
         </div>
         <UiOrderSummary class="col-span-5 md:sticky md:top-20 h-fit">
-          <SfButton :tag="NuxtLink" to="/checkout" size="lg" class="w-full mb-4 md:mb-0">
-            {{ $t('placeOrder') }}
+          <SfButton
+            size="lg"
+            class="w-full mb-4 md:mb-0"
+            :disabled="!selectedProvider || !isPaymentReady || loading"
+            @click="providerPaymentHandler"
+          >
+            {{ $t("placeOrder") }}
           </SfButton>
           <p class="text-sm text-center mt-4 pb-4 md:pb-0">
             <i18n-t keypath="termsInfo" scope="global">
@@ -194,7 +260,7 @@ const activePayment = ref(1);
                   href="#"
                   class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
                 >
-                  {{ $t('termsAndConditions') }}
+                  {{ $t("termsAndConditions") }}
                 </SfLink>
               </template>
               <template #privacyPolicy>
@@ -202,11 +268,21 @@ const activePayment = ref(1);
                   href="#"
                   class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
                 >
-                  {{ $t('privacyPolicy') }}
+                  {{ $t("privacyPolicy") }}
                 </SfLink>
               </template>
             </i18n-t>
           </p>
+          <LazyCheckoutAdyenPaymentProvider
+            v-if="showPaymentModal && paymentMethods[0]"
+            :provider="paymentMethods[0]"
+            :cart="cart"
+            @is-payment-ready="($event) => (isPaymentReady = $event)"
+            @provider-payment-handler="
+              ($event) => (providerPaymentHandler = $event)
+            "
+            @payment-loading="($event) => (loading = $event)"
+          />
         </UiOrderSummary>
       </div>
     </div>

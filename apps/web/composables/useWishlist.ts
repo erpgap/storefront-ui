@@ -18,7 +18,7 @@ export const useWishlist = () => {
 
   const loadWishlist = async () => {
     loading.value = true;
-    const { data } = await $sdk().odoo.queryNoCache<MutationWishlistAddItemArgs, WishlistLoadResponse>({
+    const { data } = await $sdk().odoo.query<MutationWishlistAddItemArgs, WishlistLoadResponse>({
       queryName: QueryName.WishlistLoadQuery,
     });
     loading.value = false;

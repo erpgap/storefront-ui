@@ -16,36 +16,51 @@ import {
   SfIconSearch,
 } from '@storefront-ui/vue';
 import { onClickOutside } from '@vueuse/core';
+import { useRouter, useRoute } from '#vue-router';
+import { AlgoliaHitType } from '@/types/algolia';
 
 defineProps<{ filled?: boolean }>();
 
 const { loadCategoryList, categories } = useCategory();
 const { isOpen, toggle, close } = useDisclosure();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
-const { wishlistTotalItems, loadWishlist, wishlist } = useWishlist();
+const { wishlistTotalItems, loadWishlist } = useWishlist();
+
+const { result, search: algoliaSearch } = useAlgoliaSearch('header');
+
 const NuxtLink = resolveComponent('NuxtLink');
+
+const router = useRouter();
+const route = useRoute();
 
 const menuRef = ref();
 const drawerRef = ref();
+const searchRef = ref();
+const showSearchClerkRef = ref();
+const highlightedIndex = ref(-1);
+
+onMounted(async () => {
+  await loadWishlist();
+});
+
 useTrapFocus(drawerRef, {
   activeState: isOpen,
   arrowKeysUpDown: true,
   initialFocus: 'container',
 });
+
 onClickOutside(menuRef, () => {
   close();
+});
+
+onClickOutside(searchRef, () => {
+  showSearchClerkRef.value = false;
 });
 
 const filteredCategories = computed(() =>
   categories?.value?.filter((category: any) => category.name === 'WOMEN' || category.name === 'MEN'),
 );
-const cartCounter = useCookie<number>('cart-counter');
 
-const inputValue = ref('');
-const search = () => {
-  // eslint-disable-next-line no-alert
-  alert(`Successfully found 10 results for ${inputValue.value}`);
-};
 const actionItems = [
   {
     icon: SfIconShoppingCart,
@@ -76,9 +91,54 @@ const handleWishlistSideBar = async () => {
 
 await loadCategoryList({ filter: { parent: true } });
 
-onMounted(async () => {
-  await loadWishlist();
-});
+const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
+
+const selectHit = (hit: AlgoliaHitType) => {
+  router.push(`/search?search=${hit?.name || inputValue.value}`);
+  showSearchClerkRef.value = false;
+  inputValue.value = hit.name;
+};
+
+const cartCounter = useCookie<number>('cart-counter');
+
+const inputValue = ref(route.query?.search || '');
+
+const search = async (event: Event) => {
+  const query = (event.target as HTMLInputElement).value;
+  if (!query) {
+    showSearchClerkRef.value = false;
+    return;
+  }
+  await algoliaSearch({
+    query: (event.target as HTMLInputElement).value,
+  });
+  showSearchClerkRef.value = true;
+  highlightedIndex.value = -1;
+};
+
+const openSearchClerk = computed(() => searchHits.value?.length > 0 && showSearchClerkRef.value);
+
+const setInputValue = (value: string) => {
+  inputValue.value = value;
+};
+
+const highlightPrevious = () => {
+  if (highlightedIndex.value === 0) {
+    highlightedIndex.value = searchHits.value.length - 1;
+  } else {
+    highlightedIndex.value -= 1;
+  }
+  setInputValue(searchHits.value[highlightedIndex.value]?.name);
+};
+
+const highlightNext = () => {
+  if (highlightedIndex.value === searchHits.value.length - 1) {
+    highlightedIndex.value = 0;
+  } else {
+    highlightedIndex.value += 1;
+  }
+  setInputValue(searchHits.value[highlightedIndex.value]?.name);
+};
 </script>
 
 <template>
@@ -201,9 +261,10 @@ onMounted(async () => {
         </nav>
         <form
           v-if="filled"
+          ref="searchRef"
           role="search"
-          class="hidden lg:flex flex-[100%] mt-2 md:mt-0 md:ml-10 pb-2 md:pb-0"
-          @submit.prevent="search"
+          class="hidden lg:flex flex-[100%] mt-2 md:mt-0 md:ml-10 pb-2 md:pb-0 relative w-full"
+          @submit.prevent
         >
           <SfInput
             v-model="inputValue"
@@ -212,6 +273,10 @@ onMounted(async () => {
             placeholder="Search"
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
+            @input="search"
+            @keydown.up.prevent="highlightPrevious"
+            @keydown.down.prevent="highlightNext"
+            @keydown.enter.prevent="selectHit(searchHits[highlightedIndex])"
           >
             <template #suffix>
               <span class="flex items-center">
@@ -227,6 +292,22 @@ onMounted(async () => {
               </span>
             </template>
           </SfInput>
+
+          <transition
+            enter-active-class="transform transition duration-500 ease-in-out"
+            leave-active-class="transform transition duration-500 ease-in-out"
+            enter-from-class="-translate-x-full md:translate-x-0 md:opacity-0"
+            enter-to-class="translate-x-0 md:translate-x-0 md:opacity-100"
+            leave-from-class="translate-x-0 md:opacity-100"
+            leave-to-class="-translate-x-full md:translate-x-0 md:opacity-0"
+          >
+            <SearchClerk
+              v-if="openSearchClerk"
+              :hits="searchHits"
+              :highlighted-index="highlightedIndex"
+              @select="selectHit"
+            />
+          </transition>
         </form>
         <nav
           v-if="filled"

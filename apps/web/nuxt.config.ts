@@ -52,6 +52,16 @@ export default defineNuxtConfig({
     ],
     // '@storyblok/nuxt',
     'nuxt-lodash',
+    [
+      '@nuxtjs/algolia',
+      {
+        apiKey: process.env.NUXT_ALGOLIA_API_KEY,
+        applicationId: process.env.NUXT_ALGOLIA_APPLICATION_ID,
+        instantSearch: {
+          theme: 'algolia',
+        },
+      },
+    ],
   ],
   // storyblok: {
   //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
@@ -60,6 +70,12 @@ export default defineNuxtConfig({
   //   apiOptions: {},
   // },
   image: {
+    providers: {
+      odooProvider: {
+        name: 'odooProvider',
+        provider: '~/providers/odoo-provider.ts',
+      },
+    },
     screens: {
       '2xl': 1536,
       xxl: 1440,
@@ -86,10 +102,7 @@ export default defineNuxtConfig({
     enabled: true,
   },
   runtimeConfig: {
-    redis: {
-      host: 'localhost',
-      port: 6379,
-    },
+    shouldByPassCacheQueryNames: ['LoadCartQuery', 'WishlistLoadQuery'],
     public: {
       odooBaseImageUrl: '',
       odooBaseUrl: '',
@@ -97,41 +110,34 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/': { swr: true },
-    '/_ipx/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
-    '/icons/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
-    '/favicon.ico': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    '/_ipx/**': {
+      headers: { 'cache-control': 'public, max-age=31536000, immutable' },
+    },
+    '/icons/**': {
+      headers: { 'cache-control': 'public, max-age=31536000, immutable' },
+    },
+    '/favicon.ico': {
+      headers: { 'cache-control': 'public, max-age=31536000, immutable' },
+    },
   },
   nitro: {
-    // publicAssets: [
-    //   {
-    //     baseURL: '/images',
-    //     dir: 'public/images/',
-    //     maxAge: 31536000,
-    //   },
-    // ],
     compressPublicAssets: true,
     storage: {
       cache: {
         driver: 'redis',
+        url: process.env.REDIS_URL,
       },
     },
     devStorage: {
       cache: {
         driver: 'redis',
+        url: process.env.REDIS_URL,
       },
     },
   },
   vite: {
     optimizeDeps: {
       include: ['lodash-es'],
-    },
-  },
-  image: {
-    providers: {
-      odooProvider: {
-        name: 'odooProvider',
-        provider: '~/providers/odoo-provider.ts',
-      },
     },
   },
 });

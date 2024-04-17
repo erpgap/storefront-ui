@@ -1,10 +1,16 @@
 <template>
-  <SfAccordionItem v-model="internalModelValue" :summary-class="summaryClass" data-testid="accordion-item">
+  <SfAccordionItem
+    v-model="internalModelValue"
+    :summary-class="summaryClass"
+    data-testid="accordion-item"
+  >
     <template #summary>
       <slot name="summary">
         <p>{{ summary }}</p>
       </slot>
-      <SfIconChevronLeft :class="['text-neutral-500', modelValue ? 'rotate-90' : '-rotate-90']" />
+      <SfIconChevronLeft
+        :class="['text-neutral-500', modelValue ? 'rotate-90' : '-rotate-90']"
+      />
     </template>
     <div class="py-2 lg:px-4">
       <slot />
@@ -13,8 +19,8 @@
 </template>
 
 <script lang="ts" setup>
-import { SfAccordionItem, SfIconChevronLeft } from '@storefront-ui/vue';
-import { useVModel } from '@vueuse/core';
+import { SfAccordionItem, SfIconChevronLeft } from "@storefront-ui/vue";
+import { useVModel } from "@vueuse/core";
 
 type AccordionItemProps = {
   modelValue?: boolean;
@@ -24,12 +30,12 @@ type AccordionItemProps = {
 
 const props = withDefaults(defineProps<AccordionItemProps>(), {
   modelValue: false,
-  summary: '',
-  summaryClass: '',
+  summary: "",
+  summaryClass: "",
 });
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(["update:modelValue"]);
 
-const internalModelValue = useVModel(props, 'modelValue', emit, {
+const internalModelValue = useVModel(props, "modelValue", emit, {
   passive: true,
 });
 </script>

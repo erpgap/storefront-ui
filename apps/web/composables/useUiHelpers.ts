@@ -1,4 +1,4 @@
-import { ProductFilterInput, QueryProductsArgs } from '~/graphql';
+import { ProductFilterInput, QueryProductsArgs } from "~/graphql";
 
 export const useUiHelpers = () => {
   const route: any = useRoute();
@@ -6,12 +6,12 @@ export const useUiHelpers = () => {
 
   const { query, path } = route;
 
-  const queryParamsNotFilters = ['page', 'sort', 'itemsPerPage'];
-  const localePrefixes = ['/en', '/de', '/ru'];
+  const queryParamsNotFilters = ["page", "sort", "itemsPerPage"];
+  const localePrefixes = ["/en", "/de", "/ru"];
   const pathToSlug = (): string => {
     for (const localePrefix of localePrefixes) {
       if (path.startsWith(localePrefix)) {
-        return path.replace(localePrefix, '');
+        return path.replace(localePrefix, "");
       }
     }
     return path;
@@ -19,40 +19,42 @@ export const useUiHelpers = () => {
 
   const getFacetsFromURL = (query: any): QueryProductsArgs => {
     const filters: string[] = [];
+    const newQuery = { ...query };
+    delete newQuery.search;
 
-    if (query) {
-      Object.keys(query).forEach((filterKey) => {
-        if (![...queryParamsNotFilters, 'price'].includes(filterKey)) {
-          if (query[filterKey].includes(',')) {
-            query[filterKey]?.split(',').forEach(() => {
+    if (newQuery) {
+      Object.keys(newQuery).forEach((filterKey) => {
+        if (![...queryParamsNotFilters, "price"].includes(filterKey)) {
+          if (query[filterKey].includes(",")) {
+            query[filterKey]?.split(",").forEach(() => {
               filters.push(filterKey);
             });
           } else {
-            const label = query[filterKey]?.split(',')[0];
+            const label = query[filterKey]?.split(",")[0];
             filters.push(label);
           }
         }
       });
     }
 
-    const price = query?.price?.split('-');
+    const price = query?.price?.split("-");
 
     const pageSize = query.itemsPerPage ? parseInt(query.itemsPerPage) : 12;
-    const sort = query?.sort?.split(',') || [];
+    const sort = query?.sort?.split(",") || [];
     const page = query?.page || 1;
 
     const productFilters = {
       minPrice: Number(price?.[0]) || null,
       maxPrice: Number(price?.[1]) || null,
       attribValues: filters,
-      categorySlug: path === '/' ? null : pathToSlug(),
+      categorySlug: path === "/" || path === "/search" ? null : pathToSlug(),
     };
 
     return {
       pageSize,
       currentPage: parseInt(page),
       // cacheKey: `API-P${hash(filtersForHash, { algorithm: 'md5' })}`,
-      search: '',
+      search: query.search || "",
       sort: { [sort[0]]: sort[1] },
       filter: productFilters as ProductFilterInput,
     };
@@ -62,9 +64,9 @@ export const useUiHelpers = () => {
     Object.keys(query).forEach((label) => {
       if (queryParamsNotFilters.includes(label)) return;
 
-      const valueList = query[label].split(',');
+      const valueList = query[label].split(",");
       valueList.forEach((value: string) => {
-        if (label === 'price') {
+        if (label === "price") {
           const item = {
             filterName: label,
             label: `${value.slice(0, 2)}`,
@@ -72,7 +74,7 @@ export const useUiHelpers = () => {
           };
           formattedFilters.push(item);
         } else {
-          const newVal = value?.split('-');
+          const newVal = value?.split("-");
           const item = {
             filterName: label,
             label: `${newVal[1] ?? newVal[0]}`,
@@ -88,9 +90,10 @@ export const useUiHelpers = () => {
   const changeFilters = (filters: any[], sort: string) => {
     const formattedFilters: any = {};
     filters.forEach((element) => {
-      if (element.filterName === 'Size') {
+      if (element.filterName === "Size") {
         if (formattedFilters[element.filterName]) {
-          formattedFilters[element.filterName] += `,${element.id}-${element.label}`;
+          formattedFilters[element.filterName] +=
+            `,${element.id}-${element.label}`;
           return;
         }
         formattedFilters[element.filterName] = `${element.id}-${element.label}`;
@@ -120,9 +123,30 @@ export const useUiHelpers = () => {
     delete allQuery.page;
     router.push({ query: allQuery });
   };
+
+  const getComponentProviderByName = (provider: string): string => {
+    if (!provider) throw new Error("Provider without provider");
+
+    const upperName = provider.toLocaleUpperCase();
+
+    if (upperName === "ADYEN_OG") {
+      return "AdyenExternalPaymentProvider";
+    }
+
+    if (upperName === "ADYEN") {
+      return "AdyenDirectPaymentProvider";
+    }
+
+    if (upperName.includes("WIRE")) {
+      return "WireTransferPaymentProvider";
+    }
+
+    throw new Error(`Provider ${name} not implemented!`);
+  };
   return {
     getFacetsFromURL,
     changeFilters,
     facetsFromUrlToFilter,
+    getComponentProviderByName,
   };
 };

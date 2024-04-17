@@ -1,38 +1,48 @@
-import { DocumentNode } from '@apollo/client';
-import LoginMutation from './LoginMutation';
-import LogoutMutation from './LogoutMutation';
-import CreateNewAccountMutation from './CreateNewAccountMutation';
-import SendResetPasswordMutation from './SendResetPasswordMutation';
-import UpdatePasswordMutation from './UpdatePasswordMutation';
-import ChangePasswordMutation from './ChangePasswordMutation';
-import CartAddItem from './CartAddItem';
-import CartUpdateQuantity from './CartUpdateQuantity';
-import CartRemoveItem from './CartRemoveItem';
-import RegisterUserMutation from './RegisterUserMutation';
-import UpdateMyAccountMutation from './UpdateMyAccountMutation';
-import WishlistAddItem from './WishlistAddItem';
-import WishlistRemoveItem from './WishlistRemoveItem';
-import AddAddress from './AddAddress';
-import UpdateAddress from './UpdateAddress';
-import CreateUpdatePartner from './CreateUpdatePartner';
+import AddAddress from "./AddAddress";
+import AdyenAcquierInfo from "./AdyenAcquirerInfo";
+import AdyenPaymentDetails from "./AdyenPaymentDetails";
+import AdyenPaymentMethods from "./AdyenPaymentMethods";
+import AdyenPayments from "./AdyenPayments";
+import AdyenTransaction from "./AdyenTransaction";
+import CartAddItem from "./CartAddItem";
+import CartRemoveItem from "./CartRemoveItem";
+import CartUpdateQuantity from "./CartUpdateQuantity";
+import ChangePasswordMutation from "./ChangePasswordMutation";
+import CreateNewAccountMutation from "./CreateNewAccountMutation";
+import CreateUpdatePartner from "./CreateUpdatePartner";
+import LoginMutation from "./LoginMutation";
+import LogoutMutation from "./LogoutMutation";
+import RegisterUserMutation from "./RegisterUserMutation";
+import SendResetPasswordMutation from "./SendResetPasswordMutation";
+import UpdateAddress from "./UpdateAddress";
+import UpdateMyAccountMutation from "./UpdateMyAccountMutation";
+import UpdatePasswordMutation from "./UpdatePasswordMutation";
+import WishlistAddItem from "./WishlistAddItem";
+import WishlistRemoveItem from "./WishlistRemoveItem";
+import { DocumentNode } from "@apollo/client";
 
 enum MutationName {
-  LoginMutation = 'LoginMutation',
-  LogoutMutation = 'LogoutMutation',
-  CreateNewAccountMutation = 'CreateNewAccountMutation',
-  SendResetPasswordMutation = 'SendResetPasswordMutation',
-  UpdatePasswordMutation = 'UpdatePasswordMutation',
-  ChangePasswordMutation = 'ChangePasswordMutation',
-  CartAddItem = 'CartAddItem',
-  CartUpdateQuantity = 'CartUpdateQuantity',
-  CartRemoveItem = 'CartRemoveItem',
-  RegisterUserMutation = 'RegisterUserMutation',
-  UpdateMyAccountMutation = 'UpdateMyAccountMutation',
-  WishlistAddItem = 'WishlistAddItem',
-  WishlistRemoveItem = 'WishlistRemoveItem',
-  AddAddress = 'AddAddress',
-  UpdateAddress = 'UpdateAddress',
-  CreateUpdatePartner = 'CreateUpdatePartner',
+  LoginMutation = "LoginMutation",
+  LogoutMutation = "LogoutMutation",
+  CreateNewAccountMutation = "CreateNewAccountMutation",
+  SendResetPasswordMutation = "SendResetPasswordMutation",
+  UpdatePasswordMutation = "UpdatePasswordMutation",
+  ChangePasswordMutation = "ChangePasswordMutation",
+  CartAddItem = "CartAddItem",
+  CartUpdateQuantity = "CartUpdateQuantity",
+  CartRemoveItem = "CartRemoveItem",
+  RegisterUserMutation = "RegisterUserMutation",
+  UpdateMyAccountMutation = "UpdateMyAccountMutation",
+  WishlistAddItem = "WishlistAddItem",
+  WishlistRemoveItem = "WishlistRemoveItem",
+  AddAddress = "AddAddress",
+  UpdateAddress = "UpdateAddress",
+  CreateUpdatePartner = "CreateUpdatePartner",
+  AdyenTransaction = "AdyenTransaction",
+  AdyenAcquierInfo = "AdyenAcquierInfo",
+  AdyenPaymentMethods = "AdyenPaymentMethods",
+  AdyenPaymentDetails = "AdyenPaymentDetails",
+  AdyenPayments = "AdyenPayments",
 }
 
 const Mutations: Record<MutationName, DocumentNode> = {
@@ -52,6 +62,11 @@ const Mutations: Record<MutationName, DocumentNode> = {
   AddAddress,
   UpdateAddress,
   CreateUpdatePartner,
+  AdyenTransaction,
+  AdyenAcquierInfo,
+  AdyenPaymentMethods,
+  AdyenPaymentDetails,
+  AdyenPayments,
 };
 
 export { Mutations, MutationName };

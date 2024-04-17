@@ -1,17 +1,18 @@
-import { DocumentNode } from 'graphql/language';
-import LoadUserQuery from './LoadUserQuery';
-import GetProductVariantQuery from './GetProductVariantQuery';
-import StockLotsQuery from './StockLotsQuery';
+import GetAddressesQuery from './GetAddressesQuery';
 import GetCategoriesQuery from './GetCategoriesQuery';
 import GetCategoryQuery from './GetCategoryQuery';
-import GetProductTemplateListQuery from './GetProductTemplateListQuery';
-import GetProductTemplateQuery from './GetProductTemplateQuery';
-import WishlistLoadQuery from './WishlistLoadQuery';
-import LoadCartQuery from './LoadCartQuery';
-import GetAddressesQuery from './GetAddressesQuery';
 import GetCountriesQuery from './GetCountriesQuery';
 import GetDeliveryMethodsQuery from './GetDeliveryMethodsQuery';
+import GetPaymentConfirmation from './GetPaymentConfirmation';
 import GetPaymentMethodsQuery from './GetPaymentMethodsQuery';
+import GetProductTemplateListQuery from './GetProductTemplateListQuery';
+import GetProductTemplateQuery from './GetProductTemplateQuery';
+import GetProductVariantQuery from './GetProductVariantQuery';
+import LoadCartQuery from './LoadCartQuery';
+import LoadUserQuery from './LoadUserQuery';
+import StockLotsQuery from './StockLotsQuery';
+import WishlistLoadQuery from './WishlistLoadQuery';
+import { DocumentNode } from 'graphql/language';
 
 enum QueryName {
   GetProductVariantQuery = 'GetProductVariantQuery',
@@ -28,6 +29,7 @@ enum QueryName {
   GetCountriesQuery = 'GetCountriesQuery',
   GetDeliveryMethodsQuery = 'GetDeliveryMethodsQuery',
   GetPaymentMethodsQuery = 'GetPaymentMethodsQuery',
+  GetPaymentConfirmation = 'GetPaymentConfirmation',
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
@@ -44,6 +46,7 @@ const Queries: Record<QueryName, DocumentNode> = {
   GetCountriesQuery,
   GetDeliveryMethodsQuery,
   GetPaymentMethodsQuery,
+  GetPaymentConfirmation,
 };
 
 const QueriesToByPassCache: string[] = [QueryName.LoadUserQuery, QueryName.WishlistLoadQuery, QueryName.LoadCartQuery];

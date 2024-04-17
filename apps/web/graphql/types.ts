@@ -9,9 +9,14 @@ import {
   Country,
   ShippingMethod,
   PaymentAcquirer,
-} from './gql/graphql';
-import { H3Error } from 'h3';
-import { _AsyncData } from 'nuxt/dist/app/composables/asyncData';
+  AdyenTransactionResult,
+  AdyenAcquirerInfoResult,
+  AdyenPaymentMethodsResult,
+  AdyenPaymentDetailsResult,
+  AdyenPaymentsResult,
+} from "./gql/graphql";
+import { H3Error } from "h3";
+import { _AsyncData } from "nuxt/dist/app/composables/asyncData";
 
 export type CategoryListResponse = _AsyncData<
   {
@@ -203,6 +208,41 @@ export type DeliveryMethodListResponse = _AsyncData<
 export type PaymentMethodListResponse = _AsyncData<
   {
     paymentAcquirers: PaymentAcquirer[];
+  },
+  H3Error
+>;
+
+export type AdyenTransactionResponse = _AsyncData<
+  {
+    adyenTransaction: AdyenTransactionResult;
+  },
+  H3Error
+>;
+
+export type AdyenAcquirerInfoResponse = _AsyncData<
+  {
+    adyenAcquirerInfo: AdyenAcquirerInfoResult;
+  },
+  H3Error
+>;
+
+export type AdyenPaymentMethodsResponse = _AsyncData<
+  {
+    adyenPaymentMethods: AdyenPaymentMethodsResult;
+  },
+  H3Error
+>;
+
+export type AdyenPaymentDetailsResponse = _AsyncData<
+  {
+    adyenPaymentDetails: AdyenPaymentDetailsResult;
+  },
+  H3Error
+>;
+
+export type AdyenPaymentsResponse = _AsyncData<
+  {
+    adyenPayments: AdyenPaymentsResult;
   },
   H3Error
 >;
