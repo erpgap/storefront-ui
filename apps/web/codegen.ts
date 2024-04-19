@@ -1,10 +1,10 @@
-import { CodegenConfig } from '@graphql-codegen/cli';
+import { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
-      'https://vsfdemo15.labs.odoogap.com/graphql/vsf': {},
+      "https://vsfdemo17.labs.odoogap.com/graphql/vsf": {},
     },
   ],
   config: {
@@ -13,9 +13,9 @@ const config: CodegenConfig = {
   },
   ignoreNoDocuments: true,
   generates: {
-    './graphql/gql/': {
-      documents: ['graphql/**/*.tsx'],
-      preset: 'client',
+    "./graphql/gql/": {
+      documents: ["graphql/**/*.tsx"],
+      preset: "client",
       config: {
         preResolveTypes: true,
         avoidOptionals: true,
