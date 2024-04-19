@@ -2,7 +2,6 @@ export default `
   id
   firstVariant{
     id
-    combinationInfoVariant
     slug
     variantAttributeValues{
       id
@@ -23,7 +22,6 @@ export default `
   description
   image
   imageFilename
-  combinationInfo
   slug
   sku
   jsonLd
