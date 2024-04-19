@@ -8,7 +8,6 @@ export const useProductAttributes: any = () => {
   };
 
   const getSpecialPrice = (firstVariant: VariantPrice) => {
-    console.log(firstVariant.combinationInfoVariant);
     if (
       firstVariant &&
       firstVariant.combinationInfoVariant?.has_discounted_price
