@@ -14,10 +14,10 @@ import {
   SfIconMenu,
   SfInput,
   SfIconSearch,
-} from '@storefront-ui/vue';
-import { onClickOutside } from '@vueuse/core';
-import { useRouter, useRoute } from '#vue-router';
-import { AlgoliaHitType } from '@/types/algolia';
+} from "@storefront-ui/vue";
+import { onClickOutside } from "@vueuse/core";
+import { useRouter, useRoute } from "#vue-router";
+import { AlgoliaHitType } from "@/types/algolia";
 
 defineProps<{ filled?: boolean }>();
 
@@ -26,9 +26,9 @@ const { isOpen, toggle, close } = useDisclosure();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 const { wishlistTotalItems, loadWishlist } = useWishlist();
 
-const { result, search: algoliaSearch } = useAlgoliaSearch('header');
+const { result, search: algoliaSearch } = useAlgoliaSearch("header");
 
-const NuxtLink = resolveComponent('NuxtLink');
+const NuxtLink = resolveComponent("NuxtLink");
 
 const router = useRouter();
 const route = useRoute();
@@ -46,7 +46,7 @@ onMounted(async () => {
 useTrapFocus(drawerRef, {
   activeState: isOpen,
   arrowKeysUpDown: true,
-  initialFocus: 'container',
+  initialFocus: "container",
 });
 
 onClickOutside(menuRef, () => {
@@ -58,31 +58,33 @@ onClickOutside(searchRef, () => {
 });
 
 const filteredCategories = computed(() =>
-  categories?.value?.filter((category: any) => category.name === 'WOMEN' || category.name === 'MEN'),
+  categories?.value?.filter(
+    (category: any) => category.name === "WOMEN" || category.name === "MEN"
+  )
 );
 
 const actionItems = [
   {
     icon: SfIconShoppingCart,
-    label: '',
-    ariaLabel: 'Cart',
-    role: 'button',
+    label: "",
+    ariaLabel: "Cart",
+    role: "button",
     badge: true,
-    link: '/cart',
+    link: "/cart",
   },
   {
     icon: SfIconPerson,
-    label: 'Log in',
-    ariaLabel: 'Log in',
-    role: 'login',
+    label: "Log in",
+    ariaLabel: "Log in",
+    role: "login",
     badge: false,
-    link: '/login',
+    link: "/login",
   },
 ];
 
 const bannerDetails = {
-  image: '/images/watch.png',
-  title: 'New in designer watches',
+  image: "/images/watch.png",
+  title: "New in designer watches",
 };
 
 const handleWishlistSideBar = async () => {
@@ -94,14 +96,15 @@ await loadCategoryList({ filter: { parent: true } });
 const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
 
 const selectHit = (hit: AlgoliaHitType) => {
+  if (!hit?.name && !inputValue.value) return;
   router.push(`/search?search=${hit?.name || inputValue.value}`);
   showSearchClerkRef.value = false;
-  inputValue.value = hit.name;
+  inputValue.value = hit?.name || inputValue.value;
 };
 
-const cartCounter = useCookie<number>('cart-counter');
+const cartCounter = useCookie<number>("cart-counter");
 
-const inputValue = ref(route.query?.search || '');
+const inputValue = ref(route.query?.search || "");
 
 const search = async (event: Event) => {
   const query = (event.target as HTMLInputElement).value;
@@ -116,7 +119,9 @@ const search = async (event: Event) => {
   highlightedIndex.value = -1;
 };
 
-const openSearchClerk = computed(() => searchHits.value?.length > 0 && showSearchClerkRef.value);
+const openSearchClerk = computed(
+  () => searchHits.value?.length > 0 && showSearchClerkRef.value
+);
 
 const setInputValue = (value: string) => {
   inputValue.value = value;
@@ -139,6 +144,12 @@ const highlightNext = () => {
   }
   setInputValue(searchHits.value[highlightedIndex.value]?.name);
 };
+
+watch(
+  () => route,
+  () => (inputValue.value = route.query.search || ""),
+  { deep: true, immediate: true }
+);
 </script>
 
 <template>
@@ -155,7 +166,9 @@ const highlightNext = () => {
         { 'bg-white border-b border-neutral-200': !filled },
       ]"
     >
-      <div class="flex items-center justify-between lg:justify-start h-full w-full narrow-container">
+      <div
+        class="flex items-center justify-between lg:justify-start h-full w-full narrow-container"
+      >
         <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7 -mt-1.5">
           <VsfLogo />
         </NuxtLink>
@@ -172,7 +185,9 @@ const highlightNext = () => {
           <template #suffix>
             <SfIconExpandMore class="hidden md:inline-flex" />
           </template>
-          <span class="hidden md:inline-flex whitespace-nowrap px-2">Browse products</span>
+          <span class="hidden md:inline-flex whitespace-nowrap px-2"
+            >Browse products</span
+          >
         </SfButton>
         <nav>
           <ul>
@@ -192,11 +207,17 @@ const highlightNext = () => {
                   placement="top"
                   class="bg-white p-0 max-h-screen overflow-y-auto lg:!absolute lg:!top-[5rem] max-w-full lg:p-6 top-index"
                 >
-                  <div class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative">
+                  <div
+                    class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative"
+                  >
                     <div
                       class="sticky top-0 flex items-center justify-between py-2 px-4 bg-primary-700 lg:hidden w-full"
                     >
-                      <div class="flex items-center typography-text-lg font-medium text-white">Browse products</div>
+                      <div
+                        class="flex items-center typography-text-lg font-medium text-white"
+                      >
+                        Browse products
+                      </div>
                       <SfButton
                         square
                         variant="tertiary"
@@ -221,7 +242,10 @@ const highlightNext = () => {
                       </h2>
                       <hr class="mb-3.5" />
                       <ul>
-                        <li v-for="{ name, slug, childs: subcategory } in childs" :key="name">
+                        <li
+                          v-for="{ name, slug, childs: subcategory } in childs"
+                          :key="name"
+                        >
                           <SfListItem
                             v-if="subcategory !== null"
                             tag="a"
@@ -238,8 +262,14 @@ const highlightNext = () => {
                     <div
                       class="flex flex-col items-center justify-center bg-neutral-100 lg:rounded-md border-neutral-300 overflow-hidden grow"
                     >
-                      <NuxtImg :src="bannerDetails.image" :alt="bannerDetails.title" class="object-contain" />
-                      <p class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium">
+                      <NuxtImg
+                        :src="bannerDetails.image"
+                        :alt="bannerDetails.title"
+                        class="object-contain"
+                      />
+                      <p
+                        class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium"
+                      >
                         {{ bannerDetails.title }}
                       </p>
                     </div>
@@ -273,7 +303,6 @@ const highlightNext = () => {
             placeholder="Search"
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
-            @input="search"
             @keydown.up.prevent="highlightPrevious"
             @keydown.down.prevent="highlightNext"
             @keydown.enter.prevent="selectHit(searchHits[highlightedIndex])"
@@ -333,7 +362,10 @@ const highlightNext = () => {
                 />
               </template>
             </SfButton>
-            <WishlistSidebar :is-open="wishlistSidebarIsOpen" @close="toggleWishlistSideBar" />
+            <WishlistSidebar
+              :is-open="wishlistSidebarIsOpen"
+              @close="toggleWishlistSideBar"
+            />
           </div>
           <SfButton
             v-for="{ ariaLabel, label, icon, link, badge, role } in actionItems"
@@ -354,7 +386,11 @@ const highlightNext = () => {
                 data-testid="cart-badge"
               />
             </template>
-            <span v-if="role === 'login'" class="hidden lg:inline-flex whitespace-nowrap pr-2">{{ label }}</span>
+            <span
+              v-if="role === 'login'"
+              class="hidden lg:inline-flex whitespace-nowrap pr-2"
+              >{{ label }}</span
+            >
           </SfButton>
         </nav>
         <div v-if="filled">
