@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import {
-  SfButton,
-  SfIconTune,
-  useDisclosure,
-  SfLoaderCircular,
-} from "@storefront-ui/vue";
+import { SfButton, SfIconTune, useDisclosure } from "@storefront-ui/vue";
 import { Product } from "~/graphql";
 
 const route = useRoute();
 
 const { isOpen, open, close } = useDisclosure();
+const { result, search: algoliaSearch } = useAlgoliaSearch("header");
 const {
   loadProductTemplateList,
   organizedAttributes,
@@ -26,6 +22,8 @@ const breadcrumbs = [
   { name: "Search", link: "/" },
 ];
 
+const resultIds = computed(() => result.value?.hits.map((hit) => hit?.id));
+
 const maxVisiblePages = ref(1);
 const setMaxVisiblePages = (isWide: boolean) =>
   (maxVisiblePages.value = isWide ? 5 : 1);
@@ -40,7 +38,10 @@ watch(isTabletScreen, (value) => {
 watch(
   () => route,
   async () => {
-    await loadProductTemplateList(getFacetsFromURL(route.query));
+    await algoliaSearch({ query: route.query.search || "" });
+    await loadProductTemplateList(
+      getFacetsFromURL(route.query, resultIds.value)
+    );
   },
   { deep: true, immediate: true }
 );
