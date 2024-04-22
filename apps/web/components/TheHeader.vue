@@ -16,7 +16,7 @@ import {
   SfIconSearch,
 } from "@storefront-ui/vue";
 import { onClickOutside } from "@vueuse/core";
-import { useRouter, useRoute } from "#vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { AlgoliaHitType } from "@/types/algolia";
 
 defineProps<{ filled?: boolean }>();
@@ -104,7 +104,7 @@ const selectHit = (hit: AlgoliaHitType) => {
 
 const cartCounter = useCookie<number>("cart-counter");
 
-const inputValue = ref(route.query?.search || "");
+const inputValue = ref(route.query.search || "");
 
 const search = async (event: Event) => {
   const query = (event.target as HTMLInputElement).value;
