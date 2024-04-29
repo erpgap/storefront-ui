@@ -125,9 +125,14 @@ export const useUser = () => {
     toast.success('Password updated successfully');
   };
 
+  const isAuthenticated = computed(() => {
+    return userCookie.value?.id;
+  });
+
   return {
     signup,
     logout,
+    isAuthenticated,
     login,
     loadUser,
     resetPassword,
