@@ -21,6 +21,7 @@ export default defineNuxtConfig({
     ],
   },
   modules: [
+    "@nuxtjs/device",
     "nuxt-lazy-hydrate",
     "@nuxtjs/critters",
     "@nuxtjs/tailwindcss",

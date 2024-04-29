@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { SfButton, SfModal, SfIconClose, useDisclosure } from '@storefront-ui/vue';
+import { SfButton, SfIconClose, SfModal } from '@storefront-ui/vue';
 
-const { isOpen: isSearchModalOpen, open: searchModalOpen, close: searchModalClose } = useDisclosure();
+const { isSearchModalOpen, searchModalClose } = useSearch();
 </script>
 
 <template>
-  <TheHeader filled @search-modal-open="searchModalOpen" />
+  <TheHeader />
+
   <main class="w-full narrow-container bg-white">
     <NuxtPage :page-key="(route) => route.fullPath" />
   </main>

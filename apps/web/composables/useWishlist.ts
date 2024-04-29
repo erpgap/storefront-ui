@@ -13,7 +13,6 @@ import { QueryName } from '~/server/queries';
 export const useWishlist = () => {
   const { $sdk } = useNuxtApp();
   const loading = ref(false);
-
   const wishlist = useState<WishlistData>('wishlist', () => ({}) as WishlistData);
 
   const loadWishlist = async () => {
