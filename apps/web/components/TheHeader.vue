@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { useRouter, useRoute } from "#vue-router";
+import { AlgoliaHitType } from "@/types/algolia";
 import {
   SfButton,
   SfDrawer,
@@ -6,6 +8,7 @@ import {
   SfIconShoppingCart,
   SfIconFavorite,
   SfIconPerson,
+  SfIconLogout,
   SfIconClose,
   SfIconExpandMore,
   SfListItem,
@@ -15,9 +18,7 @@ import {
   SfInput,
   SfIconSearch,
 } from "@storefront-ui/vue";
-// import { onClickOutside } from "@vueuse/core";
-import { useRouter, useRoute } from "vue-router";
-import { AlgoliaHitType } from "@/types/algolia";
+import { onClickOutside } from "@vueuse/core";
 
 defineProps<{ filled?: boolean }>();
 
@@ -25,6 +26,9 @@ const { loadCategoryList, categories } = useCategory();
 const { isOpen, toggle, close } = useDisclosure();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 const { wishlistTotalItems, loadWishlist } = useWishlist();
+const { isAuthenticated } = useUser();
+
+const { result, search: algoliaSearch } = useAlgoliaSearch("header");
 
 const NuxtLink = resolveComponent("NuxtLink");
 
@@ -71,9 +75,9 @@ const actionItems = [
     link: "/cart",
   },
   {
-    icon: SfIconPerson,
-    label: "Log in",
-    ariaLabel: "Log in",
+    icon: isAuthenticated.value ? SfIconLogout : SfIconPerson,
+    label: isAuthenticated.value ? "Log out" : "Log in",
+    ariaLabel: isAuthenticated.value ? "Log out" : "Log in",
     role: "login",
     badge: false,
     link: "/login",
@@ -100,7 +104,7 @@ const goToSearch = (hit: AlgoliaHitType) => {
 
 const cartCounter = useCookie<number>("cart-counter");
 
-const inputValue = ref(route.query.search || "");
+const inputValue = ref(route.query?.search || "");
 
 /* const search = async (event: Event) => {
   const query = (event.target as HTMLInputElement).value;
@@ -115,9 +119,9 @@ const inputValue = ref(route.query.search || "");
   highlightedIndex.value = -1;
 }; */
 
-/* const openSearchClerk = computed(
+const openSearchClerk = computed(
   () => searchHits.value?.length > 0 && showSearchClerkRef.value
-); */
+);
 
 /* const setInputValue = (value: string) => {
   inputValue.value = value;
