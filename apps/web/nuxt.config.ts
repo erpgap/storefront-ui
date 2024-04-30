@@ -2,63 +2,64 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      viewport: 'minimum-scale=1, initial-scale=1, width=device-width',
-      title: 'Vue Storefront',
+      viewport: "minimum-scale=1, initial-scale=1, width=device-width",
+      title: "Vue Storefront",
       htmlAttrs: {
-        lang: 'en',
+        lang: "en",
       },
     },
   },
   delayHydration: {
-    mode: 'init',
+    mode: "init",
   },
   components: {
     dirs: [
       {
         isAsync: true,
-        path: 'components',
+        path: "components",
       },
     ],
   },
   modules: [
-    'nuxt-lazy-hydrate',
-    '@nuxtjs/critters',
-    '@nuxtjs/tailwindcss',
-    '@nuxt/image',
-    'nuxt-delay-hydration',
+    "nuxt-lazy-hydrate",
+    "@nuxtjs/critters",
+    "@nuxtjs/tailwindcss",
+    "@nuxt/image",
+    "nuxt-delay-hydration",
+    "nuxt-cron",
     [
-      '@nuxtjs/google-fonts',
+      "@nuxtjs/google-fonts",
       {
         families: {
-          'Red Hat Display': [400, 500, 700],
+          "Red Hat Display": [400, 500, 700],
         },
       },
     ],
-    '@nuxtjs/fontaine',
+    "@nuxtjs/fontaine",
     [
-      '@nuxtjs/i18n',
+      "@nuxtjs/i18n",
       {
         locales: [
           {
-            code: 'en',
-            file: 'en.json',
+            code: "en",
+            file: "en.json",
           },
         ],
-        strategy: 'no_prefix',
+        strategy: "no_prefix",
         lazy: true,
-        langDir: 'lang',
-        defaultLocale: 'en',
+        langDir: "lang",
+        defaultLocale: "en",
       },
     ],
     // '@storyblok/nuxt',
-    'nuxt-lodash',
+    "nuxt-lodash",
     [
-      '@nuxtjs/algolia',
+      "@nuxtjs/algolia",
       {
         apiKey: process.env.NUXT_ALGOLIA_API_KEY,
         applicationId: process.env.NUXT_ALGOLIA_APPLICATION_ID,
         instantSearch: {
-          theme: 'algolia',
+          theme: "algolia",
         },
       },
     ],
@@ -72,12 +73,12 @@ export default defineNuxtConfig({
   image: {
     providers: {
       odooProvider: {
-        name: 'odooProvider',
-        provider: '~/providers/odoo-provider.ts',
+        name: "odooProvider",
+        provider: "~/providers/odoo-provider.ts",
       },
     },
     screens: {
-      '2xl': 1536,
+      "2xl": 1536,
       xxl: 1440,
       xl: 1280,
       lg: 1024,
@@ -86,58 +87,59 @@ export default defineNuxtConfig({
       xs: 376,
     },
   },
+  cron: {},
   build: {
     transpile: [
-      'tslib',
-      '@apollo/client',
-      '@apollo/client/core',
-      '@vue/apollo-composable',
-      '@vue/apollo-option',
-      'ts-invariant',
-      'vue-toastification',
-      '@erpgap/odoo-sdk-api-client',
+      "tslib",
+      "@apollo/client",
+      "@apollo/client/core",
+      "@vue/apollo-composable",
+      "@vue/apollo-option",
+      "ts-invariant",
+      "vue-toastification",
+      "@erpgap/odoo-sdk-api-client",
     ],
   },
   devtools: {
     enabled: true,
   },
   runtimeConfig: {
-    shouldByPassCacheQueryNames: ['LoadCartQuery', 'WishlistLoadQuery'],
+    shouldByPassCacheQueryNames: ["LoadCartQuery", "WishlistLoadQuery"],
     public: {
-      odooBaseImageUrl: '',
-      odooBaseUrl: '',
+      odooBaseImageUrl: "",
+      odooBaseUrl: "",
     },
   },
   routeRules: {
-    '/': { swr: true },
-    '/_ipx/**': {
-      headers: { 'cache-control': 'public, max-age=31536000, immutable' },
+    "/": { swr: true },
+    "/_ipx/**": {
+      headers: { "cache-control": "public, max-age=31536000, immutable" },
     },
-    '/icons/**': {
-      headers: { 'cache-control': 'public, max-age=31536000, immutable' },
+    "/icons/**": {
+      headers: { "cache-control": "public, max-age=31536000, immutable" },
     },
-    '/favicon.ico': {
-      headers: { 'cache-control': 'public, max-age=31536000, immutable' },
+    "/favicon.ico": {
+      headers: { "cache-control": "public, max-age=31536000, immutable" },
     },
   },
   nitro: {
     compressPublicAssets: true,
     storage: {
       cache: {
-        driver: 'redis',
+        driver: "redis",
         url: process.env.REDIS_URL,
       },
     },
     devStorage: {
       cache: {
-        driver: 'redis',
+        driver: "redis",
         url: process.env.REDIS_URL,
       },
     },
   },
   vite: {
     optimizeDeps: {
-      include: ['lodash-es'],
+      include: ["lodash-es"],
     },
   },
 });
