@@ -3,12 +3,8 @@ import {
   SfBadge,
   SfButton,
   SfDrawer,
-  SfIconClose,
-  SfIconExpandMore,
-  SfIconFavorite,
   SfIconLogout,
   SfIconPerson,
-  SfIconSearch,
   SfIconShoppingCart,
   SfInput,
   SfListItem,
@@ -27,8 +23,7 @@ const { isAuthenticated } = useUser();
 
 const menuRef = ref();
 const drawerRef = ref();
-const formSearchTemplateRef = ref();
-const showSearchClerkRef = ref();
+const formSearchTemplateRef = ref(null);
 
 const {
   searchInputValue,
@@ -38,8 +33,8 @@ const {
   search,
   searchHits,
   selectHit,
-  isSearchOpen,
-} = useSearch(showSearchClerkRef);
+  showResultSearch,
+} = useSearch(formSearchTemplateRef);
 
 const NuxtLink = resolveComponent('NuxtLink');
 
@@ -95,9 +90,7 @@ const cartCounter = useCookie<number>('cart-counter');
   />
   <header
     ref="menuRef"
-    :class="[
-      'text-white h-14 md:h-20 flex z-50 md:sticky md:top-0 md:shadow-md flex-wrap md:flex-nowrap w-full py-2 md:py-5 border-0 bg-primary-700 border-neutral-200 md:z-10',
-    ]"
+    class="text-white h-14 md:h-20 flex z-50 md:sticky md:top-0 md:shadow-md flex-wrap md:flex-nowrap w-full py-2 md:py-5 border-0 bg-primary-700 border-neutral-200 md:z-10"
   >
     <div class="flex items-center justify-between lg:justify-start h-full w-full narrow-container">
       <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7 -mt-1.5">
@@ -113,7 +106,7 @@ const cartCounter = useCookie<number>('cart-counter');
         @click="toggle()"
       >
         <template #suffix>
-          <SfIconExpandMore class="hidden md:inline-flex" />
+          <Icon name="ion:chevron-down-sharp" />
         </template>
         <span class="hidden md:inline-flex whitespace-nowrap px-2">Browse products</span>
       </SfButton>
@@ -179,7 +172,7 @@ const cartCounter = useCookie<number>('cart-counter');
                     class="hidden lg:block lg:absolute lg:right-0 lg:top-0 hover:bg-white active:bg-white"
                     @click="close()"
                   >
-                    <SfIconClose class="text-neutral-500" />
+                    <Icon name="ion:close" class="text-neutral-500" size="20px" />
                   </SfButton>
                 </div>
               </SfDrawer>
@@ -214,7 +207,7 @@ const cartCounter = useCookie<number>('cart-counter');
                 type="submit"
                 class="rounded-l-none hover:bg-transparent active:bg-transparent"
               >
-                <SfIconSearch />
+                <Icon name="ion:search" size="20px" />
               </SfButton>
             </span>
           </template>
@@ -229,7 +222,7 @@ const cartCounter = useCookie<number>('cart-counter');
           leave-to-class="-translate-x-full md:translate-x-0 md:opacity-0"
         >
           <SearchClerk
-            v-if="isSearchOpen"
+            v-if="showResultSearch"
             :hits="searchHits"
             :highlighted-index="highlightedIndex"
             @select="selectHit"
@@ -248,7 +241,7 @@ const cartCounter = useCookie<number>('cart-counter');
             @click="handleWishlistSideBar"
           >
             <template #prefix>
-              <SfIconFavorite class="text-white" />
+              <Icon name="mdi:heart-outline" size="22px" />
               <SfBadge
                 :content="wishlistTotalItems"
                 class="outline outline-primary-700 bg-white !text-neutral-900 group-hover:outline-primary-800 group-active:outline-primary-900 flex justify-center"
