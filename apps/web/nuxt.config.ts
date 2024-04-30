@@ -21,6 +21,7 @@ export default defineNuxtConfig({
     ],
   },
   modules: [
+    "nuxt-icon",
     "@nuxtjs/device",
     "nuxt-lazy-hydrate",
     "@nuxtjs/critters",

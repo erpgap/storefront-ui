@@ -2,7 +2,7 @@ import { useToggle } from '@vueuse/core';
 import { AlgoliaHitType } from '~/types/algolia';
 import { onClickOutside } from '@vueuse/core';
 
-export const useSearch = (formSearchTemplateRef?: Ref) => {
+export const useSearch = (formSearchTemplateRef?: any) => {
   const route = useRoute();
   const router = useRouter();
 
@@ -16,7 +16,7 @@ export const useSearch = (formSearchTemplateRef?: Ref) => {
   const { result, search: algoliaSearch } = useAlgoliaSearch('header');
   const searchInputValue = ref((route.query?.search as String) || '');
   const highlightedIndex = ref(-1);
-  const showSearchClerkRef = ref();
+  const showResultSearch = ref(false);
   const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
   const isSearchOpen = computed(() => searchHits.value?.length > 0);
 
@@ -44,7 +44,7 @@ export const useSearch = (formSearchTemplateRef?: Ref) => {
   const selectHit = (hit: AlgoliaHitType) => {
     if (!hit?.name && !searchInputValue.value) return;
     router.push(`/search?search=${hit?.name || searchInputValue.value}`);
-    showSearchClerkRef.value = false;
+    showResultSearch.value = false;
     searchInputValue.value = hit?.name || searchInputValue.value;
   };
 
@@ -73,9 +73,7 @@ export const useSearch = (formSearchTemplateRef?: Ref) => {
   );
 
   onClickOutside(formSearchTemplateRef, () => {
-    console.log(123);
-
-    showSearchClerkRef.value = false;
+    showResultSearch.value = false;
   });
 
   return {
@@ -93,6 +91,6 @@ export const useSearch = (formSearchTemplateRef?: Ref) => {
     search,
     searchHits,
     selectHit,
-    isSearchOpen,
+    showResultSearch,
   };
 };
