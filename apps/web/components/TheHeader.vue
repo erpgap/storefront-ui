@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 const { isMobile, isDesktopOrTablet } = useDevice();
 const { loadCategoryList, categories } = useCategory();
-const { loadWishlist } = useWishlist();
 
 provide(
   "filteredTopCategories",
@@ -11,10 +10,6 @@ provide(
 );
 
 await loadCategoryList({ filter: { parent: true } } as any);
-
-onMounted(async () => {
-  await loadWishlist();
-});
 </script>
 
 <template>
