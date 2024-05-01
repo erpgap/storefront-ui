@@ -56,6 +56,7 @@ const handleWishlistSideBar = async () => {
       </template>
       {{ $t('home') }}
     </SfButton>
+
     <SfButton
       key="wishlist"
       variant="tertiary"

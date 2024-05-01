@@ -1,6 +1,6 @@
+import { onClickOutside } from '@vueuse/core';
 import { useToggle } from '@vueuse/core';
 import { AlgoliaHitType } from '~/types/algolia';
-import { onClickOutside } from '@vueuse/core';
 
 export const useSearch = (formSearchTemplateRef?: any) => {
   const route = useRoute();

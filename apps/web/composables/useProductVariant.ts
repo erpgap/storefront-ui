@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { AttributeValue, Product, ProductVariantResponse, QueryProductVariantArgs } from '~/graphql';
 import { QueryName } from '~/server/queries';
 
@@ -6,7 +5,7 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   const { $sdk } = useNuxtApp();
 
   const loadingProductVariant = ref(false);
-  const productVariant = useState<Product>(`product-${slugWithCombinationIds}`, () => ({}) as Product);
+  const productVariant = useState<Product>(`product-${slugWithCombinationIds}`, () => ({} as Product));
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
     loadingProductVariant.value = true;
