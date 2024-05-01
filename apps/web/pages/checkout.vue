@@ -17,14 +17,14 @@ import { AddressEnum } from "~/graphql";
 const NuxtLink = resolveComponent("NuxtLink");
 const { isOpen, open, close } = useDisclosure();
 const { cart, loadCart } = useCart();
-const { loadAddressesByType, mailingAddresses, billingAddresses } =
+const { loadAddressesByType, shippingAddresses, billingAddresses } =
   useAddresses();
 const { loadCountryList } = useCountry();
 const { updatePartner } = usePartner();
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
 const {
   loadPaymentMethods,
-  paymentMethods,
+  paymentProviders,
   loading: paymentLoading,
 } = usePayment();
 
@@ -35,7 +35,7 @@ await loadDeliveryMethods();
 await loadPaymentMethods();
 await loadCountryList();
 
-const savedMailingAddress = computed(() => mailingAddresses.value[0] || null);
+const savedMailingAddress = computed(() => shippingAddresses.value[0] || null);
 const savedBillingAddress = computed(() => billingAddresses.value[0] || null);
 
 const partnerData = computed(() => {
@@ -71,7 +71,7 @@ const updatePartnerData = async ({
 };
 
 onMounted(() => {
-  if (paymentMethods.value.length) {
+  if (paymentProviders.value.length) {
     showPaymentModal.value = true;
   }
 });
@@ -239,7 +239,7 @@ const selectedProvider = ref(1);
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
           <CheckoutPaymentMethod
             :active-payment="selectedProvider"
-            :payment-methods="paymentMethods"
+            :payment-methods="paymentProviders"
             @update:active-payment="selectedProvider = $event"
           />
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0 mb-10" />
@@ -274,8 +274,8 @@ const selectedProvider = ref(1);
             </i18n-t>
           </p>
           <LazyCheckoutAdyenPaymentProvider
-            v-if="showPaymentModal && paymentMethods[0]"
-            :provider="paymentMethods[0]"
+            v-if="showPaymentModal && paymentProviders[0]"
+            :provider="paymentProviders[0]"
             :cart="cart"
             @is-payment-ready="($event) => (isPaymentReady = $event)"
             @provider-payment-handler="

@@ -15,7 +15,10 @@ const cartCounter = useCookie<number>("cart-counter");
     square
   >
     <template #prefix>
-      <Icon name="ion:cart-outline" size="22px" />
+      <Icon
+        :name="cartCounter > 0 ? 'ion:cart-sharp' : 'ion:cart-outline'"
+        size="22px"
+      />
       <SfBadge
         :content="cartCounter || 0"
         class="outline outline-primary-700 bg-white !text-neutral-900 group-hover:outline-primary-800 group-active:outline-primary-900 flex justify-center"

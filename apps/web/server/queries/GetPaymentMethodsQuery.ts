@@ -1,16 +1,19 @@
-import { gql } from '@apollo/client/core';
+import { gql } from "@apollo/client/core";
 
 export default gql`
   query {
-    paymentAcquirers {
+    paymentProviders {
       id
-      provider
       name
-      displayAs
-      paymentIcons {
+      paymentMethods {
         id
         name
         image
+        brands {
+          id
+          name
+          image
+        }
       }
     }
   }
