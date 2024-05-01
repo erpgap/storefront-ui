@@ -4,6 +4,8 @@ export default defineNuxtConfig({
     head: {
       viewport: "minimum-scale=1, initial-scale=1, width=device-width",
       title: "Vue Storefront",
+      viewport: "minimum-scale=1, initial-scale=1, width=device-width",
+      title: "Vue Storefront",
       htmlAttrs: {
         lang: "en",
       },
@@ -64,7 +66,7 @@ export default defineNuxtConfig({
         },
       },
     ],
-    '@nuxt/eslint',
+    "@nuxt/eslint",
   ],
   // storyblok: {
   //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
@@ -113,7 +115,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    "/": { swr: true },
+    "/": { swr: 3600 },
     "/_ipx/**": {
       headers: { "cache-control": "public, max-age=31536000, immutable" },
     },
