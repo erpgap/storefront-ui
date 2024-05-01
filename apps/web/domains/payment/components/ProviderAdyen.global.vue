@@ -7,6 +7,7 @@
 <script lang="ts" setup>
 import AdyenCheckout from "@adyen/adyen-web";
 import "@adyen/adyen-web/dist/adyen.css";
+import { PaymentProvider } from "~/graphql";
 
 interface AdyenDropinType {
   handleAction: (action: any) => void;
@@ -18,7 +19,7 @@ interface AdyenDropinType {
 const props = defineProps({
   provider: {
     required: true,
-    type: Object,
+    type: Object as PropType<PaymentProvider>,
   },
   cart: {
     required: true,
@@ -46,6 +47,8 @@ const {
   transaction,
   getAdyenPaymentDetails,
 } = useAdyenDirectPayment(props.provider.id, props.cart?.order?.id);
+
+console.log(123123);
 
 onMounted(async () => {
   loading.value = true;
@@ -80,7 +83,7 @@ onMounted(async () => {
     },
     onAdditionalDetails: async (state: any) => {
       await getAdyenPaymentDetails({
-        acquirerId: props.provider.id,
+        providerId: props.provider.id,
         transactionReference: transaction.value.reference,
         paymentDetails: state.data,
       });
@@ -97,7 +100,7 @@ onMounted(async () => {
       emit("isPaymentReady", false);
       emit("paymentLoading", true);
       const response = await adyenMakeDirectPayment({
-        acquirerId: props.provider.id,
+        providerId: props.provider.id,
         transactionReference: transaction.value.reference,
         paymentMethod: state.data.paymentMethod,
         accessToken: transaction.value.access_token,

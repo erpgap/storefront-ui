@@ -5,6 +5,7 @@ export default gql`
     paymentProviders {
       id
       name
+      code
       paymentMethods {
         id
         name

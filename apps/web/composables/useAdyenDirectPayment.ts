@@ -85,19 +85,10 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
   const getAdyenPaymentDetails = async (
     params: MutationAdyenPaymentDetailsArgs
   ) => {
-    const { data } = await useAsyncData("payment-details", async () => {
-      const { data } = await $sdk().odoo.mutation<
-        MutationAdyenPaymentDetailsArgs,
-        AdyenPaymentDetailsResponse
-      >(
-        {
-          mutationName: MutationName.AdyenPaymentDetails,
-        },
-        { ...params }
-      );
-
-      return data.value;
-    });
+    const { data } = await $sdk().odoo.mutation<
+      MutationAdyenPaymentDetailsArgs,
+      AdyenPaymentDetailsResponse
+    >({ mutationName: MutationName.AdyenPaymentDetails }, { ...params });
 
     paymentDetails.value =
       data?.value?.adyenPaymentDetails?.adyenPaymentDetails || {};

@@ -1,9 +1,9 @@
 import gql from "graphql-tag";
 
 export default gql`
-  mutation ($acquirerId: Int!, $tokenizationRequested: Boolean = false) {
+  mutation ($providerId: Int!, $tokenizationRequested: Boolean = false) {
     adyenTransaction(
-      acquirerId: $acquirerId
+      providerId: $providerId
       tokenizationRequested: $tokenizationRequested
     ) {
       transaction
