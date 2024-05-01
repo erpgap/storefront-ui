@@ -64,6 +64,7 @@ export default defineNuxtConfig({
         },
       },
     ],
+    '@nuxt/eslint',
   ],
   // storyblok: {
   //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
@@ -141,6 +142,11 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: ["lodash-es"],
+    },
+  },
+  eslint: {
+    config: {
+      stylistic: true,
     },
   },
 });

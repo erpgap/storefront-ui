@@ -11,10 +11,8 @@
     "postinstall": "nuxt prepare",
     "codegen": "graphql-codegen",
     "predev": "yarn codegen",
-    "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
-    "lint:prettier": "prettier --check .",
-    "lint": "yarn lint:js && yarn lint:prettier",
-    "lintfix": "prettier --write --list-different . && yarn lint:js --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
@@ -22,7 +20,6 @@
     "@erpgap/odoo-sdk-api-client": "^0.7.0",
     "@kgierke/nuxt-basic-auth": "^1.4.0",
     "@nuxt/devtools": "^1.0.0",
-    "@nuxt/eslint-config": "^0.2.0",
     "@nuxt/image": "^1.0.0",
     "@nuxtjs/algolia": "^1.10.1",
     "@nuxtjs/critters": "^0.6.0",
@@ -54,14 +51,10 @@
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@nuxt/eslint": "^0.3.10",
     "@nuxtjs/device": "^3.1.1",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
     "nuxt": "^3.11.2",
     "nuxt-icon": "^0.6.10",
-    "prettier": "^3.2.5",
     "typescript": "^5.3.3"
   },
   "overrides": {
