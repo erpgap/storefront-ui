@@ -29,7 +29,7 @@ export const usePayment = () => {
     });
 
     if (data.value) {
-      return data.value;
+      return data.value?.paymentConfirmation;
     }
     loading.value = false;
   };

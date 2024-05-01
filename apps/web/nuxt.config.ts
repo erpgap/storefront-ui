@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  extends: ["./domains/payment"],
   app: {
     head: {
       viewport: "minimum-scale=1, initial-scale=1, width=device-width",
