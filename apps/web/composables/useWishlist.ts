@@ -30,7 +30,9 @@ export const useWishlist = () => {
     loading.value = false;
 
     wishlist.value = data?.value?.wishlistItems || [];
-    wishlistCounter.value = Number(data?.value?.wishlistItems?.length || 0);
+    wishlistCounter.value = Number(
+      data?.value?.wishlistItems?.wishlistItems?.length || 0
+    );
   };
 
   const wishlistAddItem = async (productId: number) => {
@@ -42,7 +44,9 @@ export const useWishlist = () => {
     loading.value = false;
 
     wishlist.value = data?.value.wishlistAddItem;
-    wishlistCounter.value = Number(data?.value?.wishlistAddItem?.length || 0);
+    wishlistCounter.value = Number(
+      data?.value?.wishlistAddItem?.wishlistItems?.length || 0
+    );
   };
 
   const getProductFromProductId = (productId: number) => {
@@ -70,7 +74,7 @@ export const useWishlist = () => {
 
     wishlist.value = data?.value.wishlistRemoveItem;
     wishlistCounter.value = Number(
-      data?.value?.wishlistRemoveItem?.length || 0
+      data?.value?.wishlistRemoveItem?.wishlistItems?.length || 0
     );
   };
 

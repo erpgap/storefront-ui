@@ -19,9 +19,12 @@ const handleOpenWishListSidebar = async () => {
     @click="handleOpenWishListSidebar"
   >
     <template #prefix>
-      <Icon name="mdi:heart-outline" size="22px" />
+      <Icon
+        :name="wishlistCounter > 0 ? 'mdi:heart' : 'mdi:heart-outline'"
+        size="22px"
+      />
       <SfBadge
-        :content="wishlistCounter"
+        :content="wishlistCounter || 0"
         class="outline outline-primary-700 bg-white !text-neutral-900 group-hover:outline-primary-800 group-active:outline-primary-900 flex justify-center"
         data-testid="wishlist-badge"
       />
