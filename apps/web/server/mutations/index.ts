@@ -1,8 +1,8 @@
 import AddAddress from "./AddAddress";
-import AdyenAcquierInfo from "./AdyenAcquirerInfo";
 import AdyenPaymentDetails from "./AdyenPaymentDetails";
 import AdyenPaymentMethods from "./AdyenPaymentMethods";
 import AdyenPayments from "./AdyenPayments";
+import AdyenProviderInfo from "./AdyenProviderInfo";
 import AdyenTransaction from "./AdyenTransaction";
 import CartAddItem from "./CartAddItem";
 import CartRemoveItem from "./CartRemoveItem";
@@ -39,7 +39,7 @@ enum MutationName {
   UpdateAddress = "UpdateAddress",
   CreateUpdatePartner = "CreateUpdatePartner",
   AdyenTransaction = "AdyenTransaction",
-  AdyenAcquierInfo = "AdyenAcquierInfo",
+  AdyenProviderInfo = "AdyenProviderInfo",
   AdyenPaymentMethods = "AdyenPaymentMethods",
   AdyenPaymentDetails = "AdyenPaymentDetails",
   AdyenPayments = "AdyenPayments",
@@ -63,7 +63,7 @@ const Mutations: Record<MutationName, DocumentNode> = {
   UpdateAddress,
   CreateUpdatePartner,
   AdyenTransaction,
-  AdyenAcquierInfo,
+  AdyenProviderInfo,
   AdyenPaymentMethods,
   AdyenPaymentDetails,
   AdyenPayments,

@@ -1,108 +1,118 @@
 import {
   PaymentTransaction,
-  PaymentAcquirer,
+  PaymentProvider,
   AdyenPaymentMethodsResponse,
   AdyenTransactionResponse,
-  AdyenAcquirerInfoResponse,
+  AdyenProviderInfoResponse,
   MutationAdyenPaymentMethodsArgs,
   MutationAdyenPaymentDetailsArgs,
-  MutationAdyenAcquirerInfoArgs,
+  MutationAdyenProviderInfoArgs,
   MutationAdyenTransactionArgs,
   AdyenPaymentDetailsResponse,
   Mutation,
   AdyenPaymentsResponse,
   MutationAdyenPaymentsArgs,
-} from '~/graphql';
-import { MutationName } from '~/server/mutations';
+} from "~/graphql";
+import { MutationName } from "~/server/mutations";
 
-export interface IUseAdyenDropInPayment {
-  transaction: Ref<any>;
-  acquirerInfo: Ref<any>;
-  paymentMethods: Ref<any>;
-  openAdyenTransaction: () => any;
-  getAdyenAcquirerInfo: () => any;
-  getAdyenPaymentMethods: () => any;
-  getAdyenPaymentDetails: (params: MutationAdyenPaymentDetailsArgs) => any;
-  adyenMakeDirectPayment: (params: MutationAdyenPaymentsArgs) => any;
-  setTransaction: (transaction: PaymentTransaction) => any;
-}
-
-const useAdyenDirectPayment = (acquirerId: number, cartId?: number): IUseAdyenDropInPayment => {
+const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
   const { $sdk } = useNuxtApp();
 
-  const transaction = useState<PaymentTransaction>(`transaction-${cartId}`, () => ({}) as PaymentTransaction);
-  const acquirerInfo = useState<PaymentAcquirer>(`acquirerInfo-${cartId}`, () => ({}) as PaymentAcquirer);
-  const paymentMethods = useState<Mutation['adyenPaymentMethods'][]>(`paymentMethods-${cartId}`, () => []);
-  const paymentDetails = useState<Mutation['adyenPaymentDetails']>(
+  const transaction = useState<PaymentTransaction>(
+    `transaction-${cartId}`,
+    () => ({} as PaymentTransaction)
+  );
+  const acquirerInfo = useState<PaymentProvider>(
+    `acquirerInfo-${cartId}`,
+    () => ({} as PaymentProvider)
+  );
+  const paymentMethods = useState<Mutation["adyenPaymentMethods"][]>(
+    `paymentMethods-${cartId}`,
+    () => []
+  );
+  const paymentDetails = useState<Mutation["adyenPaymentDetails"]>(
     `paymentDetails-${cartId}`,
-    () => ({}) as Mutation['adyenPaymentDetails'],
+    () => ({} as Mutation["adyenPaymentDetails"])
   );
 
   const openAdyenTransaction = async () => {
-    const { data } = await useAsyncData('payment-transaction', async () => {
-      const { data } = await $sdk().odoo.mutation<MutationAdyenTransactionArgs, AdyenTransactionResponse>(
-        {
-          mutationName: MutationName.AdyenTransaction,
-        },
-        { acquirerId },
-      );
-
-      return data.value;
-    });
+    const { data } = await $sdk().odoo.mutation<
+      MutationAdyenTransactionArgs,
+      AdyenTransactionResponse
+    >(
+      {
+        mutationName: MutationName.AdyenTransaction,
+      },
+      { providerId }
+    );
 
     transaction.value = data.value?.adyenTransaction?.transaction || {};
   };
 
   const getAdyenAcquirerInfo = async () => {
-    const { data } = await useAsyncData('acquirer-info', async () => {
-      const { data } = await $sdk().odoo.mutation<MutationAdyenAcquirerInfoArgs, AdyenAcquirerInfoResponse>(
+    const { data } = await useAsyncData("acquirer-info", async () => {
+      const { data } = await $sdk().odoo.mutation<
+        MutationAdyenProviderInfoArgs,
+        AdyenProviderInfoResponse
+      >(
         {
-          mutationName: MutationName.AdyenAcquierInfo,
+          mutationName: MutationName.AdyenProviderInfo,
         },
-        { acquirerId },
+        { providerId }
       );
 
       return data.value;
     });
 
-    acquirerInfo.value = data?.value?.adyenAcquirerInfo?.adyenAcquirerInfo || {};
+    acquirerInfo.value =
+      data?.value?.adyenAcquirerInfo?.adyenAcquirerInfo || {};
   };
 
   const getAdyenPaymentMethods = async () => {
-    const { data } = await useAsyncData('payment-methods', async () => {
-      const { data } = await $sdk().odoo.mutation<MutationAdyenPaymentMethodsArgs, AdyenPaymentMethodsResponse>(
-        { mutationName: MutationName.AdyenPaymentMethods },
-        { acquirerId },
-      );
+    const { data } = await useAsyncData("payment-methods", async () => {
+      const { data } = await $sdk().odoo.mutation<
+        MutationAdyenPaymentMethodsArgs,
+        AdyenPaymentMethodsResponse
+      >({ mutationName: MutationName.AdyenPaymentMethods }, { providerId });
 
       return data.value;
     });
 
-    paymentMethods.value = data?.value?.adyenPaymentMethods?.adyenPaymentMethods || [];
+    paymentMethods.value =
+      data?.value?.adyenPaymentMethods?.adyenPaymentMethods || [];
   };
 
-  const getAdyenPaymentDetails = async (params: MutationAdyenPaymentDetailsArgs) => {
-    const { data } = await useAsyncData('payment-details', async () => {
-      const { data } = await $sdk().odoo.mutation<MutationAdyenPaymentDetailsArgs, AdyenPaymentDetailsResponse>(
+  const getAdyenPaymentDetails = async (
+    params: MutationAdyenPaymentDetailsArgs
+  ) => {
+    const { data } = await useAsyncData("payment-details", async () => {
+      const { data } = await $sdk().odoo.mutation<
+        MutationAdyenPaymentDetailsArgs,
+        AdyenPaymentDetailsResponse
+      >(
         {
           mutationName: MutationName.AdyenPaymentDetails,
         },
-        { ...params },
+        { ...params }
       );
 
       return data.value;
     });
 
-    paymentDetails.value = data?.value?.adyenPaymentDetails?.adyenPaymentDetails || {};
+    paymentDetails.value =
+      data?.value?.adyenPaymentDetails?.adyenPaymentDetails || {};
   };
 
   const adyenMakeDirectPayment = async (params: MutationAdyenPaymentsArgs) => {
-    const { data } = await useAsyncData('make-direct-payment', async () => {
-      const { data } = await $sdk().odoo.mutation<MutationAdyenPaymentsArgs, AdyenPaymentsResponse>(
+    const { data } = await useAsyncData("make-direct-payment", async () => {
+      const { data } = await $sdk().odoo.mutation<
+        MutationAdyenPaymentsArgs,
+        AdyenPaymentsResponse
+      >(
         {
           mutationName: MutationName.AdyenPayments,
         },
-        { ...params },
+        { ...params }
       );
 
       return data.value;
@@ -111,7 +121,8 @@ const useAdyenDirectPayment = (acquirerId: number, cartId?: number): IUseAdyenDr
     return data?.value?.adyenPayments?.adyenPayments || {};
   };
 
-  const setTransaction = (transactionParam: PaymentTransaction) => (transaction.value = transactionParam);
+  const setTransaction = (transactionParam: PaymentTransaction) =>
+    (transaction.value = transactionParam);
 
   return {
     getAdyenPaymentMethods,
