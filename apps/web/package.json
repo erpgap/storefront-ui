@@ -11,7 +11,8 @@
     "postinstall": "nuxt prepare",
     "codegen": "graphql-codegen",
     "predev": "yarn codegen",
-    "lint": "eslint .",
+    "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
+    "lint": "eslint . && yarn lint:js",
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
@@ -53,9 +54,11 @@
     "@graphql-typed-document-node/core": "^3.2.0",
     "@nuxt/eslint": "^0.3.10",
     "@nuxtjs/device": "^3.1.1",
+    "@typescript-eslint/parser": "^7.1.0",
     "nuxt": "^3.11.2",
     "nuxt-icon": "^0.6.10",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5",
+    "vue-tsc": "^1"
   },
   "overrides": {
     "react-json-view": {
