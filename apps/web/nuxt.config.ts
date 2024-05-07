@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@nuxt/image",
     "nuxt-delay-hydration",
-    "nuxt-cron",
     [
       "@nuxtjs/google-fonts",
       {
@@ -87,7 +86,6 @@ export default defineNuxtConfig({
       xs: 376,
     },
   },
-  cron: {},
   build: {
     transpile: [
       "tslib",
