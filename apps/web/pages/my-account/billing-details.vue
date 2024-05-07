@@ -1,11 +1,10 @@
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <div v-for="address in billingAddresses" :key="address.id">
-    <AccountProfileData
-      class="col-span-3"
-      :header="$t('account.accountSettings.billingDetails.billingAddress')"
-      :button-text="$t('account.accountSettings.billingDetails.edit')"
+    <AccountAddressData
       @on-click="open"
+      :header="$t('account.accountSettings.shippingDetails.shippingAddress')"
+      :button-text="$t('account.accountSettings.personalData.edit')"
     >
       <p>
         {{ address?.name }}
@@ -16,8 +15,18 @@
         {{ address?.city }}, {{ address?.state?.name }}
         {{ address?.zip }}
       </p>
-    </AccountProfileData>
-    <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
+      <template v-slot:footer>
+        <SfButton
+          :disabled="currentBillingAddress?.selectAddress?.id === address.id"
+          variant="secondary"
+          size="sm"
+          class="self-start"
+          @click="selectCurrentAddress({ id: address.id }, AddressEnum.Billing)"
+          >Current</SfButton
+        >
+      </template>
+    </AccountAddressData>
+
     <UiOverlay v-if="isOpen" :visible="isOpen">
       <SfModal
         v-model="isOpen"
@@ -27,28 +36,51 @@
         aria-labelledby="address-modal-title"
       >
         <header>
-          <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
+          <SfButton
+            square
+            variant="tertiary"
+            class="absolute right-2 top-2"
+            @click="close"
+          >
             <SfIconClose />
           </SfButton>
-          <h3 id="address-modal-title" class="text-neutral-900 text-lg md:text-2xl font-bold mb-4">
-            {{ $t('account.accountSettings.billingDetails.billingAddress') }}
+          <h3
+            id="address-modal-title"
+            class="text-neutral-900 text-lg md:text-2xl font-bold mb-4"
+          >
+            {{ $t("account.accountSettings.billingDetails.billingAddress") }}
           </h3>
         </header>
-        <FormAddAddress :saved-address="address" type="billingAddress" @on-save="close" @on-close="close" />
+        <FormAddAddress
+          :saved-address="address"
+          type="billingAddress"
+          @on-save="close"
+          @on-close="close"
+        />
       </SfModal>
     </UiOverlay>
   </div>
 </template>
 
 <script setup lang="ts">
-import { SfButton, SfIconClose, SfModal, useDisclosure } from '@storefront-ui/vue';
-import { AddressEnum } from '~/graphql';
+import {
+  SfButton,
+  SfIconClose,
+  SfModal,
+  useDisclosure,
+} from "@storefront-ui/vue";
+import { AddressEnum } from "~/graphql";
 
 definePageMeta({
-  layout: 'account',
+  layout: "account",
 });
 const { isOpen, open, close } = useDisclosure();
-const { billingAddresses, loadAddressesByType } = useAddresses();
+const {
+  billingAddresses,
+  currentBillingAddress,
+  selectCurrentAddress,
+  loadAddressesByType,
+} = useAddresses();
 
 await loadAddressesByType(AddressEnum.Billing);
 </script>

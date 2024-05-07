@@ -19,6 +19,7 @@ import UpdateMyAccountMutation from "./UpdateMyAccountMutation";
 import UpdatePasswordMutation from "./UpdatePasswordMutation";
 import WishlistAddItem from "./WishlistAddItem";
 import WishlistRemoveItem from "./WishlistRemoveItem";
+import SelectCurrentAddress from "./SelectCurrentAddress";
 import { DocumentNode } from "@apollo/client";
 
 enum MutationName {
@@ -43,6 +44,7 @@ enum MutationName {
   AdyenPaymentMethods = "AdyenPaymentMethods",
   AdyenPaymentDetails = "AdyenPaymentDetails",
   AdyenPayments = "AdyenPayments",
+  SelectCurrentAddress = "SelectCurrentAddress",
 }
 
 const Mutations: Record<MutationName, DocumentNode> = {
@@ -67,6 +69,7 @@ const Mutations: Record<MutationName, DocumentNode> = {
   AdyenPaymentMethods,
   AdyenPaymentDetails,
   AdyenPayments,
+  SelectCurrentAddress,
 };
 
 export { Mutations, MutationName };

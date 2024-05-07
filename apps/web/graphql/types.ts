@@ -188,6 +188,10 @@ export type UpdateAddressResponse = _AsyncData<
   H3Error
 >;
 
+export type SelectCurrentAddressResponse = _AsyncData<{
+  selectAddress: Partner;
+}>;
+
 export type CountryListResponse = _AsyncData<
   {
     countries: {
