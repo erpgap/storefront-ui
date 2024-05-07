@@ -9,6 +9,7 @@ const headers = {
   "X-Frame-Options": "*",
 };
 
+<<<<<<< HEAD
 export default defineCachedEventHandler(
   async (event) => {
     const results = await axios({
@@ -16,6 +17,15 @@ export default defineCachedEventHandler(
       method: "post",
       data: {
         query: `
+=======
+export default defineEventHandler(async () => {
+  // Send the products as JSON
+  const results = await axios({
+    url: odooBaseUrl,
+    method: "post",
+    data: {
+      query: `
+>>>>>>> fd0c3df ([IMP] use nuxt server api to fetch all products and return product json for algolia)
       query products {
         products {
           totalCount
@@ -25,6 +35,7 @@ export default defineCachedEventHandler(
           }
         }
     `,
+<<<<<<< HEAD
       },
       headers,
     });
@@ -34,3 +45,12 @@ export default defineCachedEventHandler(
   },
   { maxAge: 60 * 60 * 24 * 7 }
 );
+=======
+    },
+    headers,
+  });
+
+  const products = results.data.data.products.products;
+  return products;
+});
+>>>>>>> fd0c3df ([IMP] use nuxt server api to fetch all products and return product json for algolia)
