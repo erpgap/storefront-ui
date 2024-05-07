@@ -14,6 +14,7 @@ import {
   DeleteAddressInput,
   MutationDeleteAddressArgs,
   DeleteAddressResponse,
+  AddressFilterInput,
 } from "~/graphql";
 import { MutationName } from "~/server/mutations";
 import { QueryName } from "~/server/queries";
@@ -38,26 +39,22 @@ export const useAddresses = () => {
   const loadAddressesByType = async (type: AddressEnum) => {
     loading.value = true;
     try {
-      const { data } = await useAsyncData(
-        `fetch-${type}-addresses`,
-        async () => {
-          const { data } = await $sdk().odoo.query<
-            QueryAddressesArgs,
-            AddressesResponse
-          >(
-            { queryName: QueryName.GetAddressesQuery },
-            { filter: { addressType: [type] } }
-          );
-          return data.value;
-        }
+      const { data, error } = await $sdk().odoo.query<
+        QueryAddressesArgs,
+        AddressesResponse
+      >(
+        { queryName: QueryName.GetAddressesQuery },
+        { filter: { addressType: [type] } }
       );
 
-      if (data?.value) {
-        if (type === AddressEnum.Billing) {
-          billingAddresses.value = data.value.addresses;
-        } else {
-          mailingAddresses.value = data.value.addresses;
-        }
+      if (error.value) {
+        return toast.error(error.value.data.message);
+      }
+
+      if (type === AddressEnum.Billing) {
+        billingAddresses.value = data.value.addresses;
+      } else {
+        mailingAddresses.value = data.value.addresses;
       }
     } finally {
       loading.value = false;
