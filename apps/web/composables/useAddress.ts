@@ -36,7 +36,7 @@ export const useAddresses = () => {
     () => ({}) as Partner
   );
 
-  const loadAddressesByType = async (type: AddressEnum) => {
+  const loadAddressesByType = async (type: AddressFilterInput) => {
     loading.value = true;
     try {
       const { data, error } = await $sdk().odoo.query<
@@ -44,7 +44,7 @@ export const useAddresses = () => {
         AddressesResponse
       >(
         { queryName: QueryName.GetAddressesQuery },
-        { filter: { addressType: [type] } }
+        { filter: { addressType: type } }
       );
 
       if (error.value) {
