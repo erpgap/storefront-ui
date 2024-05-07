@@ -17,6 +17,13 @@
       </p>
       <template v-slot:footer>
         <SfButton
+          variant="tertiary"
+          size="sm"
+          class="self-start"
+          @click="deleteAddress({ id: address.id })"
+          >Remove</SfButton
+        >
+        <SfButton
           :disabled="currentBillingAddress?.selectAddress?.id === address.id"
           variant="secondary"
           size="sm"
@@ -80,6 +87,7 @@ const {
   currentBillingAddress,
   selectCurrentAddress,
   loadAddressesByType,
+  deleteAddress,
 } = useAddresses();
 
 await loadAddressesByType(AddressEnum.Billing);

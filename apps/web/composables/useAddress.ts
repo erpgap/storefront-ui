@@ -8,10 +8,12 @@ import {
   UpdateAddressInput,
   MutationUpdateAddressArgs,
   AddAddressResponse,
-  UpdateAddressResponse,
   SelectAddressInput,
   MutationSelectAddressArgs,
   SelectCurrentAddressResponse,
+  DeleteAddressInput,
+  MutationDeleteAddressArgs,
+  DeleteAddressResponse,
 } from "~/graphql";
 import { MutationName } from "~/server/mutations";
 import { QueryName } from "~/server/queries";
@@ -76,6 +78,24 @@ export const useAddresses = () => {
           mailingAddresses.value.push(data.value.addAddress);
         }
       }
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const deleteAddress = async (address: DeleteAddressInput) => {
+    loading.value = true;
+    try {
+      const { data, error } = await $sdk().odoo.mutation<
+        MutationDeleteAddressArgs,
+        DeleteAddressResponse
+      >({ mutationName: MutationName.DeleteAddress }, { address });
+
+      if (error.value) {
+        return toast.error(error.value.data.message);
+      }
+
+      toast.success("Address has been successfully removed");
     } finally {
       loading.value = false;
     }
@@ -147,6 +167,7 @@ export const useAddresses = () => {
     selectCurrentAddress,
     addAddress,
     updateAddress,
+    deleteAddress,
     loading,
   };
 };
