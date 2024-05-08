@@ -3,7 +3,7 @@
   <div v-for="address in billingAddresses" :key="address.id">
     <AccountAddressData
       @on-click="open"
-      :header="$t('account.accountSettings.shippingDetails.shippingAddress')"
+      :header="address.name"
       :button-text="$t('account.accountSettings.personalData.edit')"
     >
       <p>
