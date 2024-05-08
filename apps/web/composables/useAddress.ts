@@ -36,29 +36,43 @@ export const useAddresses = () => {
     () => ({}) as Partner
   );
 
-  const loadAddressesByType = async (type: AddressFilterInput) => {
+  const loadBillingAddresses = async () => {
     loading.value = true;
-    try {
-      const { data, error } = await $sdk().odoo.query<
-        QueryAddressesArgs,
-        AddressesResponse
-      >(
-        { queryName: QueryName.GetAddressesQuery },
-        { filter: { addressType: type } }
-      );
 
-      if (error.value) {
-        return toast.error(error.value.data.message);
-      }
+    const { data, error } = await $sdk().odoo.query<
+      QueryAddressesArgs,
+      AddressesResponse
+    >(
+      { queryName: QueryName.GetAddressesQuery },
+      { filter: { addressType: [AddressEnum.Billing] } }
+    );
 
-      if (type === AddressEnum.Billing) {
-        billingAddresses.value = data.value.addresses;
-      } else {
-        mailingAddresses.value = data.value.addresses;
-      }
-    } finally {
-      loading.value = false;
+    if (error.value) {
+      return toast.error(error.value.data.message);
     }
+
+    billingAddresses.value = data.value.addresses;
+
+    loading.value = false;
+  };
+
+  const loadShippingAddresses = async () => {
+    loading.value = true;
+
+    const { data, error } = await $sdk().odoo.query<
+      QueryAddressesArgs,
+      AddressesResponse
+    >(
+      { queryName: QueryName.GetAddressesQuery },
+      { filter: { addressType: [AddressEnum.Shipping] } }
+    );
+
+    if (error.value) {
+      return toast.error(error.value.data.message);
+    }
+
+    mailingAddresses.value = data.value.addresses;
+    loading.value = false;
   };
 
   const addAddress = async (address: AddAddressInput, type: AddressEnum) => {
@@ -156,7 +170,8 @@ export const useAddresses = () => {
   };
 
   return {
-    loadAddressesByType,
+    loadBillingAddresses,
+    loadShippingAddresses,
     billingAddresses,
     mailingAddresses,
     currentBillingAddress,

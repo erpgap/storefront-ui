@@ -1,3 +1,26 @@
+<script setup lang="ts">
+import {
+  SfButton,
+  SfIconClose,
+  SfModal,
+  useDisclosure,
+} from "@storefront-ui/vue";
+import { AddressEnum } from "~/graphql";
+
+definePageMeta({
+  layout: "account",
+});
+const { isOpen, open, close } = useDisclosure();
+const {
+  billingAddresses,
+  currentBillingAddress,
+  selectCurrentAddress,
+  loadBillingAddresses,
+  deleteAddress,
+} = useAddresses();
+
+await loadBillingAddresses();
+</script>
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <div v-for="address in billingAddresses" :key="address.id">
@@ -68,27 +91,3 @@
     </UiOverlay>
   </div>
 </template>
-
-<script setup lang="ts">
-import {
-  SfButton,
-  SfIconClose,
-  SfModal,
-  useDisclosure,
-} from "@storefront-ui/vue";
-import { AddressEnum } from "~/graphql";
-
-definePageMeta({
-  layout: "account",
-});
-const { isOpen, open, close } = useDisclosure();
-const {
-  billingAddresses,
-  currentBillingAddress,
-  selectCurrentAddress,
-  loadAddressesByType,
-  deleteAddress,
-} = useAddresses();
-
-await loadAddressesByType(AddressEnum.Billing);
-</script>

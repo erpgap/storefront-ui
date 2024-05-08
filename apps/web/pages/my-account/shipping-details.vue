@@ -27,28 +27,45 @@
         aria-labelledby="address-modal-title"
       >
         <header>
-          <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
+          <SfButton
+            square
+            variant="tertiary"
+            class="absolute right-2 top-2"
+            @click="close"
+          >
             <SfIconClose />
           </SfButton>
-          <h3 id="address-modal-title" class="text-neutral-900 text-lg md:text-2xl font-bold mb-4">
-            {{ $t('account.accountSettings.shippingDetails.shippingAddress') }}
+          <h3
+            id="address-modal-title"
+            class="text-neutral-900 text-lg md:text-2xl font-bold mb-4"
+          >
+            {{ $t("account.accountSettings.shippingDetails.shippingAddress") }}
           </h3>
         </header>
-        <FormAddAddress :saved-address="address" type="shippingAddress" @on-save="close" @on-close="close" />
+        <FormAddAddress
+          :saved-address="address"
+          type="shippingAddress"
+          @on-save="close"
+          @on-close="close"
+        />
       </SfModal>
     </UiOverlay>
   </div>
 </template>
 
 <script setup lang="ts">
-import { SfButton, SfIconClose, SfModal, useDisclosure } from '@storefront-ui/vue';
-import { AddressEnum } from '~/graphql';
+import {
+  SfButton,
+  SfIconClose,
+  SfModal,
+  useDisclosure,
+} from "@storefront-ui/vue";
 
 definePageMeta({
-  layout: 'account',
+  layout: "account",
 });
 const { isOpen, open, close } = useDisclosure();
-const { mailingAddresses, loadAddressesByType } = useAddresses();
+const { mailingAddresses, loadShippingAddresses } = useAddresses();
 
-await loadAddressesByType(AddressEnum.Shipping);
+await loadShippingAddresses();
 </script>

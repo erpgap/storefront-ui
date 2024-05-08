@@ -17,8 +17,12 @@ import { AddressEnum } from "~/graphql";
 const NuxtLink = resolveComponent("NuxtLink");
 const { isOpen, open, close } = useDisclosure();
 const { cart, loadCart } = useCart();
-const { loadAddressesByType, mailingAddresses, billingAddresses } =
-  useAddresses();
+const {
+  loadBillingAddresses,
+  loadShippingAddresses,
+  mailingAddresses,
+  billingAddresses,
+} = useAddresses();
 const { loadCountryList } = useCountry();
 const { updatePartner } = usePartner();
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
@@ -29,8 +33,8 @@ const {
 } = usePayment();
 
 await loadCart();
-await loadAddressesByType(AddressEnum.Shipping);
-await loadAddressesByType(AddressEnum.Billing);
+await loadShippingAddresses();
+await loadBillingAddresses();
 await loadDeliveryMethods();
 await loadPaymentMethods();
 await loadCountryList();
