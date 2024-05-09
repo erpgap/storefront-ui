@@ -15,7 +15,7 @@ import {
   SfInput,
   SfIconSearch,
 } from "@storefront-ui/vue";
-import { onClickOutside } from "@vueuse/core";
+// import { onClickOutside } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router";
 import { AlgoliaHitType } from "@/types/algolia";
 
@@ -26,8 +26,6 @@ const { isOpen, toggle, close } = useDisclosure();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 const { wishlistTotalItems, loadWishlist } = useWishlist();
 
-const { result, search: algoliaSearch } = useAlgoliaSearch("header");
-
 const NuxtLink = resolveComponent("NuxtLink");
 
 const router = useRouter();
@@ -36,8 +34,8 @@ const route = useRoute();
 const menuRef = ref();
 const drawerRef = ref();
 const searchRef = ref();
-const showSearchClerkRef = ref();
-const highlightedIndex = ref(-1);
+/* const showSearchClerkRef = ref();
+const highlightedIndex = ref(-1); */
 
 onMounted(async () => {
   await loadWishlist();
@@ -49,13 +47,13 @@ useTrapFocus(drawerRef, {
   initialFocus: "container",
 });
 
-onClickOutside(menuRef, () => {
+/* onClickOutside(menuRef, () => {
   close();
-});
+}); */
 
-onClickOutside(searchRef, () => {
+/* onClickOutside(searchRef, () => {
   showSearchClerkRef.value = false;
-});
+}); */
 
 const filteredCategories = computed(() =>
   categories?.value?.filter(
@@ -93,20 +91,18 @@ const handleWishlistSideBar = async () => {
 
 await loadCategoryList({ filter: { parent: true } });
 
-const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
+// const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
 
-const selectHit = (hit: AlgoliaHitType) => {
+const goToSearch = (hit: AlgoliaHitType) => {
   if (!hit?.name && !inputValue.value) return;
   router.push(`/search?search=${hit?.name || inputValue.value}`);
-  showSearchClerkRef.value = false;
-  inputValue.value = hit?.name || inputValue.value;
 };
 
 const cartCounter = useCookie<number>("cart-counter");
 
 const inputValue = ref(route.query.search || "");
 
-const search = async (event: Event) => {
+/* const search = async (event: Event) => {
   const query = (event.target as HTMLInputElement).value;
   if (!query) {
     showSearchClerkRef.value = false;
@@ -117,33 +113,33 @@ const search = async (event: Event) => {
   });
   showSearchClerkRef.value = true;
   highlightedIndex.value = -1;
-};
+}; */
 
-const openSearchClerk = computed(
+/* const openSearchClerk = computed(
   () => searchHits.value?.length > 0 && showSearchClerkRef.value
-);
+); */
 
-const setInputValue = (value: string) => {
+/* const setInputValue = (value: string) => {
   inputValue.value = value;
-};
+}; */
 
-const highlightPrevious = () => {
+/* const highlightPrevious = () => {
   if (highlightedIndex.value === 0) {
     highlightedIndex.value = searchHits.value.length - 1;
   } else {
     highlightedIndex.value -= 1;
   }
   setInputValue(searchHits.value[highlightedIndex.value]?.name);
-};
+}; */
 
-const highlightNext = () => {
+/* const highlightNext = () => {
   if (highlightedIndex.value === searchHits.value.length - 1) {
     highlightedIndex.value = 0;
   } else {
     highlightedIndex.value += 1;
   }
   setInputValue(searchHits.value[highlightedIndex.value]?.name);
-};
+}; */
 
 watch(
   () => route,
@@ -294,7 +290,7 @@ watch(
           ref="searchRef"
           role="search"
           class="hidden lg:flex flex-[100%] mt-2 md:mt-0 md:ml-10 pb-2 md:pb-0 relative w-full"
-          @submit.prevent
+          @submit.prevent="goToSearch"
         >
           <SfInput
             v-model="inputValue"
@@ -303,9 +299,6 @@ watch(
             placeholder="Search"
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
-            @keydown.up.prevent="highlightPrevious"
-            @keydown.down.prevent="highlightNext"
-            @keydown.enter.prevent="selectHit(searchHits[highlightedIndex])"
           >
             <template #suffix>
               <span class="flex items-center">
@@ -322,7 +315,7 @@ watch(
             </template>
           </SfInput>
 
-          <transition
+          <!-- <transition
             enter-active-class="transform transition duration-500 ease-in-out"
             leave-active-class="transform transition duration-500 ease-in-out"
             enter-from-class="-translate-x-full md:translate-x-0 md:opacity-0"
@@ -336,7 +329,7 @@ watch(
               :highlighted-index="highlightedIndex"
               @select="selectHit"
             />
-          </transition>
+          </transition> -->
         </form>
         <nav
           v-if="filled"
