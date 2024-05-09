@@ -106,6 +106,7 @@ export default defineNuxtConfig({
     public: {
       odooBaseImageUrl: "",
       odooBaseUrl: "",
+      alogliaEnabled: process.env.NUXT_ALGOLIA_ENABLED,
     },
   },
   routeRules: {

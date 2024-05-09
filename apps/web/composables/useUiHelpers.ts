@@ -58,6 +58,7 @@ export const useUiHelpers = () => {
       pageSize,
       currentPage: parseInt(page),
       // cacheKey: `API-P${hash(filtersForHash, { algorithm: 'md5' })}`,
+      search: query.search || null,
       sort: { [sort[0]]: sort[1] },
       filter: productFilters as ProductFilterInput,
     };

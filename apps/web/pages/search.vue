@@ -3,26 +3,21 @@ import { SfButton, SfIconTune, useDisclosure } from "@storefront-ui/vue";
 import { Product } from "~/graphql";
 
 const route = useRoute();
-
 const { isOpen, open, close } = useDisclosure();
-const { result, search: algoliaSearch } = useAlgoliaSearch("header");
 const {
-  loadProductTemplateList,
+  search,
   organizedAttributes,
-  loading,
-  productTemplateList,
-  totalItems,
   categories,
-} = useProductTemplateList(String(route.fullPath));
+  loading,
+  totalItems,
+  productTemplateList,
+} = useSearch();
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
-const { getFacetsFromURL } = useUiHelpers();
 
 const breadcrumbs = [
   { name: "Home", link: "/" },
   { name: "Search", link: "/" },
 ];
-
-const resultIds = computed(() => result.value?.hits.map((hit) => hit?.id));
 
 const maxVisiblePages = ref(1);
 const setMaxVisiblePages = (isWide: boolean) =>
@@ -38,10 +33,7 @@ watch(isTabletScreen, (value) => {
 watch(
   () => route,
   async () => {
-    await algoliaSearch({ query: route.query.search || "" });
-    await loadProductTemplateList(
-      getFacetsFromURL(route.query, resultIds.value)
-    );
+    search();
   },
   { deep: true, immediate: true }
 );
