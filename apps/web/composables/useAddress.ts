@@ -96,20 +96,19 @@ export const useAddresses = () => {
 
   const deleteAddress = async (address: DeleteAddressInput) => {
     loading.value = true;
-    try {
-      const { data, error } = await $sdk().odoo.mutation<
-        MutationDeleteAddressArgs,
-        DeleteAddressResponse
-      >({ mutationName: MutationName.DeleteAddress }, { address });
 
-      if (error.value) {
-        return toast.error(error.value.data.message);
-      }
+    const { data, error } = await $sdk().odoo.mutation<
+      MutationDeleteAddressArgs,
+      DeleteAddressResponse
+    >({ mutationName: MutationName.DeleteAddress }, { address });
 
-      toast.success("Address has been successfully removed");
-    } finally {
-      loading.value = false;
+    if (error.value) {
+      return toast.error(error.value.data.message);
     }
+
+    toast.success("Address has been successfully removed");
+
+    loading.value = false;
   };
 
   const updateAddress = async (
