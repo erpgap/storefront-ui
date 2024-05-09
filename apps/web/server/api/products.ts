@@ -9,13 +9,13 @@ const headers = {
   "X-Frame-Options": "*",
 };
 
-export default defineEventHandler(async () => {
-  // Send the products as JSON
-  const results = await axios({
-    url: odooBaseUrl,
-    method: "post",
-    data: {
-      query: `
+export default defineCachedEventHandler(
+  async (event) => {
+    const results = await axios({
+      url: odooBaseUrl,
+      method: "post",
+      data: {
+        query: `
       query products {
         products {
           totalCount
@@ -25,10 +25,12 @@ export default defineEventHandler(async () => {
           }
         }
     `,
-    },
-    headers,
-  });
+      },
+      headers,
+    });
 
-  const products = results.data.data.products.products;
-  return products;
-});
+    const products = results.data.data.products.products;
+    return products;
+  },
+  { maxAge: 60 * 60 * 24 * 7 }
+);
