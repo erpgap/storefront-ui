@@ -106,8 +106,9 @@ export const useAddresses = () => {
       return toast.error(error.value.data.message);
     }
 
+    loadBillingAddresses();
+    loadShippingAddresses();
     toast.success("Address has been successfully removed");
-
     loading.value = false;
   };
 

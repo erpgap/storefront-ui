@@ -19,18 +19,13 @@ const {
   deleteAddress,
 } = useAddresses();
 
-const removeAddress = async (id) => {
-  deleteAddress({ id: id });
-  loadBillingAddresses();
-};
-
 await loadBillingAddresses();
 </script>
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <div v-for="address in billingAddresses" :key="address.id">
     <AccountAddressData
-      @on-click="removeAddress(address.id)"
+      @on-click="deleteAddress({ id: address.id })"
       :header="address.name"
       :button-text="$t('account.accountSettings.personalData.edit')"
     >
