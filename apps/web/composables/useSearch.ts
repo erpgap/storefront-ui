@@ -1,30 +1,39 @@
-import { onClickOutside } from '@vueuse/core';
-import { useToggle } from '@vueuse/core';
-import { AlgoliaHitType } from '~/types/algolia';
+import { onClickOutside } from "@vueuse/core";
+import { useToggle } from "@vueuse/core";
+import { AlgoliaHitType } from "~/types/algolia";
 
 export const useSearch = (formSearchTemplateRef?: any) => {
   const route = useRoute();
   const router = useRouter();
+  const config = useRuntimeConfig();
 
   // search modal
   const searchModalClose = () => searchModalToggle(false);
-  const searchModalOpen = useState('search-ref', () => false);
+  const searchModalOpen = useState("search-ref", () => false);
   const searchModalToggle = useToggle(searchModalOpen);
   const isSearchModalOpen = computed(() => searchModalOpen.value);
 
   // algolia search
-  const { result, search: algoliaSearch } = useAlgoliaSearch('header');
-  const searchInputValue = ref((route.query?.search as String) || '');
+  const { result: aloliaResults, search: algoliaSearch } =
+    useAlgoliaSearch("header");
+  const loading = ref(false);
+  const searchInputValue = ref((route.query?.search as String) || "");
   const highlightedIndex = ref(-1);
   const showResultSearch = ref(false);
-  const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
-  const isSearchOpen = computed(() => searchHits.value?.length > 0);
+  const {
+    loadProductTemplateList,
+    organizedAttributes,
+    productTemplateList,
+    totalItems,
+    categories,
+  } = useProductTemplateList(String(route.fullPath));
+  const { getFacetsFromURL } = useUiHelpers();
 
   const algoliaSearchResultIds = computed(() =>
     aloliaResults.value?.hits.map((hit) => hit?.id)
   );
 
-  const search = async (event: Event) => {
+  const search = async () => {
     loading.value = true;
     if (Number(config.public.alogliaEnabled)) {
       await algoliaSearch({ query: route.query.search });
@@ -35,6 +44,10 @@ export const useSearch = (formSearchTemplateRef?: any) => {
       );
       loading.value = false;
       return;
+    }
+
+    await loadProductTemplateList(getFacetsFromURL(route.query));
+    loading.value = false;
   };
 
   const setInputValue = (value: string) => {
@@ -50,7 +63,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
 
   const highlightPrevious = () => {
     if (highlightedIndex.value === 0) {
-      highlightedIndex.value = searchHits.value.length - 1;
+      highlightedIndex.value = aloliaResults.value.length - 1;
     } else {
       highlightedIndex.value -= 1;
     }
@@ -68,8 +81,8 @@ export const useSearch = (formSearchTemplateRef?: any) => {
 
   watch(
     () => route,
-    () => (searchInputValue.value = (route.query.search as String) || ''),
-    { deep: true, immediate: true },
+    () => (searchInputValue.value = (route.query.search as String) || ""),
+    { deep: true, immediate: true }
   );
 
   onClickOutside(formSearchTemplateRef, () => {
@@ -84,12 +97,16 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     searchModalToggle,
 
     // algolia search
+    loading,
     searchInputValue,
     highlightNext,
     highlightPrevious,
     highlightedIndex,
     search,
-    searchHits,
+    organizedAttributes,
+    productTemplateList,
+    totalItems,
+    categories,
     selectHit,
     showResultSearch,
   };

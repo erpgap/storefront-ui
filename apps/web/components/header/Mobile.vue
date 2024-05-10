@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { useRoute, useRouter } from '#vue-router';
-import { AlgoliaHitType } from '@/types/algolia';
 import {
   SfButton,
   SfDrawer,
@@ -10,31 +8,25 @@ import {
   SfListItem,
   useDisclosure,
   useTrapFocus,
-} from '@storefront-ui/vue';
-import { onClickOutside } from '@vueuse/core';
+} from "@storefront-ui/vue";
+import { onClickOutside } from "@vueuse/core";
 
-const { loadCategoryList, categories } = useCategory();
+const { categories } = useCategory();
 const { isOpen, toggle, close } = useDisclosure();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 const { searchModalToggle } = useSearch();
 
-const { result, search: algoliaSearch } = useAlgoliaSearch('header');
-
-const NuxtLink = resolveComponent('NuxtLink');
-
-const router = useRouter();
-const route = useRoute();
+const NuxtLink = resolveComponent("NuxtLink");
 
 const menuRef = ref();
 const drawerRef = ref();
 const searchRef = ref();
 const showSearchClerkRef = ref();
-const highlightedIndex = ref(-1);
 
 useTrapFocus(drawerRef, {
   activeState: isOpen,
   arrowKeysUpDown: true,
-  initialFocus: 'container',
+  initialFocus: "container",
 });
 
 onClickOutside(menuRef, () => {
@@ -46,67 +38,15 @@ onClickOutside(searchRef, () => {
 });
 
 const filteredCategories = computed(() =>
-  categories?.value?.filter((category: any) => category.name === 'WOMEN' || category.name === 'MEN'),
+  categories?.value?.filter(
+    (category: any) => category.name === "WOMEN" || category.name === "MEN"
+  )
 );
 
 const bannerDetails = {
-  image: '/images/watch.png',
-  title: 'New in designer watches',
+  image: "/images/watch.png",
+  title: "New in designer watches",
 };
-
-const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
-
-const selectHit = (hit: AlgoliaHitType) => {
-  if (!hit?.name && !inputValue.value) return;
-  router.push(`/search?search=${hit?.name || inputValue.value}`);
-  showSearchClerkRef.value = false;
-  inputValue.value = hit?.name || inputValue.value;
-};
-
-const inputValue = ref(route.query?.search || '');
-
-const search = async (event: Event) => {
-  const query = (event.target as HTMLInputElement).value;
-  if (!query) {
-    showSearchClerkRef.value = false;
-    return;
-  }
-  await algoliaSearch({
-    query: (event.target as HTMLInputElement).value,
-  });
-  showSearchClerkRef.value = true;
-  highlightedIndex.value = -1;
-};
-
-const openSearchClerk = computed(() => searchHits.value?.length > 0 && showSearchClerkRef.value);
-
-const setInputValue = (value: string) => {
-  inputValue.value = value;
-};
-
-const highlightPrevious = () => {
-  if (highlightedIndex.value === 0) {
-    highlightedIndex.value = searchHits.value.length - 1;
-  } else {
-    highlightedIndex.value -= 1;
-  }
-  setInputValue(searchHits.value[highlightedIndex.value]?.name);
-};
-
-const highlightNext = () => {
-  if (highlightedIndex.value === searchHits.value.length - 1) {
-    highlightedIndex.value = 0;
-  } else {
-    highlightedIndex.value += 1;
-  }
-  setInputValue(searchHits.value[highlightedIndex.value]?.name);
-};
-
-watch(
-  () => route,
-  () => (inputValue.value = route.query.search || ''),
-  { deep: true, immediate: true },
-);
 </script>
 
 <template>
@@ -116,7 +56,9 @@ watch(
       'text-white h-14 md:h-20 flex z-50 md:sticky md:top-0 md:shadow-md flex-wrap md:flex-nowrap w-full py-2 md:py-5 border-0 bg-primary-700 border-neutral-200 md:z-10',
     ]"
   >
-    <div class="flex items-center justify-between lg:justify-start h-full w-full narrow-container">
+    <div
+      class="flex items-center justify-between lg:justify-start h-full w-full narrow-container"
+    >
       <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7 -mt-1.5">
         <VsfLogo />
       </NuxtLink>
@@ -138,9 +80,17 @@ watch(
                 placement="top"
                 class="bg-white p-0 max-h-screen overflow-y-auto lg:!absolute lg:!top-[5rem] max-w-full lg:p-6 top-index"
               >
-                <div class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative">
-                  <div class="sticky top-0 flex items-center justify-between py-2 px-4 bg-primary-700 w-full">
-                    <div class="flex items-center typography-text-lg font-medium text-white">Browse products</div>
+                <div
+                  class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative"
+                >
+                  <div
+                    class="sticky top-0 flex items-center justify-between py-2 px-4 bg-primary-700 w-full"
+                  >
+                    <div
+                      class="flex items-center typography-text-lg font-medium text-white"
+                    >
+                      Browse products
+                    </div>
                     <SfButton
                       square
                       variant="tertiary"
@@ -165,7 +115,10 @@ watch(
                     </h2>
                     <hr class="mb-3.5" />
                     <ul>
-                      <li v-for="{ name, slug, childs: subcategory } in childs" :key="name">
+                      <li
+                        v-for="{ name, slug, childs: subcategory } in childs"
+                        :key="name"
+                      >
                         <SfListItem
                           v-if="subcategory !== null"
                           tag="a"
@@ -182,8 +135,14 @@ watch(
                   <div
                     class="flex flex-col items-center justify-center bg-neutral-100 lg:rounded-md border-neutral-300 overflow-hidden grow"
                   >
-                    <NuxtImg :src="bannerDetails.image" :alt="bannerDetails.title" class="object-contain" />
-                    <p class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium">
+                    <NuxtImg
+                      :src="bannerDetails.image"
+                      :alt="bannerDetails.title"
+                      class="object-contain"
+                    />
+                    <p
+                      class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium"
+                    >
                       {{ bannerDetails.title }}
                     </p>
                   </div>
@@ -194,7 +153,10 @@ watch(
         </ul>
       </nav>
 
-      <WishlistSidebar :is-open="wishlistSidebarIsOpen" @close="toggleWishlistSideBar" />
+      <WishlistSidebar
+        :is-open="wishlistSidebarIsOpen"
+        @close="toggleWishlistSideBar"
+      />
 
       <div class="flex">
         <SfButton
