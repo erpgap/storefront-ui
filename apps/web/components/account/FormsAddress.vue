@@ -22,6 +22,7 @@ const {
   addAddress,
   loadBillingAddresses,
   loadShippingAddresses,
+  selectCurrentAddress,
 } = useAddresses();
 const { countries, loadCountryList } = useCountry();
 
