@@ -141,24 +141,18 @@ export const useAddresses = () => {
     type: AddressEnum
   ) => {
     loading.value = true;
-    try {
-      const { data, error } = await $sdk().odoo.mutation<
-        MutationSelectAddressArgs,
-        SelectCurrentAddressResponse
-      >({ mutationName: MutationName.SelectCurrentAddress }, { address, type });
 
-      if (error.value) {
-        return toast.error(error.value.data.message);
-      }
+    const { data, error } = await $sdk().odoo.mutation<
+      MutationSelectAddressArgs,
+      SelectCurrentAddressResponse
+    >({ mutationName: MutationName.SelectCurrentAddress }, { address, type });
 
-      if (type === AddressEnum.Billing) {
-        toast.success("Current billing address saved successfully");
-        return;
-      }
-      toast.success("Current mailing address saved successfully");
-    } finally {
-      loading.value = false;
+    if (error.value) {
+      return toast.error(error.value.data.message);
     }
+
+    toast.success(`Current ${type} address saved successfully`);
+    loading.value = false;
   };
 
   return {
