@@ -1,10 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  extends: ["./domains/payment"],
+  extends: ["./domains/payment", "./domains/algolia-search"],
   app: {
     head: {
-      viewport: "minimum-scale=1, initial-scale=1, width=device-width",
-      title: "Vue Storefront",
       viewport: "minimum-scale=1, initial-scale=1, width=device-width",
       title: "Vue Storefront",
       htmlAttrs: {
