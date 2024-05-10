@@ -9,7 +9,7 @@ import {
 } from "@storefront-ui/vue";
 import { AddressEnum, Partner } from "~/graphql";
 
-defineProps<{
+const props = defineProps<{
   addresses: Partner[];
   type: string;
   header: string;
@@ -63,7 +63,7 @@ const newAddress = () => {
 
 const removeAddress = (id) => {
   deleteAddress({ id: id });
-  if (type === AddressEnum.Billing) {
+  if (props.type === AddressEnum.Billing) {
     loadBillingAddresses();
   } else {
     loadShippingAddresses();
@@ -83,7 +83,9 @@ const submitAddress = () => {
   };
 
   const addressType =
-    type === AddressEnum.Billing ? AddressEnum.Billing : AddressEnum.Shipping;
+    props.type === AddressEnum.Billing
+      ? AddressEnum.Billing
+      : AddressEnum.Shipping;
 
   if (defaultValues.value?.id) {
     updateAddress({ id: defaultValues.value.id, ...addressInput }, addressType);
