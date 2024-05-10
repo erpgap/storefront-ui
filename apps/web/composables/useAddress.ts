@@ -108,29 +108,32 @@ export const useAddresses = () => {
     type: AddressEnum
   ) => {
     loading.value = true;
-    try {
-      const { data } = await $sdk().odoo.mutation<
-        MutationUpdateAddressArgs,
-        SelectCurrentAddressResponse
-      >({ mutationName: MutationName.UpdateAddress }, { address });
-      if (data.value) {
-        if (type === AddressEnum.Billing) {
-          const address = data.value.updateAddress;
-          const index = billingAddresses.value.findIndex(
-            (addr) => addr.id === address.id
-          );
-          billingAddresses.value[index] = address;
-        } else {
-          const address = data.value.updateAddress;
-          const index = mailingAddresses.value.findIndex(
-            (addr) => addr.id === address.id
-          );
-          mailingAddresses.value[index] = address;
-        }
-      }
-    } finally {
-      loading.value = false;
+
+    const { data, error } = await $sdk().odoo.mutation<
+      MutationUpdateAddressArgs,
+      SelectCurrentAddressResponse
+    >({ mutationName: MutationName.UpdateAddress }, { address });
+
+    if (error.value) {
+      return toast.error(error.value.data.message);
     }
+
+    if (type === AddressEnum.Billing) {
+      const address = data.value.updateAddress;
+      const index = billingAddresses.value.findIndex(
+        (addr) => addr.id === address.id
+      );
+      billingAddresses.value[index] = address;
+    } else {
+      const address = data.value.updateAddress;
+      const index = mailingAddresses.value.findIndex(
+        (addr) => addr.id === address.id
+      );
+      mailingAddresses.value[index] = address;
+    }
+
+    toast.success("Address has been successfully updated");
+    loading.value = false;
   };
 
   const selectCurrentAddress = async (
