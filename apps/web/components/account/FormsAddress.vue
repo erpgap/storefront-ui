@@ -106,7 +106,11 @@ const states = computed(
 await loadCountryList();
 </script>
 <template>
-  <div v-for="address in addresses" :key="address.id">
+  <div
+    class="md:col-span-1 col-span-3"
+    v-for="address in addresses"
+    :key="address.id"
+  >
     <AccountAddressData
       @on-click="editAddress(address)"
       :header="address.name"

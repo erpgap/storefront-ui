@@ -12,7 +12,7 @@ defineEmits(["on-click"]);
 
 <template>
   <div
-    class="border-neutral-200 border p-2 rounded-md"
+    class="border-neutral-200 border-b md:border p-2 md:rounded-md"
     data-testid="address-data"
   >
     <div class="flex justify-between my-2">
