@@ -1,25 +1,18 @@
 <script setup lang="ts">
-import {
-  SfButton,
-  SfIconTune,
-  useDisclosure,
-  SfLoaderCircular,
-} from "@storefront-ui/vue";
+import { SfButton, SfIconTune, useDisclosure } from "@storefront-ui/vue";
 import { Product } from "~/graphql";
 
 const route = useRoute();
-
 const { isOpen, open, close } = useDisclosure();
 const {
-  loadProductTemplateList,
+  search,
   organizedAttributes,
-  loading,
-  productTemplateList,
-  totalItems,
   categories,
-} = useProductTemplateList(String(route.fullPath));
+  loading,
+  totalItems,
+  productTemplateList,
+} = useSearch();
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
-const { getFacetsFromURL } = useUiHelpers();
 
 const breadcrumbs = [
   { name: "Home", link: "/" },
@@ -40,7 +33,7 @@ watch(isTabletScreen, (value) => {
 watch(
   () => route,
   async () => {
-    await loadProductTemplateList(getFacetsFromURL(route.query));
+    search();
   },
   { deep: true, immediate: true }
 );

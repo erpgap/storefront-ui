@@ -17,7 +17,10 @@ export const useUiHelpers = () => {
     return path;
   };
 
-  const getFacetsFromURL = (query: any): QueryProductsArgs => {
+  const getFacetsFromURL = (
+    query: any,
+    ids: number[] = []
+  ): QueryProductsArgs => {
     const filters: string[] = [];
     const newQuery = { ...query };
     delete newQuery.search;
@@ -48,13 +51,14 @@ export const useUiHelpers = () => {
       maxPrice: Number(price?.[1]) || null,
       attribValues: filters,
       categorySlug: path === "/" || path === "/search" ? null : pathToSlug(),
+      ids: ids,
     };
 
     return {
       pageSize,
       currentPage: parseInt(page),
       // cacheKey: `API-P${hash(filtersForHash, { algorithm: 'md5' })}`,
-      search: query.search || "",
+      search: query.search || null,
       sort: { [sort[0]]: sort[1] },
       filter: productFilters as ProductFilterInput,
     };

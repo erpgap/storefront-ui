@@ -17,3 +17,12 @@ Template base to start new odoo vsf projects using vsf SDK
 5. yarn dev
 6. You can access with http://localhost:3000
 ```
+## Search products
+
+Find products with our search options. Choose Algolia or stick to database search.
+
+### How to configure algolia
+
+1. Set environment variables NUXT_ALGOLIA_API_KEY and NUXT_ALGOLIA_APPLICATION_ID
+2. set NUXT_ALGOLIA_ENABLED to 1 or 0 to enable or disabled algolia search.
+
