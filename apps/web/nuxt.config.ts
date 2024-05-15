@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  extends: ["./domains/payment", "./domains/algolia-search"],
+  extends: ["./domains/payment", "./domains/search-algolia"],
   app: {
     head: {
       viewport: "minimum-scale=1, initial-scale=1, width=device-width",
@@ -65,6 +65,8 @@ export default defineNuxtConfig({
         },
       },
     ],
+    "@nuxtjs/seo",
+    "@nuxt/scripts"
   ],
   // storyblok: {
   //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
@@ -143,5 +145,11 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: ["lodash-es"],
     },
+  },
+  site: {
+    url: "https://vsfsdk.labs.odoogap.com/",
+    name: "ERPGAP VSF",
+    description: "Welcome to an awesome ecommerce site!",
+    defaultLocale: "en",
   },
 });
