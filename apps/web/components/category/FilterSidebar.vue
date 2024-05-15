@@ -29,12 +29,6 @@ const { changeFilters, facetsFromUrlToFilter } = useUiHelpers();
 
 const sort = ref(route.query?.sort ? route.query?.sort : "");
 
-const parent = computed(() => {
-  return {
-    label: props.categories?.label?.toLowerCase(),
-    slug: props.categories?.slug,
-  };
-});
 const getSortOptions = (searchData: { input: any }) => ({
   options: sortOptions,
   selected: searchData.input.sort || "name asc",
@@ -49,11 +43,7 @@ const isFilterSelected = (option: any) => {
     (filter: { id: any }) => String(filter.id) === String(option.value)
   );
 };
-const isPriceSelected = (option: any) => {
-  return selectedFilters.value.some(
-    (filter: { id: any }) => String(filter.id) === String(option.values)
-  );
-};
+
 const isItemActive = (selectedValue: string) => {
   return selectedFilters.value?.includes(selectedValue);
 };
@@ -75,22 +65,8 @@ const facets: any = computed(() => [
 ]);
 const opened = ref<boolean[]>(facets.value.map(() => true));
 
-const priceModel = ref<any>("");
-const selectPrice = (values: any) => {
-  const newValue: any = [values];
-  const getIndex = selectedFilters.value.findIndex(
-    (item: { filterName: string }) => item?.filterName === "price"
-  );
-  if (getIndex > -1) {
-    selectedFilters.value[getIndex].id = newValue[0];
-  } else {
-    selectedFilters.value.push({
-      filterName: "price",
-      label: "Price",
-      id: newValue[0],
-    });
-  }
-};
+const priceModel = useState("price-model", () => "");
+
 const selectedFilter = (
   facet: { label: string },
   option: { id: string; value: string; label: string }
@@ -109,13 +85,13 @@ const selectedFilter = (
   selectedFilters.value.splice(alreadySelectedIndex, 1);
 };
 const applyFilters = () => {
-  if (!priceModel.value) {
-    selectedFilters.value = selectedFilters.value?.filter(
-      (item: ProductFilterType) => {
-        return item.filterName !== "price";
-      }
-    );
+  if (priceModel.value) {
+    selectedFilters.value.push({
+      filterName: "price",
+      id: priceModel.value,
+    });
   }
+
   const filters = selectedFilters.value.filter((item: any) => {
     return typeof item === "object";
   });
@@ -134,15 +110,14 @@ const changeCategory = (categoryId: number) => {
   router.push({ path: `/category/${categoryId}` });
 };
 
-onMounted(() => {
-  selectedFilters.value = facetsFromUrlToFilter();
-  const priceFilter = selectedFilters.value?.find((item: ProductFilterType) => {
-    return item.filterName === "price";
-  });
-  if (priceFilter) {
-    priceModel.value = priceFilter.id;
-  }
+selectedFilters.value = facetsFromUrlToFilter();
+const priceFilter = selectedFilters.value?.find((item: ProductFilterType) => {
+  return item.filterName === "price";
 });
+
+if (priceFilter) {
+  priceModel.value = priceFilter.id;
+}
 </script>
 
 <template>
@@ -234,28 +209,20 @@ onMounted(() => {
                   v-for="{ id, values, label } in facet.options"
                   :key="id"
                   tag="label"
-                  size="sm"
-                  class="px-1.5 bg-transparent hover:bg-transparent"
                 >
                   <template #prefix>
                     <SfRadio
                       v-model="priceModel"
                       class="flex items-center"
-                      name="radio-price"
+                      :name="values"
                       :value="values"
-                      @click="priceModel = priceModel === values ? '' : values"
-                      @update:model-value="selectPrice(values)"
                     />
                   </template>
-                  <p>
-                    <span
-                      :class="[
-                        'text-sm mr-2',
-                        { 'font-medium': priceModel === values },
-                      ]"
-                      >{{ label }}</span
-                    >
-                  </p>
+                  <span
+                    class="text-sm mr-2"
+                    :class="{ 'font-medium': priceModel === id }"
+                    >{{ label }}
+                  </span>
                 </SfListItem>
               </fieldset>
             </template>
