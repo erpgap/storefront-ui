@@ -17,7 +17,7 @@ const {
   productTemplateList,
   totalItems,
   categories,
-} = useProductTemplateList(String(route.fullPath));
+} = useProductTemplateList(route.path, String(route.fullPath));
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 const { getFacetsFromURL } = useUiHelpers();
 
