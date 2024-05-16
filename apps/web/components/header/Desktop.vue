@@ -139,7 +139,7 @@ onClickOutside(menuRef, () => {
                     size="sm"
                     variant="tertiary"
                     aria-label="Close navigation menu"
-                    class="hidden lg:block lg:absolute lg:right-0 lg:top-0 hover:bg-white active:bg-white"
+                    class="lg:absolute lg:right-0 lg:top-0 hover:bg-white active:bg-white"
                     @click="close()"
                   >
                     <Icon

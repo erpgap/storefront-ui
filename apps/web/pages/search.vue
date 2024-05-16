@@ -52,7 +52,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="pb-20">
-    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-14" />
+    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
     <h1 class="font-bold typography-headline-3 md:typography-headline-2 mb-10">
       Results for "{{ route.query.search }}"
     </h1>

@@ -14,7 +14,7 @@ export const useProductTemplateList = (
 ) => {
   const { $sdk } = useNuxtApp();
 
-  const loading = ref(false);
+  const loading = useState("loading-product-template-list", () => false);
   const totalItems = useState<number>(`total-items${fullSearchIndex}`, () => 0);
   const productTemplateList = useState<Product[]>(
     `products-category${fullSearchIndex}`,
