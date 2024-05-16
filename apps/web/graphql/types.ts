@@ -190,6 +190,20 @@ export type UpdateAddressResponse = _AsyncData<
   H3Error
 >;
 
+export type SelectCurrentAddressResponse = _AsyncData<
+  {
+    selectAddress: Partner;
+  },
+  H3Error
+>;
+
+export type DeleteAddressResponse = _AsyncData<
+  {
+    result: Boolean;
+  },
+  H3Error
+>;
+
 export type CountryListResponse = _AsyncData<
   {
     countries: {
