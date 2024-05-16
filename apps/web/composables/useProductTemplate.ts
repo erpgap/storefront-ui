@@ -10,7 +10,7 @@ export const useProductTemplate = (slug: string) => {
   const loadingProductTemplate = ref(false);
   const productTemplate = useState<Product>(`product-${slug}`, () => ({}) as Product);
 
-  const withBase = (filepath: string | null) => `https://vsfdemo15.labs.odoogap.com${filepath}`;
+  const withBase = (filepath: string | null) => `https://vsfdemo17.labs.odoogap.com${filepath}`;
 
   const images = computed(() => {
     return [
