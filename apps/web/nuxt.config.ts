@@ -56,16 +56,16 @@ export default defineNuxtConfig({
     ],
     // '@storyblok/nuxt',
     "nuxt-lodash",
-    [
-      "@nuxtjs/algolia",
-      {
-        apiKey: process.env.NUXT_ALGOLIA_API_KEY,
-        applicationId: process.env.NUXT_ALGOLIA_APPLICATION_ID,
-        instantSearch: {
-          theme: "algolia",
-        },
-      },
-    ],
+    // [
+    //   "@nuxtjs/algolia",
+    //   {
+    //     apiKey: process.env.NUXT_ALGOLIA_API_KEY,
+    //     applicationId: process.env.NUXT_ALGOLIA_APPLICATION_ID,
+    //     instantSearch: {
+    //       theme: "algolia",
+    //     },
+    //   },
+    // ],
     "@nuxtjs/seo",
     "@nuxt/scripts",
   ],

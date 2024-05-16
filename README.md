@@ -25,4 +25,3 @@ Find products with our search options. Choose Algolia or stick to database searc
 
 1. Set environment variables NUXT_ALGOLIA_API_KEY and NUXT_ALGOLIA_APPLICATION_ID
 2. set NUXT_ALGOLIA_ENABLED to 1 or 0 to enable or disabled algolia search.
-
