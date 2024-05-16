@@ -67,14 +67,14 @@ onMounted(() => {
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
         <LazyCategoryFilterSidebar
-          v-if="isDesktopOrTablet"
+          v-show="isDesktopOrTablet"
           :attributes="organizedAttributes"
           :categories="categories"
         />
         <LazyCategoryMobileSidebar
           :is-open="isOpen"
           @close="close"
-          v-if="isMobile"
+          v-show="isMobile"
         >
           <template #default>
             <CategoryFilterSidebar
