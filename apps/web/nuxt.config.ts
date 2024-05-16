@@ -1,6 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  extends: ["./domains/payment", "./domains/search-algolia"],
+  extends: [
+    "./domains/auth",
+    "./domains/cart-odoo",
+    "./domains/category",
+    "./domains/checkout",
+    "./domains/core",
+    "./domains/my-account",
+    "./domains/payment",
+    "./domains/search-algolia",
+  ],
   app: {
     head: {
       viewport: "minimum-scale=1, initial-scale=1, width=device-width",
@@ -12,14 +21,6 @@ export default defineNuxtConfig({
   },
   delayHydration: {
     mode: "init",
-  },
-  components: {
-    dirs: [
-      {
-        isAsync: true,
-        path: "components",
-      },
-    ],
   },
   modules: [
     "nuxt-icon",
@@ -115,7 +116,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    "/": { swr: 3600 },
+    "/": { swr: 3600, cache: { name: "home" } },
     "/_ipx/**": {
       headers: { "cache-control": "public, max-age=31536000, immutable" },
     },

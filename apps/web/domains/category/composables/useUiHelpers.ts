@@ -96,8 +96,9 @@ export const useUiHelpers = () => {
     filters.forEach((element) => {
       if (element.filterName === "Size") {
         if (formattedFilters[element.filterName]) {
-          formattedFilters[element.filterName] +=
-            `,${element.id}-${element.label}`;
+          formattedFilters[
+            element.filterName
+          ] += `,${element.id}-${element.label}`;
           return;
         }
         formattedFilters[element.filterName] = `${element.id}-${element.label}`;
@@ -128,29 +129,9 @@ export const useUiHelpers = () => {
     router.push({ query: allQuery });
   };
 
-  const getComponentProviderByName = (provider: string): string => {
-    if (!provider) throw new Error("Provider without provider");
-
-    const upperName = provider.toLocaleUpperCase();
-
-    if (upperName === "ADYEN_OG") {
-      return "AdyenExternalPaymentProvider";
-    }
-
-    if (upperName === "ADYEN") {
-      return "AdyenDirectPaymentProvider";
-    }
-
-    if (upperName.includes("WIRE")) {
-      return "WireTransferPaymentProvider";
-    }
-
-    throw new Error(`Provider ${name} not implemented!`);
-  };
   return {
     getFacetsFromURL,
     changeFilters,
     facetsFromUrlToFilter,
-    getComponentProviderByName,
   };
 };
