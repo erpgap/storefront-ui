@@ -712,6 +712,7 @@ export type Partner = {
   parentId: Maybe<Partner>;
   phone: Maybe<Scalars['String']['output']>;
   publicPricelist: Maybe<Pricelist>;
+  shippingAddress: Maybe<Partner>;
   signupToken: Maybe<Scalars['String']['output']>;
   signupValid: Maybe<Scalars['String']['output']>;
   state: Maybe<State>;

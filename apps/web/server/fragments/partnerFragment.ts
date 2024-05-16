@@ -15,6 +15,14 @@ partner{
       id
       name
     }
+    billingAddress {
+      id 
+      name
+    }
+    shippingAddress {
+      id
+      name
+    }
     email
     phone
   }

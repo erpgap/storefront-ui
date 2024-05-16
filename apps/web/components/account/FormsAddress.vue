@@ -25,6 +25,7 @@ const {
   selectCurrentAddress,
 } = useAddresses();
 const { countries, loadCountryList } = useCountry();
+const { user, loadUser } = useUser();
 
 const defaultValues = ref({
   name: "",
@@ -103,6 +104,13 @@ const states = computed(
     )?.states || []
 );
 
+function isCurrentAddress(id) {
+  if (props.type === AddressEnum.Shipping) {
+    return user.value?.shippingAddress?.id === id;
+  }
+  return user.value?.billingAddress?.id === id;
+}
+await loadUser();
 await loadCountryList();
 </script>
 <template>
@@ -130,6 +138,7 @@ await loadCountryList();
           >Remove</SfButton
         >
         <SfButton
+          :disabled="isCurrentAddress(address.id)"
           variant="secondary"
           size="sm"
           class="self-start"
