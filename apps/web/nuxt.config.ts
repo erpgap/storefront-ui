@@ -1,6 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  extends: ["./domains/payment", "./domains/search-algolia"],
+  extends: [
+    "./domains/auth",
+    "./domains/cart-odoo",
+    "./domains/category",
+    "./domains/checkout",
+    "./domains/core",
+    "./domains/my-account",
+    "./domains/payment",
+    "./domains/search-algolia",
+  ],
   app: {
     head: {
       viewport: "minimum-scale=1, initial-scale=1, width=device-width",
@@ -12,14 +21,6 @@ export default defineNuxtConfig({
   },
   delayHydration: {
     mode: "init",
-  },
-  components: {
-    dirs: [
-      {
-        isAsync: true,
-        path: "components",
-      },
-    ],
   },
   modules: [
     "nuxt-icon",
@@ -66,7 +67,7 @@ export default defineNuxtConfig({
       },
     ],
     "@nuxtjs/seo",
-    "@nuxt/scripts"
+    "@nuxt/scripts",
   ],
   // storyblok: {
   //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
@@ -116,6 +117,9 @@ export default defineNuxtConfig({
   },
   routeRules: {
     "/": { swr: 3600 },
+    "/category/*": { swr: 3600 },
+    "/product/*": { swr: 3600 },
+
     "/_ipx/**": {
       headers: { "cache-control": "public, max-age=31536000, immutable" },
     },

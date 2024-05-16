@@ -13,6 +13,6 @@ await loadCategoryList({ filter: { parent: true } } as any);
 </script>
 
 <template>
-  <HeaderDesktop v-if="isDesktopOrTablet" />
-  <HeaderMobile v-if="isMobile" />
+  <HeaderDesktop v-show="isDesktopOrTablet" />
+  <HeaderMobile v-show="isMobile" />
 </template>

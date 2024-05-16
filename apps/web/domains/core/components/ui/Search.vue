@@ -1,29 +1,22 @@
 <script setup lang="ts">
-import {
-  SfButton,
-  SfIconTune,
-  useDisclosure,
-  SfLoaderCircular,
-} from "@storefront-ui/vue";
+import { SfButton, SfIconTune, useDisclosure } from "@storefront-ui/vue";
 import { Product } from "~/graphql";
 
 const route = useRoute();
-
 const { isOpen, open, close } = useDisclosure();
 const {
-  loadProductTemplateList,
+  search,
   organizedAttributes,
-  loading,
-  productTemplateList,
-  totalItems,
   categories,
-} = useProductTemplateList(String(route.fullPath));
+  loading,
+  totalItems,
+  productTemplateList,
+} = useSearch();
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
-const { getFacetsFromURL } = useUiHelpers();
 
 const breadcrumbs = [
   { name: "Home", link: "/" },
-  { name: "Category", link: `Category/${route.params.id}` },
+  { name: "Search", link: "/" },
 ];
 
 const maxVisiblePages = ref(1);
@@ -40,7 +33,7 @@ watch(isTabletScreen, (value) => {
 watch(
   () => route,
   async () => {
-    await loadProductTemplateList(getFacetsFromURL(route.query));
+    search();
   },
   { deep: true, immediate: true }
 );
@@ -59,9 +52,9 @@ onMounted(() => {
 </script>
 <template>
   <div class="pb-20">
-    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-14" />
+    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
     <h1 class="font-bold typography-headline-3 md:typography-headline-2 mb-10">
-      All products
+      Results for "{{ route.query.search }}"
     </h1>
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
