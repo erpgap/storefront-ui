@@ -116,7 +116,10 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    "/": { swr: 3600, cache: { name: "home" } },
+    "/": { swr: 3600 },
+    "/category/*": { swr: 3600 },
+    "/product/*": { swr: 3600 },
+
     "/_ipx/**": {
       headers: { "cache-control": "public, max-age=31536000, immutable" },
     },
