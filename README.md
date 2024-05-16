@@ -17,7 +17,6 @@ Template base to start new odoo vsf projects using vsf SDK
 5. yarn dev
 6. You can access with http://localhost:3000
 ```
-
 ## Search products
 
 Find products with our search options. Choose Algolia or stick to database search.
