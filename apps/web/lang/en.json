@@ -298,12 +298,17 @@
       "billingDetails": {
         "billingAddress": "Billing address",
         "edit": "Edit",
+        "delete": "Delete",
+        "current": "Current",
         "shippingAddress": "Shipping address"
       },
       "shippingDetails": {
         "edit": "Edit",
+        "delete": "Delete",
+        "current": "Current",
         "shippingAddress": "Shipping address"
-      }
+      },
+      "addNewAddress": "Add new address"
     },
     "ordersAndReturns": {
       "heading": "Orders & Returns",
