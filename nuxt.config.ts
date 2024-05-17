@@ -68,6 +68,7 @@ export default defineNuxtConfig({
     ],
     "@nuxtjs/seo",
     "@nuxt/scripts",
+    "@nuxt/eslint"
   ],
   // storyblok: {
   //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,

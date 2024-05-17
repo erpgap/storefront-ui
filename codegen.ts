@@ -5,7 +5,6 @@ const config: CodegenConfig = {
   schema: [
     {
       'https://vsfdemo17.labs.odoogap.com/graphql/vsf': {},
-      'https://vsfdemo17.labs.odoogap.com/graphql/vsf': {},
     },
   ],
   config: {
