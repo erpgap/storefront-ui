@@ -7,7 +7,6 @@ import {
   SfIconFavorite,
   SfIconFavoriteFilled,
 } from '@storefront-ui/vue';
-import { useToast } from 'vue-toastification';
 import type { Product } from '~/graphql';
 
 defineProps({
