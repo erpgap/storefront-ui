@@ -10,7 +10,6 @@ import {
   SfSelect,
   SfThumbnail,
 } from "@storefront-ui/vue";
-import type { ProductFilterType } from "~/types/product";
 
 const emit = defineEmits(["close"]);
 const props = defineProps({
@@ -116,7 +115,7 @@ const changeCategory = (categoryId: number) => {
 };
 
 selectedFilters.value = facetsFromUrlToFilter();
-const priceFilter = selectedFilters.value?.find((item: ProductFilterType) => {
+const priceFilter = selectedFilters.value?.find((item: any) => {
   return item.filterName === "price";
 });
 
@@ -301,7 +300,7 @@ if (priceFilter) {
             </SfListItem>
           </template>
         </SfAccordionItem>
-        <hr class="my-4" >
+        <hr class="my-4" />
       </li>
     </ul>
     <div

@@ -1,13 +1,11 @@
-import type { VariantPrice } from "@/types/product";
-
 export const useProductAttributes: any = () => {
-  const getRegularPrice = (firstVariant: VariantPrice) => {
+  const getRegularPrice = (firstVariant: any) => {
     if (firstVariant && firstVariant.combinationInfoVariant) {
       return firstVariant.combinationInfoVariant.price;
     }
   };
 
-  const getSpecialPrice = (firstVariant: VariantPrice) => {
+  const getSpecialPrice = (firstVariant: any) => {
     if (
       firstVariant &&
       firstVariant.combinationInfoVariant?.has_discounted_price

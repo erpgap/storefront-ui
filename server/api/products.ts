@@ -1,5 +1,4 @@
 import productFragment from "../fragments/productFragment";
-import axios from "axios";
 
 const odooBaseUrl = `${process.env.NUXT_PUBLIC_ODOO_BASE_URL}graphql/vsf`;
 
@@ -11,7 +10,7 @@ const headers = {
 
 export default defineCachedEventHandler(
   async (event) => {
-    const results = await axios({
+    const results = await $fetch({
       url: odooBaseUrl,
       method: "post",
       data: {
