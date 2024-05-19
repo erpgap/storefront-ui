@@ -1,5 +1,5 @@
-import { Endpoints } from '@erpgap/odoo-sdk-api-client';
-import { H3Event } from 'h3';
+import type { Endpoints } from '@erpgap/odoo-sdk-api-client';
+import type { H3Event } from 'h3';
 
 export const getCached = cachedFunction(
   async (event: H3Event, body: any) => {

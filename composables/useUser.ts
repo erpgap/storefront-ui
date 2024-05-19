@@ -1,5 +1,5 @@
 import { useToast } from "vue-toastification";
-import {
+import type {
   LoadUserQueryResponse,
   LoginUserResponse,
   MutationLoginArgs,

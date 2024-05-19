@@ -11,7 +11,7 @@
       height="192"
       class="mx-auto"
     />
-    <h3 class="typography-headline-3 font-bold mt-6 mb-4">
+    <h3 class="typography-headline-3 font-bold mt-6 mb-4"> 
       {{ $t('account.ordersAndReturns.noOrders') }}
     </h3>
   </div>

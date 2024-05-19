@@ -66,7 +66,7 @@
           <th class="py-4 px-4 font-medium">
             {{ $t('account.ordersAndReturns.status') }}
           </th>
-          <th class="py-4 pl-4"></th>
+          <th class="py-4 pl-4"/>
         </tr>
       </thead>
       <tbody>

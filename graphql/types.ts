@@ -1,4 +1,4 @@
-import {
+import type {
   AttributeValue,
   Cart,
   Category,
@@ -15,8 +15,8 @@ import {
   AdyenPaymentsResult,
   PaymentProvider,
 } from "./gql/graphql";
-import { H3Error } from "h3";
-import { _AsyncData } from "nuxt/dist/app/composables/asyncData";
+import type { H3Error } from "h3";
+import type { _AsyncData } from "nuxt/dist/app/composables/asyncData";
 
 export type CategoryListResponse = _AsyncData<
   {
@@ -199,7 +199,7 @@ export type SelectCurrentAddressResponse = _AsyncData<
 
 export type DeleteAddressResponse = _AsyncData<
   {
-    result: Boolean;
+    result: boolean;
   },
   H3Error
 >;

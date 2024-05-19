@@ -1,5 +1,5 @@
-import { ApolloError } from "@apollo/client";
-import { Endpoints } from "@erpgap/odoo-sdk-api-client";
+import type { ApolloError } from "@apollo/client";
+import type { Endpoints } from "@erpgap/odoo-sdk-api-client";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);

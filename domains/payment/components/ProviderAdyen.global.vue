@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div id="dropin-container" class="mt-4" ref="dropinDivElement" />
+    <div id="dropin-container" ref="dropinDivElement" class="mt-4" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import AdyenCheckout from "@adyen/adyen-web";
 import "@adyen/adyen-web/dist/adyen.css";
-import { PaymentProvider } from "~/graphql";
+import type { PaymentProvider } from "~/graphql";
 
 interface AdyenDropinType {
   handleAction: (action: any) => void;

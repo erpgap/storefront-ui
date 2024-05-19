@@ -7,7 +7,8 @@ import {
   SfLoaderCircular,
   SfSelect,
 } from "@storefront-ui/vue";
-import { AddressEnum, Partner } from "~/graphql";
+import type { Partner } from "~/graphql";
+import { AddressEnum } from "~/graphql";
 
 const props = defineProps<{
   addresses: Partner[];
@@ -115,21 +116,21 @@ await loadCountryList();
 </script>
 <template>
   <div
-    class="md:col-span-1 col-span-3"
     v-for="address in addresses"
     :key="address.id"
+    class="md:col-span-1 col-span-3"
   >
     <AccountAddressData
-      @on-click="editAddress(address)"
       :header="address.name"
       :button-text="$t('account.accountSettings.personalData.edit')"
+      @on-click="editAddress(address)"
     >
       <p>{{ `${address.name}, ${address.street}` }}</p>
       <p>{{ address.phone }}</p>
       <p>{{ `${address.country?.name}` }}</p>
       <p>{{ `${address.state?.name}` }}</p>
       <p>{{ `${address.city} ${address.zip}` }}</p>
-      <template v-slot:footer>
+      <template #footer>
         <SfButton
           variant="tertiary"
           size="sm"
@@ -149,7 +150,7 @@ await loadCountryList();
     </AccountAddressData>
   </div>
   <div class="col-span-3">
-    <SfButton size="lg" @click="newAddress()" class="self-start"
+    <SfButton size="lg" class="self-start" @click="newAddress()"
       >Add new address</SfButton
     >
   </div>

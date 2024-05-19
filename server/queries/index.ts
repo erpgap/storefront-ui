@@ -12,7 +12,7 @@ import LoadCartQuery from './LoadCartQuery';
 import LoadUserQuery from './LoadUserQuery';
 import StockLotsQuery from './StockLotsQuery';
 import WishlistLoadQuery from './WishlistLoadQuery';
-import { DocumentNode } from 'graphql/language';
+import type { DocumentNode } from 'graphql/language';
 
 enum QueryName {
   GetProductVariantQuery = 'GetProductVariantQuery',

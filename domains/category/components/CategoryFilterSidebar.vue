@@ -10,7 +10,7 @@ import {
   SfSelect,
   SfThumbnail,
 } from "@storefront-ui/vue";
-import { ProductFilterType } from "~/types/product";
+import type { ProductFilterType } from "~/types/product";
 
 const emit = defineEmits(["close"]);
 const props = defineProps({
@@ -301,7 +301,7 @@ if (priceFilter) {
             </SfListItem>
           </template>
         </SfAccordionItem>
-        <hr class="my-4" />
+        <hr class="my-4" >
       </li>
     </ul>
     <div

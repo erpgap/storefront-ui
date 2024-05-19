@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import {
+ 
+import type {
   AttributeValue,
   Category,
   Product,

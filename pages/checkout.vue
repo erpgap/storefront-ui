@@ -12,7 +12,8 @@ import {
   SfLink,
 } from "@storefront-ui/vue";
 import { useDeliveryMethod } from "~/composables/useDeliveryMethod";
-import { AddressEnum, PaymentProvider } from "~/graphql";
+import type { PaymentProvider } from "~/graphql";
+import { AddressEnum } from "~/graphql";
 
 const NuxtLink = resolveComponent("NuxtLink");
 const { isOpen, open, close } = useDisclosure();
@@ -246,7 +247,7 @@ const selectedProvider = ref<PaymentProvider | null>(
           </div>
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
           <ProviderListOptions
-            :activeProvider="selectedProvider || paymentProviders[0]"
+            :active-provider="selectedProvider || paymentProviders[0]"
             :payment-providers="paymentProviders"
             @update:active-payment="selectedProvider = $event"
           />
@@ -283,8 +284,8 @@ const selectedProvider = ref<PaymentProvider | null>(
           </p>
 
           <component
-            v-if="showPaymentModal && !!selectedProvider?.code"
             :is="getPaymentProviderComponentName(selectedProvider.code)"
+            v-if="showPaymentModal && !!selectedProvider?.code"
             :provider="selectedProvider"
             :cart="cart"
             @is-payment-ready="($event) => (isPaymentReady = $event)"

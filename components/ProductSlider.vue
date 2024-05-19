@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SfScrollable } from '@storefront-ui/vue';
-import { Product } from '~/graphql';
+import type { Product } from '~/graphql';
 
 defineProps({
   heading: String,

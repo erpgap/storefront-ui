@@ -21,7 +21,7 @@ import WishlistAddItem from "./WishlistAddItem";
 import WishlistRemoveItem from "./WishlistRemoveItem";
 import SelectCurrentAddress from "./SelectCurrentAddress";
 import DeleteAddress from "./DeleteAddress";
-import { DocumentNode } from "@apollo/client";
+import type { DocumentNode } from "@apollo/client";
 
 enum MutationName {
   LoginMutation = "LoginMutation",

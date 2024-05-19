@@ -1,4 +1,4 @@
-import { PaymentProvider, PaymentMethodListResponse } from "~/graphql";
+import type { PaymentProvider, PaymentMethodListResponse } from "~/graphql";
 import { QueryName } from "~/server/queries";
 
 export const usePayment = () => {

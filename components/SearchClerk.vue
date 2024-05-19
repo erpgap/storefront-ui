@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AlgoliaHitType } from "@/types/algolia";
+import type { AlgoliaHitType } from "@/types/algolia";
 
 type SearchClerkProps = {
   hits?: AlgoliaHitType[];

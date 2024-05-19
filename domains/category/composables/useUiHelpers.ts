@@ -1,4 +1,4 @@
-import { ProductFilterInput, QueryProductsArgs } from "~/graphql";
+import type { ProductFilterInput, QueryProductsArgs } from "~/graphql";
 
 export const useUiHelpers = () => {
   const route: any = useRoute();

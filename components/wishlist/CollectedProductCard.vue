@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SfLink, SfButton, SfIconClose } from '@storefront-ui/vue';
-import { PropType } from 'nuxt/dist/app/compat/capi';
-import { Product } from '~/graphql';
+import type { PropType } from 'nuxt/dist/app/compat/capi';
+import type { Product } from '~/graphql';
 
 const NuxtLink = resolveComponent('NuxtLink');
 

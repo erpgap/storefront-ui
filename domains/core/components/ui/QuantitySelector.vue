@@ -55,7 +55,7 @@ const handleUpdate = (event: Event) => {
         data-testid="quantity-selector-input"
         aria-label="Quantity Selector"
         @input="handleUpdate"
-      />
+      >
       <SfButton
         type="button"
         variant="tertiary"

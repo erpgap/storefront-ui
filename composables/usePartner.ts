@@ -1,4 +1,4 @@
-import { Partner, MutationCreateUpdatePartnerArgs, PartnerResponse } from '~/graphql';
+import type { Partner, MutationCreateUpdatePartnerArgs, PartnerResponse } from '~/graphql';
 import { MutationName } from '~/server/mutations';
 
 export const usePartner = () => {

@@ -8,7 +8,7 @@ import {
   useTrapFocus,
 } from "@storefront-ui/vue";
 import { onClickOutside } from "@vueuse/core";
-import { Category } from "~/graphql";
+import type { Category } from "~/graphql";
 
 const { isOpen, toggle, close } = useDisclosure();
 
@@ -104,7 +104,7 @@ onClickOutside(menuRef, () => {
                     >
                       {{ name }}
                     </h2>
-                    <hr class="mb-3.5" />
+                    <hr class="mb-3.5" >
                     <ul>
                       <li v-for="child in childs" :key="child.id">
                         <SfListItem

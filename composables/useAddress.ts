@@ -1,5 +1,4 @@
-import {
-  AddressEnum,
+import type {
   AddressesResponse,
   Partner,
   QueryAddressesArgs,
@@ -13,7 +12,9 @@ import {
   SelectCurrentAddressResponse,
   DeleteAddressInput,
   MutationDeleteAddressArgs,
-  DeleteAddressResponse,
+  DeleteAddressResponse} from "~/graphql";
+import {
+  AddressEnum,
   AddressFilterInput,
 } from "~/graphql";
 import { MutationName } from "~/server/mutations";

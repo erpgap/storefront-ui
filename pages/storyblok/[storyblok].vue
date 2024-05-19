@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-// eslint-disable-next-line camelcase
+ 
 const route = useRoute();
 
 const story = await useAsyncStoryblok(

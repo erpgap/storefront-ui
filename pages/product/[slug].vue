@@ -16,9 +16,9 @@ import {
   SfRating,
   SfThumbnail,
 } from "@storefront-ui/vue";
-import { LocationQueryRaw } from "vue-router";
+import type { LocationQueryRaw } from "vue-router";
 import { useToast } from "vue-toastification";
-import { OrderLine, Product } from "~/graphql";
+import type { OrderLine, Product } from "~/graphql";
 
 const route = useRoute();
 const router = useRouter();

@@ -13,7 +13,7 @@
         required
       />
     </label>
-    <div class="mt-4"></div>
+    <div class="mt-4"/>
     <label>
       <UiFormLabel>{{ $t("contactInfo.email") }}</UiFormLabel>
       <SfInput

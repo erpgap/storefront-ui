@@ -1,6 +1,5 @@
-import { onClickOutside } from "@vueuse/core";
-import { useToggle } from "@vueuse/core";
-import { AlgoliaHitType } from "~/types/algolia";
+import { onClickOutside , useToggle } from "@vueuse/core";
+import type { AlgoliaHitType } from "~/types/algolia";
 
 export const useSearch = (formSearchTemplateRef?: any) => {
   const route = useRoute();
@@ -17,7 +16,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   const { result: aloliaResults, search: algoliaSearch } =
     useAlgoliaSearch("header");
   const loading = ref(false);
-  const searchInputValue = ref((route.query?.search as String) || "");
+  const searchInputValue = ref((route.query?.search as string) || "");
   const highlightedIndex = ref(-1);
   const showResultSearch = ref(false);
   const {
@@ -81,7 +80,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
 
   watch(
     () => route,
-    () => (searchInputValue.value = (route.query.search as String) || ""),
+    () => (searchInputValue.value = (route.query.search as string) || ""),
     { deep: true, immediate: true }
   );
 

@@ -1,8 +1,9 @@
 //import { createApiClient } from "../../../../../odoo/packages/sdk-api-client/src/index.server";
 //import { MiddlewareConfig } from "@erpgap/odoo-sdk-api-client/server";
+import type {
+  MiddlewareConfig} from "@erpgap/odoo-sdk-api-client/server";
 import {
-  createApiClient,
-  MiddlewareConfig,
+  createApiClient
 } from "@erpgap/odoo-sdk-api-client/server";
 import { Mutations } from "~/server/mutations";
 import { Queries } from "~/server/queries";

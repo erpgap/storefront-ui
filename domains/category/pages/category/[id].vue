@@ -5,7 +5,7 @@ import {
   useDisclosure,
   SfLoaderCircular,
 } from "@storefront-ui/vue";
-import { Product } from "~/graphql";
+import type { Product } from "~/graphql";
 
 const route = useRoute();
 const { isMobile, isDesktopOrTablet } = useDevice();
@@ -72,9 +72,9 @@ onMounted(() => {
           :categories="categories"
         />
         <LazyCategoryMobileSidebar
+          v-show="isMobile"
           :is-open="isOpen"
           @close="close"
-          v-show="isMobile"
         >
           <template #default>
             <CategoryFilterSidebar

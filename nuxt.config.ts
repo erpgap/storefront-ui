@@ -68,7 +68,7 @@ export default defineNuxtConfig({
     ],
     "@nuxtjs/seo",
     "@nuxt/scripts",
-    "@nuxt/eslint"
+    "@nuxt/eslint",
   ],
   // storyblok: {
   //   accessToken: process.env.NUXT_STORYBLOK_TOKEN,
@@ -156,5 +156,13 @@ export default defineNuxtConfig({
     name: "ERPGAP VSF",
     description: "Welcome to an awesome ecommerce site!",
     defaultLocale: "en",
+  },
+  tailwindcss: {
+    viewer: false,
+  },
+  eslint: {
+    config: {
+      stylistic: true,
+    },
   },
 });

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { SfDrawer, SfButton, SfIconClose } from '@storefront-ui/vue';
-import { onClickOutside } from '@vueuse/core';
-import { useToast } from 'vue-toastification';
-import { Product, WishlistItem } from '~/graphql';
+import { SfDrawer, SfButton, SfIconClose } from "@storefront-ui/vue";
+import { onClickOutside } from "@vueuse/core";
+import { useToast } from "vue-toastification";
+import type { Product } from "~/graphql";
 
-const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading } = useWishlist();
+const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading } =
+  useWishlist();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 const toast = useToast();
 
@@ -46,22 +47,34 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
           <div class="flex flex-col h-full">
             <div class="p-4 flex justify-between items-center">
               <span class="font-bold text-lg text-black">Wishlist</span>
-              <SfButton variant="tertiary" :aria-label="$t('closeListSettings')" @click="toggleWishlistSideBar">
+              <SfButton
+                variant="tertiary"
+                :aria-label="$t('closeListSettings')"
+                @click="toggleWishlistSideBar"
+              >
                 <template #prefix>
                   <SfIconClose class="text-neutral-500" />
                 </template>
               </SfButton>
             </div>
             <div v-if="!loading">
-              <div v-if="wishlistTotalItems > 0" class="overflow-y-scroll h-[800px] p-4 text-black">
+              <div
+                v-if="wishlistTotalItems > 0"
+                class="overflow-y-scroll h-[800px] p-4 text-black"
+              >
                 <div class="flex items-center font-medium pb-6">
                   <p class="text-gray-600 mr-1">Number of products :</p>
                   {{ wishlistTotalItems }}
                 </div>
-                <div v-for="item in wishlist?.wishlistItems || []" :key="item?.id">
+                <div
+                  v-for="item in wishlist?.wishlistItems || []"
+                  :key="item?.id"
+                >
                   <WishlistCollectedProductCard
                     :product="item?.product as Product"
-                    @remove-from-wishlist="handleWishlistRemoveItem(item?.product as Product)"
+                    @remove-from-wishlist="
+                      handleWishlistRemoveItem(item?.product as Product)
+                    "
                   />
                 </div>
               </div>

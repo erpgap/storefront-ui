@@ -1,4 +1,5 @@
-import { AttributeValue, Product, ProductVariantResponse, QueryProductVariantArgs } from '~/graphql';
+import type { Product, ProductVariantResponse, QueryProductVariantArgs } from '~/graphql';
+import { AttributeValue } from '~/graphql';
 import { QueryName } from '~/server/queries';
 
 export const useProductVariant = (slugWithCombinationIds: string) => {

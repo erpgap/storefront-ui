@@ -7,13 +7,17 @@ import {
   SfIconPerson,
   SfIconShoppingCart,
   useDisclosure,
-} from '@storefront-ui/vue';
+} from "@storefront-ui/vue";
 
-const { isOpen: wishlistIsOpen, toggle: wishlistToggle, close: wishlistClose } = useDisclosure();
+const {
+  isOpen: wishlistIsOpen,
+  toggle: wishlistToggle,
+  close: wishlistClose,
+} = useDisclosure();
 const { wishlist } = useWishlist();
-const NuxtLink = resolveComponent('NuxtLink');
+const NuxtLink = resolveComponent("NuxtLink");
 
-const collectedProducts: any = ref('');
+const collectedProducts: any = ref("");
 const isActive = ref(false);
 const setIsActive = (param: boolean) => {
   isActive.value = param;
@@ -36,7 +40,10 @@ const handleWishlistSideBar = async () => {
     @wishlist-count="setWishlistCount"
     @close="wishlistClose"
   />
-  <nav class="w-full fixed bottom-0 left-0 flex flex-row items-stretch lg:hidden" data-testid="navbar-bottom">
+  <nav
+    class="w-full fixed bottom-0 left-0 flex flex-row items-stretch lg:hidden"
+    data-testid="navbar-bottom"
+  >
     <SfButton
       key="home"
       variant="tertiary"
@@ -54,7 +61,7 @@ const handleWishlistSideBar = async () => {
           <SfIconHome />
         </div>
       </template>
-      {{ $t('home') }}
+      {{ $t("home") }}
     </SfButton>
 
     <SfButton
@@ -77,7 +84,7 @@ const handleWishlistSideBar = async () => {
           />
         </div>
       </template>
-      {{ $t('wishlist.wishlist') }}
+      {{ $t("wishlist.wishlist") }}
     </SfButton>
     <SfButton
       key="cart"
@@ -94,10 +101,13 @@ const handleWishlistSideBar = async () => {
       <template #prefix>
         <div class="relative">
           <SfIconShoppingCart />
-          <SfBadge :content="3" class="outline-white bg-white !text-neutral-900 translate-x-[5px] translate-y-[-3px]" />
+          <SfBadge
+            :content="3"
+            class="outline-white bg-white !text-neutral-900 translate-x-[5px] translate-y-[-3px]"
+          />
         </div>
       </template>
-      {{ $t('cart') }}
+      {{ $t("cart") }}
     </SfButton>
     <SfButton
       key="account"
@@ -105,7 +115,8 @@ const handleWishlistSideBar = async () => {
       :class="[
         '!p-1 !pt-3 flex flex-col h-full w-full rounded-none bg-primary-700 text-white hover:text-white hover:bg-primary-800 active:text-white active:bg-primary-900 !text-xs !font-base',
         {
-          'text-white bg-primary-900': $route.path === '/my-account' && !isActive,
+          'text-white bg-primary-900':
+            $route.path === '/my-account' && !isActive,
         },
       ]"
       size="sm"

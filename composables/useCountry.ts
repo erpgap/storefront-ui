@@ -1,4 +1,4 @@
-import { Country, QueryCountriesArgs, CountryListResponse } from '~/graphql';
+import type { Country, QueryCountriesArgs, CountryListResponse } from '~/graphql';
 import { QueryName } from '~/server/queries';
 
 export const useCountry = () => {

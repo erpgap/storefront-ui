@@ -1,4 +1,4 @@
-import { VariantPrice } from "@/types/product";
+import type { VariantPrice } from "@/types/product";
 
 export const useProductAttributes: any = () => {
   const getRegularPrice = (firstVariant: VariantPrice) => {
