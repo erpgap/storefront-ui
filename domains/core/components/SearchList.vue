@@ -2,11 +2,20 @@
 type SearchHitEmit = (event: "select", parameter: AlgoliaHitType) => void;
 type SearchClerkProps = {
   hits?: AlgoliaHitType[];
-  highlightedIndex: number;
+  searchText: string;
 };
 
-defineProps<SearchClerkProps>();
+const props = defineProps<SearchClerkProps>();
 defineEmits<SearchHitEmit>();
+
+const makeSearchBold = (text: string) => {
+  return text
+    .toLocaleLowerCase()
+    .replace(
+      props.searchText,
+      `<b class='font-extrabold text-[16px] capitalize'>${props.searchText}</b>`
+    );
+};
 </script>
 <template>
   <ul
@@ -18,13 +27,14 @@ defineEmits<SearchHitEmit>();
       v-for="(hit, index) in hits"
       :key="hit.objectID"
       class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-      :class="{ 'bg-gray-100': highlightedIndex === index }"
       role="option"
       @click="$emit('select', hit)"
     >
-      <p class="text-black text-sm font-medium">
-        {{ hit.name }}
-      </p>
+      <span
+        class="text-black text-sm font-medium capitalize"
+        v-html="makeSearchBold(hit.name)"
+      >
+      </span>
     </li>
   </ul>
 </template>

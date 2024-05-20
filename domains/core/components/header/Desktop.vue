@@ -192,10 +192,10 @@ onClickOutside(menuRef, () => {
             leave-from-class="translate-x-0 md:opacity-100"
             leave-to-class="-translate-x-full md:translate-x-0 md:opacity-0"
           >
-            <SearchClerk
+            <SearchList
               v-if="showResultSearch"
               :hits="searchHits"
-              :highlighted-index="highlightedIndex"
+              :search-text="searchInputValue"
               @select="selectHit"
             />
           </transition>
