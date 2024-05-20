@@ -1,4 +1,4 @@
-import { onClickOutside , useToggle } from "@vueuse/core";
+import { onClickOutside, useToggle } from "@vueuse/core";
 import type { AlgoliaHitType } from "~/types/algolia";
 
 export const useSearch = (formSearchTemplateRef?: any) => {
@@ -34,7 +34,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
 
   const search = async () => {
     loading.value = true;
-    if (Number(config.public.alogliaEnabled)) {
+    if (Number(config.public.algoliaEnabled)) {
       await algoliaSearch({ query: route.query.search });
       const newQuery = { ...route.query };
       delete newQuery.search;

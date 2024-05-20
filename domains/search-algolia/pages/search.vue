@@ -9,8 +9,6 @@ const { getFacetsFromURL } = useUiHelpers();
 // searching on algolia with query params
 const { search, searchInputValue, algoliaSearchResultIds } = useSearch();
 searchInputValue.value = route.query.search as string;
-await search();
-
 // fetch products with query params + ids from algolia
 const {
   loadProductTemplateList,
@@ -19,11 +17,6 @@ const {
   totalItems,
   categories,
 } = useProductTemplateList(route.fullPath);
-await loadProductTemplateList(
-  getFacetsFromURL(route.query, algoliaSearchResultIds.value)
-);
-
-console.log(organizedAttributes.value);
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 
@@ -32,7 +25,7 @@ const breadcrumbs = [
   { name: "Search", link: "/" },
 ];
 
-const maxVisiblePages = ref(1);
+const maxVisiblePages = useState("search-page-max-visible", () => 1);
 const setMaxVisiblePages = (isWide: boolean) =>
   (maxVisiblePages.value = isWide ? 5 : 1);
 
@@ -44,9 +37,12 @@ watch(isTabletScreen, (value) => {
 });
 
 watch(
-  () => route,
+  () => route.fullPath,
   async () => {
-    search();
+    await search();
+    await loadProductTemplateList(
+      getFacetsFromURL(route.query, algoliaSearchResultIds.value)
+    );
   },
   { deep: true, immediate: true }
 );
@@ -71,19 +67,19 @@ onMounted(() => {
     </h1>
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
-        <!-- <CategoryFilterSidebar
+        <CategoryFilterSidebar
           class="hidden lg:block"
           :attributes="organizedAttributes"
           :categories="categories"
-        /> -->
+        />
         <LazyCategoryMobileSidebar :is-open="isOpen" @close="close">
           <template #default>
-            <!-- <CategoryFilterSidebar
+            <CategoryFilterSidebar
               class="block lg:hidden"
               :attributes="organizedAttributes"
               :categories="categories"
               @close="close"
-            /> -->
+            />
           </template>
         </LazyCategoryMobileSidebar>
       </div>

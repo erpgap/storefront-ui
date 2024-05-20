@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import type { AlgoliaHitType } from "@/types/algolia";
-
+type SearchHitEmit = (event: "select", parameter: AlgoliaHitType) => void;
 type SearchClerkProps = {
   hits?: AlgoliaHitType[];
   highlightedIndex: number;
 };
-
-type SearchHitEmit = (event: "select", parameter: AlgoliaHitType) => void;
 
 defineProps<SearchClerkProps>();
 defineEmits<SearchHitEmit>();

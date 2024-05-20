@@ -12,7 +12,9 @@
     "predev": "yarn codegen",
     "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
     "lint": "eslint . && yarn lint:js",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky install",
+    "commit": "git-cz"
   },
   "dependencies": {
     "@adyen/adyen-web": "4.7.3",
@@ -38,6 +40,8 @@
     "vue-toastification": "next"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
     "@graphql-codegen/cli": "^4.0.1",
     "@graphql-codegen/client-preset": "^4.0.1",
     "@graphql-codegen/typescript": "^4.0.1",
@@ -50,9 +54,17 @@
     "@pinia/nuxt": "^0.5.1",
     "@storefront-ui/vue": "^2.6.3",
     "@vueuse/nuxt": "^10.9.0",
+    "git-cz": "^4.9.0",
+    "husky": "^9.0.11",
     "nuxt-lodash": "^2.5.3"
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog",
+      "disableScopeLowerCase": true
+    }
   }
 }

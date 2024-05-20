@@ -18,8 +18,6 @@ const formSearchTemplateRef = ref(null);
 
 const {
   searchInputValue,
-  highlightNext,
-  highlightPrevious,
   highlightedIndex,
   search,
   searchHits,
@@ -105,7 +103,7 @@ onClickOutside(menuRef, () => {
                       >
                         {{ name }}
                       </h2>
-                      <hr class="mb-3.5" >
+                      <hr class="mb-3.5" />
                       <ul>
                         <li v-for="child in childs" :key="child.id">
                           <SfListItem
@@ -169,8 +167,6 @@ onClickOutside(menuRef, () => {
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
             @input="search"
-            @keydown.up.prevent="highlightPrevious"
-            @keydown.down.prevent="highlightNext"
             @keydown.enter.prevent="selectHit(searchHits[highlightedIndex])"
           >
             <template #suffix>

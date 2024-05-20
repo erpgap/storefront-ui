@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     "./domains/my-account",
     "./domains/product",
     "./domains/search-algolia",
+    //"./domains/search-default",
     "./domains/wishlist",
   ],
   modules: [
@@ -44,7 +45,7 @@ export default defineNuxtConfig({
     public: {
       odooBaseImageUrl: "",
       odooBaseUrl: "",
-      alogliaEnabled: process.env.NUXT_ALGOLIA_ENABLED,
+      algoliaEnabled: 0,
     },
   },
   googleFonts: {
