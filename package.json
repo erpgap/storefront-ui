@@ -63,8 +63,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "cz-conventional-changelog",
-      "disableScopeLowerCase": true
+      "path": "cz-cz"
     }
   }
 }
