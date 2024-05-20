@@ -20,12 +20,16 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   const { result, search: algoliaSearch } = useAlgoliaSearch("header");
 
   const loading = useState("algolia-search-loading", () => false);
-  const searchInputValue = useState(
-    "algolia-search-input",
-    () => (route.query?.search as string) || ""
-  );
+  const searchInputValue = useState("algolia-search-input", () => "");
   const highlightedIndex = ref(-1);
   const showResultSearch = ref(false);
+
+  watch(
+    () => route.query,
+    () => {
+      searchInputValue.value = "";
+    }
+  );
 
   const algoliaSearchResultIds = computed(() =>
     result.value?.hits.map((hit) => hit?.id)

@@ -7,7 +7,8 @@ const { isOpen, open, close } = useDisclosure();
 const { getFacetsFromURL } = useUiHelpers();
 
 // searching on algolia with query params
-const { search, searchInputValue, algoliaSearchResultIds } = useSearch();
+const { search, searchInputValue, algoliaSearchResultIds, loading } =
+  useSearch();
 searchInputValue.value = route.query.search as string;
 await search();
 

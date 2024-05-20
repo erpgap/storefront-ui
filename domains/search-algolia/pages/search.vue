@@ -7,7 +7,8 @@ const { isOpen, open, close } = useDisclosure();
 const { getFacetsFromURL } = useUiHelpers();
 
 // searching on algolia with query params
-const { search, searchInputValue, algoliaSearchResultIds } = useSearch();
+const { search, searchInputValue, algoliaSearchResultIds, loading } =
+  useSearch();
 searchInputValue.value = route.query.search as string;
 // fetch products with query params + ids from algolia
 const {
@@ -16,7 +17,7 @@ const {
   productTemplateList,
   totalItems,
   categories,
-} = useProductTemplateList(route.fullPath);
+} = useProductTemplateList(route.fullPath, route.fullPath);
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 
@@ -36,15 +37,10 @@ watch(isTabletScreen, (value) => {
   }
 });
 
-watch(
-  () => route.fullPath,
-  async () => {
-    await search();
-    await loadProductTemplateList(
-      getFacetsFromURL(route.query, algoliaSearchResultIds.value)
-    );
-  },
-  { deep: true, immediate: true }
+await search();
+
+await loadProductTemplateList(
+  getFacetsFromURL(route.query, algoliaSearchResultIds.value)
 );
 
 const pagination = computed(() => ({
