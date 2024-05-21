@@ -1,12 +1,15 @@
 import { useToast } from "vue-toastification";
 import type {
+  CreateUpdatePartnerResponse,
   LoadUserQueryResponse,
   LoginUserResponse,
+  MutationCreateUpdatePartnerArgs,
   MutationLoginArgs,
   MutationRegisterArgs,
   MutationResetPasswordArgs,
   MutationUpdatePasswordArgs,
   Partner,
+  PartnerResponse,
   RegisterUserResponse,
   ResetPasswordResponse,
   UpdatePasswordResponse,
@@ -32,10 +35,23 @@ export const useAuth = () => {
       queryName: QueryName.LoadUserQuery,
     });
 
-    userCookie.value = data.value.partner;
-    user.value = data.value.partner;
+    userCookie.value = data.value?.partner;
+    user.value = data.value?.partner;
 
     loading.value = false;
+  };
+
+  const updatePartner = async (params: MutationCreateUpdatePartnerArgs) => {
+    loading.value = true;
+
+    const { data } = await $sdk().odoo.mutation<
+      MutationCreateUpdatePartnerArgs,
+      CreateUpdatePartnerResponse
+    >({ mutationName: MutationName.CreateUpdatePartner }, params);
+
+    user.value = data.value.createUpdatePartner;
+
+    toast.success("Partner updated successfully");
   };
 
   const logout = async () => {
@@ -133,5 +149,6 @@ export const useAuth = () => {
     successResetEmail,
     updatePassword,
     loadUser,
+    updatePartner,
   };
 };

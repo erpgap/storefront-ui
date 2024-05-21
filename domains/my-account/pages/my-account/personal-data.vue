@@ -1,13 +1,54 @@
+<script setup lang="ts">
+import {
+  SfButton,
+  SfIconClose,
+  SfModal,
+  useDisclosure,
+} from "@storefront-ui/vue";
+import { unrefElement } from "@vueuse/core";
+import type { MutationCreateUpdatePartnerArgs } from "~/graphql";
+
+definePageMeta({
+  layout: "account",
+});
+const { isOpen, open, close } = useDisclosure();
+const { loadUser, user, updatePassword, updatePartner } = useAuth();
+
+const lastActiveElement = ref();
+const modalElement = ref();
+const openedForm = ref("");
+
+const openModal = async (modalName: string) => {
+  openedForm.value = modalName;
+  lastActiveElement.value = document.activeElement;
+  open();
+  await nextTick();
+  unrefElement(modalElement).focus();
+};
+
+const closeModal = () => {
+  close();
+  lastActiveElement.value.focus();
+};
+
+const handleUpdatePartner = async (data: MutationCreateUpdatePartnerArgs) => {
+  await updatePartner({ ...data, subscribeNewsletter: false });
+  closeModal();
+};
+
+const saveNewPassword = async (passwords: any) => {
+  if (passwords.firstNewPassword === passwords.secondNewPassword) {
+    await updatePassword({
+      currentPassword: passwords.oldPassword,
+      newPassword: passwords.firstNewPassword,
+    });
+    closeModal();
+  }
+};
+
+await loadUser();
+</script>
 <template>
-  <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-  <AccountProfileData
-    class="col-span-3"
-    :header="$t('account.accountSettings.personalData.yourName')"
-    :button-text="$t('account.accountSettings.personalData.edit')"
-    @on-click="openModal('yourName')"
-  >
-    {{ user?.name }}
-  </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <AccountProfileData
     class="col-span-3"
@@ -15,9 +56,16 @@
     :button-text="$t('account.accountSettings.personalData.edit')"
     @on-click="openModal('contactInformation')"
   >
-    {{ user?.email }}
+    <div class="flex">
+      {{ user?.name }}
+    </div>
+    <div class="flex">
+      {{ user?.email }}
+    </div>
   </AccountProfileData>
+
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
+
   <AccountProfileData
     class="col-span-3"
     :header="$t('account.accountSettings.personalData.yourPassword')"
@@ -53,19 +101,14 @@
           {{ $t(`account.accountSettings.personalData.${openedForm}`) }}
         </h3>
       </header>
-      <AccountFormsName
-        v-if="openedForm === 'yourName'"
-        :full-name="user?.name"
-        @on-save="saveNewName"
+      <AccountContactInformation
+        v-if="openedForm === 'contactInformation'"
+        :name="user?.name || ''"
+        :email="user?.email || ''"
+        @on-save="handleUpdatePartner"
         @on-cancel="closeModal"
       />
-      <FormContactInformation
-        v-else-if="openedForm === 'contactInformation'"
-        :email="user?.email"
-        @on-save="saveNewEmail"
-        @on-cancel="closeModal"
-      />
-      <AccountFormsPassword
+      <AccountFormPassword
         v-else-if="openedForm === 'passwordChange'"
         @on-save="saveNewPassword"
         @on-cancel="closeModal"
@@ -73,65 +116,3 @@
     </SfModal>
   </UiOverlay>
 </template>
-
-<script setup lang="ts">
-import {
-  SfButton,
-  SfIconClose,
-  SfModal,
-  useDisclosure,
-} from "@storefront-ui/vue";
-import { unrefElement } from "@vueuse/core";
-
-definePageMeta({
-  layout: "account",
-});
-const { isOpen, open, close } = useDisclosure();
-const { loadUser, user } = useAuth();
-const { updatePassword } = useAuth();
-const { updatePartner } = usePartner();
-
-const lastActiveElement = ref();
-const modalElement = ref();
-const openedForm = ref("");
-const openModal = async (modalName: string) => {
-  openedForm.value = modalName;
-  lastActiveElement.value = document.activeElement;
-  open();
-  await nextTick();
-  unrefElement(modalElement).focus();
-};
-
-const closeModal = () => {
-  close();
-  lastActiveElement.value.focus();
-};
-
-const saveNewName = async (newName: string) => {
-  await updatePartner({
-    myaccount: { id: user.value?.id, email: user.value?.email, name: newName },
-  });
-  closeModal();
-};
-
-const saveNewEmail = async (newEmail: string) => {
-  await updatePartner({
-    myaccount: { id: user.value?.id, email: newEmail, name: user.value?.name },
-  });
-  closeModal();
-};
-
-const saveNewPassword = async (passwords: any) => {
-  if (passwords.firstNewPassword === passwords.secondNewPassword) {
-    await updatePassword({
-      currentPassword: passwords.oldPassword,
-      newPassword: passwords.firstNewPassword,
-    });
-    // if (!updatePasswordError.value) {
-    //   closeModal();
-    // }
-  }
-};
-
-await loadUser();
-</script>
