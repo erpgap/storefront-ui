@@ -1,5 +1,0 @@
-**/node_modules/**/*
-**/lib/*
-packages/theme/_theme
-packages/theme/.nuxt
-**/tests/*
