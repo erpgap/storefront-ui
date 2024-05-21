@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { SfButton, SfIconTune, useDisclosure } from "@storefront-ui/vue";
+import {
+  SfButton,
+  SfIconTune,
+  useDisclosure,
+  SfLoaderCircular,
+} from "@storefront-ui/vue";
 import type { Product } from "~/graphql";
 
 const route = useRoute();
@@ -141,7 +146,9 @@ onMounted(() => {
           />
         </template>
         <template v-else>
-          <div class="w-full text-center">Loading Products...</div>
+          <div class="w-full text-center">
+            <SfLoaderCircular size="base" />
+          </div>
         </template>
       </div>
     </div>

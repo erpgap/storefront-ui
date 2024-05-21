@@ -48,6 +48,5 @@ const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
         {{ $t("search") }}
       </h3>
     </header>
-    <UiSearch :close="searchModalClose" />
   </SfModal>
 </template>

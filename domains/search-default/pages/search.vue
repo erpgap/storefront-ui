@@ -150,7 +150,9 @@ onMounted(() => {
           />
         </template>
         <template v-else>
-          <div class="w-full text-center">Loading Products...</div>
+          <div class="w-full text-center">
+            <SfLoaderCircular size="base" />
+          </div>
         </template>
       </div>
     </div>
