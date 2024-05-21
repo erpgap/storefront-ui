@@ -26,7 +26,7 @@ const {
   selectCurrentAddress,
 } = useAddresses();
 const { countries, loadCountryList } = useCountry();
-const { user, loadUser } = useUser();
+const { user, loadUser } = useAuth();
 
 const defaultValues = ref({
   name: "",

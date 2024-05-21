@@ -113,7 +113,7 @@ import {
 const NuxtLink = resolveComponent("NuxtLink");
 const { t } = useI18n();
 const router = useRouter();
-const { logout } = useUser();
+const { logout } = useAuth();
 const sections = [
   {
     title: t("account.accountSettings.heading"),

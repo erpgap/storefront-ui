@@ -37,10 +37,19 @@
       aria-labelledby="address-modal-title"
     >
       <header>
-        <SfButton type="button" square variant="tertiary" class="absolute right-2 top-2" @click="closeModal">
+        <SfButton
+          type="button"
+          square
+          variant="tertiary"
+          class="absolute right-2 top-2"
+          @click="closeModal"
+        >
           <SfIconClose />
         </SfButton>
-        <h3 id="address-modal-title" class="text-neutral-900 text-lg md:text-2xl font-bold mb-6">
+        <h3
+          id="address-modal-title"
+          class="text-neutral-900 text-lg md:text-2xl font-bold mb-6"
+        >
           {{ $t(`account.accountSettings.personalData.${openedForm}`) }}
         </h3>
       </header>
@@ -66,17 +75,25 @@
 </template>
 
 <script setup lang="ts">
-import { SfButton, SfIconClose, SfModal, useDisclosure } from '@storefront-ui/vue';
-import { unrefElement } from '@vueuse/core';
+import {
+  SfButton,
+  SfIconClose,
+  SfModal,
+  useDisclosure,
+} from "@storefront-ui/vue";
+import { unrefElement } from "@vueuse/core";
 
 definePageMeta({
-  layout: 'account',
+  layout: "account",
 });
 const { isOpen, open, close } = useDisclosure();
-const { loadUser, user, updatePartner, updatePassword } = useUser();
+const { loadUser, user } = useAuth();
+const { updatePassword } = useAuth();
+const { updatePartner } = usePartner();
+
 const lastActiveElement = ref();
 const modalElement = ref();
-const openedForm = ref('');
+const openedForm = ref("");
 const openModal = async (modalName: string) => {
   openedForm.value = modalName;
   lastActiveElement.value = document.activeElement;
@@ -91,18 +108,25 @@ const closeModal = () => {
 };
 
 const saveNewName = async (newName: string) => {
-  await updatePartner({ myaccount: { id: user.value?.id, email: user.value?.email, name: newName } });
+  await updatePartner({
+    myaccount: { id: user.value?.id, email: user.value?.email, name: newName },
+  });
   closeModal();
 };
 
 const saveNewEmail = async (newEmail: string) => {
-  await updatePartner({ myaccount: { id: user.value?.id, email: newEmail, name: user.value?.name } });
+  await updatePartner({
+    myaccount: { id: user.value?.id, email: newEmail, name: user.value?.name },
+  });
   closeModal();
 };
 
 const saveNewPassword = async (passwords: any) => {
   if (passwords.firstNewPassword === passwords.secondNewPassword) {
-    await updatePassword({ currentPassword: passwords.oldPassword, newPassword: passwords.firstNewPassword });
+    await updatePassword({
+      currentPassword: passwords.oldPassword,
+      newPassword: passwords.firstNewPassword,
+    });
     // if (!updatePasswordError.value) {
     //   closeModal();
     // }

@@ -1,5 +1,6 @@
 import { useToast } from "vue-toastification";
 import type {
+  LoadUserQueryResponse,
   LoginUserResponse,
   MutationLoginArgs,
   MutationRegisterArgs,
@@ -11,8 +12,9 @@ import type {
   UpdatePasswordResponse,
 } from "~/graphql";
 import { MutationName } from "~/server/mutations";
+import { QueryName } from "~/server/queries";
 
-export const useUser = () => {
+export const useAuth = () => {
   const { $sdk } = useNuxtApp();
   const router = useRouter();
   const userCookie = useCookie<Partner | null>("odoo-user");
@@ -22,6 +24,19 @@ export const useUser = () => {
 
   const loading = ref(false);
   const resetEmail = useCookie<string>("reset-email");
+
+  const loadUser = async () => {
+    loading.value = true;
+
+    const { data } = await $sdk().odoo.query<null, LoadUserQueryResponse>({
+      queryName: QueryName.LoadUserQuery,
+    });
+
+    userCookie.value = data.value.partner;
+    user.value = data.value.partner;
+
+    loading.value = false;
+  };
 
   const logout = async () => {
     userCookie.value = null;
@@ -53,7 +68,6 @@ export const useUser = () => {
   };
 
   const login = async (params: MutationLoginArgs) => {
-    
     loading.value = true;
     const { data, error } = await $sdk().odoo.mutation<
       MutationLoginArgs,
@@ -66,7 +80,7 @@ export const useUser = () => {
 
     userCookie.value = data.value.login.partner;
     user.value = data.value.login.partner;
-    router.push("/my-account");
+    router.push("/my-account/personal-data");
   };
 
   const resetPassword = async (params: MutationResetPasswordArgs) => {
@@ -118,5 +132,6 @@ export const useUser = () => {
     loading,
     successResetEmail,
     updatePassword,
+    loadUser,
   };
 };

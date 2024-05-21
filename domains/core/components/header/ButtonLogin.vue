@@ -3,7 +3,7 @@ import { SfButton } from "@storefront-ui/vue";
 
 const NuxtLink = resolveComponent("NuxtLink");
 
-const { isAuthenticated } = useUser();
+const { isAuthenticated } = useAuth();
 </script>
 
 <template>
