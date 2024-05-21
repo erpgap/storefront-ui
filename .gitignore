@@ -7,6 +7,16 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .unlighthouse
+node_modules
+*.log*
+.nuxt
+.nitro
+.cache
+.output
+.env
+dist
+.DS_Store
+
 
 # Runtime data
 pids

@@ -1,0 +1,154 @@
+import { useToast } from "vue-toastification";
+import type {
+  CreateUpdatePartnerResponse,
+  LoadUserQueryResponse,
+  LoginUserResponse,
+  MutationCreateUpdatePartnerArgs,
+  MutationLoginArgs,
+  MutationRegisterArgs,
+  MutationResetPasswordArgs,
+  MutationUpdatePasswordArgs,
+  Partner,
+  PartnerResponse,
+  RegisterUserResponse,
+  ResetPasswordResponse,
+  UpdatePasswordResponse,
+} from "~/graphql";
+import { MutationName } from "~/server/mutations";
+import { QueryName } from "~/server/queries";
+
+export const useAuth = () => {
+  const { $sdk } = useNuxtApp();
+  const router = useRouter();
+  const userCookie = useCookie<Partner | null>("odoo-user");
+  const user = useState<Partner>("user", () => ({} as Partner));
+
+  const toast = useToast();
+
+  const loading = ref(false);
+  const resetEmail = useCookie<string>("reset-email");
+
+  const loadUser = async () => {
+    loading.value = true;
+
+    const { data } = await $sdk().odoo.query<null, LoadUserQueryResponse>({
+      queryName: QueryName.LoadUserQuery,
+    });
+
+    userCookie.value = data.value?.partner;
+    user.value = data.value?.partner;
+
+    loading.value = false;
+  };
+
+  const updatePartner = async (params: MutationCreateUpdatePartnerArgs) => {
+    loading.value = true;
+
+    const { data } = await $sdk().odoo.mutation<
+      MutationCreateUpdatePartnerArgs,
+      CreateUpdatePartnerResponse
+    >({ mutationName: MutationName.CreateUpdatePartner }, params);
+
+    user.value = data.value.createUpdatePartner;
+
+    toast.success("Partner updated successfully");
+  };
+
+  const logout = async () => {
+    userCookie.value = null;
+    user.value = {} as Partner;
+    await $sdk().odoo.mutation<null, null>({
+      mutationName: MutationName.LogoutMutation,
+    });
+  };
+
+  const signup = async (params: MutationRegisterArgs) => {
+    loading.value = true;
+    const { data, error } = await $sdk().odoo.mutation<
+      MutationRegisterArgs,
+      RegisterUserResponse
+    >(
+      {
+        mutationName: MutationName.RegisterUserMutation,
+      },
+      { ...params }
+    );
+    loading.value = false;
+
+    if (error.value) {
+      toast.error(error.value?.data?.message);
+      return;
+    }
+
+    user.value = data.value.partner;
+  };
+
+  const login = async (params: MutationLoginArgs) => {
+    loading.value = true;
+    const { data, error } = await $sdk().odoo.mutation<
+      MutationLoginArgs,
+      LoginUserResponse
+    >({ mutationName: MutationName.LoginMutation }, { ...params });
+    if (error.value) {
+      toast.error(error.value?.data?.message);
+      return;
+    }
+
+    userCookie.value = data.value.login.partner;
+    user.value = data.value.login.partner;
+    router.push("/my-account/personal-data");
+  };
+
+  const resetPassword = async (params: MutationResetPasswordArgs) => {
+    loading.value = true;
+    const { error } = await $sdk().odoo.mutation<
+      MutationResetPasswordArgs,
+      ResetPasswordResponse
+    >({ mutationName: MutationName.SendResetPasswordMutation }, { ...params });
+    if (error.value) {
+      toast.error(error.value?.data?.message);
+      return;
+    }
+
+    resetEmail.value = params.email;
+  };
+
+  const successResetEmail = () => {
+    const result = resetEmail.value;
+    resetEmail.value = "";
+
+    return result;
+  };
+
+  const updatePassword = async (params: MutationUpdatePasswordArgs) => {
+    loading.value = true;
+    const { data, error } = await $sdk().odoo.mutation<
+      MutationUpdatePasswordArgs,
+      UpdatePasswordResponse
+    >({ mutationName: MutationName.UpdatePasswordMutation }, params);
+    if (error.value) {
+      toast.error(error.value?.data?.message);
+      return;
+    }
+
+    toast.success("Password updated successfully");
+  };
+
+  const isAuthenticated = computed(() => {
+    return Boolean(userCookie.value?.id);
+  });
+
+  return {
+    signup,
+    logout,
+    isAuthenticated,
+    login,
+    resetPassword,
+    user,
+    loading,
+    successResetEmail,
+    updatePassword,
+    loadUser,
+    updatePartner,
+  };
+};
