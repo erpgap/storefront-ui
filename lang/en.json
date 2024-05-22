@@ -92,6 +92,7 @@
     "email": "Email",
     "name": "Name",
     "phone": "Phone number",
+    "subescribe": "Subscribe to newsletter ?",
     "phonePlaceholder": "eg. 123 456 7890",
     "cancel": "Cancel",
     "save": "Save",

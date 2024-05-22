@@ -50,6 +50,7 @@ export const useAuth = () => {
     >({ mutationName: MutationName.CreateUpdatePartner }, params);
 
     user.value = data.value.createUpdatePartner;
+    userCookie.value = data.value?.createUpdatePartner;
 
     toast.success("Partner updated successfully");
   };

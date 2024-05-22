@@ -2,30 +2,20 @@
 import {
   SfButton,
   SfIconArrowBack,
-  SfLoaderCircular,
-  SfIconClose,
-  useDisclosure,
-  SfModal,
   SfIconBlock,
-  SfListItem,
-  SfRadio,
   SfLink,
+  SfListItem,
+  SfLoaderCircular,
+  SfRadio,
 } from "@storefront-ui/vue";
-import type { PaymentProvider } from "~/graphql";
+import type { Partner, PaymentProvider } from "~/graphql";
 
 const NuxtLink = resolveComponent("NuxtLink");
-const { isOpen, open, close } = useDisclosure();
+
 const { cart, loadCart } = useCart();
 
-const {
-  loadBillingAddresses,
-  loadShippingAddresses,
-  shippingAddresses,
-  billingAddresses,
-} = useAddresses();
-
 const { loadCountryList } = useCountry();
-const { updatePartner, user, loadUser } = useAuth();
+const { user, loadUser } = useAuth();
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
 const {
   loadPaymentMethods,
@@ -35,39 +25,16 @@ const {
 
 await loadUser();
 await loadCart();
-await loadShippingAddresses();
-await loadBillingAddresses();
 await loadDeliveryMethods();
 await loadPaymentMethods();
 await loadCountryList();
 
-const savedShippingAddress = computed(
-  () => shippingAddresses.value?.[0] || user.value?.shippingAddress || {}
-);
-const savedBillingAddress = computed(
-  () => billingAddresses.value?.[0] || user.value?.billingAddress || {}
-);
-
-const partnerData = computed(() => {
-  const email = cart.value.order?.partner?.email || "";
-  const name = cart.value.order?.partner?.name || "";
-  return {
-    email: email?.toLowerCase()?.includes("newemail") ? "" : email ?? "",
-    name: name?.toLowerCase()?.includes("newname") ? "" : name ?? "",
-  };
-});
 const isLoading = false;
 
 const showPaymentModal = ref(false);
 const isPaymentReady = ref(false);
 const providerPaymentHandler = ref();
-const methodWithModal = ref();
 const loading = ref(false);
-
-const handleUpdatePartnerData = async (data: any) => {
-  await updatePartner(data);
-  close();
-};
 
 onMounted(() => {
   if (paymentProviders.value.length) {
@@ -123,82 +90,25 @@ const selectedProvider = ref<PaymentProvider | null>(
         <div class="col-span-7 mb-10 md:mb-0">
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
 
-          <div data-testid="contact-information" class="md:px-4 py-6">
-            <div class="flex justify-between items-center">
-              <h2 class="text-neutral-900 text-lg font-bold mb-4">
-                {{ $t("contactInfo.heading") }}
-              </h2>
-              <SfButton
-                v-if="partnerData?.email"
-                size="sm"
-                variant="tertiary"
-                @click="open"
-              >
-                {{ $t("contactInfo.edit") }}
-              </SfButton>
-            </div>
-            <div v-if="partnerData?.email" class="mt-2 md:w-[520px]">
-              <p>{{ partnerData?.name }}</p>
-              <p>{{ partnerData?.email }}</p>
-            </div>
-            <div v-else class="w-full md:max-w-[520px]">
-              <p>{{ $t("contactInfo.description") }}</p>
-              <SfButton
-                class="mt-4 w-full md:w-auto"
-                variant="secondary"
-                @click="open"
-              >
-                {{ $t("contactInfo.add") }}
-              </SfButton>
-            </div>
-
-            <SfModal
-              v-model="isOpen"
-              tag="section"
-              role="dialog"
-              class="h-full w-full overflow-auto md:w-[600px] md:h-fit z-50"
-              aria-labelledby="contact-modal-title"
-            >
-              <header>
-                <SfButton
-                  square
-                  variant="tertiary"
-                  class="absolute right-2 top-2"
-                  @click="close"
-                >
-                  <SfIconClose />
-                </SfButton>
-                <h3
-                  id="contact-modal-title"
-                  class="text-neutral-900 text-lg md:text-2xl font-bold mb-4"
-                >
-                  {{ $t("contactInfo.heading") }}
-                </h3>
-              </header>
-              <CheckoutContactInformation
-                :email="partnerData?.email"
-                :name="partnerData?.name"
-                @on-save="handleUpdatePartnerData"
-                @on-cancel="close"
-              />
-            </SfModal>
-          </div>
+          <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
+          <CheckoutContactInformation
+            :heading="$t('contactInfo.heading')"
+            :partner-data="cart.order?.partner as Partner"
+          />
 
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
           <CheckoutAddressForm
             :heading="$t('shipping.heading')"
             :description="$t('shipping.description')"
             :button-text="$t('shipping.addButton')"
-            :saved-address="savedShippingAddress"
-            type="shippingAddress"
+            :saved-address="cart.order?.partnerShipping as Partner"
           />
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
           <CheckoutAddressForm
             :heading="$t('billing.heading')"
             :description="$t('billing.description')"
             :button-text="$t('billing.addButton')"
-            :saved-address="savedBillingAddress"
-            type="billingAddress"
+            :saved-address="cart.order?.partnerInvoice as Partner"
           />
 
           <UiDivider class-name="w-screen md:w-auto -mx-4 md:mx-0" />

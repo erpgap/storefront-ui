@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client/core';
+import { gql } from "@apollo/client/core";
 export default gql`
   mutation ($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -10,9 +10,11 @@ export default gql`
         city
         state {
           id
+          name
         }
         country {
           id
+          name
         }
         email
         phone
