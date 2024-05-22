@@ -20,12 +20,12 @@ const { cart, loadCart } = useCart();
 const {
   loadBillingAddresses,
   loadShippingAddresses,
-  mailingAddresses,
+  shippingAddresses,
   billingAddresses,
 } = useAddresses();
 
 const { loadCountryList } = useCountry();
-const { updatePartner } = usePartner();
+const { updatePartner, user, loadUser } = useAuth();
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
 const {
   loadPaymentMethods,
@@ -33,6 +33,7 @@ const {
   loading: paymentLoading,
 } = usePayment();
 
+await loadUser();
 await loadCart();
 await loadShippingAddresses();
 await loadBillingAddresses();
@@ -40,15 +41,19 @@ await loadDeliveryMethods();
 await loadPaymentMethods();
 await loadCountryList();
 
-const savedMailingAddress = computed(() => {});
-const savedBillingAddress = computed(() => billingAddresses.value[0] || null);
+const savedShippingAddress = computed(
+  () => shippingAddresses.value?.[0] || user.value?.shippingAddress || {}
+);
+const savedBillingAddress = computed(
+  () => billingAddresses.value?.[0] || user.value?.billingAddress || {}
+);
 
 const partnerData = computed(() => {
   const email = cart.value.order?.partner?.email || "";
   const name = cart.value.order?.partner?.name || "";
   return {
-    email: email.toLowerCase().includes("newemail") ? "" : email ?? "",
-    name: name.toLowerCase().includes("newname") ? "" : name ?? "",
+    email: email?.toLowerCase()?.includes("newemail") ? "" : email ?? "",
+    name: name?.toLowerCase()?.includes("newname") ? "" : name ?? "",
   };
 });
 const isLoading = false;
@@ -59,19 +64,8 @@ const providerPaymentHandler = ref();
 const methodWithModal = ref();
 const loading = ref(false);
 
-const updatePartnerData = async ({
-  email,
-  name,
-}: {
-  email: string;
-  name: string;
-}) => {
-  await updatePartner({
-    email,
-    name: name,
-    subscribeNewsletter: false,
-  });
-  await loadCart();
+const handleUpdatePartnerData = async (data: any) => {
+  await updatePartner(data);
   close();
 };
 
@@ -144,7 +138,7 @@ const selectedProvider = ref<PaymentProvider | null>(
               </SfButton>
             </div>
             <div v-if="partnerData?.email" class="mt-2 md:w-[520px]">
-              <p>{{ partnerData.name }}</p>
+              <p>{{ partnerData?.name }}</p>
               <p>{{ partnerData?.email }}</p>
             </div>
             <div v-else class="w-full md:max-w-[520px]">
@@ -182,9 +176,9 @@ const selectedProvider = ref<PaymentProvider | null>(
                 </h3>
               </header>
               <CheckoutContactInformation
-                :email="partnerData.email"
-                :name="partnerData.name"
-                @on-save="updatePartnerData"
+                :email="partnerData?.email"
+                :name="partnerData?.name"
+                @on-save="handleUpdatePartnerData"
                 @on-cancel="close"
               />
             </SfModal>
@@ -195,7 +189,7 @@ const selectedProvider = ref<PaymentProvider | null>(
             :heading="$t('shipping.heading')"
             :description="$t('shipping.description')"
             :button-text="$t('shipping.addButton')"
-            :saved-address="savedMailingAddress"
+            :saved-address="savedShippingAddress"
             type="shippingAddress"
           />
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />

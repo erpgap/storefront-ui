@@ -9,7 +9,8 @@ import {
   SfLoaderCircular,
   SfSelect,
 } from "@storefront-ui/vue";
-import { AddressEnum } from "~/graphql";
+import type { PropType } from "vue";
+import { AddressEnum, type Partner } from "~/graphql";
 
 const props = defineProps({
   heading: String,
@@ -17,7 +18,7 @@ const props = defineProps({
   buttonText: String,
   type: String,
   savedAddress: {
-    type: Object,
+    type: Object as PropType<Partner>,
     default: () => {},
   },
 });
@@ -42,7 +43,7 @@ const defaultValues = ref({
 
 const submitAddress = () => {
   const addressInput = {
-    name: defaultValues.value.name,
+    name: defaultValues.value?.name,
     street: defaultValues.value.street,
     street2: defaultValues.value.street2,
     phone: defaultValues.value.phone,
@@ -80,15 +81,15 @@ const states = computed(
       <h2 class="text-neutral-900 text-lg font-bold mb-4">
         {{ props.heading }}
       </h2>
-      <SfButton v-if="savedAddress" size="sm" variant="tertiary" @click="open">
-        {{ $t("contactInfo.edit") }}
+      <SfButton size="sm" variant="tertiary" @click="open">
+        {{ savedAddress.id ? $t("contactInfo.edit") : $t("contactInfo.add") }}
       </SfButton>
     </div>
 
-    <div v-if="savedAddress" class="mt-2 md:w-[520px]">
+    <div v-if="savedAddress.id" class="mt-2 md:w-[520px]">
       <p>{{ `${savedAddress.name}, ${savedAddress.street}` }}</p>
       <p>{{ savedAddress.phone }}</p>
-      <p>{{ `${savedAddress.country.name}` }}</p>
+      <p>{{ `${savedAddress.country?.name}` }}</p>
       <p>{{ `${savedAddress.state?.name}` }}</p>
       <p>{{ `${savedAddress.city} ${savedAddress.zip}` }}</p>
     </div>
