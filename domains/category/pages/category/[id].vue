@@ -147,9 +147,9 @@ onMounted(() => {
             :max-visible-pages="maxVisiblePages"
           />
         </div>
-        <div v-else>
+        <div v-else class="mt-[160px]">
           <div class="w-full text-center">
-            <SfLoaderCircular size="base" />
+            <SfLoaderCircular size="xl" />
           </div>
         </div>
       </div>
