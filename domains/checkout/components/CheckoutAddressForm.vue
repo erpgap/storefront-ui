@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import {
   SfButton,
-  SfIconClose,
   useDisclosure,
   SfModal,
   SfCheckbox,
@@ -31,10 +30,24 @@ const props = defineProps({
   },
 });
 
-const { city, country, email, name, phone, state, street, street2, zip } =
-  toRefs(props.savedAddress);
+/**
+ * @TODO extract this form behaviour, undo, commit, validate, etc. to a separate form composable
+ */
+
+const { city, country, name, state, street, phone, zip } = toRefs(
+  props.savedAddress
+);
 const countryId = toRef(country.value?.id);
 const stateId = toRef(state.value?.id);
+
+const { commit: commitCity, undo: undoCity } = useManualRefHistory(city);
+const { commit: commitCountry, undo: undoCountry } =
+  useManualRefHistory(countryId);
+const { commit: commitName, undo: undoName } = useManualRefHistory(name);
+const { commit: commitState, undo: undoState } = useManualRefHistory(stateId);
+const { commit: commitStreet, undo: undoStreet } = useManualRefHistory(street);
+const { commit: commitPhone, undo: undoPhone } = useManualRefHistory(phone);
+const { commit: commitZip, undo: undoZip } = useManualRefHistory(zip);
 
 const { isOpen, open, close } = useDisclosure();
 const { addAddress, updateAddress } = useAddresses();
@@ -49,7 +62,6 @@ const handleSaveAddress = async () => {
     street2: street.value?.split(" ")?.[1],
     city: city.value,
     zip: zip.value,
-    phone: phone.value,
     countryId: countryId.value,
     stateId: stateId.value,
   };
@@ -63,10 +75,12 @@ const handleSaveAddress = async () => {
       { ...data, id: props.savedAddress.id } as unknown as UpdateAddressInput,
       type
     );
+    commitAll();
     return close();
   }
 
   await addAddress(data as unknown as AddAddressInput, type);
+  commitAll();
   close();
 };
 
@@ -84,6 +98,32 @@ const selectedState = computed<State>(
 );
 
 const states = computed(() => selectedCountry.value?.states || []);
+
+const commitAll = () => {
+  commitCity();
+  commitCountry();
+  commitName();
+  commitState();
+  commitStreet();
+  commitZip();
+  commitPhone();
+};
+
+const handleOpenModal = () => {
+  commitAll();
+  open();
+};
+
+const handleCloseModal = () => {
+  close();
+  undoCity();
+  undoCountry();
+  undoName();
+  undoState();
+  undoStreet();
+  undoZip();
+  undoPhone();
+};
 </script>
 
 <template>
@@ -92,7 +132,7 @@ const states = computed(() => selectedCountry.value?.states || []);
       <h2 class="text-neutral-900 text-lg font-bold mb-4">
         {{ props.heading }}
       </h2>
-      <SfButton size="sm" variant="tertiary" @click="open">
+      <SfButton size="sm" variant="tertiary" @click="handleOpenModal">
         {{ savedAddress.id ? $t("contactInfo.edit") : $t("contactInfo.add") }}
       </SfButton>
     </div>
@@ -132,9 +172,9 @@ const states = computed(() => selectedCountry.value?.states || []);
             square
             variant="tertiary"
             class="absolute right-2 top-2"
-            @click="close"
+            @click="handleCloseModal"
           >
-            <SfIconClose />
+            <icon name="ion:close" size="20px" />
           </SfButton>
           <h3
             id="address-modal-title"
@@ -249,7 +289,12 @@ const states = computed(() => selectedCountry.value?.states || []);
           <div
             class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4"
           >
-            <SfButton type="reset" class="" variant="secondary" @click="close">
+            <SfButton
+              type="reset"
+              class=""
+              variant="secondary"
+              @click="handleCloseModal"
+            >
               {{ $t("contactInfo.cancel") }}
             </SfButton>
             <SfButton
