@@ -10,10 +10,9 @@ import {
   useTrapFocus,
 } from "@storefront-ui/vue";
 import { onClickOutside } from "@vueuse/core";
+import type { Category } from "~/graphql";
 
-const { categories } = useCategory();
 const { isOpen, toggle, close } = useDisclosure();
-const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 const { searchModalToggle } = useSearch();
 
 const NuxtLink = resolveComponent("NuxtLink");
@@ -37,11 +36,7 @@ onClickOutside(searchRef, () => {
   showSearchClerkRef.value = false;
 });
 
-const filteredCategories = computed(() =>
-  categories?.value?.filter(
-    (category: any) => category.name === "WOMEN" || category.name === "MEN"
-  )
-);
+const filteredCategories = inject<Category[]>("filteredTopCategories");
 
 const bannerDetails = {
   image: "/images/watch.png",
@@ -113,7 +108,7 @@ const bannerDetails = {
                     >
                       {{ name }}
                     </h2>
-                    <hr class="mb-3.5" >
+                    <hr class="mb-3.5" />
                     <ul>
                       <li
                         v-for="{ name, slug, childs: subcategory } in childs"
@@ -153,12 +148,7 @@ const bannerDetails = {
         </ul>
       </nav>
 
-      <WishlistSidebar
-        :is-open="wishlistSidebarIsOpen"
-        @close="toggleWishlistSideBar"
-      />
-
-      <div class="flex">
+      <div class="flex justify-end">
         <SfButton
           variant="tertiary"
           class="relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 rounded-md"
@@ -180,5 +170,6 @@ const bannerDetails = {
         </SfButton>
       </div>
     </div>
+    <MobileSearchList />
   </header>
 </template>

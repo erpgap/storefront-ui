@@ -192,7 +192,7 @@ onClickOutside(menuRef, () => {
             leave-from-class="translate-x-0 md:opacity-100"
             leave-to-class="-translate-x-full md:translate-x-0 md:opacity-0"
           >
-            <SearchList
+            <DesktopSearchList
               v-if="showResultSearch"
               :hits="searchHits"
               :search-text="searchInputValue"
