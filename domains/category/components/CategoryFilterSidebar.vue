@@ -209,26 +209,33 @@ if (priceFilter) {
           <template v-if="facet.type == 'price'">
             <fieldset id="radio-price">
               <SfListItem
-                v-for="{ id, values, label } in facet.options"
-                :key="id"
+                v-for="option in facet.options"
+                :key="option.id"
                 tag="label"
               >
                 <template #prefix>
                   <SfRadio
                     v-model="priceModel"
                     class="flex items-center"
-                    :name="values"
-                    :value="values"
+                    :name="facet.label"
+                    :value="option.values"
+                    :class="{
+                      'bg-primary-700 border-primary-700 hover:bg-primary-800':
+                        priceModel === option.values,
+                    }"
                   />
                 </template>
                 <span
                   class="text-sm mr-2"
-                  :class="{ 'font-medium': priceModel === id }"
-                  >{{ label }}
+                  :class="{
+                    'font-medium': priceModel === option.values,
+                  }"
+                  >{{ option.label }}
                 </span>
               </SfListItem>
             </fieldset>
           </template>
+
           <ul
             v-if="facet.type === 'select'"
             class="grid grid-cols-5 gap-2 px-3"
