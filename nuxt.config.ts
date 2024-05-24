@@ -135,13 +135,13 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
     storage: {
       cache: {
-        driver: 'redis',
+        driver: process.env.NUXT_STORAGE_DRIVER,
         url: process.env.REDIS_URL,
       },
     },
     devStorage: {
       cache: {
-        driver: 'redis',
+        driver: process.env.NUXT_STORAGE_DRIVER,
         url: process.env.REDIS_URL,
       },
     },
