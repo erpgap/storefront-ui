@@ -52,7 +52,7 @@ ENV NUXT_ALGOLIA_API_KEY=${NUXT_ALGOLIA_API_KEY}
 ENV NUXT_ALGOLIA_APPLICATION_ID=${NUXT_ALGOLIA_APPLICATION_ID}
 ENV NUXT_TELEMETRY_DISABLED=1
 
-COPY --from=build /src/apps/web/.output ./
+COPY --from=build /src/.output ./
 
 # Expose both ports
 EXPOSE $PORT
