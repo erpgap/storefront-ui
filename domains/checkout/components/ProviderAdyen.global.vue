@@ -48,8 +48,6 @@ const {
   getAdyenPaymentDetails,
 } = useAdyenDirectPayment(props.provider.id, props.cart?.order?.id);
 
-console.log(123123);
-
 onMounted(async () => {
   loading.value = true;
   await openAdyenTransaction();

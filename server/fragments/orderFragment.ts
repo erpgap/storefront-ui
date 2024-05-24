@@ -64,10 +64,13 @@ order {
     zip
     country {
       id
+      name
     }
     state {
       id
+      name
     }
+    addressType
   }
   partnerShipping {
     id
@@ -78,10 +81,13 @@ order {
     zip
     country {
       id
+      name
     }
     state { 
       id
+      name
     }
+    addressType
   }
   shippingMethod{
     id

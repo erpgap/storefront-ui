@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client/core';
-import { partnerFragment } from '../fragments';
+import { gql } from "@apollo/client/core";
+import { partnerFragment } from "../fragments";
 export default gql`
   mutation ($myaccount: UpdateMyAccountParams) {
     updateMyAccount(myaccount: $myaccount) {
@@ -10,9 +10,11 @@ export default gql`
       city
       state {
         id
+        name
       }
       country {
         id
+        name
       }
       email
       phone

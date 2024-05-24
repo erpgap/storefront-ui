@@ -38,6 +38,7 @@ const { email, name } = toRefs(props);
         required
       />
     </label>
+
     <div class="mt-4 flex flex-col-reverse md:flex-row md:justify-end">
       <SfButton
         type="reset"
