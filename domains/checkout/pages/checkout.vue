@@ -16,6 +16,7 @@ const { cart, loadCart } = useCart();
 
 const { loadCountryList } = useCountry();
 const { user, loadUser } = useAuth();
+
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
 const {
   loadPaymentMethods,
@@ -89,12 +90,12 @@ const selectedProvider = ref<PaymentProvider | null>(
       <div class="lg:grid lg:grid-cols-12 md:gap-x-6">
         <div class="col-span-7 mb-10 md:mb-0">
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
-
-          <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
+         
           <CheckoutContactInformation
             :heading="$t('contactInfo.heading')"
             :partner-data="cart.order?.partner as Partner"
           />
+
 
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
           <CheckoutAddressForm
