@@ -44,7 +44,11 @@ export default defineNuxtConfig({
     'nuxt-delay-hydration',
   ],
   runtimeConfig: {
-    shouldByPassCacheQueryNames: ['LoadCartQuery', 'WishlistLoadQuery'],
+    shouldByPassCacheQueryNames: [
+      'LoadCartQuery',
+      'WishlistLoadQuery',
+      'GetAddressesQuery',
+    ],
     public: {
       odooBaseImageUrl: '',
       odooBaseUrl: '',
