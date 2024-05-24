@@ -1,55 +1,36 @@
 <script lang="ts" setup>
-import { SfButton, SfInput } from "@storefront-ui/vue";
+import { SfButton, SfInput } from '@storefront-ui/vue';
 
-defineEmits(["on-save", "on-cancel"]);
-
-type FormContactInformationProps = {
-  name?: string;
+type AccountFormsNameProps = {
   email?: string;
 };
 
-const props = defineProps<FormContactInformationProps>();
-const { email, name } = toRefs(props);
+const props = defineProps<AccountFormsNameProps>();
+const { email } = toRefs(props);
+defineEmits(['on-save', 'on-cancel']);
+const userData = ref({
+  email: email?.value ?? '',
+});
 </script>
-
 <template>
   <form
-    data-testid="contact-information-form"
-    @submit.prevent="$emit('on-save', { email, name })"
+    data-testid="account-forms-name"
+    @submit.prevent="$emit('on-save', userData.email)"
   >
-    <label>
-      <UiFormLabel>{{ $t("contactInfo.name") }}</UiFormLabel>
-      <SfInput
-        v-model="name"
-        name="name"
-        type="text"
-        :placeholder="$t('contactInfo.name')"
-        required
-      />
-    </label>
-    <div class="mt-4" />
-    <label>
-      <UiFormLabel>{{ $t("contactInfo.email") }}</UiFormLabel>
-      <SfInput
-        v-model="email"
-        name="email"
-        type="email"
-        :placeholder="$t('contactInfo.email')"
-        required
-      />
-    </label>
-
-    <div class="mt-4 flex flex-col-reverse md:flex-row md:justify-end">
-      <SfButton
-        type="reset"
-        class="md:mr-4"
-        variant="secondary"
-        @click="$emit('on-cancel')"
-      >
-        {{ $t("contactInfo.cancel") }}
+    <div class="md:flex justify-between gap-4">
+      <label class="block flex-1">
+        <UiFormLabel>{{
+          $t('account.accountSettings.personalData.contactInformation')
+        }}</UiFormLabel>
+        <SfInput v-model="userData.email" name="email" type="text" required />
+      </label>
+    </div>
+    <div class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4">
+      <SfButton type="reset" variant="secondary" @click="$emit('on-cancel')">
+        {{ $t('contactInfo.cancel') }}
       </SfButton>
-      <SfButton type="submit" class="min-w-[120px] mb-4 md:mb-0">
-        {{ $t("contactInfo.save") }}
+      <SfButton type="submit" class="min-w-[120px]">
+        {{ $t('contactInfo.save') }}
       </SfButton>
     </div>
   </form>

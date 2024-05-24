@@ -6,9 +6,8 @@ import {
   SfInput,
   SfLoaderCircular,
   SfSelect,
-} from "@storefront-ui/vue";
-import type { Partner } from "~/graphql";
-import { AddressEnum } from "~/graphql";
+} from '@storefront-ui/vue';
+import { AddressEnum, type Partner } from '~/graphql';
 
 const props = defineProps<{
   addresses: Partner[];
@@ -21,22 +20,21 @@ const {
   deleteAddress,
   updateAddress,
   addAddress,
-  loadBillingAddresses,
-  loadShippingAddresses,
+  loadAddresses,
   selectCurrentAddress,
 } = useAddresses();
 const { countries, loadCountryList } = useCountry();
-const { user, loadUser } = useAuth();
+const { user } = useAuth();
 
 const defaultValues = ref({
-  name: "",
-  street: "",
-  street2: "",
-  phone: "",
+  name: '',
+  street: '',
+  street2: '',
+  phone: '',
   countryId: null,
-  city: "",
+  city: '',
   stateId: null,
-  zip: "",
+  zip: '',
 });
 
 const editAddress = (address: Partner) => {
@@ -51,26 +49,22 @@ const editAddress = (address: Partner) => {
 
 const newAddress = () => {
   Object.assign(defaultValues.value, {
-    id: "",
-    name: "",
-    street: "",
-    street2: "",
-    phone: "",
+    id: '',
+    name: '',
+    street: '',
+    street2: '',
+    phone: '',
     countryId: null,
-    city: "",
+    city: '',
     stateId: null,
-    zip: "",
+    zip: '',
   });
   open();
 };
 
 const removeAddress = (id) => {
   deleteAddress({ id: id });
-  if (props.type === AddressEnum.Billing) {
-    loadBillingAddresses();
-  } else {
-    loadShippingAddresses();
-  }
+  loadAddresses(props.type);
 };
 
 const submitAddress = () => {
@@ -111,26 +105,26 @@ function isCurrentAddress(id) {
   }
   return user.value?.billingAddress?.id === id;
 }
-await loadUser();
+
 await loadCountryList();
 </script>
 <template>
   <div
+    class="md:col-span-1 col-span-3"
     v-for="address in addresses"
     :key="address.id"
-    class="md:col-span-1 col-span-3"
   >
     <AccountAddressData
+      @on-click="editAddress(address)"
       :header="address.name"
       :button-text="$t('account.accountSettings.personalData.edit')"
-      @on-click="editAddress(address)"
     >
       <p>{{ `${address.name}, ${address.street}` }}</p>
       <p>{{ address.phone }}</p>
       <p>{{ `${address.country?.name}` }}</p>
       <p>{{ `${address.state?.name}` }}</p>
       <p>{{ `${address.city} ${address.zip}` }}</p>
-      <template #footer>
+      <template v-slot:footer>
         <SfButton
           variant="tertiary"
           size="sm"
@@ -150,7 +144,7 @@ await loadCountryList();
     </AccountAddressData>
   </div>
   <div class="col-span-3">
-    <SfButton size="lg" class="self-start" @click="newAddress()"
+    <SfButton size="lg" @click="newAddress()" class="self-start"
       >Add new address</SfButton
     >
   </div>
@@ -183,7 +177,7 @@ await loadCountryList();
       @submit.prevent="submitAddress"
     >
       <label>
-        <UiFormLabel>{{ $t("form.NameLabel") }}</UiFormLabel>
+        <UiFormLabel>{{ $t('form.NameLabel') }}</UiFormLabel>
         <SfInput
           v-model="defaultValues.name"
           name="name"
@@ -193,7 +187,7 @@ await loadCountryList();
         />
       </label>
       <label class="md:col-span-2">
-        <UiFormLabel>{{ $t("form.streetNameLabel") }}</UiFormLabel>
+        <UiFormLabel>{{ $t('form.streetNameLabel') }}</UiFormLabel>
         <SfInput
           v-model="defaultValues.street"
           name="streetName"
@@ -203,7 +197,7 @@ await loadCountryList();
         />
       </label>
       <label class="md:col-span-3">
-        <UiFormLabel>{{ $t("form.phoneLabel") }}</UiFormLabel>
+        <UiFormLabel>{{ $t('form.phoneLabel') }}</UiFormLabel>
         <SfInput
           v-model="defaultValues.phone"
           name="phone"
@@ -214,7 +208,7 @@ await loadCountryList();
         />
       </label>
       <label class="md:col-span-3">
-        <UiFormLabel>{{ $t("form.countryLabel") }}</UiFormLabel>
+        <UiFormLabel>{{ $t('form.countryLabel') }}</UiFormLabel>
         <SfSelect
           v-model="defaultValues.countryId"
           name="country"
@@ -222,7 +216,7 @@ await loadCountryList();
           required
         >
           <option key="placeholder" :value="null">
-            {{ $t("form.selectPlaceholder") }}
+            {{ $t('form.selectPlaceholder') }}
           </option>
           <option
             v-for="country in countries"
@@ -234,7 +228,7 @@ await loadCountryList();
         </SfSelect>
       </label>
       <label class="md:col-span-3">
-        <UiFormLabel>{{ $t("form.stateLabel") }}</UiFormLabel>
+        <UiFormLabel>{{ $t('form.stateLabel') }}</UiFormLabel>
         <SfSelect
           v-model="defaultValues.stateId"
           name="state"
@@ -243,7 +237,7 @@ await loadCountryList();
           required
         >
           <option key="placeholder" :value="null">
-            {{ $t("form.selectPlaceholder") }}
+            {{ $t('form.selectPlaceholder') }}
           </option>
           <option v-for="state in states" :key="state.id" :value="state.id">
             {{ state.name }}
@@ -252,7 +246,7 @@ await loadCountryList();
       </label>
 
       <label class="md:col-span-2">
-        <UiFormLabel>{{ $t("form.cityLabel") }}</UiFormLabel>
+        <UiFormLabel>{{ $t('form.cityLabel') }}</UiFormLabel>
         <SfInput
           v-model="defaultValues.city"
           name="city"
@@ -262,7 +256,7 @@ await loadCountryList();
         />
       </label>
       <label>
-        <UiFormLabel>{{ $t("form.postalCodeLabel") }}</UiFormLabel>
+        <UiFormLabel>{{ $t('form.postalCodeLabel') }}</UiFormLabel>
         <SfInput
           v-model="defaultValues.zip"
           name="postalCode"
@@ -276,7 +270,7 @@ await loadCountryList();
         class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4"
       >
         <SfButton type="reset" class="" variant="secondary" @click="close">
-          {{ $t("contactInfo.cancel") }}
+          {{ $t('contactInfo.cancel') }}
         </SfButton>
         <SfButton type="submit" class="min-w-[120px]" :disabled="loading">
           <SfLoaderCircular
@@ -285,7 +279,7 @@ await loadCountryList();
             size="sm"
           />
           <span v-else>
-            {{ $t("contactInfo.save") }}
+            {{ $t('contactInfo.save') }}
           </span>
         </SfButton>
       </div>

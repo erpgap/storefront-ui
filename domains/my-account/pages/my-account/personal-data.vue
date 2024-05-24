@@ -4,20 +4,17 @@ import {
   SfIconClose,
   SfModal,
   useDisclosure,
-} from "@storefront-ui/vue";
-import { unrefElement } from "@vueuse/core";
-import type { MutationCreateUpdatePartnerArgs } from "~/graphql";
+} from '@storefront-ui/vue';
+import { unrefElement } from '@vueuse/core';
 
 definePageMeta({
-  layout: "account",
+  layout: 'account',
 });
 const { isOpen, open, close } = useDisclosure();
-const { loadUser, user, updatePassword, updatePartner } = useAuth();
-
+const { loadUser, user, updatePartner, updatePassword } = useAuth();
 const lastActiveElement = ref();
 const modalElement = ref();
-const openedForm = ref("");
-
+const openedForm = ref('');
 const openModal = async (modalName: string) => {
   openedForm.value = modalName;
   lastActiveElement.value = document.activeElement;
@@ -31,8 +28,17 @@ const closeModal = () => {
   lastActiveElement.value.focus();
 };
 
-const handleUpdatePartner = async (data: MutationCreateUpdatePartnerArgs) => {
-  await updatePartner({ ...data, subscribeNewsletter: false });
+const saveNewName = async (newName: string) => {
+  await updatePartner({
+    myaccount: { id: user.value?.id, email: user.value?.email, name: newName },
+  });
+  closeModal();
+};
+
+const saveNewEmail = async (newEmail: string) => {
+  await updatePartner({
+    myaccount: { id: user.value?.id, email: newEmail, name: user.value?.name },
+  });
   closeModal();
 };
 
@@ -42,7 +48,6 @@ const saveNewPassword = async (passwords: any) => {
       currentPassword: passwords.oldPassword,
       newPassword: passwords.firstNewPassword,
     });
-    closeModal();
   }
 };
 
@@ -52,20 +57,22 @@ await loadUser();
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <AccountProfileData
     class="col-span-3"
+    :header="$t('account.accountSettings.personalData.yourName')"
+    :button-text="$t('account.accountSettings.personalData.edit')"
+    @on-click="openModal('yourName')"
+  >
+    {{ user?.name }}
+  </AccountProfileData>
+  <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
+  <AccountProfileData
+    class="col-span-3"
     :header="$t('account.accountSettings.personalData.contactInformation')"
     :button-text="$t('account.accountSettings.personalData.edit')"
     @on-click="openModal('contactInformation')"
   >
-    <div class="flex">
-      {{ user?.name }}
-    </div>
-    <div class="flex">
-      {{ user?.email }}
-    </div>
+    {{ user?.email }}
   </AccountProfileData>
-
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-
   <AccountProfileData
     class="col-span-3"
     :header="$t('account.accountSettings.personalData.yourPassword')"
@@ -101,11 +108,16 @@ await loadUser();
           {{ $t(`account.accountSettings.personalData.${openedForm}`) }}
         </h3>
       </header>
+      <AccountFormName
+        v-if="openedForm === 'yourName'"
+        :full-name="user?.name"
+        @on-save="saveNewName"
+        @on-cancel="closeModal"
+      />
       <AccountContactInformation
-        v-if="openedForm === 'contactInformation'"
-        :name="user?.name || ''"
-        :email="user?.email || ''"
-        @on-save="handleUpdatePartner"
+        v-else-if="openedForm === 'contactInformation'"
+        :email="user?.email"
+        @on-save="saveNewEmail"
         @on-cancel="closeModal"
       />
       <AccountFormPassword
