@@ -46,10 +46,6 @@ const isFilterSelected = (option: any) => {
   );
 };
 
-const isItemActive = (selectedValue: string) => {
-  return selectedFilters.value?.includes(selectedValue);
-};
-
 const facets = computed(() => [
   {
     id: null,
@@ -78,24 +74,20 @@ const selectedFilter = (
   const alreadySelectedIndex = selectedFilters.value.findIndex(
     (filter: { id: string }) => String(filter.id) === String(option.value)
   );
-  if (alreadySelectedIndex === -1) {
-    selectedFilters.value.push({
-      filterName: facet?.label,
-      label: option?.label,
-      id: option?.value,
-    });
+
+  if (alreadySelectedIndex !== -1) {
+    selectedFilters.value.splice(alreadySelectedIndex, 1);
     return;
   }
-  selectedFilters.value.splice(alreadySelectedIndex, 1);
-};
-const applyFilters = () => {
-  if (priceModel.value) {
-    selectedFilters.value.push({
-      filterName: "price",
-      id: priceModel.value,
-    });
-  }
 
+  selectedFilters.value.push({
+    filterName: facet?.label,
+    label: option?.label,
+    id: option?.value,
+  });
+};
+
+const applyFilters = () => {
   const filters = selectedFilters.value.filter((item: any) => {
     return typeof item === "object";
   });
@@ -103,6 +95,7 @@ const applyFilters = () => {
   emit("close");
   facetsFromUrlToFilter();
 };
+
 const clearFilters = () => {
   selectedFilters.value = [];
   router.push({ query: {} });
@@ -122,6 +115,18 @@ const priceFilter = selectedFilters.value?.find((item: any) => {
 if (priceFilter) {
   priceModel.value = priceFilter.id;
 }
+
+watch(priceModel, (newValue) => {
+  selectedFilters.value = selectedFilters.value.filter(
+    (item: any) => item.filterName !== "price"
+  );
+  if (newValue) {
+    selectedFilters.value.push({
+      filterName: "price",
+      id: newValue,
+    });
+  }
+});
 </script>
 
 <template>

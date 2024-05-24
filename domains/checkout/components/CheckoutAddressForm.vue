@@ -132,7 +132,9 @@ const handleCloseModal = () => {
       <h2 class="text-neutral-900 text-lg font-bold mb-4">
         {{ props.heading }}
       </h2>
+
       <SfButton size="sm" variant="tertiary" @click="handleOpenModal">
+
         {{ savedAddress.id ? $t("contactInfo.edit") : $t("contactInfo.add") }}
       </SfButton>
     </div>
