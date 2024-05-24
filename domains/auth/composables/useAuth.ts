@@ -28,10 +28,12 @@ export const useAuth = () => {
   const loading = ref(false);
   const resetEmail = useCookie<string>("reset-email");
 
-  const loadUser = async () => {
+  const loadUser = async (withoutCache: boolean = false) => {
     loading.value = true;
 
-    const { data } = await $sdk().odoo.query<null, LoadUserQueryResponse>({
+    const query = withoutCache ? $sdk().odoo.queryNoCache : $sdk().odoo.query;
+
+    const { data } = await query<null, LoadUserQueryResponse>({
       queryName: QueryName.LoadUserQuery,
     });
 

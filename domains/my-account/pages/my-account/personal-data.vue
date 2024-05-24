@@ -4,17 +4,17 @@ import {
   SfIconClose,
   SfModal,
   useDisclosure,
-} from '@storefront-ui/vue';
-import { unrefElement } from '@vueuse/core';
+} from "@storefront-ui/vue";
+import { unrefElement } from "@vueuse/core";
 
 definePageMeta({
-  layout: 'account',
+  layout: "account",
 });
 const { isOpen, open, close } = useDisclosure();
 const { loadUser, user, updatePartner, updatePassword } = useAuth();
 const lastActiveElement = ref();
 const modalElement = ref();
-const openedForm = ref('');
+const openedForm = ref("");
 const openModal = async (modalName: string) => {
   openedForm.value = modalName;
   lastActiveElement.value = document.activeElement;
@@ -47,7 +47,7 @@ const saveNewPassword = async (passwords: any) => {
   }
 };
 
-await loadUser();
+await loadUser(true);
 </script>
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
