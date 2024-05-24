@@ -1,6 +1,5 @@
 import generateFlags from "@nuxtjs/device/runtime/generateFlags";
 import type { EventHandler, RouterMethod, H3Event } from "h3";
-import { useNuxtApp } from "nuxt/app";
 
 type Handler = {
   route: string;
@@ -16,18 +15,16 @@ export default defineNitroPlugin((nitroApp) => {
       r.route === "/" || r.route === "/product/*" || r.route === "/category/*"
     );
   });
-
   if (enHandler) {
     const customHandler = cachedEventHandler(
       lazyEventHandler(enHandler.handler),
       {
+        varies: ["user-agent"],
         group: "pages",
         getKey: (event: H3Event) => {
           const headers = getRequestHeaders(event);
-
           const userAgent: any = headers["user-agent"];
           const flags = generateFlags(headers, userAgent);
-
           if (flags.isDesktop) {
             return `desktop-${event.path}`;
           }
@@ -41,6 +38,6 @@ export default defineNitroPlugin((nitroApp) => {
         },
       }
     );
-    nitroApp.router.use(enHandler.route, customHandler, enHandler.method);
+    nitroApp.router.use(enHandler.route, customHandler);
   }
 });

@@ -138,11 +138,11 @@ const handleCloseModal = () => {
     </div>
 
     <div v-if="savedAddress.id" class="mt-2 md:w-[520px]">
-      <p>{{ `${name}, ${street}` }}</p>
+      <p>{{ `${name}, ${street || ""}` }}</p>
       <p>{{ phone }}</p>
-      <p>{{ selectedCountry.name }}</p>
-      <p>{{ selectedState.name }}</p>
-      <p>{{ `${city} ${zip}` }}</p>
+      <p>{{ selectedCountry?.name || "" }}</p>
+      <p>{{ selectedState?.name || "" }}</p>
+      <p>{{ `${city || ""} ${zip || ""}` }}</p>
     </div>
 
     <div v-if="!savedAddress" class="w-full md:max-w-[520px]">

@@ -170,6 +170,6 @@ const bannerDetails = {
         </SfButton>
       </div>
     </div>
-    <MobileSearchList />
+    <MobileSearchList search-text="123" />
   </header>
 </template>

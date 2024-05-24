@@ -2341,7 +2341,7 @@
   optionalDependencies:
     ipx "^2.1.0"
 
-"@nuxt/kit@3.11.2", "@nuxt/kit@^3.10.2", "@nuxt/kit@^3.10.3", "@nuxt/kit@^3.11.1", "@nuxt/kit@^3.11.2", "@nuxt/kit@^3.3.2", "@nuxt/kit@^3.5.0", "@nuxt/kit@^3.7.0", "@nuxt/kit@^3.7.3", "@nuxt/kit@^3.8.0", "@nuxt/kit@^3.8.1", "@nuxt/kit@^3.8.2":
+"@nuxt/kit@3.11.2", "@nuxt/kit@^3.10.2", "@nuxt/kit@^3.10.3", "@nuxt/kit@^3.11.1", "@nuxt/kit@^3.11.2", "@nuxt/kit@^3.3.2", "@nuxt/kit@^3.5.0", "@nuxt/kit@^3.6.5", "@nuxt/kit@^3.7.0", "@nuxt/kit@^3.7.3", "@nuxt/kit@^3.8.0", "@nuxt/kit@^3.8.1", "@nuxt/kit@^3.8.2":
   version "3.11.2"
   resolved "https://registry.yarnpkg.com/@nuxt/kit/-/kit-3.11.2.tgz#dfc43c05992691bcd6aa58c14f88cf43e3abb788"
   integrity sha512-yiYKP0ZWMW7T3TCmsv4H8+jEsB/nFriRAR8bKoSqSV9bkVYWPE36sf7JDux30dQ91jSlQG6LQkB3vCHYTS2cIg==
@@ -3292,6 +3292,11 @@
   dependencies:
     "@tufjs/canonical-json" "2.0.0"
     minimatch "^9.0.4"
+
+"@tusbar/cache-control@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@tusbar/cache-control/-/cache-control-1.0.1.tgz#f5ddf0f8def4de487901dff2c55970c3aee61e2a"
+  integrity sha512-2X0JN3qtmEKb8Xzref5eP5PefejMjwxNhsSRFCoYAt5j0XreFdE5HD37/JRL2/ywolGrL8LTvQ91jUmBgvYbXQ==
 
 "@types/applepayjs@^3.0.2":
   version "3.0.4"
@@ -8876,6 +8881,14 @@ nuxt-lodash@^2.5.3:
     "@nuxt/kit" "^3.8.0"
     "@types/lodash-es" "^4.17.10"
     lodash-es "^4.17.21"
+
+nuxt-multi-cache@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/nuxt-multi-cache/-/nuxt-multi-cache-3.1.1.tgz#2b21d48e60c6f99f96ad7e973a069d6acc8909de"
+  integrity sha512-dwffggur9HFz49CsneMgIn5AFhxyqTzrwqvZcI5ODKKuOLsId3xI3XKSQsBk/Ue5E32LXqJdyKPdhyKoEpsU8g==
+  dependencies:
+    "@nuxt/kit" "^3.6.5"
+    "@tusbar/cache-control" "^1.0.1"
 
 nuxt-og-image@^3.0.0-rc.47:
   version "3.0.0-rc.53"
