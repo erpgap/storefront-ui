@@ -30,14 +30,20 @@ const closeModal = () => {
 
 const saveNewName = async (newName: string) => {
   await updatePartner({
-    myaccount: { id: user.value?.id, email: user.value?.email, name: newName },
+    id: user.value?.id,
+    email: user.value?.email,
+    name: newName,
+    subscribeNewsletter: false,
   });
   closeModal();
 };
 
 const saveNewEmail = async (newEmail: string) => {
   await updatePartner({
-    myaccount: { id: user.value?.id, email: newEmail, name: user.value?.name },
+    id: user.value?.id,
+    email: newEmail,
+    name: user.value?.name,
+    subscribeNewsletter: false,
   });
   closeModal();
 };
