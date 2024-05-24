@@ -1,0 +1,49 @@
+version: "3.7"
+
+services:
+
+  redis:
+    container_name: redis
+    image: library/redis:5.0-alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      - net01
+    volumes:
+      - redis_data:/data
+
+  vsf:
+    env_file: ../.env.docker
+    build:
+      context: ../
+      dockerfile: Dockerfile
+      args:
+        NUXT_PUBLIC_ODOO_BASE_URL: "https://vsfdemo15.labs.odoogap.com/"
+        NUXT_PUBLIC_ODOO_BASE_IMAGE_URL: "https://vsfdemo15.labs.odoogap.com/"
+        NUXT_PUBLIC_MIDDLEWARE_URL: "http://localhost:3000/"
+        NUXT_PUBLIC_MIDDLEWARE_PORT: 8443
+        REDIS_HOST: "redis"
+        REDIS_PORT: "6379"
+        REDIS_URL: "redis://redis:6379"
+        NUXT_ALGOLIA_API_KEY: "change_api_key"
+        NUXT_ALGOLIA_APPLICATION_ID: "change_application_id"
+
+    container_name: vsf
+    ports:
+      - 3000:3000
+      - 8181:8181
+    image: vsf2
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - net01
+
+volumes:
+  redis_data:
+    external: false
+
+networks:
+  net01:
+    name: net01
