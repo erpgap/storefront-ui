@@ -28,22 +28,12 @@ const closeModal = () => {
   lastActiveElement.value.focus();
 };
 
-const saveNewName = async (newName: string) => {
+const saveNewContactInfo = async (userData: any) => {
   await updatePartner({
     id: user.value?.id,
-    email: user.value?.email,
-    name: newName,
-    subscribeNewsletter: false,
-  });
-  closeModal();
-};
-
-const saveNewEmail = async (newEmail: string) => {
-  await updatePartner({
-    id: user.value?.id,
-    email: newEmail,
-    name: user.value?.name,
-    subscribeNewsletter: false,
+    email: userData?.email ? userData?.email : user.value?.email,
+    name: userData?.fullName ? userData.fullName : user.value?.name,
+    subscribeNewsletter: userData?.subscribeNewsletter,
   });
   closeModal();
 };
@@ -63,20 +53,12 @@ await loadUser();
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <AccountProfileData
     class="col-span-3"
-    :header="$t('account.accountSettings.personalData.yourName')"
-    :button-text="$t('account.accountSettings.personalData.edit')"
-    @on-click="openModal('yourName')"
-  >
-    {{ user?.name }}
-  </AccountProfileData>
-  <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-  <AccountProfileData
-    class="col-span-3"
     :header="$t('account.accountSettings.personalData.contactInformation')"
     :button-text="$t('account.accountSettings.personalData.edit')"
     @on-click="openModal('contactInformation')"
   >
-    {{ user?.email }}
+    <p>{{ user?.name }}</p>
+    <p>{{ user?.email }}</p>
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <AccountProfileData
@@ -114,16 +96,11 @@ await loadUser();
           {{ $t(`account.accountSettings.personalData.${openedForm}`) }}
         </h3>
       </header>
-      <AccountFormName
-        v-if="openedForm === 'yourName'"
-        :full-name="user?.name"
-        @on-save="saveNewName"
-        @on-cancel="closeModal"
-      />
       <AccountContactInformation
-        v-else-if="openedForm === 'contactInformation'"
+        v-if="openedForm === 'contactInformation'"
+        :full-name="user?.name"
         :email="user?.email"
-        @on-save="saveNewEmail"
+        @on-save="saveNewContactInfo"
         @on-cancel="closeModal"
       />
       <AccountFormPassword
