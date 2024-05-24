@@ -23,13 +23,11 @@ export default defineNuxtConfig({
     //"./domains/search-default",
     "./domains/wishlist",
   ],
-  $development: {
-    modules: ["@nuxtjs/algolia"],
-  },
   modules: [
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "@nuxtjs/i18n",
+    "@nuxtjs/algolia",
     "@vueuse/nuxt",
     "@nuxt/image",
     "@nuxt/scripts",
