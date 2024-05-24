@@ -23,6 +23,9 @@ export default defineNuxtConfig({
     //"./domains/search-default",
     "./domains/wishlist",
   ],
+  $development: {
+    modules: ["@nuxtjs/algolia"],
+  },
   modules: [
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
@@ -33,7 +36,6 @@ export default defineNuxtConfig({
     "@nuxtjs/device",
     "@nuxtjs/critters",
     "@nuxtjs/i18n",
-    "@nuxtjs/algolia",
     "@nuxtjs/fontaine",
     "@nuxtjs/google-fonts",
     "nuxt-lazy-hydrate",
