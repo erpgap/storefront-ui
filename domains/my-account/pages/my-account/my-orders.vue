@@ -78,7 +78,9 @@ const NuxtLink = resolveComponent('NuxtLink');
         <p class="block typography-text-sm font-medium">
           {{ $t('account.ordersAndReturns.amount') }}
         </p>
-        <span class="block typography-text-sm mb-2">${{ paymentAmount }}</span>
+        <span class="block typography-text-sm mb-2">{{
+          $currency(paymentAmount)
+        }}</span>
       </li>
       <li class="flex flex-wrap items-center mb-2">
         <p class="block typography-text-sm -mb-1.5 font-medium flex-[100%]">
@@ -125,7 +127,7 @@ const NuxtLink = resolveComponent('NuxtLink');
         >
           <td class="py-4 pr-4 lg:whitespace-nowrap">{{ id }}</td>
           <td class="p-4 lg:whitespace-nowrap">{{ date }}</td>
-          <td class="p-4">${{ paymentAmount }}</td>
+          <td class="p-4">{{ $currency(paymentAmount) }}</td>
           <td :class="['p-4', { 'text-negative-700': status === 'Cancelled' }]">
             {{ status }}
           </td>
