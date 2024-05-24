@@ -1,33 +1,33 @@
-import type {
-  AddressesResponse,
-  Partner,
-  QueryAddressesArgs,
-  AddAddressInput,
-  MutationAddAddressArgs,
-  UpdateAddressInput,
-  MutationUpdateAddressArgs,
-  AddAddressResponse,
-  SelectAddressInput,
-  MutationSelectAddressArgs,
-  SelectCurrentAddressResponse,
-  DeleteAddressInput,
-  MutationDeleteAddressArgs,
-  DeleteAddressResponse,
-} from "~/graphql";
-import { AddressEnum } from "~/graphql";
-import { MutationName } from "~/server/mutations";
-import { QueryName } from "~/server/queries";
-import { useToast } from "vue-toastification";
+import { useToast } from 'vue-toastification';
+import {
+  AddressEnum,
+  type AddressesResponse,
+  type Partner,
+  type QueryAddressesArgs,
+  type AddAddressInput,
+  type MutationAddAddressArgs,
+  type UpdateAddressInput,
+  type MutationUpdateAddressArgs,
+  type AddAddressResponse,
+  type SelectAddressInput,
+  type MutationSelectAddressArgs,
+  type SelectCurrentAddressResponse,
+  type DeleteAddressInput,
+  type MutationDeleteAddressArgs,
+  type DeleteAddressResponse,
+} from '~/graphql';
+import { MutationName } from '~/server/mutations';
+import { QueryName } from '~/server/queries';
 
 export const useAddresses = () => {
   const { $sdk } = useNuxtApp();
 
   const loading = ref(false);
   const toast = useToast();
-  const billingAddresses = useState<Partner[]>("billing-addresses", () => []);
-  const shippingAddresses = useState<Partner[]>("shipping", () => []);
+  const billingAddresses = useState<Partner[]>('billing-addresses', () => []);
+  const shippingAddresses = useState<Partner[]>('shipping-addresses', () => []);
 
-  const loadBillingAddresses = async () => {
+  const loadAddresses = async (addressType: AddressEnum) => {
     loading.value = true;
 
     const { data, error } = await $sdk().odoo.query<
@@ -35,34 +35,19 @@ export const useAddresses = () => {
       AddressesResponse
     >(
       { queryName: QueryName.GetAddressesQuery },
-      { filter: { addressType: [AddressEnum.Billing] } }
+      { filter: { addressType: addressType } }
     );
 
     if (error.value) {
       return toast.error(error.value.data.message);
     }
 
-    billingAddresses.value = data.value.addresses;
-
-    loading.value = false;
-  };
-
-  const loadShippingAddresses = async () => {
-    loading.value = true;
-
-    const { data, error } = await $sdk().odoo.query<
-      QueryAddressesArgs,
-      AddressesResponse
-    >(
-      { queryName: QueryName.GetAddressesQuery },
-      { filter: { addressType: [AddressEnum.Shipping] } }
-    );
-
-    if (error.value) {
-      return toast.error(error.value.data.message);
+    if (addressType === AddressEnum.Billing) {
+      billingAddresses.value = data.value.addresses;
+    } else {
+      shippingAddresses.value = data.value.addresses;
     }
 
-    shippingAddresses.value = data.value.addresses;
     loading.value = false;
   };
 
@@ -77,13 +62,10 @@ export const useAddresses = () => {
     if (error.value) {
       return toast.error(error.value.data.message);
     }
-    if (type === AddressEnum.Billing) {
-      loadBillingAddresses();
-    } else {
-      loadShippingAddresses();
-    }
 
-    toast.success("Address has been successfully saved");
+    loadAddresses(type);
+
+    toast.success('Address has been successfully saved');
     loading.value = false;
   };
 
@@ -98,7 +80,7 @@ export const useAddresses = () => {
     if (error.value) {
       return toast.error(error.value.data.message);
     }
-    toast.success("Address has been successfully removed");
+    toast.success('Address has been successfully removed');
     loading.value = false;
   };
 
@@ -131,7 +113,7 @@ export const useAddresses = () => {
       shippingAddresses.value[index] = address;
     }
 
-    toast.success("Address has been successfully updated");
+    toast.success('Address has been successfully updated');
     loading.value = false;
   };
 
@@ -150,13 +132,14 @@ export const useAddresses = () => {
       return toast.error(error.value.data.message);
     }
 
+    loadAddresses(type);
+
     toast.success(`Current ${type} address saved successfully`);
     loading.value = false;
   };
 
   return {
-    loadBillingAddresses,
-    loadShippingAddresses,
+    loadAddresses,
     billingAddresses,
     shippingAddresses,
     selectCurrentAddress,

@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { AddressEnum } from "~/graphql";
+import { AddressEnum } from '~/graphql';
+
 definePageMeta({
-  layout: "account",
+  layout: 'account',
 });
 
-const { billingAddresses, loadBillingAddresses } = useAddresses();
+const { billingAddresses, loadAddresses } = useAddresses();
 
-await loadBillingAddresses();
+await loadAddresses(AddressEnum.Billing);
 </script>
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <AccountFormAddress
-    :addresses="billingAddresses"
+    v-bind:addresses="billingAddresses"
     :type="AddressEnum.Billing"
     :header="$t('billing.heading')"
   />

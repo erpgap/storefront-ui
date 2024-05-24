@@ -31,7 +31,7 @@ defineEmits(["on-click"]);
       <slot />
     </div>
     <div class="flex gap-2 justify-end">
-      <slot name="footer"/>
+      <slot name="footer" />
     </div>
   </div>
 </template>

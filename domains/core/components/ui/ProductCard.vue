@@ -69,10 +69,19 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
 };
 </script>
 <template>
-  <div class="relative border border-neutral-200 rounded-md hover:shadow-lg min-h-[350px]">
+  <div
+    class="relative border border-neutral-200 rounded-md hover:shadow-lg min-h-[350px]"
+  >
     <div class="relative">
       <NuxtLink :to="slug">
-        <NuxtImg :src="imageUrl" :alt="imageAlt" :width="370" :height="370" class="rounded-md" :loading="loading" />
+        <NuxtImg
+          :src="imageUrl"
+          :alt="imageAlt"
+          :width="370"
+          :height="370"
+          class="rounded-md"
+          :loading="loading"
+        />
       </NuxtLink>
 
       <SfButton
@@ -103,14 +112,28 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
         <SfRating size="xs" :value="rating ?? 0" :max="5" />
         <SfCounter size="xs">{{ ratingCount }}</SfCounter>
       </div>
-      <p v-if="description" class="block py-2 font-normal leading-5 typography-text-sm text-neutral-700">
+      <p
+        v-if="description"
+        class="block py-2 font-normal leading-5 typography-text-sm text-neutral-700"
+      >
         {{ description }}
       </p>
       <div class="block pb-10 pt-3">
-        <span class="font-bold typography-text-sm">${{ regularPrice }}</span>
-        <span v-if="specialPrice" class="ml-1.5 font-normal typography-text-xs line-through">${{ specialPrice }}</span>
+        <span class="font-bold typography-text-sm">{{
+          $currency(regularPrice)
+        }}</span>
+        <span
+          v-if="specialPrice"
+          class="ml-1.5 font-normal typography-text-xs line-through"
+          >{{ $currency(specialPrice) }}</span
+        >
       </div>
-      <SfButton type="button" class="absolute bottom-2" size="sm" @click="cartAdd(firstVariant?.id, 1)">
+      <SfButton
+        type="button"
+        class="absolute bottom-2"
+        size="sm"
+        @click="cartAdd(firstVariant?.id, 1)"
+      >
         <template #prefix>
           <SfIconShoppingCart size="sm" />
         </template>
