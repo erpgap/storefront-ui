@@ -19,7 +19,7 @@ async function cartAddItem(event: any, body: any) {
 
   if (requestBody[0]?.mutationName === MutationName.CartAddItem) {
     const session = await useSession(event, {
-      password: "80d42cfb-1cd2-462c-8f17-e3237d9027e9",
+      password: "b013b03ac2231e0b448e9a22ba488dcf",
     });
 
     const keyName = `cache:cart:${session?.id}`;
@@ -31,7 +31,7 @@ async function cartRemoveItem(event: any, body: any) {
   const requestBody = await readBody(event);
   if (requestBody[0]?.mutationName === MutationName.CartRemoveItem) {
     const session = await useSession(event, {
-      password: "80d42cfb-1cd2-462c-8f17-e3237d9027e9",
+      password: "b013b03ac2231e0b448e9a22ba488dcf",
     });
 
     const keyName = `cache:cart:${session?.id}`;
@@ -43,7 +43,7 @@ async function cartUpdateItem(event: any, body: any) {
   const requestBody = await readBody(event);
   if (requestBody[0]?.mutationName === MutationName.CartUpdateQuantity) {
     const session = await useSession(event, {
-      password: "80d42cfb-1cd2-462c-8f17-e3237d9027e9",
+      password: "b013b03ac2231e0b448e9a22ba488dcf",
     });
 
     const keyName = `cache:cart:${session?.id}`;
