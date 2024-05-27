@@ -14,7 +14,6 @@ import { useToast } from "vue-toastification";
 
 export const useCart = () => {
   const { $sdk } = useNuxtApp();
-  const cartCounter = useCookie<number>("cart-counter");
   const toast = useToast();
   const cart = useState<Cart>("cart", () => ({} as Cart));
 
@@ -22,13 +21,10 @@ export const useCart = () => {
 
   const loadCart = async () => {
     loading.value = true;
-    const { data } = await $sdk().odoo.query<null, CartResponse>({
-      queryName: QueryName.LoadCartQuery,
-    });
+    const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`);
     loading.value = false;
 
-    cart.value = data.value.cart;
-    cartCounter.value = Number(data.value.cart.order?.orderLines?.length);
+    cart.value = data?.value?.cart || ({} as Cart);
   };
 
   const cartAdd = async (productId: number, quantity: number) => {
@@ -45,7 +41,6 @@ export const useCart = () => {
     }
 
     cart.value = data.value.cartAddItem;
-    cartCounter.value = Number(cart.value?.order?.orderLines?.length);
 
     toast.success("Product has been added to cart");
   };
@@ -66,7 +61,6 @@ export const useCart = () => {
     }
 
     cart.value = data.value.cartUpdateItem;
-    cartCounter.value = Number(cart.value?.order?.orderLines?.length);
     toast.success("Product updated successfully");
   };
 
@@ -83,7 +77,6 @@ export const useCart = () => {
     }
 
     cart.value = data.value.cartRemoveItem;
-    cartCounter.value = Number(cart.value?.order?.orderLines?.length);
     toast.success("Product removed successfully");
   };
 

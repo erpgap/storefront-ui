@@ -2,8 +2,9 @@
 import { SfButton, SfBadge } from "@storefront-ui/vue";
 
 const NuxtLink = resolveComponent("NuxtLink");
+const { cart } = useCart();
 
-const cartCounter = useCookie<number>("cart-counter");
+const cartCounter = computed(() => cart.value.order?.orderLines?.length || 0);
 </script>
 
 <template>
