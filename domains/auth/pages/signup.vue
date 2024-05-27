@@ -48,7 +48,7 @@ const handleSignup = async () => {
         <template #login>
           <SfLink
             :tag="NuxtLink"
-            :to="paths.authLogin"
+            to="/login"
             class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
             data-testid="signup-page-login-button"
           >
@@ -61,7 +61,7 @@ const handleSignup = async () => {
     <form
       data-testid="signup-form"
       class="flex flex-col md:border md:border-neutral-200 rounded-md gap-4 md:p-6"
-      @submit.prevent="open"
+      @submit.prevent="handleSignup"
     >
       <label>
         <UiFormLabel>{{ $t("form.firstNameLabel") }} *</UiFormLabel>
@@ -192,7 +192,7 @@ const handleSignup = async () => {
           <template #information>
             <SfLink
               :tag="NuxtLink"
-              :to="paths.account"
+              to="/my-account"
               class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
             >
               {{ $t("auth.signup.modal.information") }}
@@ -202,7 +202,7 @@ const handleSignup = async () => {
       </UiAlert>
 
       <footer class="flex justify-end">
-        <SfButton :tag="NuxtLink" :to="paths.home" class="w-full">
+        <SfButton :tag="NuxtLink" to="/" class="w-full">
           {{ $t("auth.signup.modal.button") }}
         </SfButton>
       </footer>

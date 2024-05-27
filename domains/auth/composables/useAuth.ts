@@ -21,7 +21,7 @@ export const useAuth = () => {
   const { $sdk } = useNuxtApp();
   const router = useRouter();
   const userCookie = useCookie<Partner | null>("odoo-user");
-  const user = useState<Partner>("user", () => ({} as Partner));
+  const user = useState<Partner>("user", () => ({}) as Partner);
 
   const toast = useToast();
 
@@ -84,6 +84,8 @@ export const useAuth = () => {
     }
 
     user.value = data.value.partner;
+    await login({ email: params.email, password: params.password });
+    router.push("/my-account/personal-data");
   };
 
   const login = async (params: MutationLoginArgs) => {

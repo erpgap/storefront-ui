@@ -40,6 +40,7 @@ export default defineNuxtConfig({
     "nuxt-lodash",
     "nuxt-icon",
     "nuxt-delay-hydration",
+    "nuxt-typed-router"
   ],
   runtimeConfig: {
     shouldByPassCacheQueryNames: [
