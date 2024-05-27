@@ -14,6 +14,7 @@ import type {
   AdyenPaymentDetailsResult,
   AdyenPaymentsResult,
   PaymentProvider,
+  Orders,
 } from "./gql/graphql";
 import type { H3Error } from "h3";
 import type { AsyncData } from "#app";
@@ -259,6 +260,13 @@ export type AdyenPaymentDetailsResponse = AsyncData<
 export type AdyenPaymentsResponse = AsyncData<
   {
     adyenPayments: AdyenPaymentsResult;
+  },
+  H3Error
+>;
+
+export type GetOrdersResponse = AsyncData<
+  {
+    orders: Orders;
   },
   H3Error
 >;
