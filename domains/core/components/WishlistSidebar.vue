@@ -7,10 +7,9 @@ import type { Product } from "~/graphql";
 const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading } =
   useWishlist();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
-const toast = useToast();
 
-const WishlistRef = ref();
-onClickOutside(WishlistRef, () => {
+const wishlistDrawerRef = ref(null);
+onClickOutside(wishlistDrawerRef, () => {
   wishlistSidebarIsOpen.value = false;
 });
 
@@ -36,10 +35,10 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
       >
         <SfDrawer
           v-show="wishlistSidebarIsOpen"
-          ref="WishlistRef"
           :model-value="true"
           :disable-click-away="true"
           :disable-esc="true"
+          ref="wishlistDrawerRef"
           placement="right"
           class="shadow-none z-[100] w-full lg:w-[420px] bg-white"
           data-testid="category-sidebar"
