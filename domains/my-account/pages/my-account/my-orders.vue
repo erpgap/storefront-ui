@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { SfButton } from "@storefront-ui/vue";
 import { useOrders } from "~/domains/orders/composable/useOrders";
+import { PaymentTransactionState, type Order } from "~/graphql";
 
 definePageMeta({
   layout: "account",
@@ -9,6 +10,14 @@ definePageMeta({
 const { getOrders, orders, loading } = useOrders();
 
 await getOrders();
+
+const isTransactionCancelled = (order?: Order): boolean => {
+  return (
+    order?.transactions?.some(
+      (transaction) => transaction.state === PaymentTransactionState.Canceled
+    ) ?? false
+  );
+};
 
 const NuxtLink = resolveComponent("NuxtLink");
 </script>
@@ -109,10 +118,18 @@ const NuxtLink = resolveComponent("NuxtLink");
         >
           <td class="py-4 pr-4 lg:whitespace-nowrap">{{ order?.id }}</td>
           <td class="p-4 lg:whitespace-nowrap">{{ order?.dateOrder }}</td>
-          <td class="p-4">{{ $currency(order?.amountTotal) }}</td>
-          <!-- <td :class="['p-4', { 'text-negative-700': status === 'Cancelled' }]">
-            {{ status }}
-          </td> -->
+          <td class="p-4">
+            {{ $currency(order?.amountTotal ? order?.amountTotal : 0) }}
+          </td>
+          <td
+            v-if="order"
+            :class="[
+              'p-4',
+              { 'text-negative-700': isTransactionCancelled(order) },
+            ]"
+          >
+            {{ order.transactions ? order.transactions[0].state : "--" }}
+          </td>
           <td class="py-1.5 pl-4 text-right w-full">
             <SfButton :tag="NuxtLink" size="sm" variant="tertiary">
               {{ $t("account.ordersAndReturns.details") }}</SfButton

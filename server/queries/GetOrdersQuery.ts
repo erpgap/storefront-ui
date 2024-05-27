@@ -8,6 +8,9 @@ export default gql`
         dateOrder
         amountTotal
         invoiceStatus
+        transactions {
+          state
+        }
       }
     }
   }
