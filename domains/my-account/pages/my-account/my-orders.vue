@@ -145,4 +145,5 @@ const NuxtLink = resolveComponent("NuxtLink");
       </tbody>
     </table>
   </div>
+  <NuxtPage />
 </template>
