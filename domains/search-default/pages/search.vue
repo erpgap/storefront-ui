@@ -1,28 +1,27 @@
 <script setup lang="ts">
-import { SfButton, SfIconTune, useDisclosure } from "@storefront-ui/vue";
+import {
+  SfButton,
+  SfIconTune,
+  useDisclosure,
+  SfLoaderCircular,
+} from "@storefront-ui/vue";
 import type { Product } from "~/graphql";
 
 const route = useRoute();
 const { isOpen, open, close } = useDisclosure();
 const { getFacetsFromURL } = useUiHelpers();
 
-// searching on algolia with query params
-const { search, searchInputValue, algoliaSearchResultIds, loading } =
-  useSearch();
-searchInputValue.value = route.query.search as string;
-await search();
-
-// fetch products with query params + ids from algolia
+// searching on odoo with query params
 const {
-  loadProductTemplateList,
-  organizedAttributes,
-  productTemplateList,
+  search,
+  searchInputValue,
+  loading,
   totalItems,
+  organizedAttributes,
   categories,
-} = useProductTemplateList(route.fullPath);
-await loadProductTemplateList(
-  getFacetsFromURL(route.query, algoliaSearchResultIds.value)
-);
+  productTemplateList,
+} = useSearch();
+searchInputValue.value = route.query.search as string;
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 
@@ -31,7 +30,7 @@ const breadcrumbs = [
   { name: "Search", link: "/" },
 ];
 
-const maxVisiblePages = ref(1);
+const maxVisiblePages = useState("search-page-max-visible", () => 1);
 const setMaxVisiblePages = (isWide: boolean) =>
   (maxVisiblePages.value = isWide ? 5 : 1);
 
@@ -41,14 +40,6 @@ watch(isTabletScreen, (value) => {
     close();
   }
 });
-
-watch(
-  () => route,
-  async () => {
-    search();
-  },
-  { deep: true, immediate: true }
-);
 
 const pagination = computed(() => ({
   currentPage: route?.query?.page ? Number(route.query.page) : 1,
@@ -70,19 +61,19 @@ onMounted(() => {
     </h1>
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
-        <!-- <CategoryFilterSidebar
+        <CategoryFilterSidebar
           class="hidden lg:block"
           :attributes="organizedAttributes"
           :categories="categories"
-        /> -->
+        />
         <LazyCategoryMobileSidebar :is-open="isOpen" @close="close">
           <template #default>
-            <!-- <CategoryFilterSidebar
+            <CategoryFilterSidebar
               class="block lg:hidden"
               :attributes="organizedAttributes"
               :categories="categories"
               @close="close"
-            /> -->
+            />
           </template>
         </LazyCategoryMobileSidebar>
       </div>
@@ -104,7 +95,7 @@ onMounted(() => {
             </SfButton>
           </div>
           <section
-            v-if="productTemplateList.length > 0"
+            v-if="totalItems > 0"
             class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8"
           >
             <LazyUiProductCard

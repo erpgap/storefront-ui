@@ -16,11 +16,17 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   const searchModalToggle = useToggle(searchModalOpen);
   const isSearchModalOpen = computed(() => searchModalOpen.value);
 
-  // algolia search
-  const { result, search: algoliaSearch } = useAlgoliaSearch("header");
-
-  const loading = useState("algolia-search-loading", () => false);
-  const searchInputValue = useState("algolia-search-input", () => "");
+  // odoo search
+  const {
+    loadProductTemplateList,
+    organizedAttributes,
+    productTemplateList,
+    totalItems,
+    categories,
+  } = useProductTemplateList(String(route.fullPath));
+  const { getFacetsFromURL } = useUiHelpers();
+  const loading = useState("odoo-search-loading", () => false);
+  const searchInputValue = useState("odoo-search-input", () => "");
   const highlightedIndex = ref(-1);
   const showResultSearch = ref(false);
 
@@ -31,31 +37,27 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     }
   );
 
-  const algoliaSearchResultIds = computed(() =>
-    result.value?.hits.map((hit) => hit?.id)
-  );
-
   const search = async () => {
     loading.value = true;
 
-    await algoliaSearch({ query: searchInputValue.value });
+    await loadProductTemplateList(getFacetsFromURL(route.query));
     showResultSearch.value = true;
 
     loading.value = false;
   };
 
-  const searchHits = computed<AlgoliaHitType[]>(() => result.value?.hits || []);
+  const searchHits = computed(() => productTemplateList.value || []);
 
-  const selectHit = (hit: AlgoliaHitType) => {
-    if (!hit?.name && !searchInputValue.value) return;
-    router.push(`/search?search=${hit?.name || searchInputValue.value}`);
+  const selectHit = (hit: string) => {
+    if (!hit && !searchInputValue.value) return;
+    router.push(`/search?search=${hit || searchInputValue.value}`);
     showResultSearch.value = false;
-    searchInputValue.value = hit?.name || searchInputValue.value;
+    searchInputValue.value = hit || searchInputValue.value;
   };
 
   const highlightPrevious = () => {
     if (highlightedIndex.value === 0) {
-      highlightedIndex.value = result.value?.length - 1;
+      highlightedIndex.value = productTemplateList.value?.length - 1;
     } else {
       highlightedIndex.value -= 1;
     }
@@ -90,6 +92,5 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     selectHit,
     showResultSearch,
     searchHits,
-    algoliaSearchResultIds,
   };
 };
