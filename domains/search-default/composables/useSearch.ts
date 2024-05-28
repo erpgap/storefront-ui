@@ -1,10 +1,14 @@
 import { onClickOutside, useToggle } from "@vueuse/core";
-import type { AlgoliaHitType } from "~/types/algolia";
 
+/**
+ * @Responsabilities
+ *  1 - FETCH from odoo
+ *  2 - Higlighth the results
+ *  3 - Handle modal state
+ */
 export const useSearch = (formSearchTemplateRef?: any) => {
   const route = useRoute();
   const router = useRouter();
-  const config = useRuntimeConfig();
 
   // search modal
   const searchModalClose = () => searchModalToggle(false);
@@ -12,61 +16,52 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   const searchModalToggle = useToggle(searchModalOpen);
   const isSearchModalOpen = computed(() => searchModalOpen.value);
 
-  // algolia search
-  const { result: aloliaResults, search: algoliaSearch } =
-    useAlgoliaSearch("header");
-  const loading = ref(false);
-  const searchInputValue = ref((route.query?.search as string) || "");
-  const highlightedIndex = ref(-1);
-  const showResultSearch = ref(false);
+  // odoo search
   const {
     loadProductTemplateList,
-    organizedAttributes,
     productTemplateList,
+    loading,
     totalItems,
+    organizedAttributes,
     categories,
-  } = useProductTemplateList(String(route.fullPath));
+  } = useProductTemplateList(route.fullPath, route.fullPath);
   const { getFacetsFromURL } = useUiHelpers();
+  const searchInputValue = useState("odoo-search-input", () => "");
+  const highlightedIndex = ref(-1);
+  const showResultSearch = ref(false);
 
-  const algoliaSearchResultIds = computed(() =>
-    aloliaResults.value?.hits.map((hit) => hit?.id)
+  watch(
+    () => route.query,
+    () => {
+      searchInputValue.value = "";
+    }
   );
 
   const search = async () => {
     loading.value = true;
-    if (Number(config.public.algoliaEnabled)) {
-      await algoliaSearch({ query: route.query.search });
-      const newQuery = { ...route.query };
-      delete newQuery.search;
-      await loadProductTemplateList(
-        getFacetsFromURL(newQuery, algoliaSearchResultIds.value)
-      );
-      loading.value = false;
-      return;
-    }
 
     await loadProductTemplateList(getFacetsFromURL(route.query));
+
+    showResultSearch.value = true;
+
     loading.value = false;
   };
 
-  const setInputValue = (value: string) => {
-    searchInputValue.value = value;
-  };
+  const searchHits = computed(() => productTemplateList.value || []);
 
-  const selectHit = (hit: AlgoliaHitType) => {
-    if (!hit?.name && !searchInputValue.value) return;
-    router.push(`/search?search=${hit?.name || searchInputValue.value}`);
+  const selectHit = (hit: string) => {
+    if (!hit && !searchInputValue.value) return;
+    router.push(`/search?search=${hit || searchInputValue.value}`);
     showResultSearch.value = false;
-    searchInputValue.value = hit?.name || searchInputValue.value;
+    searchInputValue.value = hit || searchInputValue.value;
   };
 
   const highlightPrevious = () => {
     if (highlightedIndex.value === 0) {
-      highlightedIndex.value = aloliaResults.value.length - 1;
+      highlightedIndex.value = productTemplateList.value?.length - 1;
     } else {
       highlightedIndex.value -= 1;
     }
-    setInputValue(searchHits.value[highlightedIndex.value]?.name);
   };
 
   const highlightNext = () => {
@@ -75,14 +70,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     } else {
       highlightedIndex.value += 1;
     }
-    setInputValue(searchHits.value[highlightedIndex.value]?.name);
   };
-
-  watch(
-    () => route,
-    () => (searchInputValue.value = (route.query.search as string) || ""),
-    { deep: true, immediate: true }
-  );
 
   onClickOutside(formSearchTemplateRef, () => {
     showResultSearch.value = false;
@@ -95,18 +83,19 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     searchModalOpen,
     searchModalToggle,
 
-    // algolia search
+    // odoo search
     loading,
     searchInputValue,
     highlightNext,
     highlightPrevious,
     highlightedIndex,
     search,
-    organizedAttributes,
-    productTemplateList,
-    totalItems,
-    categories,
     selectHit,
     showResultSearch,
+    searchHits,
+    totalItems,
+    organizedAttributes,
+    categories,
+    productTemplateList,
   };
 };

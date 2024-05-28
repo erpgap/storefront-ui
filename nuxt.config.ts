@@ -19,15 +19,14 @@ export default defineNuxtConfig({
     "./domains/core",
     "./domains/my-account",
     "./domains/product",
-    "./domains/search-algolia",
-    //"./domains/search-default",
+    //"./domains/search-algolia",
+    "./domains/search-default",
     "./domains/wishlist",
   ],
   modules: [
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "@nuxtjs/i18n",
-    "@nuxtjs/algolia",
     "@vueuse/nuxt",
     "@nuxt/image",
     "@nuxt/scripts",
@@ -40,7 +39,7 @@ export default defineNuxtConfig({
     "nuxt-lodash",
     "nuxt-icon",
     "nuxt-delay-hydration",
-    "nuxt-typed-router"
+    "nuxt-typed-router",
   ],
   runtimeConfig: {
     shouldByPassCacheQueryNames: [
@@ -51,7 +50,6 @@ export default defineNuxtConfig({
     public: {
       odooBaseImageUrl: "",
       odooBaseUrl: "",
-      algoliaEnabled: 0,
       currencySymbol: "",
       currencySeparator: "",
       currencyDecimal: "",
@@ -74,13 +72,6 @@ export default defineNuxtConfig({
     lazy: true,
     langDir: "lang",
     defaultLocale: "en",
-  },
-  algolia: {
-    apiKey: process.env.NUXT_ALGOLIA_API_KEY,
-    applicationId: process.env.NUXT_ALGOLIA_APPLICATION_ID,
-    instantSearch: {
-      theme: "algolia",
-    },
   },
   delayHydration: {
     mode: "init",
