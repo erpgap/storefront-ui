@@ -43,6 +43,7 @@
     "nuxt-icon": "^0.6.10",
     "nuxt-lazy-hydrate": "^1.0.0",
     "nuxt-lodash": "^2.5.3",
+    "nuxt-typed-router": "^3.6.3",
     "object-hash": "^3.0.0",
     "react": "^18.3.1",
     "vue": "^3.4.27",

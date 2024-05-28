@@ -12,8 +12,8 @@ export default defineNuxtConfig({
   },
   extends: [
     "./domains/auth",
-    "./domains/cart-odoo",
-    //"./domains/cart-redis",
+    //"./domains/cart-odoo",
+    "./domains/cart-redis",
     "./domains/category",
     "./domains/checkout",
     "./domains/core",
@@ -40,6 +40,7 @@ export default defineNuxtConfig({
     "nuxt-lodash",
     "nuxt-icon",
     "nuxt-delay-hydration",
+    "nuxt-typed-router"
   ],
   runtimeConfig: {
     shouldByPassCacheQueryNames: [

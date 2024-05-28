@@ -24,8 +24,6 @@ await loadProductTemplateList(
   getFacetsFromURL(route.query, algoliaSearchResultIds.value)
 );
 
-console.log(organizedAttributes.value);
-
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 
 const breadcrumbs = [

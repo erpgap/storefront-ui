@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const { isMobile, isDesktopOrTablet } = useDevice();
 const { loadCategoryList, categories } = useCategory();
+const { loadCart } = useCart();
 
 provide(
   "filteredTopCategories",
@@ -10,6 +11,7 @@ provide(
 );
 
 await loadCategoryList({ filter: { parent: true } } as any);
+await loadCart();
 </script>
 
 <template>

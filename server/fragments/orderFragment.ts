@@ -9,6 +9,9 @@ order {
   dateOrder
   orderUrl
   stage
+  transactions {
+    state
+  }
   websiteOrderLine {
     id
     name
