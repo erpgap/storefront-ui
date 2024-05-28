@@ -9,6 +9,7 @@ import GetProductTemplateListQuery from "./GetProductTemplateListQuery";
 import GetProductTemplateQuery from "./GetProductTemplateQuery";
 import GetProductVariantQuery from "./GetProductVariantQuery";
 import GetOrdersQuery from "./GetOrdersQuery";
+import GetOrderQuery from "./GetOrderQuery";
 import LoadCartQuery from "./LoadCartQuery";
 import LoadUserQuery from "./LoadUserQuery";
 import StockLotsQuery from "./StockLotsQuery";
@@ -32,6 +33,7 @@ enum QueryName {
   GetPaymentMethodsQuery = "GetPaymentMethodsQuery",
   GetPaymentConfirmation = "GetPaymentConfirmation",
   GetOrdersQuery = "GetOrdersQuery",
+  GetOrderQuery = "GetOrderQuery",
 }
 
 const Queries: Record<QueryName, DocumentNode> = {
@@ -50,6 +52,7 @@ const Queries: Record<QueryName, DocumentNode> = {
   GetPaymentMethodsQuery,
   GetPaymentConfirmation,
   GetOrdersQuery,
+  GetOrderQuery,
 };
 
 const QueriesToByPassCache: string[] = [
