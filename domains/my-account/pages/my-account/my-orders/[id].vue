@@ -7,6 +7,7 @@ const router = useRouter();
 console.log(route.params);
 const { isOpen } = useDisclosure({ initialValue: true });
 const { getOrderById, order, loading } = useOrders();
+const { loadUser, user } = useAuth();
 
 const billingAddress = {
   firstName: "Hieronim",
@@ -139,15 +140,16 @@ const NuxtLink = resolveComponent("NuxtLink");
           </thead>
           <tbody>
             <tr
-              v-for="(product, i) in order?.orderLines"
+              v-for="(product, i) in order?.websiteOrderLine"
               :key="i"
               class="border-b border-neutral-200 align-top"
             >
               <td class="pb-4 pr-4 lg:whitespace-nowrap typography-text-base">
-                <UiProductCardHorizontal :product="product" />
+                {{ product.product?.displayName }}
               </td>
+
               <td class="p-4 lg:whitespace-nowrap typography-text-base">
-                ${{ product.priceUnit }}
+                ${{ product.product?.combinationInfo.price }}
               </td>
               <td class="p-4 typography-text-base">{{ product.quantity }}</td>
               <td class="p-4 typography-text-base">
@@ -182,17 +184,11 @@ const NuxtLink = resolveComponent("NuxtLink");
             <p class="typography-text-sm font-medium mb-2">
               {{ $t("account.ordersAndReturns.orderDetails.billingAddress") }}
             </p>
-            <span
-              >{{ billingAddress.firstName }}
-              {{ billingAddress.lastName }}</span
-            >
-            <span class="block">{{ billingAddress.phoneNumber }}</span>
-            <span
-              >{{ billingAddress.address1 }} {{ billingAddress.address2 }}</span
-            >
+            <span>{{ user.billingAddress?.name }} </span>
+            <span class="block">{{ user.billingAddress?.phone }}</span>
             <span class="block">
-              {{ billingAddress.city }}, {{ billingAddress.state }}
-              {{ billingAddress.postalCode }}
+              {{ user.billingAddress?.city }}, {{ user.billingAddress?.state }}
+              {{ user.billingAddress?.zip }}
             </span>
           </li>
           <li class="mb-4 md:mb-0">
@@ -203,25 +199,19 @@ const NuxtLink = resolveComponent("NuxtLink");
               order?.transactions[0].payment?.paymentReference
             }}</span>
           </li>
-          <!-- <li class="mb-4">
+          <li class="mb-4">
             <p class="typography-text-sm font-medium mb-2">
               {{ $t("account.ordersAndReturns.orderDetails.shippingAddress") }}
             </p>
-            <span
-              >{{ data?.shippingAddress.firstName }}
-              {{ data?.shippingAddress.lastName }}</span
-            >
-            <span class="block">{{ data?.shippingAddress.phoneNumber }}</span>
-            <span
-              >{{ data?.shippingAddress.address1 }}
-              {{ data?.shippingAddress.address2 }}</span
-            >
+            <span>{{ user.shippingAddress?.name }} </span>
+            <span class="block">{{ user.shippingAddress?.phone }}</span>
+
             <span class="block">
-              {{ data?.shippingAddress.city }},
-              {{ data?.shippingAddress.state }}
-              {{ data?.shippingAddress.postalCode }}
+              {{ user.shippingAddress?.city }},
+              {{ user.shippingAddress?.state }}
+              {{ user.shippingAddress?.postalCode }}
             </span>
-          </li> -->
+          </li>
           <li class="mb-4 md:mb-0">
             <p class="typography-text-sm font-medium mb-2">
               {{ $t("account.ordersAndReturns.orderDetails.paymentMethod") }}
