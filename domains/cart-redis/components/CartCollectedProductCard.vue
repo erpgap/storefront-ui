@@ -86,9 +86,13 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
           v-if="orderLine.priceSubtotal"
           class="text-secondary-700 sm:order-1 font-bold typography-text-sm sm:typography-text-lg sm:ml-auto"
         >
-          ${{ orderLine.priceSubtotal }}
+          {{ $currency(orderLine.priceSubtotal) }}
           <span
             class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
+            v-if="
+              orderLine.product?.combinationInfo?.list_price !==
+              orderLine.product?.combinationInfo?.price
+            "
           >
             ${{
               orderLine.product?.combinationInfo?.list_price *
