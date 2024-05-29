@@ -28,7 +28,7 @@ const makeSearchBold = (text: string) => {
       :key="product.id"
       class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
       role="option"
-      @click="$router.push(`${product.slug}`)"
+      @click="$emit('select', product)"
     >
       <span
         class="text-black text-sm font-medium capitalize"

@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import { SfButton, SfIconClose, SfModal } from "@storefront-ui/vue";
-
-const { isSearchModalOpen, searchModalClose } = useSearch();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 </script>
 
@@ -9,7 +6,7 @@ const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
   <TheHeader />
 
   <main class="w-full narrow-container bg-white">
-    <NuxtPage :page-key="(route) => route.fullPath" />
+    <slot></slot>
   </main>
 
   <LazyNewsletter />

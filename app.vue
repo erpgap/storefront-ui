@@ -1,7 +1,7 @@
 <script setup>
 const nuxtApp = useNuxtApp();
 
-nuxtApp.hook('page:finish', () => {
+nuxtApp.hook("page:finish", () => {
   window.scrollTo(0, 0);
 });
 </script>
@@ -10,7 +10,7 @@ nuxtApp.hook('page:finish', () => {
     <NuxtLoadingIndicator color="white" :height="4" />
 
     <NuxtLayout>
-      <NuxtPage />
+      <NuxtPage :page-key="(route) => route.fullPath" />
     </NuxtLayout>
   </div>
 </template>

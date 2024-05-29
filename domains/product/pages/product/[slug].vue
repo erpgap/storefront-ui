@@ -15,10 +15,9 @@ import {
   SfLink,
   SfRating,
   SfThumbnail,
-} from '@storefront-ui/vue';
-import type { LocationQueryRaw } from 'vue-router';
-import { useToast } from 'vue-toastification';
-import type { OrderLine, Product } from '~/graphql';
+} from "@storefront-ui/vue";
+import type { LocationQueryRaw } from "vue-router";
+import type { OrderLine, Product } from "~/graphql";
 
 const route = useRoute();
 const router = useRouter();
@@ -49,8 +48,6 @@ const params = computed(() => ({
   ),
   productTemplateId: productTemplate?.value?.id,
 }));
-
-const toast = useToast();
 
 const selectedSize = computed(() => Number(route.query.Size));
 const selectedColor = computed(() => Number(route.query.Color));
@@ -192,7 +189,7 @@ await loadProductVariant(params.value);
                   <template #prefix>
                     <SfIconShoppingCart size="sm" />
                   </template>
-                  {{ $t('addToCart') }}
+                  {{ $t("addToCart") }}
                 </SfButton>
               </div>
               <div class="flex justify-center mt-4 gap-x-4">
@@ -200,7 +197,7 @@ await loadProductVariant(params.value);
                   <template #prefix>
                     <SfIconCompareArrows size="sm" />
                   </template>
-                  {{ $t('compare') }}
+                  {{ $t("compare") }}
                 </SfButton>
                 <SfButton
                   type="button"
@@ -225,8 +222,8 @@ await loadProductVariant(params.value);
                   />
                   {{
                     isInWishlist(productVariant?.id as number)
-                      ? $t('wishlist.removeFromWishlist')
-                      : $t('wishlist.addToWishlist')
+                      ? $t("wishlist.removeFromWishlist")
+                      : $t("wishlist.addToWishlist")
                   }}
                 </SfButton>
               </div>
@@ -243,7 +240,7 @@ await loadProductVariant(params.value);
                   </template>
                   <template #addAddress>
                     <SfLink class="ml-1" href="#" variant="secondary">{{
-                      $t('additionalInfo.addAddress')
+                      $t("additionalInfo.addAddress")
                     }}</SfLink>
                   </template>
                 </i18n-t>
@@ -258,7 +255,7 @@ await loadProductVariant(params.value);
                 <i18n-t keypath="additionalInfo.pickup" scope="global">
                   <template #checkAvailability>
                     <SfLink class="ml-1" href="#" variant="secondary">{{
-                      $t('additionalInfo.checkAvailability')
+                      $t("additionalInfo.checkAvailability")
                     }}</SfLink>
                   </template>
                 </i18n-t>
@@ -272,7 +269,7 @@ await loadProductVariant(params.value);
               <i18n-t keypath="additionalInfo.returns" scope="global">
                 <template #details>
                   <SfLink class="ml-1" href="#" variant="secondary">{{
-                    $t('additionalInfo.details')
+                    $t("additionalInfo.details")
                   }}</SfLink>
                 </template>
               </i18n-t>
@@ -391,7 +388,7 @@ await loadProductVariant(params.value);
                 <h2
                   class="font-bold font-headings text-lg leading-6 md:text-2xl"
                 >
-                  {{ $t('productDetails') }}
+                  {{ $t("productDetails") }}
                 </h2>
               </template>
               <p>
@@ -406,7 +403,7 @@ await loadProductVariant(params.value);
                 <h2
                   class="font-bold font-headings text-lg leading-6 md:text-2xl"
                 >
-                  {{ $t('customerReviews') }}
+                  {{ $t("customerReviews") }}
                 </h2>
               </template>
               <p>
@@ -430,7 +427,7 @@ await loadProductVariant(params.value);
           width="300"
           height="300"
         />
-        <p class="mt-8 font-medium">{{ $t('emptyStateText') }}</p>
+        <p class="mt-8 font-medium">{{ $t("emptyStateText") }}</p>
       </div>
     </template>
   </NuxtErrorBoundary>

@@ -9,6 +9,7 @@ import { unrefElement } from "@vueuse/core";
 
 definePageMeta({
   layout: "account",
+  middleware: ["auth-check"],
 });
 const { isOpen, open, close } = useDisclosure();
 const { loadUser, user, updatePartner, updatePassword } = useAuth();

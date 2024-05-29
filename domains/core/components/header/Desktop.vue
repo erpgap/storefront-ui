@@ -22,7 +22,9 @@ const {
   search,
   searchHits,
   selectHit,
+  enterPress,
   showResultSearch,
+  isSearchModalOpen,
 } = useSearch(formSearchTemplateRef);
 
 const NuxtLink = resolveComponent("NuxtLink");
@@ -42,7 +44,7 @@ onClickOutside(menuRef, () => {
 <template>
   <div>
     <div
-      v-if="isOpen"
+      v-if="isOpen || isSearchModalOpen"
       class="fixed !w-screen !h-screen inset-0 bg-neutral-500 bg-opacity-50 transition-opacity duration-1000 top-index"
     />
     <header
@@ -167,7 +169,7 @@ onClickOutside(menuRef, () => {
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
             @input="search()"
-            @keydown.enter.prevent="selectHit(searchHits[highlightedIndex])"
+            @keydown.enter.prevent="enterPress(searchHits[highlightedIndex])"
           >
             <template #suffix>
               <span class="flex items-center">
@@ -196,7 +198,7 @@ onClickOutside(menuRef, () => {
               v-if="showResultSearch"
               :hits="searchHits"
               :search-text="searchInputValue"
-              @select="selectHit(searchHits[highlightedIndex])"
+              @select="selectHit"
             />
           </transition>
         </form>
