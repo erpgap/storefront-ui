@@ -5,7 +5,7 @@ const NuxtLink = resolveComponent("NuxtLink");
 const { loadCart, totalItemsInCart } = useCart();
 
 onMounted(async () => {
-  await loadCart();
+  await loadCart(true);
 });
 </script>
 

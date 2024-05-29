@@ -18,12 +18,21 @@ export const useCart = () => {
 
   const loading = ref(false);
 
-  const loadCart = async () => {
+  const loadCart = async (skipCache: boolean) => {
+    if (skipCache) {
+      loading.value = true;
+      const data = await $fetch<{ cart: Cart }>(`/api/odoo/cart-load`);
+      loading.value = false;
+
+      cart.value = data?.cart || ({} as Cart);
+      return;
+    }
+
     loading.value = true;
-    const data = await $fetch<{ cart: Cart }>(`/api/odoo/cart-load`);
+    const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`);
     loading.value = false;
 
-    cart.value = data?.cart || ({} as Cart);
+    cart.value = data?.value?.cart || ({} as Cart);
   };
 
   const cartAdd = async (productId: number, quantity: number) => {
