@@ -20,15 +20,14 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   const {
     loadProductTemplateList,
     productTemplateList,
-    loading,
     totalItems,
     organizedAttributes,
     categories,
   } = useProductTemplateList(route.fullPath, route.fullPath);
-  const { getFacetsFromURL } = useUiHelpers();
   const searchInputValue = useState("odoo-search-input", () => "");
   const highlightedIndex = ref(-1);
   const showResultSearch = ref(false);
+  const loading = ref(false);
 
   watch(
     () => route.query,
@@ -40,7 +39,17 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   const search = async () => {
     loading.value = true;
 
-    await loadProductTemplateList(getFacetsFromURL(route.query));
+    if (searchInputValue.value.length < 3) {
+      return;
+    }
+
+    await loadProductTemplateList(
+      {
+        search: searchInputValue.value,
+        pageSize: 12,
+      },
+      true
+    );
 
     showResultSearch.value = true;
 
@@ -49,11 +58,10 @@ export const useSearch = (formSearchTemplateRef?: any) => {
 
   const searchHits = computed(() => productTemplateList.value || []);
 
-  const selectHit = (hit: string) => {
-    if (!hit && !searchInputValue.value) return;
-    router.push(`/search?search=${hit || searchInputValue.value}`);
+  const selectHit = () => {
+    if (!searchInputValue.value) return;
+    router.push(`/search?search=${searchInputValue.value}`);
     showResultSearch.value = false;
-    searchInputValue.value = hit || searchInputValue.value;
   };
 
   const highlightPrevious = () => {

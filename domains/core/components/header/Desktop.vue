@@ -161,12 +161,12 @@ onClickOutside(menuRef, () => {
         >
           <SfInput
             v-model="searchInputValue"
-            type="search"
+            type="text"
             class="[&::-webkit-search-cancel-button]:appearance-none"
             placeholder="Search"
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
-            @input="search"
+            @input="search()"
             @keydown.enter.prevent="selectHit(searchHits[highlightedIndex])"
           >
             <template #suffix>
@@ -196,7 +196,7 @@ onClickOutside(menuRef, () => {
               v-if="showResultSearch"
               :hits="searchHits"
               :search-text="searchInputValue"
-              @select="selectHit"
+              @select="selectHit(searchHits[highlightedIndex])"
             />
           </transition>
         </form>

@@ -23,7 +23,6 @@ export const useUiHelpers = () => {
   ): QueryProductsArgs => {
     const filters: string[] = [];
     const newQuery = { ...query };
-    delete newQuery.search;
 
     if (newQuery) {
       Object.keys(newQuery).forEach((filterKey) => {
@@ -52,13 +51,14 @@ export const useUiHelpers = () => {
       attribValues: filters,
       categorySlug: path === "/" || path === "/search" ? null : pathToSlug(),
       ids: ids,
-    };
+    } as ProductFilterInput;
 
     return {
       pageSize,
       currentPage: parseInt(page),
       sort: { [sort[0]]: sort[1] },
-      filter: productFilters as ProductFilterInput,
+      filter: productFilters,
+      search: query?.search,
     };
   };
   const facetsFromUrlToFilter = () => {
@@ -94,9 +94,8 @@ export const useUiHelpers = () => {
     filters.forEach((element) => {
       if (element.filterName === "Size") {
         if (formattedFilters[element.filterName]) {
-          formattedFilters[
-            element.filterName
-          ] += `,${element.id}-${element.label}`;
+          formattedFilters[element.filterName] +=
+            `,${element.id}-${element.label}`;
           return;
         }
         formattedFilters[element.filterName] = `${element.id}-${element.label}`;

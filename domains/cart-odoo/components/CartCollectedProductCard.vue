@@ -3,9 +3,9 @@ import {
   SfIconRemoveShoppingCart,
   SfIconSell,
   SfLink,
-} from '@storefront-ui/vue';
-import { type OrderLine, type Product } from '~/graphql';
-const NuxtLink = resolveComponent('NuxtLink');
+} from "@storefront-ui/vue";
+import { type OrderLine, type Product } from "~/graphql";
+const NuxtLink = resolveComponent("NuxtLink");
 
 defineProps({
   orderLine: {
@@ -48,7 +48,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
         class="absolute top-0 left-0 text-white bg-secondary-600 py-1 pl-1.5 pr-2 text-xs font-medium"
       >
         <SfIconSell size="xs" class="mr-1" />
-        {{ $t('sale') }}
+        {{ $t("sale") }}
       </div>
     </div>
     <div class="flex flex-col pl-4 min-w-[180px] flex-1">
@@ -89,15 +89,16 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
           {{ $currency(orderLine.priceSubtotal) }}
           <span
             class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
+            v-if="
+              orderLine.product?.combinationInfo?.list_price !==
+              orderLine.product?.combinationInfo?.price
+            "
           >
-            {{
-              $currency(
-                orderLine.product?.combinationInfo?.list_price *
-                  orderLine?.quantity
-              )
+            ${{
+              orderLine.product?.combinationInfo?.list_price *
+              orderLine?.quantity
             }}
           </span>
-        </span>
         <span
           v-else
           class="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg"

@@ -9,20 +9,18 @@ import type { Product } from "~/graphql";
 
 const route = useRoute();
 const { isOpen, open, close } = useDisclosure();
-const { getFacetsFromURL } = useUiHelpers();
 
 // searching on odoo with query params
 const {
-  search,
-  searchInputValue,
   loading,
   totalItems,
   organizedAttributes,
   categories,
+  loadProductTemplateList,
   productTemplateList,
-} = useSearch();
-searchInputValue.value = route.query.search as string;
+} = useProductTemplateList(route.fullPath, route.fullPath);
 
+const { getFacetsFromURL } = useUiHelpers();
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 
 const breadcrumbs = [
@@ -40,6 +38,14 @@ watch(isTabletScreen, (value) => {
     close();
   }
 });
+
+watch(
+  () => route,
+  async () => {
+    await loadProductTemplateList(getFacetsFromURL(route.query));
+  },
+  { deep: true, immediate: true }
+);
 
 const pagination = computed(() => ({
   currentPage: route?.query?.page ? Number(route.query.page) : 1,

@@ -13,7 +13,10 @@ export const useProductTemplateList = (
 ) => {
   const { $sdk } = useNuxtApp();
 
-  const loading = useState("loading-product-template-list", () => false);
+  const loading = useState(
+    `loading-product-template-list-${fullSearchIndex}`,
+    () => false
+  );
   const totalItems = useState<number>(`total-items${fullSearchIndex}`, () => 0);
   const productTemplateList = useState<Product[]>(
     `products-category${fullSearchIndex}`,
@@ -28,8 +31,11 @@ export const useProductTemplateList = (
     () => []
   );
 
-  const loadProductTemplateList = async (params: QueryProductsArgs) => {
-    if (productTemplateList.value.length > 0) return;
+  const loadProductTemplateList = async (
+    params: QueryProductsArgs,
+    force: boolean = false
+  ) => {
+    if (productTemplateList.value.length > 0 && !force) return;
 
     loading.value = true;
     const { data } = await $sdk().odoo.query<

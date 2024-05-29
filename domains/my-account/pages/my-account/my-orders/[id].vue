@@ -4,7 +4,6 @@ import { useOrders } from "~/domains/orders/composable/useOrders";
 
 const route = useRoute();
 const router = useRouter();
-console.log(route.params);
 const { isOpen } = useDisclosure({ initialValue: true });
 const { getOrderById, order, loading } = useOrders();
 const { loadUser, user } = useAuth();
