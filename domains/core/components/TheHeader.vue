@@ -2,6 +2,7 @@
 const { isMobile, isDesktopOrTablet } = useDevice();
 const { loadCategoryList, categories } = useCategory();
 const { loadCart } = useCart();
+const { loadWishlist } = useWishlist();
 
 provide(
   "filteredTopCategories",
@@ -12,6 +13,7 @@ provide(
 
 await loadCategoryList({ filter: { parent: true } } as any);
 await loadCart();
+await loadWishlist();
 </script>
 
 <template>
