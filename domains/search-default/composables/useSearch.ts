@@ -1,4 +1,5 @@
 import { onClickOutside, useToggle } from "@vueuse/core";
+import type { Product } from "~/graphql";
 
 /**
  * @Responsabilities
@@ -52,16 +53,25 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     );
 
     showResultSearch.value = true;
+    searchModalOpen.value = true;
 
     loading.value = false;
   };
 
   const searchHits = computed(() => productTemplateList.value || []);
 
-  const selectHit = () => {
+  const enterPress = () => {
     if (!searchInputValue.value) return;
-    router.push(`/search?search=${searchInputValue.value}`);
     showResultSearch.value = false;
+    searchModalOpen.value = false;
+    router.push(`/search?search=${searchInputValue.value}`);
+  };
+
+  const selectHit = (selected: Product) => {
+    if (!searchInputValue.value) return;
+    showResultSearch.value = false;
+    searchModalOpen.value = false;
+    router.push(String(selected.slug));
   };
 
   const highlightPrevious = () => {
@@ -105,5 +115,6 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     organizedAttributes,
     categories,
     productTemplateList,
+    enterPress,
   };
 };

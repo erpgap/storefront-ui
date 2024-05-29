@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import { SfButton, SfIconClose, SfModal } from "@storefront-ui/vue";
-
-const { isSearchModalOpen, searchModalClose } = useSearch();
 const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
 </script>
 
