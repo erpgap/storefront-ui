@@ -78,14 +78,15 @@ const NuxtLink = resolveComponent("NuxtLink");
         <span class="block typography-text-sm flex-1">{{
           order?.invoiceStatus
         }}</span>
+
         <SfButton
           :tag="NuxtLink"
           size="sm"
           variant="tertiary"
-          :to="`'/my-account/my-orders/'${order?.id}`"
+          :to="`/my-account/my-orders/${order?.id}`"
         >
-          {{ $t("account.ordersAndReturns.details") }}</SfButton
-        >
+          {{ $t("account.ordersAndReturns.details") }}
+        </SfButton>
       </li>
       <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
     </ul>
@@ -131,12 +132,18 @@ const NuxtLink = resolveComponent("NuxtLink");
             {{ order.transactions ? order.transactions[0].state : "--" }}
           </td>
           <td class="py-1.5 pl-4 text-right w-full">
-            <SfButton :tag="NuxtLink" size="sm" variant="tertiary">
-              {{ $t("account.ordersAndReturns.details") }}</SfButton
+            <SfButton
+              :tag="NuxtLink"
+              size="sm"
+              variant="tertiary"
+              :to="`/my-account/my-orders/${order?.id}`"
             >
+              {{ $t("account.ordersAndReturns.details") }}
+            </SfButton>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <NuxtPage />
 </template>
