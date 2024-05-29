@@ -79,7 +79,7 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
               </div>
               <div
                 v-else
-                class="flex items-center justify-center flex-col py-48 text-black"
+                class="flex items-center justify-center flex-col text-black"
                 data-testid="cart-page-content"
               >
                 <NuxtImg
