@@ -2,13 +2,16 @@
 import { SfButton, SfBadge } from "@storefront-ui/vue";
 
 const { toggleWishlistSideBar } = useUiState();
-const { loadWishlist } = useWishlist();
-const wishlistCounter = useCookie<number>("wishlist-counter");
+const { loadWishlist, wishlistTotalItems } = useWishlist();
 
 const handleOpenWishListSidebar = async () => {
   await loadWishlist();
   toggleWishlistSideBar();
 };
+
+onMounted(async () => {
+  await loadWishlist();
+});
 </script>
 <template>
   <SfButton
@@ -20,11 +23,11 @@ const handleOpenWishListSidebar = async () => {
   >
     <template #prefix>
       <Icon
-        :name="wishlistCounter > 0 ? 'mdi:heart' : 'mdi:heart-outline'"
+        :name="wishlistTotalItems > 0 ? 'mdi:heart' : 'mdi:heart-outline'"
         size="22px"
       />
       <SfBadge
-        :content="wishlistCounter || 0"
+        :content="wishlistTotalItems"
         class="outline outline-primary-700 bg-white !text-neutral-900 group-hover:outline-primary-800 group-active:outline-primary-900 flex justify-center"
         data-testid="wishlist-badge"
       />
