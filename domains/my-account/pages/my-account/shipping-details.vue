@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { AddressEnum } from '~/graphql';
+import { AddressEnum } from "~/graphql";
 
 definePageMeta({
-  layout: 'account',
+  layout: "account",
+  middleware: ["auth-check"],
 });
 const { shippingAddresses, loadAddresses } = useAddresses();
 

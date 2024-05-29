@@ -6,7 +6,7 @@ const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
   <TheHeader />
 
   <main class="w-full narrow-container bg-white">
-    <NuxtPage :page-key="(route) => route.fullPath" />
+    <slot></slot>
   </main>
 
   <LazyNewsletter />

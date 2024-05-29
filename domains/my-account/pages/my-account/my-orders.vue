@@ -5,6 +5,7 @@ import { PaymentTransactionState, type Order } from "~/graphql";
 
 definePageMeta({
   layout: "account",
+  middleware: ["auth-check"],
 });
 
 const { getOrders, orders, loading } = useOrders();

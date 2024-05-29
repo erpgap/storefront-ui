@@ -1,16 +1,24 @@
- 
-import type { AttributeValue, Product, ProductResponse, QueryProductArgs } from '~/graphql';
-import { QueryName } from '~/server/queries';
-import { useProductAttributes } from './useProductAttributes';
+import type {
+  AttributeValue,
+  Product,
+  ProductResponse,
+  QueryProductArgs,
+} from "~/graphql";
+import { QueryName } from "~/server/queries";
+import { useProductAttributes } from "./useProductAttributes";
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 export const useProductTemplate = (slug: string) => {
   const { $sdk } = useNuxtApp();
 
   const loadingProductTemplate = ref(false);
-  const productTemplate = useState<Product>(`product-${slug}`, () => ({}) as Product);
+  const productTemplate = useState<Product>(
+    `product-${slug}`,
+    () => ({}) as Product
+  );
 
-  const withBase = (filepath: string | null) => `https://vsfdemo17.labs.odoogap.com${filepath}`;
+  const withBase = (filepath: string | null) =>
+    `https://vsfdemo17.labs.odoogap.com${filepath}`;
 
   const images = computed(() => {
     return [
@@ -41,10 +49,19 @@ export const useProductTemplate = (slug: string) => {
       return;
     }
     loadingProductTemplate.value = true;
-    const { data } = await $sdk().odoo.query<QueryProductArgs, ProductResponse>(
-      { queryName: QueryName.GetProductTemplateQuery },
-      params,
-    );
+    const { data, error } = await $sdk().odoo.query<
+      QueryProductArgs,
+      ProductResponse
+    >({ queryName: QueryName.GetProductTemplateQuery }, params);
+
+    if (error.value) {
+      showError({
+        ...error.value,
+        status: 404,
+        message: "Product not found",
+      });
+      return;
+    }
 
     loadingProductTemplate.value = false;
 
@@ -53,7 +70,7 @@ export const useProductTemplate = (slug: string) => {
 
   const getAllSizes = computed(() => {
     return productTemplate?.value?.attributeValues
-      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Size')
+      ?.filter((item: AttributeValue) => item?.attribute?.name === "Size")
       ?.map((item: AttributeValue) => ({
         value: item.id,
         label: item.name,
@@ -62,7 +79,7 @@ export const useProductTemplate = (slug: string) => {
 
   const getAllColors = computed(() => {
     return productTemplate?.value?.attributeValues
-      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Color')
+      ?.filter((item: AttributeValue) => item?.attribute?.name === "Color")
       ?.map((item: AttributeValue) => ({
         value: item.id,
         label: item.name,
@@ -71,7 +88,7 @@ export const useProductTemplate = (slug: string) => {
 
   const getAllMaterials = computed(() => {
     return productTemplate?.value?.attributeValues
-      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Material')
+      ?.filter((item: AttributeValue) => item?.attribute?.name === "Material")
       ?.map((item: AttributeValue) => ({
         value: item.id,
         label: item.name,

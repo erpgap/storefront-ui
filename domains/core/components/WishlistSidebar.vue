@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { SfDrawer, SfButton, SfIconClose } from "@storefront-ui/vue";
+import {
+  SfLoaderCircular,
+  SfDrawer,
+  SfButton,
+  SfIconClose,
+} from "@storefront-ui/vue";
 import { onClickOutside } from "@vueuse/core";
-import { useToast } from "vue-toastification";
 import type { Product } from "~/graphql";
 
 const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading } =
@@ -92,8 +96,8 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
                 <h2 class="mt-8 font-medium">Your Wishlist is empty</h2>
               </div>
             </div>
-            <div v-else class="flex items-center justify-center h-full">
-              <p class="text-black inline">loading...</p>
+            <div v-else class="w-full text-center">
+              <SfLoaderCircular size="lg" class="mt-[160px]" />
             </div>
           </div>
         </SfDrawer>
