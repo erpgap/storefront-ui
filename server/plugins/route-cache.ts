@@ -15,12 +15,14 @@ export default defineNitroPlugin((nitroApp) => {
       r.route === "/" || r.route === "/product/*" || r.route === "/category/*"
     );
   });
+
   if (enHandler) {
     const customHandler = cachedEventHandler(
       lazyEventHandler(enHandler.handler),
       {
         varies: ["user-agent"],
         group: "pages",
+        name: enHandler.route,
         getKey: (event: H3Event) => {
           const headers = getRequestHeaders(event);
           const userAgent: any = headers["user-agent"];

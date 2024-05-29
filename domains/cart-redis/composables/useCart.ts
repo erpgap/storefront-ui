@@ -9,17 +9,18 @@ import type {
   MutationCartUpdateItemArgs,
 } from "~/graphql";
 import { MutationName } from "~/server/mutations";
-import { QueryName } from "~/server/queries";
 import { useToast } from "vue-toastification";
 
 export const useCart = () => {
   const { $sdk } = useNuxtApp();
   const toast = useToast();
-  const cart = useState<Cart>("cart", () => ({} as Cart));
+  const cart = useState<Cart>("cart", () => ({}) as Cart);
 
   const loading = ref(false);
 
   const loadCart = async () => {
+    console.log(12313);
+
     loading.value = true;
     const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`);
     loading.value = false;
