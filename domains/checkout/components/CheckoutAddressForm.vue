@@ -1,17 +1,16 @@
 <script lang="ts" setup>
 import {
   SfButton,
-  useDisclosure,
-  SfModal,
   SfCheckbox,
   SfInput,
   SfLoaderCircular,
+  SfModal,
   SfSelect,
+  useDisclosure,
 } from "@storefront-ui/vue";
 import type { PropType } from "vue";
 import {
   AddressEnum,
-  AddressType,
   type AddAddressInput,
   type Country,
   type Partner,
@@ -23,7 +22,10 @@ const props = defineProps({
   heading: String,
   description: String,
   buttonText: String,
-  type: String,
+  type: {
+    type: String as PropType<AddressEnum>,
+    required: true,
+  },
   savedAddress: {
     type: Object as PropType<Partner>,
     default: () => {},
@@ -37,6 +39,8 @@ const props = defineProps({
 const { city, country, name, state, street, phone, zip } = toRefs(
   props.savedAddress
 );
+name.value = name.value === "Public user" ? "" : name.value;
+
 const countryId = toRef(country.value?.id);
 const stateId = toRef(state.value?.id);
 
@@ -56,30 +60,25 @@ const { countries } = useCountry();
 const isCartUpdateLoading = false;
 
 const handleSaveAddress = async () => {
-  const data = {
+  const data: UpdateAddressInput = {
     name: name.value,
-    street: street.value?.split(" ")?.[0],
-    street2: street.value?.split(" ")?.[1],
+    street: street.value?.split(" ")?.[0] || "",
+    street2: street.value?.split(" ")?.[1] || "",
     city: city.value,
     zip: zip.value,
-    countryId: countryId.value,
-    stateId: stateId.value,
+    phone: phone.value,
+    countryId: Number(countryId.value),
+    stateId: Number(stateId.value),
   };
-  const type =
-    props.savedAddress.addressType === AddressType.InvoiceAddress
-      ? AddressEnum.Billing
-      : AddressEnum.Shipping;
 
-  if (props.savedAddress?.id) {
-    await updateAddress(
-      { ...data, id: props.savedAddress.id } as unknown as UpdateAddressInput,
-      type
-    );
+  if (props.savedAddress?.id && props.savedAddress.id !== 4) {
+    data.id = props.savedAddress.id;
+    await updateAddress(data, props.type);
     commitAll();
     return close();
   }
 
-  await addAddress(data as unknown as AddAddressInput, type);
+  await addAddress(data as unknown as AddAddressInput, props.type);
   commitAll();
   close();
 };
@@ -134,13 +133,12 @@ const handleCloseModal = () => {
       </h2>
 
       <SfButton size="sm" variant="tertiary" @click="handleOpenModal">
-
         {{ savedAddress.id ? $t("contactInfo.edit") : $t("contactInfo.add") }}
       </SfButton>
     </div>
 
     <div v-if="savedAddress.id" class="mt-2 md:w-[520px]">
-      <p>{{ `${name}, ${street || ""}` }}</p>
+      <p>{{ `${name} ${street || ""}` }}</p>
       <p>{{ phone }}</p>
       <p>{{ selectedCountry?.name || "" }}</p>
       <p>{{ selectedState?.name || "" }}</p>
