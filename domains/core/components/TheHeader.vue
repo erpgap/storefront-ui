@@ -12,11 +12,6 @@ provide(
 );
 
 await loadCategoryList({ filter: { parent: true } } as any);
-
-onMounted(async () => {
-  await loadWishlist();
-  await loadCart();
-});
 </script>
 
 <template>

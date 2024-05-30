@@ -8,10 +8,12 @@ import {
   SfLoaderCircular,
   SfRadio,
 } from "@storefront-ui/vue";
-import type { Partner, PaymentProvider } from "~/graphql";
+import { useToast } from "vue-toastification";
+import { AddressEnum, type Partner, type PaymentProvider } from "~/graphql";
 const NuxtLink = resolveComponent("NuxtLink");
 
-const { cart, loadCart } = useCart();
+const { cart, loadCart, totalItemsInCart } = useCart();
+const router = useRouter();
 
 const { loadCountryList } = useCountry();
 const { user, loadUser } = useAuth();
@@ -23,11 +25,18 @@ const {
   loading: paymentLoading,
 } = usePayment();
 
-await loadUser();
-await loadCart();
-await loadDeliveryMethods();
-await loadPaymentMethods();
-await loadCountryList();
+await loadUser(true);
+await Promise.all([
+  loadCart(false),
+
+  loadDeliveryMethods(),
+  loadPaymentMethods(),
+  loadCountryList(),
+]);
+
+if (totalItemsInCart?.value === 0) {
+  router.push("/category/53");
+}
 
 const isLoading = false;
 
@@ -37,7 +46,7 @@ const providerPaymentHandler = ref();
 const loading = ref(false);
 
 onMounted(() => {
-  if (paymentProviders.value.length) {
+  if (paymentProviders?.value?.length) {
     showPaymentModal.value = true;
   }
 });
@@ -85,7 +94,7 @@ const selectedProvider = ref<PaymentProvider | null>(
     <span v-if="isLoading" class="!flex justify-center my-40 h-24">
       <SfLoaderCircular size="3xl" />
     </span>
-    <div v-else>
+    <div v-else-if="cart?.order?.id">
       <div class="lg:grid lg:grid-cols-12 md:gap-x-6">
         <div class="col-span-7 mb-10 md:mb-0">
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
@@ -100,6 +109,7 @@ const selectedProvider = ref<PaymentProvider | null>(
             :heading="$t('shipping.heading')"
             :description="$t('shipping.description')"
             :button-text="$t('shipping.addButton')"
+            :type="AddressEnum.Shipping"
             :saved-address="cart.order?.partnerShipping as Partner"
           />
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
@@ -107,6 +117,7 @@ const selectedProvider = ref<PaymentProvider | null>(
             :heading="$t('billing.heading')"
             :description="$t('billing.description')"
             :button-text="$t('billing.addButton')"
+            :type="AddressEnum.Billing"
             :saved-address="cart.order?.partnerInvoice as Partner"
           />
 
