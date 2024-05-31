@@ -38,52 +38,6 @@ const NuxtLink = resolveComponent("NuxtLink");
   </h2>
 
   <div v-if="orders?.orders" class="col-span-3">
-    <ul
-      v-for="order in orders.orders"
-      :key="order?.id"
-      class="md:hidden my-4 last-of-type:mb-0"
-    >
-      <li>
-        <p class="block typography-text-sm font-medium">
-          {{ $t("account.ordersAndReturns.orderId") }}
-        </p>
-        <span class="block typography-text-sm mb-2">{{ order?.id }}</span>
-      </li>
-      <li>
-        <p class="block typography-text-sm font-medium">
-          {{ $t("account.ordersAndReturns.orderDate") }}
-        </p>
-        <span class="block typography-text-sm mb-2">{{
-          order?.dateOrder
-        }}</span>
-      </li>
-      <li>
-        <p class="block typography-text-sm font-medium">
-          {{ $t("account.ordersAndReturns.amount") }}
-        </p>
-        <span class="block typography-text-sm mb-2">{{
-          $currency(Number(order?.amountTotal))
-        }}</span>
-      </li>
-      <li class="flex flex-wrap items-center mb-2">
-        <p class="block typography-text-sm -mb-1.5 font-medium flex-[100%]">
-          {{ $t("account.ordersAndReturns.status") }}
-        </p>
-        <span class="block typography-text-sm flex-1">{{
-          order?.invoiceStatus
-        }}</span>
-
-        <SfButton
-          :tag="NuxtLink"
-          size="sm"
-          variant="tertiary"
-          :to="`/my-account/my-orders/${order?.id}`"
-        >
-          {{ $t("account.ordersAndReturns.details") }}
-        </SfButton>
-      </li>
-      <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-    </ul>
     <table class="hidden md:block text-left typography-text-sm mx-4">
       <caption class="hidden">
         List of orders
@@ -111,7 +65,7 @@ const NuxtLink = resolveComponent("NuxtLink");
           :key="order?.id"
           class="border-b border-neutral-200"
         >
-          <td class="py-4 pr-4 lg:whitespace-nowrap">{{ order?.id }}</td>
+          <td class="py-4 pr-4 lg:whitespace-nowrap">{{ order?.name }}</td>
           <td class="p-4 lg:whitespace-nowrap">{{ order?.dateOrder }}</td>
           <td class="p-4">
             {{ $currency(order?.amountTotal ? order?.amountTotal : 0) }}

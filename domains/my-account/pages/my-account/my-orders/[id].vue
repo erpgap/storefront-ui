@@ -51,7 +51,7 @@ const NuxtLink = resolveComponent("NuxtLink");
             <p class="font-medium">
               {{ $t("account.ordersAndReturns.orderDetails.orderId") }}
             </p>
-            <span>{{ order?.id }}</span>
+            <span>{{ order?.name }}</span>
           </li>
           <li class="my-4 md:mb-0">
             <p class="font-medium">
