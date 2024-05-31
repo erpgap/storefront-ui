@@ -34,7 +34,7 @@ const NuxtLink = resolveComponent("NuxtLink");
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <h2 class="hidden md:block typography-headline-4 font-bold mx-4 capitalize">
-    {{ $t("account.ordersAndReturns.myOrders") }}
+    {{ $t("account.orders.myOrders") }}
   </h2>
 
   <div v-if="orders?.orders" class="col-span-3">
@@ -45,16 +45,16 @@ const NuxtLink = resolveComponent("NuxtLink");
       <thead class="border-b-2 border-neutral-200">
         <tr>
           <th class="py-4 pr-4 font-medium">
-            {{ $t("account.ordersAndReturns.orderId") }}
+            {{ $t("account.myOrders.orderId") }}
           </th>
           <th class="py-4 px-4 font-medium lg:whitespace-nowrap">
-            {{ $t("account.ordersAndReturns.orderDate") }}
+            {{ $t("account.myOrders.orderDate") }}
           </th>
           <th class="py-4 px-4 font-medium">
-            {{ $t("account.ordersAndReturns.amount") }}
+            {{ $t("account.myOrders.amount") }}
           </th>
           <th class="py-4 px-4 font-medium">
-            {{ $t("account.ordersAndReturns.status") }}
+            {{ $t("account.myOrders.status") }}
           </th>
           <th class="py-4 pl-4"></th>
         </tr>
@@ -91,7 +91,7 @@ const NuxtLink = resolveComponent("NuxtLink");
               variant="tertiary"
               :to="`/my-account/my-orders/${order?.id}`"
             >
-              {{ $t("account.ordersAndReturns.details") }}
+              {{ $t("account.myOrders.details") }}
             </SfButton>
           </td>
         </tr>
@@ -104,17 +104,17 @@ const NuxtLink = resolveComponent("NuxtLink");
   <div v-if="orders?.orders?.length === 0" class="col-span-3 text-center mt-8">
     <NuxtImg
       src="/images/empty-cart.svg"
-      :alt="$t('account.ordersAndReturns.noOrdersAltText')"
+      :alt="$t('account.myOrders.noOrdersAltText')"
       width="192"
       height="192"
       class="mx-auto"
       loading="lazy"
     />
     <h3 class="typography-headline-3 font-bold mb-4 mt-6">
-      {{ $t("account.ordersAndReturns.noOrders") }}
+      {{ $t("account.myOrders.noOrders") }}
     </h3>
     <SfButton variant="secondary" class="!ring-neutral-200">
-      {{ $t("account.ordersAndReturns.continue") }}</SfButton
+      {{ $t("account.myOrders.continue") }}</SfButton
     >
   </div>
   <NuxtPage />
