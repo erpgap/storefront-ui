@@ -5,6 +5,7 @@ const error = useError();
 </script>
 <template>
   <NuxtLayout>
+    <div></div>
     <div
       v-if="error?.message === 'Product not found'"
       class="flex flex-col justify-center items-center"
@@ -30,14 +31,15 @@ const error = useError();
         </SfButton>
       </div>
     </div>
-    <div v-else class="flex flex-col justify-center items-center">
+    <div v-else>
       <NuxtImg
+        class="mx-auto"
         src="/images/something-went-wrong.svg"
         :alt="$t('emptyStateAltText')"
         width="300"
         height="300"
       />
-      <p class="mt-8 font-medium">Some problem happened</p>
+      <p class="mt-8 text-center font-medium">Some problem happened</p>
       <div class="my-10">
         <SfButton
           to="/category/53"
