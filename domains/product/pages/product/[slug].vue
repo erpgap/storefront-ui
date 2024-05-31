@@ -311,6 +311,38 @@ await loadProductVariant(params.value);
               </span>
             </fieldset>
             <fieldset
+              v-if="getAllMaterials && getAllMaterials?.length"
+              class="pb-4 flex"
+            >
+              <legend
+                class="block mb-2 text-base font-medium leading-6 text-neutral-900"
+              >
+                Material
+              </legend>
+              <span
+                v-for="{ label, value } in getAllMaterials"
+                :key="value"
+                class="mr-2 mb-2 uppercase"
+              >
+                <SfChip
+                  class="min-w-[48px]"
+                  size="sm"
+                  :v-model="value"
+                  :input-props="{
+                    onClick: (e) =>
+                      value == selectedMaterial && e.preventDefault(),
+                  }"
+                  :model-value="value == selectedMaterial"
+                  @update:model-value="
+                    value != selectedMaterial &&
+                      updateFilter({ ['Material']: value.toString() })
+                  "
+                >
+                  {{ label }}
+                </SfChip>
+              </span>
+            </fieldset>
+            <fieldset
               v-if="getAllColors && getAllColors?.length"
               class="pb-2 flex"
             >
@@ -341,38 +373,6 @@ await loadProductVariant(params.value);
                   <template #prefix>
                     <SfThumbnail size="sm" :style="{ background: label }" />
                   </template>
-                  {{ label }}
-                </SfChip>
-              </span>
-            </fieldset>
-            <fieldset
-              v-if="getAllMaterials && getAllMaterials?.length"
-              class="pb-4 flex"
-            >
-              <legend
-                class="block mb-2 text-base font-medium leading-6 text-neutral-900"
-              >
-                Material
-              </legend>
-              <span
-                v-for="{ label, value } in getAllMaterials"
-                :key="value"
-                class="mr-2 mb-2 uppercase"
-              >
-                <SfChip
-                  class="min-w-[48px]"
-                  size="sm"
-                  :v-model="value"
-                  :input-props="{
-                    onClick: (e) =>
-                      value == selectedMaterial && e.preventDefault(),
-                  }"
-                  :model-value="value == selectedMaterial"
-                  @update:model-value="
-                    value != selectedMaterial &&
-                      updateFilter({ ['Material']: value.toString() })
-                  "
-                >
                   {{ label }}
                 </SfChip>
               </span>
