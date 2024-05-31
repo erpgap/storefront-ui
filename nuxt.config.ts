@@ -151,4 +151,7 @@ export default defineNuxtConfig({
   device: {
     refreshOnResize: true,
   },
+  experimental: {
+    asyncContext: true,
+  },
 });

@@ -28,7 +28,7 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
       v-if="wishlistSidebarIsOpen"
       class="fixed !w-screen !h-screen inset-0 bg-neutral-500 bg-opacity-50 transition-opacity duration-1000 top-index"
     />
-    <div>
+    <div ref="wishlistDrawerRef">
       <transition
         enter-active-class="transition duration-500 ease-in-out"
         leave-active-class="transition duration-500 ease-in-out"
@@ -38,11 +38,9 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
         leave-to-class="translate-x-full"
       >
         <SfDrawer
-          v-show="wishlistSidebarIsOpen"
-          :model-value="true"
+          v-model="wishlistSidebarIsOpen"
           :disable-click-away="true"
           :disable-esc="true"
-          ref="wishlistDrawerRef"
           placement="right"
           class="shadow-none z-[100] w-full lg:w-[420px] bg-white"
           data-testid="category-sidebar"
@@ -53,7 +51,7 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
               <SfButton
                 variant="tertiary"
                 :aria-label="$t('closeListSettings')"
-                @click="toggleWishlistSideBar"
+                @click.prevent="toggleWishlistSideBar()"
               >
                 <template #prefix>
                   <SfIconClose class="text-neutral-500" />
