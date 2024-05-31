@@ -135,16 +135,12 @@ const sections = [
     ],
   },
   {
-    title: t("account.ordersAndReturns.heading"),
+    title: t("account.myOrders.heading"),
     icon: SfIconShoppingCart,
     subsections: [
       {
-        label: t("account.ordersAndReturns.section.myOrders"),
+        label: t("account.myOrders.section.myOrders"),
         link: "/my-account/my-orders",
-      },
-      {
-        label: t("account.ordersAndReturns.section.returns"),
-        link: "/my-account/returns",
       },
     ],
   },
