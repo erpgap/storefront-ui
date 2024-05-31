@@ -1,4 +1,4 @@
-export const useUiState = () => {
+export const useWishlistUiState = () => {
   const wishlistSidebarIsOpen = useState("wishlistSidebarIsOpen", () => false);
   const toggleWishlistSideBar = useToggle(wishlistSidebarIsOpen);
 

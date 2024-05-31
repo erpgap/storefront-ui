@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <TheHeader />
@@ -17,8 +15,5 @@ const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
     <LazyTheFooter />
   </NuxtLazyHydrate>
 
-  <WishlistSidebar
-    :is-open="wishlistSidebarIsOpen"
-    @close="toggleWishlistSideBar"
-  />
+  <WishlistSidebar />
 </template>
