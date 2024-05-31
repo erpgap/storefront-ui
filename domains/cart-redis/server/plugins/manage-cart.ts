@@ -99,7 +99,6 @@ async function updateAddress(event: any, body: any) {
     const keyName = `cache:cart:${session?.id}`;
     const currentCart =
       (await useStorage().getItem<{ cart: Cart }>(keyName)) || ({} as any);
-    console.log(body);
 
     if (body.updateAddress?.addressType === AddressType.DeliveryAddress) {
       currentCart.cart.order.partnerShipping = body.updateAddress;
