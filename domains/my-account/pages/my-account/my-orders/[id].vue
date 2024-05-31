@@ -5,19 +5,7 @@ import { useOrders } from "~/domains/orders/composable/useOrders";
 const route = useRoute();
 const router = useRouter();
 const { isOpen } = useDisclosure({ initialValue: true });
-const { getOrderById, order, loading } = useOrders();
-const { loadUser, user } = useAuth();
-
-const billingAddress = {
-  firstName: "Hieronim",
-  lastName: "Anonim",
-  phoneNumber: "+1 321 765 0987",
-  address1: "3633",
-  address2: "Oak Drive",
-  city: "Colonie",
-  state: "NY",
-  postalCode: "12205",
-};
+const { getOrderById, order } = useOrders();
 
 onMounted(async () => {
   // without nextTick data on first click does not load data
@@ -57,13 +45,13 @@ const NuxtLink = resolveComponent("NuxtLink");
           <SfIconClose class="text-neutral-500" />
         </SfButton>
       </header>
-      <main class="mt-6">
+      <main class="mt-4">
         <ul class="bg-neutral-100 p-4 rounded-md md:columns-2 mb-6">
           <li>
             <p class="font-medium">
               {{ $t("account.ordersAndReturns.orderDetails.orderId") }}
             </p>
-            <span>{{ order?.id }}</span>
+            <span>{{ order?.name }}</span>
           </li>
           <li class="my-4 md:mb-0">
             <p class="font-medium">
@@ -82,37 +70,10 @@ const NuxtLink = resolveComponent("NuxtLink");
               {{ $t("account.ordersAndReturns.orderDetails.status") }}
             </p>
             <span v-if="order">{{
-              order.transactions ? order.transactions[0].state : "--"
+              order.transactions ? order.transactions.length - 1 : "--"
             }}</span>
           </li>
         </ul>
-        <div
-          v-for="(product, i) in order?.orderLines"
-          :key="i"
-          class="md:hidden border-t border-neutral-200"
-        >
-          <UiProductCardHorizontal :product="product" />
-          <ul class="flex">
-            <li class="flex-grow pr-4 py-4">
-              <p class="font-medium typography-text-sm">
-                {{ $t("account.ordersAndReturns.orderDetails.price") }}
-              </p>
-              <span>${{ product.priceUnit }}</span>
-            </li>
-            <li class="flex-grow p-4">
-              <p class="font-medium typography-text-sm">
-                {{ $t("account.ordersAndReturns.orderDetails.quantity") }}
-              </p>
-              <span>{{ product.quantity }}</span>
-            </li>
-            <li class="flex-[50%] justify-self-end text-right pl-4 py-4">
-              <p class="font-medium typography-text-sm">
-                {{ $t("account.ordersAndReturns.orderDetails.subtotal") }}
-              </p>
-              <span>${{ product.priceSubtotal }}</span>
-            </li>
-          </ul>
-        </div>
         <table
           class="hidden md:table w-full text-left typography-text-sm mx-4 md:mx-0"
         >
@@ -139,25 +100,26 @@ const NuxtLink = resolveComponent("NuxtLink");
           </thead>
           <tbody>
             <tr
-              v-for="(product, i) in order?.websiteOrderLine"
+              v-for="(line, i) in order?.websiteOrderLine"
               :key="i"
               class="border-b border-neutral-200 align-top"
             >
               <td class="pb-4 pr-4 lg:whitespace-nowrap typography-text-base">
-                {{ product.product?.displayName }}
+                <ProductCardHorizontal :product="line.product" />
               </td>
 
               <td class="p-4 lg:whitespace-nowrap typography-text-base">
-                ${{ product.product?.combinationInfo.price }}
+                ${{ line.product?.combinationInfo.price || " --" }}
               </td>
-              <td class="p-4 typography-text-base">{{ product.quantity }}</td>
               <td class="p-4 typography-text-base">
-                ${{ product.priceSubtotal }}
+                {{ line.quantity || " --" }}
+              </td>
+              <td class="p-4 typography-text-base">
+                ${{ line.priceSubtotal || " --" }}
               </td>
             </tr>
           </tbody>
         </table>
-
         <div
           class="flex justify-between pt-4 border-t border-neutral-200 md:border-0"
         >
@@ -172,52 +134,10 @@ const NuxtLink = resolveComponent("NuxtLink");
           <p>{{ $t("account.ordersAndReturns.orderDetails.estimatedTax") }}</p>
           <span>${{ order?.amountTax }}</span>
         </div>
-        <div
-          class="flex justify-between border-b py-4 border-neutral-200 typography-text-lg font-medium"
-        >
+        <div class="flex justify-between pt-4 typography-text-lg font-medium">
           <p>{{ $t("account.ordersAndReturns.orderDetails.total") }}</p>
           <span>${{ order?.amountTotal }}</span>
         </div>
-        <ul class="md:columns-2 mt-6">
-          <li class="mb-4">
-            <p class="typography-text-sm font-medium mb-2">
-              {{ $t("account.ordersAndReturns.orderDetails.billingAddress") }}
-            </p>
-            <span>{{ user.billingAddress?.name }} </span>
-            <span class="block">{{ user.billingAddress?.phone }}</span>
-            <span class="block">
-              {{ user.billingAddress?.city }}, {{ user.billingAddress?.state }}
-              {{ user.billingAddress?.zip }}
-            </span>
-          </li>
-          <li class="mb-4 md:mb-0">
-            <p class="typography-text-sm font-medium mb-2">
-              {{ $t("account.ordersAndReturns.orderDetails.paymentMethod") }}
-            </p>
-            <span v-if="order?.transactions">{{
-              order?.transactions[0].payment?.paymentReference
-            }}</span>
-          </li>
-          <li class="mb-4">
-            <p class="typography-text-sm font-medium mb-2">
-              {{ $t("account.ordersAndReturns.orderDetails.shippingAddress") }}
-            </p>
-            <span>{{ user.shippingAddress?.name }} </span>
-            <span class="block">{{ user.shippingAddress?.phone }}</span>
-
-            <span class="block">
-              {{ user.shippingAddress?.city }},
-              {{ user.shippingAddress?.state }}
-              {{ user.shippingAddress?.postalCode }}
-            </span>
-          </li>
-          <li class="mb-4 md:mb-0">
-            <p class="typography-text-sm font-medium mb-2">
-              {{ $t("account.ordersAndReturns.orderDetails.paymentMethod") }}
-            </p>
-            <span>{{ order?.shippingMethod }}</span>
-          </li>
-        </ul>
       </main>
     </UiModal>
   </UiOverlay>

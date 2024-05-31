@@ -27,10 +27,19 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
     productVariant.value = data?.value?.productVariant.product as Product;
   };
 
+  const categoriesForBreadcrumb = computed(() => {
+    return (
+      productVariant.value?.categories
+        ?.filter((category) => category.name !== "All")
+        ?.map((item) => ({ name: item.name, link: item.slug }))
+        ?.flat() || []
+    );
+  });
+
   const breadcrumbs = computed(() => {
     return [
       { name: "Home", link: "/" },
-      { name: "Product" },
+      ...categoriesForBreadcrumb.value,
       {
         name: productVariant?.value?.name,
         link: `product/${productVariant?.value?.name}`,
