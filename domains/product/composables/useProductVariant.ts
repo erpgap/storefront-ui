@@ -18,11 +18,20 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
     if (productVariant.value?.id) return;
 
     loadingProductVariant.value = true;
-    const { data } = await $sdk().odoo.query<
+    const { data, error } = await $sdk().odoo.query<
       QueryProductVariantArgs,
       ProductVariantResponse
     >({ queryName: QueryName.GetProductVariantQuery }, params);
     loadingProductVariant.value = false;
+
+    if (error.value) {
+      showError({
+        ...error.value,
+        status: 404,
+        message: "Product not found",
+      });
+      return;
+    }
 
     productVariant.value = data?.value?.productVariant.product as Product;
   };
