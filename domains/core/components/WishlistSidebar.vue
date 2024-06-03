@@ -4,18 +4,16 @@ import {
   SfDrawer,
   SfButton,
   SfIconClose,
+  useTrapFocus,
 } from "@storefront-ui/vue";
-import { onClickOutside } from "@vueuse/core";
 import type { Product } from "~/graphql";
 
 const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading } =
   useWishlist();
-const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useUiState();
+const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useWishlistUiState();
 
-const wishlistDrawerRef = ref(null);
-onClickOutside(wishlistDrawerRef, () => {
-  wishlistSidebarIsOpen.value = false;
-});
+const wishlistDrawerRef = ref();
+useTrapFocus(wishlistDrawerRef, { activeState: wishlistSidebarIsOpen });
 
 const handleWishlistRemoveItem = async (firstVariant: Product) => {
   await wishlistRemoveItem(firstVariant.id);
@@ -28,7 +26,7 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
       v-if="wishlistSidebarIsOpen"
       class="fixed !w-screen !h-screen inset-0 bg-neutral-500 bg-opacity-50 transition-opacity duration-1000 top-index"
     />
-    <div ref="wishlistDrawerRef">
+    <div>
       <transition
         enter-active-class="transition duration-500 ease-in-out"
         leave-active-class="transition duration-500 ease-in-out"
@@ -38,8 +36,8 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
         leave-to-class="translate-x-full"
       >
         <SfDrawer
+          ref="wishlistDrawerRef"
           v-model="wishlistSidebarIsOpen"
-          :disable-click-away="true"
           :disable-esc="true"
           placement="right"
           class="shadow-none z-[100] w-full lg:w-[420px] bg-white"

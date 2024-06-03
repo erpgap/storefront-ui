@@ -34,7 +34,7 @@ const NuxtLink = resolveComponent("NuxtLink");
       <header
         class="flex justify-between bg-white items-center typography-headline-4 md:typography-headline-3 font-bold"
       >
-        <h3>{{ $t("account.ordersAndReturns.orderDetails.heading") }}</h3>
+        <h3>{{ $t("account.myOrders.orderDetails.heading") }}</h3>
         <SfButton
           square
           variant="tertiary"
@@ -49,25 +49,25 @@ const NuxtLink = resolveComponent("NuxtLink");
         <ul class="bg-neutral-100 p-4 rounded-md md:columns-2 mb-6">
           <li>
             <p class="font-medium">
-              {{ $t("account.ordersAndReturns.orderDetails.orderId") }}
+              {{ $t("account.myOrders.orderDetails.orderId") }}
             </p>
             <span>{{ order?.name }}</span>
           </li>
           <li class="my-4 md:mb-0">
             <p class="font-medium">
-              {{ $t("account.ordersAndReturns.orderDetails.orderDate") }}
+              {{ $t("account.myOrders.orderDetails.orderDate") }}
             </p>
             <span>{{ order?.dateOrder }}</span>
           </li>
           <li>
             <p class="font-medium">
-              {{ $t("account.ordersAndReturns.orderDetails.paymentAmount") }}
+              {{ $t("account.myOrders.orderDetails.paymentAmount") }}
             </p>
             <span>${{ order?.amountTotal }}</span>
           </li>
           <li class="mt-4">
             <p class="font-medium">
-              {{ $t("account.ordersAndReturns.orderDetails.status") }}
+              {{ $t("account.myOrders.orderDetails.status") }}
             </p>
             <span v-if="order">{{
               order.transactions ? order.transactions.length - 1 : "--"
@@ -79,22 +79,22 @@ const NuxtLink = resolveComponent("NuxtLink");
         >
           <caption class="hidden">
             {{
-              $t("account.ordersAndReturns.orderDetails.tableCaption")
+              $t("account.myOrders.orderDetails.tableCaption")
             }}
           </caption>
           <thead>
             <tr class="border-b-2 border-neutral-200">
               <th class="py-3 font-medium">
-                {{ $t("account.ordersAndReturns.orderDetails.product") }}
+                {{ $t("account.myOrders.orderDetails.product") }}
               </th>
               <th class="py-3 px-4 font-medium lg:whitespace-nowrap">
-                {{ $t("account.ordersAndReturns.orderDetails.price") }}
+                {{ $t("account.myOrders.orderDetails.price") }}
               </th>
               <th class="py-3 px-4 font-medium">
-                {{ $t("account.ordersAndReturns.orderDetails.quantity") }}
+                {{ $t("account.myOrders.orderDetails.quantity") }}
               </th>
               <th class="py-3 px-4 font-medium">
-                {{ $t("account.ordersAndReturns.orderDetails.subtotal") }}
+                {{ $t("account.myOrders.orderDetails.subtotal") }}
               </th>
             </tr>
           </thead>
@@ -123,19 +123,19 @@ const NuxtLink = resolveComponent("NuxtLink");
         <div
           class="flex justify-between pt-4 border-t border-neutral-200 md:border-0"
         >
-          <p>{{ $t("account.ordersAndReturns.orderDetails.itemsSubtotal") }}</p>
+          <p>{{ $t("account.myOrders.orderDetails.itemsSubtotal") }}</p>
           <span>${{ order?.amountSubtotal }}</span>
         </div>
         <div class="flex justify-between my-2">
-          <p>{{ $t("account.ordersAndReturns.orderDetails.delivery") }}</p>
+          <p>{{ $t("account.myOrders.orderDetails.delivery") }}</p>
           <span>{{ order?.amountDelivery }}</span>
         </div>
         <div class="flex justify-between border-b pb-4 border-neutral-200">
-          <p>{{ $t("account.ordersAndReturns.orderDetails.estimatedTax") }}</p>
+          <p>{{ $t("account.myOrders.orderDetails.estimatedTax") }}</p>
           <span>${{ order?.amountTax }}</span>
         </div>
         <div class="flex justify-between pt-4 typography-text-lg font-medium">
-          <p>{{ $t("account.ordersAndReturns.orderDetails.total") }}</p>
+          <p>{{ $t("account.myOrders.orderDetails.total") }}</p>
           <span>${{ order?.amountTotal }}</span>
         </div>
       </main>

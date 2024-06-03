@@ -311,8 +311,8 @@
       },
       "addNewAddress": "Add new address"
     },
-    "ordersAndReturns": {
-      "heading": "Orders & Returns",
+    "myOrders": {
+      "heading": "Orders",
       "orderId": "Order ID",
       "orderDate": "Order date",
       "amount": "Amount",
@@ -322,12 +322,8 @@
       "noOrders": "You haven’t shopped with us yet",
       "continue": "Continue shopping",
       "noOrdersAltText": "No orders",
-      "returnsHeading": "Returns",
-      "returnsAltText": "No returns",
-      "returnsDescription": "You haven't returned products yet",
       "section": {
-        "myOrders": "My Orders",
-        "returns": "Returns"
+        "myOrders": "My Orders"
       },
       "orderDetails": {
         "heading": "Order details",

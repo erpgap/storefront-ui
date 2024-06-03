@@ -1,4 +1,4 @@
-import { useToast } from 'vue-toastification';
+import { useToast } from "vue-toastification";
 import {
   AddressEnum,
   type AddressesResponse,
@@ -15,17 +15,17 @@ import {
   type DeleteAddressInput,
   type MutationDeleteAddressArgs,
   type DeleteAddressResponse,
-} from '~/graphql';
-import { MutationName } from '~/server/mutations';
-import { QueryName } from '~/server/queries';
+} from "~/graphql";
+import { MutationName } from "~/server/mutations";
+import { QueryName } from "~/server/queries";
 
 export const useAddresses = () => {
   const { $sdk } = useNuxtApp();
 
   const loading = ref(false);
   const toast = useToast();
-  const billingAddresses = useState<Partner[]>('billing-addresses', () => []);
-  const shippingAddresses = useState<Partner[]>('shipping-addresses', () => []);
+  const billingAddresses = useState<Partner[]>("billing-addresses", () => []);
+  const shippingAddresses = useState<Partner[]>("shipping-addresses", () => []);
 
   const loadAddresses = async (addressType: AddressEnum) => {
     loading.value = true;
@@ -65,7 +65,7 @@ export const useAddresses = () => {
 
     loadAddresses(type);
 
-    toast.success('Address has been successfully saved');
+    toast.success("Address has been successfully saved");
     loading.value = false;
   };
 
@@ -80,7 +80,7 @@ export const useAddresses = () => {
     if (error.value) {
       return toast.error(error.value.data.message);
     }
-    toast.success('Address has been successfully removed');
+    toast.success("Address has been successfully removed");
     loading.value = false;
   };
 
@@ -113,7 +113,7 @@ export const useAddresses = () => {
       shippingAddresses.value[index] = address;
     }
 
-    toast.success('Address has been successfully updated');
+    toast.success("Address has been successfully updated");
     loading.value = false;
   };
 

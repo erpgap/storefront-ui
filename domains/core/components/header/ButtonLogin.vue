@@ -7,23 +7,24 @@ const { isAuthenticated } = useAuth();
 </script>
 
 <template>
-  <SfButton
-    class="text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 mr-1 -ml-0.5 rounded-md"
-    variant="tertiary"
-    :to="isAuthenticated ? '/my-account/personal-data' : '/login'"
-    :tag="NuxtLink"
-    square
-  >
-    <template #prefix>
-      <Icon
-        :name="isAuthenticated ? 'ion:person' : 'ion:person-outline'"
-        size="22px"
-      />
-    </template>
-  </SfButton>
-  <!-- <template #fallback>
+  <ClientOnly>
+    <SfButton
+      class="text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 mr-1 -ml-0.5 rounded-md"
+      variant="tertiary"
+      :to="isAuthenticated ? '/my-account/personal-data' : '/login'"
+      :tag="NuxtLink"
+      square
+    >
+      <template #prefix>
+        <Icon
+          :name="isAuthenticated ? 'ion:person' : 'ion:person-outline'"
+          size="22px"
+        />
+      </template>
+    </SfButton>
+    <template #fallback>
       <SfButton
-        class="group relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 mr-1 -ml-0.5 rounded-md"
+        class="group relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 rounded-md"
         variant="tertiary"
         square
       >
@@ -31,5 +32,6 @@ const { isAuthenticated } = useAuth();
           <Icon name="ion:person-outline" size="22px" />
         </template>
       </SfButton>
-    </template> -->
+    </template>
+  </ClientOnly>
 </template>
