@@ -14,8 +14,14 @@
       placement="top"
       class="grid grid-cols-1 md:gap-x-6 md:grid-cols-4 bg-white max-w-xs shadow-lg p-0 !fixed max-h-screen overflow-y-auto md:!absolute md:!top-[5rem] md:max-w-full md:p-6"
     >
-      <div class="flex items-center justify-between py-2 px-4 bg-primary-700 md:hidden">
-        <div class="flex items-center typography-text-lg font-medium text-white">Browse products</div>
+      <div
+        class="flex items-center justify-between py-2 px-4 bg-primary-700 md:hidden"
+      >
+        <div
+          class="flex items-center typography-text-lg font-medium text-white"
+        >
+          Browse products
+        </div>
         <SfButton
           square
           variant="tertiary"
@@ -27,24 +33,29 @@
           <SfIconClose />
         </SfButton>
       </div>
-      <div v-for="{ heading, items } in categoriesContent" :key="heading" class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0">
+      <div
+        v-for="{ heading, items } in categoriesContent"
+        :key="heading"
+        class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0"
+      >
         <h2
           role="presentation"
           class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 md:py-1.5"
         >
           {{ heading }}
         </h2>
-        <hr class="mb-3.5" >
+        <hr class="mb-3.5" />
         <ul>
           <li v-for="item in items" :key="item.title">
             <SfListItem
-              tag="a"
-              :href="item.link"
+              tag="span"
               size="sm"
               role="none"
               class="typography-text-base md:typography-text-sm py-4 md:py-1.5"
             >
-              {{ item.title }}
+              <NuxtLink :to="item.link">
+                {{ item.title }}
+              </NuxtLink>
             </SfListItem>
           </li>
         </ul>
@@ -52,7 +63,11 @@
       <div
         class="flex flex-col items-center justify-center bg-neutral-100 md:rounded-md border-neutral-300 overflow-hidden grow"
       >
-        <NuxtImg :src="bannerDetails.image" :alt="bannerDetails.title" class="object-contain" />
+        <NuxtImg
+          :src="bannerDetails.image"
+          :alt="bannerDetails.title"
+          class="object-contain"
+        />
         <p class="mb-4 mt-4 px-4 text-center typography-text-base font-medium">
           {{ bannerDetails.title }}
         </p>
@@ -82,9 +97,9 @@ import {
   SfListItem,
   useDisclosure,
   useTrapFocus,
-} from '@storefront-ui/vue';
-import { onClickOutside } from '@vueuse/core';
-import { ref } from 'vue';
+} from "@storefront-ui/vue";
+import { onClickOutside } from "@vueuse/core";
+import { ref } from "vue";
 
 const { isOpen, toggle, close } = useDisclosure();
 const menuRef = ref();
@@ -93,7 +108,7 @@ const drawerRef = ref();
 useTrapFocus(drawerRef, {
   activeState: isOpen,
   arrowKeysUpDown: true,
-  initialFocus: 'container',
+  initialFocus: "container",
 });
 onClickOutside(menuRef, () => {
   close();
@@ -102,113 +117,114 @@ onClickOutside(menuRef, () => {
 const actionItems = [
   {
     icon: SfIconShoppingCart,
-    label: '',
-    ariaLabel: 'Cart',
-    role: 'button',
+    label: "",
+    ariaLabel: "Cart",
+    role: "button",
   },
   {
     icon: SfIconFavorite,
-    label: '',
-    ariaLabel: 'Wishlist',
-    role: 'button',
+    label: "",
+    ariaLabel: "Wishlist",
+    role: "button",
   },
   {
     icon: SfIconPerson,
-    label: 'Log in',
-    ariaLabel: 'Log in',
-    role: 'login',
+    label: "Log in",
+    ariaLabel: "Log in",
+    role: "login",
   },
 ];
 const bannerDetails = {
-  image: 'https://storage.googleapis.com/sfui_docs_artifacts_bucket_public/production/watch.png',
-  title: 'New in designer watches',
+  image:
+    "https://storage.googleapis.com/sfui_docs_artifacts_bucket_public/production/watch.png",
+  title: "New in designer watches",
 };
 
 const categoriesContent = [
   {
-    heading: 'Women',
+    heading: "Women",
     items: [
       {
         title: "All Women's",
-        link: '#',
+        link: "#",
       },
       {
-        title: 'Clothing',
-        link: '#',
+        title: "Clothing",
+        link: "#",
       },
       {
-        title: 'Shoes',
-        link: '#',
+        title: "Shoes",
+        link: "#",
       },
       {
-        title: 'Accessories',
-        link: '#',
+        title: "Accessories",
+        link: "#",
       },
       {
-        title: 'Wearables',
-        link: '#',
+        title: "Wearables",
+        link: "#",
       },
       {
-        title: 'Food & Drinks',
-        link: '#',
-      },
-    ],
-  },
-  {
-    heading: 'Men',
-    items: [
-      {
-        title: 'All Men’s',
-        link: '#',
-      },
-      {
-        title: 'Clothing',
-        link: '#',
-      },
-      {
-        title: 'Shoes',
-        link: '#',
-      },
-      {
-        title: 'Accessories',
-        link: '#',
-      },
-      {
-        title: 'Wearables',
-        link: '#',
-      },
-      {
-        title: 'Food & Drinks',
-        link: '#',
+        title: "Food & Drinks",
+        link: "#",
       },
     ],
   },
   {
-    heading: 'Kids',
+    heading: "Men",
     items: [
       {
-        title: 'All Kids',
-        link: '#',
+        title: "All Men’s",
+        link: "#",
       },
       {
-        title: 'Clothing',
-        link: '#',
+        title: "Clothing",
+        link: "#",
       },
       {
-        title: 'Shoes',
-        link: '#',
+        title: "Shoes",
+        link: "#",
       },
       {
-        title: 'Accessories',
-        link: '#',
+        title: "Accessories",
+        link: "#",
       },
       {
-        title: 'Wearables',
-        link: '#',
+        title: "Wearables",
+        link: "#",
       },
       {
-        title: 'Food & Drinks',
-        link: '#',
+        title: "Food & Drinks",
+        link: "#",
+      },
+    ],
+  },
+  {
+    heading: "Kids",
+    items: [
+      {
+        title: "All Kids",
+        link: "#",
+      },
+      {
+        title: "Clothing",
+        link: "#",
+      },
+      {
+        title: "Shoes",
+        link: "#",
+      },
+      {
+        title: "Accessories",
+        link: "#",
+      },
+      {
+        title: "Wearables",
+        link: "#",
+      },
+      {
+        title: "Food & Drinks",
+        link: "#",
       },
     ],
   },

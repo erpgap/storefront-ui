@@ -27,8 +27,14 @@ const {
   isSearchModalOpen,
 } = useSearch(formSearchTemplateRef);
 
+const router = useRouter();
 const NuxtLink = resolveComponent("NuxtLink");
 const filteredCategories = inject<Category[]>("filteredTopCategories");
+
+const goTo = (slug: string) => {
+  close();
+  router.push(slug);
+};
 
 useTrapFocus(drawerRef, {
   activeState: isOpen,
@@ -77,8 +83,8 @@ onClickOutside(menuRef, () => {
           <ul>
             <li role="none">
               <transition
-                enter-active-class="transform transition duration-500 ease-in-out"
-                leave-active-class="transform transition duration-500 ease-in-out"
+                enter-active-class="transform transition duration-300 ease-in-out"
+                leave-active-class="transform transition duration-100 ease-in-out"
                 enter-from-class="-translate-x-full md:translate-x-0 md:opacity-0"
                 enter-to-class="translate-x-0 md:translate-x-0 md:opacity-100"
                 leave-from-class="translate-x-0 md:opacity-100"
@@ -110,11 +116,12 @@ onClickOutside(menuRef, () => {
                         <li v-for="child in childs" :key="child.id">
                           <SfListItem
                             v-if="child.childs !== null"
-                            tag="a"
-                            :href="child.slug"
+                            tag="span"
+                            :to="child.slug"
                             size="sm"
                             role="none"
                             class="typography-text-base lg:typography-text-sm py-4 lg:py-1.5"
+                            @click="goTo(child.slug)"
                           >
                             {{ child.name }}
                           </SfListItem>
