@@ -66,15 +66,10 @@ onMounted(async () => {
       router.push({ name: "paymentResponse" });
     },
     onError: (error: any, component: any) => {
-      console.log(error);
       if (
         error.errorText !== "error was cleared" &&
         error.errorText !== "incomplete field"
       ) {
-        /* send({
-          message: error?.message || error?.errorI18n || error?.errorText,
-          type: 'danger'
-        }); */
       }
 
       emit("paymentLoading", false);
