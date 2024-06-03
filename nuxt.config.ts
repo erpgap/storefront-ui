@@ -152,6 +152,6 @@ export default defineNuxtConfig({
     refreshOnResize: true,
   },
   experimental: {
-    asyncContext: true,
+    asyncContext: false,
   },
 });
