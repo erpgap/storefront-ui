@@ -40,8 +40,8 @@ watch(isTabletScreen, (value) => {
 
 watch(
   () => route,
-  async () => {
-    await loadProductTemplateList(getFacetsFromURL(route.query));
+  () => {
+    loadProductTemplateList(getFacetsFromURL(route.query));
   },
   { deep: true, immediate: true }
 );
