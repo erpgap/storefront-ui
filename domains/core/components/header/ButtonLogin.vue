@@ -22,6 +22,7 @@ const { isAuthenticated } = useAuth();
         />
       </template>
     </SfButton>
+
     <template #fallback>
       <SfButton
         class="group relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 rounded-md"

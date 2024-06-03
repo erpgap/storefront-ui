@@ -20,7 +20,7 @@ import { QueryName } from "~/server/queries";
 export const useAuth = () => {
   const { $sdk } = useNuxtApp();
   const router = useRouter();
-  const userCookie = useCookie<Partner | null>("odoo-user");
+  const userCookie = useCookie<any | null>("odoo-user", { maxAge: 3600 * 30 });
   const user = useState<Partner>("user", () => ({}) as Partner);
 
   const toast = useToast();
@@ -37,7 +37,7 @@ export const useAuth = () => {
       queryName: QueryName.LoadUserQuery,
     });
 
-    userCookie.value = data.value?.partner;
+    userCookie.value = data.value?.partner?.id;
     user.value = data.value?.partner;
 
     loading.value = false;
@@ -54,7 +54,7 @@ export const useAuth = () => {
     user.value = data.value.createUpdatePartner;
 
     if (userCookie.value?.id) {
-      userCookie.value = data.value?.createUpdatePartner;
+      userCookie.value = data.value?.createUpdatePartner?.id;
     }
 
     toast.success("Partner updated successfully");
@@ -143,7 +143,7 @@ export const useAuth = () => {
   };
 
   const isAuthenticated = computed(() => {
-    return Boolean(userCookie.value?.id);
+    return user?.value?.id || Boolean(userCookie.value);
   });
 
   return {
