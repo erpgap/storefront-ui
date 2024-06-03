@@ -28,8 +28,8 @@ export const useUiHelpers = () => {
       Object.keys(newQuery).forEach((filterKey) => {
         if (![...queryParamsNotFilters, "price"].includes(filterKey)) {
           if (query[filterKey].includes(",")) {
-            query[filterKey]?.split(",").forEach(() => {
-              filters.push(filterKey);
+            query[filterKey]?.split(",").forEach((item) => {
+              filters.push(item);
             });
           } else {
             const label = query[filterKey]?.split(",")[0];
@@ -76,11 +76,10 @@ export const useUiHelpers = () => {
           };
           formattedFilters.push(item);
         } else {
-          const newVal = value?.split("-");
           const item = {
             filterName: label,
-            label: `${newVal[1] ?? newVal[0]}`,
-            id: `${newVal[0]}`,
+            label: value,
+            id: value,
           };
           formattedFilters.push(item);
         }
@@ -92,21 +91,16 @@ export const useUiHelpers = () => {
   const changeFilters = (filters: any[], sort: string) => {
     const formattedFilters: any = {};
     filters.forEach((element) => {
-      if (element.filterName === "Size") {
-        if (formattedFilters[element.filterName]) {
-          formattedFilters[element.filterName] +=
-            `,${element.id}-${element.label}`;
-          return;
-        }
-        formattedFilters[element.filterName] = `${element.id}-${element.label}`;
-      } else {
-        if (formattedFilters[element.filterName]) {
-          formattedFilters[element.filterName] += `,${element.id}`;
-          return;
-        }
-        formattedFilters[element.filterName] = `${element.id}`;
+      console.log(element);
+
+      if (formattedFilters[element.filterName]) {
+        formattedFilters[element.filterName] += `,${element.label}`;
+        return;
       }
+      formattedFilters[element.filterName] = `${element.label}`;
     });
+
+    console.log(formattedFilters);
 
     let allQuery: any = {};
     if (filters.length > 0) {

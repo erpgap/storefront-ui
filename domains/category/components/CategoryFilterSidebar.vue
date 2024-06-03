@@ -42,7 +42,7 @@ const getSortOptions = (searchData: { input: any }) => ({
 const selectedFilters = useState("category-selected-filters", () => []);
 const isFilterSelected = (option: any) => {
   return selectedFilters.value.some(
-    (filter: { id: any }) => String(filter.id) === String(option.value)
+    (filter: { id: any }) => String(filter.id) === String(option.id)
   );
 };
 
@@ -61,18 +61,18 @@ const facets = computed(() => [
   },
   ...props.attributes,
 ]);
-const opened = useState<boolean[]>("category-opened", () =>
-  facets.value.map(() => true)
-);
+const opened = useState("category-opened", () => ({
+  Price: true,
+}));
 
 const priceModel = useState("price-model", () => "");
 
-const selectedFilter = (
+const selectFilter = (
   facet: { label: string },
   option: { id: string; value: string; label: string }
 ) => {
   const alreadySelectedIndex = selectedFilters.value.findIndex(
-    (filter: { id: string }) => String(filter.id) === String(option.value)
+    (filter: { id: string }) => String(filter.id) === String(option.id)
   );
 
   if (alreadySelectedIndex !== -1) {
@@ -82,7 +82,7 @@ const selectedFilter = (
 
   selectedFilters.value.push({
     filterName: facet?.label,
-    label: option?.label,
+    label: option?.id,
     id: option?.value,
   });
 };
@@ -93,7 +93,6 @@ const applyFilters = () => {
   });
   changeFilters(filters, sort.value);
   emit("close");
-  facetsFromUrlToFilter();
 };
 
 const clearFilters = () => {
@@ -108,6 +107,20 @@ const changeCategory = (categoryId: number) => {
 };
 
 selectedFilters.value = facetsFromUrlToFilter();
+
+watch(
+  () => [facets.value, selectedFilters.value],
+  () => {
+    facets.value.forEach((facet: any) => {
+      opened.value[facet.label] = selectedFilters.value.some(
+        (item: any) => item.filterName === facet.label
+      );
+    });
+    opened.value.Price = true;
+  },
+  { deep: true }
+);
+
 const priceFilter = selectedFilters.value?.find((item: any) => {
   return item.filterName === "price";
 });
@@ -200,14 +213,14 @@ watch(priceModel, (newValue) => {
     </h5>
     <ul>
       <li v-for="(facet, index) in facets" :key="index">
-        <SfAccordionItem v-model="opened[index]">
+        <SfAccordionItem v-model="opened[facet.label]">
           <template #summary>
             <div class="flex justify-between items-center p-2 mb-2">
               <p class="p-2 font-medium typography-headline-5">
                 {{ facet?.label }}
               </p>
               <SfIconChevronLeft
-                :class="opened[index] ? 'rotate-90' : '-rotate-90'"
+                :class="opened[facet.label] ? 'rotate-90' : '-rotate-90'"
               />
             </div>
           </template>
@@ -251,9 +264,7 @@ watch(priceModel, (newValue) => {
                 size="sm"
                 :input-props="{ value }"
                 :model-value="isFilterSelected({ id, value })"
-                @update:model-value="
-                  selectedFilter(facet, { id, value, label })
-                "
+                @update:model-value="selectFilter(facet, { id, value, label })"
               >
                 {{ label }}
               </SfChip>
@@ -266,9 +277,7 @@ watch(priceModel, (newValue) => {
                 size="sm"
                 :input-props="{ value }"
                 :model-value="isFilterSelected({ id, value })"
-                @update:model-value="
-                  selectedFilter(facet, { id, value, label })
-                "
+                @update:model-value="selectFilter(facet, { id, value, label })"
               >
                 {{ label }}
               </SfChip>
@@ -294,7 +303,7 @@ watch(priceModel, (newValue) => {
                   class="appearance-none peer hidden"
                   :model-value="isFilterSelected({ id, value })"
                   @update:model-value="
-                    selectedFilter(facet, { id, value, label })
+                    selectFilter(facet, { id, value, label })
                   "
                 />
                 <span

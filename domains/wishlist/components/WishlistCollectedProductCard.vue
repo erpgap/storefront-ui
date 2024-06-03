@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { SfLink, SfButton, SfIconClose } from '@storefront-ui/vue';
-import type { PropType } from 'nuxt/dist/app/compat/capi';
-import type { Product } from '~/graphql';
+import { SfLink, SfButton, SfIconClose } from "@storefront-ui/vue";
+import type { Product } from "~/graphql";
 
-const NuxtLink = resolveComponent('NuxtLink');
+const NuxtLink = resolveComponent("NuxtLink");
 
-const { toggleWishlistSideBar } = useUiState();
+const { toggleWishlistSideBar } = useWishlistUiState();
 
 defineProps({
   product: {
@@ -40,7 +39,7 @@ defineProps({
           :to="mountUrlSlugForProductVariant(product)"
           variant="secondary"
           class="no-underline typography-text-sm sm:typography-text-lg"
-          @click="toggleWishlistSideBar"
+          @click="toggleWishlistSideBar()"
         >
           {{ product?.name }}
         </SfLink>
