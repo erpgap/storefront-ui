@@ -47,8 +47,9 @@ const saveNewPassword = async (passwords: any) => {
     });
   }
 };
-
-await loadUser(true);
+onMounted(async () => {
+  await loadUser(true);
+});
 </script>
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
