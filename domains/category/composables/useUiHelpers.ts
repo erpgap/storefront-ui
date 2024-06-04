@@ -91,7 +91,9 @@ export const useUiHelpers = () => {
   const changeFilters = (filters: any[], sort: string) => {
     const formattedFilters: any = {};
     filters.forEach((element) => {
-      console.log(element);
+      if (element.filterName === "price") {
+        element.label = element.id;
+      }
 
       if (formattedFilters[element.filterName]) {
         formattedFilters[element.filterName] += `,${element.label}`;

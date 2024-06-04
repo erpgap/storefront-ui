@@ -56,9 +56,7 @@ onBeforeUnmount(() => {
 });
 
 const radioModel = ref("1");
-const selectedProvider = ref<PaymentProvider | null>(
-  paymentProviders.value?.[0] || null
-);
+const selectedProvider = ref<PaymentProvider | null>(null);
 </script>
 
 <template>
@@ -197,6 +195,7 @@ const selectedProvider = ref<PaymentProvider | null>(
 
           <component
             :is="getPaymentProviderComponentName(selectedProvider.code)"
+            :key="selectedProvider.id"
             v-if="showPaymentModal && !!selectedProvider?.code"
             :provider="selectedProvider"
             :cart="cart"
