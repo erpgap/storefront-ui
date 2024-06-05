@@ -278,3 +278,10 @@ export type GetOrderResponse = AsyncData<
   },
   H3Error
 >;
+
+export type NewsletterSubscribeResponse = AsyncData<
+  {
+    newsletterSubscribe: Boolean;
+  },
+  H3Error
+>;
