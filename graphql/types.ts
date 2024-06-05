@@ -281,7 +281,7 @@ export type GetOrderResponse = AsyncData<
 
 export type NewsletterSubscribeResponse = AsyncData<
   {
-    newsletterSubscribe: Boolean;
+    newsletterSubscribe: boolean;
   },
   H3Error
 >;
