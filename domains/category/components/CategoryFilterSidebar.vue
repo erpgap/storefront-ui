@@ -72,7 +72,7 @@ const selectFilter = (
   option: { id: string; value: string; label: string }
 ) => {
   const alreadySelectedIndex = selectedFilters.value.findIndex(
-    (filter: { id: string }) => String(filter.id) === String(option.id)
+    (filter: { label: string }) => String(filter.label) === String(option.id)
   );
 
   if (alreadySelectedIndex !== -1) {
@@ -91,6 +91,7 @@ const applyFilters = () => {
   const filters = selectedFilters.value.filter((item: any) => {
     return typeof item === "object";
   });
+
   changeFilters(filters, sort.value);
   emit("close");
 };
