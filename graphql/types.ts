@@ -225,6 +225,13 @@ export type CountryListResponse = AsyncData<
   H3Error
 >;
 
+export type StatesResponse = AsyncData<
+  {
+    country: Country;
+  },
+  H3Error
+>;
+
 export type DeliveryMethodListResponse = AsyncData<
   {
     deliveryMethods: ShippingMethod[];

@@ -2,6 +2,7 @@ import GetAddressesQuery from "./GetAddressesQuery";
 import GetCategoriesQuery from "./GetCategoriesQuery";
 import GetCategoryQuery from "./GetCategoryQuery";
 import GetCountriesQuery from "./GetCountriesQuery";
+import GetStatesQuery from "./GetStatesQuery";
 import GetDeliveryMethodsQuery from "./GetDeliveryMethodsQuery";
 import GetPaymentConfirmation from "./GetPaymentConfirmation";
 import GetPaymentMethodsQuery from "./GetPaymentMethodsQuery";
@@ -29,6 +30,7 @@ enum QueryName {
   GetAddressesQuery = "GetAddressesQuery",
   WishlistLoadQuery = "WishlistLoadQuery",
   GetCountriesQuery = "GetCountriesQuery",
+  GetStates = "GetStatesQuery",
   GetDeliveryMethodsQuery = "GetDeliveryMethodsQuery",
   GetPaymentMethodsQuery = "GetPaymentMethodsQuery",
   GetPaymentConfirmation = "GetPaymentConfirmation",
@@ -53,6 +55,7 @@ const Queries: Record<QueryName, DocumentNode> = {
   GetPaymentConfirmation,
   GetOrdersQuery,
   GetOrderQuery,
+  GetStatesQuery,
 };
 
 const QueriesToByPassCache: string[] = [
