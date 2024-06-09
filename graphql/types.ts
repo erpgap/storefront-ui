@@ -206,6 +206,15 @@ export type DeleteAddressResponse = AsyncData<
   H3Error
 >;
 
+export type AddressFormFieldsInput = {
+  street: String;
+  street2?: String;
+  countryId: Number;
+  city: String;
+  stateId: Number;
+  zip: String;
+};
+
 export type CountryListResponse = AsyncData<
   {
     countries: {
