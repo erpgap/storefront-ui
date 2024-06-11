@@ -16,15 +16,9 @@ const props = defineProps<{
 }>();
 
 const { isOpen, open, close } = useDisclosure();
-const {
-  deleteAddress,
-  updateAddress,
-  addAddress,
-  loadAddresses,
-  selectCurrentAddress,
-} = useAddresses();
+const { deleteAddress, updateAddress, addAddress, loadAddresses } =
+  useAddresses();
 const { countries, loadCountryList } = useCountry();
-const { user } = useAuth();
 
 const defaultValues = ref({
   name: "",
@@ -64,7 +58,7 @@ const newAddress = () => {
 
 const removeAddress = (id) => {
   deleteAddress({ id: id });
-  loadAddresses(props.type);
+  loadAddresses(props.type as AddressEnum);
 };
 
 const submitAddress = () => {
@@ -99,13 +93,6 @@ const states = computed(
     )?.states || []
 );
 
-function isCurrentAddress(id) {
-  if (props.type === AddressEnum.Shipping) {
-    return user.value?.shippingAddress?.id === id;
-  }
-  return user.value?.billingAddress?.id === id;
-}
-
 await loadCountryList();
 </script>
 <template>
@@ -126,19 +113,11 @@ await loadCountryList();
       <p>{{ `${address.city} ${address.zip}` }}</p>
       <template v-slot:footer>
         <SfButton
-          variant="tertiary"
+          variant="secondary"
           size="sm"
           class="self-start"
           @click="removeAddress(address.id)"
           >Remove</SfButton
-        >
-        <SfButton
-          :disabled="isCurrentAddress(address.id)"
-          variant="secondary"
-          size="sm"
-          class="self-start"
-          @click="selectCurrentAddress({ id: address.id }, AddressEnum.Billing)"
-          >Current</SfButton
         >
       </template>
     </AccountAddressData>

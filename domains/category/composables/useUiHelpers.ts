@@ -102,8 +102,6 @@ export const useUiHelpers = () => {
       formattedFilters[element.filterName] = `${element.label}`;
     });
 
-    console.log(formattedFilters);
-
     let allQuery: any = {};
     if (filters.length > 0) {
       allQuery = { ...formattedFilters };
