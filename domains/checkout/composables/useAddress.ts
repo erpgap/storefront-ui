@@ -18,13 +18,19 @@ import {
 } from "~/graphql";
 import { MutationName } from "~/server/mutations";
 import { QueryName } from "~/server/queries";
+import objectHash from "object-hash";
 
 export const useAddresses = () => {
   const { $sdk } = useNuxtApp();
+  const hash = objectHash("test");
 
   const loading = ref(false);
   const toast = useToast();
-  const billingAddresses = useState<Partner[]>("billing-addresses", () => []);
+
+  const billingAddresses = useState<Partner[]>(
+    `${hash}-billing-addresses`,
+    () => []
+  );
   const shippingAddresses = useState<Partner[]>("shipping-addresses", () => []);
 
   const loadAddresses = async (addressType: AddressEnum) => {

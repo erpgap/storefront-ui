@@ -15,12 +15,12 @@ export const useStateList = (countryId: number) => {
     if (states.value.length > 0) {
       return;
     }
-    const { data, error } = await $sdk().odoo.query<
+    const { data } = await $sdk().odoo.query<
       CountryFilterInput,
       StatesResponse
-    >({ queryName: QueryName.StatesQuery }, param.value);
+    >({ queryName: QueryName.GetStates }, param.value);
 
-    states.value = data.value.country.states;
+    states.value = data.value.country.states || [];
   };
 
   return {
