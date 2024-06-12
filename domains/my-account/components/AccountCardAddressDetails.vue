@@ -7,15 +7,19 @@ import {
 } from "~/graphql";
 
 const { isOpen, open, close } = useDisclosure();
-const { deleteAddress } = useAddresses();
+const { deleteAddress, loadAddresses } = useAddresses();
 
-defineProps({
+const props = defineProps({
   addresses: {
     type: Array as PropType<Partner[]>,
     required: true,
   },
   header: {
     type: String,
+    required: true,
+  },
+  type: {
+    type: String as PropType<AddressEnum.Billing | AddressEnum.Shipping>,
     required: true,
   },
 });
@@ -28,18 +32,17 @@ const handleOpenFormForEditAddress = (
 ) => {
   edit.value = true;
   addressForEdit.value = address;
-  console.log(address);
   open();
 };
 
 const handleOpenFormToAddAddress = () => {
   edit.value = false;
-  console.log("add address");
   open();
 };
 
-const handleRemoveAddress = (id: number) => {
+const handleRemoveAddress = async (id: number) => {
   deleteAddress({ id: id });
+  await loadAddresses(props.type);
 };
 </script>
 <template>

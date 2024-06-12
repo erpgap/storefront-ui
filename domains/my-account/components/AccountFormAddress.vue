@@ -8,7 +8,7 @@ import {
   type UpdateAddressInput,
 } from "~/graphql";
 
-const { updateAddress, addAddress, loading } = useAddresses();
+const { updateAddress, addAddress, loadAddresses, loading } = useAddresses();
 
 const emits = defineEmits(["on-save", "on-close"]);
 
@@ -33,8 +33,8 @@ const addressFormFieldsInput = ref({
   name: props.address.name ?? "",
   phone: props.address.phone ?? "",
   city: props.address.city ?? "",
-  countryId: props.address.country.id,
-  stateId: props.address.state.id,
+  countryId: props.address.country?.id ?? 0,
+  stateId: props.address.state?.id ?? 0,
   street: props.address?.street ?? "",
   zip: props.address?.zip ?? "",
   street2: props.address?.street2 ?? "",
@@ -46,6 +46,7 @@ const handleSubmit = async () => {
       addressFormFieldsInput.value as UpdateAddressInput,
       AddressEnum.Billing
     );
+    await loadAddresses(props.type);
     return;
   }
   await addAddress(
