@@ -46,7 +46,7 @@ const handleSubmit = async () => {
       addressFormFieldsInput.value as UpdateAddressInput,
       AddressEnum.Billing
     );
-    await loadAddresses(props.type);
+    emits("on-save");
     return;
   }
   await addAddress(

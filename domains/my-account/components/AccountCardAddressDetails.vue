@@ -44,6 +44,11 @@ const handleRemoveAddress = async (id: number) => {
   deleteAddress({ id: id });
   await loadAddresses(props.type);
 };
+
+const handleCloseAfterSaveAddress = async () => {
+  await loadAddresses(props.type);
+  close();
+};
 </script>
 <template>
   <div
@@ -105,7 +110,7 @@ const handleRemoveAddress = async (id: number) => {
         :is-edit-form="edit"
         :address="addressForEdit"
         :type="AddressEnum.Billing"
-        @on-save="close"
+        @on-save="handleCloseAfterSaveAddress"
         @on-close="close"
       />
     </UiModal>
