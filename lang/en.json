@@ -303,7 +303,8 @@
         "edit": "Edit",
         "delete": "Delete",
         "current": "Current",
-        "shippingAddress": "Shipping address"
+        "shippingAddress": "Shipping address",
+        "sameAddress": "My billing address is the same of shipping"
       },
       "shippingDetails": {
         "edit": "Edit",
