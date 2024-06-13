@@ -6,6 +6,7 @@ defineProps({
   product: {
     type: Object as PropType<Product>,
     required: true,
+    default: () => {},
   },
 });
 </script>
