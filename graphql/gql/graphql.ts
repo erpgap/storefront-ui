@@ -707,6 +707,7 @@ export type Partner = {
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
   isCompany: Scalars['Boolean']['output'];
+  isPublic: Maybe<Scalars['Boolean']['output']>;
   mobile: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   parentId: Maybe<Partner>;

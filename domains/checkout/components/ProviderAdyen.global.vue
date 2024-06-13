@@ -121,8 +121,6 @@ onMounted(async () => {
     },
   };
 
-  console.log(configuration);
-
   const checkout = new AdyenCheckout(configuration);
 
   adyenDropin.value = checkout
