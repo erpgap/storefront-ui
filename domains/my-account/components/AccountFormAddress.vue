@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { SfButton, SfInput, SfLoaderCircular } from "@storefront-ui/vue";
+import {
+  SfButton,
+  SfCheckbox,
+  SfInput,
+  SfLoaderCircular,
+} from "@storefront-ui/vue";
 
 import {
   AddressEnum,
@@ -8,7 +13,7 @@ import {
   type UpdateAddressInput,
 } from "~/graphql";
 
-const { updateAddress, addAddress, loadAddresses, loading } = useAddresses();
+const { updateAddress, addAddress, loading } = useAddresses();
 
 const emits = defineEmits(["on-save", "on-close"]);
 
@@ -23,36 +28,61 @@ const props = defineProps({
     default: false,
   },
   address: {
-    type: Object as PropType<AddressFormFieldsInputExtendedFields>,
+    type: Object as PropType<AddAddressInput | UpdateAddressInput>,
     default: () => ({}),
   },
 });
 
-const addressFormFieldsInput = ref({
-  id: props.address.id,
-  name: props.address.name ?? "",
-  phone: props.address.phone ?? "",
-  city: props.address.city ?? "",
-  countryId: props.address.country?.id ?? 0,
-  stateId: props.address.state?.id ?? 0,
-  street: props.address?.street ?? "",
-  zip: props.address?.zip ?? "",
-  street2: props.address?.street2 ?? "",
+const addressFormFieldsInput = ref<AddressFormFieldsInputExtendedFields>({
+  id: 0,
+  name: "",
+  phone: "",
+  city: "",
+  email: "",
+  countryId: 0,
+  stateId: 0,
+  street: "",
+  zip: "",
+  street2: "",
 });
+
+if (props.isEditForm) {
+  addressFormFieldsInput.value.name = props.address?.name ?? "";
+  addressFormFieldsInput.value.phone = props.address?.phone ?? "";
+  addressFormFieldsInput.value.city = props.address?.city ?? "";
+  addressFormFieldsInput.value.countryId = props.address?.country.id ?? 0;
+  addressFormFieldsInput.value.stateId = props.address?.state.id ?? 0;
+  addressFormFieldsInput.value.city = props.address?.city ?? "";
+  addressFormFieldsInput.value.zip = props.address?.zip ?? "";
+  addressFormFieldsInput.value.street = props.address?.street ?? "";
+}
+
+const billingAddresIsTheSameAsShipping = ref(false);
 
 const handleSubmit = async () => {
   if (props.isEditForm) {
+    addressFormFieldsInput.value.id = props.address?.id;
     await updateAddress(
       addressFormFieldsInput.value as UpdateAddressInput,
-      AddressEnum.Billing
+      props.type
     );
+
     emits("on-save");
     return;
   }
-  await addAddress(
-    addressFormFieldsInput.value as AddAddressInput,
-    AddressEnum.Billing
-  );
+  delete addressFormFieldsInput.value["id"];
+  await addAddress(addressFormFieldsInput.value as AddAddressInput, props.type);
+
+  if (
+    billingAddresIsTheSameAsShipping.value &&
+    props.type === AddressEnum.Billing &&
+    !props.isEditForm
+  ) {
+    await addAddress(
+      addressFormFieldsInput.value as AddAddressInput,
+      AddressEnum.Shipping
+    );
+  }
   emits("on-save");
 };
 </script>
@@ -119,6 +149,16 @@ const handleSubmit = async () => {
         required
         :placeholder="$t('form.postalCodeLabel')"
       />
+    </label>
+    <label
+      v-if="!isEditForm && type === AddressEnum.Billing"
+      class="md:col-span-2"
+    >
+      <SfCheckbox
+        v-model="billingAddresIsTheSameAsShipping"
+        name="billingAddresIsTheSameAsShipping"
+      />
+      {{ $t("account.accountSettings.billingDetails.sameAddress") }}
     </label>
     <div
       class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4"

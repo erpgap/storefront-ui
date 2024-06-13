@@ -41,7 +41,7 @@ const handleOpenFormToAddAddress = () => {
 };
 
 const handleRemoveAddress = async (id: number) => {
-  deleteAddress({ id: id });
+  await deleteAddress({ id: id });
   await loadAddresses(props.type);
 };
 
@@ -109,7 +109,7 @@ const handleCloseAfterSaveAddress = async () => {
       <AccountFormAddress
         :is-edit-form="edit"
         :address="addressForEdit"
-        :type="AddressEnum.Billing"
+        :type="type"
         @on-save="handleCloseAfterSaveAddress"
         @on-close="close"
       />

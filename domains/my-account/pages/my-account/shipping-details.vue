@@ -16,6 +16,6 @@ onMounted(async () => {
   <AccountCardAddressDetails
     :addresses="shippingAddresses"
     :type="AddressEnum.Shipping"
-    :header="$t('billing.heading')"
+    :header="$t('shipping.heading')"
   />
 </template>

@@ -212,9 +212,9 @@ export type DeleteAddressResponse = AsyncData<
 export type AddressFormFieldsInput = {
   street: string;
   street2?: string;
-  country: Country;
+  countryId: number;
   city: string;
-  state: State;
+  stateId: number;
   zip: string;
 };
 
