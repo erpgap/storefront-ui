@@ -21,6 +21,10 @@ watch(
   { immediate: true }
 );
 
+const webSiteOrderLinesWithoutUndefinedProducts = computed(() => {
+  return order.value?.websiteOrderLine?.filter((item) => item.product !== null);
+});
+
 const NuxtLink = resolveComponent("NuxtLink");
 </script>
 <template>
@@ -100,22 +104,27 @@ const NuxtLink = resolveComponent("NuxtLink");
           </thead>
           <tbody>
             <tr
-              v-for="(line, i) in order?.websiteOrderLine"
+              v-for="(line, i) in webSiteOrderLinesWithoutUndefinedProducts"
               :key="i"
               class="border-b border-neutral-200 align-top"
             >
               <td class="pb-4 pr-4 lg:whitespace-nowrap typography-text-base">
-                <ProductCardHorizontal :product="line.product" />
+                <ProductCardHorizontal
+                  v-if="line.product"
+                  :product="line.product"
+                />
               </td>
 
               <td class="p-4 lg:whitespace-nowrap typography-text-base">
-                ${{ line.product?.combinationInfo.price || " --" }}
+                {{
+                  $currency(Number(line.product?.combinationInfo.price)) || "--"
+                }}
               </td>
               <td class="p-4 typography-text-base">
-                {{ line.quantity || " --" }}
+                {{ line.quantity || "--" }}
               </td>
               <td class="p-4 typography-text-base">
-                ${{ line.priceSubtotal || " --" }}
+                {{ $currency(Number(line.priceSubtotal)) || "--" }}
               </td>
             </tr>
           </tbody>
@@ -124,19 +133,19 @@ const NuxtLink = resolveComponent("NuxtLink");
           class="flex justify-between pt-4 border-t border-neutral-200 md:border-0"
         >
           <p>{{ $t("account.myOrders.orderDetails.itemsSubtotal") }}</p>
-          <span>${{ order?.amountSubtotal }}</span>
+          <span>{{ $currency(Number(order?.amountSubtotal)) }}</span>
         </div>
         <div class="flex justify-between my-2">
           <p>{{ $t("account.myOrders.orderDetails.delivery") }}</p>
-          <span>{{ order?.amountDelivery }}</span>
+          <span>{{ $currency(Number(order?.amountDelivery)) }}</span>
         </div>
         <div class="flex justify-between border-b pb-4 border-neutral-200">
           <p>{{ $t("account.myOrders.orderDetails.estimatedTax") }}</p>
-          <span>${{ order?.amountTax }}</span>
+          <span>{{ $currency(Number(order?.amountTax)) }}</span>
         </div>
         <div class="flex justify-between pt-4 typography-text-lg font-medium">
           <p>{{ $t("account.myOrders.orderDetails.total") }}</p>
-          <span>${{ order?.amountTotal }}</span>
+          <span>{{ $currency(Number(order?.amountTotal)) }}</span>
         </div>
       </main>
     </UiModal>

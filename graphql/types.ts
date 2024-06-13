@@ -16,6 +16,9 @@ import type {
   PaymentProvider,
   Orders,
   Order,
+  Countries,
+  AddressEnum,
+  State,
 } from "./gql/graphql";
 import type { H3Error } from "h3";
 import type { AsyncData } from "#app";
@@ -206,12 +209,32 @@ export type DeleteAddressResponse = AsyncData<
   H3Error
 >;
 
-export type CountryListResponse = AsyncData<
+export type AddressFormFieldsInput = {
+  street: string;
+  street2?: string;
+  countryId: number;
+  city: string;
+  stateId: number;
+  zip: string;
+};
+
+export type AddressFormFieldsInputExtendedFields = AddressFormFieldsInput & {
+  id?: number;
+  name: string;
+  phone: string;
+  email?: string;
+};
+
+export type CountriesResponse = AsyncData<
   {
-    countries: {
-      countries: Country[];
-      totalCount: number;
-    };
+    countries: Countries;
+  },
+  H3Error
+>;
+
+export type StatesResponse = AsyncData<
+  {
+    country: Country;
   },
   H3Error
 >;

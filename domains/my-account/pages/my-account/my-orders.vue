@@ -34,7 +34,7 @@ const NuxtLink = resolveComponent("NuxtLink");
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
   <h2 class="hidden md:block typography-headline-4 font-bold mx-4 capitalize">
-    {{ $t("account.orders.myOrders") }}
+    {{ $t("account.myOrders.heading") }}
   </h2>
 
   <div v-if="orders?.orders" class="col-span-3">

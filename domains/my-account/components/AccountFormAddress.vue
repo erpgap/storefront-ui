@@ -1,271 +1,188 @@
 <script setup lang="ts">
 import {
   SfButton,
-  SfIconClose,
-  useDisclosure,
+  SfCheckbox,
   SfInput,
   SfLoaderCircular,
-  SfSelect,
 } from "@storefront-ui/vue";
-import { AddressEnum, type Partner } from "~/graphql";
 
-const props = defineProps<{
-  addresses: Partner[];
-  type: string;
-  header: string;
-}>();
+import {
+  AddressEnum,
+  type AddAddressInput,
+  type AddressFormFieldsInputExtendedFields,
+  type UpdateAddressInput,
+} from "~/graphql";
 
-const { isOpen, open, close } = useDisclosure();
-const { deleteAddress, updateAddress, addAddress, loadAddresses } =
-  useAddresses();
-const { countries, loadCountryList } = useCountry();
+const { updateAddress, addAddress, loading } = useAddresses();
 
-const defaultValues = ref({
-  name: "",
-  street: "",
-  street2: "",
-  phone: "",
-  countryId: null,
-  city: "",
-  stateId: null,
-  zip: "",
+const emits = defineEmits(["on-save", "on-close"]);
+
+const props = defineProps({
+  type: {
+    type: String as PropType<AddressEnum>,
+    required: true,
+  },
+  isEditForm: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  address: {
+    type: Object as PropType<AddAddressInput | UpdateAddressInput>,
+    default: () => ({}),
+  },
 });
 
-const editAddress = (address: Partner) => {
-  defaultValues.value = {
-    id: address?.id,
-    countryId: address.country?.id,
-    stateId: address.state?.id,
-    ...address,
-  };
-  open();
-};
+const addressFormFieldsInput = ref<AddressFormFieldsInputExtendedFields>({
+  id: 0,
+  name: "",
+  phone: "",
+  city: "",
+  email: "",
+  countryId: 0,
+  stateId: 0,
+  street: "",
+  zip: "",
+  street2: "",
+});
 
-const newAddress = () => {
-  Object.assign(defaultValues.value, {
-    id: "",
-    name: "",
-    street: "",
-    street2: "",
-    phone: "",
-    countryId: null,
-    city: "",
-    stateId: null,
-    zip: "",
-  });
-  open();
-};
+if (props.isEditForm) {
+  addressFormFieldsInput.value.name = props.address?.name ?? "";
+  addressFormFieldsInput.value.phone = props.address?.phone ?? "";
+  addressFormFieldsInput.value.city = props.address?.city ?? "";
+  addressFormFieldsInput.value.countryId = props.address?.country.id ?? 0;
+  addressFormFieldsInput.value.stateId = props.address?.state.id ?? 0;
+  addressFormFieldsInput.value.city = props.address?.city ?? "";
+  addressFormFieldsInput.value.zip = props.address?.zip ?? "";
+  addressFormFieldsInput.value.street = props.address?.street ?? "";
+}
 
-const removeAddress = (id) => {
-  deleteAddress({ id: id });
-  loadAddresses(props.type as AddressEnum);
-};
+const billingAddresIsTheSameAsShipping = ref(false);
 
-const submitAddress = () => {
-  const addressInput = {
-    name: defaultValues.value.name,
-    street: defaultValues.value.street,
-    street2: defaultValues.value.street2,
-    phone: defaultValues.value.phone,
-    countryId: defaultValues.value.countryId,
-    city: defaultValues.value.city,
-    stateId: defaultValues.value.stateId,
-    zip: defaultValues.value.zip,
-  };
+const handleSubmit = async () => {
+  if (props.isEditForm) {
+    addressFormFieldsInput.value.id = props.address?.id;
+    await updateAddress(
+      addressFormFieldsInput.value as UpdateAddressInput,
+      props.type
+    );
 
-  const addressType =
-    props.type === AddressEnum.Billing
-      ? AddressEnum.Billing
-      : AddressEnum.Shipping;
-
-  if (defaultValues.value?.id) {
-    updateAddress({ id: defaultValues.value.id, ...addressInput }, addressType);
-  } else {
-    addAddress(addressInput, addressType);
+    emits("on-save");
+    return;
   }
-  close();
+  delete addressFormFieldsInput.value["id"];
+  await addAddress(addressFormFieldsInput.value as AddAddressInput, props.type);
+
+  if (
+    billingAddresIsTheSameAsShipping.value &&
+    props.type === AddressEnum.Billing &&
+    !props.isEditForm
+  ) {
+    await addAddress(
+      addressFormFieldsInput.value as AddAddressInput,
+      AddressEnum.Shipping
+    );
+  }
+  emits("on-save");
 };
-
-const states = computed(
-  () =>
-    countries.value.find(
-      (country: any) => country.id === defaultValues.value.countryId
-    )?.states || []
-);
-
-await loadCountryList();
 </script>
 <template>
-  <div
-    class="md:col-span-1 col-span-3"
-    v-for="address in addresses"
-    :key="address.id"
+  <form
+    class="grid grid-cols-1 md:grid-cols-[50%_1fr_120px] gap-4"
+    data-testid="address-form"
+    @submit.prevent="handleSubmit"
   >
-    <AccountAddressData
-      @on-click="editAddress(address)"
-      :header="address.name"
-      :button-text="$t('account.accountSettings.personalData.edit')"
+    <label>
+      <UiFormLabel>{{ $t("form.NameLabel") }}</UiFormLabel>
+      <SfInput
+        v-model="addressFormFieldsInput.name"
+        name="name"
+        autocomplete="given-name"
+        required
+        :placeholder="$t('form.NameLabel')"
+      />
+    </label>
+    <label class="md:col-span-2">
+      <UiFormLabel>{{ $t("form.streetNameLabel") }}</UiFormLabel>
+      <SfInput
+        v-model="addressFormFieldsInput.street"
+        name="streetName"
+        autocomplete="family-name"
+        required
+        :placeholder="$t('form.streetNameLabel')"
+      />
+    </label>
+    <label class="md:col-span-3">
+      <UiFormLabel>{{ $t("form.phoneLabel") }}</UiFormLabel>
+      <SfInput
+        v-model="addressFormFieldsInput.phone"
+        name="phone"
+        type="tel"
+        autocomplete="tel"
+        required
+        :placeholder="$t('form.phoneLabel')"
+      />
+    </label>
+
+    <UiFormSelectCountries v-model="addressFormFieldsInput.countryId" />
+    <UiFormSelectStates
+      v-model="addressFormFieldsInput.stateId"
+      :key="addressFormFieldsInput?.countryId"
+      :country-id="addressFormFieldsInput?.countryId"
+    />
+    <label class="md:col-span-2">
+      <UiFormLabel>{{ $t("form.cityLabel") }}</UiFormLabel>
+      <SfInput
+        v-model="addressFormFieldsInput.city"
+        name="city"
+        autocomplete="address-level2"
+        required
+        :placeholder="$t('form.cityLabel')"
+      />
+    </label>
+    <label>
+      <UiFormLabel>{{ $t("form.postalCodeLabel") }}</UiFormLabel>
+      <SfInput
+        v-model="addressFormFieldsInput.zip"
+        name="postalCode"
+        autocomplete="postal-code"
+        required
+        :placeholder="$t('form.postalCodeLabel')"
+      />
+    </label>
+    <label
+      v-if="!isEditForm && type === AddressEnum.Billing"
+      class="md:col-span-2"
     >
-      <p>{{ `${address.name}, ${address.street}` }}</p>
-      <p>{{ address.phone }}</p>
-      <p>{{ `${address.country?.name}` }}</p>
-      <p>{{ `${address?.state?.name || ""}` }}</p>
-      <p>{{ `${address.city} ${address.zip}` }}</p>
-      <template v-slot:footer>
-        <SfButton
-          variant="secondary"
-          size="sm"
-          class="self-start"
-          @click="removeAddress(address.id)"
-          >Remove</SfButton
-        >
-      </template>
-    </AccountAddressData>
-  </div>
-  <div class="col-span-3">
-    <SfButton size="lg" @click="newAddress()" class="self-start"
-      >Add new address</SfButton
+      <SfCheckbox
+        v-model="billingAddresIsTheSameAsShipping"
+        name="billingAddresIsTheSameAsShipping"
+      />
+      {{ $t("account.accountSettings.billingDetails.sameAddress") }}
+    </label>
+    <div
+      class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4"
     >
-  </div>
-  <UiOverlay v-if="isOpen" :visible="isOpen">
-    <UiModal
-      :model-value="isOpen"
-      tag="section"
-      role="dialog"
-      class="h-full w-full overflow-auto md:w-[600px] md:h-fit z-50"
-      aria-labelledby="address-modal-title"
-    >
-      <header>
-        <SfButton
-          square
-          variant="tertiary"
-          class="absolute right-2 top-2"
-          @click="close"
-        >
-          <SfIconClose />
-        </SfButton>
-        <h3
-          id="address-modal-title"
-          class="text-neutral-900 text-lg md:text-2xl font-bold mb-4"
-        >
-          {{ header }}
-        </h3>
-      </header>
-      <form
-        class="grid grid-cols-1 md:grid-cols-[50%_1fr_120px] gap-4"
-        data-testid="address-form"
-        @submit.prevent="submitAddress"
+      <SfButton
+        type="reset"
+        class=""
+        variant="secondary"
+        @click="$emit('on-close')"
       >
-        <label>
-          <UiFormLabel>{{ $t("form.NameLabel") }}</UiFormLabel>
-          <SfInput
-            v-model="defaultValues.name"
-            name="name"
-            autocomplete="given-name"
-            required
-            :placeholder="$t('form.NameLabel')"
-          />
-        </label>
-        <label class="md:col-span-2">
-          <UiFormLabel>{{ $t("form.streetNameLabel") }}</UiFormLabel>
-          <SfInput
-            v-model="defaultValues.street"
-            name="streetName"
-            autocomplete="family-name"
-            required
-            :placeholder="$t('form.streetNameLabel')"
-          />
-        </label>
-        <label class="md:col-span-3">
-          <UiFormLabel>{{ $t("form.phoneLabel") }}</UiFormLabel>
-          <SfInput
-            v-model="defaultValues.phone"
-            name="phone"
-            type="tel"
-            autocomplete="tel"
-            required
-            :placeholder="$t('form.phoneLabel')"
-          />
-        </label>
-        <label class="md:col-span-3">
-          <UiFormLabel>{{ $t("form.countryLabel") }}</UiFormLabel>
-          <SfSelect
-            v-model="defaultValues.countryId"
-            name="country"
-            autocomplete="country-name"
-            required
-          >
-            <option key="placeholder" :value="null">
-              {{ $t("form.selectPlaceholder") }}
-            </option>
-            <option
-              v-for="country in countries"
-              :key="country.id"
-              :value="country.id"
-            >
-              {{ country.name }}
-            </option>
-          </SfSelect>
-        </label>
-        <label class="md:col-span-3">
-          <UiFormLabel>{{ $t("form.stateLabel") }}</UiFormLabel>
-          <SfSelect
-            v-model="defaultValues.stateId"
-            name="state"
-            autocomplete="state-name"
-            :disabled="!states.length"
-            required
-          >
-            <option key="placeholder" :value="null">
-              {{ $t("form.selectPlaceholder") }}
-            </option>
-            <option v-for="state in states" :key="state.id" :value="state.id">
-              {{ state.name }}
-            </option>
-          </SfSelect>
-        </label>
-
-        <label class="md:col-span-2">
-          <UiFormLabel>{{ $t("form.cityLabel") }}</UiFormLabel>
-          <SfInput
-            v-model="defaultValues.city"
-            name="city"
-            autocomplete="address-level2"
-            required
-            :placeholder="$t('form.cityLabel')"
-          />
-        </label>
-        <label>
-          <UiFormLabel>{{ $t("form.postalCodeLabel") }}</UiFormLabel>
-          <SfInput
-            v-model="defaultValues.zip"
-            name="postalCode"
-            autocomplete="postal-code"
-            required
-            :placeholder="$t('form.postalCodeLabel')"
-          />
-        </label>
-
-        <div
-          class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4"
-        >
-          <SfButton type="reset" class="" variant="secondary" @click="close">
-            {{ $t("contactInfo.cancel") }}
-          </SfButton>
-          <SfButton type="submit" class="min-w-[120px]" :disabled="loading">
-            <SfLoaderCircular
-              v-if="loading"
-              class="flex justify-center items-center"
-              size="sm"
-            />
-            <span v-else>
-              {{ $t("contactInfo.save") }}
-            </span>
-          </SfButton>
-        </div>
-      </form>
-    </UiModal>
-  </UiOverlay>
+        {{ $t("contactInfo.cancel") }}
+      </SfButton>
+      <SfButton type="submit" class="min-w-[120px]" :disabled="loading">
+        <SfLoaderCircular
+          v-if="loading"
+          class="flex justify-center items-center"
+          size="sm"
+        />
+        <span v-else>
+          {{ $t("contactInfo.save") }}
+        </span>
+      </SfButton>
+    </div>
+  </form>
 </template>
 
 <style scoped></style>
