@@ -1,7 +1,8 @@
 export default `
-partner{
+partner{     
     id
     name
+    isPublic
     street
     street2
     city
