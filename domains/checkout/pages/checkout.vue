@@ -8,14 +8,15 @@ import {
   SfLoaderCircular,
   SfRadio,
 } from "@storefront-ui/vue";
-import { useToast } from "vue-toastification";
+
 import { AddressEnum, type Partner, type PaymentProvider } from "~/graphql";
+import { useCountryList } from "~/domains/core/composable/useCountryList";
 const NuxtLink = resolveComponent("NuxtLink");
 
 const { cart, loadCart, totalItemsInCart } = useCart();
 const router = useRouter();
 
-const { loadCountryList } = useCountry();
+const { loadCountries } = useCountryList();
 const { user, loadUser } = useAuth();
 
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
@@ -31,7 +32,7 @@ await Promise.all([
 
   loadDeliveryMethods(),
   loadPaymentMethods(),
-  loadCountryList(),
+  loadCountries(),
 ]);
 
 if (totalItemsInCart?.value === 0) {
