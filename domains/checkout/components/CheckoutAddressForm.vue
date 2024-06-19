@@ -18,6 +18,8 @@ import {
   type UpdateAddressInput,
 } from "~/graphql";
 
+import { useCountryList } from "~/domains/core/composable/useCountryList";
+
 const props = defineProps({
   heading: String,
   description: String,
@@ -55,7 +57,8 @@ const { commit: commitZip, undo: undoZip } = useManualRefHistory(zip);
 
 const { isOpen, open, close } = useDisclosure();
 const { addAddress, updateAddress } = useAddresses();
-const { countries } = useCountry();
+
+const { countries } = useCountryList();
 
 const isCartUpdateLoading = false;
 
@@ -85,8 +88,9 @@ const handleSaveAddress = async () => {
 
 const selectedCountry = computed<Country>(
   () =>
-    countries.value.find((item: any) => item.id === countryId.value) ||
-    ({} as Country)
+    countries.value.countries?.find(
+      (item: any) => item.id === countryId.value
+    ) || ({} as Country)
 );
 
 const selectedState = computed<State>(
