@@ -24,9 +24,13 @@ const props = defineProps({
  * @TODO extract this form behaviour, undo, commit, validate, etc. to a separate form composable
  */
 const { isOpen, open, close } = useDisclosure();
-const { email, name } = toRefs(props.partnerData);
+const { email, name, isPublic } = toRefs(props.partnerData);
 const { commit: commitEmail, undo: undoEmail } = useManualRefHistory(email);
 const { commit: commitName, undo: undoName } = useManualRefHistory(name);
+
+if (isPublic) {
+  name.value = "";
+}
 
 const subscribeNewsletter = ref(true);
 
