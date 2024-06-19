@@ -67,7 +67,10 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   });
 
   const getRegularPrice = computed(
-    () => productVariant.value?.combinationInfoVariant?.list_price || 0
+    () =>
+      productVariant.value?.combinationInfoVariant?.list_price ||
+      productVariant.value?.combinationInfo?.list_price ||
+      0
   );
   const getSpecialPrice = computed(
     () => productVariant.value?.combinationInfoVariant?.price || 0

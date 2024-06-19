@@ -78,7 +78,11 @@ const productsInCart = computed(() => {
 });
 
 const handleCartAdd = async () => {
-  await cartAdd(productVariant?.value.id, quantitySelectorValue.value);
+  let id = productVariant?.value.id;
+  if (!productVariant.value.combinationInfoVariant) {
+    id = Number(productVariant?.value.firstVariant?.id);
+  }
+  await cartAdd(id, quantitySelectorValue.value);
 };
 
 const handleWishlistAddItem = async (firstVariant: Product) => {
