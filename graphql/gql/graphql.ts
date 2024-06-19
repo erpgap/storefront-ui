@@ -640,6 +640,7 @@ export type Order = {
   partner: Maybe<Partner>;
   partnerInvoice: Maybe<Partner>;
   partnerShipping: Maybe<Partner>;
+  reportOrderLine: Maybe<Array<OrderLine>>;
   shippingMethod: Maybe<ShippingMethod>;
   stage: Maybe<OrderStage>;
   taxTotals: Maybe<Scalars['GenericScalar']['output']>;
