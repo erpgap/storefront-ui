@@ -99,6 +99,7 @@ partner {
   id
   email
   name
+  isPublic
 }`;
 
 export { internalOrderFragment };
