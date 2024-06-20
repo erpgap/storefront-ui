@@ -1,29 +1,15 @@
 <script lang="ts" setup>
-import {
-  SfButton,
-  SfInput,
-  SfLink,
-  SfIconCheckCircle,
-  SfIconClose,
-} from "@storefront-ui/vue";
+import { SfButton, SfLink } from "@storefront-ui/vue";
 import { ref, type Ref } from "vue";
 import { useCore } from "../composable/useCore";
 
-const { newsletterSubscribe, apiError } = useCore();
+const { newsletterSubscribe } = useCore();
 
 const inputValue = ref("");
-const showPositiveAlert = ref(false);
-const showErrorAlert = ref(false);
 const emailValidation = ref();
 
 const subscribeNewsletter = async () => {
   await newsletterSubscribe({ email: inputValue.value });
-
-  if (apiError.value !== "") {
-    showErrorAlert.value = true;
-  }
-
-  showPositiveAlert.value = true;
   inputValue.value = "";
 };
 </script>
@@ -54,45 +40,6 @@ const subscribeNewsletter = async () => {
         can <SfLink href="#" class="!text-neutral-600">unsubscribe</SfLink> at
         any time without costs.
       </div>
-    </div>
-    <div class="absolute top-0 right-0 mx-2 mt-2 sm:mr-6" v-if="!apiError">
-      <div
-        role="alert"
-        class="flex items-start md:items-center shadow-md max-w-[600px] bg-positive-100 pr-2 pl-4 mb-2 ring-1 ring-positive-200 typography-text-sm md:typography-text-base py-1 rounded-md"
-        v-if="showPositiveAlert"
-      >
-        <SfIconCheckCircle class="mr-2 my-2 text-positive-700" />
-        <p class="py-2 mr-2">
-          Your email has been added to the newsletter subscription.
-        </p>
-        <button
-          type="button"
-          class="p-1.5 md:p-2 ml-auto rounded-md text-positive-700 hover:bg-positive-200 active:bg-positive-300 hover:text-positive-800 active:text-positive-900"
-          aria-label="Close positive alert"
-          @click="showPositiveAlert = false"
-        >
-          <SfIconClose class="hidden md:block" />
-          <SfIconClose size="sm" class="md:hidden block" />
-        </button>
-      </div>
-    </div>
-    <div
-      role="alert"
-      class="flex items-start md:items-center max-w-[600px] shadow-md bg-negative-100 pr-2 pl-4 ring-1 ring-negative-300 typography-text-sm md:typography-text-base py-1 rounded-md"
-      v-if="showErrorAlert"
-    >
-      <p class="py-2 mr-2">
-        {{ apiError }}
-      </p>
-      <button
-        type="button"
-        class="p-1.5 md:p-2 ml-auto rounded-md text-negative-700 hover:bg-negative-200 active:bg-negative-300 hover:text-negative-800 active:text-negative-900"
-        aria-label="Close error alert"
-        @click="showErrorAlert = false"
-      >
-        <SfIconClose class="hidden md:block" />
-        <SfIconClose size="sm" class="md:hidden block" />
-      </button>
     </div>
   </div>
 </template>
