@@ -33,6 +33,29 @@ websiteOrderLine {
   quantity
   priceTotal
 }
+reportOrderLine {
+  id
+  name
+  priceSubtotal
+  product {
+    id
+    name
+    image
+    imageFilename
+    displayName
+    combinationInfo
+    slug
+    variantAttributeValues{
+      id
+      name
+      attribute{
+        name
+      }
+    }
+  }
+  quantity
+  priceTotal
+}
 orderLines {
   id
   name

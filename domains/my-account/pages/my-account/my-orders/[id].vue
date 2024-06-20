@@ -21,8 +21,8 @@ watch(
   { immediate: true }
 );
 
-const webSiteOrderLinesWithoutUndefinedProducts = computed(() => {
-  return order.value?.websiteOrderLine?.filter((item) => item.product !== null);
+const linesWithoutUndefinedProducts = computed(() => {
+  return order.value?.reportOrderLine?.filter((item) => item.product !== null);
 });
 
 const NuxtLink = resolveComponent("NuxtLink");
@@ -104,7 +104,7 @@ const NuxtLink = resolveComponent("NuxtLink");
           </thead>
           <tbody>
             <tr
-              v-for="(line, i) in webSiteOrderLinesWithoutUndefinedProducts"
+              v-for="(line, i) in linesWithoutUndefinedProducts"
               :key="i"
               class="border-b border-neutral-200 align-top"
             >
