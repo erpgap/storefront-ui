@@ -235,11 +235,11 @@ const handleCloseModal = () => {
                 {{ $t("form.selectPlaceholder") }}
               </option>
               <option
-                v-for="country in countries"
-                :key="country.id"
-                :value="country.id"
+                v-for="country in countries.countries"
+                :key="country?.id"
+                :value="country?.id"
               >
-                {{ country.name }}
+                {{ country?.name }}
               </option>
             </SfSelect>
           </label>
