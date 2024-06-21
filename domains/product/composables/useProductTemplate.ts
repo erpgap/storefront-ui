@@ -9,7 +9,7 @@ import { useProductAttributes } from "./useProductAttributes";
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 export const useProductTemplate = (slug: string) => {
-  const { $sdk } = useNuxtApp();
+  const { $sdk, $getImage } = useNuxtApp();
 
   const loadingProductTemplate = ref(false);
   const productTemplate = useState<Product>(
@@ -17,14 +17,21 @@ export const useProductTemplate = (slug: string) => {
     () => ({}) as Product
   );
 
-  const withBase = (filepath: string | null) =>
-    `https://vsfdemo17.labs.odoogap.com${filepath}`;
-
   const images = computed(() => {
     return [
       {
-        imageSrc: withBase(productTemplate?.value?.image),
-        imageThumbSrc: withBase(productTemplate?.value?.image),
+        imageSrc: $getImage(
+          String(productTemplate.value.image),
+          300,
+          400,
+          String(productTemplate.value.name)
+        ),
+        imageThumbSrc: $getImage(
+          String(productTemplate.value.image),
+          300,
+          400,
+          String(productTemplate.value.name)
+        ),
         alt: productTemplate?.value?.name,
       },
     ];
