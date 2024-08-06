@@ -1,12 +1,13 @@
 import type {
   Cart,
   CartAddItemResponse,
+  CartLineInput,
   CartRemoveItemResponse,
   CartResponse,
   CartUpdateItemResponse,
-  MutationCartAddItemArgs,
-  MutationCartRemoveItemArgs,
-  MutationCartUpdateItemArgs,
+  MutationCartAddMultipleItemsArgs,
+  MutationCartRemoveMultipleItemsArgs,
+  MutationCartUpdateMultipleItemsArgs,
 } from "~/graphql";
 import { MutationName } from "~/server/mutations";
 import { useToast } from "vue-toastification";
@@ -35,56 +36,66 @@ export const useCart = () => {
     cart.value = data?.value?.cart || ({} as Cart);
   };
 
-  const cartAdd = async (productId: number, quantity: number) => {
+  const cartAdd = async (id: number, quantity: number) => {
     loading.value = true;
 
+    const params: MutationCartAddMultipleItemsArgs = {
+      products: [{ id, quantity }],
+    };
+
     const { data, error } = await $sdk().odoo.mutation<
-      MutationCartAddItemArgs,
+      MutationCartAddMultipleItemsArgs,
       CartAddItemResponse
-    >({ mutationName: MutationName.CartAddItem }, { productId, quantity });
+    >({ mutationName: MutationName.CartAddItem }, params);
     loading.value = false;
 
     if (error.value) {
       return toast.error(error.value.data.message);
     }
 
-    cart.value = data.value.cartAddItem;
+    cart.value = data.value.cartAddMultipleItems;
 
     toast.success("Product has been added to cart");
   };
 
-  const updateItemQuantity = async (lineId: number, quantity: number) => {
+  const updateItemQuantity = async (id: number, quantity: number) => {
     loading.value = true;
+
+    const params: MutationCartUpdateMultipleItemsArgs = {
+      lines: [{ id, quantity }],
+    };
+
     const { data, error } = await $sdk().odoo.mutation<
-      MutationCartUpdateItemArgs,
+      MutationCartUpdateMultipleItemsArgs,
       CartUpdateItemResponse
-    >(
-      { mutationName: MutationName.CartUpdateQuantity },
-      { lineId, quantity: Number(quantity) }
-    );
+    >({ mutationName: MutationName.CartUpdateQuantity }, params);
     loading.value = false;
 
     if (error.value) {
       return toast.error(error.value.data.message);
     }
 
-    cart.value = data.value.cartUpdateItem;
+    cart.value = data.value.cartUpdateMultipleItems;
     toast.success("Product updated successfully");
   };
 
   const removeItemFromCart = async (lineId: number) => {
+    const params: MutationCartRemoveMultipleItemsArgs = {
+      lineIds: [lineId],
+    };
+
     loading.value = true;
     const { data, error } = await $sdk().odoo.mutation<
-      MutationCartRemoveItemArgs,
+      MutationCartRemoveMultipleItemsArgs,
       CartRemoveItemResponse
-    >({ mutationName: MutationName.CartRemoveItem }, { lineId });
+    >({ mutationName: MutationName.CartRemoveItem }, params);
     loading.value = false;
 
     if (error.value) {
       return toast.error(error.value.data.message);
     }
 
-    cart.value = data.value.cartRemoveItem;
+    cart.value = data.value.cartRemoveMultipleItems;
     toast.success("Product removed successfully");
   };
 

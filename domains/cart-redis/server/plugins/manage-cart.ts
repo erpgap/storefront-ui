@@ -31,7 +31,7 @@ async function cartAddItem(event: any, body: any) {
       keyName
     )) || { cart: {} };
 
-    const cart = Object.assign({}, currentCart.cart, body.cartAddItem);
+    const cart = Object.assign({}, currentCart.cart, body.cartAddMultipleItems);
     useStorage().setItem(keyName, { cart });
   }
 }
@@ -48,7 +48,11 @@ async function cartRemoveItem(event: any, body: any) {
       keyName
     )) || { cart: {} };
 
-    const cart = Object.assign({}, currentCart.cart, body.cartRemoveItem);
+    const cart = Object.assign(
+      {},
+      currentCart.cart,
+      body.cartRemoveMultipleItems
+    );
     await useStorage().setItem(keyName, { cart });
   }
 }
@@ -65,7 +69,11 @@ async function cartUpdateItem(event: any, body: any) {
       keyName
     )) || { cart: {} };
 
-    const cart = Object.assign({}, currentCart.cart, body.cartUpdateItem);
+    const cart = Object.assign(
+      {},
+      currentCart.cart,
+      body.cartUpdateMultipleItems
+    );
     await useStorage().setItem(keyName, { cart });
   }
 }
