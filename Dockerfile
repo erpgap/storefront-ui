@@ -1,4 +1,4 @@
-ARG NODE_VERSION=20.8
+ARG NODE_VERSION=20.10
 ARG YARN_VERSION=3.6.1
 ARG NUXT_PUBLIC_ODOO_BASE_URL="https://vsfdemo15.labs.odoogap.com/"
 ARG NUXT_PUBLIC_ODOO_BASE_IMAGE_URL="https://vsfdemo15.labs.odoogap.com/"
