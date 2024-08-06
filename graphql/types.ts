@@ -97,20 +97,20 @@ export type CartResponse = AsyncData<
 
 export type CartAddItemResponse = AsyncData<
   {
-    cartAddItem: Cart;
+    cartAddMultipleItems: Cart;
   },
   H3Error
 >;
 export type CartUpdateItemResponse = AsyncData<
   {
-    cartUpdateItem: Cart;
+    cartUpdateMultipleItems: Cart;
   },
   H3Error
 >;
 
 export type CartRemoveItemResponse = AsyncData<
   {
-    cartRemoveItem: Cart;
+    cartRemoveMultipleItems: Cart;
   },
   H3Error
 >;

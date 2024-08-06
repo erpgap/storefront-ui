@@ -111,9 +111,9 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    "/": { swr: 3600 },
-    "/category/*": { swr: 3600 },
-    "/product/*": { swr: 3600 },
+    "/": { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+    "/category/*": { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+    "/product/*": { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
     "/_ipx/**": {
       headers: { "cache-control": "public, max-age=31536000, immutable" },
     },

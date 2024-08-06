@@ -132,6 +132,10 @@ export type Category = {
   childs: Maybe<Array<Category>>;
   id: Scalars['Int']['output'];
   jsonLd: Maybe<Scalars['GenericScalar']['output']>;
+  metaDescription: Maybe<Scalars['String']['output']>;
+  metaImage: Maybe<Scalars['String']['output']>;
+  metaKeyword: Maybe<Scalars['String']['output']>;
+  metaTitle: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   parent: Maybe<Category>;
   products: Maybe<Array<Product>>;
@@ -387,18 +391,12 @@ export type Mutation = {
   applyCoupon: Maybe<ApplyCoupon>;
   /** Apply Gift Card */
   applyGiftCard: Maybe<ApplyGiftCard>;
-  /** Add Item */
-  cartAddItem: Maybe<CartData>;
   /** Add Multiple Items */
   cartAddMultipleItems: Maybe<CartData>;
   /** Cart Clear */
   cartClear: Maybe<Order>;
-  /** Remove Item */
-  cartRemoveItem: Maybe<CartData>;
   /** Remove Multiple Items */
   cartRemoveMultipleItems: Maybe<CartData>;
-  /** Update Item */
-  cartUpdateItem: Maybe<CartData>;
   /** Update Multiple Items */
   cartUpdateMultipleItems: Maybe<CartData>;
   /** Set new user's password with the token from the change password url received in the email. */
@@ -488,30 +486,13 @@ export type MutationApplyGiftCardArgs = {
 };
 
 
-export type MutationCartAddItemArgs = {
-  productId: Scalars['Int']['input'];
-  quantity: Scalars['Int']['input'];
-};
-
-
 export type MutationCartAddMultipleItemsArgs = {
   products: Array<InputMaybe<ProductInput>>;
 };
 
 
-export type MutationCartRemoveItemArgs = {
-  lineId: Scalars['Int']['input'];
-};
-
-
 export type MutationCartRemoveMultipleItemsArgs = {
   lineIds: Array<InputMaybe<Scalars['Int']['input']>>;
-};
-
-
-export type MutationCartUpdateItemArgs = {
-  lineId: Scalars['Int']['input'];
-  quantity: Scalars['Int']['input'];
 };
 
 
@@ -812,6 +793,7 @@ export type Product = {
   jsonLd: Maybe<Scalars['GenericScalar']['output']>;
   mediaGallery: Maybe<Array<ProductImage>>;
   metaDescription: Maybe<Scalars['String']['output']>;
+  metaImage: Maybe<Scalars['String']['output']>;
   metaKeyword: Maybe<Scalars['String']['output']>;
   metaTitle: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
@@ -840,6 +822,7 @@ export type Product = {
   /** Specific to Product Variant */
   variantPriceAfterDiscount: Maybe<Scalars['Float']['output']>;
   visibility: Maybe<Scalars['Int']['output']>;
+  websiteDescription: Maybe<Scalars['String']['output']>;
   weight: Maybe<Scalars['Float']['output']>;
 };
 
@@ -1063,6 +1046,21 @@ export type QueryProductsArgs = {
   pageSize?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<ProductSortInput>;
+};
+
+
+export type QueryWebsiteFooterArgs = {
+  noParent: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryWebsiteMegaMenuArgs = {
+  noParent: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryWebsiteMenuArgs = {
+  noParent: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Ribbon = {
