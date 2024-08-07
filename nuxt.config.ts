@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   },
   extends: [
     "./domains/auth",
+    "./domains/recent-view-products",
     //"./domains/cart-odoo",
     "./domains/cart-redis",
     "./domains/category",
