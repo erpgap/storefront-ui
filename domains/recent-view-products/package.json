@@ -1,0 +1,11 @@
+{
+  "name": "@erpgap/recent-view-products",
+  "private": false,
+  "type": "module",
+  "version": "0.0.2",
+  "scripts": {},
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
+}
