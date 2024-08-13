@@ -9,12 +9,12 @@ const value = ref('');
       <SfInput
         v-model="value"
         size="lg"
-        placeholder="Discount code or gift card"
+        :placeholder="$t('checkoutPayment.discountOrGiftcard')"
       />
     </div>
 
     <SfButton :disabled="!value" size="lg" variant="secondary">
-      Apply
+      {{ $t('apply') }}
     </SfButton>
   </div>
 </template>

@@ -107,7 +107,8 @@
     "creditCard": "Credit Card",
     "paypalIconAlt": "Paypal Icon",
     "applePayIconAlt": "Apple Pay Icon",
-    "googlePayIconAlt": "Google Pay icon"
+    "googlePayIconAlt": "Google Pay icon",
+    "discountOrGiftcard": "Discount or gift card"
   },
   "shippingMethod": {
     "heading": "Shipping details",
