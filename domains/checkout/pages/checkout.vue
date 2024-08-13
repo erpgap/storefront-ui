@@ -26,8 +26,6 @@ const {
   loading: paymentLoading,
 } = usePayment();
 
-const discountCode = ref('');
-
 await loadUser(true);
 await Promise.all([
   loadCart(false),
