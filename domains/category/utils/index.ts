@@ -21,7 +21,7 @@ export const sortOptions = [
   {
     id: 'popular desc',
     value: 'popular,DESC',
-    attrName: 'Most popular',
+    attrName: 'Most Popular',
     type: '',
   },
   {
