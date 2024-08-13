@@ -45,6 +45,7 @@
   "promoCodePlaceholder": "Enter promo code",
   "delivery": "Delivery",
   "promoCode": "Promo Code ({count})",
+  "discounts": "Discounts ({count})",
   "giftCard": "Gift Card ({count})",
   "remove": "Remove",
   "emptyCart": "Your cart is empty",

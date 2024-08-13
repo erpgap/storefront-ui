@@ -13,7 +13,7 @@ const props = defineProps({
     class="flex justify-between typography-text-base mb-2"
   >
     <p class="flex grow pr-2">
-      {{ $t('promoCode', { count: order.coupons.length }) }}
+      {{ $t('discounts', { count: order.coupons.length }) }}
     </p>
     <p class="flex text-right">
       {{ $currency(Number(order?.amountDiscounts)) }}
