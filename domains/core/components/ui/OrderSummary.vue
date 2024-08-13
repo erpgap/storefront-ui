@@ -36,7 +36,28 @@ const { cart } = useCart();
           <p>{{ $currency(Number(cart?.order?.amountTax)) }}</p>
         </div>
       </div>
-      <UiOrderSummaryDiscount :order="cart?.order" />
+      <div
+        v-if="cart.order?.coupons"
+        class="flex justify-between typography-text-base mb-2"
+      >
+        <p class="flex grow pr-2">
+          {{ $t('discounts', { count: cart.order.coupons.length }) }}
+        </p>
+        <p class="flex text-right">
+          {{ $currency(Number(cart.order?.amountDiscounts)) }}
+        </p>
+      </div>
+      <div
+        v-if="cart.order?.giftCards"
+        class="flex justify-between typography-text-base mb-4"
+      >
+        <p class="flex grow pr-2">
+          {{ $t('giftCard', { count: cart.order.giftCards.length }) }}
+        </p>
+        <p class="flex text-right">
+          {{ $currency(Number(cart.order?.amountGiftCards)) }}
+        </p>
+      </div>
       <div
         class="flex justify-between typography-headline-4 md:typography-headline-3 font-bold pb-4 mb-4"
       >

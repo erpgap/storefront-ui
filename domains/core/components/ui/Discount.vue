@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { SfButton, SfInput } from '@storefront-ui/vue';
 const { applyDiscount, loading } = useDiscount();
-const { cart } = useCart();
 
 const promo = ref('');
 

@@ -167,7 +167,6 @@ const selectedProvider = ref<PaymentProvider | null>(null);
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0 mb-10" />
         </div>
         <div class="col-span-5 md:sticky md:top-20 h-fit">
-          <CheckoutDiscount />
           <UiOrderSummary>
             <SfButton
               size="lg"
