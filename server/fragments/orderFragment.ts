@@ -4,6 +4,16 @@ amountTotal
 amountTax
 amountDelivery
 amountSubtotal
+amountDiscounts
+amountGiftCards
+coupons {
+  id
+  code
+}
+giftCards {
+  id
+  code
+}
 dateOrder
 orderUrl
 stage
@@ -14,6 +24,14 @@ websiteOrderLine {
   id
   name
   priceSubtotal
+  coupon {
+    id
+  code
+  }
+  giftCard {
+    id
+    code
+  }
   product {
     id
     name

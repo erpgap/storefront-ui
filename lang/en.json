@@ -44,7 +44,8 @@
   "savingsTag": "You are saving {amount} on your order today!",
   "promoCodePlaceholder": "Enter promo code",
   "delivery": "Delivery",
-  "promoCode": "Promo Code",
+  "promoCode": "Promo Code ({count})",
+  "giftCard": "Gift Card ({count})",
   "remove": "Remove",
   "emptyCart": "Your cart is empty",
   "emptyCartImgAlt": "empty cart image",
@@ -108,7 +109,7 @@
     "paypalIconAlt": "Paypal Icon",
     "applePayIconAlt": "Apple Pay Icon",
     "googlePayIconAlt": "Google Pay icon",
-    "discountOrGiftcard": "Discount or gift card"
+    "promoOrGiftcard": "Promo code or gift card"
   },
   "shippingMethod": {
     "heading": "Shipping details",

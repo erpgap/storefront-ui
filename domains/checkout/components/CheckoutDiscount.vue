@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { SfButton, SfInput } from '@storefront-ui/vue';
 const { applyDiscount, loading } = useDiscount();
+const { cart } = useCart();
 
 const promo = ref('');
 
@@ -15,7 +16,7 @@ const handleApplyPromo = async () => {
       <SfInput
         v-model="promo"
         size="lg"
-        :placeholder="$t('checkoutPayment.discountOrGiftcard')"
+        :placeholder="$t('checkoutPayment.promoOrGiftcard')"
       />
     </div>
 

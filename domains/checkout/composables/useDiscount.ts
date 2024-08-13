@@ -41,7 +41,7 @@ export const useDiscount = () => {
       return toast.error(response.error.value.data.message);
     }
 
-    await loadCart(true);
+    await loadCart(false);
     toast.success('Promotion has been applied!');
   };
 
