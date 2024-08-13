@@ -76,14 +76,26 @@ export type AdyenTransactionResult = {
   transaction: Maybe<Scalars['GenericScalar']['output']>;
 };
 
-export type ApplyCoupon = {
-  __typename?: 'ApplyCoupon';
+export type ApplyCouponList = ApplyCoupons & {
+  __typename?: 'ApplyCouponList';
   error: Maybe<Scalars['String']['output']>;
+  order: Maybe<Order>;
 };
 
-export type ApplyGiftCard = {
-  __typename?: 'ApplyGiftCard';
+export type ApplyCoupons = {
   error: Maybe<Scalars['String']['output']>;
+  order: Maybe<Order>;
+};
+
+export type ApplyGiftCardList = ApplyGiftCards & {
+  __typename?: 'ApplyGiftCardList';
+  error: Maybe<Scalars['String']['output']>;
+  order: Maybe<Order>;
+};
+
+export type ApplyGiftCards = {
+  error: Maybe<Scalars['String']['output']>;
+  order: Maybe<Order>;
 };
 
 export type Attribute = {
@@ -131,6 +143,8 @@ export type Category = {
   __typename?: 'Category';
   childs: Maybe<Array<Category>>;
   id: Scalars['Int']['output'];
+  image: Maybe<Scalars['String']['output']>;
+  imageFilename: Maybe<Scalars['String']['output']>;
   jsonLd: Maybe<Scalars['GenericScalar']['output']>;
   metaDescription: Maybe<Scalars['String']['output']>;
   metaImage: Maybe<Scalars['String']['output']>;
@@ -226,6 +240,25 @@ export type GiftCard = {
   __typename?: 'GiftCard';
   code: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
+};
+
+export type Homepage = {
+  jsonLd: Maybe<Scalars['GenericScalar']['output']>;
+  metaDescription: Maybe<Scalars['String']['output']>;
+  metaImage: Maybe<Scalars['String']['output']>;
+  metaImageFilename: Maybe<Scalars['String']['output']>;
+  metaKeyword: Maybe<Scalars['String']['output']>;
+  metaTitle: Maybe<Scalars['String']['output']>;
+};
+
+export type HomepageList = Homepage & {
+  __typename?: 'HomepageList';
+  jsonLd: Maybe<Scalars['GenericScalar']['output']>;
+  metaDescription: Maybe<Scalars['String']['output']>;
+  metaImage: Maybe<Scalars['String']['output']>;
+  metaImageFilename: Maybe<Scalars['String']['output']>;
+  metaKeyword: Maybe<Scalars['String']['output']>;
+  metaTitle: Maybe<Scalars['String']['output']>;
 };
 
 export type Invoice = {
@@ -388,9 +421,9 @@ export type Mutation = {
   /** Create Adyen Transaction */
   adyenTransaction: Maybe<AdyenTransactionResult>;
   /** Apply Coupon */
-  applyCoupon: Maybe<ApplyCoupon>;
+  applyCoupon: Maybe<ApplyCouponList>;
   /** Apply Gift Card */
-  applyGiftCard: Maybe<ApplyGiftCard>;
+  applyGiftCard: Maybe<ApplyGiftCardList>;
   /** Add Multiple Items */
   cartAddMultipleItems: Maybe<CartData>;
   /** Cart Clear */
@@ -688,6 +721,7 @@ export type Partner = {
   email: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
+  imageFilename: Maybe<Scalars['String']['output']>;
   isCompany: Scalars['Boolean']['output'];
   isPublic: Maybe<Scalars['Boolean']['output']>;
   mobile: Maybe<Scalars['String']['output']>;
@@ -720,6 +754,7 @@ export type PaymentMethod = {
   code: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
+  imageFilename: Maybe<Scalars['String']['output']>;
   imagePaymentForm: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   providers: Maybe<Array<PaymentProvider>>;
@@ -863,6 +898,8 @@ export type ProductList = Products & {
 export type ProductSortInput = {
   id: InputMaybe<SortEnum>;
   name: InputMaybe<SortEnum>;
+  newest: InputMaybe<SortEnum>;
+  popular: InputMaybe<SortEnum>;
   price: InputMaybe<SortEnum>;
 };
 
@@ -923,6 +960,7 @@ export type Query = {
   productVariant: ProductVariant;
   products: Maybe<Products>;
   websiteFooter: Maybe<Array<WebsiteMenu>>;
+  websiteHomepage: Maybe<Homepage>;
   websiteMegaMenu: Maybe<Array<WebsiteMenu>>;
   websiteMenu: Maybe<Array<WebsiteMenu>>;
   wishlistItems: Maybe<WishlistData>;
@@ -1150,6 +1188,7 @@ export type WebsiteMenuImage = {
   buttonUrl: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
+  imageFilename: Maybe<Scalars['String']['output']>;
   sequence: Maybe<Scalars['Int']['output']>;
   subtitle: Maybe<Scalars['String']['output']>;
   tag: Maybe<Scalars['String']['output']>;
