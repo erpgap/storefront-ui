@@ -6,6 +6,12 @@ export default gql`
       id
       name
       slug
+      metaTitle
+      metaImage
+      imageFilename
+      metaKeyword
+      metaDescription
+      jsonLd
       childs {
         id
         name
