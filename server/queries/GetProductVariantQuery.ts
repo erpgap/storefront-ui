@@ -1,7 +1,10 @@
 import { gql } from '@apollo/client/core';
 export default gql`
   query ProductVariant($productTemplateId: Int, $combinationId: [Int]) {
-    productVariant(productTemplateId: $productTemplateId, combinationId: $combinationId) {
+    productVariant(
+      productTemplateId: $productTemplateId
+      combinationId: $combinationId
+    ) {
       product {
         id
         smallImage
@@ -12,6 +15,10 @@ export default gql`
         imageFilename
         combinationInfoVariant
         slug
+        metaTitle
+        metaImage
+        metaKeyword
+        metaDescription
         jsonLd
         isInWishlist
         categories {
