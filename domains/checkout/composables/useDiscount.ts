@@ -1,6 +1,7 @@
 import { useToast } from 'vue-toastification';
 import type {
   ApplyGiftCardResponse,
+  MakeGiftCardPaymentResponse,
   MutationApplyCouponArgs,
   MutationApplyGiftCardArgs,
 } from '~/graphql';
@@ -45,8 +46,25 @@ export const useDiscount = () => {
     toast.success('Promotion has been applied!');
   };
 
+  const makeGiftCardPayment = async () => {
+    loading.value = true;
+
+    const { data, error } = await $sdk().odoo.mutation<
+      null,
+      MakeGiftCardPaymentResponse
+    >({ mutationName: MutationName.MakeGiftCardPaymentMutation });
+
+    if (error.value) {
+      return toast.error(error.value.data.message);
+    }
+    loading.value = false;
+
+    return data.value;
+  };
+
   return {
     loading,
     applyDiscount,
+    makeGiftCardPayment,
   };
 };

@@ -16,6 +16,7 @@ import LoginMutation from './LoginMutation';
 import LogoutMutation from './LogoutMutation';
 import RegisterUserMutation from './RegisterUserMutation';
 import SendResetPasswordMutation from './SendResetPasswordMutation';
+import MakeGiftCardPaymentMutation from './MakeGiftCardPaymentMutation';
 import UpdateAddress from './UpdateAddress';
 import UpdateMyAccountMutation from './UpdateMyAccountMutation';
 import UpdatePasswordMutation from './UpdatePasswordMutation';
@@ -53,6 +54,7 @@ enum MutationName {
   NewsletterSubscribeMutation = 'NewsletterSubscribeMutation',
   ApplyGiftCardMutation = 'ApplyGiftCardMutation',
   ApplyCouponMutation = 'ApplyCouponMutation',
+  MakeGiftCardPaymentMutation = 'MakeGiftCardPaymentMutation',
 }
 
 const Mutations: Record<MutationName, DocumentNode> = {
@@ -82,6 +84,7 @@ const Mutations: Record<MutationName, DocumentNode> = {
   NewsletterSubscribeMutation,
   ApplyGiftCardMutation,
   ApplyCouponMutation,
+  MakeGiftCardPaymentMutation,
 };
 
 export { Mutations, MutationName };

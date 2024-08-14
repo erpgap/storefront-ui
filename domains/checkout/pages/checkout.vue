@@ -20,6 +20,8 @@ const { loadCountries } = useCountryList();
 const { user, loadUser } = useAuth();
 
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
+const { makeGiftCardPayment, loading: discountLoading } = useDiscount();
+
 const {
   loadPaymentMethods,
   paymentProviders,
@@ -45,6 +47,24 @@ const showPaymentModal = ref(false);
 const isPaymentReady = ref(false);
 const providerPaymentHandler = ref();
 const loading = ref(false);
+
+const handleGiftCardPayment = async () => {
+  const paymentProcessed = await makeGiftCardPayment();
+
+  if (paymentProcessed) {
+    router.push('/checkout/thank-you');
+    return;
+  }
+
+  router.push('/payment-fail');
+};
+
+const hasFullPaymentWithGiftCard = computed(() => {
+  return (
+    cart.value.order?.amountTotal === 0 &&
+    cart.value.order?.giftCards?.length > 0
+  );
+});
 
 onMounted(() => {
   if (paymentProviders?.value?.length) {
@@ -167,6 +187,16 @@ const selectedProvider = ref<PaymentProvider | null>(null);
         <div class="col-span-5 md:sticky md:top-20 h-fit">
           <UiOrderSummary>
             <SfButton
+              v-if="hasFullPaymentWithGiftCard"
+              size="lg"
+              class="w-full mb-4 md:mb-0"
+              :disabled="discountLoading"
+              @click="handleGiftCardPayment"
+            >
+              {{ $t('placeOrder') }}
+            </SfButton>
+            <SfButton
+              v-else
               size="lg"
               class="w-full mb-4 md:mb-0"
               :disabled="!selectedProvider || !isPaymentReady || loading"

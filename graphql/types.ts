@@ -103,7 +103,14 @@ export type CartAddItemResponse = AsyncData<
 >;
 export type ApplyGiftCardResponse = AsyncData<
   {
+    order: Order;
     error: string;
+  },
+  H3Error
+>;
+export type MakeGiftCardPaymentResponse = AsyncData<
+  {
+    done: Boolean;
   },
   H3Error
 >;
