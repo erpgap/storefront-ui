@@ -52,7 +52,7 @@ const handleGiftCardPayment = async () => {
   const paymentProcessed = await makeGiftCardPayment();
 
   if (paymentProcessed) {
-    router.push('/checkout/thank-you');
+    router.push('/thank-you');
     return;
   }
 
