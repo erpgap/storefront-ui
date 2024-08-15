@@ -259,6 +259,18 @@ export type DeliveryMethodListResponse = AsyncData<
   H3Error
 >;
 
+export type WebsiteHomepageResponse = AsyncData<
+  {
+    metaTitle: String;
+    metaImage: String;
+    metaImageFilename: String;
+    metaKeyword: String;
+    metaDescription: String;
+    jsonLd: String;
+  },
+  H3Error
+>;
+
 export type PaymentMethodListResponse = AsyncData<
   {
     paymentProviders: PaymentProvider[];
