@@ -54,10 +54,12 @@ export const useDiscount = () => {
       MakeGiftCardPaymentResponse
     >({ mutationName: MutationName.MakeGiftCardPaymentMutation });
 
-    if (error.value) {
-      return toast.error(error.value.data.message);
-    }
     loading.value = false;
+
+    if (error.value) {
+      toast.error(error.value.data.message);
+      return;
+    }
 
     return data.value;
   };
