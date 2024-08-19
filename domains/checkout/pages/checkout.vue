@@ -7,11 +7,11 @@ import {
   SfListItem,
   SfLoaderCircular,
   SfRadio,
-} from "@storefront-ui/vue";
+} from '@storefront-ui/vue';
 
-import { AddressEnum, type Partner, type PaymentProvider } from "~/graphql";
-import { useCountryList } from "~/domains/core/composable/useCountryList";
-const NuxtLink = resolveComponent("NuxtLink");
+import { AddressEnum, type Partner, type PaymentProvider } from '~/graphql';
+import { useCountryList } from '~/domains/core/composable/useCountryList';
+const NuxtLink = resolveComponent('NuxtLink');
 
 const { cart, loadCart, totalItemsInCart } = useCart();
 const router = useRouter();
@@ -20,6 +20,8 @@ const { loadCountries } = useCountryList();
 const { user, loadUser } = useAuth();
 
 const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
+const { makeGiftCardPayment, loading: discountLoading } = useDiscount();
+
 const {
   loadPaymentMethods,
   paymentProviders,
@@ -36,7 +38,7 @@ await Promise.all([
 ]);
 
 if (totalItemsInCart?.value === 0) {
-  router.push("/category/53");
+  router.push('/category/53');
 }
 
 const isLoading = false;
@@ -45,6 +47,24 @@ const showPaymentModal = ref(false);
 const isPaymentReady = ref(false);
 const providerPaymentHandler = ref();
 const loading = ref(false);
+
+const handleGiftCardPayment = async () => {
+  const paymentProcessed = await makeGiftCardPayment();
+
+  if (paymentProcessed) {
+    router.push('/thank-you');
+    return;
+  }
+
+  router.push('/payment-fail');
+};
+
+const hasFullPaymentWithGiftCard = computed(() => {
+  return (
+    cart.value.order?.amountTotal === 0 &&
+    cart.value.order?.giftCards?.length > 0
+  );
+});
 
 onMounted(() => {
   if (paymentProviders?.value?.length) {
@@ -56,7 +76,7 @@ onBeforeUnmount(() => {
   showPaymentModal.value = false;
 });
 
-const radioModel = ref("1");
+const radioModel = ref('1');
 const selectedProvider = ref<PaymentProvider | null>(null);
 </script>
 
@@ -76,7 +96,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
         <template #prefix>
           <SfIconArrowBack />
         </template>
-        {{ $t("back") }}
+        {{ $t('back') }}
       </SfButton>
       <SfButton
         :tag="NuxtLink"
@@ -87,7 +107,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
         <template #prefix>
           <SfIconArrowBack />
         </template>
-        {{ $t("backToCart") }}
+        {{ $t('backToCart') }}
       </SfButton>
     </div>
     <span v-if="isLoading" class="!flex justify-center my-40 h-24">
@@ -124,7 +144,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
           <div data-testid="shipping-method" class="md:px-4 my-6">
             <div class="flex justify-between items-center">
               <h3 class="text-neutral-900 text-lg font-bold">
-                {{ $t("shippingMethod.heading") }}
+                {{ $t('shippingMethod.heading') }}
               </h3>
             </div>
             <div class="mt-4">
@@ -152,7 +172,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
 
               <div v-else class="flex mb-6">
                 <SfIconBlock class="mr-2 text-neutral-500" />
-                <p>{{ $t("shippingMethod.description") }}</p>
+                <p>{{ $t('shippingMethod.description') }}</p>
               </div>
             </div>
           </div>
@@ -164,49 +184,61 @@ const selectedProvider = ref<PaymentProvider | null>(null);
           />
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0 mb-10" />
         </div>
-        <UiOrderSummary class="col-span-5 md:sticky md:top-20 h-fit">
-          <SfButton
-            size="lg"
-            class="w-full mb-4 md:mb-0"
-            :disabled="!selectedProvider || !isPaymentReady || loading"
-            @click="providerPaymentHandler"
-          >
-            {{ $t("placeOrder") }}
-          </SfButton>
-          <p class="text-sm text-center mt-4 pb-4 md:pb-0">
-            <i18n-t keypath="termsInfo" scope="global">
-              <template #terms>
-                <SfLink
-                  href="#"
-                  class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
-                >
-                  {{ $t("termsAndConditions") }}
-                </SfLink>
-              </template>
-              <template #privacyPolicy>
-                <SfLink
-                  href="#"
-                  class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
-                >
-                  {{ $t("privacyPolicy") }}
-                </SfLink>
-              </template>
-            </i18n-t>
-          </p>
+        <div class="col-span-5 md:sticky md:top-20 h-fit">
+          <UiOrderSummary>
+            <SfButton
+              v-if="hasFullPaymentWithGiftCard"
+              size="lg"
+              class="w-full mb-4 md:mb-0"
+              :disabled="discountLoading"
+              @click="handleGiftCardPayment"
+            >
+              {{ $t('placeOrder') }}
+            </SfButton>
+            <SfButton
+              v-else
+              size="lg"
+              class="w-full mb-4 md:mb-0"
+              :disabled="!selectedProvider || !isPaymentReady || loading"
+              @click="providerPaymentHandler"
+            >
+              {{ $t('placeOrder') }}
+            </SfButton>
+            <p class="text-sm text-center mt-4 pb-4 md:pb-0">
+              <i18n-t keypath="termsInfo" scope="global">
+                <template #terms>
+                  <SfLink
+                    href="#"
+                    class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
+                  >
+                    {{ $t('termsAndConditions') }}
+                  </SfLink>
+                </template>
+                <template #privacyPolicy>
+                  <SfLink
+                    href="#"
+                    class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
+                  >
+                    {{ $t('privacyPolicy') }}
+                  </SfLink>
+                </template>
+              </i18n-t>
+            </p>
 
-          <component
-            :is="getPaymentProviderComponentName(selectedProvider.code)"
-            :key="selectedProvider.id"
-            v-if="showPaymentModal && !!selectedProvider?.code"
-            :provider="selectedProvider"
-            :cart="cart"
-            @is-payment-ready="($event) => (isPaymentReady = $event)"
-            @provider-payment-handler="
-              ($event) => (providerPaymentHandler = $event)
-            "
-            @payment-loading="($event) => (loading = $event)"
-          />
-        </UiOrderSummary>
+            <component
+              :is="getPaymentProviderComponentName(selectedProvider.code)"
+              :key="selectedProvider.id"
+              v-if="showPaymentModal && !!selectedProvider?.code"
+              :provider="selectedProvider"
+              :cart="cart"
+              @is-payment-ready="($event) => (isPaymentReady = $event)"
+              @provider-payment-handler="
+                ($event) => (providerPaymentHandler = $event)
+              "
+              @payment-loading="($event) => (loading = $event)"
+            />
+          </UiOrderSummary>
+        </div>
       </div>
     </div>
   </div>

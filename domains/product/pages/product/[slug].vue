@@ -15,9 +15,9 @@ import {
   SfLink,
   SfRating,
   SfThumbnail,
-} from "@storefront-ui/vue";
-import type { LocationQueryRaw } from "vue-router";
-import type { OrderLine, Product } from "~/graphql";
+} from '@storefront-ui/vue';
+import type { LocationQueryRaw } from 'vue-router';
+import type { OrderLine, Product } from '~/graphql';
 
 const route = useRoute();
 const router = useRouter();
@@ -94,8 +94,12 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
   await wishlistRemoveItem(firstVariant.id);
 };
 
-await loadProductTemplate({ slug: route.path });
-await loadProductVariant(params.value);
+onMounted(async () => {
+  await loadProductTemplate({ slug: route.path });
+  await loadProductVariant(params.value);
+  useHead(productHead(productVariant.value, String(route.fullPath)));
+});
+
 addProductToRecentViews(productTemplate.value?.id);
 </script>
 
@@ -195,7 +199,7 @@ addProductToRecentViews(productTemplate.value?.id);
                   <template #prefix>
                     <SfIconShoppingCart size="sm" />
                   </template>
-                  {{ $t("addToCart") }}
+                  {{ $t('addToCart') }}
                 </SfButton>
               </div>
               <div class="flex justify-center mt-4 gap-x-4">
@@ -203,7 +207,7 @@ addProductToRecentViews(productTemplate.value?.id);
                   <template #prefix>
                     <SfIconCompareArrows size="sm" />
                   </template>
-                  {{ $t("compare") }}
+                  {{ $t('compare') }}
                 </SfButton>
                 <SfButton
                   type="button"
@@ -228,8 +232,8 @@ addProductToRecentViews(productTemplate.value?.id);
                   />
                   {{
                     isInWishlist(productVariant?.id as number)
-                      ? $t("wishlist.removeFromWishlist")
-                      : $t("wishlist.addToWishlist")
+                      ? $t('wishlist.removeFromWishlist')
+                      : $t('wishlist.addToWishlist')
                   }}
                 </SfButton>
               </div>
@@ -246,7 +250,7 @@ addProductToRecentViews(productTemplate.value?.id);
                   </template>
                   <template #addAddress>
                     <SfLink class="ml-1" href="#" variant="secondary">{{
-                      $t("additionalInfo.addAddress")
+                      $t('additionalInfo.addAddress')
                     }}</SfLink>
                   </template>
                 </i18n-t>
@@ -261,7 +265,7 @@ addProductToRecentViews(productTemplate.value?.id);
                 <i18n-t keypath="additionalInfo.pickup" scope="global">
                   <template #checkAvailability>
                     <SfLink class="ml-1" href="#" variant="secondary">{{
-                      $t("additionalInfo.checkAvailability")
+                      $t('additionalInfo.checkAvailability')
                     }}</SfLink>
                   </template>
                 </i18n-t>
@@ -275,7 +279,7 @@ addProductToRecentViews(productTemplate.value?.id);
               <i18n-t keypath="additionalInfo.returns" scope="global">
                 <template #details>
                   <SfLink class="ml-1" href="#" variant="secondary">{{
-                    $t("additionalInfo.details")
+                    $t('additionalInfo.details')
                   }}</SfLink>
                 </template>
               </i18n-t>
@@ -394,7 +398,7 @@ addProductToRecentViews(productTemplate.value?.id);
                 <h2
                   class="font-bold font-headings text-lg leading-6 md:text-2xl"
                 >
-                  {{ $t("productDetails") }}
+                  {{ $t('productDetails') }}
                 </h2>
               </template>
               <p>
@@ -409,7 +413,7 @@ addProductToRecentViews(productTemplate.value?.id);
                 <h2
                   class="font-bold font-headings text-lg leading-6 md:text-2xl"
                 >
-                  {{ $t("customerReviews") }}
+                  {{ $t('customerReviews') }}
                 </h2>
               </template>
               <p>
@@ -433,7 +437,7 @@ addProductToRecentViews(productTemplate.value?.id);
           width="300"
           height="300"
         />
-        <p class="mt-8 font-medium">{{ $t("emptyStateText") }}</p>
+        <p class="mt-8 font-medium">{{ $t('emptyStateText') }}</p>
       </div>
     </template>
   </NuxtErrorBoundary>

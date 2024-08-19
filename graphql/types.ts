@@ -19,9 +19,9 @@ import type {
   Countries,
   AddressEnum,
   State,
-} from "./gql/graphql";
-import type { H3Error } from "h3";
-import type { AsyncData } from "#app";
+} from './gql/graphql';
+import type { H3Error } from 'h3';
+import type { AsyncData } from '#app';
 
 export type CategoryListResponse = AsyncData<
   {
@@ -98,6 +98,19 @@ export type CartResponse = AsyncData<
 export type CartAddItemResponse = AsyncData<
   {
     cartAddMultipleItems: Cart;
+  },
+  H3Error
+>;
+export type ApplyGiftCardResponse = AsyncData<
+  {
+    order: Order;
+    error: string;
+  },
+  H3Error
+>;
+export type MakeGiftCardPaymentResponse = AsyncData<
+  {
+    done: Boolean;
   },
   H3Error
 >;
@@ -242,6 +255,18 @@ export type StatesResponse = AsyncData<
 export type DeliveryMethodListResponse = AsyncData<
   {
     deliveryMethods: ShippingMethod[];
+  },
+  H3Error
+>;
+
+export type WebsiteHomepageResponse = AsyncData<
+  {
+    metaTitle: String;
+    metaImage: String;
+    metaImageFilename: String;
+    metaKeyword: String;
+    metaDescription: String;
+    jsonLd: String;
   },
   H3Error
 >;
