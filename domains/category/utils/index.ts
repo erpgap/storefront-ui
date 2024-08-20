@@ -18,4 +18,16 @@ export const sortOptions = [
     attrName: 'Name: Z to A',
     type: '',
   },
+  {
+    id: 'popular desc',
+    value: 'popular,DESC',
+    attrName: 'Most Popular',
+    type: '',
+  },
+  {
+    id: 'newest desc',
+    value: 'newest,DESC',
+    attrName: 'Newest',
+    type: '',
+  },
 ];

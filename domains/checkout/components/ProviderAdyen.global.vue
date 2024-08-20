@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts" setup>
-import AdyenCheckout from "@adyen/adyen-web";
-import "@adyen/adyen-web/dist/adyen.css";
-import type { PaymentProvider } from "~/graphql";
+import AdyenCheckout from '@adyen/adyen-web';
+import '@adyen/adyen-web/dist/adyen.css';
+import type { PaymentProvider } from '~/graphql';
 
 interface AdyenDropinType {
   handleAction: (action: any) => void;
@@ -27,9 +27,9 @@ const props = defineProps({
   },
 });
 const emit = defineEmits([
-  "isPaymentReady",
-  "providerPaymentHandler",
-  "paymentLoading",
+  'isPaymentReady',
+  'providerPaymentHandler',
+  'paymentLoading',
 ]);
 const adyenDropin = ref<AdyenDropinType | null>(null);
 const router = useRouter();
@@ -55,24 +55,24 @@ onMounted(async () => {
   await getAdyenPaymentMethods();
 
   const configuration = {
-    locale: "en-EN",
-    environment: acquirerInfo.value.state === "test" ? "test" : "live",
+    locale: 'en-EN',
+    environment: acquirerInfo.value.state === 'test' ? 'test' : 'live',
     clientKey: acquirerInfo.value.client_key,
     paymentMethodsResponse: paymentMethods.value,
     analytics: {
       enabled: false,
     },
     onPaymentCompleted: (result: any, component: any) => {
-      router.push({ name: "paymentResponse" });
+      router.push({ name: 'paymentResponse' });
     },
     onError: (error: any, component: any) => {
       if (
-        error.errorText !== "error was cleared" &&
-        error.errorText !== "incomplete field"
+        error.errorText !== 'error was cleared' &&
+        error.errorText !== 'incomplete field'
       ) {
       }
 
-      emit("paymentLoading", false);
+      emit('paymentLoading', false);
     },
     onAdditionalDetails: async (state: any) => {
       await getAdyenPaymentDetails({
@@ -83,15 +83,15 @@ onMounted(async () => {
     },
     onChange: (state: any, component: { isValid: boolean }) => {
       if (component.isValid) {
-        emit("isPaymentReady", true);
+        emit('isPaymentReady', true);
         return;
       }
-      emit("isPaymentReady", false);
+      emit('isPaymentReady', false);
     },
 
     onSubmit: async (state: any) => {
-      emit("isPaymentReady", false);
-      emit("paymentLoading", true);
+      emit('isPaymentReady', false);
+      emit('paymentLoading', true);
       const response = await adyenMakeDirectPayment({
         providerId: props.provider.id,
         transactionReference: transaction.value.reference,
@@ -102,29 +102,29 @@ onMounted(async () => {
 
       if (response.action?.type) {
         adyenDropin.value?.handleAction(response.action);
-        emit("paymentLoading", false);
+        emit('paymentLoading', false);
         return;
       }
 
       const data = await getPaymentConfirmation();
       const paymentSuccess =
-        data?.order?.lastTransaction?.state === "Authorized" ||
-        data.order?.lastTransaction?.state === "Confirmed";
+        data?.order?.lastTransaction?.state === 'Authorized' ||
+        data.order?.lastTransaction?.state === 'Confirmed';
 
-      emit("paymentLoading", false);
+      emit('paymentLoading', false);
       if (paymentSuccess) {
-        router.push("/checkout/thank-you");
+        router.push('/thank-you');
         return;
       }
 
-      router.push("/payment-fail");
+      router.push('/payment-fail');
     },
   };
 
   const checkout = new AdyenCheckout(configuration);
 
   adyenDropin.value = checkout
-    .create("dropin", {
+    .create('dropin', {
       openFirstPaymentMethod: true,
       openFirstStoredPaymentMethod: false,
       showStoredPaymentMethods: false,
@@ -133,17 +133,17 @@ onMounted(async () => {
       setStatusAutomatically: true,
       onSelect: (component) => {
         if (component.isValid) {
-          emit("isPaymentReady", true);
+          emit('isPaymentReady', true);
           return;
         }
-        emit("isPaymentReady", false);
+        emit('isPaymentReady', false);
       },
     })
-    .mount("#dropin-container");
+    .mount('#dropin-container');
 
   loading.value = false;
 
-  emit("providerPaymentHandler", adyenDropin.value.submit);
+  emit('providerPaymentHandler', adyenDropin.value.submit);
 });
 
 onBeforeUnmount(() => {
