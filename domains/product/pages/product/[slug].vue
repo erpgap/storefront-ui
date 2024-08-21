@@ -50,16 +50,27 @@ const params = computed(() => ({
   productTemplateId: productTemplate?.value?.id,
 }));
 
-const selectedSize = computed(() => Number(route.query.Size));
-const selectedColor = computed(() => Number(route.query.Color));
-const selectedMaterial = computed(() => Number(route.query.Material));
+const selectedSize = computed(
+  () => Number(route.query.Size) || Number(getAllSizes?.value[0].value)
+);
+const selectedColor = computed(
+  () => Number(route.query.Color) || Number(getAllColors?.value[0].value)
+);
+const selectedMaterial = computed(
+  () => Number(route.query.Material) || Number(getAllMaterials?.value[0].value)
+);
 const productDetailsOpen = ref(true);
 const quantitySelectorValue = ref(1);
 
 const updateFilter = async (filter: LocationQueryRaw | undefined) => {
   router.push({
     path: route.path,
-    query: { ...route.query, ...filter },
+    query: {
+      Material: selectedMaterial.value,
+      Color: selectedColor.value,
+      Size: selectedSize.value,
+      ...filter,
+    },
   });
 };
 
