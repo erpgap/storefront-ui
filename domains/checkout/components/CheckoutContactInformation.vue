@@ -24,11 +24,11 @@ const props = defineProps({
  * @TODO extract this form behaviour, undo, commit, validate, etc. to a separate form composable
  */
 const { isOpen, open, close } = useDisclosure();
-const { email, name, isPublic } = toRefs(props.partnerData);
+const { email, name } = toRefs(props.partnerData);
 const { commit: commitEmail, undo: undoEmail } = useManualRefHistory(email);
 const { commit: commitName, undo: undoName } = useManualRefHistory(name);
 
-if (isPublic) {
+if (props.partnerData.isPublic && props.partnerData.id === 4) {
   name.value = "";
 }
 
@@ -41,6 +41,7 @@ const handleUpdatePartnerData = async () => {
     subscribeNewsletter: subscribeNewsletter.value,
   };
   await updatePartner(data);
+
   commitEmail();
   commitName();
   close();
@@ -67,7 +68,10 @@ const handleCancel = () => {
         {{ partnerData.id ? $t("contactInfo.edit") : $t("contactInfo.add") }}
       </SfButton>
     </div>
-    <div v-if="partnerData?.email" class="mt-2 md:w-[520px]">
+    <div
+      v-if="partnerData?.name && partnerData?.email"
+      class="mt-2 md:w-[520px]"
+    >
       <p>{{ name }}</p>
       <p>{{ email }}</p>
     </div>
