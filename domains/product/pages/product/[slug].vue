@@ -52,26 +52,42 @@ const params = computed(() => ({
   productTemplateId: productTemplate?.value?.id,
 }));
 
-const selectedSize = computed(
-  () => Number(route.query.Size) || Number(getAllSizes?.value[0].value)
+const selectedSize = computed(() =>
+  route.query.Size ? Number(route.query.Size) : getAllSizes?.value?.[0]?.value
 );
-const selectedColor = computed(
-  () => Number(route.query.Color) || Number(getAllColors?.value[0].value)
+
+const selectedColor = computed(() =>
+  route.query.Color
+    ? Number(route.query.Color)
+    : getAllColors?.value?.[0]?.value
 );
-const selectedMaterial = computed(
-  () => Number(route.query.Material) || Number(getAllMaterials?.value[0].value)
+
+const selectedMaterial = computed(() =>
+  route.query.Material
+    ? Number(route.query.Material)
+    : getAllMaterials?.value?.[0]?.value
 );
+
 const productDetailsOpen = ref(true);
 const quantitySelectorValue = ref(1);
 
 const updateFilter = async (filter: LocationQueryRaw | undefined) => {
-  await navigateTo({
-    path: route.path,
-    query: {
-      ...route.query,
-      ...filter,
-    },
-  });
+  const query: LocationQueryRaw = {};
+
+  if (selectedMaterial.value && selectedMaterial.value !== 0) {
+    query.Material = selectedMaterial.value;
+  }
+
+  if (selectedColor.value && selectedColor.value !== 0) {
+    query.Color = selectedColor.value;
+  }
+
+  if (selectedSize.value && selectedSize.value !== 0) {
+    query.Size = selectedSize.value;
+  }
+
+  Object.assign(query, filter);
+  await navigateTo({ query });
 };
 
 const tomorrow = computed(() => {
