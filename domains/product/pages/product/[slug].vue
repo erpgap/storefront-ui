@@ -43,6 +43,8 @@ const { addProductToRecentViews } = useRecentViewProducts();
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist();
 const { cart, cartAdd } = useCart();
 
+useHead(productHead(productVariant.value, String(route.fullPath)));
+
 const params = computed(() => ({
   combinationId: Object.values(route.query)?.map((value) =>
     parseInt(value as string)
@@ -50,28 +52,42 @@ const params = computed(() => ({
   productTemplateId: productTemplate?.value?.id,
 }));
 
-const selectedSize = computed(
-  () => Number(route.query.Size) || Number(getAllSizes?.value[0].value)
+const selectedSize = computed(() =>
+  route.query.Size ? Number(route.query.Size) : getAllSizes?.value?.[0]?.value
 );
-const selectedColor = computed(
-  () => Number(route.query.Color) || Number(getAllColors?.value[0].value)
+
+const selectedColor = computed(() =>
+  route.query.Color
+    ? Number(route.query.Color)
+    : getAllColors?.value?.[0]?.value
 );
-const selectedMaterial = computed(
-  () => Number(route.query.Material) || Number(getAllMaterials?.value[0].value)
+
+const selectedMaterial = computed(() =>
+  route.query.Material
+    ? Number(route.query.Material)
+    : getAllMaterials?.value?.[0]?.value
 );
+
 const productDetailsOpen = ref(true);
 const quantitySelectorValue = ref(1);
 
 const updateFilter = async (filter: LocationQueryRaw | undefined) => {
-  router.push({
-    path: route.path,
-    query: {
-      Material: selectedMaterial.value,
-      Color: selectedColor.value,
-      Size: selectedSize.value,
-      ...filter,
-    },
-  });
+  const query: LocationQueryRaw = {};
+
+  if (selectedMaterial.value && selectedMaterial.value !== 0) {
+    query.Material = selectedMaterial.value;
+  }
+
+  if (selectedColor.value && selectedColor.value !== 0) {
+    query.Color = selectedColor.value;
+  }
+
+  if (selectedSize.value && selectedSize.value !== 0) {
+    query.Size = selectedSize.value;
+  }
+
+  Object.assign(query, filter);
+  await navigateTo({ query });
 };
 
 const tomorrow = computed(() => {
@@ -105,13 +121,10 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
   await wishlistRemoveItem(firstVariant.id);
 };
 
-onMounted(async () => {
-  await loadProductTemplate({ slug: route.path });
-  await loadProductVariant(params.value);
-  useHead(productHead(productVariant.value, String(route.fullPath)));
-});
-
 addProductToRecentViews(productTemplate.value?.id);
+
+await loadProductTemplate({ slug: route.path });
+await loadProductVariant(params.value);
 </script>
 
 <template>
