@@ -19,9 +19,9 @@ import type {
   Countries,
   AddressEnum,
   State,
-} from './gql/graphql';
-import type { H3Error } from 'h3';
-import type { AsyncData } from '#app';
+} from "./gql/graphql";
+import type { H3Error } from "h3";
+import type { AsyncData } from "#app";
 
 export type CategoryListResponse = AsyncData<
   {
@@ -255,6 +255,13 @@ export type StatesResponse = AsyncData<
 export type DeliveryMethodListResponse = AsyncData<
   {
     deliveryMethods: ShippingMethod[];
+  },
+  H3Error
+>;
+
+export type DeliveryMethodResponse = AsyncData<
+  {
+    deliveryMethodId: number;
   },
   H3Error
 >;

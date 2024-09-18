@@ -7,11 +7,16 @@ import {
   SfListItem,
   SfLoaderCircular,
   SfRadio,
-} from '@storefront-ui/vue';
+} from "@storefront-ui/vue";
 
-import { AddressEnum, type Partner, type PaymentProvider } from '~/graphql';
-import { useCountryList } from '~/domains/core/composable/useCountryList';
-const NuxtLink = resolveComponent('NuxtLink');
+import {
+  AddressEnum,
+  type Partner,
+  type PaymentProvider,
+  type ShippingMethod,
+} from "~/graphql";
+import { useCountryList } from "~/domains/core/composable/useCountryList";
+const NuxtLink = resolveComponent("NuxtLink");
 
 const { cart, loadCart, totalItemsInCart } = useCart();
 const router = useRouter();
@@ -19,7 +24,8 @@ const router = useRouter();
 const { loadCountries } = useCountryList();
 const { user, loadUser } = useAuth();
 
-const { loadDeliveryMethods, deliveryMethods } = useDeliveryMethod();
+const { loadDeliveryMethods, deliveryMethods, setDeliveryMethod } =
+  useDeliveryMethod();
 const { makeGiftCardPayment, loading: discountLoading } = useDiscount();
 
 const {
@@ -38,7 +44,7 @@ await Promise.all([
 ]);
 
 if (totalItemsInCart?.value === 0) {
-  router.push('/category/53');
+  router.push("/category/53");
 }
 
 const isLoading = false;
@@ -52,23 +58,32 @@ const handleGiftCardPayment = async () => {
   const paymentProcessed = await makeGiftCardPayment();
 
   if (paymentProcessed) {
-    router.push('/thank-you');
+    router.push("/thank-you");
     return;
   }
 
-  router.push('/payment-fail');
+  router.push("/payment-fail");
 };
 
 const hasFullPaymentWithGiftCard = computed(() => {
   return (
-    cart.value.order?.amountTotal === 0 &&
-    cart.value.order?.giftCards?.length > 0
+    cart.value?.order?.amountTotal === 0 &&
+    cart.value?.order?.giftCards?.length > 0
   );
 });
 
-onMounted(() => {
+const handleSelectShippingMethod = async (shippingMethodId: number) => {
+  radioModel.value = String(shippingMethodId);
+  await setDeliveryMethod(shippingMethodId);
+};
+
+onMounted(async () => {
   if (paymentProviders?.value?.length) {
     showPaymentModal.value = true;
+  }
+  if (deliveryMethods?.value?.length === 1) {
+    radioModel.value = String(deliveryMethods.value[0].id);
+    await setDeliveryMethod(deliveryMethods.value[0].id);
   }
 });
 
@@ -76,7 +91,7 @@ onBeforeUnmount(() => {
   showPaymentModal.value = false;
 });
 
-const radioModel = ref('1');
+const radioModel = ref("");
 const selectedProvider = ref<PaymentProvider | null>(null);
 </script>
 
@@ -96,7 +111,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
         <template #prefix>
           <SfIconArrowBack />
         </template>
-        {{ $t('back') }}
+        {{ $t("back") }}
       </SfButton>
       <SfButton
         :tag="NuxtLink"
@@ -107,7 +122,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
         <template #prefix>
           <SfIconArrowBack />
         </template>
-        {{ $t('backToCart') }}
+        {{ $t("backToCart") }}
       </SfButton>
     </div>
     <span v-if="isLoading" class="!flex justify-center my-40 h-24">
@@ -144,7 +159,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
           <div data-testid="shipping-method" class="md:px-4 my-6">
             <div class="flex justify-between items-center">
               <h3 class="text-neutral-900 text-lg font-bold">
-                {{ $t('shippingMethod.heading') }}
+                {{ $t("shippingMethod.heading") }}
               </h3>
             </div>
             <div class="mt-4">
@@ -158,7 +173,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
                   :key="id"
                   tag="label"
                   class="border rounded-md items-start"
-                  @click="radioModel = `${id}`"
+                  @click="handleSelectShippingMethod(id)"
                 >
                   <div class="flex gap-2">
                     <SfRadio v-model="radioModel" :value="`${id}`" />
@@ -172,7 +187,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
 
               <div v-else class="flex mb-6">
                 <SfIconBlock class="mr-2 text-neutral-500" />
-                <p>{{ $t('shippingMethod.description') }}</p>
+                <p>{{ $t("shippingMethod.description") }}</p>
               </div>
             </div>
           </div>
@@ -193,7 +208,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
               :disabled="discountLoading"
               @click="handleGiftCardPayment"
             >
-              {{ $t('placeOrder') }}
+              {{ $t("placeOrder") }}
             </SfButton>
             <SfButton
               v-else
@@ -202,7 +217,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
               :disabled="!selectedProvider || !isPaymentReady || loading"
               @click="providerPaymentHandler"
             >
-              {{ $t('placeOrder') }}
+              {{ $t("placeOrder") }}
             </SfButton>
             <p class="text-sm text-center mt-4 pb-4 md:pb-0">
               <i18n-t keypath="termsInfo" scope="global">
@@ -211,7 +226,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
                     href="#"
                     class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
                   >
-                    {{ $t('termsAndConditions') }}
+                    {{ $t("termsAndConditions") }}
                   </SfLink>
                 </template>
                 <template #privacyPolicy>
@@ -219,7 +234,7 @@ const selectedProvider = ref<PaymentProvider | null>(null);
                     href="#"
                     class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
                   >
-                    {{ $t('privacyPolicy') }}
+                    {{ $t("privacyPolicy") }}
                   </SfLink>
                 </template>
               </i18n-t>
