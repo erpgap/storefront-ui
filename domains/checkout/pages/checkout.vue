@@ -134,8 +134,9 @@ const selectedProvider = ref<PaymentProvider | null>(null);
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
 
           <CheckoutContactInformation
+            v-if="cart?.order?.partner"
             :heading="$t('contactInfo.heading')"
-            :partner-data="cart.order?.partner as Partner"
+            :partner-data="cart?.order?.partner as Partner"
           />
 
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
