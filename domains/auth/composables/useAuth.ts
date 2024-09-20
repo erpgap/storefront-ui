@@ -118,6 +118,7 @@ export const useAuth = () => {
       return;
     }
 
+    router.push("/reset-password-success");
     resetEmail.value = params.email;
   };
 
