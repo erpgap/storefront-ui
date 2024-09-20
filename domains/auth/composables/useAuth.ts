@@ -117,8 +117,8 @@ export const useAuth = () => {
       toast.error(error.value?.data?.message);
       return;
     }
-    toast.success("Email was sent successfully");
-    router.push("/");
+
+    router.push("/reset-password-success");
     resetEmail.value = params.email;
   };
 
