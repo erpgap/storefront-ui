@@ -159,6 +159,7 @@ export const useAuth = () => {
     }
 
     toast.success("Password changed successfully");
+    router.push("/");
   };
 
   const isAuthenticated = computed(() => {
