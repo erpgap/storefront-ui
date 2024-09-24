@@ -1,8 +1,10 @@
 import { useToast } from "vue-toastification";
 import type {
+  ChangePasswordResponse,
   CreateUpdatePartnerResponse,
   LoadUserQueryResponse,
   LoginUserResponse,
+  MutationChangePasswordArgs,
   MutationCreateUpdatePartnerArgs,
   MutationLoginArgs,
   MutationRegisterArgs,
@@ -143,6 +145,22 @@ export const useAuth = () => {
     toast.success("Password updated successfully");
   };
 
+  const changeForgottenPassword = async (
+    params: MutationChangePasswordArgs
+  ) => {
+    loading.value = true;
+    const { data, error } = await $sdk().odoo.mutation<
+      MutationChangePasswordArgs,
+      ChangePasswordResponse
+    >({ mutationName: MutationName.ChangePasswordMutation }, params);
+    if (error.value) {
+      toast.error(error.value?.data?.message);
+      return;
+    }
+
+    toast.success("Password changed successfully");
+  };
+
   const isAuthenticated = computed(() => {
     return user?.value?.id || Boolean(userCookie.value);
   });
@@ -153,6 +171,7 @@ export const useAuth = () => {
     isAuthenticated,
     login,
     resetPassword,
+    changeForgottenPassword,
     user,
     loading,
     successResetEmail,

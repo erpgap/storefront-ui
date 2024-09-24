@@ -19,6 +19,7 @@ import type {
   Countries,
   AddressEnum,
   State,
+  User,
 } from "./gql/graphql";
 import type { H3Error } from "h3";
 import type { AsyncData } from "#app";
@@ -101,7 +102,7 @@ export type CartAddItemResponse = AsyncData<
   },
   H3Error
 >;
-export type ApplyGiftCardResponse = AsyncData<
+export type ApplyDiscountsResponse = AsyncData<
   {
     order: Order;
     error: string;
@@ -183,6 +184,13 @@ export type UpdatePasswordResponse = AsyncData<
     updatePassword: {
       id: number;
     };
+  },
+  H3Error
+>;
+
+export type ChangePasswordResponse = AsyncData<
+  {
+    changePassword: User;
   },
   H3Error
 >;
