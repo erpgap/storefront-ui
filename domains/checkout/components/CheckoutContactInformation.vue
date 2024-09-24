@@ -28,9 +28,15 @@ const { email, name } = toRefs(props.partnerData);
 const { commit: commitEmail, undo: undoEmail } = useManualRefHistory(email);
 const { commit: commitName, undo: undoName } = useManualRefHistory(name);
 
-if (props.partnerData.isPublic && props.partnerData.id === 4) {
-  name.value = "";
-}
+watch(
+  () => props.partnerData,
+  (newPartnerData) => {
+    if (newPartnerData.isPublic && newPartnerData.id === 4) {
+      name.value = "";
+    }
+  },
+  { immediate: true }
+);
 
 const subscribeNewsletter = ref(true);
 
