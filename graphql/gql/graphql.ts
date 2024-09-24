@@ -456,6 +456,8 @@ export type Mutation = {
   selectAddress: Maybe<Partner>;
   /** Set Shipping Method on Cart */
   setShippingMethod: Maybe<CartData>;
+  /** Two-Factor Verification */
+  totpVerification: Maybe<TwoFactorOutput>;
   /** Update a billing or shipping address and set it on the shopping cart. */
   updateAddress: Maybe<Partner>;
   /** Update MyAccount */
@@ -590,6 +592,13 @@ export type MutationSelectAddressArgs = {
 
 export type MutationSetShippingMethodArgs = {
   shippingMethodId: Scalars['Int']['input'];
+};
+
+
+export type MutationTotpVerificationArgs = {
+  code: Scalars['String']['input'];
+  rememberDevice?: InputMaybe<Scalars['Boolean']['input']>;
+  userId: Scalars['Int']['input'];
 };
 
 
@@ -1135,6 +1144,16 @@ export type State = {
   name: Scalars['String']['output'];
 };
 
+export type TwoFactorOutput = {
+  __typename?: 'TwoFactorOutput';
+  httponly: Maybe<Scalars['Boolean']['output']>;
+  key: Maybe<Scalars['String']['output']>;
+  maxAge: Maybe<Scalars['Int']['output']>;
+  samesite: Maybe<Scalars['String']['output']>;
+  user: Maybe<User>;
+  value: Maybe<Scalars['String']['output']>;
+};
+
 export type UpdateAddressInput = {
   city: InputMaybe<Scalars['String']['input']>;
   countryId: InputMaybe<Scalars['Int']['input']>;
@@ -1158,6 +1177,7 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   id: Scalars['Int']['output'];
+  mfaEnabled: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   partner: Maybe<Partner>;
 };
