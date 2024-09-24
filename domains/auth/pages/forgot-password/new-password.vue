@@ -3,7 +3,7 @@ import { SfButton, SfInput, SfIconVisibility } from "@storefront-ui/vue";
 import { useToast } from "vue-toastification";
 import type { MutationChangePasswordArgs } from "~/graphql";
 
-const { updatePassword } = useAuth();
+const { changeForgottenPassword } = useAuth();
 const route = useRoute();
 const toast = useToast();
 
@@ -29,9 +29,9 @@ const handleSubmit = async () => {
     return;
   }
 
-  await updatePassword({
-    currentPassword: changePasswordArgs.value.newPassword,
-    newPassword: changePasswordArgs.value.token,
+  await changeForgottenPassword({
+    newPassword: changePasswordArgs.value.newPassword,
+    token: changePasswordArgs.value.token,
   });
 };
 </script>
