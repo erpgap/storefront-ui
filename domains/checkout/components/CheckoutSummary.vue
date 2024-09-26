@@ -9,7 +9,7 @@ const { makeGiftCardPayment, loading: discountLoading } = useDiscount();
 const { loadPaymentMethods, paymentProviders } = usePayment();
 
 const selectedProvider = ref<PaymentProvider | null>(null);
-const isPaymentReady = ref(false);
+const isPaymentWithCardReady = ref(false);
 const providerPaymentHandler = ref();
 const loading = ref(false);
 const showPaymentModal = ref(false);
@@ -30,12 +30,7 @@ onMounted(async () => {
 });
 
 const handleGiftCardPayment = async () => {
-  const paymentProcessed = await makeGiftCardPayment();
-  if (paymentProcessed) {
-    router.push("/thank-you");
-  } else {
-    router.push("/payment-fail");
-  }
+  await makeGiftCardPayment();
 };
 </script>
 
@@ -46,7 +41,7 @@ const handleGiftCardPayment = async () => {
       size="lg"
       class="w-full mb-4 md:mb-0"
       :disabled="discountLoading"
-      @click="handleGiftCardPayment"
+      @click.prevent="handleGiftCardPayment"
     >
       {{ $t("placeOrder") }}
     </SfButton>
@@ -55,7 +50,7 @@ const handleGiftCardPayment = async () => {
       v-else
       size="lg"
       class="w-full mb-4 md:mb-0"
-      :disabled="!selectedProvider || !isPaymentReady || loading"
+      :disabled="!selectedProvider || !isPaymentWithCardReady || loading"
       @click="providerPaymentHandler"
     >
       {{ $t("placeOrder") }}
@@ -82,12 +77,16 @@ const handleGiftCardPayment = async () => {
       </i18n-t>
     </p>
     <component
-      v-if="showPaymentModal && !!selectedProvider?.code"
+      v-if="
+        showPaymentModal &&
+        !!selectedProvider?.code &&
+        !hasFullPaymentWithGiftCard
+      "
       :is="getPaymentProviderComponentName(selectedProvider?.code)"
       :key="selectedProvider?.id"
       :provider="selectedProvider"
       :cart="cart"
-      @is-payment-ready="($event: any) => (isPaymentReady = $event)"
+      @is-payment-ready="($event: any) => (isPaymentWithCardReady = $event)"
       @provider-payment-handler="
         ($event: any) => (providerPaymentHandler = $event)
       "
