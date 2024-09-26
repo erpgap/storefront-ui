@@ -176,13 +176,18 @@ async function createUpdatePartner(event: any, body: any) {
 async function clearCartAfterPaymentConfirmation(event: any, body: any) {
   const requestBody = await readBody(event);
 
+  const paymentSuccess =
+    body?.paymentConfirmation.order?.lastTransaction?.state === "Authorized" ||
+    body.paymentConfirmation.order?.lastTransaction?.state === "Confirmed";
+
   if (requestBody[0]?.queryName === QueryName.GetPaymentConfirmation) {
     const session = await useSession(event, {
       password: "b013b03ac2231e0b448e9a22ba488dcf",
     });
 
     const keyName = `cache:cart:${session?.id}`;
-
-    await useStorage().removeItem(keyName);
+    if (paymentSuccess) {
+      await useStorage().removeItem(keyName);
+    }
   }
 }
