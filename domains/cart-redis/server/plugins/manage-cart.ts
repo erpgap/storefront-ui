@@ -10,15 +10,18 @@ import { QueryName } from "~/server/queries";
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hook("beforeResponse", async (event, { body }) => {
     if (event.method == "POST") {
-      await cartAddItem(event, body);
-      await cartRemoveItem(event, body);
-      await cartUpdateItem(event, body);
-      await updateAddress(event, body);
-      await addAddress(event, body);
-      await createUpdatePartner(event, body);
-      await applyCoupon(event, body);
-      await applyGiftCard(event, body);
-      await clearCartAfterPaymentConfirmation(event, body);
+      await Promise.all([
+        cartAddItem(event, body),
+        cartRemoveItem(event, body),
+        cartUpdateItem(event, body),
+        updateAddress(event, body),
+        addAddress(event, body),
+        createUpdatePartner(event, body),
+        applyCoupon(event, body),
+        applyGiftCard(event, body),
+        clearCartAfterCreditCardPaymentConfirmation(event, body),
+        clearCartAfterGiftCardPaymentConfirmation(event, body),
+      ]);
     }
   });
 });
@@ -173,7 +176,10 @@ async function createUpdatePartner(event: any, body: any) {
   }
 }
 
-async function clearCartAfterPaymentConfirmation(event: any, body: any) {
+async function clearCartAfterCreditCardPaymentConfirmation(
+  event: any,
+  body: any
+) {
   const requestBody = await readBody(event);
 
   const paymentSuccess =
@@ -181,6 +187,28 @@ async function clearCartAfterPaymentConfirmation(event: any, body: any) {
     body.paymentConfirmation.order?.lastTransaction?.state === "Confirmed";
 
   if (requestBody[0]?.queryName === QueryName.GetPaymentConfirmation) {
+    const session = await useSession(event, {
+      password: "b013b03ac2231e0b448e9a22ba488dcf",
+    });
+
+    const keyName = `cache:cart:${session?.id}`;
+    if (paymentSuccess) {
+      await useStorage().removeItem(keyName);
+    }
+  }
+}
+
+async function clearCartAfterGiftCardPaymentConfirmation(
+  event: any,
+  body: any
+) {
+  const requestBody = await readBody(event);
+
+  const paymentSuccess = body?.makeGiftCardPayment?.done;
+
+  if (
+    requestBody[0]?.mutationName === MutationName.MakeGiftCardPaymentMutation
+  ) {
     const session = await useSession(event, {
       password: "b013b03ac2231e0b448e9a22ba488dcf",
     });

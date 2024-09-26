@@ -111,7 +111,7 @@ export type ApplyDiscountsResponse = AsyncData<
 >;
 export type MakeGiftCardPaymentResponse = AsyncData<
   {
-    done: Boolean;
+    makeGiftCardPayment: { done: Boolean };
   },
   H3Error
 >;
