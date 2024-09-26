@@ -1,15 +1,16 @@
-import { useToast } from 'vue-toastification';
+import { useToast } from "vue-toastification";
 import type {
-  ApplyGiftCardResponse,
+  ApplyDiscountsResponse,
   MakeGiftCardPaymentResponse,
   MutationApplyCouponArgs,
   MutationApplyGiftCardArgs,
-} from '~/graphql';
-import { MutationName } from '~/server/mutations';
+} from "~/graphql";
+import { MutationName } from "~/server/mutations";
 
 export const useDiscount = () => {
   const { $sdk } = useNuxtApp();
   const toast = useToast();
+  const router = useRouter();
   const { loadCart } = useCart();
 
   const loading = ref(false);
@@ -17,15 +18,15 @@ export const useDiscount = () => {
   const applyGiftCard = async (promo: MutationApplyGiftCardArgs) => {
     return $sdk().odoo.mutation<
       MutationApplyGiftCardArgs,
-      ApplyGiftCardResponse
+      ApplyDiscountsResponse
     >({ mutationName: MutationName.ApplyGiftCardMutation }, promo);
   };
 
   const applyCoupon = async (promo: MutationApplyCouponArgs) => {
-    return $sdk().odoo.mutation<MutationApplyCouponArgs, ApplyGiftCardResponse>(
-      { mutationName: MutationName.ApplyCouponMutation },
-      promo
-    );
+    return $sdk().odoo.mutation<
+      MutationApplyCouponArgs,
+      ApplyDiscountsResponse
+    >({ mutationName: MutationName.ApplyCouponMutation }, promo);
   };
 
   const applyDiscount = async (promoCode: string) => {
@@ -43,7 +44,7 @@ export const useDiscount = () => {
     }
 
     await loadCart(false);
-    toast.success('Promotion has been applied!');
+    toast.success("Promotion has been applied!");
   };
 
   const makeGiftCardPayment = async () => {
@@ -61,7 +62,12 @@ export const useDiscount = () => {
       return;
     }
 
-    return data.value;
+    if (!data.value.makeGiftCardPayment.done) {
+      router.push("/payment-fail");
+      return;
+    }
+
+    router.push("/thank-you");
   };
 
   return {
