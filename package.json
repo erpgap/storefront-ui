@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@adyen/adyen-web": "4.7.3",
-    "@erpgap/odoo-sdk": "^2.0.4",
-    "@erpgap/odoo-sdk-api-client": "^2.0.4",
+    "@erpgap/odoo-sdk": "^0.7.0",
+    "@erpgap/odoo-sdk-api-client": "^0.7.0",
     "@nuxt/image": "^1.7.0",
     "@nuxt/scripts": "^0.4.3",
     "@nuxtjs/algolia": "^1.10.2",
