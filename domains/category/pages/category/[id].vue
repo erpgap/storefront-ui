@@ -62,7 +62,11 @@ const pagination = computed(() => ({
 }));
 
 await loadCategory({ slug: String(route.fullPath) });
-useHead(categoryHead(category.value, String(route.fullPath)));
+
+if (category.value) {
+  useHead(categoryHead(category.value, String(route.fullPath)));
+}
+
 setMaxVisiblePages(isWideScreen.value);
 </script>
 <template>
