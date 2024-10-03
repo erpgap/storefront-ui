@@ -10,6 +10,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  robots: {
+    allow: "/category/*",
+  },
   extends: [
     "./domains/auth",
     "./domains/recent-view-products",
