@@ -4,8 +4,8 @@ import {
   SfIconTune,
   useDisclosure,
   SfLoaderCircular,
-} from '@storefront-ui/vue';
-import type { Product } from '~/graphql';
+} from "@storefront-ui/vue";
+import type { Product } from "~/graphql";
 
 const route = useRoute();
 const { isMobile, isDesktopOrTablet } = useDevice();
@@ -30,11 +30,11 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes();
 const { getFacetsFromURL } = useUiHelpers();
 
 const breadcrumbs = [
-  { name: 'Home', link: '/' },
-  { name: 'Category', link: `Category/${route.params.id}` },
+  { name: "Home", link: "/" },
+  { name: "Category", link: `Category/${route.params.id}` },
 ];
 
-const maxVisiblePages = useState('category-max-visible-pages', () => 1);
+const maxVisiblePages = useState("category-max-visible-pages", () => 1);
 const setMaxVisiblePages = (isWide: boolean) =>
   (maxVisiblePages.value = isWide ? 5 : 1);
 
@@ -61,11 +61,9 @@ const pagination = computed(() => ({
   pageOptions: [5, 12, 15, 20],
 }));
 
-onMounted(async () => {
-  await loadCategory({ slug: String(route.fullPath) });
-  useHead(categoryHead(category.value, String(route.fullPath)));
-  setMaxVisiblePages(isWideScreen.value);
-});
+await loadCategory({ slug: String(route.fullPath) });
+useHead(categoryHead(category.value, String(route.fullPath)));
+setMaxVisiblePages(isWideScreen.value);
 </script>
 <template>
   <div class="pb-20">

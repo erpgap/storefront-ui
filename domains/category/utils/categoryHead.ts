@@ -1,4 +1,5 @@
-import type { Category } from '~/graphql';
+import type { Category } from "~/graphql";
+import type { Meta } from "@unhead/vue";
 
 const validateCategorySEO = (category, fullPath) => {
   const warnings = [];
@@ -36,48 +37,48 @@ export default (category: Category, fullPath: string) => {
   validateCategorySEO(category, fullPath);
 
   return {
-    title: category?.metaTitle || category?.name || 'Category page',
+    title: category?.metaTitle || category?.name || "Category page",
     meta: [
       {
-        hid: 'title',
-        name: 'title',
+        hid: "title",
+        name: "title",
         content: category?.metaTitle || `${category?.name} | ${category?.id}`,
       },
       category?.metaDescription && {
-        hid: 'description',
-        name: 'description',
+        hid: "description",
+        name: "description",
         content: category.metaDescription,
       },
       category?.metaDescription && {
-        hid: 'og:description',
-        name: 'og:description',
+        hid: "og:description",
+        name: "og:description",
         content: category.metaDescription,
       },
       {
-        hid: 'og:title',
-        name: 'og:title',
-        content: category?.metaTitle || category?.name || 'Category page',
+        hid: "og:title",
+        name: "og:title",
+        content: category?.metaTitle || category?.name || "Category page",
       },
       {
-        hid: 'twitter-title',
-        name: 'twitter:title',
-        content: category?.metaTitle || category?.name || 'Category page',
+        hid: "twitter:title",
+        name: "twitter:title",
+        content: category?.metaTitle || category?.name || "Category page",
       },
       category?.metaDescription && {
-        hid: 'twitter-desc',
-        name: 'twitter:description',
+        hid: "twitter:description",
+        name: "twitter:description",
         content: category.metaDescription,
       },
-    ].filter(Boolean),
+    ].filter(Boolean) as Meta[],
     script: [
       category?.jsonLd && {
-        type: 'application/ld+json',
-        children: category.jsonLd as any,
+        type: "application/ld+json",
+        children: JSON.stringify(category.jsonLd),
       },
     ].filter(Boolean),
     link: [
       {
-        rel: 'canonical',
+        rel: "canonical",
         href: `https://vsfsdk.labs.odoogap.com${fullPath}`,
       },
     ],
