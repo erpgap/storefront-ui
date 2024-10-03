@@ -3072,7 +3072,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/kit@npm:3.13.2, @nuxt/kit@npm:^3.10.3, @nuxt/kit@npm:^3.11.1, @nuxt/kit@npm:^3.12.1, @nuxt/kit@npm:^3.12.3, @nuxt/kit@npm:^3.13.0, @nuxt/kit@npm:^3.13.1, @nuxt/kit@npm:^3.13.2, @nuxt/kit@npm:^3.3.2, @nuxt/kit@npm:^3.7.0, @nuxt/kit@npm:^3.8.0, @nuxt/kit@npm:^3.9.0":
+"@nuxt/kit@npm:3.13.2, @nuxt/kit@npm:^3.10.3, @nuxt/kit@npm:^3.11.1, @nuxt/kit@npm:^3.12.1, @nuxt/kit@npm:^3.12.3, @nuxt/kit@npm:^3.13.0, @nuxt/kit@npm:^3.13.1, @nuxt/kit@npm:^3.13.2, @nuxt/kit@npm:^3.3.2, @nuxt/kit@npm:^3.7.0, @nuxt/kit@npm:^3.7.3, @nuxt/kit@npm:^3.8.0, @nuxt/kit@npm:^3.9.0":
   version: 3.13.2
   resolution: "@nuxt/kit@npm:3.13.2"
   dependencies:
@@ -3277,12 +3277,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxtjs/device@npm:^3.1.1":
-  version: 3.2.4
-  resolution: "@nuxtjs/device@npm:3.2.4"
+"@nuxtjs/device@npm:3.1.1":
+  version: 3.1.1
+  resolution: "@nuxtjs/device@npm:3.1.1"
   dependencies:
-    defu: ^6.1.4
-  checksum: a98aa5fb3f75d2714ec845d2b4e048acd3927eeebbf2d2f48b65ed6af83b62669cabf1064dfd2ab9ad4b91810a614a86cca644400522a7ec3d918cae3b4e8e16
+    "@nuxt/kit": ^3.7.3
+    defu: ^6.1.2
+  checksum: d91eabfac05e02f6bd1f9dcd75badba439aed06d75eead2c39404cf04481d1b1a6c967c86f4cb6eddd19726d1bb422c6bde32ef4c06435adc8a5a1ae385daf90
   languageName: node
   linkType: hard
 
@@ -11753,7 +11754,7 @@ __metadata:
     "@nuxt/scripts": ^0.4.3
     "@nuxtjs/algolia": ^1.10.2
     "@nuxtjs/critters": ^0.7.1
-    "@nuxtjs/device": ^3.1.1
+    "@nuxtjs/device": 3.1.1
     "@nuxtjs/fontaine": ^0.4.2
     "@nuxtjs/google-fonts": ^3.2.0
     "@nuxtjs/i18n": ^8.3.1
