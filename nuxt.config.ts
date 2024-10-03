@@ -8,8 +8,10 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "en",
       },
+      meta: [{ name: "robots", content: "index, follow" }],
     },
   },
+
   robots: {
     allow: "/category/*",
   },
