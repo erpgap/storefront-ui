@@ -61,7 +61,14 @@ const pagination = computed(() => ({
   pageOptions: [5, 12, 15, 20],
 }));
 
-await loadCategory({ slug: String(route.fullPath) });
+const params = route.params as { id?: string | number; slug?: string };
+
+if (params.id) {
+  await loadCategory({
+    id: Number(params.id),
+    slug: String(route.fullPath),
+  });
+}
 
 if (category.value) {
   useHead(categoryHead(category.value, String(route.fullPath)));
