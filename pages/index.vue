@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { useWebsiteHomePage } from '~/domains/core/composable/useWebsiteHomePage';
+import { useWebsiteHomePage } from "~/domains/core/composable/useWebsiteHomePage";
 
 const { loadCategoryList, categories } = useCategory();
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage();
 
 const { list } = useRecentViewProducts();
 
-onMounted(async () => {
-  await getWebsiteHomepage();
-  await loadCategoryList({ filter: { parent: true } });
-  useHead(websiteHomepageHead(websiteHomepage.value, ''));
+await getWebsiteHomepage();
+await loadCategoryList({
+  filter: { parent: true, id: null },
 });
+useHead(websiteHomepageHead(websiteHomepage.value, ""));
 </script>
 
 <template>

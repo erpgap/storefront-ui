@@ -1,4 +1,4 @@
-import type { Homepage } from '~/graphql';
+import type { Homepage } from "~/graphql";
 
 const validateSEO = (homepage: Homepage, fullPath: string) => {
   const warnings = [];
@@ -37,46 +37,46 @@ export default (homepage: Homepage, fullPath: string) => {
 
   return {
     meta: [
-      {
-        hid: 'title',
-        name: 'title',
-        content: homepage?.metaTitle || 'Vue Storefront',
+      homepage?.metaTitle && {
+        hid: "title",
+        name: "title",
+        content: homepage.metaTitle || "Vue Storefront",
       },
       homepage?.metaDescription && {
-        hid: 'description',
-        name: 'description',
+        hid: "description",
+        name: "description",
         content: homepage.metaDescription,
       },
       homepage?.metaDescription && {
-        hid: 'og:description',
-        name: 'og:description',
+        hid: "og:description",
+        name: "og:description",
         content: homepage.metaDescription,
       },
-      {
-        hid: 'og:title',
-        name: 'og:title',
-        content: homepage?.metaTitle || 'Vue Storefront',
+      homepage?.metaTitle && {
+        hid: "og:title",
+        name: "og:title",
+        content: homepage.metaTitle || "Vue Storefront",
       },
-      {
-        hid: 'twitter-title',
-        name: 'twitter:title',
-        content: homepage?.metaTitle || 'Vue Storefront',
+      homepage?.metaTitle && {
+        hid: "twitter-title",
+        name: "twitter:title",
+        content: homepage.metaTitle || "Vue Storefront",
       },
       homepage?.metaDescription && {
-        hid: 'twitter-desc',
-        name: 'twitter:description',
+        hid: "twitter-desc",
+        name: "twitter:description",
         content: homepage.metaDescription,
       },
-    ].filter(Boolean),
+    ].filter((meta) => meta !== null && meta !== undefined && meta !== ""),
     script: [
       homepage?.jsonLd && {
-        type: 'application/ld+json',
+        type: "application/ld+json",
         children: homepage.jsonLd as any,
       },
     ].filter(Boolean),
     link: [
       {
-        rel: 'canonical',
+        rel: "canonical",
         href: `https://vsfsdk.labs.odoogap.com${fullPath}`,
       },
     ],
