@@ -36,6 +36,7 @@ export default (homepage: Homepage, fullPath: string) => {
   validateSEO(homepage, fullPath);
 
   return {
+    title: homepage.metaTitle || "Alokai - Vue",
     meta: [
       homepage?.metaTitle && {
         hid: "title",
@@ -67,7 +68,9 @@ export default (homepage: Homepage, fullPath: string) => {
         name: "twitter:description",
         content: homepage.metaDescription,
       },
-    ].filter((meta) => meta !== null && meta !== undefined && meta !== ""),
+    ].filter(
+      (meta): meta is { hid: string; name: string; content: string } => !!meta
+    ), // Filtro aprimorado para garantir que o array tenha apenas objetos válidos
     script: [
       homepage?.jsonLd && {
         type: "application/ld+json",
