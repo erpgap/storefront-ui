@@ -41,7 +41,7 @@ export default (homepage: Homepage, fullPath: string) => {
       homepage?.metaTitle && {
         hid: "title",
         name: "title",
-        content: homepage.metaTitle || "Vue Storefront",
+        content: homepage.metaTitle || "Alokai - Vue",
       },
       homepage?.metaDescription && {
         hid: "description",
@@ -56,12 +56,12 @@ export default (homepage: Homepage, fullPath: string) => {
       homepage?.metaTitle && {
         hid: "og:title",
         name: "og:title",
-        content: homepage.metaTitle || "Vue Storefront",
+        content: homepage.metaTitle || "Alokai - Vue",
       },
       homepage?.metaTitle && {
         hid: "twitter-title",
         name: "twitter:title",
-        content: homepage.metaTitle || "Vue Storefront",
+        content: homepage.metaTitle || "Alokai - Vue",
       },
       homepage?.metaDescription && {
         hid: "twitter-desc",
