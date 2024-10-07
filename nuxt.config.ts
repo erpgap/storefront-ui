@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       viewport: "minimum-scale=1, initial-scale=1, width=device-width",
-      title: "Vue Storefront",
+      titleTemplate: "%s | Alokai Vue",
       htmlAttrs: {
         lang: "en",
       },

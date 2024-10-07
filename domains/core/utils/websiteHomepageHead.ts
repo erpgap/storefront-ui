@@ -36,11 +36,12 @@ export default (homepage: Homepage, fullPath: string) => {
   validateSEO(homepage, fullPath);
 
   return {
+    title: homepage.metaTitle || "Alokai - Vue",
     meta: [
       homepage?.metaTitle && {
         hid: "title",
         name: "title",
-        content: homepage.metaTitle || "Vue Storefront",
+        content: homepage.metaTitle || "Alokai - Vue",
       },
       homepage?.metaDescription && {
         hid: "description",
@@ -55,19 +56,21 @@ export default (homepage: Homepage, fullPath: string) => {
       homepage?.metaTitle && {
         hid: "og:title",
         name: "og:title",
-        content: homepage.metaTitle || "Vue Storefront",
+        content: homepage.metaTitle || "Alokai - Vue",
       },
       homepage?.metaTitle && {
         hid: "twitter-title",
         name: "twitter:title",
-        content: homepage.metaTitle || "Vue Storefront",
+        content: homepage.metaTitle || "Alokai - Vue",
       },
       homepage?.metaDescription && {
         hid: "twitter-desc",
         name: "twitter:description",
         content: homepage.metaDescription,
       },
-    ].filter((meta) => meta !== null && meta !== undefined && meta !== ""),
+    ].filter(
+      (meta): meta is { hid: string; name: string; content: string } => !!meta
+    ), // Filtro aprimorado para garantir que o array tenha apenas objetos válidos
     script: [
       homepage?.jsonLd && {
         type: "application/ld+json",
