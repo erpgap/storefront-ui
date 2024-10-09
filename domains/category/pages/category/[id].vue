@@ -66,7 +66,7 @@ const params = route.params as { id?: string | number; slug?: string };
 if (params.id) {
   await loadCategory({
     id: Number(params.id),
-    slug: String(route.fullPath),
+    slug: String(route.path),
   });
 }
 

@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       viewport: "minimum-scale=1, initial-scale=1, width=device-width",
-      title: "%s",
+      title: "Alokai",
       htmlAttrs: {
         lang: "en",
       },
@@ -37,9 +37,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/scripts",
     "@nuxtjs/device",
-    "@nuxtjs/critters",
     "@nuxtjs/i18n",
-    "@nuxtjs/fontaine",
     "@nuxtjs/google-fonts",
     "nuxt-lazy-hydrate",
     "nuxt-lodash",
@@ -120,18 +118,9 @@ export default defineNuxtConfig({
     "/": { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
     "/category/*": { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
     "/product/*": { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
-    "/_ipx/**": {
-      headers: { "cache-control": "public, max-age=31536000, immutable" },
-    },
-    "/icons/**": {
-      headers: { "cache-control": "public, max-age=31536000, immutable" },
-    },
-    "/favicon.ico": {
-      headers: { "cache-control": "public, max-age=31536000, immutable" },
-    },
   },
   nitro: {
-    compressPublicAssets: true,
+    // compressPublicAssets: true,
     storage: {
       cache: {
         driver: process.env.NUXT_STORAGE_DRIVER,

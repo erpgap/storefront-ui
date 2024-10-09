@@ -1,0 +1,12 @@
+{
+  "name": "@erpgap/recent-view-products",
+  "private": false,
+  "type": "module",
+  "version": "0.0.4",
+  "main": "./nuxt.config.ts",
+  "scripts": {},
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
+}
