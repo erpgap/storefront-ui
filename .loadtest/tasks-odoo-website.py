@@ -1,7 +1,6 @@
 import time
 from locust import HttpUser, task, between
 
-
 class AlokaiLoad(HttpUser):
     wait_time = between(2, 5)
     def on_start(self):
@@ -10,21 +9,14 @@ class AlokaiLoad(HttpUser):
     # http://pre-www.motionrc.com/
 
     @task(20)
-    def product_list_1(self):
-        self.client.get(f"http://{self.host}/collections/rc-jets")
-
-    @task(20)
     def home(self):
         self.client.get(f"http://{self.host}/")
 
     @task(20)
     def product_page_1(self):
-        self.client.get(f"http://{self.host}/products/freewing-l-15-jl-10-falcon-6s-64mm-edf-jet-pnp-fj11313p")
+        self.client.get(f"http://{self.host}/product/leather-jacket-d-r-o-w-s-black-96?Size=189&Material=188&Color=191")
 
     @task(20)
-    def product_list_2(self):
-        self.client.get(f"http://{self.host}/collections/beginner-and-trainer-rc-airplanes")
+    def product_list(self):
+        self.client.get(f"http://{self.host}/category/15")
 
-    @task(20)
-    def product_page_2(self):
-        self.client.get(f"http://{self.host}/products/nexa-dhc-2-beaver-whistler-air-1620mm-arf-nxa1065-002")
