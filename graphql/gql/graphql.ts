@@ -456,6 +456,12 @@ export type Mutation = {
   selectAddress: Maybe<Partner>;
   /** Set Shipping Method on Cart */
   setShippingMethod: Maybe<CartData>;
+  /** Get Stripe Inline Form Values */
+  stripeGetInlineFormValues: Maybe<StripeGetInlineFormValuesResult>;
+  /** Get Stripe Provider Info. */
+  stripeProviderInfo: Maybe<StripeProviderInfoResult>;
+  /** Create Stripe Transaction */
+  stripeTransaction: Maybe<StripeTransactionResult>;
   /** Two-Factor Verification */
   totpVerification: Maybe<TwoFactorOutput>;
   /** Update a billing or shipping address and set it on the shopping cart. */
@@ -592,6 +598,23 @@ export type MutationSelectAddressArgs = {
 
 export type MutationSetShippingMethodArgs = {
   shippingMethodId: Scalars['Int']['input'];
+};
+
+
+export type MutationStripeGetInlineFormValuesArgs = {
+  providerId: Scalars['Int']['input'];
+};
+
+
+export type MutationStripeProviderInfoArgs = {
+  providerId: Scalars['Int']['input'];
+};
+
+
+export type MutationStripeTransactionArgs = {
+  paymentMethodId: Scalars['Int']['input'];
+  providerId: Scalars['Int']['input'];
+  tokenizationRequested?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -1144,6 +1167,21 @@ export type State = {
   name: Scalars['String']['output'];
 };
 
+export type StripeGetInlineFormValuesResult = {
+  __typename?: 'StripeGetInlineFormValuesResult';
+  stripeGetInlineFormValues: Maybe<Scalars['GenericScalar']['output']>;
+};
+
+export type StripeProviderInfoResult = {
+  __typename?: 'StripeProviderInfoResult';
+  stripeProviderInfo: Maybe<Scalars['GenericScalar']['output']>;
+};
+
+export type StripeTransactionResult = {
+  __typename?: 'StripeTransactionResult';
+  transaction: Maybe<Scalars['GenericScalar']['output']>;
+};
+
 export type TwoFactorOutput = {
   __typename?: 'TwoFactorOutput';
   httponly: Maybe<Scalars['Boolean']['output']>;
@@ -1177,9 +1215,9 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   id: Scalars['Int']['output'];
-  mfaEnabled: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   partner: Maybe<Partner>;
+  totpRequired: Maybe<Scalars['Boolean']['output']>;
 };
 
 /** An enumeration. */
