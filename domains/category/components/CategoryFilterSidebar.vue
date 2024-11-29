@@ -36,7 +36,7 @@ const changeSorting = async (newSort: string) => {
 };
 const getSortOptions = (searchData: { input: any }) => ({
   options: sortOptions,
-  selected: searchData.input.sort || "name asc",
+  selected: searchData.input.sort || "name,ASC",
 });
 
 const selectedFilters = useState("category-selected-filters", () => []);

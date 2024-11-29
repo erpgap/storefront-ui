@@ -27,8 +27,8 @@ export default defineNuxtConfig({
     "./domains/core",
     "./domains/my-account",
     "./domains/product",
-    "./domains/search-algolia",
-    //"./domains/search-default",
+    // "./domains/search-algolia",
+    "./domains/search-default",
     "./domains/wishlist",
   ],
 
