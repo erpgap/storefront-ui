@@ -1,136 +1,99 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+
+  extends: [
+    './domains/auth',
+    './domains/recent-view-products',
+    // "./domains/cart-odoo",
+    './domains/cart-redis',
+    './domains/category',
+    './domains/checkout',
+    './domains/core',
+    './domains/my-account',
+    './domains/product',
+    // "./domains/search-algolia",
+    './domains/search-default',
+    './domains/search-luigi',
+    './domains/wishlist',
+  ],
+
+  modules: [
+    '@pinia/nuxt',
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/i18n',
+    '@vueuse/nuxt',
+    '@nuxt/image',
+    '@nuxt/scripts',
+    '@nuxtjs/device',
+    '@nuxtjs/google-fonts',
+    'nuxt-lazy-hydrate',
+    'nuxt-lodash',
+    'nuxt-icon',
+    'nuxt-delay-hydration',
+    'nuxt-typed-router',
+    '@nuxtjs/robots',
+    '@nuxt/eslint',
+  ],
   devtools: { enabled: true },
 
   app: {
     head: {
-      viewport: "minimum-scale=1, initial-scale=1, width=device-width",
-      title: "Alokai",
+      viewport: 'minimum-scale=1, initial-scale=1, width=device-width',
+      title: '%s',
       htmlAttrs: {
-        lang: "en",
+        lang: 'en',
       },
-      meta: [{ name: "robots", content: "index, follow" }],
+      meta: [{ name: 'robots', content: 'index, follow' }],
     },
   },
 
-  robots: {
-    allow: "/category/*",
+  site: {
+    url: 'https://vsfsdk.labs.odoogap.com/',
+    name: 'ERPGAP VSF',
+    description: 'Welcome to an awesome ecommerce site!',
+    defaultLocale: 'en',
   },
-
-  extends: [
-    "./domains/auth",
-    "./domains/recent-view-products",
-    //"./domains/cart-odoo",
-    "./domains/cart-redis",
-    "./domains/category",
-    "./domains/checkout",
-    "./domains/core",
-    "./domains/my-account",
-    "./domains/product",
-    // "./domains/search-algolia",
-    "./domains/search-default",
-    "./domains/search-luigi",
-    "./domains/wishlist",
-  ],
-
-  modules: [
-    "@pinia/nuxt",
-    "@nuxtjs/tailwindcss",
-    "@nuxtjs/i18n",
-    "@vueuse/nuxt",
-    "@nuxt/image",
-    "@nuxt/scripts",
-    "@nuxtjs/device",
-    "@nuxtjs/i18n",
-    "@nuxtjs/google-fonts",
-    "nuxt-lazy-hydrate",
-    "nuxt-lodash",
-    "nuxt-icon",
-    "nuxt-delay-hydration",
-    "nuxt-typed-router",
-  ],
 
   runtimeConfig: {
     shouldByPassCacheQueryNames: [
-      "LoadCartQuery",
-      "WishlistLoadQuery",
-      "GetAddressesQuery",
+      'LoadCartQuery',
+      'WishlistLoadQuery',
+      'GetAddressesQuery',
     ],
     public: {
-      odooBaseImageUrl: "",
-      odooBaseUrl: "",
-      currencySymbol: "",
-      currencySeparator: "",
-      currencyDecimal: "",
-      currencyPrecision: "",
-    },
-  },
-
-  googleFonts: {
-    families: {
-      "Red Hat Display": [400, 500, 700],
-    },
-  },
-
-  i18n: {
-    locales: [
-      {
-        code: "en",
-        file: "en.json",
-      },
-    ],
-    strategy: "no_prefix",
-    lazy: true,
-    langDir: "lang",
-    defaultLocale: "en",
-  },
-
-  delayHydration: {
-    mode: "init",
-  },
-
-  vite: {
-    optimizeDeps: {
-      include: ["lodash-es"],
+      odooBaseImageUrl: '',
+      odooBaseUrl: '',
+      currencySymbol: '',
+      currencySeparator: '',
+      currencyDecimal: '',
+      currencyPrecision: '',
     },
   },
 
   build: {
     transpile: [
-      "tslib",
-      "@apollo/client",
-      "@apollo/client/core",
-      "@vue/apollo-composable",
-      "@vue/apollo-option",
-      "ts-invariant",
-      "vue-toastification",
-      "@erpgap/odoo-sdk-api-client",
+      'tslib',
+      '@apollo/client',
+      '@apollo/client/core',
+      '@vue/apollo-composable',
+      '@vue/apollo-option',
+      'ts-invariant',
+      'vue-toastification',
+      '@erpgap/odoo-sdk-api-client',
     ],
   },
 
-  image: {
-    providers: {
-      odooProvider: {
-        name: "odooProvider",
-        provider: "~/providers/odoo-provider.ts",
-      },
-    },
-    screens: {
-      "2xl": 1536,
-      xxl: 1440,
-      xl: 1280,
-      lg: 1024,
-      md: 768,
-      sm: 640,
-      xs: 376,
-    },
+  routeRules: {
+    '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+    '/category/*': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+    '/product/*': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
   },
 
-  routeRules: {
-    "/": { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
-    "/category/*": { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
-    "/product/*": { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+  experimental: {
+    asyncContext: false,
   },
+
+  compatibilityDate: '2024-11-06',
 
   nitro: {
     // compressPublicAssets: true,
@@ -148,24 +111,68 @@ export default defineNuxtConfig({
     },
   },
 
-  site: {
-    url: "https://vsfsdk.labs.odoogap.com/",
-    name: "ERPGAP VSF",
-    description: "Welcome to an awesome ecommerce site!",
-    defaultLocale: "en",
+  vite: {
+    optimizeDeps: {
+      include: ['lodash-es'],
+    },
   },
 
-  tailwindcss: {
-    viewer: false,
+  delayHydration: {
+    mode: 'init',
   },
 
   device: {
     refreshOnResize: true,
   },
 
-  experimental: {
-    asyncContext: false,
+  eslint: {
+    config: {
+      stylistic: true,
+    },
   },
 
-  compatibilityDate: "2024-11-06",
-});
+  googleFonts: {
+    families: {
+      'Red Hat Display': [400, 500, 700],
+    },
+  },
+
+  i18n: {
+    locales: [
+      {
+        code: 'en',
+        file: 'en.json',
+      },
+    ],
+    strategy: 'no_prefix',
+    lazy: true,
+    langDir: 'lang',
+    defaultLocale: 'en',
+  },
+
+  image: {
+    providers: {
+      odooProvider: {
+        name: 'odooProvider',
+        provider: '~/providers/odoo-provider.ts',
+      },
+    },
+    screens: {
+      '2xl': 1536,
+      'xxl': 1440,
+      'xl': 1280,
+      'lg': 1024,
+      'md': 768,
+      'sm': 640,
+      'xs': 376,
+    },
+  },
+
+  robots: {
+    allow: '/category/*',
+  },
+
+  tailwindcss: {
+    viewer: false,
+  },
+})

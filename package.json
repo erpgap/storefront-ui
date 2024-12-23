@@ -19,8 +19,9 @@
   },
   "dependencies": {
     "@adyen/adyen-web": "4.7.3",
-    "@erpgap/odoo-sdk": "^0.7.0",
-    "@erpgap/odoo-sdk-api-client": "^0.7.0",
+    "@erpgap/odoo-sdk": "^2.0.4",
+    "@erpgap/odoo-sdk-api-client": "^2.0.4",
+    "@nuxt/eslint": "^0.7.4",
     "@nuxt/image": "^1.7.0",
     "@nuxt/scripts": "^0.4.3",
     "@nuxtjs/algolia": "^1.10.2",
@@ -53,13 +54,18 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
+    "@eslint/js": "^9.17.0",
     "@graphql-codegen/cli": "^4.0.1",
     "@graphql-codegen/client-preset": "^4.0.1",
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "eslint": "^9.17.0",
+    "eslint-plugin-vue": "^9.32.0",
     "git-cz": "^4.9.0",
-    "husky": "^9.0.11"
+    "husky": "^9.0.11",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1"
   },
   "engines": {
     "node": ">=20.0.0"
