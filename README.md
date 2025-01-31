@@ -11,6 +11,7 @@ Template base to start new odoo vsf projects using vsf SDK
 ## How to start ?
 
 ```sh
+1. yarn config set enableTelemetry 0
 2. yarn install
 3. cp -f .env.example apps/web/.env
 4. export $(cat apps/web/.env | grep -v \#)
