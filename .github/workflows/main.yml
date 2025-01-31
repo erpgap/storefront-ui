@@ -2,12 +2,12 @@ name: Build Alokai dev
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ main ]
 
 jobs:
   deployment:
     runs-on: self-hosted
     steps:
     - run: |
-        echo "-------- Deploying https://alokai-dev.labs.erpgap.com/ "
+        echo "-------- Deploying https://alokai.labs.erpgap.com/ "
         /home/egap/.local/bin/deploy-vsf-1
