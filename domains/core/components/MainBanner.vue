@@ -22,12 +22,12 @@
         <p
           class="typography-text-xs md:typography-text-sm font-bold tracking-widest text-neutral-500 uppercase"
         >
-          SPECIAL OFFER
+          SPECIAL OFFERS
         </p>
         <h1
           class="typography-headline-2 md:typography-headline-1 md:leading-[67.5px] font-bold mt-2 mb-4"
         >
-          Jackets hot drops
+          Jackets hot drop
         </h1>
         <p class="typography-text-base md:typography-text-lg">
           This fashionable jackets collection features various colors, comfort
@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { SfButton } from "@storefront-ui/vue";
+import { SfButton } from '@storefront-ui/vue'
 
-const NuxtLink = resolveComponent("NuxtLink");
+const NuxtLink = resolveComponent('NuxtLink')
 </script>
