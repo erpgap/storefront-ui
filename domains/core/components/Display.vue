@@ -1,7 +1,7 @@
 <script setup>
-import { SfButton } from '@storefront-ui/vue';
+import { SfButton } from '@storefront-ui/vue'
 
-const NuxtLink = resolveComponent('NuxtLink');
+const NuxtLink = resolveComponent('NuxtLink')
 
 const items = ref([
   {
@@ -28,11 +28,14 @@ const items = ref([
     buttonText: 'Discover now',
     image: '/images/display-3.png',
   },
-]);
+])
 </script>
 
 <template>
-  <div class="flex flex-col md:flex-row flex-wrap gap-6 mb-10" data-testid="display">
+  <div
+    class="flex flex-col md:flex-row flex-wrap gap-6 mb-10"
+    data-testid="display"
+  >
     <div
       v-for="item in items"
       :key="item.title"
@@ -57,14 +60,18 @@ const items = ref([
           <p class="typography-text-base block text-center md:text-left mb-4">
             {{ item.description }}
           </p>
-          <SfButton class="!bg-black text-white" :tag="NuxtLink" to="/">
+          <SfButton
+            class="!bg-black text-white"
+            :tag="NuxtLink"
+            to="/search"
+          >
             {{ item.buttonText }}
           </SfButton>
         </div>
         <NuxtImg
           :src="item.image"
           :alt="item.title"
-          class="w-full md:w-1/2 self-end object-contain flex-1"
+          class="w-full md:w-1/2 md:!max-w-[300px] self-end object-contain flex-1"
           width="300"
           height="300"
           loading="lazy"

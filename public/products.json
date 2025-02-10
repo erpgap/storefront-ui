@@ -4,18 +4,17 @@
     "firstVariant": {
       "id": 5,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 5,
         "product_template_id": 5,
-        "display_name": "Office Chair",
+        "display_name": "[FURN_7777] Office Chair",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 70,
+        "price_extra": 0,
         "price": 70,
+        "list_price": 70,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 70,
@@ -24,10 +23,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 0,
@@ -49,20 +55,19 @@
     "name": "Office Chair",
     "description": null,
     "image": "/web/image/product.template/5/image_1920",
-    "imageFilename": "675b0075_office-chair",
+    "imageFilename": "office-chair",
     "combinationInfo": {
-      "combination": null,
       "product_id": 5,
       "product_template_id": 5,
-      "display_name": "Office Chair",
+      "display_name": "[FURN_7777] Office Chair",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 70,
+      "price_extra": 0,
       "price": 70,
+      "list_price": 70,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 70,
@@ -71,10 +76,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 0,
@@ -90,11 +102,11 @@
     },
     "slug": "/product/office-chair-5",
     "sku": "FURN_7777",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_7777] Office Chair\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/5/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-7777-office-chair-5\", \"priceCurrency\": \"USD\", \"price\": 70.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_7777\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_7777] Office Chair\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/5/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-7777-office-chair-5\", \"priceCurrency\": \"USD\", \"price\": 70.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_7777\"}",
     "isInWishlist": false,
     "categories": [
       {
-        "id": 17,
+        "id": 11,
         "name": "Chairs",
         "slug": "false",
         "parent": {
@@ -109,18 +121,17 @@
     "firstVariant": {
       "id": 6,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 6,
         "product_template_id": 6,
-        "display_name": "Office Lamp",
+        "display_name": "[FURN_8888] Office Lamp",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 40,
+        "price_extra": 0,
         "price": 40,
+        "list_price": 40,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 40,
@@ -129,10 +140,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 0,
@@ -154,20 +172,19 @@
     "name": "Office Lamp",
     "description": null,
     "image": "/web/image/product.template/6/image_1920",
-    "imageFilename": "675b0075_office-lamp",
+    "imageFilename": "office-lamp",
     "combinationInfo": {
-      "combination": null,
       "product_id": 6,
       "product_template_id": 6,
-      "display_name": "Office Lamp",
+      "display_name": "[FURN_8888] Office Lamp",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 40,
+      "price_extra": 0,
       "price": 40,
+      "list_price": 40,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 40,
@@ -176,10 +193,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 0,
@@ -195,7 +219,7 @@
     },
     "slug": "/product/office-lamp-6",
     "sku": "FURN_8888",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_8888] Office Lamp\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/6/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-8888-office-lamp-6\", \"priceCurrency\": \"USD\", \"price\": 40.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_8888\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_8888] Office Lamp\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/6/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-8888-office-lamp-6\", \"priceCurrency\": \"USD\", \"price\": 40.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_8888\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -212,18 +236,17 @@
     "firstVariant": {
       "id": 7,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 7,
         "product_template_id": 7,
-        "display_name": "Office Design Software",
+        "display_name": "[FURN_9999] Office Design Software",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 280,
+        "price_extra": 0,
         "price": 280,
+        "list_price": 280,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 280,
@@ -232,10 +255,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 0,
@@ -257,20 +287,19 @@
     "name": "Office Design Software",
     "description": null,
     "image": "/web/image/product.template/7/image_1920",
-    "imageFilename": "675b0075_office-design-software",
+    "imageFilename": "office-design-software",
     "combinationInfo": {
-      "combination": null,
       "product_id": 7,
       "product_template_id": 7,
-      "display_name": "Office Design Software",
+      "display_name": "[FURN_9999] Office Design Software",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 280,
+      "price_extra": 0,
       "price": 280,
+      "list_price": 280,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 280,
@@ -279,10 +308,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 0,
@@ -298,7 +334,7 @@
     },
     "slug": "/product/office-design-software-7",
     "sku": "FURN_9999",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_9999] Office Design Software\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/7/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-9999-office-design-software-7\", \"priceCurrency\": \"USD\", \"price\": 280.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_9999\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_9999] Office Design Software\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/7/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-9999-office-design-software-7\", \"priceCurrency\": \"USD\", \"price\": 280.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_9999\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -315,18 +351,17 @@
     "firstVariant": {
       "id": 8,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 8,
         "product_template_id": 8,
-        "display_name": "Desk Combination",
+        "display_name": "[FURN_7800] Desk Combination",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 450,
+        "price_extra": 0,
         "price": 450,
+        "list_price": 450,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 450,
@@ -335,13 +370,20 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
-        "free_qty": 4,
+        "free_qty": 2,
         "cart_qty": 0,
         "uom_name": "Units",
         "uom_rounding": 0.01,
@@ -360,20 +402,19 @@
     "name": "Desk Combination",
     "description": "Desk combination, black-brown: chair + desk + drawer.",
     "image": "/web/image/product.template/8/image_1920",
-    "imageFilename": "675b0075_desk-combination",
+    "imageFilename": "desk-combination",
     "combinationInfo": {
-      "combination": null,
       "product_id": 8,
       "product_template_id": 8,
-      "display_name": "Desk Combination",
+      "display_name": "[FURN_7800] Desk Combination",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 450,
+      "price_extra": 0,
       "price": 450,
+      "list_price": 450,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 450,
@@ -382,13 +423,20 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
-      "free_qty": 4,
+      "free_qty": 2,
       "cart_qty": 0,
       "uom_name": "Units",
       "uom_rounding": 0.01,
@@ -401,7 +449,7 @@
     },
     "slug": "/product/desk-combination-8",
     "sku": "FURN_7800",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_7800] Desk Combination\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/8/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-7800-desk-combination-8\", \"priceCurrency\": \"USD\", \"price\": 450.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"description\": \"Desk combination, black-brown: chair + desk + drawer.\", \"sku\": \"FURN_7800\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_7800] Desk Combination\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/8/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-7800-desk-combination-8\", \"priceCurrency\": \"USD\", \"price\": 450.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"description\": \"Desk combination, black-brown: chair + desk + drawer.\", \"sku\": \"FURN_7800\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -418,55 +466,19 @@
   {
     "id": 9,
     "firstVariant": {
-      "id": 51,
+      "id": 43,
       "combinationInfoVariant": {
-        "combination": [
-          {
-            "id": 18,
-            "name": "Custom",
-            "display_type": "radio",
-            "html_color": false,
-            "search": "1-18",
-            "price_extra": 0,
-            "attribute": [
-              {
-                "id": 1,
-                "name": "Legs",
-                "display_type": "radio",
-                "variant_create_mode": "always",
-                "filter_visibility": "visible"
-              }
-            ]
-          },
-          {
-            "id": 3,
-            "name": "White",
-            "display_type": "color",
-            "html_color": "#FFFFFF",
-            "search": "2-3",
-            "price_extra": 0,
-            "attribute": [
-              {
-                "id": 2,
-                "name": "Color",
-                "display_type": "color",
-                "variant_create_mode": "always",
-                "filter_visibility": "hidden"
-              }
-            ]
-          }
-        ],
-        "product_id": 51,
+        "product_id": 43,
         "product_template_id": 9,
-        "display_name": "Customizable Desk (Custom, White)",
+        "display_name": "[DESK0005] Customizable Desk (Custom, White)",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 750,
+        "price_extra": 0,
         "price": 750,
+        "list_price": 750,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 750,
@@ -475,10 +487,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 65,
@@ -495,11 +514,11 @@
       "slug": "/product/customizable-desk-9",
       "variantAttributeValues": [
         {
-          "id": 18,
+          "id": 7,
           "name": "Custom",
           "displayType": "radio",
           "htmlColor": null,
-          "search": "1-18",
+          "search": "1-7",
           "attribute": {
             "id": 1,
             "name": "Legs"
@@ -523,55 +542,19 @@
     "name": "Customizable Desk",
     "description": "160x80cm, with large legs.",
     "image": "/web/image/product.template/9/image_1920",
-    "imageFilename": "675b0075_customizable-desk",
+    "imageFilename": "customizable-desk",
     "combinationInfo": {
-      "combination": [
-        {
-          "id": 18,
-          "name": "Custom",
-          "display_type": "radio",
-          "html_color": false,
-          "search": "1-18",
-          "price_extra": 0,
-          "attribute": [
-            {
-              "id": 1,
-              "name": "Legs",
-              "display_type": "radio",
-              "variant_create_mode": "always",
-              "filter_visibility": "visible"
-            }
-          ]
-        },
-        {
-          "id": 3,
-          "name": "White",
-          "display_type": "color",
-          "html_color": "#FFFFFF",
-          "search": "2-3",
-          "price_extra": 0,
-          "attribute": [
-            {
-              "id": 2,
-              "name": "Color",
-              "display_type": "color",
-              "variant_create_mode": "always",
-              "filter_visibility": "hidden"
-            }
-          ]
-        }
-      ],
-      "product_id": 51,
+      "product_id": 43,
       "product_template_id": 9,
-      "display_name": "Customizable Desk (Custom, White)",
+      "display_name": "[DESK0005] Customizable Desk (Custom, White)",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 750,
+      "price_extra": 0,
       "price": 750,
+      "list_price": 750,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 750,
@@ -580,10 +563,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 65,
@@ -599,7 +589,7 @@
     },
     "slug": "/product/customizable-desk-9",
     "sku": null,
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"Customizable Desk\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/9/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/customizable-desk-9\", \"priceCurrency\": \"USD\", \"price\": 750.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"description\": \"160x80cm, with large legs.\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"Customizable Desk\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/9/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/customizable-desk-9\", \"priceCurrency\": \"USD\", \"price\": 750.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"description\": \"160x80cm, with large legs.\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -633,7 +623,7 @@
         "search": "1-2"
       },
       {
-        "id": 18,
+        "id": 7,
         "name": "Custom",
         "displayType": "radio",
         "priceExtra": 0,
@@ -641,7 +631,7 @@
           "id": 1,
           "name": "Legs"
         },
-        "search": "1-18"
+        "search": "1-7"
       },
       {
         "id": 3,
@@ -672,18 +662,17 @@
     "firstVariant": {
       "id": 16,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 16,
         "product_template_id": 10,
-        "display_name": "Corner Desk Right Sit",
+        "display_name": "[E-COM06] Corner Desk Right Sit",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 147,
+        "price_extra": 0,
         "price": 147,
+        "list_price": 147,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 147,
@@ -692,10 +681,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 0,
@@ -717,20 +713,19 @@
     "name": "Corner Desk Right Sit",
     "description": null,
     "image": "/web/image/product.template/10/image_1920",
-    "imageFilename": "675b0075_corner-desk-right-sit",
+    "imageFilename": "corner-desk-right-sit",
     "combinationInfo": {
-      "combination": null,
       "product_id": 16,
       "product_template_id": 10,
-      "display_name": "Corner Desk Right Sit",
+      "display_name": "[E-COM06] Corner Desk Right Sit",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 147,
+      "price_extra": 0,
       "price": 147,
+      "list_price": 147,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 147,
@@ -739,10 +734,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 0,
@@ -758,7 +760,7 @@
     },
     "slug": "/product/corner-desk-right-sit-10",
     "sku": "E-COM06",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM06] Corner Desk Right Sit\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/10/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/e-com06-corner-desk-right-sit-10\", \"priceCurrency\": \"USD\", \"price\": 147.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM06\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM06] Corner Desk Right Sit\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/10/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/e-com06-corner-desk-right-sit-10\", \"priceCurrency\": \"USD\", \"price\": 147.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM06\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -775,18 +777,17 @@
     "firstVariant": {
       "id": 17,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 17,
         "product_template_id": 11,
-        "display_name": "Large Cabinet",
+        "display_name": "[E-COM07] Large Cabinet",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 320,
+        "price_extra": 0,
         "price": 320,
+        "list_price": 320,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 320,
@@ -795,10 +796,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 266,
@@ -820,20 +828,19 @@
     "name": "Large Cabinet",
     "description": null,
     "image": "/web/image/product.template/11/image_1920",
-    "imageFilename": "675b0075_large-cabinet",
+    "imageFilename": "large-cabinet",
     "combinationInfo": {
-      "combination": null,
       "product_id": 17,
       "product_template_id": 11,
-      "display_name": "Large Cabinet",
+      "display_name": "[E-COM07] Large Cabinet",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 320,
+      "price_extra": 0,
       "price": 320,
+      "list_price": 320,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 320,
@@ -842,10 +849,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 266,
@@ -861,7 +875,7 @@
     },
     "slug": "/product/large-cabinet-11",
     "sku": "E-COM07",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM07] Large Cabinet\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/11/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/e-com07-large-cabinet-11\", \"priceCurrency\": \"USD\", \"price\": 320.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM07\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM07] Large Cabinet\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/11/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/e-com07-large-cabinet-11\", \"priceCurrency\": \"USD\", \"price\": 320.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM07\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -878,18 +892,17 @@
     "firstVariant": {
       "id": 18,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 18,
         "product_template_id": 12,
-        "display_name": "Storage Box",
+        "display_name": "[E-COM08] Storage Box",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 15.8,
+        "price_extra": 0,
         "price": 15.8,
+        "list_price": 15.8,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 15.8,
@@ -898,10 +911,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 18,
@@ -923,20 +943,19 @@
     "name": "Storage Box",
     "description": null,
     "image": "/web/image/product.template/12/image_1920",
-    "imageFilename": "675b0075_storage-box",
+    "imageFilename": "storage-box",
     "combinationInfo": {
-      "combination": null,
       "product_id": 18,
       "product_template_id": 12,
-      "display_name": "Storage Box",
+      "display_name": "[E-COM08] Storage Box",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 15.8,
+      "price_extra": 0,
       "price": 15.8,
+      "list_price": 15.8,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 15.8,
@@ -945,10 +964,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 18,
@@ -964,7 +990,7 @@
     },
     "slug": "/product/storage-box-12",
     "sku": "E-COM08",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM08] Storage Box\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/12/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/e-com08-storage-box-12\", \"priceCurrency\": \"USD\", \"price\": 15.8, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM08\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM08] Storage Box\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/12/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/e-com08-storage-box-12\", \"priceCurrency\": \"USD\", \"price\": 15.8, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM08\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -981,18 +1007,17 @@
     "firstVariant": {
       "id": 19,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 19,
         "product_template_id": 13,
-        "display_name": "Large Desk",
+        "display_name": "[E-COM09] Large Desk",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 1799,
+        "price_extra": 0,
         "price": 1799,
+        "list_price": 1799,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 1799,
@@ -1001,10 +1026,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 0,
@@ -1026,20 +1058,19 @@
     "name": "Large Desk",
     "description": null,
     "image": "/web/image/product.template/13/image_1920",
-    "imageFilename": "675b0075_large-desk",
+    "imageFilename": "large-desk",
     "combinationInfo": {
-      "combination": null,
       "product_id": 19,
       "product_template_id": 13,
-      "display_name": "Large Desk",
+      "display_name": "[E-COM09] Large Desk",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 1799,
+      "price_extra": 0,
       "price": 1799,
+      "list_price": 1799,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 1799,
@@ -1048,10 +1079,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 0,
@@ -1067,7 +1105,7 @@
     },
     "slug": "/product/large-desk-13",
     "sku": "E-COM09",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM09] Large Desk\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/13/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/e-com09-large-desk-13\", \"priceCurrency\": \"USD\", \"price\": 1799.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM09\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM09] Large Desk\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/13/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/e-com09-large-desk-13\", \"priceCurrency\": \"USD\", \"price\": 1799.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM09\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -1084,18 +1122,17 @@
     "firstVariant": {
       "id": 20,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 20,
         "product_template_id": 14,
-        "display_name": "Pedal Bin",
+        "display_name": "[E-COM10] Pedal Bin",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 47,
+        "price_extra": 0,
         "price": 47,
+        "list_price": 47,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 47,
@@ -1104,10 +1141,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 22,
@@ -1129,20 +1173,19 @@
     "name": "Pedal Bin",
     "description": null,
     "image": "/web/image/product.template/14/image_1920",
-    "imageFilename": "675b0075_pedal-bin",
+    "imageFilename": "pedal-bin",
     "combinationInfo": {
-      "combination": null,
       "product_id": 20,
       "product_template_id": 14,
-      "display_name": "Pedal Bin",
+      "display_name": "[E-COM10] Pedal Bin",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 47,
+      "price_extra": 0,
       "price": 47,
+      "list_price": 47,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 47,
@@ -1151,10 +1194,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 22,
@@ -1170,7 +1220,7 @@
     },
     "slug": "/product/pedal-bin-14",
     "sku": "E-COM10",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM10] Pedal Bin\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/14/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/e-com10-pedal-bin-14\", \"priceCurrency\": \"USD\", \"price\": 47.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM10\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM10] Pedal Bin\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/14/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/e-com10-pedal-bin-14\", \"priceCurrency\": \"USD\", \"price\": 47.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM10\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -1187,18 +1237,17 @@
     "firstVariant": {
       "id": 21,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 21,
         "product_template_id": 15,
-        "display_name": "Cabinet with Doors",
+        "display_name": "[E-COM11] Cabinet with Doors",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 140,
+        "price_extra": 0,
         "price": 140,
+        "list_price": 140,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 140,
@@ -1207,10 +1256,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 18,
@@ -1232,20 +1288,19 @@
     "name": "Cabinet with Doors",
     "description": null,
     "image": "/web/image/product.template/15/image_1920",
-    "imageFilename": "675b0075_cabinet-with-doors",
+    "imageFilename": "cabinet-with-doors",
     "combinationInfo": {
-      "combination": null,
       "product_id": 21,
       "product_template_id": 15,
-      "display_name": "Cabinet with Doors",
+      "display_name": "[E-COM11] Cabinet with Doors",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 140,
+      "price_extra": 0,
       "price": 140,
+      "list_price": 140,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 140,
@@ -1254,10 +1309,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 18,
@@ -1273,7 +1335,7 @@
     },
     "slug": "/product/cabinet-with-doors-15",
     "sku": "E-COM11",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM11] Cabinet with Doors\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/15/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/e-com11-cabinet-with-doors-15\", \"priceCurrency\": \"USD\", \"price\": 140.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM11\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[E-COM11] Cabinet with Doors\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/15/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/e-com11-cabinet-with-doors-15\", \"priceCurrency\": \"USD\", \"price\": 140.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"E-COM11\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -1290,36 +1352,17 @@
     "firstVariant": {
       "id": 23,
       "combinationInfoVariant": {
-        "combination": [
-          {
-            "id": 5,
-            "name": "Steel",
-            "display_type": "radio",
-            "html_color": false,
-            "search": "1-5",
-            "price_extra": 0,
-            "attribute": [
-              {
-                "id": 1,
-                "name": "Legs",
-                "display_type": "radio",
-                "variant_create_mode": "always",
-                "filter_visibility": "visible"
-              }
-            ]
-          }
-        ],
         "product_id": 23,
         "product_template_id": 16,
-        "display_name": "Conference Chair (Steel)",
+        "display_name": "[E-COM12] Conference Chair (Steel)",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 33,
+        "price_extra": 0,
         "price": 33,
+        "list_price": 33,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 33,
@@ -1328,10 +1371,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 26,
@@ -1365,38 +1415,19 @@
     "name": "Conference Chair",
     "description": null,
     "image": "/web/image/product.template/16/image_1920",
-    "imageFilename": "675b0075_conference-chair",
+    "imageFilename": "conference-chair",
     "combinationInfo": {
-      "combination": [
-        {
-          "id": 5,
-          "name": "Steel",
-          "display_type": "radio",
-          "html_color": false,
-          "search": "1-5",
-          "price_extra": 0,
-          "attribute": [
-            {
-              "id": 1,
-              "name": "Legs",
-              "display_type": "radio",
-              "variant_create_mode": "always",
-              "filter_visibility": "visible"
-            }
-          ]
-        }
-      ],
       "product_id": 23,
       "product_template_id": 16,
-      "display_name": "Conference Chair (Steel)",
+      "display_name": "[E-COM12] Conference Chair (Steel)",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 33,
+      "price_extra": 0,
       "price": 33,
+      "list_price": 33,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 33,
@@ -1405,10 +1436,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 26,
@@ -1424,11 +1462,11 @@
     },
     "slug": "/product/conference-chair-16",
     "sku": null,
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"Conference Chair\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/16/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/conference-chair-16\", \"priceCurrency\": \"USD\", \"price\": 33.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"Conference Chair\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/16/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/conference-chair-16\", \"priceCurrency\": \"USD\", \"price\": 33.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}}",
     "isInWishlist": false,
     "categories": [
       {
-        "id": 17,
+        "id": 11,
         "name": "Chairs",
         "slug": "false",
         "parent": {
@@ -1466,18 +1504,17 @@
     "firstVariant": {
       "id": 25,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 25,
         "product_template_id": 17,
-        "display_name": "Office Chair Black",
+        "display_name": "[FURN_0269] Office Chair Black",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 120.5,
+        "price_extra": 0,
         "price": 120.5,
+        "list_price": 120.5,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 120.5,
@@ -1486,10 +1523,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 10,
@@ -1511,20 +1555,19 @@
     "name": "Office Chair Black",
     "description": null,
     "image": "/web/image/product.template/17/image_1920",
-    "imageFilename": "675b0075_office-chair-black",
+    "imageFilename": "office-chair-black",
     "combinationInfo": {
-      "combination": null,
       "product_id": 25,
       "product_template_id": 17,
-      "display_name": "Office Chair Black",
+      "display_name": "[FURN_0269] Office Chair Black",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 120.5,
+      "price_extra": 0,
       "price": 120.5,
+      "list_price": 120.5,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 120.5,
@@ -1533,10 +1576,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 10,
@@ -1552,11 +1602,11 @@
     },
     "slug": "/product/office-chair-black-17",
     "sku": "FURN_0269",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_0269] Office Chair Black\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/17/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-0269-office-chair-black-17\", \"priceCurrency\": \"USD\", \"price\": 120.5, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_0269\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_0269] Office Chair Black\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/17/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-0269-office-chair-black-17\", \"priceCurrency\": \"USD\", \"price\": 120.5, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_0269\"}",
     "isInWishlist": false,
     "categories": [
       {
-        "id": 17,
+        "id": 11,
         "name": "Chairs",
         "slug": "false",
         "parent": {
@@ -1571,18 +1621,17 @@
     "firstVariant": {
       "id": 26,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 26,
         "product_template_id": 18,
-        "display_name": "Corner Desk Left Sit",
+        "display_name": "[FURN_1118] Corner Desk Left Sit",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 85,
+        "price_extra": 0,
         "price": 85,
+        "list_price": 85,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 85,
@@ -1591,10 +1640,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 2,
@@ -1616,20 +1672,19 @@
     "name": "Corner Desk Left Sit",
     "description": null,
     "image": "/web/image/product.template/18/image_1920",
-    "imageFilename": "675b0075_corner-desk-left-sit",
+    "imageFilename": "corner-desk-left-sit",
     "combinationInfo": {
-      "combination": null,
       "product_id": 26,
       "product_template_id": 18,
-      "display_name": "Corner Desk Left Sit",
+      "display_name": "[FURN_1118] Corner Desk Left Sit",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 85,
+      "price_extra": 0,
       "price": 85,
+      "list_price": 85,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 85,
@@ -1638,10 +1693,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 2,
@@ -1657,7 +1719,7 @@
     },
     "slug": "/product/corner-desk-left-sit-18",
     "sku": "FURN_1118",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_1118] Corner Desk Left Sit\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/18/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-1118-corner-desk-left-sit-18\", \"priceCurrency\": \"USD\", \"price\": 85.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_1118\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_1118] Corner Desk Left Sit\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/18/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-1118-corner-desk-left-sit-18\", \"priceCurrency\": \"USD\", \"price\": 85.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_1118\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -1674,18 +1736,17 @@
     "firstVariant": {
       "id": 27,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 27,
         "product_template_id": 19,
-        "display_name": "Drawer Black",
+        "display_name": "[FURN_8900] Drawer Black",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 25,
+        "price_extra": 0,
         "price": 25,
+        "list_price": 25,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 25,
@@ -1694,10 +1755,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 0,
@@ -1719,20 +1787,19 @@
     "name": "Drawer Black",
     "description": null,
     "image": "/web/image/product.template/19/image_1920",
-    "imageFilename": "675b0075_drawer-black",
+    "imageFilename": "drawer-black",
     "combinationInfo": {
-      "combination": null,
       "product_id": 27,
       "product_template_id": 19,
-      "display_name": "Drawer Black",
+      "display_name": "[FURN_8900] Drawer Black",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 25,
+      "price_extra": 0,
       "price": 25,
+      "list_price": 25,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 25,
@@ -1741,10 +1808,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 0,
@@ -1760,7 +1834,7 @@
     },
     "slug": "/product/drawer-black-19",
     "sku": "FURN_8900",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_8900] Drawer Black\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/19/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-8900-drawer-black-19\", \"priceCurrency\": \"USD\", \"price\": 25.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_8900\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_8900] Drawer Black\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/19/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-8900-drawer-black-19\", \"priceCurrency\": \"USD\", \"price\": 25.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_8900\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -1777,18 +1851,17 @@
     "firstVariant": {
       "id": 29,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 29,
         "product_template_id": 21,
-        "display_name": "Desk Stand with Screen",
+        "display_name": "[FURN_7888] Desk Stand with Screen",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 2100,
+        "price_extra": 0,
         "price": 2100,
+        "list_price": 2100,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 2100,
@@ -1797,10 +1870,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 0,
@@ -1822,20 +1902,19 @@
     "name": "Desk Stand with Screen",
     "description": null,
     "image": "/web/image/product.template/21/image_1920",
-    "imageFilename": "675b0075_desk-stand-with-screen",
+    "imageFilename": "desk-stand-with-screen",
     "combinationInfo": {
-      "combination": null,
       "product_id": 29,
       "product_template_id": 21,
-      "display_name": "Desk Stand with Screen",
+      "display_name": "[FURN_7888] Desk Stand with Screen",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 2100,
+      "price_extra": 0,
       "price": 2100,
+      "list_price": 2100,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 2100,
@@ -1844,10 +1923,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 0,
@@ -1863,7 +1949,7 @@
     },
     "slug": "/product/desk-stand-with-screen-21",
     "sku": "FURN_7888",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_7888] Desk Stand with Screen\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/21/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-7888-desk-stand-with-screen-21\", \"priceCurrency\": \"USD\", \"price\": 2100.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_7888\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_7888] Desk Stand with Screen\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/21/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-7888-desk-stand-with-screen-21\", \"priceCurrency\": \"USD\", \"price\": 2100.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_7888\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -1882,18 +1968,17 @@
     "firstVariant": {
       "id": 30,
       "combinationInfoVariant": {
-        "combination": null,
         "product_id": 30,
         "product_template_id": 22,
-        "display_name": "Individual Workplace",
+        "display_name": "[FURN_0789] Individual Workplace",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 885,
+        "price_extra": 0,
         "price": 885,
+        "list_price": 885,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 885,
@@ -1902,10 +1987,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 16,
@@ -1927,20 +2019,19 @@
     "name": "Individual Workplace",
     "description": null,
     "image": "/web/image/product.template/22/image_1920",
-    "imageFilename": "675b0075_individual-workplace",
+    "imageFilename": "individual-workplace",
     "combinationInfo": {
-      "combination": null,
       "product_id": 30,
       "product_template_id": 22,
-      "display_name": "Individual Workplace",
+      "display_name": "[FURN_0789] Individual Workplace",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 885,
+      "price_extra": 0,
       "price": 885,
+      "list_price": 885,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 885,
@@ -1949,10 +2040,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 16,
@@ -1968,7 +2066,7 @@
     },
     "slug": "/product/individual-workplace-22",
     "sku": "FURN_0789",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_0789] Individual Workplace\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/22/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-0789-individual-workplace-22\", \"priceCurrency\": \"USD\", \"price\": 885.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_0789\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_0789] Individual Workplace\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/22/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-0789-individual-workplace-22\", \"priceCurrency\": \"USD\", \"price\": 885.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_0789\"}",
     "isInWishlist": false,
     "categories": null,
     "attributeValues": null
@@ -1978,36 +2076,17 @@
     "firstVariant": {
       "id": 31,
       "combinationInfoVariant": {
-        "combination": [
-          {
-            "id": 7,
-            "name": "White",
-            "display_type": "color",
-            "html_color": "#FFFFFF",
-            "search": "2-7",
-            "price_extra": 0,
-            "attribute": [
-              {
-                "id": 2,
-                "name": "Color",
-                "display_type": "color",
-                "variant_create_mode": "always",
-                "filter_visibility": "hidden"
-              }
-            ]
-          }
-        ],
         "product_id": 31,
         "product_template_id": 23,
-        "display_name": "Acoustic Bloc Screens (White)",
+        "display_name": "[FURN_6666] Acoustic Bloc Screens",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 295,
+        "price_extra": 0,
         "price": 295,
+        "list_price": 295,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 295,
@@ -2016,10 +2095,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 0,
@@ -2034,57 +2120,26 @@
         "discount_perc": 0
       },
       "slug": "/product/acoustic-bloc-screens-23",
-      "variantAttributeValues": [
-        {
-          "id": 7,
-          "name": "White",
-          "displayType": "color",
-          "htmlColor": "#FFFFFF",
-          "search": "2-7",
-          "attribute": {
-            "id": 2,
-            "name": "Color"
-          }
-        }
-      ]
+      "variantAttributeValues": null
     },
     "smallImage": "/web/image/product.template/23/image_128",
     "price": 295,
     "name": "Acoustic Bloc Screens",
     "description": null,
     "image": "/web/image/product.template/23/image_1920",
-    "imageFilename": "675b0075_acoustic-bloc-screens",
+    "imageFilename": "acoustic-bloc-screens",
     "combinationInfo": {
-      "combination": [
-        {
-          "id": 7,
-          "name": "White",
-          "display_type": "color",
-          "html_color": "#FFFFFF",
-          "search": "2-7",
-          "price_extra": 0,
-          "attribute": [
-            {
-              "id": 2,
-              "name": "Color",
-              "display_type": "color",
-              "variant_create_mode": "always",
-              "filter_visibility": "hidden"
-            }
-          ]
-        }
-      ],
       "product_id": 31,
       "product_template_id": 23,
-      "display_name": "Acoustic Bloc Screens (White)",
+      "display_name": "[FURN_6666] Acoustic Bloc Screens",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 295,
+      "price_extra": 0,
       "price": 295,
+      "list_price": 295,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 295,
@@ -2093,10 +2148,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 0,
@@ -2111,8 +2173,8 @@
       "discount_perc": 0
     },
     "slug": "/product/acoustic-bloc-screens-23",
-    "sku": null,
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"Acoustic Bloc Screens\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/23/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/acoustic-bloc-screens-23\", \"priceCurrency\": \"USD\", \"price\": 295.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}}",
+    "sku": "FURN_6666",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_6666] Acoustic Bloc Screens\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/23/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-6666-acoustic-bloc-screens-23\", \"priceCurrency\": \"USD\", \"price\": 295.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_6666\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -2124,48 +2186,24 @@
         }
       }
     ],
-    "attributeValues": [
-      {
-        "id": 8,
-        "name": "Wood",
-        "displayType": "color",
-        "priceExtra": 0,
-        "attribute": {
-          "id": 2,
-          "name": "Color"
-        },
-        "search": "2-8"
-      },
-      {
-        "id": 7,
-        "name": "White",
-        "displayType": "color",
-        "priceExtra": 0,
-        "attribute": {
-          "id": 2,
-          "name": "Color"
-        },
-        "search": "2-7"
-      }
-    ]
+    "attributeValues": null
   },
   {
     "id": 24,
     "firstVariant": {
-      "id": 33,
+      "id": 32,
       "combinationInfoVariant": {
-        "combination": null,
-        "product_id": 33,
+        "product_id": 32,
         "product_template_id": 24,
-        "display_name": "Drawer",
+        "display_name": "[FURN_8855] Drawer",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 110.5,
+        "price_extra": 0,
         "price": 110.5,
+        "list_price": 110.5,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 110.5,
@@ -2174,10 +2212,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 65,
@@ -2199,20 +2244,19 @@
     "name": "Drawer",
     "description": null,
     "image": "/web/image/product.template/24/image_1920",
-    "imageFilename": "675b0075_drawer",
+    "imageFilename": "drawer",
     "combinationInfo": {
-      "combination": null,
-      "product_id": 33,
+      "product_id": 32,
       "product_template_id": 24,
-      "display_name": "Drawer",
+      "display_name": "[FURN_8855] Drawer",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 110.5,
+      "price_extra": 0,
       "price": 110.5,
+      "list_price": 110.5,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 110.5,
@@ -2221,10 +2265,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 65,
@@ -2240,7 +2291,7 @@
     },
     "slug": "/product/drawer-24",
     "sku": "FURN_8855",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_8855] Drawer\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/24/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-8855-drawer-24\", \"priceCurrency\": \"USD\", \"price\": 110.5, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_8855\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_8855] Drawer\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/24/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-8855-drawer-24\", \"priceCurrency\": \"USD\", \"price\": 110.5, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"sku\": \"FURN_8855\"}",
     "isInWishlist": false,
     "categories": [
       {
@@ -2255,20 +2306,19 @@
   {
     "id": 25,
     "firstVariant": {
-      "id": 34,
+      "id": 33,
       "combinationInfoVariant": {
-        "combination": null,
-        "product_id": 34,
+        "product_id": 33,
         "product_template_id": 25,
-        "display_name": "Four Person Desk",
+        "display_name": "[FURN_8220] Four Person Desk",
         "display_image": true,
         "is_combination_possible": true,
         "parent_exclusions": {},
-        "list_price": 2350,
+        "price_extra": 0,
         "price": 2350,
+        "list_price": 2350,
         "has_discounted_price": false,
         "compare_list_price": null,
-        "price_extra": 0,
         "prevent_zero_price_sale": false,
         "base_unit_name": "Units",
         "base_unit_price": 2350,
@@ -2277,10 +2327,17 @@
           "name": "USD",
           "symbol": "$"
         },
-        "date": "2024-12-15",
-        "product_taxes": null,
-        "taxes": null,
-        "product_type": "consu",
+        "date": "2025-02-10",
+        "product_taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "taxes": {
+          "id": 1,
+          "name": "15%"
+        },
+        "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+        "product_type": "product",
         "allow_out_of_stock_order": true,
         "available_threshold": 5,
         "free_qty": 0,
@@ -2302,20 +2359,19 @@
     "name": "Four Person Desk",
     "description": "Four person modern office workstation",
     "image": "/web/image/product.template/25/image_1920",
-    "imageFilename": "675b0075_four-person-desk",
+    "imageFilename": "four-person-desk",
     "combinationInfo": {
-      "combination": null,
-      "product_id": 34,
+      "product_id": 33,
       "product_template_id": 25,
-      "display_name": "Four Person Desk",
+      "display_name": "[FURN_8220] Four Person Desk",
       "display_image": true,
       "is_combination_possible": true,
       "parent_exclusions": {},
-      "list_price": 2350,
+      "price_extra": 0,
       "price": 2350,
+      "list_price": 2350,
       "has_discounted_price": false,
       "compare_list_price": null,
-      "price_extra": 0,
       "prevent_zero_price_sale": false,
       "base_unit_name": "Units",
       "base_unit_price": 2350,
@@ -2324,10 +2380,17 @@
         "name": "USD",
         "symbol": "$"
       },
-      "date": "2024-12-15",
-      "product_taxes": null,
-      "taxes": null,
-      "product_type": "consu",
+      "date": "2025-02-10",
+      "product_taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "taxes": {
+        "id": 1,
+        "name": "15%"
+      },
+      "product_tags": "\n        <div class=\"o_product_tags o_field_tags d-flex flex-wrap align-items-center gap-2\">\n        </div>",
+      "product_type": "product",
       "allow_out_of_stock_order": true,
       "available_threshold": 5,
       "free_qty": 0,
@@ -2343,7 +2406,7 @@
     },
     "slug": "/product/four-person-desk-25",
     "sku": "FURN_8220",
-    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_8220] Four Person Desk\", \"image\": [\"http://vsf-odoo18.labs.erpgap.com/web/image/product.product/25/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"/product/furn-8220-four-person-desk-25\", \"priceCurrency\": \"USD\", \"price\": 2350.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"description\": \"Four person modern office workstation\", \"sku\": \"FURN_8220\"}",
+    "jsonLd": "{\"@context\": \"https://schema.org/\", \"@type\": \"Product\", \"name\": \"[FURN_8220] Four Person Desk\", \"image\": [\"http://vsfdemo17.labs.odoogap.com/web/image/product.product/25/image\"], \"offers\": {\"@type\": \"Offer\", \"url\": \"https://vsfsdk.labs.odoogap.com/product/furn-8220-four-person-desk-25\", \"priceCurrency\": \"USD\", \"price\": 2350.0, \"itemCondition\": \"https://schema.org/NewCondition\", \"availability\": \"https://schema.org/InStock\", \"seller\": {\"@type\": \"Organization\", \"name\": \"My Website\"}}, \"description\": \"Four person modern office workstation\", \"sku\": \"FURN_8220\"}",
     "isInWishlist": false,
     "categories": [
       {
