@@ -37,18 +37,9 @@
           <SfButton
             size="lg"
             :tag="NuxtLink"
-            to="/product/leather-jacket-d-r-o-w-s-black-96?Size=189&Material=188&Color=191"
+            to="/search"
           >
-            Order Now
-          </SfButton>
-          <SfButton
-            size="lg"
-            :tag="NuxtLink"
-            to="/category/53"
-            class="bg-white"
-            variant="secondary"
-          >
-            Show More
+            Shop Now
           </SfButton>
         </div>
       </div>

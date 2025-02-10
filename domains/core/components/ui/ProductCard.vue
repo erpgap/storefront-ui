@@ -6,8 +6,8 @@ import {
   SfIconShoppingCart,
   SfIconFavorite,
   SfIconFavoriteFilled,
-} from "@storefront-ui/vue";
-import type { Product } from "~/graphql";
+} from '@storefront-ui/vue'
+import type { Product } from '~/graphql'
 
 defineProps({
   imageUrl: {
@@ -51,23 +51,24 @@ defineProps({
     required: false,
   },
   loading: {
-    type: String as PropType<"eager" | "lazy" | undefined>,
+    type: String as PropType<'eager' | 'lazy' | undefined>,
     required: false,
-    default: "lazy",
+    default: 'lazy',
   },
-});
+})
 
-const { cartAdd } = useCart();
-const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist();
+const { cartAdd } = useCart()
+const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
 
 const handleWishlistAddItem = async (firstVariant: Product) => {
-  await wishlistAddItem(firstVariant.id);
-};
+  await wishlistAddItem(firstVariant.id)
+}
 
 const handleWishlistRemoveItem = async (firstVariant: Product) => {
-  await wishlistRemoveItem(firstVariant.id);
-};
+  await wishlistRemoveItem(firstVariant.id)
+}
 </script>
+
 <template>
   <div
     class="relative border border-neutral-200 rounded-md hover:shadow-lg min-h-[330px] flex flex-col justify-around"
@@ -100,8 +101,14 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
             : handleWishlistAddItem(firstVariant as Product)
         "
       >
-        <SfIconFavoriteFilled v-if="isInWishlist(firstVariant?.id)" size="sm" />
-        <SfIconFavorite v-else size="sm" />
+        <SfIconFavoriteFilled
+          v-if="isInWishlist(firstVariant?.id)"
+          size="sm"
+        />
+        <SfIconFavorite
+          v-else
+          size="sm"
+        />
       </SfButton>
     </div>
     <div
@@ -114,9 +121,18 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
       >
         {{ name }}
       </NuxtLink>
-      <div class="flex items-center">
-        <SfRating size="xs" :value="rating ?? 0" :max="5" />
-        <SfCounter size="xs">{{ ratingCount }}</SfCounter>
+      <div class="flex items-center mb-2">
+        <SfRating
+          size="xs"
+          :value="4"
+          :max="5"
+        />
+        <SfCounter
+          class="ml-1"
+          size="xs"
+        >
+          26
+        </SfCounter>
       </div>
       <p
         v-if="description"
@@ -132,8 +148,7 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
           <span
             v-if="specialPrice"
             class="ml-1.5 font-normal typography-text-xs line-through"
-            >{{ $currency(specialPrice) }}</span
-          >
+          >{{ $currency(specialPrice) }}</span>
         </div>
         <SfButton
           type="button"

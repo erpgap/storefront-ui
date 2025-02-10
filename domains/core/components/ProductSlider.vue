@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { SfScrollable } from "@storefront-ui/vue";
-import type { Product, QueryProductsArgs } from "~/graphql";
+import { SfScrollable } from '@storefront-ui/vue'
+import type { Product, QueryProductsArgs } from '~/graphql'
 
 const props = defineProps({
   heading: String,
   text: String,
   ids: {
-    type: Array<Number>,
+    type: Array<number>,
     default: () => [],
   },
   keyForComposable: {
     type: String,
-    default: "",
+    default: '',
   },
-});
+})
 
-const { loadProductTemplateList, loading, productTemplateList } =
-  useProductTemplateList(props.keyForComposable, props.keyForComposable);
-const { getRegularPrice, getSpecialPrice } = useProductAttributes();
+const { loadProductTemplateList, loading, productTemplateList }
+  = useProductTemplateList(props.keyForComposable, props.keyForComposable)
+const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
-const numOfProducts = 10;
-const params: QueryProductsArgs = { pageSize: numOfProducts };
+const numOfProducts = 10
+const params: QueryProductsArgs = { pageSize: numOfProducts }
 
 if (props.ids?.length > 0) {
-  params.filter = { ids: props.ids } as any;
+  params.filter = { ids: props.ids } as any
 }
-await loadProductTemplateList(params, true);
+await loadProductTemplateList(params, true)
 </script>
 
 <template>
@@ -43,6 +43,7 @@ await loadProductTemplateList(params, true);
     buttons-placement="floating"
     class="items-center pb-4"
     data-testid="product-slider"
+    style="scrollbar-width: none;"
   >
     <LazyUiProductCard
       v-for="productTemplate in productTemplateList"
@@ -50,7 +51,7 @@ await loadProductTemplateList(params, true);
       class="min-w-[190px] max-w-[190px]"
       :slug="
         mountUrlSlugForProductVariant(
-          productTemplate.firstVariant as Product
+          productTemplate.firstVariant as Product,
         ) || ''
       "
       :name="productTemplate?.name || ''"
@@ -59,7 +60,7 @@ await loadProductTemplateList(params, true);
           String(productTemplate.image),
           370,
           370,
-          String(productTemplate.imageFilename)
+          String(productTemplate.imageFilename),
         )
       "
       :image-alt="productTemplate?.name || ''"

@@ -4,13 +4,13 @@ import {
   SfIconTune,
   useDisclosure,
   SfLoaderCircular,
-} from "@storefront-ui/vue";
-import type { Product } from "~/graphql";
+} from '@storefront-ui/vue'
+import type { Product } from '~/graphql'
 
-const route = useRoute();
-const { isMobile, isDesktopOrTablet } = useDevice();
+const route = useRoute()
+const { isMobile, isDesktopOrTablet } = useDevice()
 
-const { isOpen, open, close } = useDisclosure();
+const { isOpen, open, close } = useDisclosure()
 const {
   loadProductTemplateList,
   organizedAttributes,
@@ -18,40 +18,35 @@ const {
   productTemplateList,
   totalItems,
   categories,
-} = useProductTemplateList(route.path, String(route.fullPath));
+} = useProductTemplateList(route.path, String(route.fullPath))
 
 const {
   loadCategory,
   category,
   loading: categoryLoading,
-} = useCategory(String(route.fullPath));
+} = useCategory(String(route.fullPath))
 
-const { getRegularPrice, getSpecialPrice } = useProductAttributes();
-const { getFacetsFromURL } = useUiHelpers();
+const { getRegularPrice, getSpecialPrice } = useProductAttributes()
+const { getFacetsFromURL } = useUiHelpers()
 
-const breadcrumbs = [
-  { name: "Home", link: "/" },
-  { name: "Category", link: `Category/${route.params.id}` },
-];
-
-const maxVisiblePages = useState("category-max-visible-pages", () => 1);
+const maxVisiblePages = useState('category-max-visible-pages', () => 1)
 const setMaxVisiblePages = (isWide: boolean) =>
-  (maxVisiblePages.value = isWide ? 5 : 1);
+  (maxVisiblePages.value = isWide ? 5 : 1)
 
-watch(isWideScreen, (value) => setMaxVisiblePages(value));
+watch(isWideScreen, value => setMaxVisiblePages(value))
 watch(isTabletScreen, (value) => {
   if (value && isOpen.value) {
-    close();
+    close()
   }
-});
+})
 
 watch(
   () => route,
   async () => {
-    await loadProductTemplateList(getFacetsFromURL(route.query));
+    await loadProductTemplateList(getFacetsFromURL(route.query))
   },
-  { deep: true, immediate: true }
-);
+  { deep: true, immediate: true },
+)
 
 const pagination = computed(() => ({
   currentPage: route?.query?.page ? Number(route.query.page) : 1,
@@ -59,29 +54,35 @@ const pagination = computed(() => ({
   totalItems: totalItems.value,
   itemsPerPage: 12,
   pageOptions: [5, 12, 15, 20],
-}));
+}))
 
-const params = route.params as { id?: string | number; slug?: string };
+const params = route.params as { id?: string | number, slug?: string }
 
 if (params.id) {
   await loadCategory({
     id: Number(params.id),
     slug: String(route.fullPath),
-  });
+  })
 }
 
 if (category.value) {
-  useHead(categoryHead(category.value, String(route.fullPath)));
+  useHead(categoryHead(category.value, String(route.fullPath)))
 }
 
-setMaxVisiblePages(isWideScreen.value);
+setMaxVisiblePages(isWideScreen.value)
+
+const breadcrumbs = [
+  { name: 'Home', link: '/' },
+  { name: category._value.name, link: `Category/${route.params.id}` },
+]
 </script>
+
 <template>
   <div class="pb-20">
-    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
-    <h1 class="font-bold typography-headline-3 md:typography-headline-2 mb-10">
-      All products
-    </h1>
+    <UiBreadcrumb
+      :breadcrumbs="breadcrumbs"
+      class="self-start mt-5 mb-5"
+    />
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
         <LazyCategoryFilterSidebar
@@ -107,8 +108,7 @@ setMaxVisiblePages(isWideScreen.value);
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
         <div v-if="!loading">
           <div class="flex justify-between items-center mb-6">
-            <span class="font-bold font-headings md:text-lg"
-              >{{ totalItems }} Products
+            <span class="font-bold font-headings md:text-lg">{{ totalItems }} Products
             </span>
             <SfButton
               variant="tertiary"
@@ -132,7 +132,7 @@ setMaxVisiblePages(isWideScreen.value);
               loading="eager"
               :slug="
                 mountUrlSlugForProductVariant(
-                  (productTemplate.firstVariant || productTemplate) as Product
+                  (productTemplate.firstVariant || productTemplate) as Product,
                 )
               "
               :image-url="
@@ -140,7 +140,7 @@ setMaxVisiblePages(isWideScreen.value);
                   String(productTemplate.image),
                   370,
                   370,
-                  String(productTemplate.imageFilename)
+                  String(productTemplate.imageFilename),
                 )
               "
               :image-alt="productTemplate?.name || ''"
@@ -155,7 +155,10 @@ setMaxVisiblePages(isWideScreen.value);
               :first-variant="productTemplate.firstVariant as Product"
             />
           </section>
-          <CategoryEmptyState v-else :page="pagination.currentPage" />
+          <CategoryEmptyState
+            v-else
+            :page="pagination.currentPage"
+          />
           <LazyUiPagination
             v-if="pagination.totalPages > 1"
             class="mt-5"
@@ -165,8 +168,14 @@ setMaxVisiblePages(isWideScreen.value);
             :max-visible-pages="maxVisiblePages"
           />
         </div>
-        <div v-else class="w-full text-center">
-          <SfLoaderCircular size="xl" class="mt-[160px]" />
+        <div
+          v-else
+          class="w-full text-center"
+        >
+          <SfLoaderCircular
+            size="xl"
+            class="mt-[160px]"
+          />
         </div>
       </div>
     </div>
