@@ -87,5 +87,5 @@ export async function updateCart(event: any, updateData: any) {
     const updatedCart = Object.assign({}, currentCart.cart, updateData);
     const reducedCart = reduceCart(updatedCart as Cart)
 
-    useStorage().setItem(keyName, { cart: reducedCart });
+    useStorage().setItem(keyName, { reducedCart });
 }
