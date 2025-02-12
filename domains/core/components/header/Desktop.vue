@@ -133,12 +133,14 @@ onClickOutside(menuRef, () => {
                         </li>
                       </ul>
                     </div>
-                    <SfButton
+              
+                  </div>
+                  <SfButton
                       square
                       size="sm"
                       variant="tertiary"
                       aria-label="Close navigation menu"
-                      class="lg:absolute lg:right-0 lg:top-0 hover:bg-white active:bg-white"
+                      class="absolute right-5 top-5 hover:bg-white active:bg-white"
                       @click="close()"
                     >
                       <Icon
@@ -147,7 +149,6 @@ onClickOutside(menuRef, () => {
                         size="20px"
                       />
                     </SfButton>
-                  </div>
                 </SfDrawer>
               </transition>
             </li>
