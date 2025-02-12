@@ -107,12 +107,12 @@ onClickOutside(menuRef, () => {
                       :key="id"
                       class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
                     >
-                      <NuxtLink :to="slug"
+                      <h2 @click="goTo(slug)"
                         role="presentation"
-                        class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5"
+                        class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5 cursor-pointer"
                       >
                         {{ name }}
-                      </NuxtLink>
+                      </h2>
                       <hr class="mb-3.5">
                       <ul>
                         <li
