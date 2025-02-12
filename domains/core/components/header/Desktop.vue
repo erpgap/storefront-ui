@@ -29,7 +29,7 @@ const {
 
 const router = useRouter()
 const NuxtLink = resolveComponent('NuxtLink')
-const filteredCategories = inject<Category[]>('filteredTopCategories')
+const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
 
 const goTo = (slug: string) => {
   close()
@@ -103,7 +103,7 @@ onClickOutside(menuRef, () => {
                     class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-4 lg:narrow-container lg:relative"
                   >
                     <div
-                      v-for="{ name, childs, id } in filteredCategories"
+                      v-for="{ name, childs, id } in categoriesForMegaMenu"
                       :key="id"
                       class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
                     >

@@ -6,7 +6,7 @@ const { loadCategoriesForMegaMenu, categoriesForMegaMenu } = useMegaMenuCategori
 
 
 provide(
-  "filteredTopCategories",
+  "categoriesForMegaMenu",
   categoriesForMegaMenu
 );
 
