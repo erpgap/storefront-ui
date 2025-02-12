@@ -103,16 +103,16 @@ onClickOutside(menuRef, () => {
                     class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-4 lg:narrow-container lg:relative"
                   >
                     <div
-                      v-for="{ name, childs, id } in categoriesForMegaMenu"
+                      v-for="{ name, childs, id, slug } in categoriesForMegaMenu"
                       :key="id"
                       class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
                     >
-                      <h2
+                      <NuxtLink :to="slug"
                         role="presentation"
                         class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5"
                       >
                         {{ name }}
-                      </h2>
+                      </NuxtLink>
                       <hr class="mb-3.5">
                       <ul>
                         <li
