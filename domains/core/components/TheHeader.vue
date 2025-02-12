@@ -1,17 +1,16 @@
 <script lang="ts" setup>
+import { useMegaMenuCategories } from '../composable/useMegaMenuCategories';
+
 const { isMobile, isDesktopOrTablet } = useDevice();
-const { loadCategoryList, categories } = useCategory();
-const { loadCart } = useCart();
-const { loadWishlist } = useWishlist();
+const { loadCategoriesForMegaMenu, categoriesForMegaMenu } = useMegaMenuCategories();
+
 
 provide(
-  "filteredTopCategories",
-  categories.value?.filter(
-    (category: any) => category.name === "WOMEN" || category.name === "MEN"
-  )
+  "categoriesForMegaMenu",
+  categoriesForMegaMenu
 );
 
-await loadCategoryList({ filter: { parent: true } } as any);
+await loadCategoriesForMegaMenu({ filter: { parent: true }, pageSize: 4 });
 </script>
 
 <template>

@@ -29,7 +29,7 @@ const {
 
 const router = useRouter()
 const NuxtLink = resolveComponent('NuxtLink')
-const filteredCategories = inject<Category[]>('filteredTopCategories')
+const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
 
 const goTo = (slug: string) => {
   close()
@@ -103,13 +103,13 @@ onClickOutside(menuRef, () => {
                     class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-4 lg:narrow-container lg:relative"
                   >
                     <div
-                      v-for="{ name, childs, id } in filteredCategories"
+                      v-for="{ name, childs, id, slug } in categoriesForMegaMenu"
                       :key="id"
                       class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
                     >
-                      <h2
+                      <h2 @click="goTo(slug)"
                         role="presentation"
-                        class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5"
+                        class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5 cursor-pointer"
                       >
                         {{ name }}
                       </h2>
@@ -133,12 +133,14 @@ onClickOutside(menuRef, () => {
                         </li>
                       </ul>
                     </div>
-                    <SfButton
+              
+                  </div>
+                  <SfButton
                       square
                       size="sm"
                       variant="tertiary"
                       aria-label="Close navigation menu"
-                      class="lg:absolute lg:right-0 lg:top-0 hover:bg-white active:bg-white"
+                      class="absolute right-5 top-5 hover:bg-white active:bg-white"
                       @click="close()"
                     >
                       <Icon
@@ -147,7 +149,6 @@ onClickOutside(menuRef, () => {
                         size="20px"
                       />
                     </SfButton>
-                  </div>
                 </SfDrawer>
               </transition>
             </li>

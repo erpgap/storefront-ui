@@ -36,12 +36,8 @@ onClickOutside(searchRef, () => {
   showSearchClerkRef.value = false
 })
 
-const filteredCategories = inject<Category[]>('filteredTopCategories')
+const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
 
-const bannerDetails = {
-  image: '/images/watch.png',
-  title: 'New in designer watches',
-}
 </script>
 
 <template>
@@ -102,16 +98,16 @@ const bannerDetails = {
                     </SfButton>
                   </div>
                   <div
-                    v-for="{ name, childs } in filteredCategories"
+                    v-for="{ name, childs, slug } in categoriesForMegaMenu"
                     :key="name"
                     class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
                   >
-                    <h2
+                    <NuxtLink :to="slug"
                       role="presentation"
                       class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5"
                     >
                       {{ name }}
-                    </h2>
+                    </NuxtLink>
                     <hr class="mb-3.5">
                     <ul>
                       <li
