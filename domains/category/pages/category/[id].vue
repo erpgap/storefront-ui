@@ -8,7 +8,6 @@ import {
 import type { Product } from '~/graphql'
 
 const route = useRoute()
-const { isMobile, isDesktopOrTablet } = useDevice()
 
 const { isOpen, open, close } = useDisclosure()
 const {
@@ -86,12 +85,12 @@ const breadcrumbs = [
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
         <LazyCategoryFilterSidebar
-          v-show="isDesktopOrTablet"
+          v-if="$viewport.isGreaterOrEquals('tablet')"
           :attributes="organizedAttributes"
           :categories="categories"
         />
         <LazyCategoryMobileSidebar
-          v-show="isMobile"
+          v-if="$viewport.isLessThan('tablet')"
           :is-open="isOpen"
           @close="close"
         >
