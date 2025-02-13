@@ -24,7 +24,6 @@ const {
   selectHit,
   enterPress,
   showResultSearch,
-  isSearchModalOpen,
 } = useSearch(formSearchTemplateRef)
 
 const router = useRouter()
@@ -50,7 +49,7 @@ onClickOutside(menuRef, () => {
 <template>
   <div>
     <div
-      v-if="isOpen || isSearchModalOpen"
+      v-if="isOpen || showResultSearch"
       class="fixed !w-screen !h-screen inset-0 bg-neutral-500 bg-opacity-50 transition-opacity duration-1000 top-index"
     />
     <header
