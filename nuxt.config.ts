@@ -33,17 +33,19 @@ export default defineNuxtConfig({
     'nuxt-typed-router',
     '@nuxtjs/robots',
     '@nuxt/eslint',
+    'nuxt-viewport'
   ],
   devtools: { enabled: true },
 
   app: {
     head: {
-      viewport: 'minimum-scale=1, initial-scale=1, width=device-width',
-      title: '%s',
+      viewport:
+        "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no",
+      title: "Alokai",
       htmlAttrs: {
-        lang: 'en',
+        lang: "en",
       },
-      meta: [{ name: 'robots', content: 'index, follow' }],
+      meta: [{ name: "robots", content: "index, follow" }],
     },
   },
 
@@ -123,6 +125,20 @@ export default defineNuxtConfig({
 
   device: {
     refreshOnResize: true,
+  },
+
+  viewport: {
+    breakpoints: {
+      desktop: 1280,
+      desktopMedium: 1440,
+      desktopWide: 1600,
+
+      mobile: 320,
+      mobileMedium: 375,
+      mobileWide: 425,
+
+      tablet: 768,
+    },
   },
 
   eslint: {
