@@ -10,6 +10,9 @@ import type { Product } from '~/graphql'
 const route = useRoute()
 const { isMobile, isDesktopOrTablet } = useDevice()
 
+
+const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
+
 const { isOpen, open, close } = useDisclosure()
 const {
   loadProductTemplateList,
@@ -18,13 +21,13 @@ const {
   productTemplateList,
   totalItems,
   categories,
-} = useProductTemplateList(route.path, String(route.fullPath))
+} = useProductTemplateList(route?.path?.replace(/\/$/, ''), String(cleanFullPath.value))
 
 const {
   loadCategory,
   category,
   loading: categoryLoading,
-} = useCategory(String(route.fullPath))
+} = useCategory(String(cleanFullPath.value))
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 const { getFacetsFromURL } = useUiHelpers()
@@ -61,12 +64,12 @@ const params = route.params as { id?: string | number, slug?: string }
 if (params.id) {
   await loadCategory({
     id: Number(params.id),
-    slug: String(route.fullPath),
+    slug: String(cleanFullPath.value),
   })
 }
 
 if (category.value) {
-  useHead(categoryHead(category.value, String(route.fullPath)))
+  useHead(categoryHead(category.value, String(cleanFullPath.value)))
 }
 
 setMaxVisiblePages(isWideScreen.value)

@@ -14,7 +14,8 @@ export const useUiHelpers = () => {
         return path.replace(localePrefix, "");
       }
     }
-    return path;
+    const cleanPath = path?.replace(/\/$/, '')
+    return cleanPath;
   };
 
   const getFacetsFromURL = (
