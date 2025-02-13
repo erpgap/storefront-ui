@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { SfDrawer, SfButton, SfIconClose } from "@storefront-ui/vue";
+import { SfDrawer, SfButton, SfIconClose } from '@storefront-ui/vue'
 
 export type CategorySidebarProps = {
-  isOpen: boolean;
-};
-export type CategorySidebarEmits = (event: "close") => void;
+  isOpen: boolean
+}
+export type CategorySidebarEmits = (event: 'close') => void
 
-defineProps<CategorySidebarProps>();
-defineEmits<CategorySidebarEmits>();
+defineProps<CategorySidebarProps>()
+defineEmits<CategorySidebarEmits>()
 </script>
 
 <template>
@@ -27,8 +27,8 @@ defineEmits<CategorySidebarEmits>();
       class="w-full shadow-none lg:translate-x-0 z-[100] lg:z-0 lg:static lg:!block -translate-x-full shrink-0 lg:w-[303px] bg-white"
       data-testid="category-sidebar"
     >
-      <div class="grid grid-rows-category-sidebar h-full">
-        <div class="p-4 flex justify-between items-center lg:hidden">
+      <div class="block h-full">
+        <div class="p-4 pt-8 flex justify-between items-center lg:hidden">
           <span class="font-bold text-lg">Filter</span>
           <SfButton
             variant="tertiary"

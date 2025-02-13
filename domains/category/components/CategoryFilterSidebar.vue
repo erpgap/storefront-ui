@@ -179,7 +179,7 @@ watch(priceModel, (newValue) => {
       >
         <SfAccordionItem v-model="opened[facet.label]">
           <template #summary>
-            <div class="flex justify-between items-center p-2 mb-2">
+            <div class="flex justify-between items-center p-2">
               <p class="p-2 font-medium typography-headline-5">
                 {{ facet?.label }}
               </p>
@@ -189,7 +189,10 @@ watch(priceModel, (newValue) => {
             </div>
           </template>
           <template v-if="facet.type == 'price'">
-            <fieldset id="radio-price">
+            <fieldset
+              id="radio-price"
+              class="py-2"
+            >
               <SfListItem
                 v-for="option in facet.options"
                 :key="option.id"
@@ -220,7 +223,7 @@ watch(priceModel, (newValue) => {
 
           <ul
             v-if="facet.type === 'select'"
-            class="grid grid-cols-5 gap-2 px-3"
+            class="grid grid-cols-3 gap-2 px-3 py-2"
           >
             <li
               v-for="{ id, value, label } in facet.options"
@@ -239,7 +242,7 @@ watch(priceModel, (newValue) => {
           </ul>
           <ul
             v-if="facet.type === 'radio'"
-            class="grid grid-cols-3 gap-2 px-3"
+            class="grid grid-cols-3 gap-2 px-3 py-2"
           >
             <li
               v-for="{ id, value, label } in facet.options"
@@ -256,7 +259,10 @@ watch(priceModel, (newValue) => {
               </SfChip>
             </li>
           </ul>
-          <template v-if="facet.type == 'color'">
+          <template
+            v-if="facet.type == 'color'"
+            class="py-2"
+          >
             <SfListItem
               v-for="{ id, value, label, htmlColor } in facet.options"
               :key="id"
@@ -294,11 +300,11 @@ watch(priceModel, (newValue) => {
             </SfListItem>
           </template>
         </SfAccordionItem>
-        <hr class="my-4">
+        <hr class="my-2">
       </li>
     </ul>
     <div
-      class="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:justify-between px-3 lg:px-0"
+      class="flex flex-col lg:flex-row pt-6 gap-y-4 lg:gap-y-0 lg:justify-between px-3 lg:px-0"
     >
       <SfButton
         variant="secondary"
