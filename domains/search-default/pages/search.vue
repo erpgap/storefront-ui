@@ -67,7 +67,7 @@ onMounted(() => {
       class="self-start mt-5 mb-5"
     />
     <h1 class="font-bold typography-headline-3 md:typography-headline-2 mb-10">
-      Results <span v-if="route.query.search">for "{{ route.query.search }}"</span>
+      <span v-if="route.query.search">Results for "{{ route.query.search }}"</span>
     </h1>
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
