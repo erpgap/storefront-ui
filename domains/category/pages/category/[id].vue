@@ -68,7 +68,7 @@ if (params.id) {
 }
 
 if (category.value) {
-  useHead(categoryHead(category.value, String(cleanFullPath.value)))
+  useHead(categoryHead(category.value))
 }
 
 setMaxVisiblePages(isWideScreen.value)

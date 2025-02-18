@@ -33,8 +33,9 @@ const validateCategorySEO = (category, fullPath) => {
   warnings.forEach((warning) => console.warn(warning));
 };
 
-export default (category: Category, fullPath: string) => {
-  validateCategorySEO(category, fullPath);
+export default (category: Category) => {
+  const {href} = useRequestURL()
+  validateCategorySEO(category, href);
 
   return {
     title: category?.metaTitle || category?.name || "Category page",
@@ -79,7 +80,7 @@ export default (category: Category, fullPath: string) => {
     link: [
       {
         rel: "canonical",
-        href: `https://vsfsdk.labs.odoogap.com${fullPath}`,
+        href: href,
       },
     ],
   };
