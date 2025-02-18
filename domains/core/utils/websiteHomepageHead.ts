@@ -32,8 +32,9 @@ const validateSEO = (homepage: Homepage, fullPath: string) => {
   warnings.forEach((warning) => console.warn(warning));
 };
 
-export default (homepage: Homepage, fullPath: string) => {
-  validateSEO(homepage, fullPath);
+export default (homepage: Homepage) => {
+  const {href} = useRequestURL()
+  validateSEO(homepage, href);
 
   return {
     title: homepage.metaTitle || "Alokai - Vue",
@@ -80,7 +81,7 @@ export default (homepage: Homepage, fullPath: string) => {
     link: [
       {
         rel: "canonical",
-        href: `https://vsfsdk.labs.odoogap.com${fullPath}`,
+        href: href,
       },
     ],
   };

@@ -7,7 +7,7 @@ const { list } = useRecentViewProducts()
 
 await getWebsiteHomepage()
 
-useHead(websiteHomepageHead(websiteHomepage.value, ''))
+useHead(websiteHomepageHead(websiteHomepage.value))
 </script>
 
 <template>
