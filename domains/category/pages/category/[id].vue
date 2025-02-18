@@ -6,6 +6,7 @@ import {
   SfLoaderCircular,
 } from '@storefront-ui/vue'
 import type { Product } from '~/graphql'
+import generateSeo, {SeoEntity} from '~/utils/buildSEOHelper'
 
 const route = useRoute()
 
@@ -68,7 +69,7 @@ if (params.id) {
 }
 
 if (category.value) {
-  useHead(categoryHead(category.value))
+  useHead(generateSeo<SeoEntity>(category.value,'Category'))
 }
 
 setMaxVisiblePages(isWideScreen.value)

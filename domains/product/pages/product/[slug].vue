@@ -18,6 +18,7 @@ import {
 } from '@storefront-ui/vue'
 import type { LocationQueryRaw } from 'vue-router'
 import type { OrderLine, Product } from '~/graphql'
+import generateSeo, {SeoEntity} from '~/utils/buildSEOHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -43,7 +44,7 @@ const { addProductToRecentViews } = useRecentViewProducts()
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
 const { cart, cartAdd } = useCart()
 
-useHead(productHead(productVariant.value))
+useHead(generateSeo<SeoEntity>(productVariant.value, 'Product'))
 
 const params = computed(() => ({
   combinationId: Object.values(route.query)?.map(value =>
