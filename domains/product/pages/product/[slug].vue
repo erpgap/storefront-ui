@@ -43,7 +43,7 @@ const { addProductToRecentViews } = useRecentViewProducts()
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
 const { cart, cartAdd } = useCart()
 
-useHead(productHead(productVariant.value, String(route.fullPath)))
+useHead(productHead(productVariant.value))
 
 const params = computed(() => ({
   combinationId: Object.values(route.query)?.map(value =>

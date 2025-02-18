@@ -32,8 +32,9 @@ const validateproductSEO = (product, fullPath) => {
   warnings.forEach((warning) => console.warn(warning));
 };
 
-export default (product: Product, fullPath: string) => {
-  validateproductSEO(product, fullPath);
+export default (product: Product) => {
+  const {href} = useRequestURL()
+  validateproductSEO(product, href);
 
   return {
     title: product?.metaTitle || product?.name || 'product page',
@@ -78,7 +79,7 @@ export default (product: Product, fullPath: string) => {
     link: [
       {
         rel: 'canonical',
-        href: `https://vsfsdk.labs.odoogap.com${fullPath}`,
+        href: href,
       },
     ],
   };
