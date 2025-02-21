@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useWebsiteHomePage } from '~/domains/core/composable/useWebsiteHomePage'
+import generateSeo, {SeoEntity} from '~/utils/buildSEOHelper'
 
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
 
@@ -7,7 +8,7 @@ const { list } = useRecentViewProducts()
 
 await getWebsiteHomepage()
 
-useHead(websiteHomepageHead(websiteHomepage.value, ''))
+useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
 </script>
 
 <template>
