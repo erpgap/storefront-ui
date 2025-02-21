@@ -20,7 +20,9 @@ import type { LocationQueryRaw } from 'vue-router'
 import type { OrderLine, Product } from '~/graphql'
 
 const route = useRoute()
-const router = useRouter()
+
+const cleanPath = computed(() => route?.path?.replace(/\/$/, ''))
+const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
 
 const {
   loadProductTemplate,
@@ -29,7 +31,7 @@ const {
   getAllColors,
   getAllMaterials,
   getAllSizes,
-} = useProductTemplate(route.path)
+} = useProductTemplate(cleanPath.value)
 const {
   loadProductVariant,
   loadingProductVariant,
@@ -38,12 +40,12 @@ const {
   breadcrumbs,
   getRegularPrice,
   getSpecialPrice,
-} = useProductVariant(route.fullPath)
+} = useProductVariant(cleanFullPath.value)
 const { addProductToRecentViews } = useRecentViewProducts()
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
 const { cart, cartAdd } = useCart()
 
-useHead(productHead(productVariant.value, String(route.fullPath)))
+useHead(productHead(productVariant.value, String(cleanFullPath.value)))
 
 const params = computed(() => ({
   combinationId: Object.values(route.query)?.map(value =>
@@ -123,7 +125,7 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
 
 addProductToRecentViews(productTemplate.value?.id)
 
-await loadProductTemplate({ slug: route.path })
+await loadProductTemplate({ slug: cleanPath.value })
 await loadProductVariant(params.value)
 </script>
 
