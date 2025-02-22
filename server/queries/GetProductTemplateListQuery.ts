@@ -17,6 +17,7 @@ query(
     sort: $sort
   ) {
     totalCount
+    filterCounts
     attributeValues {
       id
       name
