@@ -185,7 +185,8 @@ export default defineNuxtConfig({
   },
 
   robots: {
-    allow: '/category/*',
+    allow: ['/category/*', '/product/*'],
+    disallow: ['/cart','/checkout','/my-account/*','/forgot-password', '/search?']
   },
 
   tailwindcss: {
