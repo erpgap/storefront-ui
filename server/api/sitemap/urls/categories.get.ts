@@ -11,8 +11,9 @@ export default defineSitemapEventHandler(async (event: any) => {
       }
     }
   `
+    const odooBaseUrl = `${process.env?.NUXT_PUBLIC_ODOO_BASE_URL}graphql/vsf`
 
-    const response = await $fetch('https://vsfdemo18.labs.odoogap.com/graphql/vsf', {
+    const response = await $fetch(odooBaseUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
