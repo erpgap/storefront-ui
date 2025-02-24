@@ -223,7 +223,7 @@ watch(priceModel, (newValue) => {
             class="grid grid-cols-5 gap-2 px-3"
           >
             <li
-              v-for="{ id, value, label } in facet.options"
+              v-for="{ id, value, label, total } in facet.options"
               :key="id"
             >
               <SfChip
@@ -233,7 +233,7 @@ watch(priceModel, (newValue) => {
                 :model-value="isFilterSelected({ id, value })"
                 @update:model-value="selectFilter(facet, { id, value, label })"
               >
-                {{ label }}
+                {{ `${label} (${total})` }}
               </SfChip>
             </li>
           </ul>
@@ -242,7 +242,7 @@ watch(priceModel, (newValue) => {
             class="grid grid-cols-3 gap-2 px-3"
           >
             <li
-              v-for="{ id, value, label } in facet.options"
+              v-for="{ id, value, label, total } in facet.options"
               :key="id"
             >
               <SfChip
@@ -252,13 +252,13 @@ watch(priceModel, (newValue) => {
                 :model-value="isFilterSelected({ id, value })"
                 @update:model-value="selectFilter(facet, { id, value, label })"
               >
-                {{ label }}
+                {{ `${label} (${total})` }}
               </SfChip>
             </li>
           </ul>
           <template v-if="facet.type == 'color'">
             <SfListItem
-              v-for="{ id, value, label, htmlColor } in facet.options"
+              v-for="{ id, value, label, htmlColor, total } in facet.options"
               :key="id"
               size="sm"
               tag="label"
@@ -289,7 +289,7 @@ watch(priceModel, (newValue) => {
                 </span>
               </template>
               <p>
-                <span class="mr-2 typography-text-sm">{{ label }}</span>
+                <span class="mr-2 typography-text-sm">{{ `${label} (${total})` }}</span>
               </p>
             </SfListItem>
           </template>

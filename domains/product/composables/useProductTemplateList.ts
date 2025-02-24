@@ -18,6 +18,7 @@ export const useProductTemplateList = (
     () => false
   );
   const totalItems = useState<number>(`total-items${fullSearchIndex}`, () => 0);
+  const filterCounts = useState<{type: string, id: number, total: number}[]>(`filter-counts${fullSearchIndex}`, () => ([]))
   const productTemplateList = useState<Product[]>(
     `products-category${fullSearchIndex}`,
     () => []
@@ -47,6 +48,7 @@ export const useProductTemplateList = (
     productTemplateList.value = data.value?.products?.products || [];
     attributes.value = data.value?.products?.attributeValues || [];
     totalItems.value = data.value?.products?.totalCount || 0;
+    filterCounts.value = data.value?.products?.filterCounts || []
     categories.value = useUniqBy(
       data.value?.products?.products
         ?.map((product) => product?.categories || [])
@@ -88,6 +90,7 @@ export const useProductTemplateList = (
           label: item.name,
           metadata: item.search,
           htmlColor: item.htmlColor,
+          total: filterCounts.value?.find((filter) => filter.id === item.id)?.total || 0
         });
     });
 
