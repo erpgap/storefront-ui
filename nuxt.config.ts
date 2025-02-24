@@ -33,7 +33,8 @@ export default defineNuxtConfig({
     'nuxt-typed-router',
     '@nuxtjs/robots',
     '@nuxt/eslint',
-    'nuxt-viewport'
+    'nuxt-viewport',
+    '@nuxtjs/sitemap',
   ],
   devtools: { enabled: true },
 
@@ -184,8 +185,16 @@ export default defineNuxtConfig({
     },
   },
 
+  sitemap: {
+    sources: ['/api/sitemap/urls/products', '/api/sitemap/urls/categories'],
+    runtimeCacheStorage: {
+      driver: process.env.NUXT_STORAGE_DRIVER,
+    }
+  },
+
   robots: {
-    allow: '/category/*',
+    allow: ['/category/*', '/product/*'],
+    disallow: ['/cart', '/checkout/*', '/my-account/*', '/forgot-password', '/search?']
   },
 
   tailwindcss: {
