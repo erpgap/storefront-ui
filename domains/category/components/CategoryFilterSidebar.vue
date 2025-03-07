@@ -317,12 +317,11 @@ watch(priceModel, (newValue) => {
           <template v-if="facet.type == 'in-stock'">
             <div class="flex items-center gap-2 px-4 cursor-pointer">
               <SfCheckbox
-                :value="label"
-                :model-value="isFilterSelected({ id, value })"
+                :model-value="isStockSelected()"
                 @update:model-value="selectStockFilter()"
               />
               <div class="w-full flex justify-between cursor-pointer">
-                <span>In stock </span>
+                <span>In stock</span>
                 <span class="text-[16px] text-[#808080]"
                   >({{ stockCount }})</span
                 >

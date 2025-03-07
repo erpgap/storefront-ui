@@ -107,13 +107,13 @@ export const useUiHelpers = () => {
     )
   }
 
-  const isStockSelected = computed(() => {
+  const isStockSelected = () => {
     return selectedFilters.value.some(
-      (filter: { filterName: string; id: boolean }) =>
-        filter.filterName === "in-stock" && filter.id === true
+      (filter: { filterName: string; id: string }) =>
+        filter.filterName === "in-stock" && filter.id === "true"
     );
-  })
-  
+  }
+
   const changeFilters = (filters: any[], sort: string) => {
     const formattedFilters: any = {};
     filters.forEach((element) => {
