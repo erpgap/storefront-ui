@@ -21,7 +21,10 @@ const {
   productTemplateList,
   totalItems,
   categories,
+  stockCount
 } = useProductTemplateList(route?.path?.replace(/\/$/, ''), String(cleanFullPath.value))
+
+provide("stockCount", stockCount);
 
 const {
   loadCategory,
