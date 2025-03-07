@@ -31,6 +31,10 @@ export const useProductTemplateList = (
     `categories-from-product-${categorySlugIndex}`,
     () => []
   );
+  const stockCount = useState<Number>(
+    `stockCount${categorySlugIndex}${fullSearchIndex}`,
+    () => 0
+  );
 
   const loadProductTemplateList = async (
     params: QueryProductsArgs,
@@ -94,6 +98,14 @@ export const useProductTemplateList = (
         });
     });
 
+    const inStockFilterCount = filterCounts.value?.find(
+      (filter) => filter.type === "in_stock"
+    );
+    if (inStockFilterCount) {
+      stockCount.value = inStockFilterCount.total;
+    }
+
+
     return data;
   });
 
@@ -104,5 +116,6 @@ export const useProductTemplateList = (
     organizedAttributes,
     totalItems,
     categories,
+    stockCount
   };
 };
