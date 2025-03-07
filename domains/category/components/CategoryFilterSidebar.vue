@@ -100,19 +100,16 @@ const selectStockFilter = () => {
     (filter) => filter.filterName === "in-stock"
   );
 
-  if (alreadySelectedIndex == -1) {
-    selectedFilters.value.push({
-      filterName: "in-stock",
-      label: "true",
-      id: true,
-    });
-  }
   if (alreadySelectedIndex !== -1) {
-    selectedFilters.value[alreadySelectedIndex].id =
-      !selectedFilters.value[alreadySelectedIndex].id;
-    selectedFilters.value[alreadySelectedIndex].label =
-      !selectedFilters.value[alreadySelectedIndex].label;
+    selectedFilters.value.splice(alreadySelectedIndex, 1);
+    return;
   }
+
+  selectedFilters.value.push({
+    filterName: "in-stock",
+    label: "true",
+    id: true,
+  });
 };
 
 const applyFilters = () => {
@@ -128,11 +125,6 @@ const clearFilters = () => {
   selectedFilters.value = [];
   router.push({ query: {} });
   emit("close");
-};
-
-const changeCategory = (categoryId: number) => {
-  clearFilters();
-  router.push({ path: `/category/${categoryId}` });
 };
 
 watch(
@@ -319,6 +311,9 @@ watch(priceModel, (newValue) => {
               <SfCheckbox
                 :model-value="isStockSelected()"
                 @update:model-value="selectStockFilter()"
+                :class="{
+            'pointer-events-none opacity-50': stockCount === 0,
+          }"
               />
               <div class="w-full flex justify-between cursor-pointer">
                 <span>In stock</span>
