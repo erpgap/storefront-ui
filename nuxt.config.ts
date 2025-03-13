@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxtjs/device',
     '@nuxtjs/google-fonts',
-    'nuxt-lazy-hydrate',
     'nuxt-lodash',
     'nuxt-icon',
     'nuxt-delay-hydration',
