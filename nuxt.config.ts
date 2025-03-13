@@ -51,7 +51,6 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: 'https://vsfsdk.labs.odoogap.com/',
     name: 'ERPGAP VSF',
     description: 'Welcome to an awesome ecommerce site!',
     defaultLocale: 'en',
