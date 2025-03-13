@@ -153,6 +153,7 @@ export default defineNuxtConfig({
   },
 
   i18n: {
+    legacy: false,
     locales: [
       {
         code: 'en',
@@ -161,7 +162,6 @@ export default defineNuxtConfig({
     ],
     strategy: 'no_prefix',
     lazy: true,
-    langDir: 'lang',
     defaultLocale: 'en',
   },
 
