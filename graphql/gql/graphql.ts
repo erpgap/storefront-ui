@@ -699,7 +699,6 @@ export type MutationStripeProviderInfoArgs = {
 
 
 export type MutationStripeTransactionArgs = {
-  paymentMethodId: Scalars['Int']['input'];
   providerId: Scalars['Int']['input'];
   tokenizationRequested?: InputMaybe<Scalars['Boolean']['input']>;
 };
