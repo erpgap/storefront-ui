@@ -122,6 +122,7 @@ const applyFilters = () => {
 };
 
 const clearFilters = () => {
+  priceModel.value = "";
   selectedFilters.value = [];
   router.push({ query: {} });
   emit("close");

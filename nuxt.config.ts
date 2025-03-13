@@ -44,9 +44,9 @@ export default defineNuxtConfig({
         "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no",
       title: "Alokai",
       htmlAttrs: {
-        lang: "en",
+        lang: 'en',
       },
-      meta: [{ name: "robots", content: "index, follow" }],
+      meta: [{ name: 'robots', content: 'index, follow' }],
     },
   },
 
@@ -141,7 +141,6 @@ export default defineNuxtConfig({
       tablet: 768,
     },
   },
-
   eslint: {
     config: {
       stylistic: true,
@@ -184,6 +183,7 @@ export default defineNuxtConfig({
       'xs': 376,
     },
   },
+
 
   sitemap: {
     sources: ['/api/sitemap/urls/products', '/api/sitemap/urls/categories'],
