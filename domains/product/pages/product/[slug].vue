@@ -15,12 +15,15 @@ import {
   SfLink,
   SfRating,
   SfThumbnail,
-} from '@storefront-ui/vue';
-import type { LocationQueryRaw } from 'vue-router';
-import type { OrderLine, Product } from '~/graphql';
+} from '@storefront-ui/vue'
+import type { LocationQueryRaw } from 'vue-router'
+import type { OrderLine, Product } from '~/graphql'
+import generateSeo, {SeoEntity} from '~/utils/buildSEOHelper'
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+
+const cleanPath = computed(() => route?.path?.replace(/\/$/, ''))
+const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
 
 const {
   loadProductTemplate,
@@ -29,7 +32,7 @@ const {
   getAllColors,
   getAllMaterials,
   getAllSizes,
-} = useProductTemplate(route.path);
+} = useProductTemplate(cleanPath.value)
 const {
   loadProductVariant,
   loadingProductVariant,
@@ -38,93 +41,94 @@ const {
   breadcrumbs,
   getRegularPrice,
   getSpecialPrice,
-} = useProductVariant(route.fullPath);
-const { addProductToRecentViews } = useRecentViewProducts();
-const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist();
-const { cart, cartAdd } = useCart();
+} = useProductVariant(cleanFullPath.value)
+const { addProductToRecentViews } = useRecentViewProducts()
+const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
+const { cart, cartAdd } = useCart()
 
-useHead(productHead(productVariant.value, String(route.fullPath)));
+useHead(generateSeo<SeoEntity>(productVariant.value, 'Product'))
+
 
 const params = computed(() => ({
-  combinationId: Object.values(route.query)?.map((value) =>
-    parseInt(value as string)
+  combinationId: Object.values(route.query)?.map(value =>
+    parseInt(value as string),
   ),
   productTemplateId: productTemplate?.value?.id,
-}));
+}))
 
 const selectedSize = computed(() =>
-  route.query.Size ? Number(route.query.Size) : getAllSizes?.value?.[0]?.value
-);
+  route.query.Size ? Number(route.query.Size) : getAllSizes?.value?.[0]?.value,
+)
 
 const selectedColor = computed(() =>
   route.query.Color
     ? Number(route.query.Color)
-    : getAllColors?.value?.[0]?.value
-);
+    : getAllColors?.value?.[0]?.value,
+)
 
 const selectedMaterial = computed(() =>
   route.query.Material
     ? Number(route.query.Material)
-    : getAllMaterials?.value?.[0]?.value
-);
+    : getAllMaterials?.value?.[0]?.value,
+)
 
-const productDetailsOpen = ref(true);
-const quantitySelectorValue = ref(1);
+const productDetailsOpen = ref(true)
+const quantitySelectorValue = ref(1)
 
 const updateFilter = async (filter: LocationQueryRaw | undefined) => {
-  const query: LocationQueryRaw = {};
+  const query: LocationQueryRaw = {}
 
   if (selectedMaterial.value && selectedMaterial.value !== 0) {
-    query.Material = selectedMaterial.value;
+    query.Material = selectedMaterial.value
   }
 
   if (selectedColor.value && selectedColor.value !== 0) {
-    query.Color = selectedColor.value;
+    query.Color = selectedColor.value
   }
 
   if (selectedSize.value && selectedSize.value !== 0) {
-    query.Size = selectedSize.value;
+    query.Size = selectedSize.value
   }
 
-  Object.assign(query, filter);
-  await navigateTo({ query });
-};
+  Object.assign(query, filter)
+  await navigateTo({ query })
+}
 
 const tomorrow = computed(() => {
-  const date = new Date();
-  date.setDate(date.getDate() + 1);
-  return date.toDateString().slice(0, 10);
-});
+  const date = new Date()
+  date.setDate(date.getDate() + 1)
+  return date.toDateString().slice(0, 10)
+})
 
 const productsInCart = computed(() => {
   return (
     cart.value?.order?.orderLines?.find(
       (orderLine: OrderLine) =>
-        orderLine.product?.id === productVariant?.value.id
+        orderLine.product?.id === productVariant?.value.id,
     )?.quantity || 0
-  );
-});
+  )
+})
 
 const handleCartAdd = async () => {
-  let id = productVariant?.value.id;
+  let id = productVariant?.value.id
   if (!productVariant.value.combinationInfoVariant) {
-    id = Number(productVariant?.value.firstVariant?.id);
+    id = Number(productVariant?.value.firstVariant?.id)
   }
-  await cartAdd(id, quantitySelectorValue.value);
-};
+  await cartAdd(id, quantitySelectorValue.value)
+}
 
 const handleWishlistAddItem = async (firstVariant: Product) => {
-  await wishlistAddItem(firstVariant.id);
-};
+  await wishlistAddItem(firstVariant.id)
+}
 
 const handleWishlistRemoveItem = async (firstVariant: Product) => {
-  await wishlistRemoveItem(firstVariant.id);
-};
+  await wishlistRemoveItem(firstVariant.id)
+}
 
-addProductToRecentViews(productTemplate.value?.id);
+addProductToRecentViews(productTemplate.value?.id)
 
-await loadProductTemplate({ slug: route.path });
-await loadProductVariant(params.value);
+await loadProductTemplate({ slug: cleanPath.value })
+await loadProductVariant(params.value)
 </script>
 
 <template>
@@ -148,7 +152,11 @@ await loadProductVariant(params.value);
             <div
               class="inline-flex items-center justify-center font-medium rounded-none bg-secondary-800 text-sm p-1.5 gap-1 mb-4"
             >
-              <SfIconSell color="white" size="sm" class="mr-1" />
+              <SfIconSell
+                color="white"
+                size="sm"
+                class="mr-1"
+              />
               <span class="mr-1 text-white">{{ $t(`sale`) }}</span>
             </div>
             <h1
@@ -159,8 +167,8 @@ await loadProductVariant(params.value);
             </h1>
             <div
               v-if="
-                productVariant &&
-                productVariant?.combinationInfoVariant?.has_discounted_price
+                productVariant
+                  && productVariant?.combinationInfoVariant?.has_discounted_price
               "
               class="my-1"
             >
@@ -174,7 +182,10 @@ await loadProductVariant(params.value);
                 {{ $currency(getRegularPrice) }}
               </span>
             </div>
-            <div v-else class="my-1">
+            <div
+              v-else
+              class="my-1"
+            >
               <span
                 class="mr-2 text-secondary-700 font-bold font-headings text-2xl"
                 data-testid="price"
@@ -183,8 +194,17 @@ await loadProductVariant(params.value);
               </span>
             </div>
             <div class="inline-flex items-center mt-4 mb-2">
-              <SfRating size="xs" :value="4" :max="5" />
-              <SfCounter class="ml-1" size="xs">26</SfCounter>
+              <SfRating
+                size="xs"
+                :value="4"
+                :max="5"
+              />
+              <SfCounter
+                class="ml-1"
+                size="xs"
+              >
+                26
+              </SfCounter>
               <SfLink
                 href="#"
                 variant="secondary"
@@ -227,12 +247,6 @@ await loadProductVariant(params.value);
                 </SfButton>
               </div>
               <div class="flex justify-center mt-4 gap-x-4">
-                <SfButton type="button" size="sm" variant="tertiary">
-                  <template #prefix>
-                    <SfIconCompareArrows size="sm" />
-                  </template>
-                  {{ $t('compare') }}
-                </SfButton>
                 <SfButton
                   type="button"
                   size="sm"
@@ -268,14 +282,23 @@ await loadProductVariant(params.value);
                 class="flex-shrink-0 mr-1 text-neutral-500"
               />
               <p class="text-sm">
-                <i18n-t keypath="additionalInfo.shipping" scope="global">
+                <i18n-t
+                  keypath="additionalInfo.shipping"
+                  scope="global"
+                >
                   <template #date>
                     {{ tomorrow }}
                   </template>
                   <template #addAddress>
-                    <SfLink class="ml-1" href="#" variant="secondary">{{
-                      $t('additionalInfo.addAddress')
-                    }}</SfLink>
+                    <SfLink
+                      class="ml-1"
+                      href="#"
+                      variant="secondary"
+                    >
+                      {{
+                        $t('additionalInfo.addAddress')
+                      }}
+                    </SfLink>
                   </template>
                 </i18n-t>
               </p>
@@ -286,11 +309,20 @@ await loadProductVariant(params.value);
                 class="flex-shrink-0 mr-1 text-neutral-500"
               />
               <p class="text-sm">
-                <i18n-t keypath="additionalInfo.pickup" scope="global">
+                <i18n-t
+                  keypath="additionalInfo.pickup"
+                  scope="global"
+                >
                   <template #checkAvailability>
-                    <SfLink class="ml-1" href="#" variant="secondary">{{
-                      $t('additionalInfo.checkAvailability')
-                    }}</SfLink>
+                    <SfLink
+                      class="ml-1"
+                      href="#"
+                      variant="secondary"
+                    >
+                      {{
+                        $t('additionalInfo.checkAvailability')
+                      }}
+                    </SfLink>
                   </template>
                 </i18n-t>
               </p>
@@ -300,11 +332,20 @@ await loadProductVariant(params.value);
                 size="sm"
                 class="flex-shrink-0 mr-1 text-neutral-500"
               />
-              <i18n-t keypath="additionalInfo.returns" scope="global">
+              <i18n-t
+                keypath="additionalInfo.returns"
+                scope="global"
+              >
                 <template #details>
-                  <SfLink class="ml-1" href="#" variant="secondary">{{
-                    $t('additionalInfo.details')
-                  }}</SfLink>
+                  <SfLink
+                    class="ml-1"
+                    href="#"
+                    variant="secondary"
+                  >
+                    {{
+                      $t('additionalInfo.details')
+                    }}
+                  </SfLink>
                 </template>
               </i18n-t>
             </div>
@@ -312,7 +353,10 @@ await loadProductVariant(params.value);
         </section>
         <section class="grid-in-left-bottom md:mt-8">
           <UiDivider class="mt-10 mb-6" />
-          <div class="lg:px-4" data-testid="product-properties">
+          <div
+            class="lg:px-4"
+            data-testid="product-properties"
+          >
             <fieldset
               v-if="getAllSizes && getAllSizes?.length"
               class="pb-4 flex"
@@ -336,8 +380,8 @@ await loadProductVariant(params.value);
                   }"
                   :model-value="value == selectedSize"
                   @update:model-value="
-                    value != selectedSize &&
-                      updateFilter({ ['Size']: value.toString() })
+                    value != selectedSize
+                      && updateFilter({ ['Size']: value.toString() })
                   "
                 >
                   {{ label }}
@@ -368,8 +412,8 @@ await loadProductVariant(params.value);
                   }"
                   :model-value="value == selectedMaterial"
                   @update:model-value="
-                    value != selectedMaterial &&
-                      updateFilter({ ['Material']: value.toString() })
+                    value != selectedMaterial
+                      && updateFilter({ ['Material']: value.toString() })
                   "
                 >
                   {{ label }}
@@ -400,12 +444,15 @@ await loadProductVariant(params.value);
                   }"
                   :model-value="value == selectedColor"
                   @update:model-value="
-                    value != selectedColor &&
-                      updateFilter({ ['Color']: value.toString() })
+                    value != selectedColor
+                      && updateFilter({ ['Color']: value.toString() })
                   "
                 >
                   <template #prefix>
-                    <SfThumbnail size="sm" :style="{ background: label }" />
+                    <SfThumbnail
+                      size="sm"
+                      :style="{ background: label }"
+                    />
                   </template>
                   {{ label }}
                 </SfChip>
@@ -461,7 +508,9 @@ await loadProductVariant(params.value);
           width="300"
           height="300"
         />
-        <p class="mt-8 font-medium">{{ $t('emptyStateText') }}</p>
+        <p class="mt-8 font-medium">
+          {{ $t('emptyStateText') }}
+        </p>
       </div>
     </template>
   </NuxtErrorBoundary>

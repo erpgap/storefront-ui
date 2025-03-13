@@ -8,6 +8,12 @@
     "source.organizeImports": "never"
   },
 
+  "eslint.options": {
+    "rules": {
+      "quotes": "off"
+    } 
+  },
+
   // Enable eslint for all supported languages
   "eslint.validate": [
     "javascript",

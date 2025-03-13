@@ -14,8 +14,14 @@ export const useUiHelpers = () => {
         return path.replace(localePrefix, "");
       }
     }
-    return path;
+    const cleanPath = path?.replace(/\/$/, '')
+    return cleanPath;
   };
+
+  const cleanFullSearchIndex = getUniqueUrlFromRouteFilteringByAttributes(
+    route.path,
+    route
+  );
 
   const getFacetsFromURL = (
     query: any,
@@ -50,6 +56,7 @@ export const useUiHelpers = () => {
       maxPrice: Number(price?.[1]) || null,
       attribValues: filters,
       categorySlug: path === "/" || path === "/search" ? null : pathToSlug(),
+      inStock: query?.["in-stock"] === "true",
       ids: ids,
     } as ProductFilterInput;
 
@@ -88,6 +95,25 @@ export const useUiHelpers = () => {
     return formattedFilters;
   };
 
+  const selectedFilters = useState<any[]>(
+    `category-selected-filters${cleanFullSearchIndex}`,
+    () => facetsFromUrlToFilter() || []
+  );
+
+
+  const isFilterSelected = (option: any) => {
+    return selectedFilters.value.some(
+      (filter: { id: any }) => String(filter.id) === String(option.id),
+    )
+  }
+
+  const isStockSelected = () => {
+    return selectedFilters.value.some(
+      (filter: { filterName: string; id: string }) =>
+        filter.filterName === "in-stock" && filter.id === "true"
+    );
+  }
+
   const changeFilters = (filters: any[], sort: string) => {
     const formattedFilters: any = {};
     filters.forEach((element) => {
@@ -124,5 +150,9 @@ export const useUiHelpers = () => {
     getFacetsFromURL,
     changeFilters,
     facetsFromUrlToFilter,
+    isFilterSelected,
+    isStockSelected,
+
+    selectedFilters
   };
 };

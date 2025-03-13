@@ -48,6 +48,7 @@ export type ProductTemplateListResponse = AsyncData<
       maxPrice?: number;
       minPrice?: number;
       totalCount: number;
+      filterCounts: any[];
       products: Product[];
     };
   },

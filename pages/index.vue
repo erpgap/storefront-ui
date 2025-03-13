@@ -1,39 +1,39 @@
 <script setup lang="ts">
-import { useWebsiteHomePage } from "~/domains/core/composable/useWebsiteHomePage";
+import { useWebsiteHomePage } from '~/domains/core/composable/useWebsiteHomePage'
+import generateSeo, {SeoEntity} from '~/utils/buildSEOHelper'
 
-const { loadCategoryList, categories } = useCategory();
-const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage();
+const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
 
-const { list } = useRecentViewProducts();
+const { list } = useRecentViewProducts()
 
-await getWebsiteHomepage();
-await loadCategoryList({
-  filter: { parent: true, id: null },
-});
-useHead(websiteHomepageHead(websiteHomepage.value, ""));
+await getWebsiteHomepage()
+
+useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
 </script>
 
 <template>
   <MainBanner />
-  <CategoryCard :categories="categories" />
   <NuxtLazyHydrate when-visible>
     <LazyDisplay />
   </NuxtLazyHydrate>
   <section class="pb-16">
     <NuxtLazyHydrate when-visible>
       <LazyProductSlider
-        heading="Inspired by your picks"
         key="inspired-by-picks"
+        heading="Inspired by your picks"
         key-for-composable="inspired-by-picks"
       />
     </NuxtLazyHydrate>
   </section>
-  <section class="pb-16" v-if="list?.length > 0">
+  <section
+    v-if="list?.length > 0"
+    class="pb-16"
+  >
     <ClientOnly>
       <LazyProductSlider
+        key="recent-views"
         heading="Your recent views"
         :ids="list"
-        key="recent-views"
         key-for-composable="recent-views"
       />
     </ClientOnly>

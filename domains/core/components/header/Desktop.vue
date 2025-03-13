@@ -6,15 +6,15 @@ import {
   SfListItem,
   useDisclosure,
   useTrapFocus,
-} from "@storefront-ui/vue";
-import { onClickOutside } from "@vueuse/core";
-import type { Category } from "~/graphql";
+} from '@storefront-ui/vue'
+import { onClickOutside } from '@vueuse/core'
+import type { Category } from '~/graphql'
 
-const { isOpen, toggle, close } = useDisclosure();
+const { isOpen, toggle, close } = useDisclosure()
 
-const menuRef = ref();
-const drawerRef = ref();
-const formSearchTemplateRef = ref(null);
+const menuRef = ref()
+const drawerRef = ref()
+const formSearchTemplateRef = ref(null)
 
 const {
   searchInputValue,
@@ -24,33 +24,32 @@ const {
   selectHit,
   enterPress,
   showResultSearch,
-  isSearchModalOpen,
-} = useSearch(formSearchTemplateRef);
+} = useSearch(formSearchTemplateRef)
 
-const router = useRouter();
-const NuxtLink = resolveComponent("NuxtLink");
-const filteredCategories = inject<Category[]>("filteredTopCategories");
+const router = useRouter()
+const NuxtLink = resolveComponent('NuxtLink')
+const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
 
 const goTo = (slug: string) => {
-  close();
-  router.push(slug);
-};
+  close()
+  router.push(slug)
+}
 
 useTrapFocus(drawerRef, {
   activeState: isOpen,
   arrowKeysUpDown: true,
-  initialFocus: "container",
-});
+  initialFocus: 'container',
+})
 
 onClickOutside(menuRef, () => {
-  close();
-});
+  close()
+})
 </script>
 
 <template>
   <div>
     <div
-      v-if="isOpen || isSearchModalOpen"
+      v-if="isOpen || showResultSearch"
       class="fixed !w-screen !h-screen inset-0 bg-neutral-500 bg-opacity-50 transition-opacity duration-1000 top-index"
     />
     <header
@@ -60,7 +59,11 @@ onClickOutside(menuRef, () => {
       <div
         class="flex items-center jfustify-between lg:justify-start h-full w-full narrow-container"
       >
-        <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7 -mt-1.5">
+        <NuxtLink
+          to="/"
+          aria-label="Sf Homepage"
+          class="h-6 md:h-7 -mt-1.5"
+        >
           <VsfLogo />
         </NuxtLink>
         <SfButton
@@ -75,9 +78,7 @@ onClickOutside(menuRef, () => {
           <template #suffix>
             <Icon name="ion:chevron-down-sharp" />
           </template>
-          <span class="hidden md:inline-flex whitespace-nowrap px-2"
-            >Browse products</span
-          >
+          <span class="hidden md:inline-flex whitespace-nowrap px-2">Browse products</span>
         </SfButton>
         <nav>
           <ul>
@@ -98,22 +99,25 @@ onClickOutside(menuRef, () => {
                   class="bg-white p-0 max-h-screen overflow-y-auto lg:!absolute lg:!top-[5rem] max-w-full lg:p-6 top-index"
                 >
                   <div
-                    class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative"
+                    class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-4 lg:narrow-container lg:relative"
                   >
                     <div
-                      v-for="{ name, childs, id } in filteredCategories"
+                      v-for="{ name, childs, id, slug } in categoriesForMegaMenu"
                       :key="id"
                       class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
                     >
-                      <h2
+                      <h2 @click="goTo(slug)"
                         role="presentation"
-                        class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5"
+                        class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5 cursor-pointer"
                       >
                         {{ name }}
                       </h2>
-                      <hr class="mb-3.5" />
+                      <hr class="mb-3.5">
                       <ul>
-                        <li v-for="child in childs" :key="child.id">
+                        <li
+                          v-for="child in childs"
+                          :key="child.id"
+                        >
                           <SfListItem
                             v-if="child.childs !== null"
                             tag="span"
@@ -128,26 +132,14 @@ onClickOutside(menuRef, () => {
                         </li>
                       </ul>
                     </div>
-                    <div
-                      class="flex flex-col items-center justify-center bg-neutral-100 lg:rounded-md border-neutral-300 overflow-hidden grow"
-                    >
-                      <NuxtImg
-                        src="/images/watch.png"
-                        alt="New in designer watches"
-                        class="object-contain"
-                      />
-                      <p
-                        class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium"
-                      >
-                        New in designer watches
-                      </p>
-                    </div>
-                    <SfButton
+              
+                  </div>
+                  <SfButton
                       square
                       size="sm"
                       variant="tertiary"
                       aria-label="Close navigation menu"
-                      class="lg:absolute lg:right-0 lg:top-0 hover:bg-white active:bg-white"
+                      class="absolute right-5 top-5 hover:bg-white active:bg-white"
                       @click="close()"
                     >
                       <Icon
@@ -156,7 +148,6 @@ onClickOutside(menuRef, () => {
                         size="20px"
                       />
                     </SfButton>
-                  </div>
                 </SfDrawer>
               </transition>
             </li>
@@ -187,7 +178,10 @@ onClickOutside(menuRef, () => {
                   type="submit"
                   class="rounded-l-none hover:bg-transparent active:bg-transparent"
                 >
-                  <Icon name="ion:search" size="20px" />
+                  <Icon
+                    name="ion:search"
+                    size="20px"
+                  />
                 </SfButton>
               </span>
             </template>

@@ -8,40 +8,36 @@ import {
   SfListItem,
   useDisclosure,
   useTrapFocus,
-} from "@storefront-ui/vue";
-import { onClickOutside } from "@vueuse/core";
-import type { Category } from "~/graphql";
+} from '@storefront-ui/vue'
+import { onClickOutside } from '@vueuse/core'
+import type { Category } from '~/graphql'
 
-const { isOpen, toggle, close } = useDisclosure();
-const { searchModalToggle } = useSearch();
+const { isOpen, toggle, close } = useDisclosure()
+const { searchModalToggle } = useSearch()
 
-const NuxtLink = resolveComponent("NuxtLink");
+const NuxtLink = resolveComponent('NuxtLink')
 
-const menuRef = ref();
-const drawerRef = ref();
-const searchRef = ref();
-const showSearchClerkRef = ref();
+const menuRef = ref()
+const drawerRef = ref()
+const searchRef = ref()
+const showSearchClerkRef = ref()
 
 useTrapFocus(drawerRef, {
   activeState: isOpen,
   arrowKeysUpDown: true,
-  initialFocus: "container",
-});
+  initialFocus: 'container',
+})
 
 onClickOutside(menuRef, () => {
-  close();
-});
+  close()
+})
 
 onClickOutside(searchRef, () => {
-  showSearchClerkRef.value = false;
-});
+  showSearchClerkRef.value = false
+})
 
-const filteredCategories = inject<Category[]>("filteredTopCategories");
+const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
 
-const bannerDetails = {
-  image: "/images/watch.png",
-  title: "New in designer watches",
-};
 </script>
 
 <template>
@@ -52,9 +48,14 @@ const bannerDetails = {
     ]"
   >
     <div
-      class="flex items-center justify-between lg:justify-start h-full w-full narrow-container"
+      class="flex items-center justify-between h-full w-full narrow-container"
+      :class="{'justify-start' : $viewport.isGreaterOrEquals('desktop')}"
     >
-      <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7 -mt-1.5">
+      <NuxtLink
+        to="/"
+        aria-label="Sf Homepage"
+        class="h-6 md:h-7 -mt-1.5"
+      >
         <VsfLogo />
       </NuxtLink>
       <nav>
@@ -98,17 +99,17 @@ const bannerDetails = {
                     </SfButton>
                   </div>
                   <div
-                    v-for="{ name, childs } in filteredCategories"
+                    v-for="{ name, childs, slug } in categoriesForMegaMenu"
                     :key="name"
                     class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
                   >
-                    <h2
+                    <NuxtLink :to="slug"
                       role="presentation"
                       class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5"
                     >
                       {{ name }}
-                    </h2>
-                    <hr class="mb-3.5" />
+                    </NuxtLink>
+                    <hr class="mb-3.5">
                     <ul>
                       <li
                         v-for="{ name, slug, childs: subcategory } in childs"
@@ -126,20 +127,6 @@ const bannerDetails = {
                         </SfListItem>
                       </li>
                     </ul>
-                  </div>
-                  <div
-                    class="flex flex-col items-center justify-center bg-neutral-100 lg:rounded-md border-neutral-300 overflow-hidden grow"
-                  >
-                    <NuxtImg
-                      :src="bannerDetails.image"
-                      :alt="bannerDetails.title"
-                      class="object-contain"
-                    />
-                    <p
-                      class="mb-4 mt-4 px-4 text-center text-black typography-text-base font-medium"
-                    >
-                      {{ bannerDetails.title }}
-                    </p>
                   </div>
                 </div>
               </SfDrawer>
