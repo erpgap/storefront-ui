@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
-}
-
 @layer components {
   .narrow-container {
     @apply px-4 md:px-6 xl:px-8 xxl:px-0 max-w-[1336px] mx-auto;
@@ -20,8 +16,8 @@ html {
   }
   .grid-areas-product-page {
     grid-template-areas:
-      'left-top right'
-      'left-bottom right';
+      "left-top right"
+      "left-bottom right";
   }
   .grid-cols-product-page {
     grid-template-columns: minmax(56%, 500px) auto;
