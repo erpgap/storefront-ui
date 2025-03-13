@@ -13,17 +13,14 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
 
 <template>
   <MainBanner />
-  <NuxtLazyHydrate when-visible>
-    <LazyDisplay />
-  </NuxtLazyHydrate>
+    <LazyDisplay hydrate-on-visible />
   <section class="pb-16">
-    <NuxtLazyHydrate when-visible>
       <LazyProductSlider
         key="inspired-by-picks"
         heading="Inspired by your picks"
         key-for-composable="inspired-by-picks"
+        hydrate-on-visible
       />
-    </NuxtLazyHydrate>
   </section>
   <section
     v-if="list?.length > 0"
