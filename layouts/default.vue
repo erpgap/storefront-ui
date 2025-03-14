@@ -8,12 +8,9 @@
   </main>
 
   <LazyNewsletter />
-  <NuxtLazyHydrate when-visible>
-    <LazyBottomNavbar />
-  </NuxtLazyHydrate>
-  <NuxtLazyHydrate when-visible>
-    <LazyTheFooter />
-  </NuxtLazyHydrate>
+
+  <LazyBottomNavbar hydrate-on-visible />
+  <LazyTheFooter hydrate-on-visible />
 
   <WishlistSidebar />
 </template>
