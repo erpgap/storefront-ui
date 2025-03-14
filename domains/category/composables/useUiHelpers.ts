@@ -32,7 +32,7 @@ export const useUiHelpers = () => {
 
     if (newQuery) {
       Object.keys(newQuery).forEach((filterKey) => {
-        if (![...queryParamsNotFilters, "price"].includes(filterKey)) {
+        if (![...queryParamsNotFilters, "Price"].includes(filterKey)) {
           if (query[filterKey].includes(",")) {
             query[filterKey]?.split(",").forEach((item) => {
               filters.push(item);
@@ -45,7 +45,7 @@ export const useUiHelpers = () => {
       });
     }
 
-    const price = query?.price?.split("-");
+    const price = query?.Price?.split("-");
 
     const pageSize = query.itemsPerPage ? parseInt(query.itemsPerPage) : 12;
     const sort = query?.sort?.split(",") || [];
@@ -75,7 +75,7 @@ export const useUiHelpers = () => {
 
       const valueList = query[label].split(",");
       valueList.forEach((value: string) => {
-        if (label === "price") {
+        if (label === "Price") {
           const item = {
             filterName: label,
             label: `${value.slice(0, 2)}`,
@@ -117,7 +117,7 @@ export const useUiHelpers = () => {
   const changeFilters = (filters: any[], sort: string) => {
     const formattedFilters: any = {};
     filters.forEach((element) => {
-      if (element.filterName === "price") {
+      if (element.filterName === "Price") {
         element.label = element.id;
       }
 

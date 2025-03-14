@@ -141,7 +141,7 @@ watch(
 );
 
 const priceFilter = selectedFilters.value?.find((item: any) => {
-  return item.filterName === "price";
+  return item.filterName === "Price";
 });
 
 if (priceFilter) {
@@ -150,11 +150,11 @@ if (priceFilter) {
 
 watch(priceModel, (newValue) => {
   selectedFilters.value = selectedFilters.value.filter(
-    (item: any) => item.filterName !== "price"
+    (item: any) => item.filterName !== "Price"
   );
   if (newValue) {
     selectedFilters.value.push({
-      filterName: "price",
+      filterName: "Price",
       id: newValue,
     });
   }
