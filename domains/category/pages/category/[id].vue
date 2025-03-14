@@ -6,7 +6,7 @@ import {
   SfLoaderCircular,
 } from '@storefront-ui/vue'
 import type { Product } from '~/graphql'
-import generateSeo, {SeoEntity} from '~/utils/buildSEOHelper'
+import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 
 const route = useRoute()
 
@@ -72,7 +72,7 @@ if (params.id) {
 }
 
 if (category.value) {
-  useHead(generateSeo<SeoEntity>(category.value,'Category'))
+  useHead(generateSeo<SeoEntity>(category.value, 'Category'))
 }
 
 setMaxVisiblePages(isWideScreen.value)
@@ -85,29 +85,15 @@ const breadcrumbs = [
 
 <template>
   <div class="pb-20">
-    <UiBreadcrumb
-      :breadcrumbs="breadcrumbs"
-      class="self-start mt-5 mb-5"
-    />
+    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
-        <LazyCategoryFilterSidebar
-          v-if="$viewport.isGreaterOrEquals('tablet')"
-          :attributes="organizedAttributes"
-          :categories="categories"
-        />
-        <LazyCategoryMobileSidebar
-          v-if="$viewport.isLessThan('tablet')"
-          :is-open="isOpen"
-          @close="close"
-        >
+        <LazyCategoryFilterSidebar v-if="$viewport.isGreaterOrEquals('tablet')" :attributes="organizedAttributes"
+          :categories="categories" />
+        <LazyCategoryMobileSidebar v-if="$viewport.isLessThan('tablet')" :is-open="isOpen" @close="close">
           <template #default>
-            <CategoryFilterSidebar
-              class="block lg:hidden"
-              :attributes="organizedAttributes"
-              :categories="categories"
-              @close="close"
-            />
+            <CategoryFilterSidebar class="block lg:hidden" :attributes="organizedAttributes" :categories="categories"
+              @close="close" />
           </template>
         </LazyCategoryMobileSidebar>
       </div>
@@ -116,72 +102,36 @@ const breadcrumbs = [
           <div class="flex justify-between items-center mb-6">
             <span class="font-bold font-headings md:text-lg">{{ totalItems }} Products
             </span>
-            <SfButton
-              variant="tertiary"
-              class="lg:hidden whitespace-nowrap"
-              @click="open"
-            >
+            <SfButton variant="tertiary" class="lg:hidden whitespace-nowrap" @click="open">
               <template #prefix>
                 <SfIconTune />
               </template>
               Filter
             </SfButton>
           </div>
-          <section
-            v-if="productTemplateList.length > 0"
-            class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8"
-          >
-            <LazyUiProductCard
-              v-for="productTemplate in productTemplateList"
-              :key="productTemplate.id"
-              :name="productTemplate?.name || ''"
-              loading="eager"
-              :slug="
-                mountUrlSlugForProductVariant(
-                  (productTemplate.firstVariant || productTemplate) as Product,
-                )
-              "
-              :image-url="
-                $getImage(
-                  String(productTemplate.image),
-                  370,
-                  370,
-                  String(productTemplate.imageFilename),
-                )
-              "
-              :image-alt="productTemplate?.name || ''"
-              :regular-price="
-                getRegularPrice(productTemplate.firstVariant as Product) || 250
-              "
-              :special-price="
-                getSpecialPrice(productTemplate.firstVariant as Product)
-              "
-              :rating-count="123"
-              :rating="Number(4)"
-              :first-variant="productTemplate.firstVariant as Product"
-            />
+          <section v-if="productTemplateList.length > 0"
+            class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8">
+            <LazyUiProductCard v-for="productTemplate in productTemplateList" :key="productTemplate.id"
+              :name="productTemplate?.name || ''" loading="eager" :slug="mountUrlSlugForProductVariant(
+                (productTemplate.firstVariant || productTemplate) as Product,
+              )
+                " :image-url="$getImage(
+                String(productTemplate.image),
+                370,
+                370,
+                String(productTemplate.imageFilename),
+              )
+                " :image-alt="productTemplate?.name || ''" :regular-price="getRegularPrice(productTemplate.firstVariant as Product) || 250
+                " :special-price="getSpecialPrice(productTemplate.firstVariant as Product)
+                " :rating-count="123" :rating="Number(4)" :first-variant="productTemplate.firstVariant as Product" />
           </section>
-          <CategoryEmptyState
-            v-else
-            :page="pagination.currentPage"
-          />
-          <LazyUiPagination
-            v-if="pagination.totalPages > 1"
-            class="mt-5"
-            :current-page="pagination.currentPage"
-            :total-items="pagination.totalItems"
-            :page-size="pagination.itemsPerPage"
-            :max-visible-pages="maxVisiblePages"
-          />
+          <CategoryEmptyState v-else :page="pagination.currentPage" />
+          <LazyUiPagination v-if="pagination.totalPages > 1" class="mt-5" :current-page="pagination.currentPage"
+            :total-items="pagination.totalItems" :page-size="pagination.itemsPerPage"
+            :max-visible-pages="maxVisiblePages" />
         </div>
-        <div
-          v-else
-          class="w-full text-center"
-        >
-          <SfLoaderCircular
-            size="xl"
-            class="mt-[160px]"
-          />
+        <div v-else class="w-full text-center">
+          <SfLoaderCircular size="xl" class="mt-[160px]" />
         </div>
       </div>
     </div>
