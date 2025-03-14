@@ -129,16 +129,15 @@ const clearFilters = () => {
 };
 
 watch(
-  () => [facets.value, selectedFilters.value],
+  () => [facets, selectedFilters],
   () => {
     facets.value.forEach((facet: any) => {
       opened.value[facet.label] = selectedFilters.value.some(
         (item: any) => item.filterName === facet.label
       );
     });
-    opened.value.Price = false;
   },
-  { deep: true }
+  { deep: true, immediate: true }
 );
 
 const priceFilter = selectedFilters.value?.find((item: any) => {
@@ -313,8 +312,8 @@ watch(priceModel, (newValue) => {
                 :model-value="isStockSelected()"
                 @update:model-value="selectStockFilter()"
                 :class="{
-            'pointer-events-none opacity-50': stockCount === 0,
-          }"
+                  'pointer-events-none opacity-50': stockCount === 0,
+                }"
               />
               <div class="w-full flex justify-between cursor-pointer">
                 <span>In stock</span>
