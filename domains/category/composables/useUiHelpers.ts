@@ -46,6 +46,7 @@ export const useUiHelpers = () => {
     }
 
     const price = query?.Price?.split("-");
+    const availability = query?.Availability ? true : false
 
     const pageSize = query.itemsPerPage ? parseInt(query.itemsPerPage) : 12;
     const sort = query?.sort?.split(",") || [];
@@ -56,7 +57,7 @@ export const useUiHelpers = () => {
       maxPrice: Number(price?.[1]) || null,
       attribValues: filters,
       categorySlug: path === "/" || path === "/search" ? null : pathToSlug(),
-      inStock: query?.["in-stock"] === "true",
+      inStock: availability,
       ids: ids,
     } as ProductFilterInput;
 
@@ -110,7 +111,7 @@ export const useUiHelpers = () => {
   const isStockSelected = () => {
     return selectedFilters.value.some(
       (filter: { filterName: string; id: string }) =>
-        filter.filterName === "in-stock" && filter.id === "true"
+        filter.filterName === "Availability" && filter.id === "true"
     );
   }
 
