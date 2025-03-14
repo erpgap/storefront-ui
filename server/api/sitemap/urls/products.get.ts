@@ -1,5 +1,6 @@
 import { defineSitemapEventHandler } from '#imports'
-import type { SitemapUrl } from '#sitemap/types'
+import type { SitemapUrlInput } from '#sitemap/types'
+import { Product } from '~/graphql'
 
 export default defineSitemapEventHandler(async (event: any) => {
 
@@ -8,6 +9,8 @@ query GetProducts {
   products(pageSize: 1000) {
     products {
       slug
+      image
+      imageFilename
     }
   }
 }
@@ -24,8 +27,21 @@ query GetProducts {
   })
 
 
-  return data?.data?.products?.products?.map((product) => ({
-    loc: product.slug,
-    _sitemap: 'products'
-  } satisfies SitemapUrl)) || [];
+  return data?.data?.products?.products?.map((product: Product) => {
+
+    const url: SitemapUrlInput = {
+      loc: product.slug,
+      _sitemap: 'products'
+    }
+
+    if (product.image) {
+      url.images = [{
+        loc: product.image,
+        caption: product.imageFilename || '',
+        title: product.imageFilename || '',
+      },]
+    }
+
+    return url
+  }) satisfies SitemapUrlInput[] || [];
 })
