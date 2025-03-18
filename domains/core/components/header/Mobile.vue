@@ -49,7 +49,7 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
   >
     <div
       class="flex items-center justify-between h-full w-full narrow-container"
-      :class="{'justify-start' : $viewport.isGreaterOrEquals('desktop')}"
+      :class="{'justify-start' : $viewport.isGreaterOrEquals('desktopSmall')}"
     >
       <NuxtLink
         to="/"

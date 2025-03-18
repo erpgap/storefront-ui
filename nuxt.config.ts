@@ -128,6 +128,7 @@ export default defineNuxtConfig({
 
   viewport: {
     breakpoints: {
+      desktopSmall: 1024,
       desktop: 1280,
       desktopMedium: 1440,
       desktopWide: 1600,
