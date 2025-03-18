@@ -19,6 +19,7 @@ const config: CodegenConfig = {
       config: {
         preResolveTypes: true,
         avoidOptionals: true,
+        useTypeImports: true
       },
     },
   },

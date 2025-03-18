@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxtjs/device',
     '@nuxtjs/google-fonts',
-    'nuxt-lazy-hydrate',
     'nuxt-lodash',
     'nuxt-icon',
     'nuxt-delay-hydration',
@@ -154,6 +153,7 @@ export default defineNuxtConfig({
   },
 
   i18n: {
+    legacy: false,
     locales: [
       {
         code: 'en',
@@ -162,7 +162,6 @@ export default defineNuxtConfig({
     ],
     strategy: 'no_prefix',
     lazy: true,
-    langDir: 'lang',
     defaultLocale: 'en',
   },
 
