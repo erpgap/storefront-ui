@@ -97,7 +97,7 @@ const selectFilter = (
 
 const selectStockFilter = () => {
   const alreadySelectedIndex = selectedFilters.value.findIndex(
-    (filter) => filter.filterName === "in-stock"
+    (filter) => filter.filterName === "Availability"
   );
 
   if (alreadySelectedIndex !== -1) {
@@ -106,7 +106,7 @@ const selectStockFilter = () => {
   }
 
   selectedFilters.value.push({
-    filterName: "in-stock",
+    filterName: "Availability",
     label: "true",
     id: true,
   });
@@ -129,20 +129,19 @@ const clearFilters = () => {
 };
 
 watch(
-  () => [facets.value, selectedFilters.value],
+  () => [facets, selectedFilters],
   () => {
     facets.value.forEach((facet: any) => {
       opened.value[facet.label] = selectedFilters.value.some(
         (item: any) => item.filterName === facet.label
       );
     });
-    opened.value.Price = false;
   },
-  { deep: true }
+  { deep: true, immediate: true }
 );
 
 const priceFilter = selectedFilters.value?.find((item: any) => {
-  return item.filterName === "price";
+  return item.filterName === "Price";
 });
 
 if (priceFilter) {
@@ -151,11 +150,11 @@ if (priceFilter) {
 
 watch(priceModel, (newValue) => {
   selectedFilters.value = selectedFilters.value.filter(
-    (item: any) => item.filterName !== "price"
+    (item: any) => item.filterName !== "Price"
   );
   if (newValue) {
     selectedFilters.value.push({
-      filterName: "price",
+      filterName: "Price",
       id: newValue,
     });
   }
@@ -308,15 +307,15 @@ watch(priceModel, (newValue) => {
             </SfListItem>
           </template>
           <template v-if="facet.type == 'in-stock'">
-            <div class="flex items-center gap-2 px-4 cursor-pointer">
+            <div
+              class="flex items-center gap-2 px-4 cursor-pointer"
+              :class="{ 'pointer-events-none opacity-50': stockCount === 0 }"
+            >
               <SfCheckbox
                 :model-value="isStockSelected()"
                 @update:model-value="selectStockFilter()"
-                :class="{
-            'pointer-events-none opacity-50': stockCount === 0,
-          }"
               />
-              <div class="w-full flex justify-between cursor-pointer">
+              <div class="w-full flex justify-between">
                 <span>In stock</span>
                 <span class="text-[16px] text-[#808080]"
                   >({{ stockCount }})</span

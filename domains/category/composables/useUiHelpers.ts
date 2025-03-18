@@ -32,7 +32,7 @@ export const useUiHelpers = () => {
 
     if (newQuery) {
       Object.keys(newQuery).forEach((filterKey) => {
-        if (![...queryParamsNotFilters, "price"].includes(filterKey)) {
+        if (![...queryParamsNotFilters, "Price"].includes(filterKey)) {
           if (query[filterKey].includes(",")) {
             query[filterKey]?.split(",").forEach((item) => {
               filters.push(item);
@@ -45,7 +45,8 @@ export const useUiHelpers = () => {
       });
     }
 
-    const price = query?.price?.split("-");
+    const price = query?.Price?.split("-");
+    const availability = query?.Availability ? true : false
 
     const pageSize = query.itemsPerPage ? parseInt(query.itemsPerPage) : 12;
     const sort = query?.sort?.split(",") || [];
@@ -56,7 +57,7 @@ export const useUiHelpers = () => {
       maxPrice: Number(price?.[1]) || null,
       attribValues: filters,
       categorySlug: path === "/" || path === "/search" ? null : pathToSlug(),
-      inStock: query?.["in-stock"] === "true",
+      inStock: availability,
       ids: ids,
     } as ProductFilterInput;
 
@@ -75,7 +76,7 @@ export const useUiHelpers = () => {
 
       const valueList = query[label].split(",");
       valueList.forEach((value: string) => {
-        if (label === "price") {
+        if (label === "Price") {
           const item = {
             filterName: label,
             label: `${value.slice(0, 2)}`,
@@ -110,14 +111,14 @@ export const useUiHelpers = () => {
   const isStockSelected = () => {
     return selectedFilters.value.some(
       (filter: { filterName: string; id: string }) =>
-        filter.filterName === "in-stock" && filter.id === "true"
+        filter.filterName === "Availability" && filter.id === "true"
     );
   }
 
   const changeFilters = (filters: any[], sort: string) => {
     const formattedFilters: any = {};
     filters.forEach((element) => {
-      if (element.filterName === "price") {
+      if (element.filterName === "Price") {
         element.label = element.id;
       }
 
