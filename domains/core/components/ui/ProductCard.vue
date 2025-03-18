@@ -143,12 +143,12 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
       <div class="flex justify-between">
         <div class="block">
           <span class="font-bold typography-text-sm">{{
-            $currency(regularPrice)
+            $currency(specialPrice)
           }}</span>
           <span
-            v-if="specialPrice"
+            v-if="regularPrice"
             class="ml-1.5 font-normal typography-text-xs line-through"
-          >{{ $currency(specialPrice) }}</span>
+          >{{ $currency(regularPrice) }}</span>
         </div>
         <SfButton
           type="button"
