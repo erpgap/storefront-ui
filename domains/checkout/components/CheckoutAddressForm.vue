@@ -15,7 +15,8 @@ import type {
   Country,
   Partner,
   State,
-  UpdateAddressInput } from '~/graphql'
+  UpdateAddressInput,
+} from '~/graphql'
 
 import { useCountryList } from '~/domains/core/composable/useCountryList'
 
@@ -29,7 +30,7 @@ const props = defineProps({
   },
   savedAddress: {
     type: Object as PropType<Partner>,
-    default: () => {},
+    default: () => { },
   },
 })
 
@@ -257,11 +258,11 @@ const handleCloseModal = () => {
                 {{ $t("form.selectPlaceholder") }}
               </option>
               <option
-                v-for="country in countries.countries"
-                :key="country?.id"
-                :value="country?.id"
+                v-for="countryOption in countries.countries"
+                :key="countryOption?.id"
+                :value="countryOption?.id"
               >
-                {{ country?.name }}
+                {{ countryOption?.name }}
               </option>
             </SfSelect>
           </label>
@@ -281,11 +282,11 @@ const handleCloseModal = () => {
                 {{ $t("form.selectPlaceholder") }}
               </option>
               <option
-                v-for="state in states"
-                :key="state.id"
-                :value="state.id"
+                v-for="stateOption in states"
+                :key="stateOption.id"
+                :value="stateOption.id"
               >
-                {{ state.name }}
+                {{ stateOption.name }}
               </option>
             </SfSelect>
           </label>
@@ -319,9 +320,7 @@ const handleCloseModal = () => {
             {{ $t("form.useAsShippingLabel") }}
           </label>
 
-          <div
-            class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4"
-          >
+          <div class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4">
             <SfButton
               type="reset"
               class=""

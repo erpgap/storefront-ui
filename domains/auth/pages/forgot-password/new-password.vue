@@ -7,6 +7,8 @@ const { changeForgottenPassword } = useAuth()
 const route = useRoute()
 const toast = useToast()
 
+defineEmits(['on-cancel'])
+
 const firstNewPasswordVisible = ref(false)
 const secondNewPasswordVisible = ref(false)
 
@@ -39,9 +41,7 @@ const handleSubmit = async () => {
 <template>
   <div class="p-8">
     <div class="mx-auto rounded-md p-4 md:p-6 mt-8">
-      <div
-        class="w-full min-h-[330px] flex flex-col gap-4 items-center justify-center"
-      >
+      <div class="w-full min-h-[330px] flex flex-col gap-4 items-center justify-center">
         <h1 class="text-3xl font-bold mb-4">
           Change your password
         </h1>
@@ -100,9 +100,7 @@ const handleSubmit = async () => {
                 </template>
               </SfInput>
             </label>
-            <div
-              class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4"
-            >
+            <div class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4">
               <SfButton
                 type="reset"
                 variant="secondary"

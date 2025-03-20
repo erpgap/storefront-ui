@@ -6,6 +6,8 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 const { toggleWishlistSideBar } = useWishlistUiState()
 
+defineEmits(['removeFromWishlist'])
+
 defineProps({
   product: {
     type: Object as PropType<Product>,
@@ -52,9 +54,7 @@ defineProps({
             class="text-secondary-700 sm:order-1 font-bold typography-text-sm sm:typography-text-lg"
           >
             {{ $currency(product?.combinationInfoVariant?.price) }}
-            <span
-              class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
-            >
+            <span class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal">
               {{ $currency(product?.combinationInfoVariant?.list_price) }}
             </span>
           </span>
