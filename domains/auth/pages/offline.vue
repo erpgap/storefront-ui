@@ -1,6 +1,12 @@
 <template>
   <section class="flex flex-col items-center md:mt-16 mb-8">
-    <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="300" height="300">
+    <svg
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 192 192"
+      width="300"
+      height="300"
+    >
       <path
         d="M152.9 37c-7.3-1.4-14.2 2.9-15.4 9.5-.4 2.3-.1 4.7.9 6.8l-3.2 5.1 6-1.2a14 14 0 0 0 7.1 3.7c7.3 1.4 14.1-2.9 15.4-9.5 1.3-6.6-3.6-13-10.8-14.4Z"
         fill="#FDA4AF"
@@ -17,7 +23,11 @@
         d="M117.2 55.4a2.5 2.5 0 0 0-.6-5 2.5 2.5 0 0 0-2.3-4.2 2.5 2.5 0 0 0-2.2-3.6c-.5 0-1 .1-1.5.5a2.5 2.5 0 0 0-4.7-1.6 2.6 2.6 0 0 0-5.1 0A2.5 2.5 0 0 0 96 43a2.5 2.5 0 0 0-3.8 3.1 2.5 2.5 0 0 0-2.3 4.3 2.5 2.5 0 0 0-.7 4.9 2.5 2.5 0 0 0 .6 4.9 2.5 2.5 0 0 0 2.4 4.3 2.5 2.5 0 0 0 2.4 3.5c-1-.9-1.5-2.9.3-7 3.3-7.6 6.3-2.4 6.2.7 0 .5.4.7 1.2 0 1.7-1.4 3.2 1.5 0 3.3-.7.3-1 1-.6 5l.2.9a2.5 2.5 0 0 0 3.7-1.8 2.5 2.5 0 0 0 4.7-1.5 2.5 2.5 0 0 0 3.7-3 2.5 2.5 0 0 0 2.4-4.3 2.5 2.5 0 0 0 .7-5Z"
         fill="#18181B"
       />
-      <path d="M151.4 53.2a.6.6 0 1 1-1.3 0 .6.6 0 0 1 1.3 0Z" stroke="#18181B" stroke-width="1.5" />
+      <path
+        d="M151.4 53.2a.6.6 0 1 1-1.3 0 .6.6 0 0 1 1.3 0Z"
+        stroke="#18181B"
+        stroke-width="1.5"
+      />
       <path
         d="M143.4 82a45.7 45.7 0 0 1-19.2 58.1M62.6 76.5a45.7 45.7 0 0 1 25-19.6m49.8 15a45.7 45.7 0 0 0-18.5-13.8M84 142.6A45.7 45.7 0 0 1 57.7 87M109.3 145.5a47.4 47.4 0 0 1-11.4.5"
         stroke="#18181B"
@@ -108,18 +118,29 @@
         stroke-linecap="round"
         stroke-linejoin="round"
       />
-      <path d="M39 50a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" stroke="#18181B" stroke-width="1.5" />
-      <path d="M39 27.5v14.3" stroke="#18181B" stroke-width="1.5" stroke-linecap="round" />
+      <path
+        d="M39 50a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+        stroke="#18181B"
+        stroke-width="1.5"
+      />
+      <path
+        d="M39 27.5v14.3"
+        stroke="#18181B"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      />
     </svg>
-    <p class="mt-8 text-center">{{ $t('youAreOfflineText') }}</p>
+    <p class="mt-8 text-center">
+      {{ $t('youAreOfflineText') }}
+    </p>
   </section>
 </template>
 
 <script setup lang="ts">
-import { useOnline, whenever } from '@vueuse/core';
+import { useOnline, whenever } from '@vueuse/core'
 
-const router = useRouter();
-const isOnline = useOnline();
+const router = useRouter()
+const isOnline = useOnline()
 
-whenever(isOnline, () => router.push('/'), { immediate: true });
+whenever(isOnline, () => router.push('/'), { immediate: true })
 </script>

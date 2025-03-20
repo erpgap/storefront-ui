@@ -1,39 +1,39 @@
 <script lang="ts" setup>
-import { SfButton, SfInput, SfIconVisibility } from "@storefront-ui/vue";
-import { useToast } from "vue-toastification";
-import type { MutationChangePasswordArgs } from "~/graphql";
+import { SfButton, SfInput, SfIconVisibility } from '@storefront-ui/vue'
+import { useToast } from 'vue-toastification'
+import type { MutationChangePasswordArgs } from '~/graphql'
 
-const { changeForgottenPassword } = useAuth();
-const route = useRoute();
-const toast = useToast();
+const { changeForgottenPassword } = useAuth()
+const route = useRoute()
+const toast = useToast()
 
-const firstNewPasswordVisible = ref(false);
-const secondNewPasswordVisible = ref(false);
+const firstNewPasswordVisible = ref(false)
+const secondNewPasswordVisible = ref(false)
 
-const repeatPassword = ref("");
-const token = ref(route.query.token);
+const repeatPassword = ref('')
+const token = ref(route.query.token)
 
 const changePasswordArgs = ref<MutationChangePasswordArgs>({
-  newPassword: "",
+  newPassword: '',
   token: token as any,
-});
+})
 
-const passwordsDoesntMatch = ref(false);
+const passwordsDoesntMatch = ref(false)
 
 const handleSubmit = async () => {
-  passwordsDoesntMatch.value = false;
+  passwordsDoesntMatch.value = false
 
   if (changePasswordArgs.value.newPassword !== repeatPassword.value) {
-    passwordsDoesntMatch.value = true;
-    toast.error("Passwords doesnt match");
-    return;
+    passwordsDoesntMatch.value = true
+    toast.error('Passwords doesnt match')
+    return
   }
 
   await changeForgottenPassword({
     newPassword: changePasswordArgs.value.newPassword,
     token: changePasswordArgs.value.token,
-  });
-};
+  })
+}
 </script>
 
 <template>
@@ -42,7 +42,9 @@ const handleSubmit = async () => {
       <div
         class="w-full min-h-[330px] flex flex-col gap-4 items-center justify-center"
       >
-        <h1 class="text-3xl font-bold mb-4">Change your password</h1>
+        <h1 class="text-3xl font-bold mb-4">
+          Change your password
+        </h1>
         <template>
           <form
             data-testid="account-forms-password"
@@ -57,8 +59,8 @@ const handleSubmit = async () => {
                 name="password"
                 :type="firstNewPasswordVisible ? 'text' : 'password'"
                 :class="{ 'text-red-600': passwordsDoesntMatch }"
-                @change="passwordsDoesntMatch = false"
                 required
+                @change="passwordsDoesntMatch = false"
               >
                 <template #suffix>
                   <button
@@ -72,8 +74,7 @@ const handleSubmit = async () => {
               <UiFormHelperText class="block">
                 {{
                   $t("account.accountSettings.personalData.passwordHelp")
-                }}</UiFormHelperText
-              >
+                }}</UiFormHelperText>
             </label>
             <label class="block">
               <UiFormLabel>{{
@@ -84,8 +85,8 @@ const handleSubmit = async () => {
                 name="password"
                 :type="secondNewPasswordVisible ? 'text' : 'password'"
                 :class="{ 'text-red-600': passwordsDoesntMatch }"
-                @change="passwordsDoesntMatch = false"
                 required
+                @change="passwordsDoesntMatch = false"
               >
                 <template #suffix>
                   <button
@@ -109,7 +110,10 @@ const handleSubmit = async () => {
               >
                 {{ $t("contactInfo.cancel") }}
               </SfButton>
-              <SfButton type="submit" class="min-w-[120px]">
+              <SfButton
+                type="submit"
+                class="min-w-[120px]"
+              >
                 {{ $t("account.accountSettings.personalData.changePassword") }}
               </SfButton>
             </div>

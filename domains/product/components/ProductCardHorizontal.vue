@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { Product } from "~/graphql";
+import type { PropType } from 'vue'
+import type { Product } from '~/graphql'
 
 defineProps({
   product: {
@@ -8,8 +8,9 @@ defineProps({
     required: true,
     default: () => {},
   },
-});
+})
 </script>
+
 <template>
   <div
     class="flex min-w-[320px] max-w-[470px] pt-4"
@@ -23,7 +24,7 @@ defineProps({
             String(product?.image),
             370,
             370,
-            String(product?.imageFilename)
+            String(product?.imageFilename),
           )
         "
         :alt="product?.imageFilename ?? ''"

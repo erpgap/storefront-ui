@@ -1,22 +1,23 @@
 <script setup lang="ts">
-type SearchHitEmit = (event: "select", parameter: AlgoliaHitType) => void;
+type SearchHitEmit = (event: 'select', parameter: AlgoliaHitType) => void
 type SearchClerkProps = {
-  hits?: AlgoliaHitType[];
-  searchText: string;
-};
+  hits?: AlgoliaHitType[]
+  searchText: string
+}
 
-const props = defineProps<SearchClerkProps>();
-defineEmits<SearchHitEmit>();
+const props = defineProps<SearchClerkProps>()
+defineEmits<SearchHitEmit>()
 
 const makeSearchBold = (text: string) => {
   return text
     .toLocaleLowerCase()
     .replace(
       props.searchText,
-      `<b class='font-extrabold text-[16px] capitalize'>${props.searchText}</b>`
-    );
-};
+      `<b class='font-extrabold text-[16px] capitalize'>${props.searchText}</b>`,
+    )
+}
 </script>
+
 <template>
   <ul
     tabindex="-1"
@@ -33,8 +34,7 @@ const makeSearchBold = (text: string) => {
       <span
         class="text-black text-sm font-medium capitalize"
         v-html="makeSearchBold(hit.name)"
-      >
-      </span>
+      />
     </li>
   </ul>
 </template>

@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { SfLink, SfButton, SfIconClose } from "@storefront-ui/vue";
-import type { Product } from "~/graphql";
+import { SfLink, SfButton, SfIconClose } from '@storefront-ui/vue'
+import type { Product } from '~/graphql'
 
-const NuxtLink = resolveComponent("NuxtLink");
+const NuxtLink = resolveComponent('NuxtLink')
 
-const { toggleWishlistSideBar } = useWishlistUiState();
+const { toggleWishlistSideBar } = useWishlistUiState()
 
 defineProps({
   product: {
     type: Object as PropType<Product>,
     required: true,
   },
-});
+})
 </script>
 
 <template>
@@ -20,7 +20,10 @@ defineProps({
     data-testid="cart-product-card"
   >
     <div class="min-w-[114px] w-[114px] overflow-hidden rounded-md">
-      <SfLink :to="mountUrlSlugForProductVariant(product)" :tag="NuxtLink">
+      <SfLink
+        :to="mountUrlSlugForProductVariant(product)"
+        :tag="NuxtLink"
+      >
         <NuxtImg
           provider="odooProvider"
           class="border rounded-md border-neutral-200"

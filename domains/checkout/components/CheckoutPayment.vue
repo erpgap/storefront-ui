@@ -9,25 +9,25 @@
 </template>
 
 <script setup lang="ts">
-import type { PaymentProvider } from "~/graphql";
+import type { PaymentProvider } from '~/graphql'
 
 const {
   loadPaymentMethods,
   paymentProviders,
   loading: paymentLoading,
-} = usePayment();
+} = usePayment()
 
-const selectedProvider = ref<PaymentProvider | null>(null);
-const showPaymentModal = ref(false);
+const selectedProvider = ref<PaymentProvider | null>(null)
+const showPaymentModal = ref(false)
 
-await loadPaymentMethods();
+await loadPaymentMethods()
 
 if (paymentProviders.value.length > 0) {
-  showPaymentModal.value = true;
-  selectedProvider.value = paymentProviders.value[0];
+  showPaymentModal.value = true
+  selectedProvider.value = paymentProviders.value[0]
 }
 
 function updateSelectedProvider(provider: PaymentProvider) {
-  selectedProvider.value = provider;
+  selectedProvider.value = provider
 }
 </script>

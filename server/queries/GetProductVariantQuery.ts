@@ -1,4 +1,5 @@
-import { gql } from '@apollo/client/core';
+import { gql } from '@apollo/client/core'
+
 export default gql`
   query ProductVariant($productTemplateId: Int, $combinationId: [Int]) {
     productVariant(
@@ -39,4 +40,4 @@ export default gql`
       hasDiscountedPrice
     }
   }
-`;
+`

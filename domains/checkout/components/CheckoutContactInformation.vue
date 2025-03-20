@@ -5,9 +5,10 @@ import {
   SfSwitch,
   SfModal,
   useDisclosure,
-} from "@storefront-ui/vue";
-import type { MutationCreateUpdatePartnerArgs, Partner } from "~/graphql";
-const { updatePartner } = useAuth();
+} from '@storefront-ui/vue'
+import type { MutationCreateUpdatePartnerArgs, Partner } from '~/graphql'
+
+const { updatePartner } = useAuth()
 
 const props = defineProps({
   heading: {
@@ -18,59 +19,66 @@ const props = defineProps({
     type: Object as PropType<Partner>,
     required: true,
   },
-});
+})
 
 /**
  * @TODO extract this form behaviour, undo, commit, validate, etc. to a separate form composable
  */
-const { isOpen, open, close } = useDisclosure();
-const { email, name } = toRefs(props.partnerData);
-const { commit: commitEmail, undo: undoEmail } = useManualRefHistory(email);
-const { commit: commitName, undo: undoName } = useManualRefHistory(name);
+const { isOpen, open, close } = useDisclosure()
+const { email, name } = toRefs(props.partnerData)
+const { commit: commitEmail, undo: undoEmail } = useManualRefHistory(email)
+const { commit: commitName, undo: undoName } = useManualRefHistory(name)
 
 watch(
   () => props.partnerData,
   (newPartnerData) => {
     if (newPartnerData.isPublic && newPartnerData.id === 4) {
-      name.value = "";
+      name.value = ''
     }
   },
-  { immediate: true }
-);
+  { immediate: true },
+)
 
-const subscribeNewsletter = ref(true);
+const subscribeNewsletter = ref(true)
 
 const handleUpdatePartnerData = async () => {
   const data: MutationCreateUpdatePartnerArgs = {
     email: String(email.value),
     name: String(name.value),
     subscribeNewsletter: subscribeNewsletter.value,
-  };
-  await updatePartner(data);
+  }
+  await updatePartner(data)
 
-  commitEmail();
-  commitName();
-  close();
-};
+  commitEmail()
+  commitName()
+  close()
+}
 const handleOpenModal = () => {
-  commitEmail();
-  commitName();
-  open();
-};
+  commitEmail()
+  commitName()
+  open()
+}
 const handleCancel = () => {
-  undoEmail();
-  undoName();
-  close();
-};
+  undoEmail()
+  undoName()
+  close()
+}
 </script>
 
 <template>
-  <div data-testid="checkout-address" class="md:px-4 py-6">
+  <div
+    data-testid="checkout-address"
+    class="md:px-4 py-6"
+  >
     <div class="flex justify-between items-center">
       <h2 class="text-neutral-900 text-lg font-bold mb-4">
         {{ props.heading }}
       </h2>
-      <SfButton size="sm" variant="tertiary" @click="handleOpenModal">
+      <SfButton
+        size="sm"
+        variant="tertiary"
+        @click="handleOpenModal"
+      >
         {{ partnerData.id ? $t("contactInfo.edit") : $t("contactInfo.add") }}
       </SfButton>
     </div>
@@ -103,7 +111,10 @@ const handleCancel = () => {
             class="absolute right-2 top-2"
             @click="handleCancel"
           >
-            <icon name="ion:close" size="20px" />
+            <icon
+              name="ion:close"
+              size="20px"
+            />
           </SfButton>
           <h3
             id="contact-modal-title"
@@ -152,7 +163,10 @@ const handleCancel = () => {
             >
               {{ $t("contactInfo.cancel") }}
             </SfButton>
-            <SfButton type="submit" class="min-w-[120px] mb-4 md:mb-0">
+            <SfButton
+              type="submit"
+              class="min-w-[120px] mb-4 md:mb-0"
+            >
               {{ $t("contactInfo.save") }}
             </SfButton>
           </div>

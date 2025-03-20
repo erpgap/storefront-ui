@@ -4,18 +4,18 @@ import {
   SfCheckbox,
   SfInput,
   SfLoaderCircular,
-} from "@storefront-ui/vue";
+} from '@storefront-ui/vue'
 
 import {
   AddressEnum,
   type AddAddressInput,
   type AddressFormFieldsInputExtendedFields,
   type UpdateAddressInput,
-} from "~/graphql";
+} from '~/graphql'
 
-const { updateAddress, addAddress, loading } = useAddresses();
+const { updateAddress, addAddress, loading } = useAddresses()
 
-const emits = defineEmits(["on-save", "on-close"]);
+const emits = defineEmits(['on-save', 'on-close'])
 
 const props = defineProps({
   type: {
@@ -31,61 +31,62 @@ const props = defineProps({
     type: Object as PropType<AddAddressInput | UpdateAddressInput>,
     default: () => ({}),
   },
-});
+})
 
 const addressFormFieldsInput = ref<AddressFormFieldsInputExtendedFields>({
   id: 0,
-  name: "",
-  phone: "",
-  city: "",
-  email: "",
+  name: '',
+  phone: '',
+  city: '',
+  email: '',
   countryId: 0,
   stateId: 0,
-  street: "",
-  zip: "",
-  street2: "",
-});
+  street: '',
+  zip: '',
+  street2: '',
+})
 
 if (props.isEditForm) {
-  addressFormFieldsInput.value.name = props.address?.name ?? "";
-  addressFormFieldsInput.value.phone = props.address?.phone ?? "";
-  addressFormFieldsInput.value.city = props.address?.city ?? "";
-  addressFormFieldsInput.value.countryId = props.address?.country.id ?? 0;
-  addressFormFieldsInput.value.stateId = props.address?.state.id ?? 0;
-  addressFormFieldsInput.value.city = props.address?.city ?? "";
-  addressFormFieldsInput.value.zip = props.address?.zip ?? "";
-  addressFormFieldsInput.value.street = props.address?.street ?? "";
+  addressFormFieldsInput.value.name = props.address?.name ?? ''
+  addressFormFieldsInput.value.phone = props.address?.phone ?? ''
+  addressFormFieldsInput.value.city = props.address?.city ?? ''
+  addressFormFieldsInput.value.countryId = props.address?.country.id ?? 0
+  addressFormFieldsInput.value.stateId = props.address?.state.id ?? 0
+  addressFormFieldsInput.value.city = props.address?.city ?? ''
+  addressFormFieldsInput.value.zip = props.address?.zip ?? ''
+  addressFormFieldsInput.value.street = props.address?.street ?? ''
 }
 
-const billingAddresIsTheSameAsShipping = ref(false);
+const billingAddresIsTheSameAsShipping = ref(false)
 
 const handleSubmit = async () => {
   if (props.isEditForm) {
-    addressFormFieldsInput.value.id = props.address?.id;
+    addressFormFieldsInput.value.id = props.address?.id
     await updateAddress(
       addressFormFieldsInput.value as UpdateAddressInput,
-      props.type
-    );
+      props.type,
+    )
 
-    emits("on-save");
-    return;
+    emits('on-save')
+    return
   }
-  delete addressFormFieldsInput.value["id"];
-  await addAddress(addressFormFieldsInput.value as AddAddressInput, props.type);
+  delete addressFormFieldsInput.value['id']
+  await addAddress(addressFormFieldsInput.value as AddAddressInput, props.type)
 
   if (
-    billingAddresIsTheSameAsShipping.value &&
-    props.type === AddressEnum.Billing &&
-    !props.isEditForm
+    billingAddresIsTheSameAsShipping.value
+    && props.type === AddressEnum.Billing
+    && !props.isEditForm
   ) {
     await addAddress(
       addressFormFieldsInput.value as AddAddressInput,
-      AddressEnum.Shipping
-    );
+      AddressEnum.Shipping,
+    )
   }
-  emits("on-save");
-};
+  emits('on-save')
+}
 </script>
+
 <template>
   <form
     class="grid grid-cols-1 md:grid-cols-[50%_1fr_120px] gap-4"
@@ -126,8 +127,8 @@ const handleSubmit = async () => {
 
     <UiFormSelectCountries v-model="addressFormFieldsInput.countryId" />
     <UiFormSelectStates
-      v-model="addressFormFieldsInput.stateId"
       :key="addressFormFieldsInput?.countryId"
+      v-model="addressFormFieldsInput.stateId"
       :country-id="addressFormFieldsInput?.countryId"
     />
     <label class="md:col-span-2">
@@ -171,7 +172,11 @@ const handleSubmit = async () => {
       >
         {{ $t("contactInfo.cancel") }}
       </SfButton>
-      <SfButton type="submit" class="min-w-[120px]" :disabled="loading">
+      <SfButton
+        type="submit"
+        class="min-w-[120px]"
+        :disabled="loading"
+      >
         <SfLoaderCircular
           v-if="loading"
           class="flex justify-center items-center"

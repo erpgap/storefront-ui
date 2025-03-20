@@ -1,13 +1,13 @@
 // tests/components/SomeComponents.nuxt.spec.ts
-import { useRecentViewProducts } from '#imports'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { describe, expect, it, vi } from 'vitest'
+import { useRecentViewProducts } from '#imports'
 
 const { useCookie } = vi.hoisted(() => {
   return {
     useCookie: vi.fn(() => {
-      return { value: []}
-    })
+      return { value: [] }
+    }),
   }
 })
 
@@ -26,7 +26,7 @@ describe('Testing useRecentViewProducts composable', () => {
     const { addProductToRecentViews, list } = useRecentViewProducts()
 
     addProductToRecentViews(100)
-    
+
     expect(list.value).toEqual([100])
   })
   it('Dont add the same ID twice', async () => {
@@ -34,7 +34,7 @@ describe('Testing useRecentViewProducts composable', () => {
 
     addProductToRecentViews(100)
     addProductToRecentViews(100)
-    
+
     expect(list.value).toEqual([100])
 
     addProductToRecentViews(101)
@@ -47,7 +47,7 @@ describe('Testing useRecentViewProducts composable', () => {
 
     addProductToRecentViews(100)
     addProductToRecentViews(101)
-    
+
     removeProductFromRecentViews(101)
     expect(list.value).toEqual([100])
 
@@ -59,16 +59,15 @@ describe('Testing useRecentViewProducts composable', () => {
      */
     setTimeout(
       () => expect(list.value).toEqual([]),
-      10
+      10,
     )
   })
   it('Dont throw error if we try to remove ID that is not in the list', async () => {
     const { addProductToRecentViews, list, removeProductFromRecentViews } = useRecentViewProducts()
 
     addProductToRecentViews(100)
-    
+
     removeProductFromRecentViews(222)
     expect(list.value).toEqual([100])
   })
-
 })

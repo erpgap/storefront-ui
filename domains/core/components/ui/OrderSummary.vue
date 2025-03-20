@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { cart } = useCart();
+const { cart } = useCart()
 </script>
 
 <template>
@@ -13,7 +13,10 @@ const { cart } = useCart();
       <p class="typography-headline-4 font-bold md:typography-headline-3">
         {{ $t("orderSummary") }}
       </p>
-      <p class="typography-text-base font-medium" data-testid="total-in-cart">
+      <p
+        class="typography-text-base font-medium"
+        data-testid="total-in-cart"
+      >
         {{
           $t("itemsInCart", { count: cart?.order?.websiteOrderLine?.length })
         }}

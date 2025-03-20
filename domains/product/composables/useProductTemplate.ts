@@ -1,21 +1,21 @@
+import { useProductAttributes } from './useProductAttributes'
 import type {
   AttributeValue,
   Product,
   ProductResponse,
   QueryProductArgs,
-} from "~/graphql";
-import { QueryName } from "~/server/queries";
-import { useProductAttributes } from "./useProductAttributes";
+} from '~/graphql'
+import { QueryName } from '~/server/queries'
 
-const { getRegularPrice, getSpecialPrice } = useProductAttributes();
+const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 export const useProductTemplate = (slug: string) => {
-  const { $sdk, $getImage } = useNuxtApp();
+  const { $sdk, $getImage } = useNuxtApp()
 
-  const loadingProductTemplate = ref(false);
+  const loadingProductTemplate = ref(false)
   const productTemplate = useState<Product>(
     `product-${slug}`,
-    () => ({}) as Product
-  );
+    () => ({}) as Product,
+  )
 
   const images = computed(() => {
     return [
@@ -24,83 +24,83 @@ export const useProductTemplate = (slug: string) => {
           String(productTemplate.value.image),
           300,
           400,
-          String(productTemplate.value.name)
+          String(productTemplate.value.name),
         ),
         imageThumbSrc: $getImage(
           String(productTemplate.value.image),
           300,
           400,
-          String(productTemplate.value.name)
+          String(productTemplate.value.name),
         ),
         alt: productTemplate?.value?.name,
       },
-    ];
-  });
+    ]
+  })
 
   const specialPrice = computed(() => {
     if (!productTemplate.value?.firstVariant) {
-      return;
+      return
     }
-    return getSpecialPrice(productTemplate.value?.firstVariant);
-  });
+    return getSpecialPrice(productTemplate.value?.firstVariant)
+  })
 
   const regularPrice = computed(() => {
     if (!productTemplate.value?.firstVariant) {
-      return;
+      return
     }
-    return getRegularPrice(productTemplate.value?.firstVariant);
-  });
+    return getRegularPrice(productTemplate.value?.firstVariant)
+  })
 
   const loadProductTemplate = async (params: QueryProductArgs) => {
     if (productTemplate.value?.id) {
-      return;
+      return
     }
-    loadingProductTemplate.value = true;
+    loadingProductTemplate.value = true
     const { data, error } = await $sdk().odoo.query<
       QueryProductArgs,
       ProductResponse
-    >({ queryName: QueryName.GetProductTemplateQuery }, params);
+    >({ queryName: QueryName.GetProductTemplateQuery }, params)
 
     if (error.value) {
       showError({
         ...error.value,
         status: 404,
-        message: "Product not found",
-      });
-      return;
+        message: 'Product not found',
+      })
+      return
     }
 
-    loadingProductTemplate.value = false;
+    loadingProductTemplate.value = false
 
-    productTemplate.value = (data?.value?.product as Product) || {};
-  };
+    productTemplate.value = (data?.value?.product as Product) || {}
+  }
 
   const getAllSizes = computed(() => {
     return productTemplate?.value?.attributeValues
-      ?.filter((item: AttributeValue) => item?.attribute?.name === "Size")
+      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Size')
       ?.map((item: AttributeValue) => ({
         value: item.id,
         label: item.name,
-      }));
-  });
+      }))
+  })
 
   const getAllColors = computed(() => {
     return productTemplate?.value?.attributeValues
-      ?.filter((item: AttributeValue) => item?.attribute?.name === "Color")
+      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Color')
       ?.map((item: AttributeValue) => ({
         value: item.id,
         label: item.name,
-      }));
-  });
+      }))
+  })
 
   const getAllMaterials = computed(() => {
     return productTemplate?.value?.attributeValues
-      ?.filter((item: AttributeValue) => item?.attribute?.name === "Material")
+      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Material')
       ?.map((item: AttributeValue) => ({
         value: item.id,
         label: item.name,
-      }));
-  });
+      }))
+  })
 
   return {
     loadingProductTemplate,
@@ -112,5 +112,5 @@ export const useProductTemplate = (slug: string) => {
     getAllColors,
     getAllMaterials,
     getAllSizes,
-  };
-};
+  }
+}

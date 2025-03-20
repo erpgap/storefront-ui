@@ -37,7 +37,6 @@ onClickOutside(searchRef, () => {
 })
 
 const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
-
 </script>
 
 <template>
@@ -49,7 +48,7 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
   >
     <div
       class="flex items-center justify-between h-full w-full narrow-container"
-      :class="{'justify-start' : $viewport.isGreaterOrEquals('desktop')}"
+      :class="{ 'justify-start': $viewport.isGreaterOrEquals('desktop') }"
     >
       <NuxtLink
         to="/"
@@ -103,7 +102,8 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
                     :key="name"
                     class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
                   >
-                    <NuxtLink :to="slug"
+                    <NuxtLink
+                      :to="slug"
                       role="presentation"
                       class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5"
                     >

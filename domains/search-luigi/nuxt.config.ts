@@ -4,11 +4,11 @@ export default defineNuxtConfig({
     head: {
       script: [
         {
-          src: "https://scripts.luigisbox.com/LBX-732226.js",
+          src: 'https://scripts.luigisbox.com/LBX-732226.js',
           async: true,
         },
       ],
     },
   },
   runtimeConfig: {},
-});
+})

@@ -1,21 +1,22 @@
 <script setup lang="ts">
-import { useCountryList } from "~/domains/core/composable/useCountryList";
-import { AddressEnum, type Partner } from "~/graphql";
+import { useCountryList } from '~/domains/core/composable/useCountryList'
+import { AddressEnum, type Partner } from '~/graphql'
 
-const { cart, loadCart, totalItemsInCart } = useCart();
-const { loadCountries } = useCountryList();
-const router = useRouter();
+const { cart, loadCart, totalItemsInCart } = useCart()
+const { loadCountries } = useCountryList()
+const router = useRouter()
 
-const { loadUser } = useAuth();
+const { loadUser } = useAuth()
 
-await loadUser(true);
-await loadCart(false);
-await loadCountries();
+await loadUser(true)
+await loadCart(false)
+await loadCountries()
 
 if (totalItemsInCart?.value === 0) {
-  router.push("/category/53");
+  router.push('/category/53')
 }
 </script>
+
 <template>
   <div class="md:px-0 mb-20">
     <CheckoutHeader />

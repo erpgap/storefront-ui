@@ -106,9 +106,10 @@ onClickOutside(menuRef, () => {
                       :key="id"
                       class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
                     >
-                      <h2 @click="goTo(slug)"
+                      <h2
                         role="presentation"
                         class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5 cursor-pointer"
+                        @click="goTo(slug)"
                       >
                         {{ name }}
                       </h2>
@@ -132,22 +133,21 @@ onClickOutside(menuRef, () => {
                         </li>
                       </ul>
                     </div>
-              
                   </div>
                   <SfButton
-                      square
-                      size="sm"
-                      variant="tertiary"
-                      aria-label="Close navigation menu"
-                      class="absolute right-5 top-5 hover:bg-white active:bg-white"
-                      @click="close()"
-                    >
-                      <Icon
-                        name="ion:close"
-                        class="text-neutral-500"
-                        size="20px"
-                      />
-                    </SfButton>
+                    square
+                    size="sm"
+                    variant="tertiary"
+                    aria-label="Close navigation menu"
+                    class="absolute right-5 top-5 hover:bg-white active:bg-white"
+                    @click="close()"
+                  >
+                    <Icon
+                      name="ion:close"
+                      class="text-neutral-500"
+                      size="20px"
+                    />
+                  </SfButton>
                 </SfDrawer>
               </transition>
             </li>

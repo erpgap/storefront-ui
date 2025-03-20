@@ -1,4 +1,4 @@
-import hash from "object-hash";
+import hash from 'object-hash'
 
 export const sortOptions = [
   {
@@ -32,26 +32,26 @@ export const sortOptions = [
     attrName: 'Newest',
     type: '',
   },
-];
+]
 
 export const getUniqueUrlFromRouteFilteringByAttributes = (
   cleanPath: string,
-  route: any
+  route: any,
 ): string => {
-  cleanPath = cleanPath?.endsWith("/") ? cleanPath?.slice(0, -1) : cleanPath;
+  cleanPath = cleanPath?.endsWith('/') ? cleanPath?.slice(0, -1) : cleanPath
 
-  const newQuery = { ...route?.query };
-  const attributesToExclude = ["list-view"];
+  const newQuery = { ...route?.query }
+  const attributesToExclude = ['list-view']
 
   Object.keys(newQuery).forEach((key) => {
     if (attributesToExclude.includes(key)) {
-      delete newQuery[key];
+      delete newQuery[key]
     }
-  });
+  })
 
-  const hashQueryParams = hash(newQuery, { algorithm: "md5" });
+  const hashQueryParams = hash(newQuery, { algorithm: 'md5' })
 
   return `${cleanPath}-${
-    Object.keys(newQuery).length > 0 ? hashQueryParams : ""
-  }`;
-};
+    Object.keys(newQuery).length > 0 ? hashQueryParams : ''
+  }`
+}

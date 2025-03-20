@@ -7,30 +7,30 @@ import {
   SfIconPerson,
   SfIconShoppingCart,
   useDisclosure,
-} from "@storefront-ui/vue";
+} from '@storefront-ui/vue'
 
 const {
   isOpen: wishlistIsOpen,
   toggle: wishlistToggle,
   close: wishlistClose,
-} = useDisclosure();
-const { wishlist } = useWishlist();
-const NuxtLink = resolveComponent("NuxtLink");
+} = useDisclosure()
+const { wishlist } = useWishlist()
+const NuxtLink = resolveComponent('NuxtLink')
 
-const collectedProducts: any = ref("");
-const isActive = ref(false);
+const collectedProducts: any = ref('')
+const isActive = ref(false)
 const setIsActive = (param: boolean) => {
-  isActive.value = param;
-};
+  isActive.value = param
+}
 
-const wishlistTotalItems: any = ref();
+const wishlistTotalItems: any = ref()
 const setWishlistCount = async (count: number) => {
-  wishlistTotalItems.value = count;
-};
+  wishlistTotalItems.value = count
+}
 const handleWishlistSideBar = async () => {
-  wishlistToggle();
-  setIsActive(true);
-};
+  wishlistToggle()
+  setIsActive(true)
+}
 </script>
 
 <template>

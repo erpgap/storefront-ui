@@ -1,7 +1,7 @@
-import currency from 'currency.js';
+import currency from 'currency.js'
 
 export default defineNuxtPlugin(() => {
-  const config = useRuntimeConfig();
+  const config = useRuntimeConfig()
   return {
     provide: {
       currency: (value: number | string) => {
@@ -10,8 +10,8 @@ export default defineNuxtPlugin(() => {
           symbol: config.public.currencySymbol,
           decimal: config.public.currencyDecimal,
           precision: config.public.currencyPrecision,
-        }).format();
+        }).format()
       },
     },
-  };
-});
+  }
+})

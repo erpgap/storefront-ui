@@ -1,18 +1,19 @@
 <script lang="ts" setup>
-import { SfButton, SfBadge } from "@storefront-ui/vue";
+import { SfButton, SfBadge } from '@storefront-ui/vue'
 
-const { toggleWishlistSideBar } = useWishlistUiState();
-const { loadWishlist, wishlistTotalItems } = useWishlist();
+const { toggleWishlistSideBar } = useWishlistUiState()
+const { loadWishlist, wishlistTotalItems } = useWishlist()
 
 const handleOpenWishListSidebar = async () => {
-  toggleWishlistSideBar();
-  await loadWishlist();
-};
+  toggleWishlistSideBar()
+  await loadWishlist()
+}
 
 onMounted(async () => {
-  await loadWishlist();
-});
+  await loadWishlist()
+})
 </script>
+
 <template>
   <SfButton
     class="group relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 mr-1 -ml-0.5 rounded-md"

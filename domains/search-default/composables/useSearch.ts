@@ -1,5 +1,5 @@
-import { onClickOutside, useToggle } from "@vueuse/core";
-import type { Product } from "~/graphql";
+import { onClickOutside, useToggle } from '@vueuse/core'
+import type { Product } from '~/graphql'
 
 /**
  * @Responsabilities
@@ -8,14 +8,14 @@ import type { Product } from "~/graphql";
  *  3 - Handle modal state
  */
 export const useSearch = (formSearchTemplateRef?: any) => {
-  const route = useRoute();
-  const router = useRouter();
+  const route = useRoute()
+  const router = useRouter()
 
   // search modal
-  const searchModalClose = () => searchModalToggle(false);
-  const searchModalOpen = useState("search-ref", () => false);
-  const searchModalToggle = useToggle(searchModalOpen);
-  const isSearchModalOpen = computed(() => searchModalOpen.value);
+  const searchModalClose = () => searchModalToggle(false)
+  const searchModalOpen = useState('search-ref', () => false)
+  const searchModalToggle = useToggle(searchModalOpen)
+  const isSearchModalOpen = computed(() => searchModalOpen.value)
 
   // odoo search
   const {
@@ -24,24 +24,24 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     totalItems,
     organizedAttributes,
     categories,
-  } = useProductTemplateList(route.fullPath, route.fullPath);
-  const searchInputValue = useState("odoo-search-input", () => "");
-  const highlightedIndex = ref(-1);
-  const showResultSearch = ref(false);
-  const loading = ref(false);
+  } = useProductTemplateList(route.fullPath, route.fullPath)
+  const searchInputValue = useState('odoo-search-input', () => '')
+  const highlightedIndex = ref(-1)
+  const showResultSearch = ref(false)
+  const loading = ref(false)
 
   watch(
     () => route.query,
     () => {
-      searchInputValue.value = "";
-    }
-  );
+      searchInputValue.value = ''
+    },
+  )
 
   const search = async () => {
-    loading.value = true;
+    loading.value = true
 
     if (searchInputValue.value.length < 3) {
-      return;
+      return
     }
 
     await loadProductTemplateList(
@@ -49,50 +49,52 @@ export const useSearch = (formSearchTemplateRef?: any) => {
         search: searchInputValue.value,
         pageSize: 12,
       },
-      true
-    );
+      true,
+    )
 
-    showResultSearch.value = true;
-    searchModalOpen.value = true;
+    showResultSearch.value = true
+    searchModalOpen.value = true
 
-    loading.value = false;
-  };
+    loading.value = false
+  }
 
-  const searchHits = computed(() => productTemplateList.value || []);
+  const searchHits = computed(() => productTemplateList.value || [])
 
   const enterPress = () => {
-    if (!searchInputValue.value) return;
-    showResultSearch.value = false;
-    searchModalOpen.value = false;
-    router.push(`/search?search=${searchInputValue.value}`);
-  };
+    if (!searchInputValue.value) return
+    showResultSearch.value = false
+    searchModalOpen.value = false
+    router.push(`/search?search=${searchInputValue.value}`)
+  }
 
   const selectHit = (selected: Product) => {
-    if (!searchInputValue.value) return;
-    showResultSearch.value = false;
-    searchModalOpen.value = false;
-    router.push(String(selected.slug));
-  };
+    if (!searchInputValue.value) return
+    showResultSearch.value = false
+    searchModalOpen.value = false
+    router.push(String(selected.slug))
+  }
 
   const highlightPrevious = () => {
     if (highlightedIndex.value === 0) {
-      highlightedIndex.value = productTemplateList.value?.length - 1;
-    } else {
-      highlightedIndex.value -= 1;
+      highlightedIndex.value = productTemplateList.value?.length - 1
     }
-  };
+    else {
+      highlightedIndex.value -= 1
+    }
+  }
 
   const highlightNext = () => {
     if (highlightedIndex.value === searchHits.value.length - 1) {
-      highlightedIndex.value = 0;
-    } else {
-      highlightedIndex.value += 1;
+      highlightedIndex.value = 0
     }
-  };
+    else {
+      highlightedIndex.value += 1
+    }
+  }
 
   onClickOutside(formSearchTemplateRef, () => {
-    showResultSearch.value = false;
-  });
+    showResultSearch.value = false
+  })
 
   return {
     // search modal
@@ -116,5 +118,5 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     categories,
     productTemplateList,
     enterPress,
-  };
-};
+  }
+}

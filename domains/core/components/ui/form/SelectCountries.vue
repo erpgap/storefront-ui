@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import CustomSfSelect from "./CustomSfSelect.vue";
-import { useCountryList } from "~/domains/core/composable/useCountryList";
-const { loadCountries, countries } = useCountryList();
-await loadCountries();
+import CustomSfSelect from './CustomSfSelect.vue'
+import { useCountryList } from '~/domains/core/composable/useCountryList'
 
-const model = defineModel({ default: 0 });
+const { loadCountries, countries } = useCountryList()
+await loadCountries()
+
+const model = defineModel({ default: 0 })
 </script>
+
 <template>
   <label class="md:col-span-3">
     <UiFormLabel>{{ $t("form.countryLabel") }}</UiFormLabel>
@@ -15,7 +17,10 @@ const model = defineModel({ default: 0 });
       autocomplete="country-name"
       required
     >
-      <option key="placeholder" :value="null">
+      <option
+        key="placeholder"
+        :value="null"
+      >
         {{ $t("form.selectPlaceholder") }}
       </option>
       <option

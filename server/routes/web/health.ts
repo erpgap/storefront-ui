@@ -1,3 +1,3 @@
 export default defineEventHandler((event) => {
-  return { status: 'pass' };
-});
+  return { status: 'pass' }
+})

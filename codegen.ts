@@ -1,4 +1,4 @@
-import type { CodegenConfig } from '@graphql-codegen/cli';
+import type { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
   overwrite: true,
@@ -19,10 +19,10 @@ const config: CodegenConfig = {
       config: {
         preResolveTypes: true,
         avoidOptionals: true,
-        useTypeImports: true
+        useTypeImports: true,
       },
     },
   },
-};
+}
 
-export default config;
+export default config

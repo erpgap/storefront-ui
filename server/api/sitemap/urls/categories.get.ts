@@ -1,6 +1,6 @@
 import { defineSitemapEventHandler } from '#imports'
 import type { SitemapUrlInput } from '#sitemap/types'
-import { Category } from '~/graphql'
+import type { Category } from '~/graphql'
 
 export default defineSitemapEventHandler(async (event: any) => {
   const query = `
@@ -17,9 +17,9 @@ export default defineSitemapEventHandler(async (event: any) => {
   const response = await $fetch(odooBaseUrl, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query })
+    body: JSON.stringify({ query }),
   })
 
   const categories: Category[] = response?.data?.categories?.categories || []
@@ -28,7 +28,7 @@ export default defineSitemapEventHandler(async (event: any) => {
     .filter((category: Category) => category.slug && category.slug !== 'false')
     .map((category: any) => ({
       loc: category.slug,
-      _sitemap: 'categories'
+      _sitemap: 'categories',
     } satisfies SitemapUrlInput))
 
   return sitemapUrls

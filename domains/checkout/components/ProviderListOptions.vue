@@ -1,28 +1,31 @@
 <script setup lang="ts">
-import type { PaymentProvider } from "~/graphql";
+import type { PaymentProvider } from '~/graphql'
 
 type CheckoutPaymentProps = {
-  activeProvider: PaymentProvider;
-  paymentProviders: PaymentProvider[];
-};
+  activeProvider: PaymentProvider
+  paymentProviders: PaymentProvider[]
+}
 
 type CheckoutPaymentEmits = (
-  event: "update:activePayment",
+  event: 'update:activePayment',
   parameter: PaymentProvider
-) => void;
+) => void
 
-const props = defineProps<CheckoutPaymentProps>();
-const emit = defineEmits<CheckoutPaymentEmits>();
+const props = defineProps<CheckoutPaymentProps>()
+const emit = defineEmits<CheckoutPaymentEmits>()
 
 onMounted(() => {
   if (props.paymentProviders.length > 0) {
-    emit("update:activePayment", props.paymentProviders[0]);
+    emit('update:activePayment', props.paymentProviders[0])
   }
-});
+})
 </script>
 
 <template>
-  <div data-testid="checkout-payment" class="md:px-4 py-6">
+  <div
+    data-testid="checkout-payment"
+    class="md:px-4 py-6"
+  >
     <fieldset>
       <legend class="text-neutral-900 text-lg font-bold mb-4">
         {{ $t("checkoutPayment.heading") }}
@@ -40,7 +43,7 @@ onMounted(() => {
             :value="provider.id"
             :checked="provider.id === activeProvider.id"
             @change="$emit('update:activePayment', provider)"
-          />
+          >
           <span
             class="h-20 flex flex-col items-center justify-center py-4 px-4 cursor-pointer rounded-md border border-neutral-200 -outline-offset-2 hover:border-primary-200 hover:bg-primary-100 peer-focus:border-primary-200 peer-focus:bg-primary-100 active:border-primary-300 active:bg-primary-200 peer-checked:outline peer-checked:outline-2 peer-checked:outline-primary-700 peer-disabled:opacity-50 peer-disabled:bg-neutral-100 peer-disabled:border-neutral-200 peer-disabled:cursor-not-allowed peer-disabled:[&_img]:grayscale"
           >

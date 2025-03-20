@@ -19,23 +19,23 @@
 </template>
 
 <script lang="ts" setup>
-import { SfAccordionItem, SfIconChevronLeft } from "@storefront-ui/vue";
-import { useVModel } from "@vueuse/core";
+import { SfAccordionItem, SfIconChevronLeft } from '@storefront-ui/vue'
+import { useVModel } from '@vueuse/core'
 
 type AccordionItemProps = {
-  modelValue?: boolean;
-  summary?: string;
-  summaryClass?: string;
-};
+  modelValue?: boolean
+  summary?: string
+  summaryClass?: string
+}
 
 const props = withDefaults(defineProps<AccordionItemProps>(), {
   modelValue: false,
-  summary: "",
-  summaryClass: "",
-});
-const emit = defineEmits(["update:modelValue"]);
+  summary: '',
+  summaryClass: '',
+})
+const emit = defineEmits(['update:modelValue'])
 
-const internalModelValue = useVModel(props, "modelValue", emit, {
+const internalModelValue = useVModel(props, 'modelValue', emit, {
   passive: true,
-});
+})
 </script>
