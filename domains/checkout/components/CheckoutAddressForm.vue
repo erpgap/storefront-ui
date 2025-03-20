@@ -7,18 +7,18 @@ import {
   SfModal,
   SfSelect,
   useDisclosure,
-} from "@storefront-ui/vue";
-import type { PropType } from "vue";
-import {
+} from '@storefront-ui/vue'
+import type { PropType } from 'vue'
+import type {
   AddressEnum,
-  type AddAddressInput,
-  type Country,
-  type Partner,
-  type State,
-  type UpdateAddressInput,
-} from "~/graphql";
+  AddAddressInput,
+  Country,
+  Partner,
+  State,
+  UpdateAddressInput,
+} from '~/graphql'
 
-import { useCountryList } from "~/domains/core/composable/useCountryList";
+import { useCountryList } from '~/domains/core/composable/useCountryList'
 
 const props = defineProps({
   heading: String,
@@ -30,118 +30,128 @@ const props = defineProps({
   },
   savedAddress: {
     type: Object as PropType<Partner>,
-    default: () => {},
+    default: () => { },
   },
-});
+})
 
 /**
  * @TODO extract this form behaviour, undo, commit, validate, etc. to a separate form composable
  */
 
 const { city, country, name, state, street, phone, zip } = toRefs(
-  props.savedAddress
-);
-name.value = name.value === "Public user" ? "" : name.value;
+  props.savedAddress,
+)
+name.value = name.value === 'Public user' ? '' : name.value
 
-const countryId = toRef(country.value?.id);
-const stateId = toRef(state.value?.id);
+const countryId = toRef(country.value?.id)
+const stateId = toRef(state.value?.id)
 
-const { commit: commitCity, undo: undoCity } = useManualRefHistory(city);
-const { commit: commitCountry, undo: undoCountry } =
-  useManualRefHistory(countryId);
-const { commit: commitName, undo: undoName } = useManualRefHistory(name);
-const { commit: commitState, undo: undoState } = useManualRefHistory(stateId);
-const { commit: commitStreet, undo: undoStreet } = useManualRefHistory(street);
-const { commit: commitPhone, undo: undoPhone } = useManualRefHistory(phone);
-const { commit: commitZip, undo: undoZip } = useManualRefHistory(zip);
+const { commit: commitCity, undo: undoCity } = useManualRefHistory(city)
+const { commit: commitCountry, undo: undoCountry }
+  = useManualRefHistory(countryId)
+const { commit: commitName, undo: undoName } = useManualRefHistory(name)
+const { commit: commitState, undo: undoState } = useManualRefHistory(stateId)
+const { commit: commitStreet, undo: undoStreet } = useManualRefHistory(street)
+const { commit: commitPhone, undo: undoPhone } = useManualRefHistory(phone)
+const { commit: commitZip, undo: undoZip } = useManualRefHistory(zip)
 
-const { isOpen, open, close } = useDisclosure();
-const { addAddress, updateAddress } = useAddresses();
+const { isOpen, open, close } = useDisclosure()
+const { addAddress, updateAddress } = useAddresses()
 
-const { countries } = useCountryList();
+const { countries } = useCountryList()
 
-const isCartUpdateLoading = false;
+const isCartUpdateLoading = false
 
 const handleSaveAddress = async () => {
   const data: UpdateAddressInput = {
     name: name.value,
-    street: street.value?.split(" ")?.[0] || "",
-    street2: street.value?.split(" ")?.[1] || "",
+    street: street.value?.split(' ')?.[0] || '',
+    street2: street.value?.split(' ')?.[1] || '',
     city: city.value,
     zip: zip.value,
     phone: phone.value,
     countryId: Number(countryId.value),
     stateId: Number(stateId.value),
-  };
-
-  if (props.savedAddress?.id && props.savedAddress.id !== 4) {
-    data.id = props.savedAddress.id;
-    await updateAddress(data, props.type);
-    commitAll();
-    return close();
   }
 
-  await addAddress(data as unknown as AddAddressInput, props.type);
-  commitAll();
-  close();
-};
+  if (props.savedAddress?.id && props.savedAddress.id !== 4) {
+    data.id = props.savedAddress.id
+    await updateAddress(data, props.type)
+    commitAll()
+    return close()
+  }
+
+  await addAddress(data as unknown as AddAddressInput, props.type)
+  commitAll()
+  close()
+}
 
 const selectedCountry = computed<Country>(
   () =>
     countries.value.countries?.find(
-      (item: any) => item.id === countryId.value
-    ) || ({} as Country)
-);
+      (item: any) => item.id === countryId.value,
+    ) || ({} as Country),
+)
 
 const selectedState = computed<State>(
   () =>
     selectedCountry.value?.states?.find(
-      (item: any) => item.id === stateId.value
-    ) || ({} as State)
-);
+      (item: any) => item.id === stateId.value,
+    ) || ({} as State),
+)
 
-const states = computed(() => selectedCountry.value?.states || []);
+const states = computed(() => selectedCountry.value?.states || [])
 
 const commitAll = () => {
-  commitCity();
-  commitCountry();
-  commitName();
-  commitState();
-  commitStreet();
-  commitZip();
-  commitPhone();
-};
+  commitCity()
+  commitCountry()
+  commitName()
+  commitState()
+  commitStreet()
+  commitZip()
+  commitPhone()
+}
 
 const handleOpenModal = () => {
-  commitAll();
-  open();
-};
+  commitAll()
+  open()
+}
 
 const handleCloseModal = () => {
-  close();
-  undoCity();
-  undoCountry();
-  undoName();
-  undoState();
-  undoStreet();
-  undoZip();
-  undoPhone();
-};
+  close()
+  undoCity()
+  undoCountry()
+  undoName()
+  undoState()
+  undoStreet()
+  undoZip()
+  undoPhone()
+}
 </script>
 
 <template>
-  <div data-testid="checkout-address" class="md:px-4 py-6">
+  <div
+    data-testid="checkout-address"
+    class="md:px-4 py-6"
+  >
     <div class="flex justify-between items-center">
       <h2 class="text-neutral-900 text-lg font-bold mb-4">
         {{ props.heading }}
       </h2>
 
-      <SfButton size="sm" variant="tertiary" @click="handleOpenModal">
+      <SfButton
+        size="sm"
+        variant="tertiary"
+        @click="handleOpenModal"
+      >
         {{ savedAddress.id ? $t("contactInfo.edit") : $t("contactInfo.add") }}
       </SfButton>
     </div>
 
-    <div v-if="savedAddress.id" class="mt-2 md:w-[520px]">
+    <div
+      v-if="savedAddress.id"
+      class="mt-2 md:w-[520px]"
+    >
       <p>{{ `${name} ${street || ""}` }}</p>
       <p>{{ phone }}</p>
       <p>{{ selectedCountry?.name || "" }}</p>
@@ -149,9 +159,16 @@ const handleCloseModal = () => {
       <p>{{ `${city || ""} ${zip || ""}` }}</p>
     </div>
 
-    <div v-if="!savedAddress" class="w-full md:max-w-[520px]">
+    <div
+      v-if="!savedAddress"
+      class="w-full md:max-w-[520px]"
+    >
       <p>{{ props.description }}</p>
-      <SfButton class="mt-4 w-full md:w-auto" variant="secondary" @click="open">
+      <SfButton
+        class="mt-4 w-full md:w-auto"
+        variant="secondary"
+        @click="open"
+      >
         {{ props.buttonText }}
       </SfButton>
     </div>
@@ -178,7 +195,10 @@ const handleCloseModal = () => {
             class="absolute right-2 top-2"
             @click="handleCloseModal"
           >
-            <icon name="ion:close" size="20px" />
+            <icon
+              name="ion:close"
+              size="20px"
+            />
           </SfButton>
           <h3
             id="address-modal-title"
@@ -231,15 +251,18 @@ const handleCloseModal = () => {
               autocomplete="country-name"
               required
             >
-              <option key="placeholder" :value="null">
+              <option
+                key="placeholder"
+                :value="null"
+              >
                 {{ $t("form.selectPlaceholder") }}
               </option>
               <option
-                v-for="country in countries.countries"
-                :key="country?.id"
-                :value="country?.id"
+                v-for="countryOption in countries.countries"
+                :key="countryOption?.id"
+                :value="countryOption?.id"
               >
-                {{ country?.name }}
+                {{ countryOption?.name }}
               </option>
             </SfSelect>
           </label>
@@ -252,11 +275,18 @@ const handleCloseModal = () => {
               :disabled="!states.length"
               required
             >
-              <option key="placeholder" :value="null">
+              <option
+                key="placeholder"
+                :value="null"
+              >
                 {{ $t("form.selectPlaceholder") }}
               </option>
-              <option v-for="state in states" :key="state.id" :value="state.id">
-                {{ state.name }}
+              <option
+                v-for="stateOption in states"
+                :key="stateOption.id"
+                :value="stateOption.id"
+              >
+                {{ stateOption.name }}
               </option>
             </SfSelect>
           </label>
@@ -290,9 +320,7 @@ const handleCloseModal = () => {
             {{ $t("form.useAsShippingLabel") }}
           </label>
 
-          <div
-            class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4"
-          >
+          <div class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4">
             <SfButton
               type="reset"
               class=""

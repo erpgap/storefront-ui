@@ -1,5 +1,5 @@
-import { partnerFragment } from '../fragments';
-import { gql } from '@apollo/client/core';
+import { gql } from '@apollo/client/core'
+import { partnerFragment } from '../fragments'
 
 export default gql`
   query ($search: String, $filter: CategoryFilterInput, $currentPage: Int, $pageSize: Int, $sort: CategorySortInput) {
@@ -26,4 +26,4 @@ export default gql`
       }
     }
   }
-`;
+`

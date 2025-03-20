@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { SfButton } from "@storefront-ui/vue";
+import { SfButton } from '@storefront-ui/vue'
+
 defineProps({
   page: {
     type: Number,
     default: 0,
   },
-});
+})
 </script>
+
 <template>
   <section>
     <div
@@ -19,8 +21,14 @@ defineProps({
         width="300"
         height="300"
       />
-      <p class="mt-8 font-medium">{{ $t("emptyStateText3", { page }) }}</p>
-      <SfButton class="mt-8 mb-20" variant="secondary" @click="$router.back()">
+      <p class="mt-8 font-medium">
+        {{ $t("emptyStateText3", { page }) }}
+      </p>
+      <SfButton
+        class="mt-8 mb-20"
+        variant="secondary"
+        @click="$router.back()"
+      >
         <template #prefix>
           <SfIconArrowBack />
         </template>

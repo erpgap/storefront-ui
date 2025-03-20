@@ -6,27 +6,27 @@ import {
   SfLink,
   SfModal,
   useDisclosure,
-} from "@storefront-ui/vue";
+} from '@storefront-ui/vue'
 
 definePageMeta({
   layout: false,
-});
+})
 
-const firstNameModel = ref("");
-const lastNameModel = ref("");
-const emailModel = ref("");
-const passwordModel = ref("");
-const termsAndConditionsModel = ref<boolean>();
-const subscriptionsModel = ref<boolean>();
+const firstNameModel = ref('')
+const lastNameModel = ref('')
+const emailModel = ref('')
+const passwordModel = ref('')
+const termsAndConditionsModel = ref<boolean>()
+const subscriptionsModel = ref<boolean>()
 
-const NuxtLink = resolveComponent("NuxtLink");
-const { isOpen, open } = useDisclosure();
-const { signup, loading } = useAuth();
-const router = useRouter();
+const NuxtLink = resolveComponent('NuxtLink')
+const { isOpen, open } = useDisclosure()
+const { signup, loading } = useAuth()
+const router = useRouter()
 
 const fullName = computed(
-  () => `${firstNameModel.value} ${lastNameModel.value}`
-);
+  () => `${firstNameModel.value} ${lastNameModel.value}`,
+)
 
 const handleSignup = async () => {
   await signup({
@@ -34,12 +34,15 @@ const handleSignup = async () => {
     name: fullName.value,
     password: passwordModel.value,
     subscribeNewsletter: subscriptionsModel.value === true,
-  });
-};
+  })
+}
 </script>
 
 <template>
-  <NuxtLayout name="auth" :heading="$t('auth.signup.heading')">
+  <NuxtLayout
+    name="auth"
+    :heading="$t('auth.signup.heading')"
+  >
     <UiAlert
       class="w-full p-4 md:p-6 mb-6 !justify-start typography-text-base"
       variant="neutral"
@@ -151,7 +154,11 @@ const handleSignup = async () => {
         {{ $t("form.asterixHint") }}
       </p>
 
-      <SfButton type="submit" size="lg" class="w-full">
+      <SfButton
+        type="submit"
+        size="lg"
+        class="w-full"
+      >
         {{ $t("auth.signup.createButton") }}
       </SfButton>
     </form>
@@ -202,7 +209,11 @@ const handleSignup = async () => {
       </UiAlert>
 
       <footer class="flex justify-end">
-        <SfButton :tag="NuxtLink" to="/" class="w-full">
+        <SfButton
+          :tag="NuxtLink"
+          to="/"
+          class="w-full"
+        >
           {{ $t("auth.signup.modal.button") }}
         </SfButton>
       </footer>

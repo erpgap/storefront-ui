@@ -4,7 +4,7 @@
   <TheHeader />
 
   <main class="w-full narrow-container bg-white">
-    <slot></slot>
+    <slot />
   </main>
 
   <LazyNewsletter />

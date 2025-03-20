@@ -4,16 +4,15 @@ import {
   SfIconTune,
   useDisclosure,
   SfLoaderCircular,
-} from '@storefront-ui/vue'
-import type { Product } from '~/graphql'
-import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
+} from "@storefront-ui/vue";
+import type { Product } from "~/graphql";
+import generateSeo, { type SeoEntity } from "~/utils/buildSEOHelper";
 
-const route = useRoute()
+const route = useRoute();
 
+const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ""));
 
-const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
-
-const { isOpen, open, close } = useDisclosure()
+const { isOpen, open, close } = useDisclosure();
 const {
   loadProductTemplateList,
   organizedAttributes,
@@ -21,8 +20,11 @@ const {
   productTemplateList,
   totalItems,
   categories,
-  stockCount
-} = useProductTemplateList(route?.path?.replace(/\/$/, ''), String(cleanFullPath.value))
+  stockCount,
+} = useProductTemplateList(
+  route?.path?.replace(/\/$/, ""),
+  String(cleanFullPath.value)
+);
 
 provide("stockCount", stockCount);
 
@@ -30,29 +32,29 @@ const {
   loadCategory,
   category,
   loading: categoryLoading,
-} = useCategory(String(cleanFullPath.value))
+} = useCategory(String(cleanFullPath.value));
 
-const { getRegularPrice, getSpecialPrice } = useProductAttributes()
-const { getFacetsFromURL } = useUiHelpers()
+const { getRegularPrice, getSpecialPrice } = useProductAttributes();
+const { getFacetsFromURL } = useUiHelpers();
 
-const maxVisiblePages = useState('category-max-visible-pages', () => 1)
+const maxVisiblePages = useState("category-max-visible-pages", () => 1);
 const setMaxVisiblePages = (isWide: boolean) =>
-  (maxVisiblePages.value = isWide ? 5 : 1)
+  (maxVisiblePages.value = isWide ? 5 : 1);
 
-watch(isWideScreen, value => setMaxVisiblePages(value))
+watch(isWideScreen, (value) => setMaxVisiblePages(value));
 watch(isTabletScreen, (value) => {
   if (value && isOpen.value) {
-    close()
+    close();
   }
-})
+});
 
 watch(
   () => route,
   async () => {
-    await loadProductTemplateList(getFacetsFromURL(route.query))
+    await loadProductTemplateList(getFacetsFromURL(route.query));
   },
-  { deep: true, immediate: true },
-)
+  { deep: true, immediate: true }
+);
 
 const pagination = computed(() => ({
   currentPage: route?.query?.page ? Number(route.query.page) : 1,
@@ -60,27 +62,27 @@ const pagination = computed(() => ({
   totalItems: totalItems.value,
   itemsPerPage: 12,
   pageOptions: [5, 12, 15, 20],
-}))
+}));
 
-const params = route.params as { id?: string | number, slug?: string }
+const params = route.params as { id?: string | number; slug?: string };
 
 if (params.id) {
   await loadCategory({
     id: Number(params.id),
     slug: String(cleanFullPath.value),
-  })
+  });
 }
 
 if (category.value) {
-  useHead(generateSeo<SeoEntity>(category.value, 'Category'))
+  useHead(generateSeo<SeoEntity>(category.value, "Category"));
 }
 
-setMaxVisiblePages(isWideScreen.value)
+setMaxVisiblePages(isWideScreen.value);
 
 const breadcrumbs = [
-  { name: 'Home', link: '/' },
+  { name: "Home", link: "/" },
   { name: category._value.name, link: `Category/${route.params.id}` },
-]
+];
 </script>
 
 <template>
@@ -88,47 +90,83 @@ const breadcrumbs = [
     <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
-        <LazyCategoryFilterSidebar v-if="$viewport.isGreaterOrEquals('desktopSmall')" :attributes="organizedAttributes"
-          :categories="categories" />
-        <LazyCategoryMobileSidebar v-if="$viewport.isLessThan('desktopSmall')" :is-open="isOpen" @close="close">
+        <LazyCategoryFilterSidebar
+          v-if="$viewport.isGreaterOrEquals('desktopSmall')"
+          :attributes="organizedAttributes"
+          :categories="categories"
+        />
+        <LazyCategoryMobileSidebar
+          v-if="$viewport.isLessThan('desktopSmall')"
+          :is-open="isOpen"
+          @close="close"
+        >
           <template #default>
-            <CategoryFilterSidebar class="block lg:hidden" :attributes="organizedAttributes" :categories="categories"
-              @close="close" />
+            <CategoryFilterSidebar
+              class="block lg:hidden"
+              :attributes="organizedAttributes"
+              :categories="categories"
+              @close="close"
+            />
           </template>
         </LazyCategoryMobileSidebar>
       </div>
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
         <div v-if="!loading">
           <div class="flex justify-between items-center mb-6">
-            <span class="font-bold font-headings md:text-lg">{{ totalItems }} Products
+            <span class="font-bold font-headings md:text-lg"
+              >{{ totalItems }} Products
             </span>
-            <SfButton variant="tertiary" class="lg:hidden whitespace-nowrap" @click="open">
+            <SfButton
+              variant="tertiary"
+              class="lg:hidden whitespace-nowrap"
+              @click="open"
+            >
               <template #prefix>
                 <SfIconTune />
               </template>
               Filter
             </SfButton>
           </div>
-          <section v-if="productTemplateList.length > 0"
-            class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8">
-            <LazyUiProductCard v-for="productTemplate in productTemplateList" :key="productTemplate.id"
-              :name="productTemplate?.name || ''" loading="eager" :slug="mountUrlSlugForProductVariant(
+          <section
+            v-if="productTemplateList.length > 0"
+            class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8"
+          >
+            <LazyUiProductCard
+              v-for="productTemplate in productTemplateList"
+              :key="productTemplate.id"
+              :name="productTemplate?.name || ''"
+              loading="eager"
+              :slug="mountUrlSlugForProductVariant(
                 (productTemplate.firstVariant || productTemplate) as Product,
               )
-                " :image-url="$getImage(
-                String(productTemplate.image),
-                370,
-                370,
-                String(productTemplate.imageFilename),
-              )
-                " :image-alt="productTemplate?.name || ''" :regular-price="getRegularPrice(productTemplate.firstVariant as Product) || 250
-                " :special-price="getSpecialPrice(productTemplate.firstVariant as Product)
-                " :rating-count="123" :rating="Number(4)" :first-variant="productTemplate.firstVariant as Product" />
+              "
+              :image-url="
+                $getImage(
+                  String(productTemplate.image),
+                  370,
+                  370,
+                  String(productTemplate.imageFilename)
+                )
+              "
+              :image-alt="productTemplate?.name || ''"
+              :regular-price="getRegularPrice(productTemplate.firstVariant as Product) || 250
+              "
+              :special-price="getSpecialPrice(productTemplate.firstVariant as Product)
+              "
+              :rating-count="123"
+              :rating="Number(4)"
+              :first-variant="productTemplate.firstVariant as Product"
+            />
           </section>
           <CategoryEmptyState v-else :page="pagination.currentPage" />
-          <LazyUiPagination v-if="pagination.totalPages > 1" class="mt-5" :current-page="pagination.currentPage"
-            :total-items="pagination.totalItems" :page-size="pagination.itemsPerPage"
-            :max-visible-pages="maxVisiblePages" />
+          <LazyUiPagination
+            v-if="pagination.totalPages > 1"
+            class="mt-5"
+            :current-page="pagination.currentPage"
+            :total-items="pagination.totalItems"
+            :page-size="pagination.itemsPerPage"
+            :max-visible-pages="maxVisiblePages"
+          />
         </div>
         <div v-else class="w-full text-center">
           <SfLoaderCircular size="xl" class="mt-[160px]" />

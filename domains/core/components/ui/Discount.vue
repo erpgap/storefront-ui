@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { SfButton, SfInput } from '@storefront-ui/vue';
-const { applyDiscount, loading } = useDiscount();
+import { SfButton, SfInput } from '@storefront-ui/vue'
 
-const promo = ref('');
+const { applyDiscount, loading } = useDiscount()
+
+const promo = ref('')
 
 const handleApplyPromo = async () => {
-  await applyDiscount(promo.value);
-};
+  await applyDiscount(promo.value)
+}
 </script>
 
 <template>
@@ -20,10 +21,10 @@ const handleApplyPromo = async () => {
     </div>
 
     <SfButton
-      @click="handleApplyPromo"
       :disabled="!promo || loading"
       size="lg"
       variant="secondary"
+      @click="handleApplyPromo"
     >
       {{ $t('apply') }}
     </SfButton>

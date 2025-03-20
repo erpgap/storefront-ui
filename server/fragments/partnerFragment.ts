@@ -57,4 +57,4 @@ partner{
     email
     phone
   }
-`;
+`

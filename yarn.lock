@@ -2410,6 +2410,38 @@
     rc9 "^2.1.2"
     std-env "^3.8.0"
 
+"@nuxt/test-utils@>=3.13.1", "@nuxt/test-utils@^3.17.2":
+  version "3.17.2"
+  resolved "https://registry.yarnpkg.com/@nuxt/test-utils/-/test-utils-3.17.2.tgz#4141f1da223e9351640a11999dce45cd982700b0"
+  integrity sha512-i1NiWsJx8sv8Zg8z3WD7ITehMi9s8DaR6ArgmDHaKkQ6RJSaVhrPKyGBTv3gzdoF8CHUKa3MNhdX62JWblvLMg==
+  dependencies:
+    "@nuxt/kit" "^3.16.0"
+    "@nuxt/schema" "^3.16.0"
+    c12 "^3.0.2"
+    consola "^3.4.0"
+    defu "^6.1.4"
+    destr "^2.0.3"
+    estree-walker "^3.0.3"
+    fake-indexeddb "^6.0.0"
+    get-port-please "^3.1.2"
+    h3 "^1.15.1"
+    local-pkg "^1.1.1"
+    magic-string "^0.30.17"
+    node-fetch-native "^1.6.5"
+    node-mock-http "^1.0.0"
+    ofetch "^1.4.1"
+    pathe "^2.0.3"
+    perfect-debounce "^1.0.0"
+    radix3 "^1.1.2"
+    scule "^1.3.0"
+    std-env "^3.8.1"
+    tinyexec "^0.3.2"
+    ufo "^1.5.4"
+    unplugin "^2.2.0"
+    vite "^6.2.1"
+    vitest-environment-nuxt "^1.0.1"
+    vue "^3.5.13"
+
 "@nuxt/vite-builder@3.16.0":
   version "3.16.0"
   resolved "https://registry.yarnpkg.com/@nuxt/vite-builder/-/vite-builder-3.16.0.tgz#2c8be276e114740052bfc3c8dd55bc049b002032"
@@ -6376,6 +6408,11 @@ externality@^1.0.2:
     pathe "^1.1.1"
     ufo "^1.1.2"
 
+fake-indexeddb@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/fake-indexeddb/-/fake-indexeddb-6.0.0.tgz#3173d5ad141436dace95f8de6e9ecdc3d9787d5d"
+  integrity sha512-YEboHE5VfopUclOck7LncgIqskAqnv4q0EWbYCaxKKjAvO93c+TJIaBuGy8CBFdbg9nKdpN3AuPRwVBJ4k7NrQ==
+
 fast-decode-uri-component@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/fast-decode-uri-component/-/fast-decode-uri-component-1.0.1.tgz#46f8b6c22b30ff7a81357d4f59abfae938202543"
@@ -8700,7 +8737,7 @@ node-domexception@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
   integrity sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==
 
-node-fetch-native@^1.6.4, node-fetch-native@^1.6.6:
+node-fetch-native@^1.6.4, node-fetch-native@^1.6.5, node-fetch-native@^1.6.6:
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/node-fetch-native/-/node-fetch-native-1.6.6.tgz#ae1d0e537af35c2c0b0de81cbff37eedd410aa37"
   integrity sha512-8Mc2HhqPdlIfedsuZoc3yioPuzp6b+L5jRCRY1QzuWZh2EGJVQrGppC6V6cF0bLdbW0+O2YpqCA25aF/1lvipQ==
@@ -11945,6 +11982,13 @@ vite-plugin-vue-tracer@^0.1.1:
     rollup "^4.30.1"
   optionalDependencies:
     fsevents "~2.3.3"
+
+vitest-environment-nuxt@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/vitest-environment-nuxt/-/vitest-environment-nuxt-1.0.1.tgz#e3308454af1947dbc315ce2a805a9d4fe4d1c49a"
+  integrity sha512-eBCwtIQriXW5/M49FjqNKfnlJYlG2LWMSNFsRVKomc8CaMqmhQPBS5LZ9DlgYL9T8xIVsiA6RZn2lk7vxov3Ow==
+  dependencies:
+    "@nuxt/test-utils" ">=3.13.1"
 
 vscode-uri@^3.1.0:
   version "3.1.0"

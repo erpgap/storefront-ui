@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client/core';
+import { gql } from '@apollo/client/core'
 
 export default gql`
   query ($pageSize: Int = 250, $filter: CountryFilterInput = {}) {
@@ -15,4 +15,4 @@ export default gql`
       }
     }
   }
-`;
+`

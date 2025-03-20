@@ -1,13 +1,16 @@
 <script lang="ts" setup>
-import { SfButton, SfIconArrowBack } from "@storefront-ui/vue";
+import { SfButton, SfIconArrowBack } from '@storefront-ui/vue'
 
-const { cart, loadCart, totalItemsInCart } = useCart();
+const { cart, loadCart, totalItemsInCart } = useCart()
 
-await loadCart(false);
+await loadCart(false)
 </script>
 
 <template>
-  <div v-if="totalItemsInCart > 0" class="pb-20">
+  <div
+    v-if="totalItemsInCart > 0"
+    class="pb-20"
+  >
     <div class="flex justify-between mt-8 mb-10">
       <h1 class="font-bold typography-headline-3 md:typography-headline-2">
         Cart
@@ -23,7 +26,11 @@ await loadCart(false);
         </template>
         {{ $t("back") }}
       </SfButton>
-      <SfButton to="/cart" class="hidden md:flex" variant="tertiary">
+      <SfButton
+        to="/cart"
+        class="hidden md:flex"
+        variant="tertiary"
+      >
         <template #prefix>
           <SfIconArrowBack />
         </template>
@@ -35,14 +42,23 @@ await loadCart(false);
       data-testid="cart-page-content"
     >
       <div class="col-span-7 mb-10 lg:mb-0">
-        <div v-for="orderLine in cart.order?.orderLines" :key="orderLine?.id">
+        <div
+          v-for="orderLine in cart.order?.orderLines"
+          :key="orderLine?.id"
+        >
           <CartCollectedProductCard :order-line="orderLine" />
         </div>
       </div>
 
-      <UiOrderSummary :cart="cart" class="col-span-5 md:sticky md:top-20 h-fit">
+      <UiOrderSummary
+        :cart="cart"
+        class="col-span-5 md:sticky md:top-20 h-fit"
+      >
         <NuxtLink to="/checkout">
-          <SfButton size="lg" class="w-full mb-4 md:mb-0">
+          <SfButton
+            size="lg"
+            class="w-full mb-4 md:mb-0"
+          >
             {{ $t("goToCheckout") }}
           </SfButton>
         </NuxtLink>
@@ -61,6 +77,8 @@ await loadCart(false);
       height="192"
       loading="lazy"
     />
-    <h2 class="mt-8">{{ $t("emptyCart") }}</h2>
+    <h2 class="mt-8">
+      {{ $t("emptyCart") }}
+    </h2>
   </div>
 </template>

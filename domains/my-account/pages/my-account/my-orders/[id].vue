@@ -1,32 +1,33 @@
 <script setup lang="ts">
-import { SfButton, SfIconClose, useDisclosure } from "@storefront-ui/vue";
-import { useOrders } from "~/domains/orders/composable/useOrders";
+import { SfButton, SfIconClose, useDisclosure } from '@storefront-ui/vue'
+import { useOrders } from '~/domains/orders/composable/useOrders'
 
-const route = useRoute();
-const router = useRouter();
-const { isOpen } = useDisclosure({ initialValue: true });
-const { getOrderById, order } = useOrders();
+const route = useRoute()
+const router = useRouter()
+const { isOpen } = useDisclosure({ initialValue: true })
+const { getOrderById, order } = useOrders()
 
 onMounted(async () => {
   // without nextTick data on first click does not load data
-  await nextTick();
-  await getOrderById({ id: parseInt(route.params.id) });
-});
+  await nextTick()
+  await getOrderById({ id: parseInt(route.params.id) })
+})
 
 watch(
   isOpen,
   (isOpen) => {
-    if (!isOpen) router.push("/my-account/my-orders");
+    if (!isOpen) router.push('/my-account/my-orders')
   },
-  { immediate: true }
-);
+  { immediate: true },
+)
 
 const linesWithoutUndefinedProducts = computed(() => {
-  return order.value?.reportOrderLine?.filter((item) => item.product !== null);
-});
+  return order.value?.reportOrderLine?.filter(item => item.product !== null)
+})
 
-const NuxtLink = resolveComponent("NuxtLink");
+const NuxtLink = resolveComponent('NuxtLink')
 </script>
+
 <template>
   <UiOverlay visible>
     <UiModal

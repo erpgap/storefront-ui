@@ -160,12 +160,12 @@ lastTransaction{
   provider
   providerReference
   state
-}`;
+}`
 
-export { internalOrderFragment };
+export { internalOrderFragment }
 
 export default `
     order{
         ${internalOrderFragment}
     }
-`;
+`

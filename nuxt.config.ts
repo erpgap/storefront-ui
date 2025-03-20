@@ -40,8 +40,8 @@ export default defineNuxtConfig({
   app: {
     head: {
       viewport:
-        "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no",
-      title: "Alokai",
+        'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no',
+      title: 'Alokai',
       htmlAttrs: {
         lang: 'en',
       },
@@ -183,20 +183,33 @@ export default defineNuxtConfig({
     },
   },
 
+  robots: {
+    allow: ['/category/*', '/product/*'],
+    disallow: ['/cart', '/checkout/*', '/my-account/*', '/forgot-password', '/search?'],
+  },
 
   sitemap: {
     sources: ['/api/sitemap/urls/products', '/api/sitemap/urls/categories'],
     runtimeCacheStorage: {
       driver: process.env.NUXT_STORAGE_DRIVER,
-    }
-  },
-
-  robots: {
-    allow: ['/category/*', '/product/*'],
-    disallow: ['/cart', '/checkout/*', '/my-account/*', '/forgot-password', '/search?']
+    },
   },
 
   tailwindcss: {
     viewer: false,
+  },
+
+  viewport: {
+    breakpoints: {
+      desktop: 1280,
+      desktopMedium: 1440,
+      desktopWide: 1600,
+
+      mobile: 320,
+      mobileMedium: 375,
+      mobileWide: 425,
+
+      tablet: 768,
+    },
   },
 })

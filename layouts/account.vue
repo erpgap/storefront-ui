@@ -2,7 +2,10 @@
   <TheHeader />
 
   <main class="narrow-container">
-    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="mt-5 mb-10" />
+    <UiBreadcrumb
+      :breadcrumbs="breadcrumbs"
+      class="mt-5 mb-10"
+    />
     <div ata-testid="account-layout">
       <h1
         v-if="isRoot"
@@ -10,14 +13,22 @@
       >
         {{ $t("account.heading") }}
       </h1>
-      <div v-else class="flex justify-start items-center mb-10 mt-4">
-        <div v-for="({ subsections }, i) in sections" :key="i">
+      <div
+        v-else
+        class="flex justify-start items-center mb-10 mt-4"
+      >
+        <div
+          v-for="({ subsections }, i) in sections"
+          :key="i"
+        >
           <div
             v-for="{ label, link } in subsections"
             :key="label"
             class="font-bold typography-headline-3"
           >
-            <h1 v-if="currentPath === link">{{ label }}</h1>
+            <h1 v-if="currentPath === link">
+              {{ label }}
+            </h1>
           </div>
         </div>
         <SfButton
@@ -33,7 +44,10 @@
           {{ $t("account.back") }}
         </SfButton>
       </div>
-      <div class="md:flex gap-10 pb-20" data-testid="account-page-sidebar">
+      <div
+        class="md:flex gap-10 pb-20"
+        data-testid="account-page-sidebar"
+      >
         <div
           :class="[
             'border-t md:border border-neutral-200 pt-4 pb-4 md:p-4 md:rounded-md min-w-[300px] md:block',
@@ -48,10 +62,15 @@
             <SfListItem
               class="py-4 md:py-2 hover:!bg-transparent font-medium !cursor-auto px-0 md:px-4"
             >
-              <template #prefix><component :is="icon" /></template>
+              <template #prefix>
+                <component :is="icon" />
+              </template>
               {{ title }}
             </SfListItem>
-            <li v-for="{ label, link } in subsections" :key="label">
+            <li
+              v-for="{ label, link } in subsections"
+              :key="label"
+            >
               <SfListItem
                 :tag="NuxtLink"
                 :to="link"
@@ -63,12 +82,15 @@
                   },
                 ]"
               >
-                <template #prefix><SfIconBase /></template>
+                <template #prefix>
+                  <SfIconBase />
+                </template>
                 {{ label }}
-                <template #suffix
-                  ><div class="block md:hidden">
-                    <SfIconChevronRight /></div
-                ></template>
+                <template #suffix>
+                  <div class="block md:hidden">
+                    <SfIconChevronRight />
+                  </div>
+                </template>
               </SfListItem>
             </li>
           </ul>
@@ -79,7 +101,9 @@
               class="py-4 md:py-2 mt-4 rounded-md active:bg-primary-100 !text-neutral-900"
               @click="handleLogout"
             >
-              <template #prefix><SfIconBase /></template>
+              <template #prefix>
+                <SfIconBase />
+              </template>
               {{ $t("account.logout") }}
             </SfListItem>
           </ul>
@@ -109,63 +133,63 @@ import {
   SfButton,
   SfIconArrowBack,
   SfIconChevronRight,
-} from "@storefront-ui/vue";
+} from '@storefront-ui/vue'
 
-const NuxtLink = resolveComponent("NuxtLink");
-const { t } = useI18n();
-const router = useRouter();
-const { logout } = useAuth();
+const NuxtLink = resolveComponent('NuxtLink')
+const { t } = useI18n()
+const router = useRouter()
+const { logout } = useAuth()
 const sections = [
   {
-    title: t("account.accountSettings.heading"),
+    title: t('account.accountSettings.heading'),
     icon: SfIconPerson,
     subsections: [
       {
-        label: t("account.accountSettings.section.personalData"),
-        link: "/my-account/personal-data",
+        label: t('account.accountSettings.section.personalData'),
+        link: '/my-account/personal-data',
       },
       {
-        label: t("account.accountSettings.section.billingDetails"),
-        link: "/my-account/billing-details",
+        label: t('account.accountSettings.section.billingDetails'),
+        link: '/my-account/billing-details',
       },
       {
-        label: t("account.accountSettings.section.shippingDetails"),
-        link: "/my-account/shipping-details",
+        label: t('account.accountSettings.section.shippingDetails'),
+        link: '/my-account/shipping-details',
       },
     ],
   },
   {
-    title: t("account.myOrders.heading"),
+    title: t('account.myOrders.heading'),
     icon: SfIconShoppingCart,
     subsections: [
       {
-        label: t("account.myOrders.section.myOrders"),
-        link: "/my-account/my-orders",
+        label: t('account.myOrders.section.myOrders'),
+        link: '/my-account/my-orders',
       },
     ],
   },
-];
+]
 
-const currentPath = computed(() => router.currentRoute.value.path);
-const path = "/my-account";
-const rootPathRegex = new RegExp(`^${path}/?$`);
-const isRoot = computed(() => rootPathRegex.test(currentPath.value));
+const currentPath = computed(() => router.currentRoute.value.path)
+const path = '/my-account'
+const rootPathRegex = new RegExp(`^${path}/?$`)
+const isRoot = computed(() => rootPathRegex.test(currentPath.value))
 const findCurrentPage = computed(() =>
   sections
     .flatMap(({ subsections }) => subsections)
-    .find(({ link }) => currentPath.value.includes(link))
-);
+    .find(({ link }) => currentPath.value.includes(link)),
+)
 
 const breadcrumbs = computed(() => [
-  { name: t("home"), link: "/" },
-  { name: t("account.heading"), link: "/my-account" },
+  { name: t('home'), link: '/' },
+  { name: t('account.heading'), link: '/my-account' },
   ...(isRoot.value
     ? []
     : [{ name: findCurrentPage.value?.label, link: currentPath.value }]),
-]);
+])
 
 const handleLogout = async () => {
-  await logout();
-  router.push("/");
-};
+  await logout()
+  router.push('/')
+}
 </script>

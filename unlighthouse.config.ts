@@ -9,8 +9,8 @@ export default {
   // # docker config
   // puppeteerOptions: {
   //  args: ['--no-sandbox'],
-  //},
-  //server: {
+  // },
+  // server: {
   //  open: true,
-  //},
-};
+  // },
+}

@@ -5,19 +5,19 @@ import {
   SfButton,
   SfIconClose,
   useTrapFocus,
-} from "@storefront-ui/vue";
-import type { Product } from "~/graphql";
+} from '@storefront-ui/vue'
+import type { Product } from '~/graphql'
 
-const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading } =
-  useWishlist();
-const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useWishlistUiState();
+const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading }
+  = useWishlist()
+const { wishlistSidebarIsOpen, toggleWishlistSideBar } = useWishlistUiState()
 
-const wishlistDrawerRef = ref();
-useTrapFocus(wishlistDrawerRef, { activeState: wishlistSidebarIsOpen });
+const wishlistDrawerRef = ref()
+useTrapFocus(wishlistDrawerRef, { activeState: wishlistSidebarIsOpen })
 
 const handleWishlistRemoveItem = async (firstVariant: Product) => {
-  await wishlistRemoveItem(firstVariant.id);
-};
+  await wishlistRemoveItem(firstVariant.id)
+}
 </script>
 
 <template>
@@ -62,7 +62,9 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
                 class="overflow-y-scroll h-[800px] p-4 text-black"
               >
                 <div class="flex items-center font-medium pb-6">
-                  <p class="text-gray-600 mr-1">Number of products :</p>
+                  <p class="text-gray-600 mr-1">
+                    Number of products :
+                  </p>
                   {{ wishlistTotalItems }}
                 </div>
                 <div
@@ -89,11 +91,19 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
                   height="192"
                   loading="lazy"
                 />
-                <h2 class="mt-8 font-medium">Your Wishlist is empty</h2>
+                <h2 class="mt-8 font-medium">
+                  Your Wishlist is empty
+                </h2>
               </div>
             </div>
-            <div v-else class="w-full text-center">
-              <SfLoaderCircular size="lg" class="mt-[160px]" />
+            <div
+              v-else
+              class="w-full text-center"
+            >
+              <SfLoaderCircular
+                size="lg"
+                class="mt-[160px]"
+              />
             </div>
           </div>
         </SfDrawer>

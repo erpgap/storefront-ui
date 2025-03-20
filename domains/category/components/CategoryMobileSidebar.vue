@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { SfDrawer, SfButton, SfIconClose } from "@storefront-ui/vue";
+import { SfDrawer, SfButton, SfIconClose } from '@storefront-ui/vue'
 
 export type CategorySidebarProps = {
-  isOpen: boolean;
-};
-export type CategorySidebarEmits = (event: "close") => void;
+  isOpen: boolean
+}
+export type CategorySidebarEmits = (event: 'close') => void
 
-defineProps<CategorySidebarProps>();
-defineEmits<CategorySidebarEmits>();
+defineProps<CategorySidebarProps>()
+defineEmits<CategorySidebarEmits>()
 </script>
 
 <template>

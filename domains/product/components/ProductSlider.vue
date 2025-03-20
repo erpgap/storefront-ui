@@ -1,21 +1,24 @@
 <script setup lang="ts">
-import { SfScrollable } from '@storefront-ui/vue';
-import type { Product } from '~/graphql';
+import { SfScrollable } from '@storefront-ui/vue'
+import type { Product } from '~/graphql'
 
 defineProps({
   heading: String,
   text: String,
-});
+})
 
-const { loadProductTemplateList, loading, productTemplateList } = useProductTemplateList('');
-const { getRegularPrice, getSpecialPrice } = useProductAttributes();
+const { loadProductTemplateList, loading, productTemplateList } = useProductTemplateList('')
+const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
-const numOfProducts = 10;
-await loadProductTemplateList({ pageSize: numOfProducts });
+const numOfProducts = 10
+await loadProductTemplateList({ pageSize: numOfProducts })
 </script>
 
 <template>
-  <h2 v-if="heading" class="text-center mb-6 font-bold typography-headline-3 md:typography-headline-2">
+  <h2
+    v-if="heading"
+    class="text-center mb-6 font-bold typography-headline-3 md:typography-headline-2"
+  >
     {{ heading }}
   </h2>
   <p class="my-4 typography-text-lg">

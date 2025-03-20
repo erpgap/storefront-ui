@@ -8,21 +8,21 @@
 const sizeClasses = {
   sm: 'text-xs p-1 gap-1',
   base: 'text-sm p-1.5 gap-1.5',
-};
+}
 </script>
 
 <script setup lang="ts">
 export interface AlertProps {
-  size?: 'sm' | 'base';
-  strong?: boolean;
-  variant?: 'primary' | 'secondary' | 'negative' | 'neutral';
+  size?: 'sm' | 'base'
+  strong?: boolean
+  variant?: 'primary' | 'secondary' | 'negative' | 'neutral'
 }
 
 const props = withDefaults(defineProps<AlertProps>(), {
   size: 'base',
   strong: false,
   variant: 'primary',
-});
+})
 
 const classes = computed(() => [
   sizeClasses[props.size],
@@ -34,5 +34,5 @@ const classes = computed(() => [
     [`text-neutral-900 border border-neutral-200 ${props.strong ? 'bg-neutral-600' : 'bg-neutral-100'}`]:
       props.variant === 'neutral',
   },
-]);
+])
 </script>

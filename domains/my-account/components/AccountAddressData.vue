@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { SfButton } from "@storefront-ui/vue";
+import { SfButton } from '@storefront-ui/vue'
 
 type AddressDataProps = {
-  header: string;
-  buttonText: string;
-};
+  header: string
+  buttonText: string
+}
 
-defineProps<AddressDataProps>();
-defineEmits(["on-click"]);
+defineProps<AddressDataProps>()
+defineEmits(['on-click'])
 </script>
 
 <template>
@@ -24,8 +24,9 @@ defineEmits(["on-click"]);
         size="sm"
         class="self-start"
         @click="$emit('on-click')"
-        >{{ buttonText }}</SfButton
       >
+        {{ buttonText }}
+      </SfButton>
     </div>
     <div class="my-2">
       <slot />

@@ -44,9 +44,12 @@
         >
           {{ heading }}
         </h2>
-        <hr class="mb-3.5" />
+        <hr class="mb-3.5">
         <ul>
-          <li v-for="item in items" :key="item.title">
+          <li
+            v-for="item in items"
+            :key="item.title"
+          >
             <SfListItem
               tag="span"
               size="sm"
@@ -85,6 +88,7 @@
     </SfDrawer>
   </transition>
 </template>
+
 <script lang="ts" setup>
 import {
   SfButton,
@@ -97,136 +101,136 @@ import {
   SfListItem,
   useDisclosure,
   useTrapFocus,
-} from "@storefront-ui/vue";
-import { onClickOutside } from "@vueuse/core";
-import { ref } from "vue";
+} from '@storefront-ui/vue'
+import { onClickOutside } from '@vueuse/core'
+import { ref } from 'vue'
 
-const { isOpen, toggle, close } = useDisclosure();
-const menuRef = ref();
-const drawerRef = ref();
+const { isOpen, toggle, close } = useDisclosure()
+const menuRef = ref()
+const drawerRef = ref()
 
 useTrapFocus(drawerRef, {
   activeState: isOpen,
   arrowKeysUpDown: true,
-  initialFocus: "container",
-});
+  initialFocus: 'container',
+})
 onClickOutside(menuRef, () => {
-  close();
-});
+  close()
+})
 
 const actionItems = [
   {
     icon: SfIconShoppingCart,
-    label: "",
-    ariaLabel: "Cart",
-    role: "button",
+    label: '',
+    ariaLabel: 'Cart',
+    role: 'button',
   },
   {
     icon: SfIconFavorite,
-    label: "",
-    ariaLabel: "Wishlist",
-    role: "button",
+    label: '',
+    ariaLabel: 'Wishlist',
+    role: 'button',
   },
   {
     icon: SfIconPerson,
-    label: "Log in",
-    ariaLabel: "Log in",
-    role: "login",
+    label: 'Log in',
+    ariaLabel: 'Log in',
+    role: 'login',
   },
-];
+]
 const bannerDetails = {
   image:
-    "https://storage.googleapis.com/sfui_docs_artifacts_bucket_public/production/watch.png",
-  title: "New in designer watches",
-};
+    'https://storage.googleapis.com/sfui_docs_artifacts_bucket_public/production/watch.png',
+  title: 'New in designer watches',
+}
 
 const categoriesContent = [
   {
-    heading: "Women",
+    heading: 'Women',
     items: [
       {
-        title: "All Women's",
-        link: "#",
+        title: 'All Women\'s',
+        link: '#',
       },
       {
-        title: "Clothing",
-        link: "#",
+        title: 'Clothing',
+        link: '#',
       },
       {
-        title: "Shoes",
-        link: "#",
+        title: 'Shoes',
+        link: '#',
       },
       {
-        title: "Accessories",
-        link: "#",
+        title: 'Accessories',
+        link: '#',
       },
       {
-        title: "Wearables",
-        link: "#",
+        title: 'Wearables',
+        link: '#',
       },
       {
-        title: "Food & Drinks",
-        link: "#",
+        title: 'Food & Drinks',
+        link: '#',
       },
     ],
   },
   {
-    heading: "Men",
+    heading: 'Men',
     items: [
       {
-        title: "All Men’s",
-        link: "#",
+        title: 'All Men’s',
+        link: '#',
       },
       {
-        title: "Clothing",
-        link: "#",
+        title: 'Clothing',
+        link: '#',
       },
       {
-        title: "Shoes",
-        link: "#",
+        title: 'Shoes',
+        link: '#',
       },
       {
-        title: "Accessories",
-        link: "#",
+        title: 'Accessories',
+        link: '#',
       },
       {
-        title: "Wearables",
-        link: "#",
+        title: 'Wearables',
+        link: '#',
       },
       {
-        title: "Food & Drinks",
-        link: "#",
+        title: 'Food & Drinks',
+        link: '#',
       },
     ],
   },
   {
-    heading: "Kids",
+    heading: 'Kids',
     items: [
       {
-        title: "All Kids",
-        link: "#",
+        title: 'All Kids',
+        link: '#',
       },
       {
-        title: "Clothing",
-        link: "#",
+        title: 'Clothing',
+        link: '#',
       },
       {
-        title: "Shoes",
-        link: "#",
+        title: 'Shoes',
+        link: '#',
       },
       {
-        title: "Accessories",
-        link: "#",
+        title: 'Accessories',
+        link: '#',
       },
       {
-        title: "Wearables",
-        link: "#",
+        title: 'Wearables',
+        link: '#',
       },
       {
-        title: "Food & Drinks",
-        link: "#",
+        title: 'Food & Drinks',
+        link: '#',
       },
     ],
   },
-];
+]
 </script>

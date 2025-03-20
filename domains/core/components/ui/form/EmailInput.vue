@@ -1,24 +1,25 @@
 <script setup lang="ts">
-const model = defineModel();
+const model = defineModel()
 
-const emit = defineEmits(["is-field-valid"]);
+const emit = defineEmits(['is-field-valid'])
 
-const showError = ref(false);
+const showError = ref(false)
 
 const clearError = () => {
-  showError.value = false;
-};
+  showError.value = false
+}
 
 const validateEmail = () => {
-  const isValid = /^\S+@\S+\.\S+$/.test(String(model.value));
-  showError.value = !isValid;
-  emit("is-field-valid", isValid);
-};
+  const isValid = /^\S+@\S+\.\S+$/.test(String(model.value))
+  showError.value = !isValid
+  emit('is-field-valid', isValid)
+}
 
 watch(model, () => {
-  validateEmail();
-});
+  validateEmail()
+})
 </script>
+
 <template>
   <div class="relative w-full">
     <span
@@ -31,7 +32,7 @@ watch(model, () => {
         placeholder="Please type your email"
         class="w-full text-base outline-none appearance-none text-neutral-900 disabled:cursor-not-allowed disabled:bg-transparent read-only:bg-transparent"
         @input="clearError"
-      />
+      >
     </span>
   </div>
 </template>

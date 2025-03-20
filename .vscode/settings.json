@@ -1,29 +1,10 @@
 {
-  "eslint.experimental.useFlatConfig": true,
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  // Auto fix
+  "eslint.useFlatConfig": true,
+  //Auto fix
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
+    "source.fixAll.eslint": "always",
     "source.organizeImports": "never"
   },
-
-  "eslint.options": {
-    "rules": {
-      "quotes": "off"
-    } 
-  },
-
-  // Enable eslint for all supported languages
-  "eslint.validate": [
-    "javascript",
-    "typescript",
-    "vue",
-    "html",
-    "markdown",
-    "json",
-    "yaml",
-    "gql",
-    "graphql"
-  ]
+  "svg.preview.background": "dark-transparent"
 }
