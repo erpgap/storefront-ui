@@ -8,35 +8,35 @@ import {
   SfListItem,
   useDisclosure,
   useTrapFocus,
-} from '@storefront-ui/vue'
-import { onClickOutside } from '@vueuse/core'
-import type { Category } from '~/graphql'
+} from "@storefront-ui/vue";
+import { onClickOutside } from "@vueuse/core";
+import type { Category } from "~/graphql";
 
-const { isOpen, toggle, close } = useDisclosure()
-const { searchModalToggle } = useSearch()
+const { isOpen, toggle, close } = useDisclosure();
+const { searchModalToggle } = useSearch();
 
-const NuxtLink = resolveComponent('NuxtLink')
+const NuxtLink = resolveComponent("NuxtLink");
 
-const menuRef = ref()
-const drawerRef = ref()
-const searchRef = ref()
-const showSearchClerkRef = ref()
+const menuRef = ref();
+const drawerRef = ref();
+const searchRef = ref();
+const showSearchClerkRef = ref();
 
 useTrapFocus(drawerRef, {
   activeState: isOpen,
   arrowKeysUpDown: true,
-  initialFocus: 'container',
-})
+  initialFocus: "container",
+});
 
 onClickOutside(menuRef, () => {
-  close()
-})
+  close();
+});
 
 onClickOutside(searchRef, () => {
-  showSearchClerkRef.value = false
-})
+  showSearchClerkRef.value = false;
+});
 
-const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
+const categoriesForMegaMenu = inject<Category[]>("categoriesForMegaMenu");
 </script>
 
 <template>
@@ -48,13 +48,9 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
   >
     <div
       class="flex items-center justify-between h-full w-full narrow-container"
-      :class="{ 'justify-start': $viewport.isGreaterOrEquals('desktop') }"
+      :class="{ 'justify-start': $viewport.isGreaterOrEquals('desktopSmall') }"
     >
-      <NuxtLink
-        to="/"
-        aria-label="Sf Homepage"
-        class="h-6 md:h-7 -mt-1.5"
-      >
+      <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7 -mt-1.5">
         <VsfLogo />
       </NuxtLink>
       <nav>
@@ -73,43 +69,22 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
                 v-model="isOpen"
                 disable-click-away
                 placement="top"
-                class="bg-white p-0 max-h-screen overflow-y-auto lg:!absolute lg:!top-[5rem] max-w-full lg:p-6 top-index"
+                class="bg-white max-h-screen overflow-y-auto!absolute top-[56px] md:!top-[5rem] max-w-full p-6 top-index"
               >
-                <div
-                  class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-3 lg:narrow-container lg:relative"
-                >
-                  <div
-                    class="sticky top-0 flex items-center justify-between py-2 px-4 bg-primary-700 w-full"
-                  >
-                    <div
-                      class="flex items-center typography-text-lg font-medium text-white"
-                    >
-                      Browse products
-                    </div>
-                    <SfButton
-                      square
-                      variant="tertiary"
-                      aria-label="Close navigation menu"
-                      class="text-white ml-2"
-                      @click="close()"
-                      @keydown.enter.space="close()"
-                    >
-                      <SfIconClose />
-                    </SfButton>
-                  </div>
+                <div>
                   <div
                     v-for="{ name, childs, slug } in categoriesForMegaMenu"
                     :key="name"
-                    class="[&:nth-child(2)]:pt-0 pt-6 md:pt-0 text-black"
+                    class="py-2 text-black"
                   >
                     <NuxtLink
                       :to="slug"
                       role="presentation"
-                      class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-4 lg:py-1.5"
+                      class="typography-text-base font-medium text-neutral-900 whitespace-nowrap p-2 pl-0"
                     >
                       {{ name }}
                     </NuxtLink>
-                    <hr class="mb-3.5">
+                    <hr class="mb-3.5" />
                     <ul>
                       <li
                         v-for="{ name, slug, childs: subcategory } in childs"
@@ -121,7 +96,7 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
                           :href="slug"
                           size="sm"
                           role="none"
-                          class="typography-text-base lg:typography-text-sm py-4 lg:py-1.5"
+                          class="typography-text-base lg:typography-text-sm py-2"
                         >
                           {{ name }}
                         </SfListItem>
