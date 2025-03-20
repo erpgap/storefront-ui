@@ -88,9 +88,9 @@ const breadcrumbs = [
     <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
-        <LazyCategoryFilterSidebar v-if="$viewport.isGreaterOrEquals('tablet')" :attributes="organizedAttributes"
+        <LazyCategoryFilterSidebar v-if="$viewport.isGreaterOrEquals('desktopSmall')" :attributes="organizedAttributes"
           :categories="categories" />
-        <LazyCategoryMobileSidebar v-if="$viewport.isLessThan('tablet')" :is-open="isOpen" @close="close">
+        <LazyCategoryMobileSidebar v-if="$viewport.isLessThan('desktopSmall')" :is-open="isOpen" @close="close">
           <template #default>
             <CategoryFilterSidebar class="block lg:hidden" :attributes="organizedAttributes" :categories="categories"
               @close="close" />
