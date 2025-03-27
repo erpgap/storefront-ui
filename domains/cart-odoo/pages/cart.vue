@@ -43,7 +43,7 @@ await loadCart(false)
     >
       <div class="col-span-7 mb-10 lg:mb-0">
         <div
-          v-for="orderLine in cart.order?.orderLines"
+          v-for="orderLine in cart.order?.websiteOrderLine"
           :key="orderLine?.id"
         >
           <CartCollectedProductCard :order-line="orderLine" />
