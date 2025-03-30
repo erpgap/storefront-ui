@@ -101,7 +101,7 @@ const tomorrow = computed(() => {
 
 const productsInCart = computed(() => {
   return (
-    cart.value?.order?.orderLines?.find(
+    cart.value?.order?.websiteOrderLine?.find(
       (orderLine: OrderLine) =>
         orderLine.product?.id === productVariant?.value.id
     )?.quantity || 0

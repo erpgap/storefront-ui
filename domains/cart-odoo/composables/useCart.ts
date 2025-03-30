@@ -28,7 +28,7 @@ export const useCart = () => {
     loading.value = false
 
     cart.value = data.value.cart
-    cartCounter.value = Number(data.value.cart.order?.orderLines?.length)
+    cartCounter.value = Number(data.value.cart.order?.websiteOrderLine?.length)
   }
 
   const cartAdd = async (id: number, quantity: number) => {
@@ -49,7 +49,7 @@ export const useCart = () => {
     }
 
     cart.value = data.value.cartAddMultipleItems
-    cartCounter.value = Number(cart.value?.order?.orderLines?.length)
+    cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
 
     toast.success('Product has been added to cart')
   }
@@ -72,7 +72,7 @@ export const useCart = () => {
     }
 
     cart.value = data.value.cartUpdateItem
-    cartCounter.value = Number(cart.value?.order?.orderLines?.length)
+    cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
     toast.success('Product updated successfully')
   }
 
@@ -93,7 +93,7 @@ export const useCart = () => {
     }
 
     cart.value = data.value.cartRemoveMultipleItems
-    cartCounter.value = Number(cart.value?.order?.orderLines?.length)
+    cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
     toast.success('Product removed successfully')
   }
 

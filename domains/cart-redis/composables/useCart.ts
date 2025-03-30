@@ -100,7 +100,7 @@ export const useCart = () => {
   }
 
   const totalItemsInCart = computed(() => {
-    return cart.value.order?.orderLines?.length || 0
+    return cart.value.order?.websiteOrderLine?.length || 0
   })
 
   return {

@@ -18,9 +18,6 @@ export const reduceCart = (cartData: Cart) => ({
     giftCards: cartData?.order?.giftCards,
     websiteOrderLine: cartData?.order?.websiteOrderLine?.map((line: OrderLine) => ({
       id: line?.id,
-    })),
-    orderLines: cartData?.order?.orderLines?.map((line: OrderLine) => ({
-      id: line?.id,
       name: line?.product?.name,
       priceTotal: line?.priceTotal,
       priceSubtotal: line?.priceSubtotal,
