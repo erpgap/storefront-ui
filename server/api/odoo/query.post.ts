@@ -40,6 +40,7 @@ const customCache = cachedFunction(
 )
 
 export default defineEventHandler(async (event: any) => {
+  bootstrapApolloClient(event)
   try {
     const response: any = await customCache(event)
 
