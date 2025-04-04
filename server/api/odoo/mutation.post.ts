@@ -2,6 +2,7 @@ import type { ApolloError } from '@apollo/client'
 import type { Endpoints } from '@erpgap/odoo-sdk-api-client'
 
 export default defineEventHandler(async (event) => {
+  bootstrapApolloClient(event)
   const body = await readBody(event)
 
   const api: Endpoints = event.context.apolloClient.api
