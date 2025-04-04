@@ -5,7 +5,6 @@ const { isOpen: collapseOpen, toggle: collapseToggle } = useDisclosure()
 const formSearchTemplateRef = ref(null)
 const {
     searchInputValue,
-    highlightedIndex,
     search,
     searchHits,
     enterPress,
@@ -13,9 +12,6 @@ const {
     selectHit,
 } = useSearch(formSearchTemplateRef)
 
-const handleSearch = () => {
-    enterPress(searchHits[highlightedIndex])
-}
 const props = defineProps({
     isOpen: {
         type: Boolean,
@@ -54,7 +50,7 @@ watch(
                         <SfInput v-model="searchInputValue" type="text"
                             class="[&::-webkit-search-cancel-button]:appearance-none" placeholder="Search"
                             wrapper-class="flex-1 h-10 pr-0" size="base" @input="search()"
-                            @keydown.enter.prevent="handleSearch">
+                            @keydown.enter.prevent="enterPress">
                             <template #suffix>
                                 <span class="flex items-center">
                                     <SfButton v-if="searchInputValue" variant="tertiary" square aria-label="clear"
@@ -64,7 +60,7 @@ watch(
                                     </SfButton>
                                     <SfButton variant="tertiary" square aria-label="search" type="submit"
                                         class="rounded-l-none hover:bg-transparent active:bg-transparent"
-                                        @click="handleSearch">
+                                        @click="enterPress">
                                         <Icon name="ion:search" size="20px" />
                                     </SfButton>
                                 </span>

@@ -96,10 +96,6 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     }
   }
 
-  // onClickOutside(formSearchTemplateRef, () => {
-  //   showResultSearch.value = false
-  // })
-
   return {
     // search modal
     searchModalClose,
