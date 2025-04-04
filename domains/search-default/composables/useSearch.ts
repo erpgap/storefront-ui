@@ -1,4 +1,4 @@
-import { onClickOutside, useToggle } from '@vueuse/core'
+import { onClickOutside, useToggle, useDebounceFn } from '@vueuse/core'
 import type { Product } from '~/graphql'
 
 /**
@@ -37,7 +37,11 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     },
   )
 
-  const search = async () => {
+  watch(searchInputValue,
+    (newValue) => {
+      if (!newValue) showResultSearch.value = false
+    })
+  const search = useDebounceFn(async () => {
     loading.value = true
 
     if (searchInputValue.value.length < 3) {
@@ -56,7 +60,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     searchModalOpen.value = true
 
     loading.value = false
-  }
+  }, 1000)
 
   const searchHits = computed(() => productTemplateList.value || [])
 
@@ -92,9 +96,9 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     }
   }
 
-  onClickOutside(formSearchTemplateRef, () => {
-    showResultSearch.value = false
-  })
+  // onClickOutside(formSearchTemplateRef, () => {
+  //   showResultSearch.value = false
+  // })
 
   return {
     // search modal
