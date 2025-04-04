@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { useMegaMenuCategories } from '../composable/useMegaMenuCategories'
-
 const { loadCategoriesForMegaMenu, categoriesForMegaMenu } = useMegaMenuCategories()
 
 provide(

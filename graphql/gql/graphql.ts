@@ -419,6 +419,13 @@ export type Lead = {
   subject: Maybe<Scalars['String']['output']>;
 };
 
+export type LoginOutput = {
+  __typename?: 'LoginOutput';
+  cart: Maybe<Order>;
+  user: Maybe<User>;
+  wishlistItems: Maybe<Array<Maybe<WishlistItem>>>;
+};
+
 export type MailingContact = {
   __typename?: 'MailingContact';
   companyName: Maybe<Scalars['String']['output']>;
@@ -526,7 +533,7 @@ export type Mutation = {
   /** Delete MyAccount */
   deleteMyAccount: Maybe<Scalars['Boolean']['output']>;
   /** Authenticate user with email and password and retrieves token. */
-  login: Maybe<User>;
+  login: Maybe<LoginOutput>;
   /** Logout user */
   logout: Maybe<Scalars['Boolean']['output']>;
   /** Pay the order only with gift card. */
@@ -833,17 +840,14 @@ export enum PageType {
   StaticPage = 'StaticPage'
 }
 
-export enum PageTypeEnum {
-  Products = 'Products',
-  Static = 'Static'
-}
-
 export type Partner = {
   __typename?: 'Partner';
   addressType: Maybe<AddressType>;
   billingAddress: Maybe<Partner>;
   city: Maybe<Scalars['String']['output']>;
   company: Maybe<Partner>;
+  companyName: Maybe<Scalars['String']['output']>;
+  companyRegNo: Maybe<Scalars['String']['output']>;
   contacts: Maybe<Array<Partner>>;
   country: Maybe<Country>;
   currentPricelist: Maybe<Pricelist>;
@@ -1110,8 +1114,6 @@ export type Query = {
   websiteHomepage: Maybe<Homepage>;
   websiteMegaMenu: Maybe<Array<WebsiteMenu>>;
   websiteMenu: Maybe<Array<WebsiteMenu>>;
-  websitePage: Maybe<WebsitePage>;
-  websitePages: Maybe<WebsitePages>;
   wishlistItems: Maybe<WishlistData>;
 };
 
@@ -1266,21 +1268,6 @@ export type QueryWebsiteMenuArgs = {
   noParent: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-
-export type QueryWebsitePageArgs = {
-  id: InputMaybe<Scalars['Int']['input']>;
-  pageSlug?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryWebsitePagesArgs = {
-  currentPage?: InputMaybe<Scalars['Int']['input']>;
-  filter?: InputMaybe<WebsitePageFilterInput>;
-  pageSize?: InputMaybe<Scalars['Int']['input']>;
-  search?: InputMaybe<Scalars['String']['input']>;
-  sort?: InputMaybe<WebsitePageSortInput>;
-};
-
 export type Ribbon = {
   __typename?: 'Ribbon';
   bgColor: Maybe<Scalars['String']['output']>;
@@ -1357,6 +1344,7 @@ export type UpdateMyAccountParams = {
   email: InputMaybe<Scalars['String']['input']>;
   id: InputMaybe<Scalars['Int']['input']>;
   name: InputMaybe<Scalars['String']['input']>;
+  phone: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -1421,27 +1409,6 @@ export type WebsitePage = {
   publishingDate: Maybe<Scalars['String']['output']>;
   website: Maybe<Website>;
   websiteUrl: Maybe<Scalars['String']['output']>;
-};
-
-export type WebsitePageFilterInput = {
-  id: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  pageSlug: InputMaybe<Scalars['String']['input']>;
-  pageType: InputMaybe<Array<InputMaybe<PageTypeEnum>>>;
-};
-
-export type WebsitePageList = WebsitePages & {
-  __typename?: 'WebsitePageList';
-  totalCount: Scalars['Int']['output'];
-  websitePages: Maybe<Array<Maybe<WebsitePage>>>;
-};
-
-export type WebsitePageSortInput = {
-  id: InputMaybe<SortEnum>;
-};
-
-export type WebsitePages = {
-  totalCount: Scalars['Int']['output'];
-  websitePages: Maybe<Array<Maybe<WebsitePage>>>;
 };
 
 export type WishlistData = WishlistItems & {
