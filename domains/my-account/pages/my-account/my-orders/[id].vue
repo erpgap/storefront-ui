@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SfButton, SfIconClose, useDisclosure } from '@storefront-ui/vue'
-import { useOrders } from '~/domains/orders/composable/useOrders'
+
 
 const route = useRoute()
 const router = useRouter()
@@ -30,23 +30,13 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 <template>
   <UiOverlay visible>
-    <UiModal
-      v-model="isOpen"
-      as="section"
-      role="dialog"
-      class="h-full w-full overflow-auto !p-4 md:!p-10 md:max-w-[770px] md:h-fit"
-    >
+    <UiModal v-model="isOpen" as="section" role="dialog"
+      class="h-full w-full overflow-auto !p-4 md:!p-10 md:max-w-[770px] md:h-fit">
       <header
-        class="flex justify-between bg-white items-center typography-headline-4 md:typography-headline-3 font-bold"
-      >
+        class="flex justify-between bg-white items-center typography-headline-4 md:typography-headline-3 font-bold">
         <h3>{{ $t("account.myOrders.orderDetails.heading") }}</h3>
-        <SfButton
-          square
-          variant="tertiary"
-          :tag="NuxtLink"
-          :to="`/my-account/my-orders`"
-          class="md:absolute md:top-2 md:right-2"
-        >
+        <SfButton square variant="tertiary" :tag="NuxtLink" :to="`/my-account/my-orders`"
+          class="md:absolute md:top-2 md:right-2">
           <SfIconClose class="text-neutral-500" />
         </SfButton>
       </header>
@@ -76,12 +66,10 @@ const NuxtLink = resolveComponent('NuxtLink')
             </p>
             <span v-if="order">{{
               order.transactions ? order.transactions.length - 1 : "--"
-            }}</span>
+              }}</span>
           </li>
         </ul>
-        <table
-          class="hidden md:table w-full text-left typography-text-sm mx-4 md:mx-0"
-        >
+        <table class="hidden md:table w-full text-left typography-text-sm mx-4 md:mx-0">
           <caption class="hidden">
             {{
               $t("account.myOrders.orderDetails.tableCaption")
@@ -104,16 +92,10 @@ const NuxtLink = resolveComponent('NuxtLink')
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(line, i) in linesWithoutUndefinedProducts"
-              :key="i"
-              class="border-b border-neutral-200 align-top"
-            >
+            <tr v-for="(line, i) in linesWithoutUndefinedProducts" :key="i"
+              class="border-b border-neutral-200 align-top">
               <td class="pb-4 pr-4 lg:whitespace-nowrap typography-text-base">
-                <ProductCardHorizontal
-                  v-if="line.product"
-                  :product="line.product"
-                />
+                <ProductCardHorizontal v-if="line.product" :product="line.product" />
               </td>
 
               <td class="p-4 lg:whitespace-nowrap typography-text-base">
@@ -130,9 +112,7 @@ const NuxtLink = resolveComponent('NuxtLink')
             </tr>
           </tbody>
         </table>
-        <div
-          class="flex justify-between pt-4 border-t border-neutral-200 md:border-0"
-        >
+        <div class="flex justify-between pt-4 border-t border-neutral-200 md:border-0">
           <p>{{ $t("account.myOrders.orderDetails.itemsSubtotal") }}</p>
           <span>{{ $currency(Number(order?.amountSubtotal)) }}</span>
         </div>
