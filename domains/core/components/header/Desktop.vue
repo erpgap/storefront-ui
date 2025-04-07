@@ -18,7 +18,6 @@ const formSearchTemplateRef = ref(null)
 
 const {
   searchInputValue,
-  highlightedIndex,
   search,
   searchHits,
   selectHit,
@@ -41,8 +40,8 @@ useTrapFocus(drawerRef, {
   initialFocus: 'container',
 })
 
-onClickOutside(menuRef, () => {
-  close()
+onClickOutside(formSearchTemplateRef, () => {
+  showResultSearch.value = false
 })
 </script>
 
@@ -56,9 +55,7 @@ onClickOutside(menuRef, () => {
       ref="menuRef"
       class="text-white h-14 md:h-20 flex z-50 md:sticky md:top-0 md:shadow-md flex-wrap md:flex-nowrap w-full py-2 md:py-5 border-0 bg-primary-700 border-neutral-200 md:z-10"
     >
-      <div
-        class="flex items-center jfustify-between lg:justify-start h-full w-full narrow-container"
-      >
+      <div class="flex items-center jfustify-between lg:justify-start h-full w-full narrow-container">
         <NuxtLink
           to="/"
           aria-label="Sf Homepage"
@@ -98,9 +95,7 @@ onClickOutside(menuRef, () => {
                   placement="top"
                   class="bg-white p-0 max-h-screen overflow-y-auto lg:!absolute lg:!top-[5rem] max-w-full lg:p-6 top-index"
                 >
-                  <div
-                    class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-4 lg:narrow-container lg:relative"
-                  >
+                  <div class="grid grid-cols-1 lg:gap-x-6 lg:grid-cols-4 lg:narrow-container lg:relative">
                     <div
                       v-for="{ name, childs, id, slug } in categoriesForMegaMenu"
                       :key="id"
@@ -167,7 +162,7 @@ onClickOutside(menuRef, () => {
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
             @input="search()"
-            @keydown.enter.prevent="enterPress(searchHits[highlightedIndex])"
+            @keydown.enter.prevent="enterPress"
           >
             <template #suffix>
               <span class="flex items-center">
@@ -177,6 +172,7 @@ onClickOutside(menuRef, () => {
                   aria-label="search"
                   type="submit"
                   class="rounded-l-none hover:bg-transparent active:bg-transparent"
+                  @click="enterPress"
                 >
                   <Icon
                     name="ion:search"
