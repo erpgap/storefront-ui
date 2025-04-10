@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import CustomSfSelect from './CustomSfSelect.vue'
-
-
 const { loadCountries, countries } = useCountryList()
 await loadCountries()
 
