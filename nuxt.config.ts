@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     './domains/core',
     './domains/my-account',
     './domains/product',
+    './domains/orders',
     // "./domains/search-algolia",
     './domains/search-default',
     './domains/search-luigi',
@@ -125,21 +126,6 @@ export default defineNuxtConfig({
   device: {
     refreshOnResize: true,
   },
-
-  viewport: {
-    breakpoints: {
-      desktopSmall: 1024,
-      desktop: 1280,
-      desktopMedium: 1440,
-      desktopWide: 1600,
-
-      mobile: 320,
-      mobileMedium: 375,
-      mobileWide: 425,
-
-      tablet: 768,
-    },
-  },
   eslint: {
     config: {
       stylistic: true,
@@ -197,6 +183,21 @@ export default defineNuxtConfig({
 
   tailwindcss: {
     viewer: false,
+  },
+
+  viewport: {
+    breakpoints: {
+      desktopSmall: 1024,
+      desktop: 1280,
+      desktopMedium: 1440,
+      desktopWide: 1600,
+
+      mobile: 320,
+      mobileMedium: 375,
+      mobileWide: 425,
+
+      tablet: 768,
+    },
   },
 
   viewport: {
