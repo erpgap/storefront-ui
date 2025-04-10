@@ -150,7 +150,7 @@ export type RegisterUserResponse = AsyncData<
 export type LoginUserResponse = AsyncData<
   {
     login: {
-      partner: Partner
+      user: User
     }
   },
   H3Error

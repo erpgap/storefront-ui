@@ -104,8 +104,8 @@ export const useAuth = () => {
       return
     }
 
-    userCookie.value = data.value.login.partner
-    user.value = data.value.login.partner
+    userCookie.value = data.value.login?.user?.partner
+    user.value = data.value.login?.user?.partner as Partner
     router.push('/my-account/personal-data')
   }
 
