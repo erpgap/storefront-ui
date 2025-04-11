@@ -1,6 +1,6 @@
 export interface AlgoliaHitType {
-  id: number;
-  objectID: string;
-  name: string;
-  category?: number;
+  id: number
+  objectID: string
+  name: string
+  category?: number
 }

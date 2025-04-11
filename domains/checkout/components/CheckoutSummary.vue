@@ -1,37 +1,35 @@
 <script setup lang="ts">
-import { SfButton, SfLink } from "@storefront-ui/vue";
+import { SfButton, SfLink } from '@storefront-ui/vue'
 
-import type { PaymentProvider } from "~/graphql";
+import type { PaymentProvider } from '~/graphql'
 
-const { cart } = useCart();
-const router = useRouter();
-const { makeGiftCardPayment, loading: discountLoading } = useDiscount();
-const { loadPaymentMethods, paymentProviders } = usePayment();
+const { cart } = useCart()
+const router = useRouter()
+const { makeGiftCardPayment, loading: discountLoading } = useDiscount()
+const { loadPaymentMethods, paymentProviders } = usePayment()
 
-const selectedProvider = ref<PaymentProvider | null>(null);
-const isPaymentWithCardReady = ref(false);
-const providerPaymentHandler = ref();
-const loading = ref(false);
-const showPaymentModal = ref(false);
-const giftCards = ref(cart.value?.order?.giftCards);
+const selectedProvider = ref<PaymentProvider | null>(null)
+const isPaymentWithCardReady = ref(false)
+const providerPaymentHandler = ref()
+const loading = ref(false)
+const showPaymentModal = ref(false)
+const giftCards = ref(cart.value?.order?.giftCards)
 
-const hasFullPaymentWithGiftCard = computed(() => {
-  if (giftCards.value && giftCards.value?.length > 0) {
-    return cart.value?.order?.amountTotal === 0;
-  }
-});
+const hasFullPaymentWithGiftCard = computed(() =>
+  giftCards.value?.length > 0 && cart.value?.order?.amountTotal === 0,
+)
 
 onMounted(async () => {
-  await loadPaymentMethods();
+  await loadPaymentMethods()
   if (paymentProviders.value.length > 0) {
-    showPaymentModal.value = true;
-    selectedProvider.value = paymentProviders.value[0];
+    showPaymentModal.value = true
+    selectedProvider.value = paymentProviders.value[0]
   }
-});
+})
 
 const handleGiftCardPayment = async () => {
-  await makeGiftCardPayment();
-};
+  await makeGiftCardPayment()
+}
 </script>
 
 <template>
@@ -57,7 +55,10 @@ const handleGiftCardPayment = async () => {
     </SfButton>
 
     <p class="text-sm text-center mt-4 pb-4 md:pb-0">
-      <i18n-t keypath="termsInfo" scope="global">
+      <i18n-t
+        keypath="termsInfo"
+        scope="global"
+      >
         <template #terms>
           <SfLink
             href="#"
@@ -77,12 +78,12 @@ const handleGiftCardPayment = async () => {
       </i18n-t>
     </p>
     <component
-      v-if="
-        showPaymentModal &&
-        !!selectedProvider?.code &&
-        !hasFullPaymentWithGiftCard
-      "
       :is="getPaymentProviderComponentName(selectedProvider?.code)"
+      v-if="
+        showPaymentModal
+          && !!selectedProvider?.code
+          && !hasFullPaymentWithGiftCard
+      "
       :key="selectedProvider?.id"
       :provider="selectedProvider"
       :cart="cart"

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { SfModal } from "@storefront-ui/vue";
+import { SfModal } from '@storefront-ui/vue'
 
 const props = defineProps<{
-  modelValue?: boolean;
-  tag?: string;
-  disableClickAway?: boolean;
-  disableEsc?: boolean;
-}>();
+  modelValue?: boolean
+  tag?: string
+  disableClickAway?: boolean
+  disableEsc?: boolean
+}>()
 </script>
 
 <template>

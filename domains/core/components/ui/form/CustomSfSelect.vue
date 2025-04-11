@@ -1,16 +1,18 @@
 <script lang="ts">
-export default {
-  inheritAttrs: false,
-};
 </script>
+
 <script lang="ts" setup>
-import { type PropType, computed } from "vue";
+import { type PropType, computed } from 'vue'
 import {
   SfSelectSize,
   SfIconExpandMore,
   useFocusVisible,
   useDisclosure,
-} from "@storefront-ui/vue";
+} from '@storefront-ui/vue'
+
+export default {
+  inheritAttrs: false,
+}
 
 const props = defineProps({
   size: {
@@ -19,7 +21,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: "",
+    default: '',
   },
   required: {
     type: Boolean,
@@ -35,24 +37,24 @@ const props = defineProps({
   },
   modelValue: {
     type: Number,
-    default: "",
+    default: '',
   },
   wrapperClassName: {
     type: String,
-    default: "",
+    default: '',
   },
-});
+})
 const emit = defineEmits<{
-  (event: "update:modelValue", param: string): void;
-}>();
+  (event: 'update:modelValue', param: string): void
+}>()
 
-const { isOpen, close, open } = useDisclosure();
-const { isFocusVisible } = useFocusVisible();
+const { isOpen, close, open } = useDisclosure()
+const { isFocusVisible } = useFocusVisible()
 
 const modelProxy = computed({
   get: () => props.modelValue,
-  set: (value: string) => emit("update:modelValue", value),
-});
+  set: (value: string) => emit('update:modelValue', value),
+})
 </script>
 
 <template>
@@ -67,8 +69,8 @@ const modelProxy = computed({
     data-testid="select"
   >
     <select
-      :required="required"
       v-model="modelProxy"
+      :required="required"
       :disabled="disabled"
       :class="[
         'appearance-none disabled:cursor-not-allowed cursor-pointer pl-4 pr-3.5 text-neutral-900 ring-inset focus:ring-primary-700 focus:ring-2 outline-none bg-transparent rounded-md ring-1 ring-neutral-300 hover:ring-primary-700 active:ring-2 active:ring-primary-700 disabled:bg-disabled-100 disabled:text-disabled-900 disabled:ring-disabled-200',
@@ -80,11 +82,11 @@ const modelProxy = computed({
         },
       ]"
       data-testid="select-input"
+      v-bind="$attrs"
       @blur="close"
       @change="close"
       @click="open"
       @keydown.space="open"
-      v-bind="$attrs"
     >
       <option
         v-if="placeholder"

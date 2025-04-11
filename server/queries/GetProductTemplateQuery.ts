@@ -1,5 +1,5 @@
-import productFragment from '../fragments/productFragment';
-import { gql } from '@apollo/client/core';
+import { gql } from '@apollo/client/core'
+import productFragment from '../fragments/productFragment'
 
 export default gql`
   query(
@@ -15,4 +15,4 @@ export default gql`
         ${productFragment}
     }
   }
-`;
+`

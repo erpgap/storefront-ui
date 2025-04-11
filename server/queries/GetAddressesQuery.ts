@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client/core';
-import addressFragment from '../fragments/addressFragment';
+import { gql } from '@apollo/client/core'
+import addressFragment from '../fragments/addressFragment'
 
 export default gql`
 query(
@@ -11,4 +11,4 @@ query(
     ${addressFragment}
   }
 }
-`;
+`

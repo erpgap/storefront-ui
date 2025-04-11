@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { SfLink, SfButton, SfIconClose } from "@storefront-ui/vue";
-import type { Product } from "~/graphql";
+import { SfLink, SfButton, SfIconClose } from '@storefront-ui/vue'
+import type { Product } from '~/graphql'
 
-const NuxtLink = resolveComponent("NuxtLink");
+const NuxtLink = resolveComponent('NuxtLink')
 
-const { toggleWishlistSideBar } = useWishlistUiState();
+const { toggleWishlistSideBar } = useWishlistUiState()
+
+defineEmits(['removeFromWishlist'])
 
 defineProps({
   product: {
     type: Object as PropType<Product>,
     required: true,
   },
-});
+})
 </script>
 
 <template>
@@ -20,7 +22,10 @@ defineProps({
     data-testid="cart-product-card"
   >
     <div class="min-w-[114px] w-[114px] overflow-hidden rounded-md">
-      <SfLink :to="mountUrlSlugForProductVariant(product)" :tag="NuxtLink">
+      <SfLink
+        :to="mountUrlSlugForProductVariant(product)"
+        :tag="NuxtLink"
+      >
         <NuxtImg
           provider="odooProvider"
           class="border rounded-md border-neutral-200"
@@ -49,9 +54,7 @@ defineProps({
             class="text-secondary-700 sm:order-1 font-bold typography-text-sm sm:typography-text-lg"
           >
             {{ $currency(product?.combinationInfoVariant?.price) }}
-            <span
-              class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
-            >
+            <span class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal">
               {{ $currency(product?.combinationInfoVariant?.list_price) }}
             </span>
           </span>

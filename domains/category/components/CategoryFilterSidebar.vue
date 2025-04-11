@@ -9,9 +9,9 @@ import {
   SfRadio,
   SfSelect,
   SfThumbnail,
-} from "@storefront-ui/vue";
+} from '@storefront-ui/vue'
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(['close'])
 const props = defineProps({
   attributes: {
     type: Array,
@@ -21,171 +21,148 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-});
-const route = useRoute();
-const router = useRouter();
-const { changeFilters, facetsFromUrlToFilter } = useUiHelpers();
+})
 
-const sort = useState("sort", () =>
-  route.query?.sort ? route.query?.sort : ""
-);
+const stockCount = inject('stockCount')
 
-const sortBy = computed(() => getSortOptions({ input: { sort: sort.value } }));
+const route = useRoute()
+const router = useRouter()
+const {
+  changeFilters,
+  facetsFromUrlToFilter,
+  isFilterSelected,
+  isStockSelected,
+  selectedFilters,
+} = useUiHelpers()
+
+const sort = useState('sort', () =>
+  route.query?.sort ? route.query?.sort : '',
+)
+
+const sortBy = computed(() => getSortOptions({ input: { sort: sort.value } }))
 const changeSorting = async (newSort: string) => {
-  sort.value = newSort;
-};
+  sort.value = newSort
+}
 const getSortOptions = (searchData: { input: any }) => ({
   options: sortOptions,
-  selected: searchData.input.sort || "name asc",
-});
-
-const selectedFilters = useState("category-selected-filters", () => []);
-const isFilterSelected = (option: any) => {
-  return selectedFilters.value.some(
-    (filter: { id: any }) => String(filter.id) === String(option.id)
-  );
-};
+  selected: searchData.input.sort || 'name,ASC',
+})
 
 const facets = computed(() => [
   {
     id: null,
-    label: "Price",
-    type: "price",
+    label: 'Price',
+    type: 'price',
     options: [
-      { id: "pr1", label: "Under $250.00", values: "0-250" },
-      { id: "pr2", label: "$250.00 - $500.00", values: "250-500" },
-      { id: "pr3", label: "$500.00 - $750.00", values: "500-750" },
-      { id: "pr4", label: "$750.00 - $1000.00", values: "750-1000" },
-      { id: "pr5", label: "$1000.00- $1500.00", values: "1000-1500" },
+      { id: 'pr1', label: 'Under $250.00', values: '0-250' },
+      { id: 'pr2', label: '$250.00 - $500.00', values: '250-500' },
+      { id: 'pr3', label: '$500.00 - $750.00', values: '500-750' },
+      { id: 'pr4', label: '$750.00 - $1000.00', values: '750-1000' },
+      { id: 'pr5', label: '$1000.00- $1500.00', values: '1000-1500' },
     ],
   },
   ...props.attributes,
-]);
-const opened = useState("category-opened", () => ({
-  Price: true,
-}));
+  {
+    id: 888,
+    label: 'Availability',
+    type: 'in-stock',
+  },
+])
 
-const priceModel = useState("price-model", () => "");
+const opened = useState('category-opened', () => ({
+  Price: false,
+}))
+
+const priceModel = useState('price-model', () => '')
 
 const selectFilter = (
   facet: { label: string },
-  option: { id: string; value: string; label: string }
+  option: { id: string, value: string, label: string },
 ) => {
   const alreadySelectedIndex = selectedFilters.value.findIndex(
-    (filter: { label: string }) => String(filter.label) === String(option.id)
-  );
+    (filter: { label: string }) => String(filter.label) === String(option.id),
+  )
 
   if (alreadySelectedIndex !== -1) {
-    selectedFilters.value.splice(alreadySelectedIndex, 1);
-    return;
+    selectedFilters.value.splice(alreadySelectedIndex, 1)
+    return
   }
 
   selectedFilters.value.push({
     filterName: facet?.label,
     label: option?.id,
     id: option?.value,
-  });
-};
+  })
+}
+
+const selectStockFilter = () => {
+  const alreadySelectedIndex = selectedFilters.value.findIndex(
+    filter => filter.filterName === 'Availability',
+  )
+
+  if (alreadySelectedIndex !== -1) {
+    selectedFilters.value.splice(alreadySelectedIndex, 1)
+    return
+  }
+
+  selectedFilters.value.push({
+    filterName: 'Availability',
+    label: 'true',
+    id: true,
+  })
+}
 
 const applyFilters = () => {
   const filters = selectedFilters.value.filter((item: any) => {
-    return typeof item === "object";
-  });
+    return typeof item === 'object'
+  })
 
-  changeFilters(filters, sort.value);
-  emit("close");
-};
+  changeFilters(filters, sort.value)
+  emit('close')
+}
 
 const clearFilters = () => {
-  priceModel.value = "";
-  selectedFilters.value = [];
-  router.push({ query: {} });
-  emit("close");
-};
-
-const changeCategory = (categoryId: number) => {
-  clearFilters();
-  router.push({ path: `/category/${categoryId}` });
-};
-
-selectedFilters.value = facetsFromUrlToFilter();
+  priceModel.value = ''
+  selectedFilters.value = []
+  router.push({ query: {} })
+  emit('close')
+}
 
 watch(
-  () => [facets.value, selectedFilters.value],
+  () => [facets, selectedFilters],
   () => {
     facets.value.forEach((facet: any) => {
       opened.value[facet.label] = selectedFilters.value.some(
-        (item: any) => item.filterName === facet.label
-      );
-    });
-    opened.value.Price = true;
+        (item: any) => item.filterName === facet.label,
+      )
+    })
   },
-  { deep: true }
-);
+  { deep: true, immediate: true },
+)
 
 const priceFilter = selectedFilters.value?.find((item: any) => {
-  return item.filterName === "price";
-});
+  return item.filterName === 'Price'
+})
 
 if (priceFilter) {
-  priceModel.value = priceFilter.id;
+  priceModel.value = priceFilter.id
 }
 
 watch(priceModel, (newValue) => {
   selectedFilters.value = selectedFilters.value.filter(
-    (item: any) => item.filterName !== "price"
-  );
+    (item: any) => item.filterName !== 'Price',
+  )
   if (newValue) {
     selectedFilters.value.push({
-      filterName: "price",
+      filterName: 'Price',
       id: newValue,
-    });
+    })
   }
-});
+})
 </script>
 
 <template>
   <aside class="w-full lg:max-w-[376px]">
-    <template v-if="categories.length">
-      <div
-        class="py-2 px-4 mb-4 bg-neutral-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
-        data-testid="category-tree"
-      >
-        {{ $t("category") }}
-      </div>
-
-      <ul class="mt-4 mb-6 md:mt-2" data-testid="categories">
-        <SfListItem
-          v-for="(category, index) in categories"
-          :key="category.name"
-          size="lg"
-          :class="[
-            'md:sf-list-item-sm md:py-1.5 sf-list-item',
-            {
-              'bg-primary-100 hover:bg-primary-100 active:bg-primary-100 font-medium':
-                category.id === route.query.id,
-            },
-          ]"
-          data-testid="category-tree-item"
-        >
-          <span
-            class="flex gap-2 items-center"
-            @click="changeCategory(category.id)"
-          >
-            <span
-              class="text-base md:text-sm capitalize flex items-center"
-              data-testid="list-item-menu-label"
-              :class="{
-                'font-bold': category.slug === route.path,
-              }"
-            >
-              <slot />
-              {{ category.name }}
-            </span>
-          </span>
-        </SfListItem>
-      </ul>
-    </template>
     <h5
       class="py-2 px-4 mb-6 bg-neutral-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
     >
@@ -214,7 +191,10 @@ watch(priceModel, (newValue) => {
       Filter
     </h5>
     <ul>
-      <li v-for="(facet, index) in facets" :key="index">
+      <li
+        v-for="(facet, index) in facets"
+        :key="index"
+      >
         <SfAccordionItem v-model="opened[facet.label]">
           <template #summary>
             <div class="flex justify-between items-center p-2 mb-2">
@@ -250,7 +230,7 @@ watch(priceModel, (newValue) => {
                   :class="{
                     'font-medium': priceModel === option.values,
                   }"
-                  >{{ option.label }}
+                >{{ option.label }}
                 </span>
               </SfListItem>
             </fieldset>
@@ -258,9 +238,12 @@ watch(priceModel, (newValue) => {
 
           <ul
             v-if="facet.type === 'select'"
-            class="grid grid-cols-5 gap-2 px-3"
+            class="grid grid-cols-2 gap-2 px-3"
           >
-            <li v-for="{ id, value, label } in facet.options" :key="id">
+            <li
+              v-for="{ id, value, label, total } in facet.options"
+              :key="id"
+            >
               <SfChip
                 class="w-full"
                 size="sm"
@@ -268,12 +251,21 @@ watch(priceModel, (newValue) => {
                 :model-value="isFilterSelected({ id, value })"
                 @update:model-value="selectFilter(facet, { id, value, label })"
               >
-                {{ label }}
+                <div class="w-full flex justify-center gap-2">
+                  <span>{{ label }}</span>
+                  <span class="text-[16px] text-[#808080]">({{ total }})</span>
+                </div>
               </SfChip>
             </li>
           </ul>
-          <ul v-if="facet.type === 'radio'" class="grid grid-cols-3 gap-2 px-3">
-            <li v-for="{ id, value, label } in facet.options" :key="id">
+          <ul
+            v-if="facet.type === 'radio'"
+            class="grid grid-cols-2 gap-2 px-3"
+          >
+            <li
+              v-for="{ id, value, label, total } in facet.options"
+              :key="id"
+            >
               <SfChip
                 class="w-full"
                 size="sm"
@@ -281,13 +273,16 @@ watch(priceModel, (newValue) => {
                 :model-value="isFilterSelected({ id, value })"
                 @update:model-value="selectFilter(facet, { id, value, label })"
               >
-                {{ label }}
+                <div class="w-full flex justify-center gap-2">
+                  <span>{{ label }}</span>
+                  <span class="text-[16px] text-[#808080]">({{ total }})</span>
+                </div>
               </SfChip>
             </li>
           </ul>
           <template v-if="facet.type == 'color'">
             <SfListItem
-              v-for="{ id, value, label, htmlColor } in facet.options"
+              v-for="{ id, value, label, htmlColor, total } in facet.options"
               :key="id"
               size="sm"
               tag="label"
@@ -317,24 +312,47 @@ watch(priceModel, (newValue) => {
                   />
                 </span>
               </template>
-              <p>
-                <span class="mr-2 typography-text-sm">{{ label }}</span>
-              </p>
+              <div class="w-full flex justify-between cursor-pointer">
+                <span>{{ label }}</span>
+                <span class="text-[16px] text-[#808080]">({{ total }})</span>
+              </div>
             </SfListItem>
           </template>
+          <template v-if="facet.type == 'in-stock'">
+            <div
+              class="flex items-center gap-2 px-4 cursor-pointer"
+              :class="{ 'pointer-events-none opacity-50': stockCount === 0 }"
+            >
+              <SfCheckbox
+                :model-value="isStockSelected()"
+                @update:model-value="selectStockFilter()"
+              />
+              <div class="w-full flex justify-between">
+                <span>In stock</span>
+                <span class="text-[16px] text-[#808080]">({{ stockCount }})</span>
+              </div>
+            </div>
+          </template>
         </SfAccordionItem>
-        <hr class="my-4" />
+        <hr class="my-4">
       </li>
     </ul>
     <div
       class="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:justify-between px-3 lg:px-0"
     >
-      <SfButton variant="secondary" class="w-full mr-3" @click="clearFilters">
+      <SfButton
+        variant="secondary"
+        class="w-full mr-3"
+        @click="clearFilters"
+      >
         {{ $t("clearFilters") }}
       </SfButton>
-      <SfButton class="w-full" @click="applyFilters">{{
-        $t("showProducts")
-      }}</SfButton>
+      <SfButton
+        class="w-full"
+        @click="applyFilters"
+      >
+        {{ $t("showProducts") }}
+      </SfButton>
     </div>
   </aside>
 </template>

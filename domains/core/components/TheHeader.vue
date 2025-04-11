@@ -1,20 +1,15 @@
 <script lang="ts" setup>
-const { isMobile, isDesktopOrTablet } = useDevice();
-const { loadCategoryList, categories } = useCategory();
-const { loadCart } = useCart();
-const { loadWishlist } = useWishlist();
+const { loadCategoriesForMegaMenu, categoriesForMegaMenu } = useMegaMenuCategories()
 
 provide(
-  "filteredTopCategories",
-  categories.value?.filter(
-    (category: any) => category.name === "WOMEN" || category.name === "MEN"
-  )
-);
+  'categoriesForMegaMenu',
+  categoriesForMegaMenu,
+)
 
-await loadCategoryList({ filter: { parent: true } } as any);
+await loadCategoriesForMegaMenu({ filter: { parent: true }, pageSize: 4 })
 </script>
 
 <template>
-  <HeaderDesktop v-if="isDesktopOrTablet" />
-  <HeaderMobile v-if="isMobile" />
+  <HeaderDesktop v-if="$viewport.isGreaterOrEquals('desktop')" />
+  <HeaderMobile v-else />
 </template>

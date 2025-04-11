@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { SfButton, SfBadge } from "@storefront-ui/vue";
+import { SfButton, SfBadge } from '@storefront-ui/vue'
 
-const NuxtLink = resolveComponent("NuxtLink");
-const { loadCart, totalItemsInCart } = useCart();
+const NuxtLink = resolveComponent('NuxtLink')
+const { loadCart, totalItemsInCart } = useCart()
 
 onMounted(async () => {
-  await loadCart(true);
-});
+  await loadCart(true)
+})
 </script>
 
 <template>
@@ -40,7 +40,10 @@ onMounted(async () => {
         square
       >
         <template #prefix>
-          <Icon name="ion:cart-outline" size="22px" />
+          <Icon
+            name="ion:cart-outline"
+            size="22px"
+          />
           <SfBadge
             :content="0"
             class="outline outline-primary-700 bg-white !text-neutral-900 group-hover:outline-primary-800 group-active:outline-primary-900 flex justify-center"

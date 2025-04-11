@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { SfButton, SfIconArrowBack } from "@storefront-ui/vue";
-const NuxtLink = resolveComponent("NuxtLink");
-const error = useError();
+import { SfButton, SfIconArrowBack } from '@storefront-ui/vue'
+
+const NuxtLink = resolveComponent('NuxtLink')
+const error = useError()
 </script>
+
 <template>
   <NuxtLayout>
     <div
@@ -15,7 +17,9 @@ const error = useError();
         width="300"
         height="300"
       />
-      <p class="mt-8 font-medium">Page Not Found</p>
+      <p class="mt-8 font-medium">
+        Page Not Found
+      </p>
       <div class="my-10">
         <SfButton
           to="/category/53"
@@ -38,7 +42,9 @@ const error = useError();
         width="300"
         height="300"
       />
-      <p class="mt-8 text-center font-medium">Some problem happened</p>
+      <p class="mt-8 text-center font-medium">
+        Some problem happened
+      </p>
       <div class="my-10">
         <SfButton
           to="/category/53"

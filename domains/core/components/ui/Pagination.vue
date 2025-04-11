@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { SfButton, SfIconChevronLeft, SfIconChevronRight, usePagination } from '@storefront-ui/vue';
+import { SfButton, SfIconChevronLeft, SfIconChevronRight, usePagination } from '@storefront-ui/vue'
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
 const props = defineProps({
   currentPage: {
@@ -21,7 +21,7 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-});
+})
 
 const pagination = computed<any>(() =>
   reactive(
@@ -32,15 +32,15 @@ const pagination = computed<any>(() =>
       maxPages: props?.maxVisiblePages,
     }),
   ),
-);
+)
 
 const setParams = (filter: any) => {
-  router.push({ query: { ...route.query, ...filter } });
-};
+  router.push({ query: { ...route.query, ...filter } })
+}
 
 onMounted(() => {
-  pagination.value?.setPage(route.query.page ? Number(route.query.page) : 1);
-});
+  pagination.value?.setPage(route.query.page ? Number(route.query.page) : 1)
+})
 </script>
 
 <template>
@@ -92,7 +92,12 @@ onMounted(() => {
       </li>
       <li v-if="pagination.startPage > 2">
         <div class="flex pt-1 border-t-4 border-transparent">
-          <button type="button" disabled aria-hidden="true" class="px-4 py-3 md:w-12 rounded-md text-neutral-500">
+          <button
+            type="button"
+            disabled
+            aria-hidden="true"
+            class="px-4 py-3 md:w-12 rounded-md text-neutral-500"
+          >
             ...
           </button>
         </div>
@@ -112,7 +117,10 @@ onMounted(() => {
           </button>
         </div>
       </li>
-      <li v-for="page in pagination.pages" :key="`page-${page}`">
+      <li
+        v-for="page in pagination.pages"
+        :key="`page-${page}`"
+      >
         <div
           :class="[
             'flex pt-1 border-t-4 border-transparent',
@@ -156,7 +164,12 @@ onMounted(() => {
       </li>
       <li v-if="pagination.endPage < pagination.totalPages - 1">
         <div class="flex pt-1 border-t-4 border-transparent">
-          <button type="button" disabled aria-hidden="true" class="px-4 py-3 md:w-12 rounded-md text-neutral-500">
+          <button
+            type="button"
+            disabled
+            aria-hidden="true"
+            class="px-4 py-3 md:w-12 rounded-md text-neutral-500"
+          >
             ...
           </button>
         </div>

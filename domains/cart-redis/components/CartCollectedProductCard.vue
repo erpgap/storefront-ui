@@ -3,18 +3,19 @@ import {
   SfIconRemoveShoppingCart,
   SfIconSell,
   SfLink,
-} from "@storefront-ui/vue";
-import { type OrderLine, type Product } from "~/graphql";
-const NuxtLink = resolveComponent("NuxtLink");
+} from '@storefront-ui/vue'
+import type { OrderLine, Product } from '~/graphql'
+
+const NuxtLink = resolveComponent('NuxtLink')
 
 defineProps({
   orderLine: {
     type: Object as PropType<OrderLine>,
     required: true,
   },
-});
+})
 
-const { updateItemQuantity, removeItemFromCart } = useCart();
+const { updateItemQuantity, removeItemFromCart } = useCart()
 </script>
 
 <template>
@@ -34,7 +35,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
               String(orderLine.product?.image),
               370,
               370,
-              String(orderLine.product?.imageFilename)
+              String(orderLine.product?.imageFilename),
             )
           "
           :alt="orderLine.product?.imageFilename ?? ''"
@@ -47,7 +48,10 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
       <div
         class="absolute top-0 left-0 text-white bg-secondary-600 py-1 pl-1.5 pr-2 text-xs font-medium"
       >
-        <SfIconSell size="xs" class="mr-1" />
+        <SfIconSell
+          size="xs"
+          class="mr-1"
+        />
         {{ $t("sale") }}
       </div>
     </div>
@@ -88,15 +92,15 @@ const { updateItemQuantity, removeItemFromCart } = useCart();
         >
           {{ $currency(orderLine.priceSubtotal) }}
           <span
-            class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
             v-if="
-              orderLine.product?.combinationInfo?.list_price !==
-              orderLine.product?.combinationInfo?.price
+              orderLine.product?.combinationInfo?.list_price
+                !== orderLine.product?.combinationInfo?.price
             "
+            class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
           >
             ${{
-              orderLine.product?.combinationInfo?.list_price *
-              orderLine?.quantity
+              orderLine.product?.combinationInfo?.list_price
+                * orderLine?.quantity
             }}
           </span>
         </span>

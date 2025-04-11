@@ -1,13 +1,13 @@
-name: Build VSF
+name: Build Alokai dev
 
 on:
   push:
-    branches: [ main ]
+    branches: [ develop ]
 
 jobs:
   deployment:
     runs-on: self-hosted
     steps:
     - run: |
-        echo "-------- Deploying https://vsfsdk.labs.odoogap.com "
-        /home/ubuntu/.deploy-vsf-1
+        echo "-------- Deploying https://alokai-dev.labs.erpgap.com/ "
+        /home/egap/.local/bin/deploy-vsf-1

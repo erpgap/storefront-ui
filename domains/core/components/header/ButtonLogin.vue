@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { SfButton } from "@storefront-ui/vue";
+import { SfButton } from '@storefront-ui/vue'
 
-const NuxtLink = resolveComponent("NuxtLink");
+const NuxtLink = resolveComponent('NuxtLink')
 
-const { isAuthenticated } = useAuth();
+const { isAuthenticated } = useAuth()
 </script>
 
 <template>
@@ -22,7 +22,7 @@ const { isAuthenticated } = useAuth();
       />
     </template>
   </SfButton>
-  <!-- 
+  <!--
     <template #fallback>
       <SfButton
         class="group relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 rounded-md"

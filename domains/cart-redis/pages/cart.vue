@@ -1,15 +1,18 @@
 <script lang="ts" setup>
-import { SfButton, SfIconArrowBack } from '@storefront-ui/vue';
-import Discount from '~/domains/core/components/ui/Discount.vue';
+import { SfButton, SfIconArrowBack } from '@storefront-ui/vue'
+import Discount from '~/domains/core/components/ui/Discount.vue'
 
-const NuxtLink = resolveComponent('NuxtLink');
-const { cart, loadCart } = useCart();
+const NuxtLink = resolveComponent('NuxtLink')
+const { cart, loadCart } = useCart()
 
-await loadCart();
+await loadCart()
 </script>
 
 <template>
-  <div v-if="cart?.order?.websiteOrderLine?.length > 0" class="pb-20">
+  <div
+    v-if="cart?.order?.websiteOrderLine?.length > 0"
+    class="pb-20"
+  >
     <div class="flex justify-between mt-8 mb-10">
       <h1 class="font-bold typography-headline-3 md:typography-headline-2">
         Cart
@@ -42,7 +45,10 @@ await loadCart();
       data-testid="cart-page-content"
     >
       <div class="col-span-7 mb-10 lg:mb-0">
-        <div v-for="orderLine in cart.order?.orderLines" :key="orderLine?.id">
+        <div
+          v-for="orderLine in cart.order?.websiteOrderLine"
+          :key="orderLine?.id"
+        >
           <CartCollectedProductCard :order-line="orderLine" />
         </div>
       </div>
@@ -50,7 +56,10 @@ await loadCart();
         <Discount />
         <UiOrderSummary :cart="cart">
           <NuxtLink to="/checkout">
-            <SfButton size="lg" class="w-full mb-4 md:mb-0">
+            <SfButton
+              size="lg"
+              class="w-full mb-4 md:mb-0"
+            >
               {{ $t('goToCheckout') }}
             </SfButton>
           </NuxtLink>
@@ -70,6 +79,8 @@ await loadCart();
       height="192"
       loading="lazy"
     />
-    <h2 class="mt-8">{{ $t('emptyCart') }}</h2>
+    <h2 class="mt-8">
+      {{ $t('emptyCart') }}
+    </h2>
   </div>
 </template>

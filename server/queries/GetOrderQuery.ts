@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client/core";
+import { gql } from '@apollo/client/core'
 
-import { internalOrderFragment } from "../fragments/orderFragment";
+import { internalOrderFragment } from '../fragments/orderFragment'
 
 export default gql`
 query ($id: Int!) {
@@ -8,4 +8,4 @@ query ($id: Int!) {
     ${internalOrderFragment}  
   } 
 }
-`;
+`

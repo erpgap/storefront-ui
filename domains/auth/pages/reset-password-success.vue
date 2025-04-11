@@ -10,22 +10,29 @@
           name="i-material-symbols-check-circle"
           class="size-20 text-primary-700"
         />
-        <h1 class="text-3xl font-bold">Your request has ben sent!</h1>
+        <h1 class="text-3xl font-bold">
+          Your request has ben sent!
+        </h1>
         <p>You just received a reply in your registered email.</p>
-        <SfButton @click="navigateTo('/')" size="lg" variant="secondary">
+        <SfButton
+          size="lg"
+          variant="secondary"
+          @click="navigateTo('/')"
+        >
           Continue shopping
         </SfButton>
       </div>
     </div>
   </NuxtLayout>
 </template>
+
 <script setup lang="ts">
-import { SfButton } from "@storefront-ui/vue";
+import { SfButton } from '@storefront-ui/vue'
 
 definePageMeta({
   layout: false,
-});
+})
 
-const email = ref("hieronim.anonim@gmail.com");
-const NuxtLink = resolveComponent("NuxtLink");
+const email = ref('hieronim.anonim@gmail.com')
+const NuxtLink = resolveComponent('NuxtLink')
 </script>

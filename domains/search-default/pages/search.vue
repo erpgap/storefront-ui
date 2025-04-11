@@ -4,11 +4,11 @@ import {
   SfIconTune,
   useDisclosure,
   SfLoaderCircular,
-} from "@storefront-ui/vue";
-import type { Product } from "~/graphql";
+} from '@storefront-ui/vue'
+import type { Product } from '~/graphql'
 
-const route = useRoute();
-const { isOpen, open, close } = useDisclosure();
+const route = useRoute()
+const { isOpen, open, close } = useDisclosure()
 
 // searching on odoo with query params
 const {
@@ -18,34 +18,34 @@ const {
   categories,
   loadProductTemplateList,
   productTemplateList,
-} = useProductTemplateList(route.fullPath, route.fullPath);
+} = useProductTemplateList(route.fullPath, route.fullPath)
 
-const { getFacetsFromURL } = useUiHelpers();
-const { getRegularPrice, getSpecialPrice } = useProductAttributes();
+const { getFacetsFromURL } = useUiHelpers()
+const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
 const breadcrumbs = [
-  { name: "Home", link: "/" },
-  { name: "Search", link: "/" },
-];
+  { name: 'Home', link: '/' },
+  { name: 'Search', link: '/' },
+]
 
-const maxVisiblePages = useState("search-page-max-visible", () => 1);
+const maxVisiblePages = useState('search-page-max-visible', () => 1)
 const setMaxVisiblePages = (isWide: boolean) =>
-  (maxVisiblePages.value = isWide ? 5 : 1);
+  (maxVisiblePages.value = isWide ? 5 : 1)
 
-watch(isWideScreen, (value) => setMaxVisiblePages(value));
+watch(isWideScreen, value => setMaxVisiblePages(value))
 watch(isTabletScreen, (value) => {
   if (value && isOpen.value) {
-    close();
+    close()
   }
-});
+})
 
 watch(
   () => route,
   async () => {
-    await loadProductTemplateList(getFacetsFromURL(route.query));
+    await loadProductTemplateList(getFacetsFromURL(route.query))
   },
-  { deep: true, immediate: true }
-);
+  { deep: true, immediate: true },
+)
 
 const pagination = computed(() => ({
   currentPage: route?.query?.page ? Number(route.query.page) : 1,
@@ -53,15 +53,19 @@ const pagination = computed(() => ({
   totalItems: totalItems.value,
   itemsPerPage: 12,
   pageOptions: [5, 12, 15, 20],
-}));
+}))
 
 onMounted(() => {
-  setMaxVisiblePages(isWideScreen.value);
-});
+  setMaxVisiblePages(isWideScreen.value)
+})
 </script>
+
 <template>
   <div class="pb-20">
-    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
+    <UiBreadcrumb
+      :breadcrumbs="breadcrumbs"
+      class="self-start mt-5 mb-5"
+    />
     <h1 class="font-bold typography-headline-3 md:typography-headline-2 mb-10">
       Results for "{{ route.query.search }}"
     </h1>
@@ -72,7 +76,10 @@ onMounted(() => {
           :attributes="organizedAttributes"
           :categories="categories"
         />
-        <LazyCategoryMobileSidebar :is-open="isOpen" @close="close">
+        <LazyCategoryMobileSidebar
+          :is-open="isOpen"
+          @close="close"
+        >
           <template #default>
             <CategoryFilterSidebar
               class="block lg:hidden"
@@ -86,8 +93,7 @@ onMounted(() => {
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
         <template v-if="!loading">
           <div class="flex justify-between items-center mb-6">
-            <span class="font-bold font-headings md:text-lg"
-              >{{ totalItems }} Products
+            <span class="font-bold font-headings md:text-lg">{{ totalItems }} Products
             </span>
             <SfButton
               variant="tertiary"
@@ -111,7 +117,7 @@ onMounted(() => {
               loading="eager"
               :slug="
                 mountUrlSlugForProductVariant(
-                  (productTemplate.firstVariant || productTemplate) as Product
+                  (productTemplate.firstVariant || productTemplate) as Product,
                 )
               "
               :image-url="
@@ -119,7 +125,7 @@ onMounted(() => {
                   String(productTemplate.image),
                   370,
                   370,
-                  String(productTemplate.imageFilename)
+                  String(productTemplate.imageFilename),
                 )
               "
               :image-alt="productTemplate?.name || ''"

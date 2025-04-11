@@ -1,20 +1,20 @@
 export const useRecentViewProducts = () => {
-  const list = useCookie<Number[]>("recent-view-products");
+  const list = useCookie<number[]>('recent-view-products')
 
   const addProductToRecentViews = (id: number) => {
     if (list.value?.includes(id)) {
-      return;
+      return
     }
-    list.value?.push(id) || (list.value = [id]);
-  };
+    list.value?.push(id) || (list.value = [id])
+  }
 
   const removeProductFromRecentViews = (id: number) => {
-    list.value = list.value.filter((productId) => productId !== id);
-  };
+    list.value = list.value.filter(productId => productId !== id)
+  }
 
   return {
     addProductToRecentViews,
     removeProductFromRecentViews,
     list: computed(() => list.value),
-  };
-};
+  }
+}

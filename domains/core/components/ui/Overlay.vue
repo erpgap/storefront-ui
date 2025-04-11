@@ -7,10 +7,11 @@
     <slot />
   </div>
 </template>
+
 <script lang="ts" setup>
 export interface OverlayProps {
-  visible?: boolean;
+  visible?: boolean
 }
 
-defineProps<OverlayProps>();
+defineProps<OverlayProps>()
 </script>

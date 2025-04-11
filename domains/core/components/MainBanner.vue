@@ -27,7 +27,7 @@
         <h1
           class="typography-headline-2 md:typography-headline-1 md:leading-[67.5px] font-bold mt-2 mb-4"
         >
-          Jackets hot drops
+          Jackets hot drop
         </h1>
         <p class="typography-text-base md:typography-text-lg">
           This fashionable jackets collection features various colors, comfort
@@ -37,18 +37,9 @@
           <SfButton
             size="lg"
             :tag="NuxtLink"
-            to="/product/leather-jacket-d-r-o-w-s-black-96?Size=189&Material=188&Color=191"
+            to="/search"
           >
-            Order Now
-          </SfButton>
-          <SfButton
-            size="lg"
-            :tag="NuxtLink"
-            to="/category/53"
-            class="bg-white"
-            variant="secondary"
-          >
-            Show More
+            Shop Now
           </SfButton>
         </div>
       </div>
@@ -57,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { SfButton } from "@storefront-ui/vue";
+import { SfButton } from '@storefront-ui/vue'
 
-const NuxtLink = resolveComponent("NuxtLink");
+const NuxtLink = resolveComponent('NuxtLink')
 </script>

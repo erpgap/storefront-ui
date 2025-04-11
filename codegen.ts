@@ -1,10 +1,10 @@
-import type { CodegenConfig } from '@graphql-codegen/cli';
+import type { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
-      'https://vsfdemo17.labs.odoogap.com/graphql/vsf': {},
+      'https://vsf-odoo18.labs.erpgap.com/graphql/vsf': {},
     },
   ],
   config: {
@@ -19,9 +19,10 @@ const config: CodegenConfig = {
       config: {
         preResolveTypes: true,
         avoidOptionals: true,
+        useTypeImports: true,
       },
     },
   },
-};
+}
 
-export default config;
+export default config

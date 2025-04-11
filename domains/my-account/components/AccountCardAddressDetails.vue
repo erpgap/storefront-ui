@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { SfButton, SfIconClose, useDisclosure } from "@storefront-ui/vue";
-import {
+import { SfButton, SfIconClose, useDisclosure } from '@storefront-ui/vue'
+import type {
   AddressEnum,
-  type AddressFormFieldsInputExtendedFields,
-  type Partner,
-} from "~/graphql";
+  AddressFormFieldsInputExtendedFields,
+  Partner } from '~/graphql'
 
-const { isOpen, open, close } = useDisclosure();
-const { deleteAddress, loadAddresses } = useAddresses();
+const { isOpen, open, close } = useDisclosure()
+const { deleteAddress, loadAddresses } = useAddresses()
 
 const props = defineProps({
   addresses: {
@@ -22,67 +21,76 @@ const props = defineProps({
     type: String as PropType<AddressEnum.Billing | AddressEnum.Shipping>,
     required: true,
   },
-});
+})
 
-const edit = ref(false);
-const addressForEdit = ref<AddressFormFieldsInputExtendedFields>();
+const edit = ref(false)
+const addressForEdit = ref<AddressFormFieldsInputExtendedFields>()
 
 const handleOpenFormForEditAddress = (
-  address: AddressFormFieldsInputExtendedFields
+  address: AddressFormFieldsInputExtendedFields,
 ) => {
-  edit.value = true;
-  addressForEdit.value = address;
-  open();
-};
+  edit.value = true
+  addressForEdit.value = address
+  open()
+}
 
 const handleOpenFormToAddAddress = () => {
-  edit.value = false;
-  open();
-};
+  edit.value = false
+  open()
+}
 
 const handleRemoveAddress = async (id: number) => {
-  await deleteAddress({ id: id });
-  await loadAddresses(props.type);
-};
+  await deleteAddress({ id: id })
+  await loadAddresses(props.type)
+}
 
 const handleCloseAfterSaveAddress = async () => {
-  await loadAddresses(props.type);
-  close();
-};
+  await loadAddresses(props.type)
+  close()
+}
 </script>
+
 <template>
   <div
-    class="md:col-span-1 col-span-3"
     v-for="address in addresses"
     :key="address.id"
+    class="md:col-span-1 col-span-3"
   >
     <AccountAddressData
-      @on-click="handleOpenFormForEditAddress(address)"
       :header="address.name || ''"
       :button-text="$t('account.accountSettings.personalData.edit')"
+      @on-click="handleOpenFormForEditAddress(address)"
     >
       <p>{{ `${address.name}, ${address.street}` }}</p>
       <p>{{ address.phone }}</p>
       <p>{{ `${address.country?.name}` }}</p>
       <p>{{ `${address?.state?.name || ""}` }}</p>
       <p>{{ `${address.city} ${address.zip}` }}</p>
-      <template v-slot:footer>
+      <template #footer>
         <SfButton
           variant="secondary"
           size="sm"
           class="self-start"
           @click="handleRemoveAddress(address.id)"
-          >Remove</SfButton
         >
+          Remove
+        </SfButton>
       </template>
     </AccountAddressData>
   </div>
   <div class="col-span-3">
-    <SfButton size="lg" @click="handleOpenFormToAddAddress()" class="self-start"
-      >Add new address</SfButton
+    <SfButton
+      size="lg"
+      class="self-start"
+      @click="handleOpenFormToAddAddress()"
     >
+      Add new address
+    </SfButton>
   </div>
-  <UiOverlay v-if="isOpen" :visible="isOpen">
+  <UiOverlay
+    v-if="isOpen"
+    :visible="isOpen"
+  >
     <UiModal
       :model-value="isOpen"
       tag="section"
