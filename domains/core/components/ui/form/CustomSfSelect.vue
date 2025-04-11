@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { type PropType, computed } from 'vue'
-import {
-  SfSelectSize,
-  SfIconExpandMore,
-  useFocusVisible,
-  useDisclosure,
-} from '@storefront-ui/vue'
+import { SfSelectSize, SfIconExpandMore, useFocusVisible, useDisclosure } from '@storefront-ui/vue'
+
+defineOptions({
+  name: 'CustomSfSelect',
+  inheritAttrs: false,
+})
 
 const props = defineProps({
   size: {
@@ -51,11 +51,9 @@ const modelProxy = computed({
 </script>
 
 <template>
-  <span :class="[
-    'relative flex flex-col rounded-md',
-    {
-      'focus-within:outline focus-within:outline-offset': isFocusVisible,
-    },
+  <span :class="['relative flex flex-col rounded-md', {
+    'focus-within:outline focus-within:outline-offset': isFocusVisible,
+  },
     wrapperClassName,
   ]" data-testid="select">
     <select v-model="modelProxy" :required="required" :disabled="disabled" :class="[
@@ -78,6 +76,11 @@ const modelProxy = computed({
       <slot />
     </select>
     <slot name="chevron">
+      <SfIconExpandMore :class="[
+        'absolute -translate-y-1 pointer-events-none top-1/3 right-4 transition easy-in-out duration-0.5',
+        disabled ? 'text-disabled-500' : 'text-neutral-500',
+        isOpen ? 'rotate-180' : '',
+      ]" />
       <SfIconExpandMore :class="[
         'absolute -translate-y-1 pointer-events-none top-1/3 right-4 transition easy-in-out duration-0.5',
         disabled ? 'text-disabled-500' : 'text-neutral-500',
