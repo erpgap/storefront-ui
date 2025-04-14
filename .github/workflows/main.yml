@@ -1,4 +1,4 @@
-name: Build Alokai dev
+name: Build Alokai prod
 
 on:
   push:
