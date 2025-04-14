@@ -38,9 +38,7 @@ const setParams = (filter: any) => {
   router.push({ query: { ...route.query, ...filter } })
 }
 
-onMounted(() => {
-  pagination.value?.setPage(route.query.page ? Number(route.query.page) : 1)
-})
+pagination.value?.setPage(route.query.page ? Number(route.query.page) : 1)
 </script>
 
 <template>
