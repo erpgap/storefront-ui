@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import {
-  SfButton,
-  SfIconTune,
-  useDisclosure,
-  SfLoaderCircular,
-} from '@storefront-ui/vue'
-import type { Product } from '~/graphql'
+import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefront-ui/vue'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
+import type { Product } from '~/graphql'
 
 const route = useRoute()
 
@@ -21,25 +16,16 @@ const {
   totalItems,
   categories,
   stockCount,
-} = useProductTemplateList(
-  route?.path?.replace(/\/$/, ''),
-  String(cleanFullPath.value),
-)
+} = useProductTemplateList(route?.path?.replace(/\/$/, ''), String(cleanFullPath.value))
 
 provide('stockCount', stockCount)
 
-const {
-  loadCategory,
-  category,
-  loading: categoryLoading,
-} = useCategory(String(cleanFullPath.value))
-
+const { loadCategory, category, loading: categoryLoading } = useCategory(String(cleanFullPath.value))
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 const { getFacetsFromURL } = useUiHelpers()
 
 const maxVisiblePages = useState('category-max-visible-pages', () => 1)
-const setMaxVisiblePages = (isWide: boolean) =>
-  (maxVisiblePages.value = isWide ? 5 : 1)
+const setMaxVisiblePages = (isWide: boolean) => (maxVisiblePages.value = isWide ? 5 : 1)
 
 watch(isWideScreen, value => setMaxVisiblePages(value))
 watch(isTabletScreen, (value) => {
@@ -171,7 +157,7 @@ const breadcrumbs = [
             :total-items="pagination.totalItems"
             :page-size="pagination.itemsPerPage"
             :max-visible-pages="maxVisiblePages"
-          />
+          /> -->
         </div>
         <div
           v-else

@@ -199,17 +199,4 @@ export default defineNuxtConfig({
     },
   },
 
-  viewport: {
-    breakpoints: {
-      desktop: 1280,
-      desktopMedium: 1440,
-      desktopWide: 1600,
-
-      mobile: 320,
-      mobileMedium: 375,
-      mobileWide: 425,
-
-      tablet: 768,
-    },
-  },
 })
