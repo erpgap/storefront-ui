@@ -199,4 +199,5 @@ export default defineNuxtConfig({
       tablet: 768,
     },
   },
+
 })
