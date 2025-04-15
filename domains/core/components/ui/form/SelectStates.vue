@@ -1,6 +1,4 @@
 <script setup lang="ts">
-
-
 const props = defineProps({
   countryId: {
     type: Number,
@@ -26,13 +24,13 @@ watch(
 <template>
   <label class="md:col-span-3">
     <UiFormLabel>{{ $t("form.stateLabel") }}</UiFormLabel>
-    <CustomSfSelect v-model="model" name="state" autocomplete="state-name" required>
+    <UiFormCustomSfSelect v-model="model" name="state" autocomplete="state-name" required>
       <option key="placeholder" :value="null">
         {{ $t("form.selectPlaceholder") }}
       </option>
       <option v-for="state in states" :value="state?.id">
         {{ state.name }}
       </option>
-    </CustomSfSelect>
+    </UiFormCustomSfSelect>
   </label>
 </template>

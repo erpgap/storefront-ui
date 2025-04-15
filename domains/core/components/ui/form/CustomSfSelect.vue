@@ -1,6 +1,3 @@
-<script lang="ts">
-</script>
-
 <script lang="ts" setup>
 import { type PropType, computed } from 'vue'
 import {
