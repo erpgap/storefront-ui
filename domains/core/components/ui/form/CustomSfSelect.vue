@@ -101,7 +101,7 @@ const modelProxy = computed({
       <SfIconExpandMore
         :class="[
           'absolute -translate-y-1 pointer-events-none top-1/3 right-4 transition easy-in-out duration-0.5',
-          disabled ? 'text-disabled-500' : 'text-neutral-500',
+          disabled ? 'text-disabled-500' : 'text-neutral-600',
           isOpen ? 'rotate-180' : '',
         ]"
       />
