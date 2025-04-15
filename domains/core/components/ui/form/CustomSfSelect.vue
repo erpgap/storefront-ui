@@ -1,3 +1,6 @@
+<script lang="ts">
+</script>
+
 <script lang="ts" setup>
 import { type PropType, computed } from 'vue'
 import { SfSelectSize, SfIconExpandMore, useFocusVisible, useDisclosure } from '@storefront-ui/vue'
