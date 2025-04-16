@@ -29,6 +29,7 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
       <ProductSlider
         key="inspired-by-picks"
         heading="Inspired by your picks"
+        key-for-composable="inspired-by-picks"
         hydrate-on-visible
       />
     </section>
@@ -41,6 +42,8 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
           key="recent-views"
           heading="Your recent views"
           :product-template-list="productTemplateList"
+          :ids="list"
+          key-for-composable="recent-views"
         />
       </ClientOnly>
     </section>

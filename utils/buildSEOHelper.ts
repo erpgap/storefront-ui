@@ -15,27 +15,27 @@ const validateSEO = (entity: SeoEntity, fullPath: string, entityType: string) =>
 
   if (!entity?.metaTitle) {
     warnings.push(
-      `[WARNING] - The ${entityType} from slug ${fullPath} does not have the metaTitle.`,
+      `[WARNING DEVELOPER] - The ${entityType} from slug ${fullPath} does not have the metaTitle.`,
     )
   }
   if (!entity?.metaDescription) {
     warnings.push(
-      `[WARNING] - The ${entityType} from slug ${fullPath} does not have the metaDescription.`,
+      `[WARNING DEVELOPER] - The ${entityType} from slug ${fullPath} does not have the metaDescription.`,
     )
   }
   if (!entity?.jsonLd) {
     warnings.push(
-      `[WARNING] - The ${entityType} from slug ${fullPath} does not have the jsonLd.`,
+      `[WARNING DEVELOPER] - The ${entityType} from slug ${fullPath} does not have the jsonLd.`,
     )
   }
   if (!entity?.metaKeyword) {
     warnings.push(
-      `[WARNING] - The ${entityType} from slug ${fullPath} does not have the metaKeyword.`,
+      `[WARNING DEVELOPER] - The ${entityType} from slug ${fullPath} does not have the metaKeyword.`,
     )
   }
   if (!entity?.metaImage) {
     warnings.push(
-      `[WARNING] - The ${entityType} from slug ${fullPath} does not have the metaImage.`,
+      `[WARNING DEVELOPER] - The ${entityType} from slug ${fullPath} does not have the metaImage.`,
     )
   }
 
