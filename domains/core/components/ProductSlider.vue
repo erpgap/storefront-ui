@@ -12,7 +12,6 @@ const props = defineProps({
 })
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
-
 </script>
 
 <template>

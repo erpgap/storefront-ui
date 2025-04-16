@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { QueryProductsArgs } from '~/graphql';
+import type { QueryProductsArgs } from '~/graphql'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
@@ -22,25 +22,27 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
 </script>
 
 <template>
-  <MainBanner />
-  <LazyDisplay hydrate-on-visible />
-  <section class="pb-16">
-    <ProductSlider
-      key="inspired-by-picks"
-      heading="Inspired by your picks"
-      hydrate-on-visible
-    />
-  </section>
-  <section
-    v-if="list?.length > 0"
-    class="pb-16"
-  >
-    <ClientOnly>
-      <LazyProductSlider
-        key="recent-views"
-        heading="Your recent views"
-        :product-template-list="productTemplateList"
+  <div>
+    <MainBanner />
+    <LazyDisplay hydrate-on-visible />
+    <section class="pb-16">
+      <ProductSlider
+        key="inspired-by-picks"
+        heading="Inspired by your picks"
+        hydrate-on-visible
       />
-    </ClientOnly>
-  </section>
+    </section>
+    <section
+      v-if="list?.length > 0"
+      class="pb-16"
+    >
+      <ClientOnly>
+        <LazyProductSlider
+          key="recent-views"
+          heading="Your recent views"
+          :product-template-list="productTemplateList"
+        />
+      </ClientOnly>
+    </section>
+  </div>
 </template>
