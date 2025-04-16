@@ -45,6 +45,7 @@ defineProps({
   specialPrice: {
     type: Number,
     required: false,
+    default: null,
   },
   firstVariant: {
     type: Object,
