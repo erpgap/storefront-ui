@@ -497,8 +497,11 @@ await loadProductVariant(params.value)
         </section>
         <UiDivider class="mt-4 mb-2" />
       </div>
-      <section class="lg:mx-4 mt-28 mb-20">
-        <ProductSlider text="Recommended with this product" />
+      <section v-if="productTemplate?.frequentlyBoughtTogether" class="lg:mx-4 mt-28">
+        <ProductSlider text="Recommended with this product" :product-template-list="productTemplate?.frequentlyBoughtTogether" />
+      </section>
+      <section v-if="productTemplate?.alternativeProducts" class="lg:mx-4 mb-20">
+        <ProductSlider text="Alternative product" :product-template-list="productTemplate?.alternativeProducts" />
       </section>
     </div>
     <template #error="{ error }">

@@ -6,7 +6,7 @@ const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
 
 const { list } = useRecentViewProducts()
 
-const { loadProductTemplateList, loading, productTemplateList } = useProductTemplateList('inspired-by-picks', 'inspired-by-picks')
+const { loadProductTemplateList, loading, productTemplateList } = useProductTemplateList('recent-views', 'recent-views')
 
 const numOfProducts = 10
 const params: QueryProductsArgs = { pageSize: numOfProducts }
