@@ -230,6 +230,11 @@ export type CategorySortInput = {
   id: InputMaybe<SortEnum>;
 };
 
+export type CheckoutRedirectOutput = {
+  __typename?: 'CheckoutRedirectOutput';
+  accessToken: Maybe<Scalars['String']['output']>;
+};
+
 export type Company = {
   __typename?: 'Company';
   city: Maybe<Scalars['String']['output']>;
@@ -524,6 +529,8 @@ export type Mutation = {
   cartUpdateMultipleItems: Maybe<CartData>;
   /** Set new user's password with the token from the change password url received in the email. */
   changePassword: Maybe<User>;
+  /** Returns access token to redirect user to Odoo checkout */
+  checkoutRedirect: Maybe<CheckoutRedirectOutput>;
   /** Creates a new lead with the contact information. */
   contactUs: Maybe<Lead>;
   /** Create or update a partner for guest checkout */
@@ -637,6 +644,11 @@ export type MutationCartUpdateMultipleItemsArgs = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
+};
+
+
+export type MutationCheckoutRedirectArgs = {
+  sessionId: Scalars['String']['input'];
 };
 
 

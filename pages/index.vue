@@ -1,10 +1,21 @@
 <script setup lang="ts">
+import type { QueryProductsArgs } from '~/graphql'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
 
 const { list } = useRecentViewProducts()
 
+const { loadProductTemplateList, loading, productTemplateList } = useProductTemplateList('recent-views', 'recent-views')
+
+const numOfProducts = 10
+const params: QueryProductsArgs = { pageSize: numOfProducts }
+
+if (list.value.length > 0) {
+  params.filter = { ids: list.value } as any
+}
+
+await loadProductTemplateList(params, true)
 await getWebsiteHomepage()
 
 useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
@@ -30,7 +41,7 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
         <LazyProductSlider
           key="recent-views"
           heading="Your recent views"
-          :ids="list"
+          :product-template-list="productTemplateList"
           key-for-composable="recent-views"
         />
       </ClientOnly>

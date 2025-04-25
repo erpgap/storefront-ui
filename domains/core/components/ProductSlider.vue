@@ -5,27 +5,13 @@ import type { Product, QueryProductsArgs } from '~/graphql'
 const props = defineProps({
   heading: String,
   text: String,
-  ids: {
-    type: Array<number>,
+  productTemplateList: {
+    type: Array<Product>,
     default: () => [],
-  },
-  keyForComposable: {
-    type: String,
-    default: '',
   },
 })
 
-const { loadProductTemplateList, loading, productTemplateList }
-  = useProductTemplateList(props.keyForComposable, props.keyForComposable)
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
-
-const numOfProducts = 10
-const params: QueryProductsArgs = { pageSize: numOfProducts }
-
-if (props.ids?.length > 0) {
-  params.filter = { ids: props.ids } as any
-}
-await loadProductTemplateList(params, true)
 </script>
 
 <template>
@@ -39,14 +25,14 @@ await loadProductTemplateList(params, true)
     {{ text }}
   </p>
   <SfScrollable
-    v-if="productTemplateList.length > 0"
+    v-if="props.productTemplateList.length > 0"
     buttons-placement="floating"
     class="items-center pb-4"
     data-testid="product-slider"
     style="scrollbar-width: none;"
   >
     <LazyUiProductCard
-      v-for="productTemplate in productTemplateList"
+      v-for="productTemplate in props.productTemplateList"
       :key="productTemplate.id"
       class="min-w-[190px] max-w-[190px]"
       :slug="

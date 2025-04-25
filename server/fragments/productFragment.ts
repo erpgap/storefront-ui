@@ -1,3 +1,5 @@
+import alternativeProductsFragment from "./alternativeProductsFragment"
+import frequentlyTogetherProductsFragment from "./frequentlyTogetherProductsFragment"
 export default `
   id
   firstVariant{
@@ -17,6 +19,8 @@ export default `
       }
     }
   }
+  ${alternativeProductsFragment}
+  ${frequentlyTogetherProductsFragment}
   smallImage
   price
   name
