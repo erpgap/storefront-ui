@@ -115,7 +115,6 @@ onClickOutside(formSearchTemplateRef, () => {
                           :key="child.id"
                         >
                           <SfListItem
-                            v-if="child.childs !== null"
                             tag="span"
                             :to="child.slug"
                             size="sm"

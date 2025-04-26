@@ -25,7 +25,7 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
     {{ text }}
   </p>
   <SfScrollable
-    v-if="props.productTemplateList.length > 0"
+    v-if="props.productTemplateList?.length > 0"
     buttons-placement="floating"
     class="items-center pb-4"
     data-testid="product-slider"

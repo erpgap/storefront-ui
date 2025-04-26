@@ -6,12 +6,12 @@ const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
 
 const { list } = useRecentViewProducts()
 
-const { loadProductTemplateList, loading, productTemplateList } = useProductTemplateList('recent-views', 'recent-views')
+const { loadProductTemplateList, productTemplateList } = useProductTemplateList('recent-views', 'recent-views')
 
 const numOfProducts = 10
 const params: QueryProductsArgs = { pageSize: numOfProducts }
 
-if (list.value.length > 0) {
+if (list.value?.length > 0) {
   params.filter = { ids: list.value } as any
 }
 
@@ -25,14 +25,6 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
   <div>
     <MainBanner />
     <LazyDisplay hydrate-on-visible />
-    <section class="pb-16">
-      <LazyProductSlider
-        key="inspired-by-picks"
-        heading="Inspired by your picks"
-        key-for-composable="inspired-by-picks"
-        hydrate-on-visible
-      />
-    </section>
     <section
       v-if="list?.length > 0"
       class="pb-16"

@@ -852,6 +852,11 @@ export enum PageType {
   StaticPage = 'StaticPage'
 }
 
+export enum PageTypeEnum {
+  Products = 'Products',
+  Static = 'Static'
+}
+
 export type Partner = {
   __typename?: 'Partner';
   addressType: Maybe<AddressType>;
@@ -949,6 +954,7 @@ export type Product = {
   __typename?: 'Product';
   accessoryProducts: Maybe<Array<Product>>;
   allowOutOfStock: Maybe<Scalars['Boolean']['output']>;
+  alokaiPages: Maybe<Array<WebsitePage>>;
   alternativeProducts: Maybe<Array<Product>>;
   /** Specific to Product Template */
   attributeValues: Maybe<Array<AttributeValue>>;
@@ -1126,6 +1132,8 @@ export type Query = {
   websiteHomepage: Maybe<Homepage>;
   websiteMegaMenu: Maybe<Array<WebsiteMenu>>;
   websiteMenu: Maybe<Array<WebsiteMenu>>;
+  websitePage: Maybe<WebsitePage>;
+  websitePages: Maybe<WebsitePages>;
   wishlistItems: Maybe<WishlistData>;
 };
 
@@ -1280,6 +1288,21 @@ export type QueryWebsiteMenuArgs = {
   noParent: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+
+export type QueryWebsitePageArgs = {
+  id: InputMaybe<Scalars['Int']['input']>;
+  pageSlug?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryWebsitePagesArgs = {
+  currentPage?: InputMaybe<Scalars['Int']['input']>;
+  filter?: InputMaybe<WebsitePageFilterInput>;
+  pageSize?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<WebsitePageSortInput>;
+};
+
 export type Ribbon = {
   __typename?: 'Ribbon';
   bgColor: Maybe<Scalars['String']['output']>;
@@ -1421,6 +1444,27 @@ export type WebsitePage = {
   publishingDate: Maybe<Scalars['String']['output']>;
   website: Maybe<Website>;
   websiteUrl: Maybe<Scalars['String']['output']>;
+};
+
+export type WebsitePageFilterInput = {
+  id: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  pageSlug: InputMaybe<Scalars['String']['input']>;
+  pageType: InputMaybe<Array<InputMaybe<PageTypeEnum>>>;
+};
+
+export type WebsitePageList = WebsitePages & {
+  __typename?: 'WebsitePageList';
+  totalCount: Scalars['Int']['output'];
+  websitePages: Maybe<Array<Maybe<WebsitePage>>>;
+};
+
+export type WebsitePageSortInput = {
+  id: InputMaybe<SortEnum>;
+};
+
+export type WebsitePages = {
+  totalCount: Scalars['Int']['output'];
+  websitePages: Maybe<Array<Maybe<WebsitePage>>>;
 };
 
 export type WishlistData = WishlistItems & {
