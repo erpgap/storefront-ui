@@ -41,26 +41,20 @@ export type CategoryResponse = AsyncData<
   H3Error
 >
 
-export type ProductTemplateListResponse = AsyncData<
-  {
-    products: {
-      attributeValues: AttributeValue[]
-      maxPrice?: number
-      minPrice?: number
-      totalCount: number
-      filterCounts: any[]
-      products: Product[]
-    }
-  },
-  H3Error
->
+export type ProductTemplateListResponse = {
+  products: {
+    attributeValues: AttributeValue[]
+    maxPrice?: number
+    minPrice?: number
+    totalCount: number
+    filterCounts: any[]
+    products: Product[]
+  }
+}
 
-export type ProductResponse = AsyncData<
-  {
-    product: Product
-  },
-  H3Error
->
+export type ProductResponse = {
+  product: Product
+}
 
 export type ProductVariantResponse = AsyncData<
   {
@@ -349,3 +343,24 @@ export type NewsletterSubscribeResponse = AsyncData<
   },
   H3Error
 >
+export interface AttributeFacet {
+  id: string
+  label: string
+  attributeName: string
+  options: OrganizedAttribute[]
+  open?: boolean
+  type?: string
+  size?: number
+  search?: string
+}
+export interface OrganizedAttribute {
+  id: string
+  value: number
+  label: string
+  htmlColor: string
+  total?: number
+}
+
+export type CustomProductWithStockFromRedis = Product & {
+  stock: number
+}

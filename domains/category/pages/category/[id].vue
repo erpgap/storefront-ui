@@ -14,9 +14,8 @@ const {
   loading,
   productTemplateList,
   totalItems,
-  categories,
   stockCount,
-} = useProductTemplateList(route?.path?.replace(/\/$/, ''), String(cleanFullPath.value))
+} = useProductTemplateList(String(cleanFullPath.value))
 
 provide('stockCount', stockCount)
 
@@ -35,11 +34,15 @@ watch(isTabletScreen, (value) => {
 })
 
 watch(
-  () => route,
-  async () => {
-    await loadProductTemplateList(getFacetsFromURL(route.query))
+  () => route.query,
+  async (newValue, oldValue) => {
+    delete newValue['list-view']
+    delete oldValue['list-view']
+
+    if (!isEqual(oldValue, newValue)) {
+      await loadProductTemplateList(getFacetsFromURL(route.query))
+    }
   },
-  { deep: true, immediate: true },
 )
 
 const pagination = computed(() => ({
@@ -69,6 +72,8 @@ const breadcrumbs = [
   { name: 'Home', link: '/' },
   { name: category._value.name, link: `Category/${route.params.id}` },
 ]
+
+await loadProductTemplateList(getFacetsFromURL(route.query))
 </script>
 
 <template>
@@ -82,7 +87,7 @@ const breadcrumbs = [
         <LazyCategoryFilterSidebar
           v-if="$viewport.isGreaterOrEquals('desktopSmall')"
           :attributes="organizedAttributes"
-          :categories="categories"
+          :categories="[]"
         />
         <LazyCategoryMobileSidebar
           v-if="$viewport.isLessThan('desktopSmall')"
@@ -93,7 +98,7 @@ const breadcrumbs = [
             <CategoryFilterSidebar
               class="block lg:hidden"
               :attributes="organizedAttributes"
-              :categories="categories"
+              :categories="[]"
               @close="close"
             />
           </template>
@@ -157,7 +162,7 @@ const breadcrumbs = [
             :total-items="pagination.totalItems"
             :page-size="pagination.itemsPerPage"
             :max-visible-pages="maxVisiblePages"
-          /> -->
+          />
         </div>
         <div
           v-else
