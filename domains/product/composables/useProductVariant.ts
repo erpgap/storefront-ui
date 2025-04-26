@@ -1,5 +1,6 @@
 import type {
   Product,
+  ProductVariant,
   ProductVariantResponse,
   QueryProductVariantArgs,
 } from '~/graphql'
@@ -9,31 +10,40 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   const { $sdk } = useNuxtApp()
 
   const loadingProductVariant = ref(false)
-  const productVariant = useState<Product>(
-    `product-${slugWithCombinationIds}`,
-    () => ({}) as Product,
-  )
+  const productVariant = useState<Product>(`product-${slugWithCombinationIds}`, () => ({}) as Product)
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
     if (productVariant.value?.id) return
 
-    loadingProductVariant.value = true
-    const { data, error } = await $sdk().odoo.query<
-      QueryProductVariantArgs,
-      ProductVariantResponse
-    >({ queryName: QueryName.GetProductVariantQuery }, params)
-    loadingProductVariant.value = false
+    console.log(params)
 
-    if (error.value) {
+    const { data, status } = await useAsyncData(() =>
+      $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>(
+        { queryName: QueryName.GetProductVariantQuery }, params),
+    )
+
+    productVariant.value = (data?.value?.productVariant?.product) || {} as Product
+    if (!productVariant.value?.id) {
       showError({
-        ...error.value,
         status: 404,
         message: 'Product not found',
       })
-      return
     }
 
-    productVariant.value = data?.value?.productVariant.product as Product
+    watch(status, () => {
+      if (status.value === 'error' && !data?.value) {
+        showError({
+          status: 404,
+          message: 'Product not found',
+        })
+      }
+      if (status.value === 'pending') {
+        loadingProductVariant.value = true
+      }
+      if (status.value === 'success') {
+        loadingProductVariant.value = false
+      }
+    })
   }
 
   const categoriesForBreadcrumb = computed(() => {
@@ -78,7 +88,7 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
 
   return {
     loadingProductVariant,
-    productVariant,
+    productVariant: computed(() => productVariant.value),
     getImages,
     breadcrumbs,
     getRegularPrice,

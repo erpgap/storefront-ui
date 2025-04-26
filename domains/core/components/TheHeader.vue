@@ -1,10 +1,7 @@
 <script lang="ts" setup>
 const { loadCategoriesForMegaMenu, categoriesForMegaMenu } = useMegaMenuCategories()
 
-provide(
-  'categoriesForMegaMenu',
-  categoriesForMegaMenu,
-)
+provide('categoriesForMegaMenu', categoriesForMegaMenu)
 
 await loadCategoriesForMegaMenu({ filter: { parent: true }, pageSize: 4 })
 </script>

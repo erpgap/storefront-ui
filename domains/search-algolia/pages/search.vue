@@ -12,8 +12,8 @@ const { isOpen, open, close } = useDisclosure()
 const { getFacetsFromURL } = useUiHelpers()
 
 // searching on algolia with query params
-const { search, searchInputValue, algoliaSearchResultIds, loading }
-  = useSearch()
+const { search, searchInputValue, algoliaSearchResultIds, loading } = useSearch()
+
 searchInputValue.value = route.query.search as string
 // fetch products with query params + ids from algolia
 const {
@@ -21,8 +21,10 @@ const {
   organizedAttributes,
   productTemplateList,
   totalItems,
-  categories,
-} = useProductTemplateList(route.fullPath, route.fullPath)
+  stockCount,
+} = useProductTemplateList(route.fullPath)
+
+provide('stockCount', stockCount)
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 

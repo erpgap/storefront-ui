@@ -14,16 +14,10 @@ export const useMegaMenuCategories = () => {
   const loadCategoriesForMegaMenu = async (params: QueryCategoriesArgs) => {
     loading.value = true
     try {
-      const { data } = await useAsyncData(
-        'categories-megamenu',
-        async () => {
-          const { data, error } = await $sdk().odoo.query<
-            QueryCategoriesArgs,
-            CategoryListResponse
-          >({ queryName: QueryName.GetCategoriesQuery }, params)
-
-          return data.value
-        },
+      const { data } = await useAsyncData('categories-megamenu', async () =>
+        await $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse>(
+          { queryName: QueryName.GetCategoriesQuery }, params,
+        ),
       )
 
       if (data?.value?.categories) {

@@ -34,7 +34,6 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
           key="recent-views"
           heading="Your recent views"
           :product-template-list="productTemplateList"
-          key-for-composable="recent-views"
         />
       </ClientOnly>
     </section>

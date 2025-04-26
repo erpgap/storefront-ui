@@ -24,15 +24,13 @@ import type {
 } from './gql/graphql'
 import type { AsyncData } from '#app'
 
-export type CategoryListResponse = AsyncData<
+export type CategoryListResponse =
   {
     categories: {
       categories: Category[]
       totalCount: number
     }
-  },
-  H3Error
->
+  }
 
 export type CategoryResponse = AsyncData<
   {
@@ -56,12 +54,11 @@ export type ProductResponse = {
   product: Product
 }
 
-export type ProductVariantResponse = AsyncData<
-  {
-    productVariant: ProductVariant
-  },
-  H3Error
->
+export type ProductVariantResponse = {
+  productVariant: {
+    product: Product
+  }
+}
 
 export type WishlistLoadResponse = AsyncData<
   {
@@ -269,7 +266,7 @@ export type DeliveryMethodResponse = AsyncData<
   H3Error
 >
 
-export type WebsiteHomepageResponse = AsyncData<
+export type WebsiteHomepageResponse =
   {
     metaTitle: string
     metaImage: string
@@ -277,9 +274,7 @@ export type WebsiteHomepageResponse = AsyncData<
     metaKeyword: string
     metaDescription: string
     jsonLd: string
-  },
-  H3Error
->
+  }
 
 export type PaymentMethodListResponse = AsyncData<
   {

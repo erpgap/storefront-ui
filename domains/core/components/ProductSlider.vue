@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SfScrollable } from '@storefront-ui/vue'
-import type { Product, QueryProductsArgs } from '~/graphql'
+import type { Product } from '~/graphql'
 
 const props = defineProps({
   heading: String,
@@ -32,14 +32,10 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
     style="scrollbar-width: none;"
   >
     <LazyUiProductCard
-      v-for="productTemplate in props.productTemplateList"
-      :key="productTemplate.id"
+      v-for="(productTemplate, index) in props.productTemplateList"
+      :key="productTemplate?.id || index"
       class="min-w-[190px] max-w-[190px]"
-      :slug="
-        mountUrlSlugForProductVariant(
-          productTemplate.firstVariant as Product,
-        ) || ''
-      "
+      :slug=" mountUrlSlugForProductVariant(productTemplate.firstVariant as Product) || '' "
       :name="productTemplate?.name || ''"
       :image-url="
         $getImage(
