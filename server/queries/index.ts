@@ -1,4 +1,3 @@
-import type { DocumentNode } from 'graphql/language'
 import GetAddressesQuery from './GetAddressesQuery'
 import GetCategoriesQuery from './GetCategoriesQuery'
 import GetCategoryQuery from './GetCategoryQuery'
@@ -40,7 +39,7 @@ enum QueryName {
   GetWebsiteHomepageQuery = 'GetWebsiteHomepageQuery',
 }
 
-const Queries: Record<QueryName, DocumentNode> = {
+const Queries: Record<QueryName, string> = {
   GetProductVariantQuery,
   LoadUserQuery,
   StockLotsQuery,

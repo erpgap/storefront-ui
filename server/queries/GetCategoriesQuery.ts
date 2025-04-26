@@ -1,7 +1,6 @@
-import { gql } from '@apollo/client/core'
 import { partnerFragment } from '../fragments'
 
-export default gql`
+export default `
   query ($search: String, $filter: CategoryFilterInput, $currentPage: Int, $pageSize: Int, $sort: CategorySortInput) {
     categories(search: $search, filter: $filter, currentPage: $currentPage, pageSize: $pageSize, sort: $sort) {
       categories {

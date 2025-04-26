@@ -1,6 +1,4 @@
-import { gql } from '@apollo/client/core'
-
-export default gql`
+export default `
   mutation DeleteAddress($address: DeleteAddressInput!) {
     deleteAddress(address: $address) {
       result

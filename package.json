@@ -48,7 +48,6 @@
     "nuxt-typed-router": "^3.6.3",
     "nuxt-viewport": "2.2.0",
     "object-hash": "^3.0.0",
-    "react": "^18.3.1",
     "typescript": "^5.8.2",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2",

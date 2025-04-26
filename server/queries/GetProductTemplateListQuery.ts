@@ -1,7 +1,6 @@
-import { gql } from '@apollo/client/core'
 import productFragment from '../fragments/productFragment'
 
-export default gql`
+export default `
 query(
   $filter: ProductFilterInput
   $currentPage: Int

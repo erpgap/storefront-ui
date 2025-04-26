@@ -1,4 +1,3 @@
-import type { DocumentNode } from '@apollo/client'
 import AddAddress from './AddAddress'
 import AdyenPaymentDetails from './AdyenPaymentDetails'
 import AdyenPaymentMethods from './AdyenPaymentMethods'
@@ -59,7 +58,7 @@ enum MutationName {
   ShippingMethod = 'ShippingMethod',
 }
 
-const Mutations: Record<MutationName, DocumentNode> = {
+const Mutations: Record<MutationName, string> = {
   LoginMutation,
   LogoutMutation,
   CreateNewAccountMutation,

@@ -1,7 +1,6 @@
-import { gql } from '@apollo/client/core'
 import partnerFragament from '../fragments/partnerFragment'
 
-export default gql`
+export default `
   mutation CreateUpdatePartner(
     $name: String!
     $email: String!

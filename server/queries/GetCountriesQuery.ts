@@ -1,6 +1,4 @@
-import { gql } from '@apollo/client/core'
-
-export default gql`
+export default `
   query ($pageSize: Int = 250, $filter: CountryFilterInput = {}) {
     countries(pageSize: $pageSize, filter: $filter) {
       countries {

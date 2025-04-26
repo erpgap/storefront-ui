@@ -1,6 +1,4 @@
-import { gql } from '@apollo/client/core'
-
-export default gql`
+export default `
   query ($filter: StockLotFilterInput, $currentPage: Int, $pageSize: Int = 0) {
     stockLots(filter: $filter, currentPage: $currentPage, pageSize: $pageSize) {
       totalCount

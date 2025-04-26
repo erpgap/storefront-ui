@@ -1,62 +1,59 @@
-import type { ApolloError } from '@apollo/client'
-import type { Endpoints } from '@erpgap/odoo-sdk-api-client'
+import { Queries } from '~/server/queries'
 
 export default defineEventHandler(async (event: any) => {
-  bootstrapApolloClient(event)
+  const config = useRuntimeConfig(event)
   try {
     const body = await readBody(event)
-    const api: Endpoints = event.context.apolloClient.api
-    const response = await api.query(body?.[0], body?.[1])
+    const response: any = await $fetch.raw(`${config.public.odooBaseUrl}graphql/vsf`, {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'content-type': 'application/json',
+        'REAL-IP': getRequestIP(event) || '',
+        'resquest-host': getRequestHost(event),
+        'Cookie': `session_id=${getCookie(event, 'session_id')}`,
 
-    if ((response.data as any)?.cookie) {
-      appendResponseHeader(
-        event,
-        'Set-cookie',
-        (response.data as unknown)?.cookie,
-      )
-    }
+      },
+      body: JSON.stringify({ query: Queries[body?.[0]?.queryName], variables: body?.[1] }),
+    })
 
-    if (response.errors) {
+    if (response?._data?.errors?.length > 0) {
       throw createError({
         statusCode: 500,
-        data: response.errors,
-        message: response.errors[0].message,
+        data: response?._data?.errors,
+        message: response?._data?.errors?.[0]?.message,
       })
     }
 
-    delete (response.data as unknown).cookie
-
-    return response.data
+    return response?._data?.data
   }
-  catch (error: unknown) {
-    const apolloError = error as ApolloError
-
-    if (apolloError.graphQLErrors?.length > 0) {
+  catch (error: any) {
+    if (error.graphQLErrors?.length > 0) {
       throw createError({
         statusCode: 500,
-        data: apolloError.graphQLErrors,
-        message: apolloError.message,
+        data: error.graphQLErrors,
+        message: error.message,
       })
     }
-    if (apolloError.protocolErrors?.length > 0) {
+    if (error.protocolErrors?.length > 0) {
       throw createError({
         statusCode: 400,
-        data: apolloError.protocolErrors,
-        message: apolloError.message,
+        data: error.protocolErrors,
+        message: error.message,
       })
     }
-    if (apolloError.clientErrors?.length > 0) {
+    if (error.clientErrors?.length > 0) {
       throw createError({
         statusCode: 400,
-        data: apolloError.clientErrors,
-        message: apolloError.message,
+        data: error.clientErrors,
+        message: error.message,
       })
     }
-    if (apolloError.networkError) {
+    if (error.networkError) {
       throw createError({
         statusCode: 500,
-        data: (apolloError.networkError as unknown)?.result?.errors,
-        message: apolloError.message,
+        data: (error.networkError as unknown)?.result?.errors,
+        message: error.message,
       })
     }
 
