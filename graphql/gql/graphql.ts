@@ -1047,6 +1047,7 @@ export type ProductList = Products & {
   maxPrice: Maybe<Scalars['Float']['output']>;
   minPrice: Maybe<Scalars['Float']['output']>;
   products: Maybe<Array<Maybe<Product>>>;
+  searchUrl: Maybe<Scalars['String']['output']>;
   totalCount: Scalars['Int']['output'];
 };
 
@@ -1097,6 +1098,7 @@ export type Products = {
   maxPrice: Maybe<Scalars['Float']['output']>;
   minPrice: Maybe<Scalars['Float']['output']>;
   products: Maybe<Array<Maybe<Product>>>;
+  searchUrl: Maybe<Scalars['String']['output']>;
   totalCount: Scalars['Int']['output'];
 };
 
