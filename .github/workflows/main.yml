@@ -6,7 +6,7 @@ on:
 
 jobs:
   deployment:
-    runs-on: self-hosted
+    runs-on: [self-hosted, production]
     steps:
     - run: |
         echo "-------- Deploying https://alokai.labs.erpgap.com/ "
