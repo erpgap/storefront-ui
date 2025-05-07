@@ -13,8 +13,6 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
   <div>
     <MainBanner />
     <LazyDisplay hydrate-on-visible />
-    <ClientOnly>
-      <LazyRecentViewSlider heading="Your recent views" />
-    </ClientOnly>
+    <LazyRecentViewSlider heading="Your recent views" />
   </div>
 </template>
