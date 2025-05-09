@@ -96,7 +96,7 @@ export const useProductTemplateList = (customIndex: string = '') => {
 
     const inStockFilterCount = filterCounts?.find(filter => filter.type === 'in_stock')
     if (inStockFilterCount) {
-      stockCount.value = inStockFilterCount.total
+      stockCount.value = inStockFilterCount.total || 0
     }
 
     const queryParamsKeys = Object.keys(route.query)

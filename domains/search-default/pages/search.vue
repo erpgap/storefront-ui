@@ -15,10 +15,12 @@ const {
   loading,
   totalItems,
   organizedAttributes,
-  categories,
   loadProductTemplateList,
   productTemplateList,
-} = useProductTemplateList(route.fullPath, route.fullPath)
+  stockCount,
+} = useProductTemplateList(route.fullPath)
+
+provide('stockCount', stockCount)
 
 const { getFacetsFromURL } = useUiHelpers()
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
@@ -74,7 +76,7 @@ onMounted(() => {
         <CategoryFilterSidebar
           class="hidden lg:block"
           :attributes="organizedAttributes"
-          :categories="categories"
+          :categories="[]"
         />
         <LazyCategoryMobileSidebar
           :is-open="isOpen"
@@ -84,7 +86,7 @@ onMounted(() => {
             <CategoryFilterSidebar
               class="block lg:hidden"
               :attributes="organizedAttributes"
-              :categories="categories"
+              :categories="[]"
               @close="close"
             />
           </template>
