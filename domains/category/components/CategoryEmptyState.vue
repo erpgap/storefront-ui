@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SfButton } from '@storefront-ui/vue'
+import { SfButton, SfIconArrowBack } from '@storefront-ui/vue'
 
 defineProps({
   page: {
