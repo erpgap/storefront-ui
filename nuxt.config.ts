@@ -51,6 +51,7 @@ export default defineNuxtConfig({
   },
 
   site: {
+    url: process.env.NUXT_PUBLIC_MIDDLEWARE_URL,
     name: 'ERPGAP VSF',
     description: 'Welcome to an awesome ecommerce site!',
     defaultLocale: 'en',
