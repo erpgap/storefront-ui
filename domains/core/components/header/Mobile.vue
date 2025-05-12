@@ -45,7 +45,7 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
     <div class="flex items-center justify-between h-full w-full narrow-container"
       :class="{ 'justify-start': $viewport.isGreaterOrEquals('desktopSmall') }">
       <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7 -mt-1.5">
-        <VsfLogo />
+        <AlokaiLogo />
       </NuxtLink>
       <nav>
         <ul>
