@@ -5,12 +5,12 @@ import Discount from '~/domains/core/components/ui/Discount.vue'
 const NuxtLink = resolveComponent('NuxtLink')
 const { cart, loadCart } = useCart()
 
-await loadCart()
+await loadCart(false)
 </script>
 
 <template>
   <div
-    v-if="cart?.order?.websiteOrderLine?.length > 0"
+    v-if="cart?.order?.websiteOrderLine?.length ?? 0 > 0"
     class="pb-20"
   >
     <div class="flex justify-between mt-8 mb-10">
