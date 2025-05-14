@@ -14,7 +14,9 @@ const {
   toggle: wishlistToggle,
   close: wishlistClose,
 } = useDisclosure()
-const { wishlist } = useWishlist()
+const { toggleWishlistSideBar } = useWishlistUiState()
+const { loadWishlist, wishlistTotalItems } = useWishlist()
+const { loadCart, totalItemsInCart } = useCart()
 const NuxtLink = resolveComponent('NuxtLink')
 
 const collectedProducts: any = ref('')
@@ -23,14 +25,14 @@ const setIsActive = (param: boolean) => {
   isActive.value = param
 }
 
-const wishlistTotalItems: any = ref()
-const setWishlistCount = async (count: number) => {
-  wishlistTotalItems.value = count
+const handleOpenWishListSidebar = async () => {
+  toggleWishlistSideBar()
+  await loadWishlist()
 }
-const handleWishlistSideBar = async () => {
-  wishlistToggle()
-  setIsActive(true)
-}
+
+onMounted(async () => {
+  await loadCart(true)
+})
 </script>
 
 <template>
@@ -66,7 +68,7 @@ const handleWishlistSideBar = async () => {
         { 'text-white bg-primary-900': isActive },
       ]"
       size="sm"
-      @click="handleWishlistSideBar"
+      @click="handleOpenWishListSidebar"
     >
       <template #prefix>
         <div class="relative">
@@ -96,7 +98,7 @@ const handleWishlistSideBar = async () => {
         <div class="relative">
           <SfIconShoppingCart />
           <SfBadge
-            :content="3"
+            :content="totalItemsInCart"
             class="outline-white bg-white !text-neutral-900 translate-x-[5px] translate-y-[-3px]"
           />
         </div>
