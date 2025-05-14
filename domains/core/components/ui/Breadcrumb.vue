@@ -1,5 +1,5 @@
 <script setup>
-import { SfDropdown, SfButton, SfLink, SfIconMoreHoriz } from '@storefront-ui/vue'
+import { SfButton, SfLink, SfIconMoreHoriz, useDropdown } from '@storefront-ui/vue'
 
 defineProps({
   breadcrumbs: Array,
@@ -13,6 +13,9 @@ const toggle = () => {
   dropdownOpened.value = !dropdownOpened.value
 }
 
+const { referenceRef, floatingRef } = useDropdown({ dropdownOpened, onClose: () => dropdownOpened.value = false });
+
+
 const NuxtLink = resolveComponent('NuxtLink')
 </script>
 
@@ -23,34 +26,24 @@ const NuxtLink = resolveComponent('NuxtLink')
   >
     <ol class="flex w-auto leading-none group md:flex-wrap pl-0">
       <li class="flex items-center sm:hidden text-neutral-500 z-1">
-        <SfDropdown
-          v-model="dropdownOpened"
-          strategy="absolute"
-          placement="bottom-start"
-          @update:model-value="close"
-        >
-          <template #trigger>
-            <SfButton
-              class="relative w-5 h-5 !p-0 rounded-sm outline-secondary-600 hover:bg-transparent active:bg-transparent"
-              aria-label="Show more breadcrumbs"
-              type="button"
-              variant="tertiary"
-              square
-              data-testid="breadcrumbs-dropdown-button"
-              @click="toggle"
-            >
-              <template #prefix>
-                <SfIconMoreHoriz
-                  size="sm"
-                  class="text-neutral-500 hover:text-primary-700 active:text-primary-800 active:bg-transparent"
-                />
-              </template>
-            </SfButton>
-          </template>
-          <ol
-            class="px-4 py-2 rounded-md shadow-md border-neutral-100"
-            data-testid="breadcrumbs-dropdown"
+        <div ref="referenceRef" class="w-max z-100">
+          <SfButton
+            class="relative w-5 h-5 !p-0 rounded-sm outline-secondary-600 hover:bg-transparent active:bg-transparent"
+            aria-label="Show more breadcrumbs"
+            type="button"
+            variant="tertiary"
+            square
+            data-testid="breadcrumbs-dropdown-button"
+            @click="toggle"
           >
+            <template #prefix>
+              <SfIconMoreHoriz
+                size="sm"
+                class="text-neutral-500 hover:text-primary-700 active:text-primary-800 active:bg-transparent"
+              />
+            </template>
+          </SfButton>
+          <ul v-if="dropdownOpened" ref="floatingRef" class="absolute px-4 py-2 rounded-md shadow-md border-neutral-100 z-100 mb-20 bg-white">
             <li
               v-for="item in breadcrumbs"
               :key="item.name"
@@ -65,8 +58,8 @@ const NuxtLink = resolveComponent('NuxtLink')
                 {{ item.name }}
               </SfLink>
             </li>
-          </ol>
-        </SfDropdown>
+          </ul>
+        </div>
       </li>
       <li
         v-for="(item, index) in breadcrumbs"

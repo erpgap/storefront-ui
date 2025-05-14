@@ -61,7 +61,7 @@ onClickOutside(formSearchTemplateRef, () => {
           aria-label="Sf Homepage"
           class="h-6 md:h-7 -mt-1.5"
         >
-          <VsfLogo />
+          <AlokaiLogo />
         </NuxtLink>
         <SfButton
           class="hidden lg:flex text-white font-body bg-transparent hover:bg-primary-800 hover:text-white active:bg-primary-900 active:text-white ml-6"
