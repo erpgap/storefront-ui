@@ -88,12 +88,8 @@ export type CartResponse = AsyncData<
   H3Error
 >
 
-export type CartAddItemResponse = AsyncData<
-  {
-    cartAddMultipleItems: Cart
-  },
-  H3Error
->
+export type CartAddItemResponse = { cartAddMultipleItems: Cart }
+
 export type ApplyDiscountsResponse = AsyncData<
   {
     order: Order
@@ -107,19 +103,8 @@ export type MakeGiftCardPaymentResponse = AsyncData<
   },
   H3Error
 >
-export type CartUpdateItemResponse = AsyncData<
-  {
-    cartUpdateMultipleItems: Cart
-  },
-  H3Error
->
-
-export type CartRemoveItemResponse = AsyncData<
-  {
-    cartRemoveMultipleItems: Cart
-  },
-  H3Error
->
+export type CartUpdateItemResponse = { cartUpdateMultipleItems: Cart }
+export type CartRemoveItemResponse = { cartRemoveMultipleItems: Cart }
 
 export type LoadUserQueryResponse = AsyncData<
   {
