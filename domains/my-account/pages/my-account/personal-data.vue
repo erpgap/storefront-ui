@@ -49,7 +49,7 @@ const saveNewPassword = async (passwords: any) => {
   }
 }
 onMounted(async () => {
-  await loadUser(true)
+  // await loadUser(false)
 })
 </script>
 
