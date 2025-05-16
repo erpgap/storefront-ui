@@ -3,9 +3,9 @@ defineProps<{
   heading: string
 }>()
 
-const { loadUser } = useAuth()
+/* const { loadUser } = useAuth()
 
-await loadUser(true)
+await loadUser(true) */
 </script>
 
 <template>

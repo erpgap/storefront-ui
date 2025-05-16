@@ -123,6 +123,15 @@ export type RegisterUserResponse = AsyncData<
   H3Error
 >
 
+export type SignUpUserResponse = {
+  register: {
+    id: number
+    name: string
+    email: string
+    partner: Partner
+  }
+}
+
 export type LoginUserResponse = AsyncData<
   {
     login: {
@@ -131,6 +140,12 @@ export type LoginUserResponse = AsyncData<
   },
   H3Error
 >
+
+export type SignInUserResponse = {
+  login: {
+    user: User
+  }
+}
 
 export type ResetPasswordResponse = AsyncData<
   {
