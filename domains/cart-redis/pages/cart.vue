@@ -66,6 +66,13 @@ await loadCart(false)
         </UiOrderSummary>
       </div>
     </div>
+    <section
+        class="lg:mx-4 mt-36"
+      >
+        <LazyRecentViewSlider
+          text="Your recent views"
+        />
+      </section>
   </div>
   <div
     v-else
