@@ -132,9 +132,6 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
 watch(
   () => productTemplate.value?.id,
   async (newValue, oldValue) => {
-    console.log(productTemplate.value?.id)
-    console.log(params.value)
-
     if (newValue !== oldValue) {
       await loadProductVariant(params.value)
       addProductToRecentViews(productTemplate.value?.id)
