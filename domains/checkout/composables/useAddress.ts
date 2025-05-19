@@ -34,46 +34,68 @@ export const useAddresses = () => {
   const shippingAddresses = useState<Partner[]>('shipping-addresses', () => [])
 
   const loadAddresses = async (addressType: AddressEnum) => {
-    loading.value = true
+    try {
+      loading.value = true
 
-    const { data, error } = await $sdk().odoo.query<
-      QueryAddressesArgs,
-      AddressesResponse
-    >(
-      { queryName: QueryName.GetAddressesQuery },
-      { filter: { addressType: addressType } },
-    )
+      const { data } = await useAsyncData(
+        async () => {
+          const { data } = await $sdk().odoo.query<
+            QueryAddressesArgs,
+            AddressesResponse
+          >(
+            { queryName: QueryName.GetAddressesQuery },
+            { filter: { addressType: [addressType] } },
+          )
+          return data.value
+        },
+      )
 
-    if (error.value) {
-      return toast.error(error.value.data.message)
+      if (data.value?.addresses) {
+        if (addressType === AddressEnum.Billing) {
+          billingAddresses.value = data.value.addresses
+        }
+        else {
+          shippingAddresses.value = data.value.addresses
+        }
+      }
     }
-
-    if (addressType === AddressEnum.Billing) {
-      billingAddresses.value = data.value.addresses
+    catch (error: any) {
+      if (error.value) {
+        return toast.error(error.value.data.message)
+      }
     }
-    else {
-      shippingAddresses.value = data.value.addresses
+    finally {
+      loading.value = false
     }
-
-    loading.value = false
   }
 
   const addAddress = async (address: AddAddressInput, type: AddressEnum) => {
-    loading.value = true
+    try {
+      loading.value = true
+      const { data } = await useAsyncData(
+        async () => {
+          const { data } = await $sdk().odoo.mutation<
+            MutationAddAddressArgs,
+            AddAddressResponse
+          >(
+            { mutationName: MutationName.AddAddress },
+            { address, type },
+          )
+          return data.value
+        },
+      )
 
-    const { data, error } = await $sdk().odoo.mutation<
-      MutationAddAddressArgs,
-      AddAddressResponse
-    >({ mutationName: MutationName.AddAddress }, { address, type })
-
-    if (error.value) {
-      return toast.error(error.value.data.message)
+      loadAddresses(type)
+      toast.success('Address has been successfully saved')
     }
-
-    loadAddresses(type)
-
-    toast.success('Address has been successfully saved')
-    loading.value = false
+    catch (error: any) {
+      if (error.value) {
+        return toast.error(error.value.data.message)
+      }
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const deleteAddress = async (address: DeleteAddressInput) => {

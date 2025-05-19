@@ -240,7 +240,7 @@ export type AddressFormFieldsInputExtendedFields = AddressFormFieldsInput & {
 
 export type CountriesResponse = AsyncData<
   {
-    countries: Countries
+    countries: Countries[]
   },
   H3Error
 >
