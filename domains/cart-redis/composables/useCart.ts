@@ -25,8 +25,8 @@ export const useCart = () => {
     const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`)
     loading.value = false
 
-    cart.value = data.value.cart
-    cartCounter.value = Number(data.value.cart.order?.websiteOrderLine?.length)
+    cart.value = data.value?.cart
+    cartCounter.value = Number(data.value?.cart.order?.websiteOrderLine?.length)
   }
 
   const cartAdd = async (id: number, quantity: number) => {
