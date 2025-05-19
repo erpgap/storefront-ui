@@ -164,6 +164,11 @@ export type AddressesResponse = AsyncData<
   },
   H3Error
 >
+
+export type responseAddresses = {
+  addresses: Partner[]
+}
+
 export type AddAddressResponse = AsyncData<
   {
     addAddress: Partner

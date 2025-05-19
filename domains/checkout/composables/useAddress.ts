@@ -16,6 +16,7 @@ import {
   type DeleteAddressInput,
   type MutationDeleteAddressArgs,
   type DeleteAddressResponse,
+  type responseAddresses,
 } from '~/graphql'
 import { MutationName } from '~/server/mutations'
 import { QueryName } from '~/server/queries'
@@ -26,6 +27,7 @@ export const useAddresses = () => {
 
   const loading = ref(false)
   const toast = useToast()
+  const { user } = useAuth()
 
   const billingAddresses = useState<Partner[]>(
     `${hash}-billing-addresses`,
@@ -34,19 +36,21 @@ export const useAddresses = () => {
   const shippingAddresses = useState<Partner[]>('shipping-addresses', () => [])
 
   const loadAddresses = async (addressType: AddressEnum) => {
+    const params: QueryAddressesArgs = {
+      filter: { addressType: [addressType] },
+    }
     try {
       loading.value = true
 
       const { data } = await useAsyncData(
+        `user-${user.value?.id}-addresses-${addressType}`,
         async () => {
-          const { data } = await $sdk().odoo.query<
+          return await $sdk().odoo.query<
             QueryAddressesArgs,
-            AddressesResponse
+            responseAddresses
           >(
-            { queryName: QueryName.GetAddressesQuery },
-            { filter: { addressType: [addressType] } },
+            { queryName: QueryName.GetAddressesQuery }, params,
           )
-          return data.value
         },
       )
 
@@ -72,17 +76,12 @@ export const useAddresses = () => {
   const addAddress = async (address: AddAddressInput, type: AddressEnum) => {
     try {
       loading.value = true
-      const { data } = await useAsyncData(
-        async () => {
-          const { data } = await $sdk().odoo.mutation<
-            MutationAddAddressArgs,
-            AddAddressResponse
-          >(
-            { mutationName: MutationName.AddAddress },
-            { address, type },
-          )
-          return data.value
-        },
+      const { data } = await $sdk().odoo.mutation<
+        MutationAddAddressArgs,
+        AddAddressResponse
+      >(
+        { mutationName: MutationName.AddAddress },
+        { address, type },
       )
 
       loadAddresses(type)
@@ -106,9 +105,9 @@ export const useAddresses = () => {
       DeleteAddressResponse
     >({ mutationName: MutationName.DeleteAddress }, { address })
 
-    if (error.value) {
+    /* if (error.value) {
       return toast.error(error.value.data.message)
-    }
+    } */
     toast.success('Address has been successfully removed')
     loading.value = false
   }
