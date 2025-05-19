@@ -100,7 +100,7 @@ export const useCart = () => {
 
   const totalItemsInCart = computed(() => {
     return (
-      cart.value.order?.websiteOrderLine?.reduce(
+      cart.value?.order?.websiteOrderLine?.reduce(
         (acc, item) => acc + item.quantity,
         0,
       ) || 0
