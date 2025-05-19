@@ -71,7 +71,7 @@ export const useAuth = () => {
   }
 
   const signup = async (params: MutationRegisterArgs) => {
-    try{
+    try {
       loading.value = true
       const data = await $sdk().odoo.mutation<MutationRegisterArgs, SignUpUserResponse>(
         {
@@ -82,17 +82,18 @@ export const useAuth = () => {
       user.value = data.register.partner
       await login({ email: params.email, password: params.password })
       router.push('/my-account/personal-data')
-    }catch(error: any){
+    }
+    catch (error: any) {
       toast.error(error.value?.data?.message)
       return
-    }finally{
+    }
+    finally {
       loading.value = false
     }
-    
   }
 
   const login = async (params: MutationLoginArgs) => {
-    try{
+    try {
       loading.value = true
       const data = await $sdk().odoo.mutation<
         MutationLoginArgs,
@@ -106,10 +107,12 @@ export const useAuth = () => {
       userCookie.value = data.login?.user?.partner
       user.value = data.login?.user?.partner as Partner
       router.push('/my-account/personal-data')
-    }catch(error: any){
+    }
+    catch (error: any) {
       toast.error(error.value?.data?.message)
       return
-    }finally{
+    }
+    finally {
       loading.value = false
     }
   }

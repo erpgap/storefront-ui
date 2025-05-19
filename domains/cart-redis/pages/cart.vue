@@ -5,7 +5,7 @@ import Discount from '~/domains/core/components/ui/Discount.vue'
 const NuxtLink = resolveComponent('NuxtLink')
 const { cart, loadCart } = useCart()
 
-await loadCart(false)
+await loadCart()
 </script>
 
 <template>
@@ -29,7 +29,7 @@ await loadCart(false)
         {{ $t('back') }}
       </SfButton>
       <SfButton
-        to="/category/15"
+        to="/"
         class="hidden md:flex"
         variant="tertiary"
         :tag="NuxtLink"
@@ -67,12 +67,12 @@ await loadCart(false)
       </div>
     </div>
     <section
-        class="lg:mx-4 mt-36"
-      >
-        <LazyRecentViewSlider
-          text="Your recent views"
-        />
-      </section>
+      class="lg:mx-4 mt-36"
+    >
+      <LazyRecentViewSlider
+        text="Your recent views"
+      />
+    </section>
   </div>
   <div
     v-else
