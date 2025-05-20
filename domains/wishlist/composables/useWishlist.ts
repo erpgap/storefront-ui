@@ -42,14 +42,21 @@ export const useWishlist = () => {
   }
 
   const wishlistAddItem = async (productId: number) => {
-    loading.value = true
-    const { data } = await $sdk().odoo.mutation<
-      MutationWishlistAddItemArgs,
-      WishlistAddItemResponse
-    >({ mutationName: MutationName.WishlistAddItem }, { productId })
-    loading.value = false
+    try {
+      loading.value = true
+      const data = await $sdk().odoo.mutation<
+        MutationWishlistAddItemArgs,
+        WishlistAddItemResponse
+      >({ mutationName: MutationName.WishlistAddItem }, { productId })
 
-    wishlist.value = data?.value.wishlistAddItem
+      wishlist.value = data?.wishlistAddItem
+    }
+    catch (error) {
+      toast.error(error.data?.message)
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const getProductFromProductId = (productId: number) => {
@@ -65,17 +72,24 @@ export const useWishlist = () => {
       return
     }
 
-    loading.value = true
-    const { data } = await $sdk().odoo.mutation<
-      MutationWishlistRemoveItemArgs,
-      WishlistRemoveItemResponse
-    >(
-      { mutationName: MutationName.WishlistRemoveItem },
-      { wishId: wishlistItem.id },
-    )
-    loading.value = false
+    try {
+      loading.value = true
+      const data = await $sdk().odoo.mutation<
+        MutationWishlistRemoveItemArgs,
+        WishlistRemoveItemResponse
+      >(
+        { mutationName: MutationName.WishlistRemoveItem },
+        { wishId: wishlistItem.id },
+      )
 
-    wishlist.value = data?.value.wishlistRemoveItem
+      wishlist.value = data?.wishlistRemoveItem
+    }
+    catch (error) {
+      toast.error(error.data?.message)
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const wishlistTotalItems = computed(() => {
