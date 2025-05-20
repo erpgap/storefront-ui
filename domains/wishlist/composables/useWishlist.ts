@@ -12,7 +12,6 @@ import { QueryName } from '~/server/queries'
 
 export const useWishlist = () => {
   const { $sdk } = useNuxtApp()
-  const wishlistCounter = useCookie<number>('wishlist-counter')
   const loading = ref(false)
   const wishlist = useState<WishlistData>(
     'wishlist',
@@ -23,7 +22,7 @@ export const useWishlist = () => {
   const loadWishlist = async () => {
     try {
       loading.value = true
-      const { data } = await useAsyncData('wishlist', async () => {
+      const { data } = await useAsyncData('wishlist-data', async () => {
         return await $sdk().odoo.query<
           MutationWishlistAddItemArgs,
           WishlistLoadResponse
@@ -33,9 +32,6 @@ export const useWishlist = () => {
       })
 
       wishlist.value = data?.value?.wishlistItems || []
-      wishlistCounter.value = Number(
-        data?.value?.wishlistItems?.wishlistItems?.length || 0,
-      )
     }
     catch (error) {
       toast.error(error.data?.message)
@@ -54,9 +50,6 @@ export const useWishlist = () => {
     loading.value = false
 
     wishlist.value = data?.value.wishlistAddItem
-    wishlistCounter.value = Number(
-      data?.value?.wishlistAddItem?.wishlistItems?.length || 0,
-    )
   }
 
   const getProductFromProductId = (productId: number) => {
@@ -83,9 +76,6 @@ export const useWishlist = () => {
     loading.value = false
 
     wishlist.value = data?.value.wishlistRemoveItem
-    wishlistCounter.value = Number(
-      data?.value?.wishlistRemoveItem?.wishlistItems?.length || 0,
-    )
   }
 
   const wishlistTotalItems = computed(() => {
