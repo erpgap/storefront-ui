@@ -22,16 +22,15 @@ export const useWishlist = () => {
   const loadWishlist = async () => {
     try {
       loading.value = true
-      const { data } = await useAsyncData('wishlist-data', async () => {
-        return await $sdk().odoo.query<
-          MutationWishlistAddItemArgs,
-          WishlistLoadResponse
-        >({
-          queryName: QueryName.WishlistLoadQuery,
-        })
+
+      const data = await $sdk().odoo.query<
+        MutationWishlistAddItemArgs,
+        WishlistLoadResponse
+      >({
+        queryName: QueryName.WishlistLoadQuery,
       })
 
-      wishlist.value = data?.value?.wishlistItems || []
+      wishlist.value = data?.wishlistItems || []
     }
     catch (error) {
       toast.error(error.data?.message)
