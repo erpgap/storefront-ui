@@ -54,7 +54,7 @@ const handleCloseAfterSaveAddress = async () => {
   <div
     v-for="address in addresses"
     :key="address.id"
-    class="md:col-span-1 col-span-3"
+    class="md:col-span-1 col-span-3 md:mb-4"
   >
     <AccountAddressData
       :header="address.name || ''"

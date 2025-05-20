@@ -16,6 +16,7 @@ import {
   type DeleteAddressInput,
   type MutationDeleteAddressArgs,
   type DeleteAddressResponse,
+  type responseAddresses,
 } from '~/graphql'
 import { MutationName } from '~/server/mutations'
 import { QueryName } from '~/server/queries'
@@ -26,6 +27,7 @@ export const useAddresses = () => {
 
   const loading = ref(false)
   const toast = useToast()
+  const { user } = useAuth()
 
   const billingAddresses = useState<Partner[]>(
     `${hash}-billing-addresses`,
@@ -34,46 +36,65 @@ export const useAddresses = () => {
   const shippingAddresses = useState<Partner[]>('shipping-addresses', () => [])
 
   const loadAddresses = async (addressType: AddressEnum) => {
-    loading.value = true
-
-    const { data, error } = await $sdk().odoo.query<
-      QueryAddressesArgs,
-      AddressesResponse
-    >(
-      { queryName: QueryName.GetAddressesQuery },
-      { filter: { addressType: addressType } },
-    )
-
-    if (error.value) {
-      return toast.error(error.value.data.message)
+    const params: QueryAddressesArgs = {
+      filter: { addressType: [addressType] },
     }
+    try {
+      loading.value = true
 
-    if (addressType === AddressEnum.Billing) {
-      billingAddresses.value = data.value.addresses
-    }
-    else {
-      shippingAddresses.value = data.value.addresses
-    }
+      const { data } = await useAsyncData(
+        `user-${user.value?.id}-addresses-${addressType}`,
+        async () => {
+          return await $sdk().odoo.query<
+            QueryAddressesArgs,
+            responseAddresses
+          >(
+            { queryName: QueryName.GetAddressesQuery }, params,
+          )
+        },
+      )
 
-    loading.value = false
+      if (data.value?.addresses) {
+        if (addressType === AddressEnum.Billing) {
+          billingAddresses.value = data.value.addresses
+        }
+        else {
+          shippingAddresses.value = data.value.addresses
+        }
+      }
+    }
+    catch (error: any) {
+      if (error.value) {
+        return toast.error(error.value.data.message)
+      }
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const addAddress = async (address: AddAddressInput, type: AddressEnum) => {
-    loading.value = true
+    try {
+      loading.value = true
+      const { data } = await $sdk().odoo.mutation<
+        MutationAddAddressArgs,
+        AddAddressResponse
+      >(
+        { mutationName: MutationName.AddAddress },
+        { address, type },
+      )
 
-    const { data, error } = await $sdk().odoo.mutation<
-      MutationAddAddressArgs,
-      AddAddressResponse
-    >({ mutationName: MutationName.AddAddress }, { address, type })
-
-    if (error.value) {
-      return toast.error(error.value.data.message)
+      loadAddresses(type)
+      toast.success('Address has been successfully saved')
     }
-
-    loadAddresses(type)
-
-    toast.success('Address has been successfully saved')
-    loading.value = false
+    catch (error: any) {
+      if (error.value) {
+        return toast.error(error.value.data.message)
+      }
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const deleteAddress = async (address: DeleteAddressInput) => {
@@ -84,9 +105,9 @@ export const useAddresses = () => {
       DeleteAddressResponse
     >({ mutationName: MutationName.DeleteAddress }, { address })
 
-    if (error.value) {
+    /* if (error.value) {
       return toast.error(error.value.data.message)
-    }
+    } */
     toast.success('Address has been successfully removed')
     loading.value = false
   }
