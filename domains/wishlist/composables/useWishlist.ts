@@ -1,3 +1,4 @@
+import { useToast } from 'vue-toastification'
 import type {
   MutationWishlistAddItemArgs,
   MutationWishlistRemoveItemArgs,
@@ -17,21 +18,31 @@ export const useWishlist = () => {
     'wishlist',
     () => ({} as WishlistData),
   )
+  const toast = useToast()
 
   const loadWishlist = async () => {
-    loading.value = true
-    const { data } = await $sdk().odoo.query<
-      MutationWishlistAddItemArgs,
-      WishlistLoadResponse
-    >({
-      queryName: QueryName.WishlistLoadQuery,
-    })
-    loading.value = false
+    try {
+      loading.value = true
+      const { data } = await useAsyncData('wishlist', async () => {
+        return await $sdk().odoo.query<
+          MutationWishlistAddItemArgs,
+          WishlistLoadResponse
+        >({
+          queryName: QueryName.WishlistLoadQuery,
+        })
+      })
 
-    wishlist.value = data?.value?.wishlistItems || []
-    wishlistCounter.value = Number(
-      data?.value?.wishlistItems?.wishlistItems?.length || 0,
-    )
+      wishlist.value = data?.value?.wishlistItems || []
+      wishlistCounter.value = Number(
+        data?.value?.wishlistItems?.wishlistItems?.length || 0,
+      )
+    }
+    catch (error) {
+      toast.error(error.data?.message)
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const wishlistAddItem = async (productId: number) => {
