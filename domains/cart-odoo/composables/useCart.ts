@@ -22,13 +22,13 @@ export const useCart = () => {
 
   const loadCart = async () => {
     loading.value = true
-    const { data } = await $sdk().odoo.query<null, CartResponse>({
+    const data = await $sdk().odoo.query<null, CartResponse>({
       queryName: QueryName.LoadCartQuery,
     })
     loading.value = false
 
-    cart.value = data.value.cart
-    cartCounter.value = Number(data.value.cart.order?.websiteOrderLine?.length)
+    cart.value = data?.cart || ({} as Cart)
+    cartCounter.value = Number(data?.cart?.order?.websiteOrderLine?.length)
   }
 
   const cartAdd = async (id: number, quantity: number) => {
@@ -43,12 +43,12 @@ export const useCart = () => {
         { mutationName: MutationName.CartAddItem }, params,
       )
 
-      cart.value = data.cartAddMultipleItems
+      cart.value = data?.cartAddMultipleItems || ({} as Cart)
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
       toast.success('Product has been added to cart')
     }
     catch (error: any) {
-      return toast.error(error.data.message)
+      return toast.error(error?.data?.message)
     }
     finally {
       loading.value = false
@@ -66,12 +66,12 @@ export const useCart = () => {
       const data = await $sdk().odoo.mutation<MutationCartUpdateMultipleItemsArgs, CartUpdateItemResponse>(
         { mutationName: MutationName.CartUpdateQuantity }, params,
       )
-      cart.value = data.cartUpdateMultipleItems
+      cart.value = data?.cartUpdateMultipleItems || ({} as Cart)
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
       toast.success('Product updated successfully')
     }
     catch (error: any) {
-      return toast.error(error.data.message)
+      return toast.error(error?.data?.message)
     }
   }
 
@@ -87,12 +87,12 @@ export const useCart = () => {
         { mutationName: MutationName.CartRemoveItem }, params,
       )
 
-      cart.value = data.cartRemoveMultipleItems
+      cart.value = data?.cartRemoveMultipleItems || ({} as Cart)
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
       toast.success('Product removed successfully')
     }
     catch (error: any) {
-      return toast.error(error.data.message)
+      return toast.error(error?.data?.message)
     }
     finally {
       loading.value = false
