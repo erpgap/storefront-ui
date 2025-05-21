@@ -3,7 +3,6 @@ import type {
   ChangePasswordResponse,
   CreateUpdatePartnerResponse,
   LoadUserQueryResponse,
-  LoginUserResponse,
   MutationChangePasswordArgs,
   MutationCreateUpdatePartnerArgs,
   MutationLoginArgs,
@@ -12,8 +11,9 @@ import type {
   MutationUpdatePasswordArgs,
   Partner,
   PartnerResponse,
-  RegisterUserResponse,
   ResetPasswordResponse,
+  SignInUserResponse,
+  SignUpUserResponse,
   UpdatePasswordResponse,
 } from '~/graphql'
 import { MutationName } from '~/server/mutations'
@@ -71,42 +71,50 @@ export const useAuth = () => {
   }
 
   const signup = async (params: MutationRegisterArgs) => {
-    loading.value = true
-    const { data, error } = await $sdk().odoo.mutation<
-      MutationRegisterArgs,
-      RegisterUserResponse
-    >(
-      {
-        mutationName: MutationName.RegisterUserMutation,
-      },
-      { ...params },
-    )
-    loading.value = false
-
-    if (error.value) {
+    try {
+      loading.value = true
+      const data = await $sdk().odoo.mutation<MutationRegisterArgs, SignUpUserResponse>(
+        {
+          mutationName: MutationName.RegisterUserMutation,
+        },
+        { ...params },
+      )
+      user.value = data.register.partner
+      await login({ email: params.email, password: params.password })
+      router.push('/my-account/personal-data')
+    }
+    catch (error: any) {
       toast.error(error.value?.data?.message)
       return
     }
-
-    user.value = data.value.partner
-    await login({ email: params.email, password: params.password })
-    router.push('/my-account/personal-data')
+    finally {
+      loading.value = false
+    }
   }
 
   const login = async (params: MutationLoginArgs) => {
-    loading.value = true
-    const { data, error } = await $sdk().odoo.mutation<
-      MutationLoginArgs,
-      LoginUserResponse
-    >({ mutationName: MutationName.LoginMutation }, { ...params })
-    if (error.value) {
+    try {
+      loading.value = true
+      const data = await $sdk().odoo.mutation<
+        MutationLoginArgs,
+        SignInUserResponse
+      >({ mutationName: MutationName.LoginMutation }, { ...params })
+      /* if (error.value) {
+        toast.error(error.value?.data?.message)
+        return
+      } */
+
+      userCookie.value = data.login?.user?.partner
+      user.value = data.login?.user?.partner as Partner
+      router.push('/my-account/personal-data')
+    }
+    catch (error: any) {
       toast.error(error.value?.data?.message)
       return
     }
-
-    userCookie.value = data.value.login?.user?.partner
-    user.value = data.value.login?.user?.partner as Partner
-    router.push('/my-account/personal-data')
+    finally {
+      loading.value = false
+    }
   }
 
   const resetPassword = async (params: MutationResetPasswordArgs) => {

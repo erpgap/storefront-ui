@@ -14,10 +14,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-  <AccountCardAddressDetails
-    :addresses="billingAddresses"
-    :type="AddressEnum.Billing"
-    :header="$t('billing.heading')"
-  />
+  <div>
+    <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0 md:mb-4" />
+    <AccountCardAddressDetails
+      :addresses="billingAddresses"
+      :type="AddressEnum.Billing"
+      :header="$t('billing.heading')"
+    />
+  </div>
 </template>

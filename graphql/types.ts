@@ -123,6 +123,15 @@ export type RegisterUserResponse = AsyncData<
   H3Error
 >
 
+export type SignUpUserResponse = {
+  register: {
+    id: number
+    name: string
+    email: string
+    partner: Partner
+  }
+}
+
 export type LoginUserResponse = AsyncData<
   {
     login: {
@@ -131,6 +140,12 @@ export type LoginUserResponse = AsyncData<
   },
   H3Error
 >
+
+export type SignInUserResponse = {
+  login: {
+    user: User
+  }
+}
 
 export type ResetPasswordResponse = AsyncData<
   {
@@ -149,6 +164,11 @@ export type AddressesResponse = AsyncData<
   },
   H3Error
 >
+
+export type responseAddresses = {
+  addresses: Partner[]
+}
+
 export type AddAddressResponse = AsyncData<
   {
     addAddress: Partner
@@ -225,7 +245,7 @@ export type AddressFormFieldsInputExtendedFields = AddressFormFieldsInput & {
 
 export type CountriesResponse = AsyncData<
   {
-    countries: Countries
+    countries: Countries[]
   },
   H3Error
 >
