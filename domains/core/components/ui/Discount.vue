@@ -2,11 +2,15 @@
 import { SfButton, SfInput } from '@storefront-ui/vue'
 
 const { applyDiscount, loading } = useDiscount()
+const { loadCart } = useCart()
 
-const promo = ref('')
+const promo = ref<string>('')
 
 const handleApplyPromo = async () => {
-  await applyDiscount(promo.value)
+  await Promise.all([
+    applyDiscount(promo.value),
+    loadCart(),
+  ])
 }
 </script>
 
