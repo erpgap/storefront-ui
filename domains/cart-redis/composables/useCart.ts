@@ -21,13 +21,21 @@ export const useCart = () => {
   const loading = ref(false)
 
   const loadCart = async () => {
-    loading.value = true
-    const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`)
-    loading.value = false
+    try {
+      loading.value = true
+      const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`)
 
-    if (data.value?.cart) {
+      if (!data.value?.cart)
+        return
+
       cart.value = data.value.cart
-      cartCounter.value = Number(data.value.cart.order?.websiteOrderLine?.length)
+      cartCounter.value = Number(data.value.cart?.order?.websiteOrderLine?.length)
+    }
+    catch (error: any) {
+      return toast.error(error.data.message)
+    }
+    finally {
+      loading.value = false
     }
   }
 
