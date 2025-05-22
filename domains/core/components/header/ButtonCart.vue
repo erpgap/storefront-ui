@@ -4,9 +4,7 @@ import { SfButton, SfBadge } from '@storefront-ui/vue'
 const NuxtLink = resolveComponent('NuxtLink')
 const { loadCart, totalItemsInCart } = useCart()
 
-onMounted(async () => {
-  await loadCart(true)
-})
+await loadCart()
 </script>
 
 <template>
