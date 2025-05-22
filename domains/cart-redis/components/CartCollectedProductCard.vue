@@ -63,7 +63,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
           variant="secondary"
           class="no-underline typography-text-sm sm:typography-text-lg cursor-pointer"
         >
-          {{ orderLine?.name }}
+          {{ orderLine?.product?.name || orderLine?.name }}
         </SfLink>
         <SfIconRemoveShoppingCart
           class="cursor-pointer"
