@@ -5,7 +5,8 @@ import type { Countries, CountriesResponse } from '~/graphql'
 
 export const useCountryList = () => {
   const { $sdk } = useNuxtApp()
-  const countries = useState('cuntries', () => ({}) as Countries)
+  const countries = useState('countries', () => ({}) as Countries)
+  const toast = useToast()
 
   const loadCountries = async () => {
     try {
@@ -18,19 +19,8 @@ export const useCountryList = () => {
       countries.value = data.value?.countries || ({} as Countries)
     }
     catch (error: any) {
-      if (error.value) {
-        return useToast().error(error.value.data.message)
-      }
+      toast.error(error?.data?.message)
     }
-    finally {
-      // loading.value = false
-    }
-
-    /* const { data } = await $sdk().odoo.query<null, CountriesResponse>({
-      queryName: QueryName.GetCountriesQuery,
-    })
-
-    countries.value = data.value.countries || ({} as Countries) */
   }
 
   return {

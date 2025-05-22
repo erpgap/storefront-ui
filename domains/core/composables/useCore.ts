@@ -15,19 +15,19 @@ export const useCore = () => {
   const newsletterSubscribe = async (
     params: MutationNewsletterSubscribeArgs,
   ) => {
-    loading.value = true
+    try {
+      loading.value = true
 
-    const { data, error } = await $sdk().odoo.mutation<
-      MutationNewsletterSubscribeArgs,
-      NewsletterSubscribeResponse
-    >({ mutationName: MutationName.NewsletterSubscribeMutation }, params)
+      await $sdk().odoo.mutation<
+        MutationNewsletterSubscribeArgs,
+        NewsletterSubscribeResponse
+      >({ mutationName: MutationName.NewsletterSubscribeMutation }, params)
 
-    if (error.value) {
-      return toast.error(error.value.data.message)
+      toast.success('Your email has been added to the newsletter subscription')
     }
-
-    loading.value = false
-    toast.success('Your email has been added to the newsletter subscription')
+    finally {
+      loading.value = false
+    }
   }
 
   return {

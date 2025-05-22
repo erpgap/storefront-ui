@@ -35,12 +35,12 @@ export const useAuth = () => {
 
     const query = withoutCache ? $sdk().odoo.queryNoCache : $sdk().odoo.query
 
-    const { data } = await query<null, LoadUserQueryResponse>({
+    const data = await query<null, LoadUserQueryResponse>({
       queryName: QueryName.LoadUserQuery,
     })
 
-    userCookie.value = data.value?.partner?.id
-    user.value = data.value?.partner
+    userCookie.value = data?.partner?.id
+    user.value = data?.partner
 
     loading.value = false
   }
@@ -48,15 +48,16 @@ export const useAuth = () => {
   const updatePartner = async (params: MutationCreateUpdatePartnerArgs) => {
     loading.value = true
 
-    const { data } = await $sdk().odoo.mutation<
+    const data = await $sdk().odoo.mutation<
       MutationCreateUpdatePartnerArgs,
       CreateUpdatePartnerResponse
     >({ mutationName: MutationName.CreateUpdatePartner }, params)
 
-    user.value = data.value.createUpdatePartner
+    console.log(data)
+    user.value = data?.createUpdatePartner
 
     if (userCookie.value?.id) {
-      userCookie.value = data.value?.createUpdatePartner?.id
+      userCookie.value = data?.createUpdatePartner?.id
     }
 
     toast.success('Partner updated successfully')
@@ -79,12 +80,12 @@ export const useAuth = () => {
         },
         { ...params },
       )
-      user.value = data.register.partner
+      user.value = data?.register?.partner
       await login({ email: params.email, password: params.password })
       router.push('/my-account/personal-data')
     }
     catch (error: any) {
-      toast.error(error.value?.data?.message)
+      toast.error(error?.data?.message)
       return
     }
     finally {
@@ -99,18 +100,10 @@ export const useAuth = () => {
         MutationLoginArgs,
         SignInUserResponse
       >({ mutationName: MutationName.LoginMutation }, { ...params })
-      /* if (error.value) {
-        toast.error(error.value?.data?.message)
-        return
-      } */
 
-      userCookie.value = data.login?.user?.partner
-      user.value = data.login?.user?.partner as Partner
+      userCookie.value = data?.login?.user?.partner
+      user.value = data?.login?.user?.partner as Partner
       router.push('/my-account/personal-data')
-    }
-    catch (error: any) {
-      toast.error(error.value?.data?.message)
-      return
     }
     finally {
       loading.value = false
@@ -118,18 +111,22 @@ export const useAuth = () => {
   }
 
   const resetPassword = async (params: MutationResetPasswordArgs) => {
-    loading.value = true
-    const { error } = await $sdk().odoo.mutation<
-      MutationResetPasswordArgs,
-      ResetPasswordResponse
-    >({ mutationName: MutationName.SendResetPasswordMutation }, { ...params })
-    if (error.value) {
-      toast.error(error.value?.data?.message)
-      return
-    }
+    try {
+      loading.value = true
+      const data = await $sdk().odoo.mutation<
+        MutationResetPasswordArgs,
+        ResetPasswordResponse
+      >({ mutationName: MutationName.SendResetPasswordMutation }, { ...params })
 
-    router.push('/reset-password-success')
-    resetEmail.value = params.email
+      router.push('/reset-password-success')
+      resetEmail.value = params.email
+    }
+    catch (error: any) {
+      toast.error(error?.data?.message)
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const successResetEmail = () => {
@@ -140,34 +137,42 @@ export const useAuth = () => {
   }
 
   const updatePassword = async (params: MutationUpdatePasswordArgs) => {
-    loading.value = true
-    const { data, error } = await $sdk().odoo.mutation<
-      MutationUpdatePasswordArgs,
-      UpdatePasswordResponse
-    >({ mutationName: MutationName.UpdatePasswordMutation }, params)
-    if (error.value) {
-      toast.error(error.value?.data?.message)
-      return
-    }
+    try {
+      loading.value = true
+      const data = await $sdk().odoo.mutation<
+        MutationUpdatePasswordArgs,
+        UpdatePasswordResponse
+      >({ mutationName: MutationName.UpdatePasswordMutation }, params)
 
-    toast.success('Password updated successfully')
+      toast.success('Password updated successfully')
+    }
+    catch (error: any) {
+      toast.error(error?.data?.message)
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const changeForgottenPassword = async (
     params: MutationChangePasswordArgs,
   ) => {
-    loading.value = true
-    const { data, error } = await $sdk().odoo.mutation<
-      MutationChangePasswordArgs,
-      ChangePasswordResponse
-    >({ mutationName: MutationName.ChangePasswordMutation }, params)
-    if (error.value) {
-      toast.error(error.value?.data?.message)
-      return
-    }
+    try {
+      loading.value = true
+      const data = await $sdk().odoo.mutation<
+        MutationChangePasswordArgs,
+        ChangePasswordResponse
+      >({ mutationName: MutationName.ChangePasswordMutation }, params)
 
-    toast.success('Password changed successfully')
-    router.push('/')
+      toast.success('Password changed successfully')
+      router.push('/')
+    }
+    catch (error: any) {
+      toast.error(error?.data?.message)
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const isAuthenticated = computed(() => {

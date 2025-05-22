@@ -15,22 +15,22 @@ export const useOrders = () => {
 
   const getOrders = async () => {
     loading.value = true
-    const { data } = await $sdk().odoo.query<null, GetOrdersResponse>(
+    const data = await $sdk().odoo.query<null, GetOrdersResponse>(
       { queryName: QueryName.GetOrdersQuery },
       null,
     )
     loading.value = false
-    orders.value = (data.value?.orders as Orders) || {}
+    orders.value = (data?.orders as Orders) || {}
   }
 
   const getOrderById = async (params: QueryOrderArgs) => {
     loading.value = true
-    const { data } = await $sdk().odoo.query<QueryOrderArgs, GetOrderResponse>(
+    const data = await $sdk().odoo.query<QueryOrderArgs, GetOrderResponse>(
       { queryName: QueryName.GetOrderQuery },
       params,
     )
     loading.value = false
-    order.value = data?.value?.order || ({} as Order)
+    order.value = data?.order || ({} as Order)
   }
 
   return {

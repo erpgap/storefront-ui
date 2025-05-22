@@ -22,16 +22,13 @@ export const useCategory = (categorySlug?: string) => {
     try {
       const { data } = await useAsyncData(
         `category-list-${categorySlug}`,
-        async () => {
-          const { data } = await $sdk().odoo.query<
-            QueryCategoryArgs,
-            CategoryResponse
-          >({ queryName: QueryName.GetCategoryQuery }, params)
-          return data.value
-        },
+        () => $sdk().odoo.query<QueryCategoryArgs, CategoryResponse>(
+          { queryName: QueryName.GetCategoryQuery },
+          params,
+        ),
       )
 
-      if (data?.value?.category) {
+      if (data.value?.category) {
         category.value = data.value.category
       }
     }
@@ -45,17 +42,13 @@ export const useCategory = (categorySlug?: string) => {
     try {
       const { data } = await useAsyncData(
         `category-list-${categorySlug}`,
-        async () => {
-          const { data, error } = await $sdk().odoo.query<
-            QueryCategoriesArgs,
-            CategoryListResponse
-          >({ queryName: QueryName.GetCategoriesQuery }, params)
-
-          return data.value
-        },
+        () => $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse>(
+          { queryName: QueryName.GetCategoriesQuery },
+          params,
+        ),
       )
 
-      if (data?.value?.categories) {
+      if (data.value?.categories) {
         categories.value = data.value.categories?.categories
       }
     }

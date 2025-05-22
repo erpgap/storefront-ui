@@ -21,6 +21,8 @@ import type {
   AddressEnum,
   State,
   User,
+  ApplyCouponList,
+  ApplyGiftCardList,
 } from './gql/graphql'
 import type { AsyncData } from '#app'
 
@@ -92,8 +94,8 @@ export type CartAddItemResponse = { cartAddMultipleItems: Cart }
 
 export type ApplyDiscountsResponse = AsyncData<
   {
-    order: Order
-    error: string
+    applyGiftCard: ApplyGiftCardList
+    applyCoupon: ApplyCouponList
   },
   H3Error
 >
