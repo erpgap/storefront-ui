@@ -1,8 +1,10 @@
+import { useToast } from 'vue-toastification'
 import type { PaymentProvider, PaymentMethodListResponse } from '~/graphql'
 import { QueryName } from '~/server/queries'
 
 export const usePayment = () => {
   const { $sdk } = useNuxtApp()
+  const toast = useToast()
 
   const loading = ref(false)
   const paymentProviders = useState<PaymentProvider[]>(
@@ -11,27 +13,37 @@ export const usePayment = () => {
   )
 
   const loadPaymentMethods = async () => {
-    loading.value = true
-    const { data } = await $sdk().odoo.query<any, PaymentMethodListResponse>({
-      queryName: QueryName.GetPaymentMethodsQuery,
-    })
+    try {
+      loading.value = true
+      const { data } = await useAsyncData('payment-providers', async () => await $sdk().odoo.query<any, PaymentMethodListResponse>({
+        queryName: QueryName.GetPaymentMethodsQuery,
+      }))
 
-    if (data.value) {
-      paymentProviders.value = data.value.paymentProviders || []
+      paymentProviders.value = data.value?.paymentProviders || []
     }
-    loading.value = false
+    catch (error: any) {
+      toast.error(error?.data?.message)
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const getPaymentConfirmation = async () => {
-    loading.value = true
-    const { data } = await $sdk().odoo.query<any, any>({
-      queryName: QueryName.GetPaymentConfirmation,
-    })
+    try {
+      loading.value = true
+      const data = await $sdk().odoo.query<any, any>({
+        queryName: QueryName.GetPaymentConfirmation,
+      })
 
-    if (data.value) {
-      return data.value?.paymentConfirmation
+      return data?.paymentConfirmation
     }
-    loading.value = false
+    catch (error: any) {
+      toast.error(error?.data?.message)
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   return {
