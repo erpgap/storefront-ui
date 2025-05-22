@@ -18,14 +18,19 @@ const {
 } = usePayment()
 
 const selectedProvider = ref<PaymentProvider | null>(null)
-const showPaymentModal = ref(false)
+const showPaymentModal = ref<boolean>(false)
 
 await loadPaymentMethods()
 
-if (paymentProviders.value.length > 0) {
-  showPaymentModal.value = true
-  selectedProvider.value = paymentProviders.value[0]
-}
+watch(() => paymentProviders.value, () => {
+  if (paymentProviders.value.length > 0) {
+    showPaymentModal.value = true
+    selectedProvider.value = paymentProviders.value[0]
+  }
+}, {
+  deep: true,
+  immediate: true,
+})
 
 function updateSelectedProvider(provider: PaymentProvider) {
   selectedProvider.value = provider
