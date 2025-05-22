@@ -21,19 +21,19 @@ export const useDeliveryMethod = () => {
   const loadDeliveryMethods = async () => {
     loading.value = true
     try {
-      const { data } = await useAsyncData('shipping-methods', async () => {
-        const { data } = await $sdk().odoo.query<
+      const { data } = await useAsyncData('shipping-methods', async () =>
+        await $sdk().odoo.query<
           any,
           DeliveryMethodListResponse
         >({
           queryName: QueryName.GetDeliveryMethodsQuery,
-        })
-        return data.value
-      })
+        }),
+      )
 
-      if (data.value) {
-        deliveryMethods.value = data.value.deliveryMethods || []
-      }
+      deliveryMethods.value = data.value?.deliveryMethods || []
+    }
+    catch (error: any) {
+      toast.error(error?.data?.message)
     }
     finally {
       loading.value = false
@@ -41,21 +41,19 @@ export const useDeliveryMethod = () => {
   }
 
   const setDeliveryMethod = async (shippingMethodId: number) => {
-    loading.value = true
-
-    const { data, error } = await $sdk().odoo.mutation<
-      MutationSetShippingMethodArgs,
-      DeliveryMethodResponse
-    >({ mutationName: MutationName.ShippingMethod }, { shippingMethodId })
-
-    if (error.value) {
-      return toast.error(error.value.data.message)
+    try {
+      loading.value = true
+      await $sdk().odoo.mutation<
+        MutationSetShippingMethodArgs,
+        DeliveryMethodResponse
+      >({ mutationName: MutationName.ShippingMethod }, { shippingMethodId })
     }
-
-    // toast.success("Address has been successfully saved");
-    loading.value = false
-
-    // deliveryMethods.value = [method];
+    catch (error: any) {
+      toast.error(error?.data?.message)
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   return {
