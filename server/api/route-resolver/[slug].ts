@@ -4,35 +4,40 @@ export default defineEventHandler(async (event) => {
   if (!slug) {
     throw createError({
       statusCode: 400,
-      message: 'Slug parameter is required'
+      message: 'Slug parameter is required',
     })
   }
 
   // Single Redis key check with JSON value
   const redisKey = `cache:slug:${slug}`
-  console.info('redisKey', redisKey)
   const routeData = await useStorage().getItem(redisKey)
-  console.info('routeData', routeData)
 
   if (routeData) {
     try {
       // If stored as string, parse it
+      console.info('data', routeData)
       const data = typeof routeData === 'string' ? JSON.parse(routeData) : routeData
-      
-      return {
-        exists: true,
-        type: data.type,
+
+      // Define model type mapping
+      const modelToRouteType = {
+        'product.template': 'product',
+        'product.public.category': 'category',
       }
-    } catch (error) {
+
+      return {
+        data: modelToRouteType[data.value],
+      }
+    }
+    catch (error) {
       console.error('Error parsing route data:', error)
       throw createError({
         statusCode: 500,
-        message: 'Error processing route data'
+        message: 'Error processing route data',
       })
     }
   }
-  
+
   return {
-    exists: false
+    exists: false,
   }
-}) 
+})
