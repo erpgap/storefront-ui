@@ -8,17 +8,13 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Single Redis key check with JSON value
   const redisKey = `cache:slug:${slug}`
   const routeData = await useStorage().getItem(redisKey)
 
   if (routeData) {
     try {
-      // If stored as string, parse it
-      console.info('data', routeData)
       const data = typeof routeData === 'string' ? JSON.parse(routeData) : routeData
 
-      // Define model type mapping
       const modelToRouteType = {
         'product.template': 'product',
         'product.public.category': 'category',
@@ -38,6 +34,6 @@ export default defineEventHandler(async (event) => {
   }
 
   return {
-    exists: false,
+    data: null,
   }
 })
