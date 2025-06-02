@@ -7,7 +7,12 @@ export default defineNuxtModule({
         name: 'routes-generator',
     },
     async setup(_, nuxt) {
+      
         const odooBaseUrl: string = process.env?.NUXT_PUBLIC_ODOO_BASE_URL ? `${process.env.NUXT_PUBLIC_ODOO_BASE_URL}/graphql/vsf` : ''
+        const CATEGORY_PAGE_SIZE = parseInt(process.env?.NUXT_PUBLIC_CATEGORY_PAGE_SIZE || '10000', 10)
+        const PRODUCT_PAGE_SIZE = parseInt(process.env?.NUXT_PUBLIC_PRODUCT_PAGE_SIZE || '10000', 10)
+        const CATEGORY_PAGE_FILE = process.env?.NUXT_PUBLIC_CATEGORY_PAGE_FILE || '~/domains/category/pages/category/[id].vue'
+        const PRODUCT_PAGE_FILE = process.env?.NUXT_PUBLIC_PRODUCT_PAGE_FILE || '~/domains/product/pages/product/[slug].vue'
 
         if (!odooBaseUrl) {
             console.error('[routes-generator] ODOO_BASE_URL is not set')
@@ -16,7 +21,7 @@ export default defineNuxtModule({
 
           const categoriesQuery = `
            query {
-             categories(pageSize: 10000) {
+             categories(pageSize: ${CATEGORY_PAGE_SIZE}) {
                categories {
                  slug
                }
@@ -26,7 +31,7 @@ export default defineNuxtModule({
 
           const productsQuery = `
            query {
-             products(pageSize: 10000) {
+             products(pageSize: ${PRODUCT_PAGE_SIZE}) {
                products {
                  slug
                }
@@ -98,7 +103,7 @@ export default defineNuxtModule({
                 pages.push({
                     name: `category-${slug.replace('/', '')}`,
                     path: slug,
-                    file: '~/domains/category/pages/category/[id].vue',
+                    file: CATEGORY_PAGE_FILE,
                 })
             })
 
@@ -106,7 +111,7 @@ export default defineNuxtModule({
                 pages.push({
                     name: `product-${slug.replace('/', '')}`,
                     path: slug,
-                    file: '~/domains/product/pages/product/[slug].vue',
+                    file: PRODUCT_PAGE_FILE,
                 })
             })
 
