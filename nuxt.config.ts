@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     './domains/my-account',
     './domains/product',
     './domains/orders',
-    './domains/landing-pages',
     // "./domains/search-algolia",
     './domains/search-default',
     './domains/search-luigi',
