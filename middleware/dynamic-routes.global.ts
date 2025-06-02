@@ -7,18 +7,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   const router = useRouter()
-  const slug = to.path.replace(/^\//, '') // Remove leading slash
+  const slug = to.path.replace(/^\//, '')
 
   try {
-    // Check if route exists in Redis
     const { data: routeData } = await useFetch(`/api/route-resolver/${slug}`)
 
     if (!routeData?.value?.data) {
-      console.warn('Route does not exist or invalid:', slug)
+      console.warn('[dynamic-routes] Route does not exist or invalid:', slug)
       return
     }
 
-    // Map route types to their components
     const routeComponents = {
       category: () => import('~/domains/category/custom-pages/category-page.vue'),
       product: () => import('~/domains/product/custom-pages/product-page.vue'),
@@ -28,21 +26,21 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const component = routeComponents[routeType]
 
     if (!component) {
-      console.warn('Invalid route type:', routeType)
+      console.warn('[dynamic-routes] Invalid route type:', routeType)
       return
     }
 
     // Add the new route dynamically
     router.addRoute({
       path: to.path,
-      name: slug,
+      name: `${routeType}-${slug.replace('/', '')}`,
       component: component,
     })
 
     return to.fullPath
   }
   catch (error) {
-    console.error('Error in dynamic route middleware:', error)
+    console.error('[dynamic-routes] Error in dynamic route middleware:', error)
     return
   }
 })
