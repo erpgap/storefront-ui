@@ -20,8 +20,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     // Map route types to their components
     const routeComponents = {
-      category: () => import('~/domains/category/pages/category-page.vue'),
-      product: () => import('~/domains/product/pages/product-page.vue'),
+      category: () => import('~/domains/category/custom-pages/category-page.vue'),
+      product: () => import('~/domains/product/custom-pages/product-page.vue'),
     }
 
     const routeType = routeData.value.data as keyof typeof routeComponents

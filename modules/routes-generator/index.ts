@@ -98,7 +98,7 @@ export default defineNuxtModule({
                 pages.push({
                     name: `category-${slug.replace('/', '')}`,
                     path: slug,
-                    file: '~/domains/category/pages/category/[id].vue',
+                    file: '~/domains/category/custom-pages/category-page.vue',
                 })
             })
 
@@ -106,7 +106,7 @@ export default defineNuxtModule({
                 pages.push({
                     name: `product-${slug.replace('/', '')}`,
                     path: slug,
-                    file: '~/domains/product/pages/product/[slug].vue',
+                    file: '~/domains/product/custom-pages/product-page.vue',
                 })
             })
 
