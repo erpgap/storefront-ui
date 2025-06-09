@@ -1,13 +1,13 @@
 import type { Meta } from '@unhead/vue'
 
 export interface SeoEntity {
-  metaTitle?: string
-  metaDescription?: string
-  jsonLd?: string | object
-  metaKeyword?: string
-  metaImage?: string
-  name?: string
-  id?: string | number
+  metaTitle?: string | null
+  metaDescription?: string | null
+  jsonLd?: string | object | null
+  metaKeyword?: string | null
+  metaImage?: string | null
+  name?: string | null
+  id?: string | number | null
 }
 
 const validateSEO = (entity: SeoEntity, fullPath: string, entityType: string) => {
