@@ -23,7 +23,7 @@ export const useProductTemplate = (slug: string) => {
 
   const breadcrumbs = computed(() => {
     const productName
-      = productTemplate.value?.firstVariant?.combinationInfoVariant.display_name
+      = productTemplate.value?.name
         || productTemplate.value?.firstVariant?.name
         || 'Product'
 
