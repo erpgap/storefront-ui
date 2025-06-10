@@ -12,6 +12,7 @@ import {
   SfIconShoppingCartCheckout,
   SfIconWarehouse,
   SfLink,
+  SfLoaderCircular,
   SfRating,
   SfThumbnail,
 } from '@storefront-ui/vue'
@@ -129,12 +130,22 @@ await loadProductTemplate({ slug: cleanPath.value })
 
 <template>
   <NuxtErrorBoundary>
-    <div v-if="productTemplate?.id && !loadingProductTemplate">
+    <div>
       <UiBreadcrumb
         :breadcrumbs="breadcrumbs"
         class="self-start mt-5 mb-10"
       />
       <div
+        v-if="loadingProductTemplate"
+        class="w-full flex flex-col items-center justify-center min-h-[60vh]"
+      >
+        <SfLoaderCircular
+          size="xl"
+          class="my-32"
+        />
+      </div>
+      <div
+        v-else-if="productTemplate.id"
         class="md:grid grid-areas-product-page grid-cols-product-page gap-x-6"
       >
         <section class="grid-in-left-top md:h-full xl:max-h-[700px]">
@@ -159,7 +170,7 @@ await loadProductTemplate({ slug: cleanPath.value })
               class="mb-1 font-bold typography-headline-4"
               data-testid="product-name"
             >
-              {{ productTemplate.firstVariant?.combinationInfoVariant?.display_name }}
+              {{ productTemplate?.name }}
             </h1>
             <div
               v-if="
@@ -487,7 +498,7 @@ await loadProductTemplate({ slug: cleanPath.value })
         <UiDivider class="mt-4 mb-2" />
       </div>
       <section
-        v-if="productTemplate?.frequentlyBoughtTogether"
+        v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether"
         class="lg:mx-4 mt-28"
       >
         <LazyProductSlider
@@ -496,7 +507,7 @@ await loadProductTemplate({ slug: cleanPath.value })
         />
       </section>
       <section
-        v-if="productTemplate?.alternativeProducts"
+        v-if="!loadingProductTemplate && productTemplate?.alternativeProducts"
         class="lg:mx-4 mb-20"
       >
         <LazyProductSlider
@@ -505,6 +516,7 @@ await loadProductTemplate({ slug: cleanPath.value })
         />
       </section>
       <section
+        v-if="!loadingProductTemplate"
         class="lg:mx-4 mb-20"
       >
         <LazyRecentViewSlider
