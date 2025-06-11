@@ -1,14 +1,23 @@
 <script lang="ts" setup>
-import { SfButton, SfIconArrowBack } from '@storefront-ui/vue'
+import { SfButton, SfIconArrowBack, SfLoaderCircular } from '@storefront-ui/vue'
 
-const { cart, loadCart, totalItemsInCart } = useCart()
+const { cart, loadCart, totalItemsInCart, loading } = useCart()
 
 await loadCart(false)
 </script>
 
 <template>
   <div
-    v-if="totalItemsInCart > 0"
+    v-if="loading"
+    class="w-full flex flex-col items-center justify-center min-h-[60vh]"
+  >
+    <SfLoaderCircular
+      size="xl"
+      class="my-32"
+    />
+  </div>
+  <div
+    v-else-if="totalItemsInCart > 0"
     class="pb-20"
   >
     <div class="flex justify-between mt-8 mb-10">
