@@ -8,20 +8,20 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const redisKey = `cache:slug:${slug}`
-  const routeData = await useStorage().getItem(redisKey)
+  const redisKey = `slug:${slug}`
+  const data = await useStorage<string>('slug').getItem(redisKey)
 
-  if (routeData) {
+  if (data) {
     try {
-      const data = typeof routeData === 'string' ? JSON.parse(routeData) : routeData
 
       const modelToRouteType = {
         'product.template': 'product',
         'product.public.category': 'category',
+        'vsf.website.page': 'staticPage',
       }
 
       return {
-        data: modelToRouteType[data.value],
+        data: modelToRouteType[data],
       }
     }
     catch (error) {
