@@ -35,6 +35,16 @@ export default defineNuxtModule({
            }
          `; 
 
+         const websitePagesQuery = `
+      query {
+        websitePages(pageSize: 10000) {
+          websitePages {
+            websiteUrl
+          }
+        }
+      }
+    `;
+
 
 
          const fetchCategorySlugs = async (): Promise<string[]> => {
@@ -83,15 +93,35 @@ export default defineNuxtModule({
           }
         };
 
-        const [categorySlugs, productSlugs] = await Promise.all([
+        const fetchWebpageSlugs = async (): Promise<string[]> => {
+          try {
+            const res = await ofetch(odooBaseUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ query: websitePagesQuery }),
+            })
+            return res?.data?.websitePages?.websitePages
+              ?.map((p: any) => p.websiteUrl)
+              .filter((s: string) => !!s) || []
+          }
+          catch (e) {
+            console.error('[routes-generator] Error fetching website pages:', e)
+            return []
+          }
+        }
+
+
+
+        const [categorySlugs, productSlugs, websitePagesUrls] = await Promise.all([
           fetchCategorySlugs(),
           fetchProductSlugs(),
+          fetchWebpageSlugs(),
         ]);
 
 
 
         console.info(
-          `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products loaded`
+          `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products and ${websitePagesUrls.length} website pages loaded`
         ); 
 
         nuxt.hook('pages:extend', (pages: NuxtPage[]) => {
@@ -111,6 +141,12 @@ export default defineNuxtModule({
                 })
             })
 
+            websitePagesUrls.forEach(url => {
+                pages.push({
+                    name: url.replace('/', ''),
+                    path: url,
+                })
+            })
         })
     },
 })
