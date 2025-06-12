@@ -1,4 +1,4 @@
-import { defineNuxtModule } from '@nuxt/kit'
+import { defineNuxtModule, extendRouteRules } from '@nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
 
@@ -9,6 +9,7 @@ export default defineNuxtModule({
     async setup(_, nuxt) {
       
         const odooBaseUrl: string = process.env?.NUXT_PUBLIC_ODOO_BASE_URL ? `${process.env.NUXT_PUBLIC_ODOO_BASE_URL}/graphql/vsf` : ''
+        const swrValue = Number(process.env.NUXT_SWR_CACHE_TIME || 300)
 
         if (!odooBaseUrl) {
             console.error('[routes-generator] ODOO_BASE_URL is not set')
@@ -123,6 +124,19 @@ export default defineNuxtModule({
         console.info(
           `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products and ${websitePagesUrls.length} website pages loaded`
         ); 
+
+        categorySlugs.forEach((slug) => {
+          extendRouteRules(slug, { swr: swrValue })
+        })
+    
+        productSlugs.forEach((slug) => {
+          extendRouteRules(slug, { swr: swrValue })
+        })
+    
+        websitePagesUrls.forEach((url) => {
+          const path = url.startsWith('/') ? url : `/${url}`
+          extendRouteRules(path, { swr: swrValue })
+        })
 
         nuxt.hook('pages:extend', (pages: NuxtPage[]) => {
             categorySlugs.forEach(slug => {
