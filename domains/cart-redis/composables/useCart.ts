@@ -8,15 +8,16 @@ import type {
   MutationCartAddMultipleItemsArgs,
   MutationCartRemoveMultipleItemsArgs,
   MutationCartUpdateMultipleItemsArgs,
+  Product,
 } from '~/graphql'
 import { MutationName } from '~/server/mutations'
-import { QueryName } from '~/server/queries'
 
 export const useCart = () => {
   const { $sdk } = useNuxtApp()
   const cartCounter = useCookie<number>('cart-counter')
   const toast = useToast()
   const cart = useState<Cart>('cart', () => ({}) as Cart)
+  const frequentlyTogetherProducts = useState<Product[]>('frequently-together-products', () => [])
 
   const loading = ref(false)
 
@@ -30,6 +31,7 @@ export const useCart = () => {
 
       cart.value = data.value.cart
       cartCounter.value = Number(data.value.cart?.order?.websiteOrderLine?.length)
+      frequentlyTogetherProducts.value = (data.value.cart.frequentlyBoughtTogether || []).filter((p): p is Product => p !== null)
     }
     catch (error: any) {
       return toast.error(error.data.message)
@@ -122,7 +124,7 @@ export const useCart = () => {
     cartAdd,
     updateItemQuantity,
     removeItemFromCart,
-
+    frequentlyTogetherProducts,
     loading,
     cart,
     totalItemsInCart,

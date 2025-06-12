@@ -1,16 +1,24 @@
 <script lang="ts" setup>
-import { SfButton, SfIconArrowBack } from '@storefront-ui/vue'
-import Discount from '~/domains/core/components/ui/Discount.vue'
+import { SfButton, SfIconArrowBack, SfLoaderCircular } from '@storefront-ui/vue'
 
 const NuxtLink = resolveComponent('NuxtLink')
-const { cart, loadCart } = useCart()
+const { cart, loadCart, loading, frequentlyTogetherProducts } = useCart()
 
 await loadCart()
 </script>
 
 <template>
   <div
-    v-if="cart?.order?.websiteOrderLine?.length ?? 0 > 0"
+    v-if="loading"
+    class="w-full flex flex-col items-center justify-center min-h-[60vh]"
+  >
+    <SfLoaderCircular
+      size="xl"
+      class="my-32"
+    />
+  </div>
+  <div
+    v-else-if="cart?.order?.websiteOrderLine?.length ?? 0 > 0"
     class="pb-20"
   >
     <div class="flex justify-between mt-8 mb-10">
@@ -53,7 +61,7 @@ await loadCart()
         </div>
       </div>
       <div class="col-span-5 md:sticky md:top-20 h-fit">
-        <Discount />
+        <UiDiscount />
         <UiOrderSummary :cart="cart">
           <NuxtLink to="/checkout">
             <SfButton
@@ -66,6 +74,26 @@ await loadCart()
         </UiOrderSummary>
       </div>
     </div>
+    <section    
+      v-if="frequentlyTogetherProducts?.length > 0"
+      class="lg:mx-4 mt-36"
+    >
+      <LazyProductSlider
+      heading="Frequently bought together"
+      text="You may also like"
+      :product-template-list="frequentlyTogetherProducts"
+      />
+    </section>
+    <section    
+      v-if="cart.order.web"
+      class="lg:mx-4 mt-36"
+    >
+      <LazyProductSlider
+      heading="Frequently bought together"
+      text="You may also like"
+      :product-template-list="frequentlyTogetherProducts"
+      />
+    </section>
     <section
       class="lg:mx-4 mt-36"
     >
