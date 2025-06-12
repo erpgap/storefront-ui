@@ -1,8 +1,8 @@
 import { useProductAttributes } from './useProductAttributes'
 import type {
   AttributeValue,
+  BreadcrumbItem,
   CustomProductWithStockFromRedis,
-  Product,
   ProductResponse,
   QueryProductArgs,
 } from '~/graphql'
@@ -20,6 +20,28 @@ export const useProductTemplate = (slug: string) => {
   const productTemplate = useState<CustomProductWithStockFromRedis>(`product-${cleanSlug}`,
     () => ({} as CustomProductWithStockFromRedis),
   )
+
+  const breadcrumbs = computed(() => {
+    const productName
+      = productTemplate.value?.name
+        || productTemplate.value?.firstVariant?.name
+        || 'Product'
+
+    const categories = productTemplate.value?.categories || []
+
+    const categoryCrumbs: BreadcrumbItem[] = categories
+      .filter(cat => cat?.name !== 'All')
+      .map(cat => ({
+        name: cat.name || '',
+        link: `/${cat?.slug?.replace(/^\/?/, '')}`,
+      }))
+
+    return [
+      { name: 'Home', link: '/' },
+      ...categoryCrumbs,
+      { name: productName, link: '' },
+    ]
+  })
 
   const loadProductTemplate = async (params: QueryProductArgs) => {
     if (productTemplate?.value?.id) {
@@ -107,10 +129,39 @@ export const useProductTemplate = (slug: string) => {
     return getRegularPrice(productTemplate.value?.firstVariant)
   })
 
+  const getAllSizes = computed(() => {
+    return productTemplate?.value?.attributeValues
+      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Size')
+      ?.map((item: AttributeValue) => ({
+        value: item.id,
+        label: item.name,
+      }))
+  })
+
+  const getAllColors = computed(() => {
+    return productTemplate?.value?.attributeValues
+      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Color')
+      ?.map((item: AttributeValue) => ({
+        value: item.id,
+        label: item.name,
+      }))
+  })
+
+  const getAllMaterials = computed(() => {
+    return productTemplate?.value?.attributeValues
+      ?.filter((item: AttributeValue) => item?.attribute?.name === 'Material')
+      ?.map((item: AttributeValue) => ({
+        value: item.id,
+        label: item.name,
+      }))
+  })
+
   return {
     loadProductTemplate,
-    // loadAlternativeProducts,
-
+    breadcrumbs,
+    getAllSizes,
+    getAllColors,
+    getAllMaterials,
     loadingProductTemplate,
     productTemplate,
     regularPrice,

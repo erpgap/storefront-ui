@@ -9,6 +9,7 @@ const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
 
 const { isOpen, open, close } = useDisclosure()
 const {
+  breadcrumbs,
   loadProductTemplateList,
   organizedAttributes,
   loading,
@@ -67,11 +68,6 @@ if (category.value) {
 }
 
 setMaxVisiblePages(isWideScreen.value)
-
-const breadcrumbs = [
-  { name: 'Home', link: '/' },
-  { name: category._value.name, link: `Category/${route.params.id}` },
-]
 
 await loadProductTemplateList(getFacetsFromURL(route.query))
 </script>

@@ -3,7 +3,6 @@ import {
   SfButton,
   SfChip,
   SfCounter,
-  SfIconCompareArrows,
   SfIconFavorite,
   SfIconFavoriteFilled,
   SfIconPackage,
@@ -13,6 +12,7 @@ import {
   SfIconShoppingCartCheckout,
   SfIconWarehouse,
   SfLink,
+  SfLoaderCircular,
   SfRating,
   SfThumbnail,
 } from '@storefront-ui/vue'
@@ -23,7 +23,6 @@ import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 const route = useRoute()
 
 const cleanPath = computed(() => route?.path?.replace(/\/$/, ''))
-const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
 
 const {
   loadProductTemplate,
@@ -32,28 +31,14 @@ const {
   getAllColors,
   getAllMaterials,
   getAllSizes,
-} = useProductTemplate(cleanPath.value)
-const {
-  loadProductVariant,
-  loadingProductVariant,
-  productVariant,
-  getImages,
   breadcrumbs,
-  getRegularPrice,
-  getSpecialPrice,
-} = useProductVariant(cleanFullPath.value)
+} = useProductTemplate(cleanPath.value)
+
 const { addProductToRecentViews } = useRecentViewProducts()
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
 const { cart, cartAdd } = useCart()
 
-useHead(generateSeo<SeoEntity>(productVariant.value, 'Product'))
-
-const params = computed(() => ({
-  combinationId: Object.values(route.query)?.map(value =>
-    parseInt(value as string),
-  ),
-  productTemplateId: productTemplate?.value?.id,
-}))
+useHead(generateSeo<SeoEntity>(productTemplate.value, 'Product'))
 
 const selectedSize = computed(() =>
   route.query.Size ? Number(route.query.Size) : getAllSizes?.value?.[0]?.value,
@@ -108,15 +93,15 @@ const productsInCart = computed(() => {
   return (
     cart.value?.order?.websiteOrderLine?.find(
       (orderLine: OrderLine) =>
-        orderLine.product?.id === productVariant?.value.id,
+        orderLine.product?.id === productTemplate?.value.id,
     )?.quantity || 0
   )
 })
 
 const handleCartAdd = async () => {
-  let id = productVariant?.value.id
-  if (!productVariant.value.combinationInfoVariant) {
-    id = Number(productVariant?.value.firstVariant?.id)
+  let id = productTemplate?.value.id
+  if (!productTemplate.value.firstVariant?.combinationInfoVariant) {
+    id = Number(productTemplate?.value.firstVariant?.id)
   }
   await cartAdd(id, quantitySelectorValue.value)
 }
@@ -130,33 +115,41 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
 }
 
 watch(
-  () => productTemplate.value?.id,
-  async (newValue, oldValue) => {
-    if (newValue !== oldValue) {
-      await loadProductVariant(params.value)
-      addProductToRecentViews(productTemplate.value?.id)
+  productTemplate,
+  async (oldValue, newValue) => {
+    if (oldValue?.id !== newValue?.id) {
+      addProductToRecentViews(Number(productTemplate.value?.id))
     }
   },
+  { deep: true, immediate: true },
 )
-
+const { getImages } = useProductGetters(productTemplate)
+const mainImages = computed(() => getImages(890, 594))
 await loadProductTemplate({ slug: cleanPath.value })
-if (productTemplate.value?.id) {
-  await loadProductVariant(params.value)
-}
 </script>
 
 <template>
   <NuxtErrorBoundary>
-    <div v-if="productTemplate?.id && !loadingProductTemplate">
+    <div>
       <UiBreadcrumb
         :breadcrumbs="breadcrumbs"
         class="self-start mt-5 mb-10"
       />
       <div
+        v-if="loadingProductTemplate"
+        class="w-full flex flex-col items-center justify-center min-h-[60vh]"
+      >
+        <SfLoaderCircular
+          size="xl"
+          class="my-32"
+        />
+      </div>
+      <div
+        v-else-if="productTemplate.id"
         class="md:grid grid-areas-product-page grid-cols-product-page gap-x-6"
       >
         <section class="grid-in-left-top md:h-full xl:max-h-[700px]">
-          <LazyUiGallery :images="getImages" />
+          <LazyUiGallery :images="mainImages" />
         </section>
         <section class="col-span-5 grid-in-right md:mb-0">
           <div
@@ -177,12 +170,12 @@ if (productTemplate.value?.id) {
               class="mb-1 font-bold typography-headline-4"
               data-testid="product-name"
             >
-              {{ productVariant?.name }}
+              {{ productTemplate?.name }}
             </h1>
             <div
               v-if="
-                productVariant
-                  && productVariant?.combinationInfoVariant?.has_discounted_price
+                productTemplate
+                  && productTemplate?.firstVariant?.combinationInfoVariant.has_discounted_price
               "
               class="my-1"
             >
@@ -190,10 +183,10 @@ if (productTemplate.value?.id) {
                 class="mr-2 text-secondary-700 font-bold font-headings text-2xl"
                 data-testid="price"
               >
-                {{ $currency(getSpecialPrice) }}
+                {{ $currency(productTemplate?.firstVariant?.combinationInfoVariant.price) }}
               </span>
               <span class="text-base font-normal text-neutral-500 line-through">
-                {{ $currency(getRegularPrice) }}
+                {{ $currency(productTemplate?.firstVariant?.combinationInfoVariant.list_price) }}
               </span>
             </div>
             <div
@@ -204,7 +197,7 @@ if (productTemplate.value?.id) {
                 class="mr-2 text-secondary-700 font-bold font-headings text-2xl"
                 data-testid="price"
               >
-                {{ $currency(getRegularPrice) }}
+                {{ $currency(productTemplate?.firstVariant?.combinationInfoVariant.list_price) }}
               </span>
             </div>
             <div class="inline-flex items-center mt-4 mb-2">
@@ -231,7 +224,7 @@ if (productTemplate.value?.id) {
               class="mb-4 font-normal typography-text-sm"
               data-testid="product-description"
             >
-              {{ productVariant?.description }}
+              {{ productTemplate?.description }}
             </p>
             <div class="py-4 mb-4 border-gray-200 border-y">
               <div
@@ -248,7 +241,7 @@ if (productTemplate.value?.id) {
                   class="min-w-[145px] flex-grow flex-shrink-0 basis-0"
                 />
                 <SfButton
-                  :disabled="loadingProductVariant"
+                  :disabled="loadingProductTemplate"
                   type="button"
                   size="lg"
                   class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap"
@@ -266,24 +259,24 @@ if (productTemplate.value?.id) {
                   size="sm"
                   variant="tertiary"
                   :class="
-                    productVariant?.isInWishlist ? 'bg-primary-100' : 'bg-white'
+                    productTemplate?.firstVariant?.isInWishlist ? 'bg-primary-100' : 'bg-white'
                   "
                   @click="
-                    isInWishlist(productVariant?.id as number)
-                      ? handleWishlistRemoveItem(productVariant)
-                      : handleWishlistAddItem(productVariant)
+                    isInWishlist(productTemplate?.firstVariant?.id as number)
+                      ? handleWishlistRemoveItem(productTemplate)
+                      : handleWishlistAddItem(productTemplate)
                   "
                 >
                   <SfIconFavoriteFilled
-                    v-show="isInWishlist(productVariant?.id as number)"
+                    v-show="isInWishlist(productTemplate?.firstVariant?.id as number)"
                     size="sm"
                   />
                   <SfIconFavorite
-                    v-show="!isInWishlist(productVariant?.id as number)"
+                    v-show="!isInWishlist(productTemplate?.firstVariant?.id as number)"
                     size="sm"
                   />
                   {{
-                    isInWishlist(productVariant?.id as number)
+                    isInWishlist(productTemplate?.firstVariant?.id as number)
                       ? $t('wishlist.removeFromWishlist')
                       : $t('wishlist.addToWishlist')
                   }}
@@ -481,7 +474,7 @@ if (productTemplate.value?.id) {
                 </h2>
               </template>
               <p>
-                {{ productVariant?.description }}
+                {{ productTemplate?.firstVariant?.description }}
               </p>
             </UiAccordionItem>
             <UiDivider class="my-4" />
@@ -505,7 +498,7 @@ if (productTemplate.value?.id) {
         <UiDivider class="mt-4 mb-2" />
       </div>
       <section
-        v-if="productTemplate?.frequentlyBoughtTogether"
+        v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether"
         class="lg:mx-4 mt-28"
       >
         <LazyProductSlider
@@ -514,7 +507,7 @@ if (productTemplate.value?.id) {
         />
       </section>
       <section
-        v-if="productTemplate?.alternativeProducts"
+        v-if="!loadingProductTemplate && productTemplate?.alternativeProducts"
         class="lg:mx-4 mb-20"
       >
         <LazyProductSlider
@@ -523,6 +516,7 @@ if (productTemplate.value?.id) {
         />
       </section>
       <section
+        v-if="!loadingProductTemplate"
         class="lg:mx-4 mb-20"
       >
         <LazyRecentViewSlider
