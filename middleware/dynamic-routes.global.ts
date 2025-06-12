@@ -33,7 +33,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     // Add the new route dynamically
     router.addRoute({
       path: to.path,
-      name: `${routeType}-${slug.replace('/', '')}`,
+      name: slug.replace('/', ''),
       component: component,
     })
 
