@@ -1,4 +1,4 @@
-import { defineNuxtModule } from '@nuxt/kit'
+import { defineNuxtModule, extendRouteRules } from '@nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
 
@@ -9,10 +9,7 @@ export default defineNuxtModule({
     async setup(_, nuxt) {
       
         const odooBaseUrl: string = process.env?.NUXT_PUBLIC_ODOO_BASE_URL ? `${process.env.NUXT_PUBLIC_ODOO_BASE_URL}/graphql/vsf` : ''
-        const CATEGORY_PAGE_SIZE = parseInt(process.env?.NUXT_PUBLIC_CATEGORY_PAGE_SIZE || '10000', 10)
-        const PRODUCT_PAGE_SIZE = parseInt(process.env?.NUXT_PUBLIC_PRODUCT_PAGE_SIZE || '10000', 10)
-        const CATEGORY_PAGE_FILE = process.env?.NUXT_PUBLIC_CATEGORY_PAGE_FILE || '~/domains/category/pages/category/[id].vue'
-        const PRODUCT_PAGE_FILE = process.env?.NUXT_PUBLIC_PRODUCT_PAGE_FILE || '~/domains/product/pages/product/[slug].vue'
+        const swrValue = Number(process.env.NUXT_SWR_CACHE_TIME || 300)
 
         if (!odooBaseUrl) {
             console.error('[routes-generator] ODOO_BASE_URL is not set')
@@ -21,7 +18,7 @@ export default defineNuxtModule({
 
           const categoriesQuery = `
            query {
-             categories(pageSize: ${CATEGORY_PAGE_SIZE}) {
+             categories(pageSize: 10000) {
                categories {
                  slug
                }
@@ -31,13 +28,23 @@ export default defineNuxtModule({
 
           const productsQuery = `
            query {
-             products(pageSize: ${PRODUCT_PAGE_SIZE}) {
+             products(pageSize: 10000) {
                products {
                  slug
                }
              }
            }
          `; 
+
+         const websitePagesQuery = `
+      query {
+        websitePages(pageSize: 10000) {
+          websitePages {
+            websiteUrl
+          }
+        }
+      }
+    `;
 
 
 
@@ -87,34 +94,73 @@ export default defineNuxtModule({
           }
         };
 
-        const [categorySlugs, productSlugs] = await Promise.all([
+        const fetchWebpageSlugs = async (): Promise<string[]> => {
+          try {
+            const res = await ofetch(odooBaseUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ query: websitePagesQuery }),
+            })
+            return res?.data?.websitePages?.websitePages
+              ?.map((p: any) => p.websiteUrl)
+              .filter((s: string) => !!s) || []
+          }
+          catch (e) {
+            console.error('[routes-generator] Error fetching website pages:', e)
+            return []
+          }
+        }
+
+
+
+        const [categorySlugs, productSlugs, websitePagesUrls] = await Promise.all([
           fetchCategorySlugs(),
           fetchProductSlugs(),
+          fetchWebpageSlugs(),
         ]);
 
 
 
         console.info(
-          `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products loaded`
+          `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products and ${websitePagesUrls.length} website pages loaded`
         ); 
+
+        categorySlugs.forEach((slug) => {
+          extendRouteRules(slug, { swr: swrValue })
+        })
+    
+        productSlugs.forEach((slug) => {
+          extendRouteRules(slug, { swr: swrValue })
+        })
+    
+        websitePagesUrls.forEach((url) => {
+          const path = url.startsWith('/') ? url : `/${url}`
+          extendRouteRules(path, { swr: swrValue })
+        })
 
         nuxt.hook('pages:extend', (pages: NuxtPage[]) => {
             categorySlugs.forEach(slug => {
                 pages.push({
-                    name: `category-${slug.replace('/', '')}`,
+                    name: slug.replace(/^\//, '').replace(/\//g, '-'),
                     path: slug,
-                    file: CATEGORY_PAGE_FILE,
+                    file: '~/domains/category/custom-pages/category-page.vue',
                 })
             })
 
             productSlugs.forEach(slug => {
                 pages.push({
-                    name: `product-${slug.replace('/', '')}`,
+                    name: slug.replace(/^\//, '').replace(/\//g, '-'),
                     path: slug,
-                    file: PRODUCT_PAGE_FILE,
+                    file: '~/domains/product/custom-pages/product-page.vue',
                 })
             })
 
+            websitePagesUrls.forEach(url => {
+                pages.push({
+                    name: url.replace(/^\//, '').replace(/\//g, '-'),
+                    path: url,
+                })
+            })
         })
     },
 })
