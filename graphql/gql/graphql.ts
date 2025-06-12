@@ -51,31 +51,6 @@ export enum AddressType {
   PrivateAddress = 'PrivateAddress'
 }
 
-export type AdyenPaymentDetailsResult = {
-  __typename?: 'AdyenPaymentDetailsResult';
-  adyenPaymentDetails: Maybe<Scalars['GenericScalar']['output']>;
-};
-
-export type AdyenPaymentMethodsResult = {
-  __typename?: 'AdyenPaymentMethodsResult';
-  adyenPaymentMethods: Maybe<Scalars['GenericScalar']['output']>;
-};
-
-export type AdyenPaymentsResult = {
-  __typename?: 'AdyenPaymentsResult';
-  adyenPayments: Maybe<Scalars['GenericScalar']['output']>;
-};
-
-export type AdyenProviderInfoResult = {
-  __typename?: 'AdyenProviderInfoResult';
-  adyenProviderInfo: Maybe<Scalars['GenericScalar']['output']>;
-};
-
-export type AdyenTransactionResult = {
-  __typename?: 'AdyenTransactionResult';
-  transaction: Maybe<Scalars['GenericScalar']['output']>;
-};
-
 export type ApplyCouponList = ApplyCoupons & {
   __typename?: 'ApplyCouponList';
   error: Maybe<Scalars['String']['output']>;
@@ -505,16 +480,6 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Add new billing or shipping address and set it on the shopping cart. */
   addAddress: Maybe<Partner>;
-  /** Submit the Adyen Payment Details. */
-  adyenPaymentDetails: Maybe<AdyenPaymentDetailsResult>;
-  /** Get Adyen Payment Methods. */
-  adyenPaymentMethods: Maybe<AdyenPaymentMethodsResult>;
-  /** Make Adyen Payment request. */
-  adyenPayments: Maybe<AdyenPaymentsResult>;
-  /** Get Adyen Provider Info. */
-  adyenProviderInfo: Maybe<AdyenProviderInfoResult>;
-  /** Create Adyen Transaction */
-  adyenTransaction: Maybe<AdyenTransactionResult>;
   /** Apply Coupon */
   applyCoupon: Maybe<ApplyCouponList>;
   /** Apply Gift Card */
@@ -555,12 +520,6 @@ export type Mutation = {
   selectAddress: Maybe<Partner>;
   /** Set Shipping Method on Cart */
   setShippingMethod: Maybe<CartData>;
-  /** Get Stripe Inline Form Values */
-  stripeGetInlineFormValues: Maybe<StripeGetInlineFormValuesResult>;
-  /** Get Stripe Provider Info. */
-  stripeProviderInfo: Maybe<StripeProviderInfoResult>;
-  /** Create Stripe Transaction */
-  stripeTransaction: Maybe<StripeTransactionResult>;
   /** Two-Factor Verification */
   totpVerification: Maybe<TwoFactorOutput>;
   /** Update a billing or shipping address and set it on the shopping cart. */
@@ -581,38 +540,6 @@ export type Mutation = {
 export type MutationAddAddressArgs = {
   address: InputMaybe<AddAddressInput>;
   type: AddressEnum;
-};
-
-
-export type MutationAdyenPaymentDetailsArgs = {
-  paymentDetails: Scalars['GenericScalar']['input'];
-  providerId: Scalars['Int']['input'];
-  transactionReference: Scalars['String']['input'];
-};
-
-
-export type MutationAdyenPaymentMethodsArgs = {
-  providerId: Scalars['Int']['input'];
-};
-
-
-export type MutationAdyenPaymentsArgs = {
-  accessToken: Scalars['String']['input'];
-  browserInfo: Scalars['GenericScalar']['input'];
-  paymentMethod: Scalars['GenericScalar']['input'];
-  providerId: Scalars['Int']['input'];
-  transactionReference: Scalars['String']['input'];
-};
-
-
-export type MutationAdyenProviderInfoArgs = {
-  providerId: Scalars['Int']['input'];
-};
-
-
-export type MutationAdyenTransactionArgs = {
-  providerId: Scalars['Int']['input'];
-  tokenizationRequested?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -704,22 +631,6 @@ export type MutationSelectAddressArgs = {
 
 export type MutationSetShippingMethodArgs = {
   shippingMethodId: Scalars['Int']['input'];
-};
-
-
-export type MutationStripeGetInlineFormValuesArgs = {
-  providerId: Scalars['Int']['input'];
-};
-
-
-export type MutationStripeProviderInfoArgs = {
-  providerId: Scalars['Int']['input'];
-};
-
-
-export type MutationStripeTransactionArgs = {
-  providerId: Scalars['Int']['input'];
-  tokenizationRequested?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -846,15 +757,9 @@ export type Orders = {
   totalCount: Scalars['Int']['output'];
 };
 
-/** An enumeration. */
-export enum PageType {
-  ProductsPage = 'ProductsPage',
-  StaticPage = 'StaticPage'
-}
-
 export enum PageTypeEnum {
-  Products = 'Products',
-  Static = 'Static'
+  Products = 'PRODUCTS',
+  Static = 'STATIC'
 }
 
 export type Partner = {
@@ -1339,21 +1244,6 @@ export type State = {
   name: Scalars['String']['output'];
 };
 
-export type StripeGetInlineFormValuesResult = {
-  __typename?: 'StripeGetInlineFormValuesResult';
-  stripeGetInlineFormValues: Maybe<Scalars['GenericScalar']['output']>;
-};
-
-export type StripeProviderInfoResult = {
-  __typename?: 'StripeProviderInfoResult';
-  stripeProviderInfo: Maybe<Scalars['GenericScalar']['output']>;
-};
-
-export type StripeTransactionResult = {
-  __typename?: 'StripeTransactionResult';
-  transaction: Maybe<Scalars['GenericScalar']['output']>;
-};
-
 export type TwoFactorOutput = {
   __typename?: 'TwoFactorOutput';
   httponly: Maybe<Scalars['Boolean']['output']>;
@@ -1441,7 +1331,7 @@ export type WebsitePage = {
   id: Maybe<Scalars['Int']['output']>;
   isPublished: Maybe<Scalars['Boolean']['output']>;
   name: Maybe<Scalars['String']['output']>;
-  pageType: Maybe<PageType>;
+  pageType: Maybe<PageTypeEnum>;
   products: Maybe<Array<Product>>;
   publishingDate: Maybe<Scalars['String']['output']>;
   website: Maybe<Website>;

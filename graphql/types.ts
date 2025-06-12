@@ -134,6 +134,11 @@ export type SignUpUserResponse = {
   }
 }
 
+export type BreadcrumbItem = {
+  name: string
+  link: string
+}
+
 export type LoginUserResponse = AsyncData<
   {
     login: {
@@ -365,4 +370,13 @@ export interface OrganizedAttribute {
 
 export type CustomProductWithStockFromRedis = Product & {
   stock: number
+}
+
+export type ImageGalleryItem = {
+  id: number
+  url: string
+  link: string
+  alt: string
+  width?: number | string
+  height?: number | string
 }
