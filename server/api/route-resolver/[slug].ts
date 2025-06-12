@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
       const modelToRouteType = {
         'product.template': 'product',
         'product.public.category': 'category',
-        'vsf.website.page': 'staticPage',
+        'vsf.website.page': 'websitePage',
       }
 
       return {
