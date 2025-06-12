@@ -141,7 +141,7 @@ export default defineNuxtModule({
         nuxt.hook('pages:extend', (pages: NuxtPage[]) => {
             categorySlugs.forEach(slug => {
                 pages.push({
-                    name: slug.replace('/', ''),
+                    name: slug.replace(/^\//, '').replace(/\//g, '-'),
                     path: slug,
                     file: '~/domains/category/custom-pages/category-page.vue',
                 })
@@ -149,7 +149,7 @@ export default defineNuxtModule({
 
             productSlugs.forEach(slug => {
                 pages.push({
-                    name: slug.replace('/', ''),
+                    name: slug.replace(/^\//, '').replace(/\//g, '-'),
                     path: slug,
                     file: '~/domains/product/custom-pages/product-page.vue',
                 })
@@ -157,7 +157,7 @@ export default defineNuxtModule({
 
             websitePagesUrls.forEach(url => {
                 pages.push({
-                    name: url.replace('/', ''),
+                    name: url.replace(/^\//, '').replace(/\//g, '-'),
                     path: url,
                 })
             })
