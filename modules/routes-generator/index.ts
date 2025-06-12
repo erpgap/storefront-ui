@@ -9,8 +9,6 @@ export default defineNuxtModule({
     async setup(_, nuxt) {
       
         const odooBaseUrl: string = process.env?.NUXT_PUBLIC_ODOO_BASE_URL ? `${process.env.NUXT_PUBLIC_ODOO_BASE_URL}/graphql/vsf` : ''
-        const CATEGORY_PAGE_SIZE = parseInt(process.env?.NUXT_PUBLIC_CATEGORY_PAGE_SIZE || '10000', 10)
-        const PRODUCT_PAGE_SIZE = parseInt(process.env?.NUXT_PUBLIC_PRODUCT_PAGE_SIZE || '10000', 10)
 
         if (!odooBaseUrl) {
             console.error('[routes-generator] ODOO_BASE_URL is not set')
@@ -19,7 +17,7 @@ export default defineNuxtModule({
 
           const categoriesQuery = `
            query {
-             categories(pageSize: ${CATEGORY_PAGE_SIZE}) {
+             categories(pageSize: 10000) {
                categories {
                  slug
                }
@@ -29,7 +27,7 @@ export default defineNuxtModule({
 
           const productsQuery = `
            query {
-             products(pageSize: ${PRODUCT_PAGE_SIZE}) {
+             products(pageSize: 10000) {
                products {
                  slug
                }
