@@ -97,7 +97,7 @@ export default defineNuxtModule({
         nuxt.hook('pages:extend', (pages: NuxtPage[]) => {
             categorySlugs.forEach(slug => {
                 pages.push({
-                    name: `category-${slug.replace('/', '')}`,
+                    name: slug.replace('/', ''),
                     path: slug,
                     file: '~/domains/category/custom-pages/category-page.vue',
                 })
@@ -105,7 +105,7 @@ export default defineNuxtModule({
 
             productSlugs.forEach(slug => {
                 pages.push({
-                    name: `product-${slug.replace('/', '')}`,
+                    name: slug.replace('/', ''),
                     path: slug,
                     file: '~/domains/product/custom-pages/product-page.vue',
                 })
