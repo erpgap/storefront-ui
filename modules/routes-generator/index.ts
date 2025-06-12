@@ -11,8 +11,6 @@ export default defineNuxtModule({
         const odooBaseUrl: string = process.env?.NUXT_PUBLIC_ODOO_BASE_URL ? `${process.env.NUXT_PUBLIC_ODOO_BASE_URL}/graphql/vsf` : ''
         const CATEGORY_PAGE_SIZE = parseInt(process.env?.NUXT_PUBLIC_CATEGORY_PAGE_SIZE || '10000', 10)
         const PRODUCT_PAGE_SIZE = parseInt(process.env?.NUXT_PUBLIC_PRODUCT_PAGE_SIZE || '10000', 10)
-        const CATEGORY_PAGE_FILE = process.env?.NUXT_PUBLIC_CATEGORY_PAGE_FILE || '~/domains/category/pages/category/[id].vue'
-        const PRODUCT_PAGE_FILE = process.env?.NUXT_PUBLIC_PRODUCT_PAGE_FILE || '~/domains/product/pages/product/[slug].vue'
 
         if (!odooBaseUrl) {
             console.error('[routes-generator] ODOO_BASE_URL is not set')
@@ -103,11 +101,7 @@ export default defineNuxtModule({
                 pages.push({
                     name: `category-${slug.replace('/', '')}`,
                     path: slug,
-<<<<<<< HEAD
                     file: '~/domains/category/custom-pages/category-page.vue',
-=======
-                    file: CATEGORY_PAGE_FILE,
->>>>>>> 181be3e (feat: enhance routes-generator module with configurable page sizes and file paths for categories and products)
                 })
             })
 
@@ -115,11 +109,7 @@ export default defineNuxtModule({
                 pages.push({
                     name: `product-${slug.replace('/', '')}`,
                     path: slug,
-<<<<<<< HEAD
                     file: '~/domains/product/custom-pages/product-page.vue',
-=======
-                    file: PRODUCT_PAGE_FILE,
->>>>>>> 181be3e (feat: enhance routes-generator module with configurable page sizes and file paths for categories and products)
                 })
             })
 
