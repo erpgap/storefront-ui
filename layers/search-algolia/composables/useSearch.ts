@@ -22,7 +22,6 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     organizedAttributes,
     productTemplateList,
     totalItems,
-    categories,
   } = useProductTemplateList(String(route.fullPath))
   const { getFacetsFromURL } = useUiHelpers()
   const loading = useState('odoo-search-loading', () => false)
