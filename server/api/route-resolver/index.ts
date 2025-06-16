@@ -1,6 +1,7 @@
 export default defineEventHandler(async (event) => {
-  // Handle potential undefined params
-  const slug = event.context.params?.slug
+  // Get slug from query parameters
+  const query = getQuery(event)
+  const slug = query.slug as string
   if (!slug) {
     throw createError({
       statusCode: 400,
@@ -8,13 +9,12 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const redisKey = `slug:${slug}`
+  const redisKey = `slug:${encodeURIComponent(slug)}`
   const data = await useStorage<string>('slug').getItem(redisKey)
 
   if (data) {
     try {
-
-      const modelToRouteType = {
+      const modelToRouteType: Record<string, string> = {
         'product.template': 'product',
         'product.public.category': 'category',
         'alokai.website.page': 'websitePage',
