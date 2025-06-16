@@ -7,10 +7,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   const router = useRouter()
-  const slug = to.path.replace(/^\//, '')
+  const slug = to.path
 
   try {
-    const { data: routeData } = await useFetch(`/api/route-resolver/${slug}`)
+    const { data: routeData } = await useFetch(`/api/route-resolver`, {
+      params: {
+        slug,
+      },
+    })
 
     if (!routeData?.value?.data) {
       console.warn('[dynamic-routes] Route does not exist or invalid:', slug)
@@ -33,7 +37,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     // Add the new route dynamically
     router.addRoute({
       path: to.path,
-      name: slug.replace('/', ''),
+      name: slug.replace(/^\//, '').replace(/\//g, '-'),
       component: component,
     })
 
