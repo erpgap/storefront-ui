@@ -16,6 +16,7 @@ import LoadUserQuery from './LoadUserQuery'
 import StockLotsQuery from './StockLotsQuery'
 import WishlistLoadQuery from './WishlistLoadQuery'
 import GetWebsiteHomepageQuery from './GetWebsiteHomepageQuery'
+import GetProductTemplateListQueryForRecentViews from './GetProductTemplateListQueryForRecentViews'
 
 enum QueryName {
   GetProductVariantQuery = 'GetProductVariantQuery',
@@ -37,6 +38,7 @@ enum QueryName {
   GetOrdersQuery = 'GetOrdersQuery',
   GetOrderQuery = 'GetOrderQuery',
   GetWebsiteHomepageQuery = 'GetWebsiteHomepageQuery',
+  GetProductTemplateListQueryForRecentViews = 'GetProductTemplateListQueryForRecentViews',
 }
 
 const Queries: Record<QueryName, string> = {
@@ -58,6 +60,7 @@ const Queries: Record<QueryName, string> = {
   GetOrderQuery,
   GetStatesQuery,
   GetWebsiteHomepageQuery,
+  GetProductTemplateListQueryForRecentViews,
 }
 
 const QueriesToByPassCache: string[] = [

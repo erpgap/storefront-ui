@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { SfButton, SfIconArrowBack, SfLoaderCircular } from '@storefront-ui/vue'
+import { LazyProductRecentViewSlider } from '#components'
 
 const NuxtLink = resolveComponent('NuxtLink')
 const { cart, loadCart, loading, frequentlyTogetherProducts } = useCart()
@@ -74,30 +75,30 @@ await loadCart()
         </UiOrderSummary>
       </div>
     </div>
-    <section    
+    <section
       v-if="frequentlyTogetherProducts?.length > 0"
       class="lg:mx-4 mt-36"
     >
       <LazyProductSlider
-      heading="Frequently bought together"
-      text="You may also like"
-      :product-template-list="frequentlyTogetherProducts"
+        heading="Frequently bought together"
+        text="You may also like"
+        :product-template-list="frequentlyTogetherProducts"
       />
     </section>
-    <section    
+    <section
       v-if="cart.order.web"
       class="lg:mx-4 mt-36"
     >
       <LazyProductSlider
-      heading="Frequently bought together"
-      text="You may also like"
-      :product-template-list="frequentlyTogetherProducts"
+        heading="Frequently bought together"
+        text="You may also like"
+        :product-template-list="frequentlyTogetherProducts"
       />
     </section>
     <section
       class="lg:mx-4 mt-36"
     >
-      <LazyRecentViewSlider
+      <LazyProductRecentViewSlider
         text="Your recent views"
       />
     </section>
