@@ -12,7 +12,7 @@ const { isOpen, open, close } = useDisclosure()
 const { getFacetsFromURL } = useUiHelpers()
 
 // searching on algolia with query params
-const { search, searchInputValue, algoliaSearchResultIds, loading } = useSearch()
+const { search, searchInputValue, loading } = useSearch()
 
 searchInputValue.value = route.query.search as string
 // fetch products with query params + ids from algolia
@@ -47,7 +47,7 @@ watch(isTabletScreen, (value) => {
 await search()
 
 await loadProductTemplateList(
-  getFacetsFromURL(route.query, algoliaSearchResultIds.value),
+  getFacetsFromURL(route.query),
 )
 
 const pagination = computed(() => ({

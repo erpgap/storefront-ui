@@ -1,23 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 
-  extends: [
-    './domains/auth',
-    './domains/recent-view-products',
-    // "./domains/cart-odoo",
-    './domains/cart-redis',
-    './domains/category',
-    './domains/checkout',
-    './domains/core',
-    './domains/my-account',
-    './domains/product',
-    './domains/orders',
-    // "./domains/search-algolia",
-    './domains/search-default',
-    './domains/search-luigi',
-    './domains/wishlist',
-  ],
-
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
@@ -82,7 +65,7 @@ export default defineNuxtConfig({
   },
 
   experimental: {
-    asyncContext: false,
+    asyncContext: true,
   },
 
   compatibilityDate: '2024-11-06',
