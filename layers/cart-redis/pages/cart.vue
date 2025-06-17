@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { SfButton, SfIconArrowBack, SfLoaderCircular } from '@storefront-ui/vue'
-import { LazyProductRecentViewSlider } from '#components'
+import { useCart } from '../composables/useCart'
 
 const NuxtLink = resolveComponent('NuxtLink')
-const { cart, loadCart, loading, frequentlyTogetherProducts } = useCart()
+const { cart, loading, loadCart, frequentlyTogetherProducts } = useCart()
 
 await loadCart()
 </script>
@@ -86,7 +86,7 @@ await loadCart()
       />
     </section>
     <section
-      v-if="cart.order.web"
+      v-if="(cart.order?.websiteOrderLine?.length ?? 0) > 0"
       class="lg:mx-4 mt-36"
     >
       <LazyProductSlider
