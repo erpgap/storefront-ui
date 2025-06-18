@@ -39,7 +39,7 @@ export const useProductTemplateList = (customIndex: string = '') => {
       })
     }
 
-    loadCurrentCategory()
+    // loadCurrentCategory()
 
     return breadcrumbList
   })
