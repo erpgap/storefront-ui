@@ -4,6 +4,7 @@ export default `
       id
       name
       slug
+      breadcrumb
       metaTitle
       metaImage
       imageFilename

@@ -26,12 +26,9 @@ export type CategoryListResponse =
     }
   }
 
-export type CategoryResponse = AsyncData<
-  {
-    category: Category
-  },
-  H3Error
->
+export type CategoryResponse = {
+  category: Category
+}
 
 export type ProductTemplateListResponse = {
   products: {
