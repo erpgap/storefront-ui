@@ -175,6 +175,7 @@ export type Categories = {
 
 export type Category = {
   __typename?: 'Category';
+  breadcrumb: Maybe<Scalars['GenericScalar']['output']>;
   childs: Maybe<Array<Category>>;
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
@@ -864,6 +865,7 @@ export type Product = {
   /** Specific to Product Template */
   attributeValues: Maybe<Array<AttributeValue>>;
   barcode: Maybe<Scalars['String']['output']>;
+  breadcrumb: Maybe<Scalars['GenericScalar']['output']>;
   categories: Maybe<Array<Category>>;
   /** Specific to Product Template */
   combinationInfo: Maybe<Scalars['GenericScalar']['output']>;
@@ -883,6 +885,7 @@ export type Product = {
   /** Specific to Product Variant */
   isVariantPossible: Maybe<Scalars['Boolean']['output']>;
   jsonLd: Maybe<Scalars['GenericScalar']['output']>;
+  jsonLdBreadcrumb: Maybe<Scalars['GenericScalar']['output']>;
   mediaGallery: Maybe<Array<ProductImage>>;
   metaDescription: Maybe<Scalars['String']['output']>;
   metaImage: Maybe<Scalars['String']['output']>;
