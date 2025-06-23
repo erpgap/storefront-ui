@@ -1,7 +1,6 @@
 import { useProductAttributes } from './useProductAttributes'
 import type {
   AttributeValue,
-  BreadcrumbItem,
   CustomProductWithStockFromRedis,
   ProductResponse,
   QueryProductArgs,
@@ -20,28 +19,6 @@ export const useProductTemplate = (slug: string) => {
   const productTemplate = useState<CustomProductWithStockFromRedis>(`product-${cleanSlug}`,
     () => ({} as CustomProductWithStockFromRedis),
   )
-
-  const breadcrumbs = computed(() => {
-    const productName
-      = productTemplate.value?.name
-        || productTemplate.value?.firstVariant?.name
-        || 'Product'
-
-    const categories = productTemplate.value?.categories || []
-
-    const categoryCrumbs: BreadcrumbItem[] = categories
-      .filter(cat => cat?.name !== 'All')
-      .map(cat => ({
-        name: cat.name || '',
-        link: `/${cat?.slug?.replace(/^\/?/, '')}`,
-      }))
-
-    return [
-      { name: 'Home', link: '/' },
-      ...categoryCrumbs,
-      { name: productName, link: '' },
-    ]
-  })
 
   const loadProductTemplate = async (params: QueryProductArgs) => {
     if (productTemplate?.value?.id) {
@@ -158,7 +135,7 @@ export const useProductTemplate = (slug: string) => {
 
   return {
     loadProductTemplate,
-    breadcrumbs,
+
     getAllSizes,
     getAllColors,
     getAllMaterials,

@@ -3,6 +3,8 @@ import frequentlyTogetherProductsFragment from './frequentlyTogetherProductsFrag
 
 export default `
   id
+  breadcrumb
+  jsonLdBreadcrumb
   metaDescription
   metaImage
   metaKeyword

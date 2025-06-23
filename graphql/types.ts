@@ -123,11 +123,6 @@ export type SignUpUserResponse = {
   }
 }
 
-export type BreadcrumbItem = {
-  name: string
-  link: string
-}
-
 export type LoginUserResponse = AsyncData<
   {
     login: {
