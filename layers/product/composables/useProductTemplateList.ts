@@ -1,4 +1,4 @@
-import type { AttributeFacet, AttributeValue, BreadcrumbItem, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql'
+import type { AttributeFacet, AttributeValue, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql'
 import { QueryName } from '~/server/queries'
 
 export const useProductTemplateList = (customIndex: string = '') => {
