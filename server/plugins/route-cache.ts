@@ -19,8 +19,7 @@ const routesToSkipCache = [
   '/sitemap.xml',
   '/__nuxt_island/**',
   '/_ipx/**',
-  '/_scripts/**',
-  '/**',
+  '/_scripts/**',  
 ]
 
 type Handler = {
@@ -38,7 +37,7 @@ export default defineNitroPlugin((nitroApp) => {
   const enHandler = handlerList.filter((r) => {
     const isRouteToSkip = skipRoutesSet.has(r.route)
 
-    return !isRouteToSkip
+    return !isRouteToSkip || r.route === '/**'
   })
 
   if (enHandler.length > 0) {
