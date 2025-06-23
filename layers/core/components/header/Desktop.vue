@@ -22,6 +22,7 @@ const {
   searchHits,
   selectHit,
   showResultSearch,
+  enterPress,
 } = useSearch(formSearchTemplateRef)
 
 const router = useRouter()
@@ -160,6 +161,7 @@ onClickOutside(formSearchTemplateRef, () => {
             wrapper-class="flex-1 h-10 pr-0"
             size="base"
             @input="search()"
+            @keydown.enter.prevent="enterPress"
           >
             <template #suffix>
               <span class="flex items-center">
@@ -169,6 +171,7 @@ onClickOutside(formSearchTemplateRef, () => {
                   aria-label="search"
                   type="submit"
                   class="rounded-l-none hover:bg-transparent active:bg-transparent"
+                  @click="enterPress"
                 >
                   <Icon
                     name="ion:search"
