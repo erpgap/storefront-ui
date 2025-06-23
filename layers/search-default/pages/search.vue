@@ -145,7 +145,7 @@ onMounted(() => {
               :first-variant="productTemplate.firstVariant as Product"
             />
           </section>
-          <CategoryEmptyState v-else />
+          <CategoryEmptyState v-if="!loading && totalItems === 0" />
           <LazyUiPagination
             v-if="pagination.totalPages > 1"
             class="mt-5"
