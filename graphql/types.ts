@@ -26,12 +26,9 @@ export type CategoryListResponse =
     }
   }
 
-export type CategoryResponse = AsyncData<
-  {
-    category: Category
-  },
-  H3Error
->
+export type CategoryResponse = {
+  category: Category
+}
 
 export type ProductTemplateListResponse = {
   products: {
@@ -124,11 +121,6 @@ export type SignUpUserResponse = {
     email: string
     partner: Partner
   }
-}
-
-export type BreadcrumbItem = {
-  name: string
-  link: string
 }
 
 export type LoginUserResponse = AsyncData<

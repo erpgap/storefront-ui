@@ -31,7 +31,6 @@ const {
   getAllColors,
   getAllMaterials,
   getAllSizes,
-  breadcrumbs,
 } = useProductTemplate(cleanPath.value)
 
 const { addProductToRecentViews } = useRecentViewProducts()
@@ -132,7 +131,7 @@ await loadProductTemplate({ slug: cleanPath.value })
   <NuxtErrorBoundary>
     <div>
       <UiBreadcrumb
-        :breadcrumbs="breadcrumbs"
+        :breadcrumbs="productTemplate?.breadcrumb"
         class="self-start mt-5 mb-10"
       />
       <div

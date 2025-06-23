@@ -1,4 +1,4 @@
-import type { AttributeFacet, AttributeValue, BreadcrumbItem, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql'
+import type { AttributeFacet, AttributeValue, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql'
 import { QueryName } from '~/server/queries'
 
 export const useProductTemplateList = (customIndex: string = '') => {
@@ -149,15 +149,9 @@ export const useProductTemplateList = (customIndex: string = '') => {
     })
   }
 
-  const loadCurrentCategory = async () => {
-    if (categorySlugIndex) {
-      await loadCategory({ slug: categorySlugIndex })
-    }
-  }
-
   return {
     loadProductTemplateList,
-    breadcrumbs,
+
     minPrice,
     maxPrice,
     loading,

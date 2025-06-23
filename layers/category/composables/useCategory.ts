@@ -17,24 +17,43 @@ export const useCategory = (categorySlug?: string) => {
     () => ({} as Category),
   )
 
-  const loadCategory = async (params: QueryCategoryArgs) => {
-    loading.value = true
-    try {
-      const { data } = await useAsyncData(
-        `category-list-${categorySlug}`,
-        () => $sdk().odoo.query<QueryCategoryArgs, CategoryResponse>(
+  const loadCategory = async (params: { slug: string }) => {
+    const cleanParam = {
+      slug: params.slug?.endsWith('/')
+        ? params.slug?.slice(0, -1)
+        : params.slug,
+    }
+    const { data, status } = await useAsyncData(
+      () =>
+        $sdk().odoo.query<QueryCategoryArgs, CategoryResponse>(
           { queryName: QueryName.GetCategoryQuery },
-          params,
+          cleanParam as QueryCategoryArgs,
+          { headers: useRequestHeaders() },
         ),
-      )
+      { lazy: import.meta.client },
+    )
 
-      if (data.value?.category) {
-        category.value = data.value.category
+    watch(status, () => {
+      if (status.value === 'pending') {
+        loading.value = true
       }
+      if (status.value === 'success' || status.value === 'error') {
+        loading.value = false
+      }
+    })
+
+    if (import.meta.server) {
+      if (data.value?.category?.id === 0) {
+        showError({
+          status: 404,
+        })
+      }
+      category.value = data.value?.category || ({} as Category)
     }
-    finally {
-      loading.value = false
-    }
+
+    watch(data, () => {
+      category.value = data.value?.category || ({} as Category)
+    })
   }
 
   const loadCategoryList = async (params: QueryCategoriesArgs) => {
