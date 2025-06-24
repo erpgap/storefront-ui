@@ -15,45 +15,43 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 </script>
 
 <template>
-  <ClientOnly>
-    <h2
-      v-if="heading"
-      class="text-center mb-6 font-bold typography-headline-3 md:typography-headline-2"
-    >
-      {{ heading }}
-    </h2>
-    <p class="my-4 typography-text-lg">
-      {{ text }}
-    </p>
-    <SfScrollable
-      v-if="props.productTemplateList?.length > 0"
-      buttons-placement="floating"
-      class="items-center pb-4"
-      data-testid="product-slider"
-      style="scrollbar-width: none;"
-    >
-      <LazyUiProductCard
-        v-for="(productTemplate, index) in props.productTemplateList"
-        :key="productTemplate?.id || index"
-        class="min-w-[190px] max-w-[190px]"
-        :slug=" mountUrlSlugForProductVariant(productTemplate.firstVariant as Product) || '' "
-        :name="productTemplate?.name || ''"
-        :image-url="
-          $getImage(
-            String(productTemplate.image),
-            370,
-            370,
-            String(productTemplate.imageFilename),
-          )
-        "
-        :image-alt="productTemplate?.name || ''"
-        :regular-price="getRegularPrice(productTemplate.firstVariant as Product)"
-        :special-price="getSpecialPrice(productTemplate.firstVariant as Product)"
-        :is-in-wishlist="productTemplate?.isInWishlist || false"
-        :rating-count="0"
-        :rating="0"
-        :first-variant="productTemplate.firstVariant as Product"
-      />
-    </SfScrollable>
-  </ClientOnly>
+  <h2
+    v-if="heading"
+    class="text-center mb-6 font-bold typography-headline-3 md:typography-headline-2"
+  >
+    {{ heading }}
+  </h2>
+  <p class="my-4 typography-text-lg">
+    {{ text }}
+  </p>
+  <SfScrollable
+    v-if="props.productTemplateList?.length > 0"
+    buttons-placement="floating"
+    class="items-center pb-4"
+    data-testid="product-slider"
+    style="scrollbar-width: none;"
+  >
+    <LazyUiProductCard
+      v-for="(productTemplate, index) in props.productTemplateList"
+      :key="productTemplate?.id || index"
+      class="min-w-[190px] max-w-[190px]"
+      :slug=" mountUrlSlugForProductVariant(productTemplate.firstVariant as Product) || '' "
+      :name="productTemplate?.name || ''"
+      :image-url="
+        $getImage(
+          String(productTemplate.image),
+          370,
+          370,
+          String(productTemplate.imageFilename),
+        )
+      "
+      :image-alt="productTemplate?.name || ''"
+      :regular-price="getRegularPrice(productTemplate.firstVariant as Product)"
+      :special-price="getSpecialPrice(productTemplate.firstVariant as Product)"
+      :is-in-wishlist="productTemplate?.isInWishlist || false"
+      :rating-count="0"
+      :rating="0"
+      :first-variant="productTemplate.firstVariant as Product"
+    />
+  </SfScrollable>
 </template>
