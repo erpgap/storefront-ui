@@ -19,7 +19,7 @@ const routesToSkipCache = [
   '/sitemap.xml',
   '/__nuxt_island/**',
   '/_ipx/**',
-  '/_scripts/**',  
+  '/_scripts/**',
 ]
 
 type Handler = {
@@ -37,7 +37,7 @@ export default defineNitroPlugin((nitroApp) => {
   const enHandler = handlerList.filter((r) => {
     const isRouteToSkip = skipRoutesSet.has(r.route)
 
-    return !isRouteToSkip || r.route === '/**'
+    return !isRouteToSkip
   })
 
   if (enHandler.length > 0) {
@@ -51,14 +51,13 @@ export default defineNitroPlugin((nitroApp) => {
           getKey: (event: H3Event) => {
             const headers = getRequestHeaders(event)
             const userAgent: any = headers['user-agent']
-            const countryIsoCode: any = getCookie(event, 'country-iso-code') || 'US'
 
             const flags = generateFlags(headers, userAgent)
 
             if (flags.isDesktop) {
-              return `desktop-${countryIsoCode}-${event.path}`
+              return `desktop-${event.path}`
             }
-            return `mobile-${countryIsoCode}-${event.path}`
+            return `mobile-${event.path}`
           },
           shouldInvalidateCache: (event: H3Event) => {
             return false

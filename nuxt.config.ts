@@ -62,10 +62,6 @@ export default defineNuxtConfig({
     transpile: ['vue-toastification'],
   },
 
-  routeRules: {
-    '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
-  },
-
   experimental: {
     asyncContext: true,
   },

@@ -1,4 +1,4 @@
-import { defineNuxtModule, extendRouteRules } from '@nuxt/kit'
+import { defineNuxtModule } from '@nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
 
@@ -119,19 +119,6 @@ export default defineNuxtModule({
     console.info(
       `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products and ${websitePagesUrls.length} website pages loaded`,
     )
-
-    categorySlugs.forEach((slug) => {
-      extendRouteRules(slug, { swr: swrValue })
-    })
-
-    productSlugs.forEach((slug) => {
-      extendRouteRules(slug, { swr: swrValue })
-    })
-
-    websitePagesUrls.forEach((url) => {
-      const path = url.startsWith('/') ? url : `/${url}`
-      extendRouteRules(path, { swr: swrValue })
-    })
 
     nuxt.hook('pages:extend', (pages: NuxtPage[]) => {
       categorySlugs.forEach((slug) => {
