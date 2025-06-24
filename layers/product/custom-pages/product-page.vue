@@ -98,11 +98,7 @@ const productsInCart = computed(() => {
 })
 
 const handleCartAdd = async () => {
-  let id = productTemplate?.value.id
-  if (!productTemplate.value.firstVariant?.combinationInfoVariant) {
-    id = Number(productTemplate?.value.firstVariant?.id)
-  }
-  await cartAdd(id, quantitySelectorValue.value)
+  await cartAdd(Number(productTemplate?.value.firstVariant?.id), quantitySelectorValue.value)
 }
 
 const handleWishlistAddItem = async (firstVariant: Product) => {
@@ -262,8 +258,8 @@ await loadProductTemplate({ slug: cleanPath.value })
                   "
                   @click="
                     isInWishlist(productTemplate?.firstVariant?.id as number)
-                      ? handleWishlistRemoveItem(productTemplate)
-                      : handleWishlistAddItem(productTemplate)
+                      ? productTemplate.firstVariant && handleWishlistRemoveItem(productTemplate.firstVariant)
+                      : productTemplate.firstVariant && handleWishlistAddItem(productTemplate.firstVariant)
                   "
                 >
                   <SfIconFavoriteFilled
