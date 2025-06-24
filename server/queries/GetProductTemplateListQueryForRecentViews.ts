@@ -14,10 +14,23 @@ query (
     sort: $sort
   ) {
     products {      
-      firstVariant {
+      firstVariant{
+      id
+      combinationInfoVariant
+      slug
+      variantAttributeValues{
         id
-        combinationInfoVariant         
+        name
+        displayType
+        name
+        htmlColor
+        search
+        attribute{
+          id
+          name
+        }
       }
+    }
       tags {        
         name
         image
