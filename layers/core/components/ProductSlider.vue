@@ -15,7 +15,7 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 </script>
 
 <template>
-  <ClientOnly >
+  <ClientOnly>
     <h2
       v-if="heading"
       class="text-center mb-6 font-bold typography-headline-3 md:typography-headline-2"
@@ -50,8 +50,8 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
         :regular-price="getRegularPrice(productTemplate.firstVariant as Product)"
         :special-price="getSpecialPrice(productTemplate.firstVariant as Product)"
         :is-in-wishlist="productTemplate?.isInWishlist || false"
-        :rating-count="productTemplate.ratingCount"
-        :rating="productTemplate.rating"
+        :rating-count="0"
+        :rating="0"
         :first-variant="productTemplate.firstVariant as Product"
       />
     </SfScrollable>
