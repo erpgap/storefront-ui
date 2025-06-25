@@ -514,9 +514,11 @@ await loadProductTemplate({ slug: cleanPath.value })
         v-if="!loadingProductTemplate"
         class="lg:mx-4 mb-20"
       >
-        <LazyProductRecentViewSlider
-          text="Your recent views"
-        />
+        <ClientOnly>
+          <LazyProductRecentViewSlider
+            text="Your recent views"
+          />
+        </ClientOnly>
       </section>
     </div>
     <template #error="{ error }">
