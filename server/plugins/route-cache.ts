@@ -37,7 +37,7 @@ export default defineNitroPlugin((nitroApp) => {
   const enHandler = handlerList.filter((r) => {
     const isRouteToSkip = skipRoutesSet.has(r.route)
 
-    return !isRouteToSkip
+    return !isRouteToSkip || r.route === '/**'
   })
 
   if (enHandler.length > 0) {
