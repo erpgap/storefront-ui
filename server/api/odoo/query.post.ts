@@ -13,7 +13,7 @@ const customCache = cachedFunction(
         'accept': 'application/json',
         'content-type': 'application/json',
         'REAL-IP': getRequestIP(event) || '',
-        'resquest-host': getRequestHost(event),
+        'resquest-host': config.public.middlewareUrl || getRequestHost(event),
         'Cookie': `session_id=${getCookie(event, 'session_id')}`,
       },
       body: JSON.stringify({ query: Queries[body?.[0]?.queryName], variables: body?.[1] }),

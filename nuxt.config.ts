@@ -51,6 +51,7 @@ export default defineNuxtConfig({
     public: {
       odooBaseImageUrl: '',
       odooBaseUrl: '',
+      middlewareUrl: '',
       currencySymbol: '',
       currencySeparator: '',
       currencyDecimal: '',
