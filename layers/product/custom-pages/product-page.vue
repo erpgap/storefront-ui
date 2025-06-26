@@ -17,7 +17,7 @@ import {
   SfThumbnail,
 } from '@storefront-ui/vue'
 import type { LocationQueryRaw } from 'vue-router'
-import type { OrderLine, Product } from '~/graphql'
+import type { ImageGalleryItem, OrderLine, Product } from '~/graphql'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 
 const route = useRoute()
@@ -146,7 +146,7 @@ await loadProductTemplate({ slug: cleanPath.value })
       >
         <section class="grid-in-left-top md:h-full xl:max-h-[700px]">
           <LazyUiGallery
-            :main-image="mainImage || {}"
+            :main-image="mainImage || {} as ImageGalleryItem"
             :thumbs="thumbs"
           />
         </section>
