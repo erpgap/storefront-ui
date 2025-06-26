@@ -1,7 +1,21 @@
-import { updateCart, reduceCart } from '../utils/cartHelpers.js'
-import { AddressType, type Cart } from '~/graphql'
+import { AddressType, type Cart, type OrderLineWithStockFromRedis, type WishlistData } from '~/graphql'
 import { MutationName } from '~/server/mutations'
 import { QueryName } from '~/server/queries'
+
+const updateCartWithRedisStock = async (cart: Cart) => {
+  const websiteId = 3
+
+  for (const orderLine of cart?.order?.websiteOrderLine || []) {
+    const stock = await useStorage('stock').getItem<string>(`stock:product-${orderLine?.product?.id}`)
+    try {
+      (orderLine as OrderLineWithStockFromRedis).product.stock = Number(stock?.[websiteId] || 0)
+    }
+    catch (error: any) {
+      (orderLine as OrderLineWithStockFromRedis).product.stock = 0
+    }
+  }
+  return cart
+}
 
 /**
  * This plugin is responsible for managing the cart cache.
@@ -15,13 +29,18 @@ export default defineNitroPlugin((nitro) => {
         cartAddItem(event, body),
         cartRemoveItem(event, body),
         cartUpdateItem(event, body),
+        cartClear(event, body),
         updateAddress(event, body),
         addAddress(event, body),
         createUpdatePartner(event, body),
         applyCoupon(event, body),
         applyGiftCard(event, body),
-        clearCartAfterCreditCardPaymentConfirmation(event, body),
-        clearCartAfterGiftCardPaymentConfirmation(event, body),
+        login(event, body),
+
+        // There is a problem in this methods below, if they still needed must fix.
+        // Since the checkout will be odoo, we dont need them in first release.
+        // clearCartAfterCreditCardPaymentConfirmation(event, body),
+        // clearCartAfterGiftCardPaymentConfirmation(event, body),
       ])
     }
   })
@@ -30,7 +49,18 @@ async function cartAddItem(event: any, body: any) {
   const requestBody = await readBody(event)
 
   if (requestBody[0]?.mutationName === MutationName.CartAddItem) {
-    await updateCart(event, body.cartAddMultipleItems)
+    const session = await useSession(event, {
+      password: 'b013b03ac2231e0b448e9a22ba488dcf',
+    })
+
+    const keyName = `cache:cart:${session?.id}`
+    const currentCart = (await useStorage().getItem<{ cart: Cart }>(keyName)) || { cart: {} }
+
+    let cart = Object.assign({}, currentCart.cart, body.cartAddMultipleItems)
+
+    cart = await updateCartWithRedisStock(cart)
+
+    await useStorage().setItem(keyName, { cart })
   }
 }
 
@@ -38,7 +68,19 @@ async function applyCoupon(event: any, body: any) {
   const requestBody = await readBody(event)
 
   if (requestBody[0]?.mutationName === MutationName.ApplyCouponMutation) {
-    await updateCart(event, body.applyCoupon)
+    const session = await useSession(event, {
+      password: 'b013b03ac2231e0b448e9a22ba488dcf',
+    })
+
+    const keyName = `cache:cart:${session?.id}`
+    const currentCart = (await useStorage().getItem<{ cart: Cart }>(
+      keyName,
+    )) || { cart: {} }
+
+    let cart = Object.assign({}, currentCart.cart, body.applyCoupon)
+    cart = await updateCartWithRedisStock(cart)
+
+    useStorage().setItem(keyName, { cart })
   }
 }
 
@@ -46,21 +88,54 @@ async function applyGiftCard(event: any, body: any) {
   const requestBody = await readBody(event)
 
   if (requestBody[0]?.mutationName === MutationName.ApplyGiftCardMutation) {
-    await updateCart(event, body.applyGiftCard)
+    const session = await useSession(event, {
+      password: 'b013b03ac2231e0b448e9a22ba488dcf',
+    })
+
+    const keyName = `cache:cart:${session?.id}`
+    const currentCart = (await useStorage().getItem<{ cart: Cart }>(keyName)) || { cart: {} }
+
+    let cart = Object.assign({}, currentCart.cart, body.applyGiftCard)
+    cart = await updateCartWithRedisStock(cart)
+
+    useStorage().setItem(keyName, { cart })
   }
 }
 
 async function cartRemoveItem(event: any, body: any) {
   const requestBody = await readBody(event)
   if (requestBody[0]?.mutationName === MutationName.CartRemoveItem) {
-    await updateCart(event, body.cartRemoveMultipleItems)
+    const session = await useSession(event, {
+      password: 'b013b03ac2231e0b448e9a22ba488dcf',
+    })
+
+    const keyName = `cache:cart:${session?.id}`
+    const currentCart = (await useStorage().getItem<{ cart: Cart }>(
+      keyName,
+    )) || { cart: {} }
+
+    let cart = Object.assign({}, currentCart.cart, body.cartRemoveMultipleItems)
+    cart = await updateCartWithRedisStock(cart)
+
+    await useStorage().setItem(keyName, { cart })
   }
 }
 
 async function cartUpdateItem(event: any, body: any) {
   const requestBody = await readBody(event)
+
   if (requestBody[0]?.mutationName === MutationName.CartUpdateQuantity) {
-    await updateCart(event, body.cartUpdateMultipleItems)
+    const session = await useSession(event, {
+      password: 'b013b03ac2231e0b448e9a22ba488dcf',
+    })
+
+    const keyName = `cache:cart:${session?.id}`
+    const currentCart = (await useStorage().getItem<{ cart: Cart }>(keyName)) || { cart: {} }
+    let cart = Object.assign({}, currentCart.cart, body.cartUpdateMultipleItems)
+
+    cart = await updateCartWithRedisStock(cart)
+
+    await useStorage().setItem(keyName, { cart })
   }
 }
 
@@ -80,9 +155,7 @@ async function addAddress(event: any, body: any) {
     else {
       currentCart.cart.order.partnerInvoice = body.addAddress
     }
-
-    const reducedCart = reduceCart(currentCart as Cart)
-    await useStorage().setItem(keyName, reducedCart)
+    await useStorage().setItem(keyName, currentCart)
   }
 }
 
@@ -104,8 +177,7 @@ async function updateAddress(event: any, body: any) {
       currentCart.cart.order.partnerInvoice = body.updateAddress
     }
 
-    const reducedCart = reduceCart(currentCart as Cart)
-    await useStorage().setItem(keyName, reducedCart)
+    await useStorage().setItem(keyName, currentCart)
   }
 }
 
@@ -120,9 +192,7 @@ async function createUpdatePartner(event: any, body: any) {
     const currentCart
       = (await useStorage().getItem<{ cart: Cart }>(keyName)) || ({} as any)
     currentCart.cart.order.partner = body.createUpdatePartner
-
-    const reducedCart = reduceCart(currentCart as Cart)
-    await useStorage().setItem(keyName, reducedCart)
+    await useStorage().setItem(keyName, currentCart)
   }
 }
 
@@ -144,6 +214,57 @@ async function clearCartAfterCreditCardPaymentConfirmation(
     const keyName = `cache:cart:${session?.id}`
     if (paymentSuccess) {
       await useStorage().removeItem(keyName)
+    }
+  }
+}
+
+async function cartClear(event: any, body: any) {
+  const requestBody = await readBody(event)
+
+  if (requestBody[0]?.mutationName === MutationName.CartClear) {
+    const session = await useSession(event, { password: 'b013b03ac2231e0b448e9a22ba488dcf' })
+
+    const keyName = `cache:cart:${session?.id}`
+    await useStorage().removeItem(keyName)
+  }
+}
+
+async function login(event: any, body: any) {
+  const requestBody = await readBody(event)
+
+  if (requestBody[0]?.mutationName === MutationName.LoginMutation) {
+    try {
+      const session = await useSession(event, {
+        password: 'b013b03ac2231e0b448e9a22ba488dcf',
+      })
+
+      const keyName = `cart:${session?.id}`
+      const currentCart = (await useStorage().getItem<{ cart: Cart }>(keyName)) || ({} as any)
+      if (body?.login?.cart?.websiteOrderLine?.length > 0) {
+        currentCart.cart.order = body.cart
+        await useStorage().setItem(keyName, currentCart)
+      }
+      else {
+        currentCart.cart.order.partner = body.cart.order.partner
+        currentCart.cart.order.partnerShipping = body.cart.order.partnerShipping
+        currentCart.cart.order.partnerInvoice = body.cart.order.partnerInvoice
+      }
+
+      const keyNameWishlist = `cache:wishlist:${session?.id}`
+      const currentWishlist = (await useStorage().getItem<WishlistData>(
+        keyNameWishlist,
+      )) || { wishlistItems: {}, totalCount: 0 }
+
+      const wishlist = Object.assign(
+        {},
+        currentWishlist.wishlistItems,
+        body.login.wishlistItems,
+      )
+
+      await useStorage().setItem(keyNameWishlist, { wishlist })
+    }
+    catch (error) {
+      //
     }
   }
 }

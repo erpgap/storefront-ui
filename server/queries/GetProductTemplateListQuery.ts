@@ -27,8 +27,7 @@ query(
       attribute{
         id
         name
-      }
-      
+      }      
     }
     products {
       ${productFragment}
