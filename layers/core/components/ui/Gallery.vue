@@ -1,17 +1,34 @@
 <script lang="ts" setup>
 import { SfScrollable } from '@storefront-ui/vue'
-import { ref } from 'vue'
+import { ref, computed, type PropType } from 'vue'
+import type { ImageGalleryItem } from '~/graphql'
 
 const props = defineProps({
-  images: {
-    type: Array,
-    default: [],
+  mainImage: {
+    type: Object as PropType<ImageGalleryItem>,
+    required: true,
+  },
+  thumbs: {
+    type: Array as PropType<ImageGalleryItem[]>,
+    default: () => [],
   },
 })
 
 const thumbsRef = ref<HTMLElement>()
 const activeIndex = ref(0)
-const images = computed<any[]>(() => props.images)
+
+const allImages = computed(() => [
+  {
+    imageSrc: props.mainImage.url,
+    imageThumbSrc: props.mainImage.url,
+    alt: props.mainImage.alt,
+  },
+  ...props.thumbs.map(thumb => ({
+    imageSrc: thumb.url,
+    imageThumbSrc: thumb.url,
+    alt: thumb.alt,
+  })),
+])
 </script>
 
 <template>
@@ -24,12 +41,14 @@ const images = computed<any[]>(() => props.images)
       buttons-placement="none"
     >
       <button
-        v-for="({ imageThumbSrc, alt }, index) in images"
+        v-for="({ imageThumbSrc, alt }, index) in allImages"
         :key="`${alt}-${index}-thumbnail`"
         type="button"
         :aria-label="alt"
-        :aria-current="activeIndex === 0"
-        class="md:w-[78px] md:h-auto relative shrink-0 pb-1 mx-4 border-b-4 snap-start cursor-pointer focus-visible:outline focus-visible:outline-offset transition-colors flex-grow md:flex-grow-0 border-primary-700"
+        :aria-current="activeIndex === index"
+        class="md:w-[78px] md:h-auto relative shrink-0 pb-1 mx-4 border-b-4 snap-start cursor-pointer focus-visible:outline focus-visible:outline-offset transition-colors flex-grow md:flex-grow-0"
+        :class="activeIndex === index ? 'border-primary-700' : 'border-transparent'"
+        @click="activeIndex = index"
       >
         <NuxtImg
           provider="odooProvider"
@@ -51,7 +70,7 @@ const images = computed<any[]>(() => props.images)
       :drag="{ containerWidth: true }"
     >
       <div
-        v-for="({ imageSrc, alt }, index) in images"
+        v-for="({ imageSrc, alt }, index) in allImages"
         :key="`${alt}-${index}`"
         class="flex justify-center h-full basis-full shrink-0 grow snap-center"
       >

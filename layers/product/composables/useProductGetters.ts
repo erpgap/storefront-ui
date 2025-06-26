@@ -6,7 +6,21 @@ import type {
 export const useProductGetters = (
   product: Ref<CustomProductWithStockFromRedis>,
 ) => {
-  const getImages = (
+  const getMainImage = (
+    width: string | number,
+    height: string | number,
+  ): ImageGalleryItem | null => {
+    if (!product.value?.image) return null
+    return {
+      id: product.value.id,
+      url: String(product.value.image),
+      alt: String(product.value.imageFilename),
+      width,
+      height,
+    }
+  }
+
+  const getThumbs = (
     width: string | number,
     height: string | number,
   ): ImageGalleryItem[] => {
@@ -15,13 +29,14 @@ export const useProductGetters = (
         id: image.id,
         url: String(image.image),
         alt: String(image.imageFilename),
-        width: width,
-        height: height,
+        width,
+        height,
       })) as ImageGalleryItem[]) || []
     )
   }
 
   return {
-    getImages,
+    getMainImage,
+    getThumbs,
   }
 }
