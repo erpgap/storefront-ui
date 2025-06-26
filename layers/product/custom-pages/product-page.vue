@@ -118,8 +118,9 @@ watch(
   },
   { deep: true, immediate: true },
 )
-const { getImages } = useProductGetters(productTemplate)
-const mainImages = computed(() => getImages(890, 594))
+const { getMainImage, getThumbs } = useProductGetters(productTemplate)
+const mainImage = computed(() => getMainImage(380, 505))
+const thumbs = computed(() => getThumbs(78, 78))
 await loadProductTemplate({ slug: cleanPath.value })
 </script>
 
@@ -144,7 +145,10 @@ await loadProductTemplate({ slug: cleanPath.value })
         class="md:grid grid-areas-product-page grid-cols-product-page gap-x-6"
       >
         <section class="grid-in-left-top md:h-full xl:max-h-[700px]">
-          <LazyUiGallery :images="mainImages" />
+          <LazyUiGallery
+            :main-image="mainImage || {}"
+            :thumbs="thumbs"
+          />
         </section>
         <section class="col-span-5 grid-in-right md:mb-0">
           <div
