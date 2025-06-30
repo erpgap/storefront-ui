@@ -55,7 +55,9 @@ const pagination = computed(() => ({
   pageOptions: [5, 10, 15, 20],
 }))
 
-await loadCategory({ slug: String(cleanFullPath.value) })
+watch(cleanFullPath, async (newSlug) => {
+  await loadCategory({ slug: String(newSlug) })
+})
 
 if (category.value) {
   useHead(generateSeo<SeoEntity>(category.value, 'Category'))
