@@ -19,7 +19,7 @@ export const useCategory = () => {
         ? params.slug?.slice(0, -1)
         : params.slug,
     }
-    const { data, status } = await useAsyncData(
+    const { data, status } = await useAsyncData(`category-${cleanParam.slug}`,
       () =>
         $sdk().odoo.query<QueryCategoryArgs, CategoryResponse>(
           { queryName: QueryName.GetCategoryQuery },
