@@ -54,7 +54,7 @@ const pagination = computed(() => ({
 }))
 
 watch(
-  cleanFullPath,
+  () => route.path,
   async (newSlug, oldSlug) => {
     if (newSlug && newSlug !== oldSlug) {
       await loadCategory({ slug: String(newSlug) })
