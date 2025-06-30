@@ -54,12 +54,7 @@ const pagination = computed(() => ({
   pageOptions: [5, 10, 15, 20],
 }))
 
-const params = route.params as { id?: string | number, slug?: string }
-
-await loadCategory({
-  id: Number(params.id),
-  slug: String(cleanFullPath.value),
-})
+await loadCategory({ slug: String(cleanFullPath.value) })
 
 if (category.value) {
   useHead(generateSeo<SeoEntity>(category.value, 'Category'))
