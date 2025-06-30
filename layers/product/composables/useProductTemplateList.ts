@@ -16,34 +16,6 @@ export const useProductTemplateList = (customIndex: string = '') => {
   const productTemplateList = useState<Product[]>(`product-template-list${cleanFullSearchIndex}${customIndex}`, () => [])
   const organizedAttributes = useState<AttributeFacet[]>(`attributes${categorySlugIndex}${customIndex}`, () => [])
 
-  const { loadCategory, category: loadedCategory } = useCategory(categorySlugIndex)
-
-  const breadcrumbs = computed(() => {
-    const breadcrumbList: BreadcrumbItem[] = [{ name: 'Inicio', link: '/' }]
-    const categoryChain: { name: string, slug: string }[] = []
-
-    let current = loadedCategory.value
-
-    while (current) {
-      categoryChain.unshift({
-        name: current.name,
-        slug: current.slug?.replace(/^\/?/, '') || '',
-      })
-      current = current.parent
-    }
-
-    for (const item of categoryChain) {
-      breadcrumbList.push({
-        name: item.name,
-        link: `/${item.slug}`,
-      })
-    }
-
-    // loadCurrentCategory()
-
-    return breadcrumbList
-  })
-
   const updateVariablesFromData = (data: ProductTemplateListResponse | null) => {
     productTemplateList.value = data?.products?.products || []
     minPrice.value = data?.products?.minPrice || null
