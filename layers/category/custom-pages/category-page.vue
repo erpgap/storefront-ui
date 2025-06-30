@@ -6,6 +6,7 @@ import type { Product } from '~/graphql'
 const route = useRoute()
 
 const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
+console.log('cleanFullPath', cleanFullPath.value)
 
 const { isOpen, open, close } = useDisclosure()
 const {
@@ -20,7 +21,7 @@ const {
 
 provide('stockCount', stockCount)
 
-const { loadCategory, category } = useCategory(String(cleanFullPath.value))
+const { loadCategory, category } = useCategory()
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 const { getFacetsFromURL } = useUiHelpers()
 
