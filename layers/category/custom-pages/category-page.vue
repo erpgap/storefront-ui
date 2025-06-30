@@ -6,11 +6,9 @@ import type { Product } from '~/graphql'
 const route = useRoute()
 
 const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
-console.log('cleanFullPath', cleanFullPath.value)
 
 const { isOpen, open, close } = useDisclosure()
 const {
-
   loadProductTemplateList,
   organizedAttributes,
   loading,
@@ -55,13 +53,18 @@ const pagination = computed(() => ({
   pageOptions: [5, 10, 15, 20],
 }))
 
-watch(cleanFullPath, async (newSlug) => {
-  await loadCategory({ slug: String(newSlug) })
-})
-
-if (category.value) {
-  useHead(generateSeo<SeoEntity>(category.value, 'Category'))
-}
+watch(
+  cleanFullPath,
+  async (newSlug, oldSlug) => {
+    if (newSlug && newSlug !== oldSlug) {
+      await loadCategory({ slug: String(newSlug) })
+      if (category.value) {
+        useHead(generateSeo<SeoEntity>(category.value, 'Category'))
+      }
+    }
+  },
+  { immediate: true },
+)
 
 setMaxVisiblePages(isWideScreen.value)
 
