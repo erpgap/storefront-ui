@@ -1,10 +1,10 @@
 import type {
-  CustomProductWithStockFromRedis,
   ImageGalleryItem,
+  Product,
 } from '~/graphql'
 
 export const useProductGetters = (
-  product: Ref<CustomProductWithStockFromRedis>,
+  product: Ref<Product>,
 ) => {
   const getMainImage = (
     width: string | number,
