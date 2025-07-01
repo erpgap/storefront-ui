@@ -3,6 +3,7 @@ import {
   SfButton,
   SfChip,
   SfCounter,
+  SfIconCompareArrows,
   SfIconFavorite,
   SfIconFavoriteFilled,
   SfIconPackage,
@@ -23,6 +24,7 @@ import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 const route = useRoute()
 
 const cleanPath = computed(() => route?.path?.replace(/\/$/, ''))
+const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
 
 const {
   loadProductTemplate,
@@ -32,12 +34,25 @@ const {
   getAllMaterials,
   getAllSizes,
 } = useProductTemplate(cleanPath.value)
-
+const {
+  loadProductVariant,
+  loadingProductVariant,
+  productVariant,
+  getRegularPrice,
+  getSpecialPrice,
+} = useProductVariant(cleanFullPath.value)
 const { addProductToRecentViews } = useRecentViewProducts()
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
 const { cart, cartAdd } = useCart()
 
-useHead(generateSeo<SeoEntity>(productTemplate.value, 'Product'))
+useHead(generateSeo<SeoEntity>(productVariant.value, 'Product'))
+
+const params = computed(() => ({
+  combinationId: Object.values(route.query)?.map(value =>
+    parseInt(value as string),
+  ),
+  productTemplateId: productTemplate?.value?.id,
+}))
 
 const selectedSize = computed(() =>
   route.query.Size ? Number(route.query.Size) : getAllSizes?.value?.[0]?.value,
@@ -92,13 +107,17 @@ const productsInCart = computed(() => {
   return (
     cart.value?.order?.websiteOrderLine?.find(
       (orderLine: OrderLine) =>
-        orderLine.product?.id === productTemplate?.value.id,
+        orderLine.product?.id === productVariant?.value.id,
     )?.quantity || 0
   )
 })
 
 const handleCartAdd = async () => {
-  await cartAdd(Number(productTemplate?.value.firstVariant?.id), quantitySelectorValue.value)
+  let id = productVariant?.value.id
+  if (!productVariant.value.combinationInfoVariant) {
+    id = Number(productVariant?.value.firstVariant?.id)
+  }
+  await cartAdd(id, quantitySelectorValue.value)
 }
 
 const handleWishlistAddItem = async (firstVariant: Product) => {
@@ -110,24 +129,31 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
 }
 
 watch(
-  productTemplate,
-  async (oldValue, newValue) => {
-    if (oldValue?.id !== newValue?.id) {
-      addProductToRecentViews(Number(productTemplate.value?.id))
+  () => params.value,
+  async (newValue, oldValue) => {
+    if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+      await loadProductVariant(newValue)
+      addProductToRecentViews(productTemplate.value?.id)
     }
   },
-  { deep: true, immediate: true },
+  { deep: true },
 )
-const { getMainImage, getThumbs } = useProductGetters(productTemplate)
+
+const { getMainImage, getThumbs } = useProductGetters(productVariant)
 const mainImage = computed(() => getMainImage(380, 505))
 const thumbs = computed(() => getThumbs(78, 78))
+
 await loadProductTemplate({ slug: cleanPath.value })
+if (productTemplate.value?.id) {
+  await loadProductVariant(params.value)
+}
 </script>
 
 <template>
   <NuxtErrorBoundary>
     <div>
       <UiBreadcrumb
+        v-if="productTemplate?.breadcrumb?.length"
         :breadcrumbs="productTemplate?.breadcrumb"
         class="self-start mt-5 mb-10"
       />
@@ -141,7 +167,7 @@ await loadProductTemplate({ slug: cleanPath.value })
         />
       </div>
       <div
-        v-else-if="productTemplate.id"
+        v-else-if="productVariant.id"
         class="md:grid grid-areas-product-page grid-cols-product-page gap-x-6"
       >
         <section class="grid-in-left-top md:h-full xl:max-h-[700px]">
@@ -169,12 +195,12 @@ await loadProductTemplate({ slug: cleanPath.value })
               class="mb-1 font-bold typography-headline-4"
               data-testid="product-name"
             >
-              {{ productTemplate?.name }}
+              {{ productVariant?.name }}
             </h1>
             <div
               v-if="
-                productTemplate
-                  && productTemplate?.firstVariant?.combinationInfoVariant.has_discounted_price
+                productVariant
+                  && productVariant?.combinationInfoVariant?.has_discounted_price
               "
               class="my-1"
             >
@@ -182,10 +208,10 @@ await loadProductTemplate({ slug: cleanPath.value })
                 class="mr-2 text-secondary-700 font-bold font-headings text-2xl"
                 data-testid="price"
               >
-                {{ $currency(productTemplate?.firstVariant?.combinationInfoVariant.price) }}
+                {{ $currency(getSpecialPrice) }}
               </span>
               <span class="text-base font-normal text-neutral-500 line-through">
-                {{ $currency(productTemplate?.firstVariant?.combinationInfoVariant.list_price) }}
+                {{ $currency(getRegularPrice) }}
               </span>
             </div>
             <div
@@ -196,7 +222,7 @@ await loadProductTemplate({ slug: cleanPath.value })
                 class="mr-2 text-secondary-700 font-bold font-headings text-2xl"
                 data-testid="price"
               >
-                {{ $currency(productTemplate?.firstVariant?.combinationInfoVariant.list_price) }}
+                {{ $currency(getRegularPrice) }}
               </span>
             </div>
             <div class="inline-flex items-center mt-4 mb-2">
@@ -223,7 +249,7 @@ await loadProductTemplate({ slug: cleanPath.value })
               class="mb-4 font-normal typography-text-sm"
               data-testid="product-description"
             >
-              {{ productTemplate?.description }}
+              {{ productVariant?.description }}
             </p>
             <div class="py-4 mb-4 border-gray-200 border-y">
               <div
@@ -240,7 +266,7 @@ await loadProductTemplate({ slug: cleanPath.value })
                   class="min-w-[145px] flex-grow flex-shrink-0 basis-0"
                 />
                 <SfButton
-                  :disabled="loadingProductTemplate"
+                  :disabled="loadingProductVariant"
                   type="button"
                   size="lg"
                   class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap"
@@ -258,24 +284,24 @@ await loadProductTemplate({ slug: cleanPath.value })
                   size="sm"
                   variant="tertiary"
                   :class="
-                    productTemplate?.firstVariant?.isInWishlist ? 'bg-primary-100' : 'bg-white'
+                    productVariant?.isInWishlist ? 'bg-primary-100' : 'bg-white'
                   "
                   @click="
-                    isInWishlist(productTemplate?.firstVariant?.id as number)
-                      ? productTemplate.firstVariant && handleWishlistRemoveItem(productTemplate.firstVariant)
-                      : productTemplate.firstVariant && handleWishlistAddItem(productTemplate.firstVariant)
+                    isInWishlist(productVariant?.id as number)
+                      ? handleWishlistRemoveItem(productVariant)
+                      : handleWishlistAddItem(productVariant)
                   "
                 >
                   <SfIconFavoriteFilled
-                    v-show="isInWishlist(productTemplate?.firstVariant?.id as number)"
+                    v-show="isInWishlist(productVariant?.id as number)"
                     size="sm"
                   />
                   <SfIconFavorite
-                    v-show="!isInWishlist(productTemplate?.firstVariant?.id as number)"
+                    v-show="!isInWishlist(productVariant?.id as number)"
                     size="sm"
                   />
                   {{
-                    isInWishlist(productTemplate?.firstVariant?.id as number)
+                    isInWishlist(productVariant?.id as number)
                       ? $t('wishlist.removeFromWishlist')
                       : $t('wishlist.addToWishlist')
                   }}
@@ -473,7 +499,7 @@ await loadProductTemplate({ slug: cleanPath.value })
                 </h2>
               </template>
               <p>
-                {{ productTemplate?.firstVariant?.description }}
+                {{ productVariant?.description }}
               </p>
             </UiAccordionItem>
             <UiDivider class="my-4" />
