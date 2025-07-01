@@ -58,9 +58,9 @@ watch(
   async (newSlug, oldSlug) => {
     if (newSlug && newSlug !== oldSlug) {
       await loadCategory({ slug: String(newSlug) })
-      if (category.value) {
-        useHead(generateSeo<SeoEntity>(category.value, 'Category'))
-      }
+      // if (category.value) {
+      //   useHead(generateSeo<SeoEntity>(category.value, 'Category'))
+      // }
     }
   },
   { immediate: true },
