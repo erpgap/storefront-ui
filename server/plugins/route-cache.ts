@@ -37,7 +37,7 @@ export default defineNitroPlugin((nitroApp) => {
   const enHandler = handlerList.filter((r) => {
     const isRouteToSkip = skipRoutesSet.has(r.route)
 
-    return !isRouteToSkip || r.route === '/**'
+    return !isRouteToSkip
   })
 
   if (enHandler.length > 0) {
@@ -66,7 +66,7 @@ export default defineNitroPlugin((nitroApp) => {
           swr: true,
           staleMaxAge: Number(process.env?.NUXT_SWR_CACHE_TIME),
           shouldBypassCache: (event: H3Event) => {
-            return false
+            return event.path === '/cart' || event.path.startsWith('/my-account/')
           },
         },
       )
