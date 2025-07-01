@@ -42,26 +42,6 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
     })
   }
 
-  const categoriesForBreadcrumb = computed(() => {
-    return (
-      productVariant.value?.categories
-        ?.filter(category => category.name !== 'All')
-        ?.map(item => ({ name: item.name, link: item.slug }))
-        ?.flat() || []
-    )
-  })
-
-  const breadcrumbs = computed(() => {
-    return [
-      { name: 'Home', link: '/' },
-      ...categoriesForBreadcrumb.value,
-      {
-        name: productVariant?.value?.name,
-        link: `product/${productVariant?.value?.name}`,
-      },
-    ]
-  })
-
   const getImages = computed(() => {
     return [
       {
@@ -86,7 +66,6 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
     loadingProductVariant,
     productVariant: computed(() => productVariant.value),
     getImages,
-    breadcrumbs,
     getRegularPrice,
     getSpecialPrice,
 
