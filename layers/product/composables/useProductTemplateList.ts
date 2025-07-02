@@ -5,7 +5,7 @@ export const useProductTemplateList = (customIndex: string = '') => {
   const { $sdk } = useNuxtApp()
   const route = useRoute()
 
-  const categorySlugIndex = route.path
+  const categorySlugIndex = route.fullPath
   const cleanFullSearchIndex = getUniqueUrlFromRouteFilteringByAttributes(route.path, route)
 
   const minPrice = useState<number | null>(`min-price-template-list${categorySlugIndex}${customIndex}`, () => null)
