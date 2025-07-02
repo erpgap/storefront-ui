@@ -4,13 +4,13 @@ import {
   SfIconSell,
   SfLink,
 } from '@storefront-ui/vue'
-import type { OrderLine, Product } from '~/graphql'
+import type { CustomOrderLineWithStockFromRedis, OrderLine, Product } from '~/graphql'
 
 const NuxtLink = resolveComponent('NuxtLink')
 
 defineProps({
   orderLine: {
-    type: Object as PropType<OrderLine>,
+    type: Object as PropType<CustomOrderLineWithStockFromRedis>,
     required: true,
   },
 })
@@ -113,7 +113,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
         <UiQuantitySelector
           v-model="orderLine.quantity"
           :min-value="1"
-          :max-value="Number(orderLine.product?.qty)"
+          :max-value="Number(orderLine.product?.stock)"
           :value="Number(orderLine.quantity)"
           class="mt-4 sm:mt-0"
           @update:model-value="updateItemQuantity(orderLine.id, $event)"

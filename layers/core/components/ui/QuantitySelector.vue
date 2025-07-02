@@ -45,6 +45,7 @@ const handleUpdate = (event: Event) => {
         square
         class="rounded-r-none"
         aria-label="Decrease value"
+        :disabled="props.modelValue <= 1"
         data-testid="quantity-selector-decrease-button"
         @click="decrement"
       >
@@ -67,6 +68,7 @@ const handleUpdate = (event: Event) => {
         class="rounded-l-none"
         aria-label="Increase value"
         data-testid="quantity-selector-increase-button"
+        :disabled="props.modelValue >= props.maxQty"
         @click="increment"
       >
         <SfIconAdd />

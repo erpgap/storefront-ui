@@ -11,36 +11,25 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   const { $sdk } = useNuxtApp()
 
   const loadingProductVariant = ref(false)
+
   const productVariant = useState<CustomProductWithStockFromRedis>(`product-${slugWithCombinationIds}`, () => ({}) as CustomProductWithStockFromRedis)
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
-    const { data, status } = await useAsyncData(() =>
+    loadingProductVariant.value = true
+    const { data, status } = await useAsyncData(`product-${slugWithCombinationIds}`, () =>
       $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>(
         { queryName: QueryName.GetProductVariantQuery }, params),
     )
+    loadingProductVariant.value = false
 
-    productVariant.value = (data?.value?.productVariant?.product) || {} as CustomProductWithStockFromRedis
-    if (!productVariant.value?.id) {
+    if (!data?.value?.productVariant?.product?.id) {
       showError({
         status: 404,
         message: 'Product not found',
       })
     }
 
-    watch(status, () => {
-      if (status.value === 'error' && !data?.value) {
-        showError({
-          status: 404,
-          message: 'Product not found',
-        })
-      }
-      if (status.value === 'pending') {
-        loadingProductVariant.value = true
-      }
-      if (status.value === 'success') {
-        loadingProductVariant.value = false
-      }
-    })
+    productVariant.value = (data?.value?.productVariant?.product) || {} as CustomProductWithStockFromRedis
   }
 
   const getImages = computed(() => {
@@ -65,7 +54,7 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
 
   return {
     loadingProductVariant,
-    productVariant: computed(() => productVariant.value),
+    productVariant,
     getImages,
     getRegularPrice,
     getSpecialPrice,

@@ -145,7 +145,12 @@ const thumbs = computed(() => getThumbs(78, 78))
 
 await loadProductTemplate({ slug: cleanPath.value })
 if (productTemplate.value?.id) {
-  await loadProductVariant(params.value)
+  await loadProductVariant({
+    combinationId: Object.values(route.query)?.map(value =>
+      parseInt(value as string),
+    ),
+    productTemplateId: productTemplate?.value?.id,
+  })
 }
 </script>
 

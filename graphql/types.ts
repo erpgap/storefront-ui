@@ -15,6 +15,7 @@ import type {
   User,
   ApplyCouponList,
   ApplyGiftCardList,
+  OrderLine,
 } from './gql/graphql'
 import type { AsyncData } from '#app'
 
@@ -47,7 +48,7 @@ export type ProductResponse = {
 
 export type ProductVariantResponse = {
   productVariant: {
-    product: Product
+    product: CustomProductWithStockFromRedis
   }
 }
 
@@ -354,6 +355,10 @@ export interface OrganizedAttribute {
 
 export type CustomProductWithStockFromRedis = Product & {
   stock: number
+}
+
+export type CustomOrderLineWithStockFromRedis = OrderLine & {
+  product: CustomProductWithStockFromRedis
 }
 
 export type ImageGalleryItem = {

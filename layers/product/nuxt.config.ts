@@ -14,7 +14,7 @@ export default defineNuxtConfig({
         const data = Array.from(Array(2300).keys())
 
         const formatedData = data.map((item: number) => ({
-          key: `stock:stock:product-${item}`, value: '{"3": 3}',
+          key: `stock:stock:product-${item}`, value: `{"3": ${Math.floor(Math.random() * 5)}}`,
         }))
 
         await nitro.storage.setItems(formatedData)
