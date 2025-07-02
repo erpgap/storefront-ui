@@ -63,7 +63,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="pb-20">
+  <div
+    :key="route.fullPath"
+    class="pb-20"
+  >
     <UiBreadcrumb
       :breadcrumbs="breadcrumbs"
       class="self-start mt-5 mb-5"
