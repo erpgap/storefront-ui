@@ -13,7 +13,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
 
   // search modal
   const searchModalClose = () => searchModalToggle(false)
-  const searchModalOpen = useState('search-ref', () => false)
+  const searchModalOpen = useState('search-ref-${formSearchTemplateRef}', () => false)
   const searchModalToggle = useToggle(searchModalOpen)
   const isSearchModalOpen = computed(() => searchModalOpen.value)
 
@@ -24,8 +24,8 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     totalItems,
     organizedAttributes,
     loading,
-  } = useProductTemplateList(route.fullPath, route.fullPath)
-  const searchInputValue = useState('odoo-search-input', () => '')
+  } = useProductTemplateList(route.fullPath)
+  const searchInputValue = useState(`odoo-search-input-${formSearchTemplateRef}`, () => '')
   const highlightedIndex = ref(-1)
   const showResultSearch = ref(false)
 
@@ -40,6 +40,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     (newValue) => {
       if (!newValue) showResultSearch.value = false
     })
+
   const search = useDebounceFn(async () => {
     loading.value = true
 
@@ -52,7 +53,6 @@ export const useSearch = (formSearchTemplateRef?: any) => {
         search: searchInputValue.value,
         pageSize: 12,
       },
-      true,
     )
 
     showResultSearch.value = true
