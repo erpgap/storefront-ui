@@ -18,7 +18,7 @@ import {
   SfThumbnail,
 } from '@storefront-ui/vue'
 import type { LocationQueryRaw } from 'vue-router'
-import type { ImageGalleryItem, OrderLine, Product } from '~/graphql'
+import type { CustomProductWithStockFromRedis, ImageGalleryItem, OrderLine, Product } from '~/graphql'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 
 const route = useRoute()
@@ -115,16 +115,16 @@ const productsInCart = computed(() => {
 const handleCartAdd = async () => {
   let id = productVariant?.value.id
   if (!productVariant.value.combinationInfoVariant) {
-    id = Number(productVariant?.value.firstVariant?.id)
+    id = Number(productVariant?.value?.id)
   }
   await cartAdd(id, quantitySelectorValue.value)
 }
 
-const handleWishlistAddItem = async (firstVariant: Product) => {
+const handleWishlistAddItem = async (firstVariant: CustomProductWithStockFromRedis) => {
   await wishlistAddItem(firstVariant.id)
 }
 
-const handleWishlistRemoveItem = async (firstVariant: Product) => {
+const handleWishlistRemoveItem = async (firstVariant: CustomProductWithStockFromRedis) => {
   await wishlistRemoveItem(firstVariant.id)
 }
 
@@ -266,7 +266,7 @@ if (productTemplate.value?.id) {
                   class="min-w-[145px] flex-grow flex-shrink-0 basis-0"
                 />
                 <SfButton
-                  :disabled="loadingProductVariant"
+                  :disabled="loadingProductVariant || productVariant.stock <= 0"
                   type="button"
                   size="lg"
                   class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap"

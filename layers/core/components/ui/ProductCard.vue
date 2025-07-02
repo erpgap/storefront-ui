@@ -7,7 +7,7 @@ import {
   SfIconFavorite,
   SfIconFavoriteFilled,
 } from '@storefront-ui/vue'
-import type { Product } from '~/graphql'
+import type { CustomProductWithStockFromRedis, Product } from '~/graphql'
 
 defineProps({
   imageUrl: {
@@ -48,7 +48,7 @@ defineProps({
     default: null,
   },
   firstVariant: {
-    type: Object,
+    type: Object as PropType<CustomProductWithStockFromRedis>,
     required: false,
   },
   loading: {
@@ -61,11 +61,11 @@ defineProps({
 const { cartAdd } = useCart()
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
 
-const handleWishlistAddItem = async (firstVariant: Product) => {
+const handleWishlistAddItem = async (firstVariant: CustomProductWithStockFromRedis) => {
   await wishlistAddItem(firstVariant.id)
 }
 
-const handleWishlistRemoveItem = async (firstVariant: Product) => {
+const handleWishlistRemoveItem = async (firstVariant: CustomProductWithStockFromRedis) => {
   await wishlistRemoveItem(firstVariant.id)
 }
 </script>
@@ -98,8 +98,8 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
         aria-label="Add to wishlist"
         @click="
           isInWishlist(firstVariant?.id)
-            ? handleWishlistRemoveItem(firstVariant as Product)
-            : handleWishlistAddItem(firstVariant as Product)
+            ? handleWishlistRemoveItem(firstVariant as CustomProductWithStockFromRedis)
+            : handleWishlistAddItem(firstVariant as CustomProductWithStockFromRedis)
         "
       >
         <SfIconFavoriteFilled
@@ -155,6 +155,7 @@ const handleWishlistRemoveItem = async (firstVariant: Product) => {
           type="button"
           class="ottom-2"
           size="sm"
+          :disabled="!firstVariant?.stock || firstVariant?.stock <= 0"
           @click="cartAdd(firstVariant?.id, 1)"
         >
           <template #prefix>

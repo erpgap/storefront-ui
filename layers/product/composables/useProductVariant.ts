@@ -1,4 +1,5 @@
 import type {
+  CustomProductWithStockFromRedis,
   Product,
   ProductVariant,
   ProductVariantResponse,
@@ -10,7 +11,7 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   const { $sdk } = useNuxtApp()
 
   const loadingProductVariant = ref(false)
-  const productVariant = useState<Product>(`product-${slugWithCombinationIds}`, () => ({}) as Product)
+  const productVariant = useState<CustomProductWithStockFromRedis>(`product-${slugWithCombinationIds}`, () => ({}) as CustomProductWithStockFromRedis)
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
     const { data, status } = await useAsyncData(() =>
@@ -18,7 +19,7 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
         { queryName: QueryName.GetProductVariantQuery }, params),
     )
 
-    productVariant.value = (data?.value?.productVariant?.product) || {} as Product
+    productVariant.value = (data?.value?.productVariant?.product) || {} as CustomProductWithStockFromRedis
     if (!productVariant.value?.id) {
       showError({
         status: 404,
