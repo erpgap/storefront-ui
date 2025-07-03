@@ -81,7 +81,7 @@ export default defineNuxtConfig({
       cart: {
         driver: process.env.NUXT_STORAGE_DRIVER,
         url: process.env.NUXT_STORAGE_URL,
-        ttl: process.env?.NUXT_SWR_CACHE_TIME || -1,
+        ttl: process.env?.NUXT_SWR_CACHE_TIME || 0,
       },
       cache: {
         driver: process.env.NUXT_STORAGE_DRIVER,
