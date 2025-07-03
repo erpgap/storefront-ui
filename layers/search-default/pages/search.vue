@@ -99,7 +99,16 @@ onMounted(() => {
         </LazyCategoryMobileSidebar>
       </div>
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
-        <template v-if="!loading">
+        <div
+          v-if="loading"
+          class="w-full text-center"
+        >
+          <SfLoaderCircular
+            size="xl"
+            class="mt-[160px]"
+          />
+        </div>
+        <div v-else-if="productTemplateList.length > 0">
           <div class="flex justify-between items-center mb-6">
             <span class="font-bold font-headings md:text-lg">{{ totalItems }} Products
             </span>
@@ -115,7 +124,6 @@ onMounted(() => {
             </SfButton>
           </div>
           <section
-            v-if="totalItems > 0"
             class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8"
           >
             <LazyUiProductCard
@@ -138,7 +146,7 @@ onMounted(() => {
               "
               :image-alt="productTemplate?.name || ''"
               :regular-price="
-                getRegularPrice(productTemplate.firstVariant as Product) || 250
+                getRegularPrice(productTemplate.firstVariant as Product)
               "
               :special-price="
                 getSpecialPrice(productTemplate.firstVariant as Product)
@@ -148,7 +156,6 @@ onMounted(() => {
               :first-variant="productTemplate.firstVariant as Product"
             />
           </section>
-          <CategoryEmptyState v-if="!loading && totalItems === 0" />
           <LazyUiPagination
             v-if="pagination.totalPages > 1"
             class="mt-5"
@@ -157,12 +164,11 @@ onMounted(() => {
             :page-size="pagination.itemsPerPage"
             :max-visible-pages="maxVisiblePages"
           />
-        </template>
-        <template v-else>
-          <div class="w-full text-center">
-            <SfLoaderCircular size="base" />
-          </div>
-        </template>
+        </div>
+        <CategoryEmptyState
+          v-if="!loading && productTemplateList.length === 0"
+          :page="pagination.currentPage"
+        />
       </div>
     </div>
   </div>
