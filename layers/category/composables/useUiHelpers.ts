@@ -18,10 +18,10 @@ export const useUiHelpers = () => {
     return cleanPath
   }
 
-  const cleanFullSearchIndex = getUniqueUrlFromRouteFilteringByAttributes(
+  const cleanFullSearchIndex = computed(() => getUniqueUrlFromRouteFilteringByAttributes(
     route.path,
     route,
-  )
+  ))
 
   const getFacetsFromURL = (
     query: any,
@@ -99,7 +99,7 @@ export const useUiHelpers = () => {
   }
 
   const selectedFilters = useState<any[]>(
-    `category-selected-filters${cleanFullSearchIndex}`,
+    `category-selected-filters${cleanFullSearchIndex.value}`,
     () => facetsFromUrlToFilter() || [],
   )
 
