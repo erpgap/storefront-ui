@@ -74,7 +74,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     if (!searchInputValue.value) return
     showResultSearch.value = false
     searchModalOpen.value = false
-    router.push(String(selected.slug))
+    router.push(`${mountUrlSlugForProductVariant((selected.firstVariant) as Product)}`)
   }
 
   const highlightPrevious = () => {
