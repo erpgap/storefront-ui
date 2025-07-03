@@ -5,16 +5,16 @@ export const useProductTemplateList = (customIndex: string = '') => {
   const { $sdk } = useNuxtApp()
   const route = useRoute()
 
-  const categorySlugIndex = route.fullPath
-  const cleanFullSearchIndex = getUniqueUrlFromRouteFilteringByAttributes(route.path, route)
+  const categorySlugIndex = computed(() => route.fullPath)
+  const cleanFullSearchIndex = computed(() => getUniqueUrlFromRouteFilteringByAttributes(route.path, route))
 
-  const minPrice = useState<number | null>(`min-price-template-list${categorySlugIndex}${customIndex}`, () => null)
-  const maxPrice = useState<number | null>(`max-price-template-list${categorySlugIndex}${customIndex}`, () => null)
+  const minPrice = useState<number | null>(`min-price-template-list${categorySlugIndex.value}${customIndex}`, () => null)
+  const maxPrice = useState<number | null>(`max-price-template-list${categorySlugIndex.value}${customIndex}`, () => null)
   const loading = useState(`loading-product-template-list${customIndex}`, () => false)
-  const stockCount = useState<number>(`stock-count${categorySlugIndex}${customIndex}`, () => 0)
-  const totalItems = useState<number>(`total-items${cleanFullSearchIndex}${customIndex}`, () => 0)
-  const productTemplateList = useState<Product[]>(`product-template-list${cleanFullSearchIndex}${customIndex}`, () => [])
-  const organizedAttributes = useState<AttributeFacet[]>(`attributes${categorySlugIndex}${customIndex}`, () => [])
+  const stockCount = useState<number>(`stock-count${categorySlugIndex.value}${customIndex}`, () => 0)
+  const totalItems = useState<number>(`total-items${cleanFullSearchIndex.value}${customIndex}`, () => 0)
+  const productTemplateList = useState<Product[]>(`product-template-list${cleanFullSearchIndex.value}${customIndex}`, () => [])
+  const organizedAttributes = useState<AttributeFacet[]>(`attributes${categorySlugIndex.value}${customIndex}`, () => [])
 
   const updateVariablesFromData = (data: ProductTemplateListResponse | null) => {
     productTemplateList.value = data?.products?.products || []
@@ -30,7 +30,7 @@ export const useProductTemplateList = (customIndex: string = '') => {
 
   const loadProductTemplateList = async (params: QueryProductsArgs) => {
     const { data, status } = await useAsyncData(
-      `${cleanFullSearchIndex}${customIndex}`,
+      `${cleanFullSearchIndex.value}${customIndex}`,
       () =>
         $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>(
           { queryName: QueryName.GetProductTemplateListQuery },
