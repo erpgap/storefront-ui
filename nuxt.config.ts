@@ -21,13 +21,21 @@ export default defineNuxtConfig({
     'nuxt-viewport',
     '@nuxtjs/sitemap',
   ],
+
+  $production: {
+    routeRules: {
+      '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+    },
+
+  },
+
   devtools: { enabled: true },
 
   app: {
     head: {
       viewport:
         'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no',
-      title: 'Alokai',
+      title: 'Alokai - Demo',
       htmlAttrs: {
         lang: 'en',
       },
@@ -65,10 +73,6 @@ export default defineNuxtConfig({
     transpile: ['vue-toastification'],
   },
 
-  routeRules: {
-    '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
-  },
-
   experimental: {
     asyncContext: true,
   },
@@ -82,20 +86,48 @@ export default defineNuxtConfig({
         driver: process.env.NUXT_STORAGE_DRIVER,
         url: process.env.NUXT_STORAGE_URL,
         ttl: process.env?.NUXT_SWR_CACHE_TIME || 0,
+        retry: {
+          retries: 3,
+          delay: 1000,
+        },
+        // Timeout maior para inicialização
+        connectTimeout: 10000,
+        lazyConnect: true,
       },
       cache: {
         driver: process.env.NUXT_STORAGE_DRIVER,
         url: process.env.NUXT_STORAGE_URL,
+        retry: {
+          retries: 3,
+          delay: 1000,
+        },
+        // Timeout maior para inicialização
+        connectTimeout: 10000,
+        lazyConnect: true,
       },
       stock: {
         driver: process.env.NUXT_STORAGE_DRIVER,
         url: process.env.NUXT_STORAGE_URL,
         ttl: process.env?.NUXT_SWR_CACHE_TIME || 3600,
+        retry: {
+          retries: 3,
+          delay: 1000,
+        },
+        // Timeout maior para inicialização
+        connectTimeout: 10000,
+        lazyConnect: true,
       },
       slug: {
         driver: process.env.NUXT_STORAGE_DRIVER,
         url: process.env.NUXT_STORAGE_URL,
         ttl: process.env?.NUXT_SWR_CACHE_TIME || 3600,
+        retry: {
+          retries: 3,
+          delay: 1000,
+        },
+        // Timeout maior para inicialização
+        connectTimeout: 10000,
+        lazyConnect: true,
       },
     },
     devStorage: {
