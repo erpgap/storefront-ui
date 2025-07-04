@@ -60,6 +60,8 @@ const pagination = computed(() => ({
 onMounted(() => {
   setMaxVisiblePages(isWideScreen.value)
 })
+
+await loadProductTemplateList(getFacetsFromURL(route.query))
 </script>
 
 <template>
@@ -166,7 +168,7 @@ onMounted(() => {
           />
         </div>
         <CategoryEmptyState
-          v-if="!loading && productTemplateList.length === 0"
+          v-if="!loading && totalItems === 0"
           :page="pagination.currentPage"
         />
       </div>
