@@ -91,7 +91,6 @@ onClickOutside(formSearchTemplateRef, () => {
                 <SfDrawer
                   ref="drawerRef"
                   v-model="isOpen"
-                  disable-click-away
                   placement="top"
                   class="bg-white p-0 max-h-screen overflow-y-auto lg:!absolute lg:!top-[5rem] max-w-full lg:p-6 top-index"
                 >
