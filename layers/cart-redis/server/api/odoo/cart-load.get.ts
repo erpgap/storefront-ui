@@ -2,7 +2,7 @@ import type { Endpoints } from '@erpgap/odoo-sdk-api-client'
 import type { CustomProductWithStockFromRedis } from '~/graphql'
 
 export default defineEventHandler(async (event: any) => {
-  const websiteId = 3 // Example website ID, adjust when defined
+  const websiteId = 1 // Example website ID, adjust when defined
   const session = await useSession(event, {
     password: 'b013b03ac2231e0b448e9a22ba488dcf',
   })

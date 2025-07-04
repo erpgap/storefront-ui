@@ -6,7 +6,7 @@ import { QueryName } from '~/server/queries/'
  */
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hook('beforeResponse', async (event, { body }) => {
-    const websiteId = 3 // Example website ID, adjust when defined
+    const websiteId = 1 // Example website ID, adjust when defined
     const requestBody = await readBody(event)
 
     if (event.method == 'POST' && requestBody[0]?.queryName === QueryName.GetProductVariantQuery) {
