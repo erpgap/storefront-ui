@@ -4,28 +4,28 @@ This is a demo project that guides the creation of a Nuxt-based E-commerce proje
 
 ## 📚 Table of Contents
 
-- [🔍 Overview](#overview)
-- [📄 Main Pages](#main-pages)
-- [🚀 Dynamic Routing System](#dynamic-routing-system)
-    - [⚡ Automatic Route Generation](#automatic-route-generation)
-    - [🔀 Route Resolver](#route-resolver)
-- [✨ Key Features](#key-features)
-    - [🔍 Product Search](#1-product-search)
-    - [🗄️ Advanced Caching System](#2-advanced-caching-system)
-    - [💳 Payment Integration](#3-payment-integration)
-    - [📦 Product Features](#4-product-features)
-    - [📂 Category System](#5-category-system)
-- [🛠️ Tech Stack](#tech-stack)
-- [📁 Project Structure](#project-structure)
-- [⚙️ Setup and Installation](#setup-and-installation)
-- [🔗 ODOO Integration](#odoo-integration)
-    - [📦 Core E-commerce Concepts](#core-e-commerce-concepts)
-    - [🏗️ Data Structure in Practice](#data-structure-in-practice)
-    - [🔄 Key Integration Patterns](#key-integration-patterns)
-    - [📂 Categories and Navigation](#categories-and-navigation)
-    - [🛒 Cart and Order Management](#cart-and-order-management)    
-    - [🔍 SEO and URL Structure](#seo-and-url-structure)
-    - [📊 Performance Optimizations](#performance-optimizations)
+- [Overview](#overview)
+- [Main Pages](#main-pages)
+- [Dynamic Routing System](#dynamic-routing-system)
+  - [Automatic Route Generation](#automatic-route-generation)
+  - [Route Resolver](#route-resolver)
+- [Key Features](#key-features)
+  - [Product Search](#product-search)
+  - [Advanced Caching System](#advanced-caching-system)
+  - [Payment Integration](#payment-integration)
+  - [Product Features](#product-features)
+  - [Category System](#category-system)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Setup and Installation](#setup-and-installation)
+- [ODOO Integration](#odoo-integration)
+  - [Core E-commerce Concepts](#core-e-commerce-concepts)
+  - [Data Structure in Practice](#data-structure-in-practice)
+  - [Key Integration Patterns](#key-integration-patterns)
+  - [Categories and Navigation](#categories-and-navigation)
+  - [Cart and Order Management](#cart-and-order-management)
+  - [SEO and URL Structure](#seo-and-url-structure)
+  - [Performance Optimizations](#performance-optimizations)
 
 
 ## 🔍 Overview
@@ -110,7 +110,7 @@ An intelligent system that:
 - **🚀 Framework**: Nuxt 3
 - **🎨 UI Components**: Alokai Storefront UI
 - **🏪 Backend**: ODOO ERP
-- **💅 Styling**: Tailwind CSS
+- **💅 Styling**: Tailwind CSS 3
 - **📦 State Management**: Pinia
 - **⚡ Build Tool**: Vite
 - **🗄️ Cache**: Redis (configurable via storage drivers)
@@ -254,7 +254,7 @@ interface CombinationInfoVariant {
 
 #### Stock Management
 - Real-time stock stored in Redis cache
-- Updated via [`CustomProductWithStockFromRedis`](layers/product/composables/useProductTemplate.ts) type
+- Stock quantity updated according cart operations. More informations [`here`](https://docs.alokai.com/integrations/odoo)
 - Stock checks prevent overselling
 
 
