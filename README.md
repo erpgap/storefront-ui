@@ -1,4 +1,4 @@
-# 🛒 ODOO + Alokai Storefront
+# ODOO + Alokai Storefront
 
 This is a demo project that guides the creation of a Nuxt-based E-commerce project using Alokai (formerly Vue Storefront) integrated with the ODOO ERP.
 
@@ -27,7 +27,7 @@ This is a demo project that guides the creation of a Nuxt-based E-commerce proje
     - [🔍 SEO and URL Structure](#seo-and-url-structure)
     - [📊 Performance Optimizations](#performance-optimizations)
 
-    
+
 ## 🔍 Overview
 
 The project uses the Alokai SDK to create a modern and high-performance e-commerce experience, directly connected to ODOO as the backend ERP.
