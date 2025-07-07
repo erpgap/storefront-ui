@@ -92,15 +92,11 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
         >
           {{ $currency(orderLine.priceSubtotal) }}
           <span
-            v-if="
-              orderLine.product?.combinationInfo?.list_price
-                !== orderLine.product?.combinationInfo?.price
-            "
+            v-if="orderLine.product?.combinationInfoVariant?.has_discounted_price"
             class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
           >
             ${{
-              orderLine.product?.combinationInfo?.list_price
-                * orderLine?.quantity
+              orderLine.product?.combinationInfoVariant?.price * (orderLine?.quantity ?? 1)
             }}
           </span>
         </span>
