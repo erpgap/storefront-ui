@@ -28,11 +28,11 @@ This is a demo project that guides the creation of a Nuxt-based E-commerce proje
   - [Performance Optimizations](#performance-optimizations)
 
 
-## 🔍 Overview
+## Overview
 
 The project uses the Alokai SDK to create a modern and high-performance e-commerce experience, directly connected to ODOO as the backend ERP.
 
-## 📄 Main Pages
+## Main Pages
 
 The core of the Alokai e-commerce used in this project includes the following pages:
 
@@ -46,7 +46,7 @@ The core of the Alokai e-commerce used in this project includes the following pa
   - 📍 Addresses (/billing-details or /shipping-details)
   - 📝 Personal information (/personal-data)
 
-## 🚀 Dynamic Routing System
+## Dynamic Routing System
 
 ### ⚡ Automatic Route Generation
 The project uses an advanced dynamic route generation system that:
@@ -65,7 +65,7 @@ An intelligent system that:
   - `product.public.category` → 📂 category  
   - `alokai.website.page` → 📄 website page
 
-## ✨ Key Features
+## Key Features
 
 ### 1. 🔍 Product Search
 
@@ -168,11 +168,11 @@ npm run dev
 npm run build
 ```
 
-## 🔗 ODOO Integration
+## ODOO Integration
 
 The project is configured to integrate with the ODOO ERP using GraphQL APIs. Understanding ODOO's e-commerce data model is crucial for effective development.
 
-### 📦 Core E-commerce Concepts
+### Core E-commerce Concepts
 
 #### Product Template vs Product Variant
 
@@ -207,7 +207,7 @@ The project is configured to integrate with the ODOO ERP using GraphQL APIs. Und
 - Combined to create unique product variants
 - Can have price extras and HTML colors for UI display
 
-### 🏗️ Data Structure in Practice
+### Data Structure in Practice
 
 #### Product Template Structure
 ```typescript
@@ -336,14 +336,14 @@ const filters = [
 
 ![Entity Relationship Diagram](public/images/doc/diagrams.png)
 
-### 📂 Categories and Navigation
+### Categories and Navigation
 
 **Product Categories (`product.public.category`)**
 - Hierarchical structure with parent/child relationships
 - SEO-optimized with slugs and meta information
 - Support breadcrumb navigation and filtering
 
-### 🛒 Cart and Order Management
+### Cart and Order Management
 
 **Cart Operations (add/remove/update qty)**
 - Always use **Product Variant ID** for cart operations
@@ -355,14 +355,14 @@ const filters = [
 - Each line references a specific product variant
 - Supports discounts, coupons, and gift cards
 
-### 🔍 SEO and URL Structure
+### SEO and URL Structure
 
 - **Product Templates**: `/product-slug` (base product page)
 - **Product Variants**: `/product-slug?Color=1&Size=2` (specific variant)
 - **Categories**: `/category-slug` (category listing)
 - **Search**: Integrated with ODOO native search, Algolia, or Luigi
 
-### 📊 Performance Optimizations
+### Performance Optimizations
 
 - **Redis Caching**: Stock, prices, and route resolution
 - **Static Generation**: Pre-built product and category pages
