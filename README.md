@@ -17,7 +17,6 @@ This is a demo project that guides the creation of a Nuxt-based E-commerce proje
   - [Category System](#category-system)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
-- [Setup and Installation](#setup-and-installation)
 - [ODOO Integration](#odoo-integration)
   - [Core E-commerce Concepts](#core-e-commerce-concepts)
   - [Data Structure in Practice](#data-structure-in-practice)
@@ -26,6 +25,7 @@ This is a demo project that guides the creation of a Nuxt-based E-commerce proje
   - [Cart and Order Management](#cart-and-order-management)
   - [SEO and URL Structure](#seo-and-url-structure)
   - [Performance Optimizations](#performance-optimizations)
+- [Setup and Installation](#setup-and-installation)
 
 
 ## Overview
@@ -58,7 +58,7 @@ The project uses an advanced dynamic route generation system that:
 
 ### 🔀 Route Resolver
 An intelligent system that:
-- 🎯 Identifies whether a route matches a product, category, or website page
+- 🎯 Identifies, at runtime, whether a route matches a product, category, or website page
 - 🗄️ Uses Redis cache to optimize lookups
 - 🗺️ Maps ODOO models to route types:
   - `product.template` → 📦 product
@@ -111,7 +111,6 @@ An intelligent system that:
 - **🎨 UI Components**: Alokai Storefront UI
 - **🏪 Backend**: ODOO ERP
 - **💅 Styling**: Tailwind CSS 3
-- **📦 State Management**: Pinia
 - **⚡ Build Tool**: Vite
 - **🗄️ Cache**: Redis (configurable via storage drivers)
 - **🖼️ Images**: Nuxt Image with custom ODOO provider
@@ -142,30 +141,10 @@ An intelligent system that:
 ├── modules/                     # Custom Nuxt modules
 │   └── routes-generator/        # Automatic route generator
 ├── server/                      # Server API routes and middleware
-│   ├── api/                     # API endpoints
-│   ├── mutations/               # GraphQL mutations
-│   └── queries/                 # GraphQL queries
-├── plugins/                     # Nuxt plugins
-├── composables/                 # Global Vue composables
-├── middleware/                  # Route middleware
-├── utils/                       # Utility functions
-└── nuxt.config.ts              # Nuxt configuration
-```
+    ├── api/                     # API endpoints
+    ├── mutations/               # GraphQL mutations
+    └── queries/                 # GraphQL queries
 
-## ⚙️ Setup and Installation
-
-```bash
-# Install dependencies
-npm install
-
-# Configure environment variables
-cp .env.example .env
-
-# Run in development mode
-npm run dev
-
-# Build for production
-npm run build
 ```
 
 ## ODOO Integration
@@ -369,4 +348,21 @@ const filters = [
 - **SWR Strategy**: Stale-while-revalidate for dynamic content
 - **Lazy Loading**: Component-level loading strategies
 
-For detailed technical implementation, refer to the composables in [`layers/product/composables/`](layers/product/composables/) and GraphQL types in [`graphql/types.ts`](graphql/types.ts).
+
+## ⚙️ Setup and Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Configure environment variables
+cp .env.example .env
+
+# Run in development mode
+npm run dev
+
+# Build for production
+npm run build
+```
+
+For detailed technical implementation, take a look at our main documentation at [docs.alokai.com](https://docs.alokai.com/integrations/odoo).
