@@ -7,8 +7,7 @@ This is a demo project that guides the creation of a Nuxt-based E-commerce proje
 - [Overview](#overview)
 - [Main Pages](#main-pages)
 - [Dynamic Routing System](#dynamic-routing-system)
-  - [Automatic Route Generation](#automatic-route-generation)
-  - [Route Resolver](#route-resolver)
+  - [Automatic Route Generation](#automatic-route-generation)  
 - [Key Features](#key-features)
   - [Product Search](#product-search)
   - [Advanced Caching System](#advanced-caching-system)
@@ -53,17 +52,12 @@ The project uses an advanced dynamic route generation system that:
 
 - **🔄 Automatic fetch from ODOO**: During build time, the system queries ODOO via GraphQL to fetch all slugs for products, categories, and website pages
 - **📄 Static route creation**: Automatically generates static pages for each product and category found
-- **⚡ Performance optimization**: Applies automatic SWR (Stale-While-Revalidate) configurations to each generated route
-- **🔗 Real-time route resolution**: `/api/route-resolver` API endpoint that identifies the content type based on the URL slug
-
-### 🔀 Route Resolver
-An intelligent system that:
-- 🎯 Identifies, at runtime, whether a route matches a product, category, or website page
-- 🗄️ Uses Redis cache to optimize lookups
-- 🗺️ Maps ODOO models to route types:
-  - `product.template` → 📦 product
-  - `product.public.category` → 📂 category  
-  - `alokai.website.page` → 📄 website page
+- **⚡ Performance optimization**: Uses Redis cache to optimize lookups and applies automatic SWR (Stale-While-Revalidate) configurations to each generated route
+- **🔗 Real-time route resolution**: Identifies at runtime ([see more here](/middleware/dynamic-routes.global.ts)) new odoo routes and maps to correct type by URL slug and save it on Redis as following:
+                                    
+                                    - `product.template` → 📦 product
+                                    - `product.public.category` → 📂 category  
+                                    - `alokai.website.page` → 📄 website page
 
 ## Key Features
 
@@ -242,10 +236,10 @@ interface CombinationInfoVariant {
 #### 1. Product Loading Strategy
 ```typescript
 // Load template first for general info and SEO
-const { productTemplate } = useProductTemplate(slug)
+const { loadProductTemplate, productTemplate } = useProductTemplate(slug)
 
 // Load specific variant based on URL attributes
-const { productVariant } = useProductVariant(fullPath)
+const { loadProductVariant, productVariant } = useProductVariant(fullPath)
 ```
 
 #### 2. Variant Selection Flow
