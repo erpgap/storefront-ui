@@ -71,7 +71,7 @@ async function addAddress(event: any, body: any) {
 
     const keyName = `cache:cart:${session?.id}`
     const currentCart
-      = (await useStorage().getItem<{ cart: Cart }>(keyName)) || ({} as any)
+      = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || ({} as any)
     if (requestBody[1].type === 'Shipping') {
       currentCart.cart.order.partnerShipping = body.addAddress
     }
@@ -80,7 +80,7 @@ async function addAddress(event: any, body: any) {
     }
 
     const reducedCart = reduceCart(currentCart as Cart)
-    await useStorage().setItem(keyName, reducedCart)
+    await useStorage('cart').setItem(keyName, reducedCart)
   }
 }
 
@@ -93,7 +93,7 @@ async function updateAddress(event: any, body: any) {
 
     const keyName = `cache:cart:${session?.id}`
     const currentCart
-      = (await useStorage().getItem<{ cart: Cart }>(keyName)) || ({} as any)
+      = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || ({} as any)
 
     if (body.updateAddress?.addressType === AddressType.DeliveryAddress) {
       currentCart.cart.order.partnerShipping = body.updateAddress
@@ -103,7 +103,7 @@ async function updateAddress(event: any, body: any) {
     }
 
     const reducedCart = reduceCart(currentCart as Cart)
-    await useStorage().setItem(keyName, reducedCart)
+    await useStorage('cart').setItem(keyName, reducedCart)
   }
 }
 
@@ -116,11 +116,11 @@ async function createUpdatePartner(event: any, body: any) {
 
     const keyName = `cache:cart:${session?.id}`
     const currentCart
-      = (await useStorage().getItem<{ cart: Cart }>(keyName)) || ({} as any)
+      = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || ({} as any)
     currentCart.cart.order.partner = body.createUpdatePartner
 
     const reducedCart = reduceCart(currentCart as Cart)
-    await useStorage().setItem(keyName, reducedCart)
+    await useStorage('cart').setItem(keyName, reducedCart)
   }
 }
 
@@ -141,7 +141,7 @@ async function clearCartAfterCreditCardPaymentConfirmation(
 
     const keyName = `cache:cart:${session?.id}`
     if (paymentSuccess) {
-      await useStorage().removeItem(keyName)
+      await useStorage('cart').removeItem(keyName)
     }
   }
 }
@@ -163,7 +163,7 @@ async function clearCartAfterGiftCardPaymentConfirmation(
 
     const keyName = `cache:cart:${session?.id}`
     if (paymentSuccess) {
-      await useStorage().removeItem(keyName)
+      await useStorage('cart').removeItem(keyName)
     }
   }
 }
