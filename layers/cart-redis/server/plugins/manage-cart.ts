@@ -74,9 +74,11 @@ async function addAddress(event: any, body: any) {
       = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || ({} as any)
     if (requestBody[1].type === 'Shipping') {
       currentCart.cart.order.partnerShipping = body.addAddress
+      currentCart.cart.order.partner.isPublic = body.addAddress?.isPublic || false
     }
     else {
       currentCart.cart.order.partnerInvoice = body.addAddress
+      currentCart.cart.order.partner.isPublic = body.addAddress?.isPublic || false
     }
 
     const reducedCart = reduceCart(currentCart as Cart)
@@ -97,9 +99,11 @@ async function updateAddress(event: any, body: any) {
 
     if (body.updateAddress?.addressType === AddressType.DeliveryAddress) {
       currentCart.cart.order.partnerShipping = body.updateAddress
+      currentCart.cart.order.partner.isPublic = body.updateAddress?.isPublic || false
     }
     else {
       currentCart.cart.order.partnerInvoice = body.updateAddress
+      currentCart.cart.order.partner.isPublic = body.updateAddress?.isPublic || false
     }
 
     const reducedCart = reduceCart(currentCart as Cart)
