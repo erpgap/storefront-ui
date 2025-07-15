@@ -1,0 +1,19 @@
+name = "alokai-test"
+main = ".output/server/index.mjs" 
+compatibility_date = "2025-07-15"
+
+kv_namespaces = [
+  { binding    = "GLOBAL_KV", id="a13bf261068d41248f1c26a5ca8038d6"}
+]
+
+# Static assets configuration
+[assets]
+directory = ".output/public"
+
+[observability.logs]
+enabled = true
+
+[vars]
+NUXT_PUBLIC_ODOO_BASE_URL = "https://vsf-odoo18.labs.erpgap.com/"
+NUXT_PUBLIC_ODOO_BASE_IMAGE_URL = "https://vsf-odoo18.labs.erpgap.com/"
+NUXT_PUBLIC_MIDDLEWARE_URL = "https://vsf-odoo18.labs.erpgap.com/graphql/vsf"

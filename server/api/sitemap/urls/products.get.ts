@@ -14,8 +14,9 @@ query GetProducts {
   }
 }
 `
-
-  const odooBaseUrl = `${process.env?.NUXT_PUBLIC_ODOO_BASE_URL}graphql/vsf`
+  const raw = process.env.NUXT_PUBLIC_ODOO_BASE_URL || ''
+  const base = raw.replace(/\/$/, '')
+  const odooBaseUrl = `${base}/graphql/vsf`
 
   const data = await $fetch(odooBaseUrl, {
     method: 'POST',
