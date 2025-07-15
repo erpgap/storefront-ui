@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-viewport',
     '@nuxtjs/sitemap',
+    // 'nitro-cloudflare-dev'
   ],
 
   $production: {
@@ -59,13 +60,13 @@ export default defineNuxtConfig({
       'LoadUserQuery',
     ],
     public: {
-      odooBaseImageUrl: '',
-      odooBaseUrl: '',
-      middlewareUrl: '',
-      currencySymbol: '',
-      currencySeparator: '',
-      currencyDecimal: '',
-      currencyPrecision: '',
+      odooBaseImageUrl: process.env.NUXT_PUBLIC_ODOO_BASE_IMAGE_URL!,
+      odooBaseUrl: process.env.NUXT_PUBLIC_ODOO_BASE_URL!,
+      middlewareUrl: process.env.NUXT_PUBLIC_MIDDLEWARE_URL!,
+      currencySymbol: process.env.NUXT_PUBLIC_CURRENCY_SYMBOL!,
+      currencySeparator: process.env.NUXT_PUBLIC_CURRENCY_SEPARATOR!,
+      currencyDecimal: process.env.NUXT_PUBLIC_CURRENCY_DECIMAL!,
+      currencyPrecision: process.env.NUXT_PUBLIC_CURRENCY_PRECISION!
     },
   },
 
@@ -80,11 +81,16 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-06',
 
   nitro: {
+    preset: 'cloudflare_module',
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true
+    },
     // compressPublicAssets: true,
     storage: {
       cart: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
+        driver: 'cloudflare-kv-binding',
+        binding: 'GLOBAL_KV',
         ttl: process.env?.NUXT_SWR_CACHE_TIME || 0,
         retry: {
           retries: 3,
@@ -95,8 +101,8 @@ export default defineNuxtConfig({
         lazyConnect: true,
       },
       cache: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
+        driver: 'cloudflare-kv-binding',
+        binding: 'GLOBAL_KV',
         retry: {
           retries: 3,
           delay: 1000,
@@ -106,8 +112,8 @@ export default defineNuxtConfig({
         lazyConnect: true,
       },
       stock: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
+        driver: 'cloudflare-kv-binding',
+        binding: 'GLOBAL_KV',
         ttl: process.env?.NUXT_SWR_CACHE_TIME || 3600,
         retry: {
           retries: 3,
@@ -118,8 +124,8 @@ export default defineNuxtConfig({
         lazyConnect: true,
       },
       slug: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
+        driver: 'cloudflare-kv-binding',
+        binding: 'GLOBAL_KV',
         ttl: process.env?.NUXT_SWR_CACHE_TIME || 3600,
         retry: {
           retries: 3,
@@ -131,15 +137,8 @@ export default defineNuxtConfig({
       },
     },
     devStorage: {
-      cache: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
-      },
-      slug: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
-        ttl: process.env?.NUXT_SWR_CACHE_TIME || 3600,
-      },
+      cache: { driver: 'memory' },
+      slug: { driver: 'memory' },
     },
   },
 
@@ -207,7 +206,8 @@ export default defineNuxtConfig({
   sitemap: {
     sources: ['/api/sitemap/urls/products', '/api/sitemap/urls/categories'],
     runtimeCacheStorage: {
-      driver: process.env.NUXT_STORAGE_DRIVER,
+        driver: 'cloudflare-kv-binding',
+        binding: 'GLOBAL_KV',
     },
   },
 

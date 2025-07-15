@@ -7,19 +7,31 @@ const customCache = cachedFunction(
     const config = useRuntimeConfig(event)
     const body = await readBody(event)
 
-    const response: any = await $fetch.raw(`${config.public.odooBaseUrl}graphql/vsf`, {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'content-type': 'application/json',
-        'REAL-IP': getRequestIP(event) || '',
-        'resquest-host': config.public.middlewareUrl || getRequestHost(event),
-        'Cookie': `session_id=${getCookie(event, 'session_id')}`,
-      },
-      body: JSON.stringify({ query: Queries[body?.[0]?.queryName], variables: body?.[1] }),
-    })
+    const base = config.public.odooBaseUrl.replace(/\/$/, '')
+    const endpoint = `${base}/graphql/vsf`
+    console.log('[GraphQL Proxy] Fetching from:', endpoint)
 
-    return response
+    let json: any
+    try {
+      json = await $fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        responseType: 'json',        // default, but explicit
+        body: {
+          query:     Queries[body?.[0]?.queryName],
+          variables: body?.[1]
+        },
+        // optional hook if you still want the status
+        onResponse({ response }) {
+          console.log('[GraphQL Proxy] Upstream status:', response.status)
+        }
+      })
+    } catch (err: any) {
+      console.error('[GraphQL Proxy] $fetch threw:', err)
+      throw err
+    }
+
+    return { _data: { data: json.data, errors: json.errors } }
   },
   {
     maxAge: Number(process.env?.NUXT_SWR_CACHE_TIME || 3600),

@@ -15,7 +15,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky install",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@adyen/adyen-web": "4.7.3",
@@ -50,6 +51,7 @@
     "nuxt-viewport": "2.2.0",
     "object-hash": "^3.0.0",
     "typescript": "^5.8.2",
+    "unstorage": "^1.16.1",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2",
     "vue-toastification": "next"
@@ -68,7 +70,8 @@
     "eslint-plugin-vue": "^9.32.0",
     "git-cz": "^4.9.0",
     "husky": "^9.0.11",
-    "typescript-eslint": "^8.18.1"
+    "typescript-eslint": "^8.18.1",
+    "wrangler": "^4.24.3"
   },
   "engines": {
     "node": ">=20.0.0"

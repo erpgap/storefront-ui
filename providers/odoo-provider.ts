@@ -8,5 +8,5 @@ export const getImage: ProviderGetImage = (src, { modifiers }, ctx) => {
 
   const hash = objectHash({ text: src + resolution })
 
-  return { url: `${baseURL}${src?.replace('/', '')}/${resolution}/${hash}` }
+  return { url: `${baseURL.replace(/\/$/, '')}${src}/${resolution}/${hash}` }
 }
