@@ -80,7 +80,6 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-06',
 
   nitro: {
-    // compressPublicAssets: true,
     storage: {
       cart: {
         driver: process.env.NUXT_STORAGE_DRIVER,
@@ -90,7 +89,6 @@ export default defineNuxtConfig({
           retries: 3,
           delay: 1000,
         },
-        // Timeout maior para inicialização
         connectTimeout: 10000,
         lazyConnect: true,
       },
@@ -101,7 +99,6 @@ export default defineNuxtConfig({
           retries: 3,
           delay: 1000,
         },
-        // Timeout maior para inicialização
         connectTimeout: 10000,
         lazyConnect: true,
       },
@@ -113,7 +110,6 @@ export default defineNuxtConfig({
           retries: 3,
           delay: 1000,
         },
-        // Timeout maior para inicialização
         connectTimeout: 10000,
         lazyConnect: true,
       },
@@ -125,7 +121,6 @@ export default defineNuxtConfig({
           retries: 3,
           delay: 1000,
         },
-        // Timeout maior para inicialização
         connectTimeout: 10000,
         lazyConnect: true,
       },
