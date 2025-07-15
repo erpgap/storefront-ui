@@ -30,7 +30,7 @@ export const useCart = () => {
         return
 
       cart.value = data.value.cart
-      cartCounter.value = Number(data.value.cart?.order?.websiteOrderLine?.length)
+      cartCounter.value = Number(data.value.cart?.order?.websiteOrderLine?.length || 0)
       frequentlyTogetherProducts.value = (data.value.cart.frequentlyBoughtTogether || []).filter((p): p is Product => p !== null)
     }
     catch (error: any) {
