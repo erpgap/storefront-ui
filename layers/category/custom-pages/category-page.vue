@@ -53,14 +53,27 @@ const pagination = computed(() => ({
   pageOptions: [5, 10, 15, 20],
 }))
 
+const seoData = computed(() => {
+  if (category.value) {
+    return generateSeo<SeoEntity>(category.value, 'Category')
+  }
+
+  const fallbackEntity: SeoEntity = {
+    name: 'Category',
+    metaTitle: `Category | ${route.path.split('/').pop() || 'Products'}`,
+    metaDescription: 'Browse our product categories',
+  }
+
+  return generateSeo<SeoEntity>(fallbackEntity, 'Category')
+})
+
+useHead(seoData)
+
 watch(
   () => route.path,
   async (newSlug, oldSlug) => {
     if (newSlug && newSlug !== oldSlug) {
       await loadCategory({ slug: String(newSlug) })
-      // if (category.value) {
-      //   useHead(generateSeo<SeoEntity>(category.value, 'Category'))
-      // }
     }
   },
   { immediate: true },
