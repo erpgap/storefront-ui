@@ -7,5 +7,5 @@ import { vi } from 'vitest'
   href: 'https://example.com/test-path',
 }))
 
-// Mock do console.warn para evitar warnings nos testes
+// Mock console.warn avoiding tests warnings
 global.console.warn = vi.fn()
