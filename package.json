@@ -72,7 +72,6 @@
     "eslint": "^9.17.0",
     "eslint-plugin-vue": "^9.32.0",
     "git-cz": "^4.9.0",
-    "happy-dom": "^18.0.1",
     "husky": "^9.0.11",
     "typescript-eslint": "^8.18.1",
     "vitest": "^3.2.4"
