@@ -15,11 +15,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky install",
-    "commit": "git-cz",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "commit": "git-cz"
   },
   "dependencies": {
     "@adyen/adyen-web": "4.7.3",
@@ -29,6 +25,7 @@
     "@nuxt/eslint": "^0.7.4",
     "@nuxt/image": "^1.7.0",
     "@nuxt/scripts": "^0.11.1",
+    "@nuxt/test-utils": "^3.17.2",
     "@nuxtjs/algolia": "^1.10.2",
     "@nuxtjs/critters": "^0.7.1",
     "@nuxtjs/device": "3.1.1",
@@ -66,22 +63,19 @@
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
     "@graphql-typed-document-node/core": "^3.2.0",
-    "@nuxt/eslint": "^0.7.4",
-    "@nuxt/test-utils": "^3.17.2",
     "@types/object-hash": "^3.0.6",
     "eslint": "^9.17.0",
     "eslint-plugin-vue": "^9.32.0",
     "git-cz": "^4.9.0",
     "husky": "^9.0.11",
-    "typescript-eslint": "^8.18.1",
-    "vitest": "^3.2.4"
+    "typescript-eslint": "^8.18.1"
   },
   "engines": {
     "node": ">=20.0.0"
   },
   "config": {
     "commitizen": {
-      "path": "cz-cz"
+      "path": "git-cz"
     }
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
