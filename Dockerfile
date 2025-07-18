@@ -1,5 +1,5 @@
-ARG NODE_VERSION=20.10
-ARG YARN_VERSION=3.6.1
+ARG NODE_VERSION=22
+ARG YARN_VERSION=1.22.22
 ARG NUXT_PUBLIC_ODOO_BASE_URL="https://vsfdemo15.labs.odoogap.com/"
 ARG NUXT_PUBLIC_ODOO_BASE_IMAGE_URL="https://vsfdemo15.labs.odoogap.com/"
 ARG NUXT_PUBLIC_MIDDLEWARE_URL="http://localhost:3000/"
@@ -30,16 +30,18 @@ ENV NUXT_ALGOLIA_API_KEY=${NUXT_ALGOLIA_API_KEY}
 ENV NUXT_ALGOLIA_APPLICATION_ID=${NUXT_ALGOLIA_APPLICATION_ID}
 ENV NUXT_TELEMETRY_DISABLED=1
 
-RUN yarn set version ${YARN_VERSION}
+RUN corepack enable && corepack prepare yarn@${YARN_VERSION} --activate
 WORKDIR /src
 
 # Build
 FROM base as build
 
+ENV NODE_ENV=development
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --production=false
+
 COPY . ./
-RUN yarn add -W nuxt \
-    && yarn \
-    && yarn build
+RUN yarn build
 
 # Run
 FROM base

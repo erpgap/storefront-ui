@@ -20,6 +20,8 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-viewport',
     '@nuxtjs/sitemap',
+    // Only add test-utils in development
+    ...(process.env.NODE_ENV === 'development' ? ['@nuxt/test-utils/module'] : []),
   ],
 
   $production: {
