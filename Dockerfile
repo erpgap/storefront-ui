@@ -1,4 +1,4 @@
-ARG NODE_VERSION=22
+ARG NODE_VERSION=22.17
 ARG YARN_VERSION=1.22.22
 ARG NUXT_PUBLIC_ODOO_BASE_URL="https://vsfdemo15.labs.odoogap.com/"
 ARG NUXT_PUBLIC_ODOO_BASE_IMAGE_URL="https://vsfdemo15.labs.odoogap.com/"
@@ -45,8 +45,6 @@ RUN yarn build
 
 # Run
 FROM base
-ARG NUXT_PUBLIC_ODOO_BASE_URL: "https://vsfdemo15.labs.odoogap.com/"
-ARG NUXT_PUBLIC_ODOO_BASE_IMAGE_URL: "https://vsfdemo15.labs.odoogap.com/"
 
 ENV PORT=$PORT
 ENV NODE_ENV=production
