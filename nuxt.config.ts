@@ -1,8 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  extends: [
-    '@erpgap/recent-view-products',
-  ],
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
