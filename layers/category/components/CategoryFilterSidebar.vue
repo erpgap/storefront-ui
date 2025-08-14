@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import {
-  SfAccordionItem,
   SfButton,
   SfCheckbox,
   SfChip,
-  SfIconChevronLeft,
   SfListItem,
   SfRadio,
   SfSelect,
   SfThumbnail,
+  SfLoaderCircular,
 } from '@storefront-ui/vue'
 
 const emit = defineEmits(['close'])
@@ -29,19 +28,20 @@ const route = useRoute()
 const router = useRouter()
 const {
   changeFilters,
-  facetsFromUrlToFilter,
   isFilterSelected,
   isStockSelected,
   selectedFilters,
 } = useUiHelpers()
 
 const sort = useState('sort', () =>
-  route.query?.sort ? route.query?.sort : '',
+  route.query?.sort ? String(route.query.sort) : '',
 )
 
 const sortBy = computed(() => getSortOptions({ input: { sort: sort.value } }))
-const changeSorting = async (newSort: string) => {
+const changeSorting = (newSort: string) => {
   sort.value = newSort
+
+  applyFiltersInstantly()
 }
 const getSortOptions = (searchData: { input: any }) => ({
   options: sortOptions,
@@ -69,11 +69,34 @@ const facets = computed(() => [
   },
 ])
 
-const opened = useState('category-opened', () => ({
-  Price: false,
-}))
+const selectPriceFilter = (option: { id: string, label: string, values: string }) => {
+  const wasSelected = isPriceFilterSelected(option.values)
+  console.log('Was selected before?', wasSelected)
 
-const priceModel = useState('price-model', () => '')
+  selectedFilters.value = selectedFilters.value.filter(
+    (filter: any) => filter.filterName !== 'Price',
+  )
+
+  if (!wasSelected) {
+    selectedFilters.value.push({
+      filterName: 'Price',
+      label: option.id,
+      id: option.values,
+    })
+    console.log('Added price filter:', option.values)
+  }
+  else {
+    console.log('Removed price filter:', option.values)
+  }
+
+  applyFiltersInstantly()
+}
+
+const isPriceFilterSelected = (values: string) => {
+  return selectedFilters.value.some(
+    (filter: any) => filter.filterName === 'Price' && filter.id === values,
+  )
+}
 
 const selectFilter = (
   facet: { label: string },
@@ -85,14 +108,16 @@ const selectFilter = (
 
   if (alreadySelectedIndex !== -1) {
     selectedFilters.value.splice(alreadySelectedIndex, 1)
-    return
+  }
+  else {
+    selectedFilters.value.push({
+      filterName: facet?.label,
+      label: option?.id,
+      id: option?.value,
+    })
   }
 
-  selectedFilters.value.push({
-    filterName: facet?.label,
-    label: option?.id,
-    id: option?.value,
-  })
+  applyFiltersInstantly()
 }
 
 const selectStockFilter = () => {
@@ -102,67 +127,48 @@ const selectStockFilter = () => {
 
   if (alreadySelectedIndex !== -1) {
     selectedFilters.value.splice(alreadySelectedIndex, 1)
-    return
+  }
+  else {
+    selectedFilters.value.push({
+      filterName: 'Availability',
+      label: 'true',
+      id: true,
+    })
   }
 
-  selectedFilters.value.push({
-    filterName: 'Availability',
-    label: 'true',
-    id: true,
-  })
+  applyFiltersInstantly()
 }
 
-const applyFilters = () => {
+const applyFiltersInstantly = () => {
   const filters = selectedFilters.value.filter((item: any) => {
     return typeof item === 'object'
   })
 
   changeFilters(filters, sort.value)
+}
+
+const applyFilters = async () => {
+  applyFiltersInstantly()
   emit('close')
 }
 
 const clearFilters = () => {
-  priceModel.value = ''
   selectedFilters.value = []
   router.push({ query: {} })
   emit('close')
 }
-
-watch(
-  () => [facets, selectedFilters],
-  () => {
-    facets.value.forEach((facet: any) => {
-      opened.value[facet.label] = selectedFilters.value.some(
-        (item: any) => item.filterName === facet.label,
-      )
-    })
-  },
-  { deep: true, immediate: true },
-)
-
-const priceFilter = selectedFilters.value?.find((item: any) => {
-  return item.filterName === 'Price'
-})
-
-if (priceFilter) {
-  priceModel.value = priceFilter.id
-}
-
-watch(priceModel, (newValue) => {
-  selectedFilters.value = selectedFilters.value.filter(
-    (item: any) => item.filterName !== 'Price',
-  )
-  if (newValue) {
-    selectedFilters.value.push({
-      filterName: 'Price',
-      id: newValue,
-    })
-  }
-})
 </script>
 
 <template>
-  <aside class="w-full lg:max-w-[376px]">
+  <aside class="w-full lg:max-w-[376px] relative">
+    <!-- Loading overlay -->
+    <div
+      v-if="loading"
+      class="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center"
+    >
+      <SfLoaderCircular size="base" />
+    </div>
+
     <h5
       class="py-2 px-4 mb-6 bg-neutral-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
     >
@@ -194,151 +200,158 @@ watch(priceModel, (newValue) => {
       <li
         v-for="(facet, index) in facets"
         :key="index"
+        class="mb-6"
       >
-        <SfAccordionItem v-model="opened[facet.label]">
-          <template #summary>
-            <div class="flex justify-between items-center px-2">
-              <p class="p-2 font-medium typography-headline-5">
-                {{ facet?.label }}
-              </p>
-              <SfIconChevronLeft
-                :class="opened[facet.label] ? 'rotate-90' : '-rotate-90'"
-              />
-            </div>
-          </template>
-          <template v-if="facet.type == 'price'">
-            <fieldset id="radio-price">
-              <SfListItem
-                v-for="option in facet.options"
-                :key="option.id"
-                tag="label"
-              >
-                <template #prefix>
-                  <SfRadio
-                    v-model="priceModel"
-                    class="flex items-center"
-                    :name="facet.label"
-                    :value="option.values"
-                    :class="{
-                      'bg-primary-700 border-primary-700 hover:bg-primary-800':
-                        priceModel === option.values,
-                    }"
-                  />
-                </template>
-                <span
-                  class="text-sm mr-2"
-                  :class="{
-                    'font-medium': priceModel === option.values,
-                  }"
-                >{{ option.label }}
-                </span>
-              </SfListItem>
-            </fieldset>
-          </template>
+        <h6
+          class="px-2 py-2 font-medium typography-headline-5 border-b border-neutral-200"
+        >
+          {{ facet?.label }}
+        </h6>
 
-          <ul
-            v-if="facet.type === 'select'"
-            class="grid grid-cols-2 gap-2 px-3"
-          >
-            <li
-              v-for="{ id, value, label, total } in facet.options"
-              :key="id"
-            >
-              <SfChip
-                class="w-full"
-                size="sm"
-                :input-props="{ value }"
-                :model-value="isFilterSelected({ id, value })"
-                @update:model-value="selectFilter(facet, { id, value, label })"
-              >
-                <div class="w-full flex justify-center gap-2">
-                  <span>{{ label }}</span>
-                  <span class="text-[16px] text-[#808080]">({{ total }})</span>
-                </div>
-              </SfChip>
-            </li>
-          </ul>
-          <ul
-            v-if="facet.type === 'radio'"
-            class="grid grid-cols-2 gap-2 px-3"
-          >
-            <li
-              v-for="{ id, value, label, total } in facet.options"
-              :key="id"
-            >
-              <SfChip
-                class="w-full"
-                size="sm"
-                :input-props="{ value }"
-                :model-value="isFilterSelected({ id, value })"
-                @update:model-value="selectFilter(facet, { id, value, label })"
-              >
-                <div class="w-full flex justify-center gap-2">
-                  <span>{{ label }}</span>
-                  <span class="text-[16px] text-[#808080]">({{ total }})</span>
-                </div>
-              </SfChip>
-            </li>
-          </ul>
-          <template v-if="facet.type == 'color'">
+        <div
+          v-if="facet.type == 'price'"
+          class="mt-4"
+        >
+          <fieldset id="radio-price">
             <SfListItem
-              v-for="{ id, value, label, htmlColor, total } in facet.options"
-              :key="id"
-              size="sm"
+              v-for="option in facet.options"
+              :key="option.id"
               tag="label"
-              :class="[
-                'px-4 bg-transparent hover:bg-transparent',
-                {
-                  'font-medium': isFilterSelected({ id, value }),
-                },
-              ]"
-              :selected="isFilterSelected({ id, value })"
+              @click.prevent="selectPriceFilter(option)"
             >
               <template #prefix>
-                <SfCheckbox
-                  :value="label"
-                  class="appearance-none peer hidden"
-                  :model-value="isFilterSelected({ id, value })"
-                  @update:model-value="
-                    selectFilter(facet, { id, value, label })
-                  "
+                <SfRadio
+                  :model-value="isPriceFilterSelected(option.values) ? option.values : null"
+                  :value="option.values"
+                  :name="facet.label"
+                  class="flex items-center"
+                  :class="{
+                    'bg-primary-700 border-primary-700 hover:bg-primary-800':
+                      isPriceFilterSelected(option.values),
+                  }"
                 />
-                <span
-                  class="inline-flex items-center justify-center p-1 transition duration-300 rounded-full cursor-pointer ring-1 ring-neutral-200 ring-inset outline-offset-2 outline-secondary-600 peer-checked:ring-2 peer-checked:ring-primary-700 peer-hover:bg-primary-100 peer-[&:not(:checked):hover]:ring-primary-200 peer-active:bg-primary-200 peer-active:ring-primary-300 peer-disabled:cursor-not-allowed peer-disabled:bg-disabled-100 peer-disabled:opacity-50 peer-disabled:ring-1 peer-disabled:ring-disabled-200 peer-disabled:hover:ring-disabled-200 peer-checked:hover:ring-primary-700 peer-checked:active:ring-primary-700 peer-focus-visible:outline"
-                >
-                  <SfThumbnail
-                    size="sm"
-                    :style="{ backgroundColor: htmlColor }"
-                  />
-                </span>
               </template>
-              <div class="w-full flex justify-between cursor-pointer">
+              <span
+                class="text-sm mr-2 cursor-pointer"
+                :class="{
+                  'font-medium': isPriceFilterSelected(option.values),
+                }"
+              >{{ option.label }}
+              </span>
+            </SfListItem>
+          </fieldset>
+        </div>
+
+        <ul
+          v-if="facet.type === 'select'"
+          class="grid grid-cols-2 gap-2 px-3 mt-4"
+        >
+          <li
+            v-for="{ id, value, label, total } in facet.options"
+            :key="id"
+          >
+            <SfChip
+              class="w-full"
+              size="sm"
+              :input-props="{ value }"
+              :model-value="isFilterSelected({ id, value })"
+              @update:model-value="selectFilter(facet, { id, value, label })"
+            >
+              <div class="w-full flex justify-center gap-2">
                 <span>{{ label }}</span>
                 <span class="text-[16px] text-[#808080]">({{ total }})</span>
               </div>
-            </SfListItem>
-          </template>
-          <template v-if="facet.type == 'in-stock'">
-            <div
-              class="flex items-center gap-2 px-4 cursor-pointer"
-              :class="{ 'pointer-events-none opacity-50': stockCount === 0 }"
+            </SfChip>
+          </li>
+        </ul>
+
+        <ul
+          v-if="facet.type === 'radio'"
+          class="grid grid-cols-2 gap-2 px-3 mt-4"
+        >
+          <li
+            v-for="{ id, value, label, total } in facet.options"
+            :key="id"
+          >
+            <SfChip
+              class="w-full"
+              size="sm"
+              :input-props="{ value }"
+              :model-value="isFilterSelected({ id, value })"
+              @update:model-value="selectFilter(facet, { id, value, label })"
             >
-              <SfCheckbox
-                :model-value="isStockSelected()"
-                @update:model-value="selectStockFilter()"
-              />
-              <div class="w-full flex justify-between">
-                <span>In stock</span>
-                <span class="text-[16px] text-[#808080]">({{ stockCount }})</span>
+              <div class="w-full flex justify-center gap-2">
+                <span>{{ label }}</span>
+                <span class="text-[16px] text-[#808080]">({{ total }})</span>
               </div>
+            </SfChip>
+          </li>
+        </ul>
+
+        <div
+          v-if="facet.type == 'color'"
+          class="mt-4"
+        >
+          <SfListItem
+            v-for="{ id, value, label, htmlColor, total } in facet.options"
+            :key="id"
+            size="sm"
+            tag="label"
+            :class="[
+              'px-4 bg-transparent hover:bg-transparent',
+              {
+                'font-medium': isFilterSelected({ id, value }),
+              },
+            ]"
+            :selected="isFilterSelected({ id, value })"
+          >
+            <template #prefix>
+              <SfCheckbox
+                :value="label"
+                class="appearance-none peer hidden"
+                :model-value="isFilterSelected({ id, value })"
+                @update:model-value="
+                  selectFilter(facet, { id, value, label })
+                "
+              />
+              <span
+                class="inline-flex items-center justify-center p-1 transition duration-300 rounded-full cursor-pointer ring-1 ring-neutral-200 ring-inset outline-offset-2 outline-secondary-600 peer-checked:ring-2 peer-checked:ring-primary-700 peer-hover:bg-primary-100 peer-[&:not(:checked):hover]:ring-primary-200 peer-active:bg-primary-200 peer-active:ring-primary-300 peer-disabled:cursor-not-allowed peer-disabled:bg-disabled-100 peer-disabled:opacity-50 peer-disabled:ring-1 peer-disabled:ring-disabled-200 peer-disabled:hover:ring-disabled-200 peer-checked:hover:ring-primary-700 peer-checked:active:ring-primary-700 peer-focus-visible:outline"
+              >
+                <SfThumbnail
+                  size="sm"
+                  :style="{ backgroundColor: htmlColor }"
+                />
+              </span>
+            </template>
+            <div class="w-full flex justify-between cursor-pointer">
+              <span>{{ label }}</span>
+              <span class="text-[16px] text-[#808080]">({{ total }})</span>
             </div>
-          </template>
-        </SfAccordionItem>
-        <hr class="my-4">
+          </SfListItem>
+        </div>
+
+        <div
+          v-if="facet.type == 'in-stock'"
+          class="mt-4"
+        >
+          <div
+            class="flex items-center gap-2 px-4 cursor-pointer"
+            :class="{ 'pointer-events-none opacity-50': stockCount === 0 }"
+          >
+            <SfCheckbox
+              :model-value="isStockSelected()"
+              @update:model-value="selectStockFilter()"
+            />
+            <div class="w-full flex justify-between">
+              <span>In stock</span>
+              <span class="text-[16px] text-[#808080]">({{ stockCount }})</span>
+            </div>
+          </div>
+        </div>
       </li>
     </ul>
     <div
-      class="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:justify-between px-3 lg:px-0"
+      class="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:justify-between px-3 lg:px-0 mt-6"
     >
       <SfButton
         variant="secondary"
@@ -346,12 +359,6 @@ watch(priceModel, (newValue) => {
         @click="clearFilters"
       >
         {{ $t("clearFilters") }}
-      </SfButton>
-      <SfButton
-        class="w-full"
-        @click="applyFilters"
-      >
-        {{ $t("showProducts") }}
       </SfButton>
     </div>
   </aside>
