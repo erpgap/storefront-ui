@@ -3,7 +3,6 @@ import {
   SfButton,
   SfChip,
   SfCounter,
-  SfIconCompareArrows,
   SfIconFavorite,
   SfIconFavoriteFilled,
   SfIconPackage,
@@ -18,7 +17,7 @@ import {
   SfThumbnail,
 } from '@storefront-ui/vue'
 import type { LocationQueryRaw } from 'vue-router'
-import type { CustomProductWithStockFromRedis, ImageGalleryItem, OrderLine, Product } from '~/graphql'
+import type { CustomProductWithStockFromRedis, ImageGalleryItem, OrderLine } from '~/graphql'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 
 const route = useRoute()

@@ -41,14 +41,16 @@ const validateSEO = (entity: SeoEntity, fullPath: string, entityType: string) =>
 
   warnings.forEach(warning => console.warn(warning))
 }
+const { href } = useRequestURL()
+const generateSeo = <T extends SeoEntity>(
+  entity: T,
+  entityType: string,
 
-const generateSeo = <T extends SeoEntity>(entity: T, entityType: string) => {
-  const { href } = useRequestURL()
-
+) => {
   validateSEO(entity, href, entityType)
 
   const defaultTitle
-        = entity.metaTitle || entity.name || `${entityType} page`
+    = entity.metaTitle || entity.name || `${entityType} page`
 
   return {
     title: defaultTitle,
@@ -88,12 +90,6 @@ const generateSeo = <T extends SeoEntity>(entity: T, entityType: string) => {
       entity?.jsonLd && {
         type: 'application/ld+json',
         children: JSON.stringify(entity.jsonLd),
-      },
-    ].filter(Boolean),
-    link: [
-      {
-        rel: 'canonical',
-        href,
       },
     ],
   }

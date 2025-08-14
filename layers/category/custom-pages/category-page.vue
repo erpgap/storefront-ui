@@ -54,7 +54,7 @@ const pagination = computed(() => ({
 }))
 
 const seoData = computed(() => {
-  if (category.value) {
+  if (category.value && Object.keys(category.value).length > 0) {
     return generateSeo<SeoEntity>(category.value, 'Category')
   }
 
