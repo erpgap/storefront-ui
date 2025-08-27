@@ -1,7 +1,5 @@
 import type {
   CustomProductWithStockFromRedis,
-  Product,
-  ProductVariant,
   ProductVariantResponse,
   QueryProductVariantArgs,
 } from '~/graphql'
@@ -11,25 +9,35 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   const { $sdk } = useNuxtApp()
 
   const loadingProductVariant = ref(false)
-
-  const productVariant = useState<CustomProductWithStockFromRedis>(`product-${slugWithCombinationIds}`, () => ({}) as CustomProductWithStockFromRedis)
+  const productVariant = useState<CustomProductWithStockFromRedis>(
+    `product-${slugWithCombinationIds}`,
+    () => ({}) as CustomProductWithStockFromRedis,
+  )
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
-    loadingProductVariant.value = true
-    const { data, status } = await useAsyncData(`product-${slugWithCombinationIds}`, () =>
-      $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>(
-        { queryName: QueryName.GetProductVariantQuery }, params),
-    )
-    loadingProductVariant.value = false
+    try {
+      loadingProductVariant.value = true
 
-    if (!data?.value?.productVariant?.product?.id) {
-      showError({
-        status: 404,
-        message: 'Product not found',
-      })
+      const { data, status } = await useAsyncData(
+        `product-variant-${slugWithCombinationIds}`,
+        () => $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>(
+          { queryName: QueryName.GetProductVariantQuery },
+          params,
+        ),
+      )
+
+      await until(status).toBe('success')
+
+      productVariant.value = (data?.value?.productVariant?.product) || {} as CustomProductWithStockFromRedis
+
+      await nextTick()
     }
-
-    productVariant.value = (data?.value?.productVariant?.product) || {} as CustomProductWithStockFromRedis
+    catch (error) {
+      console.error('Error loading product variant:', error)
+    }
+    finally {
+      loadingProductVariant.value = false
+    }
   }
 
   const getImages = computed(() => {
@@ -48,17 +56,17 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
       || productVariant.value?.combinationInfo?.list_price
       || 0,
   )
+
   const getSpecialPrice = computed(
     () => productVariant.value?.combinationInfoVariant?.price || 0,
   )
 
   return {
-    loadingProductVariant,
-    productVariant,
+    loadingProductVariant: readonly(loadingProductVariant),
+    productVariant: readonly(productVariant),
     getImages,
     getRegularPrice,
     getSpecialPrice,
-
     loadProductVariant,
   }
 }
