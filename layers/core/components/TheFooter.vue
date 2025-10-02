@@ -1,100 +1,105 @@
 <template>
-  <footer class="pt-10 bg-neutral-100">
-    <div
-      class="grid md:justify-items-center grid-cols-[1fr_1fr] md:grid-cols-[repeat(4,1fr)] narrow-container"
-    >
+  <footer class="bg-[#f7f7f7]">
+        <div class="footer-top text-black">
       <div
-        v-for="{ label, subcategories } in categories"
-        :key="label"
-        class="grid grid-cols xs:pb-4"
-      >
-        <div
-          class="ml-4 text-lg font-medium leading-7 text-neutral-900 font-body"
-        >
-          {{ label }}
+        class="narrow-container pt-[50px] lg:pt-[90px] pb-[60px] lg:pb-[190px] flex flex-col xl:flex-row justify-between gap-[60px] xl:gap-[100px]">
+        <!-- Col -->
+        <div>
+          <div class="min-w-[180px]">
+            <!-- Logo -->
+            <NuxtLink to="/" aria-label="Sf Homepage">
+              <AlokaiLogo class="w-auto h-9" />
+            </NuxtLink>
+          </div>
         </div>
-        <SfListItem
-          v-for="{ subcategoryLabel, link } in subcategories"
-          :key="subcategoryLabel"
-          class="py-2 !bg-transparent typography-text-sm font-body"
-        >
-          <SfLink
-            class="no-underline text-neutral-600 hover:underline hover:!text-neutral-900 active:underline active:!text-neutral-900"
-            variant="secondary"
-            :href="link"
-          >
-            {{ subcategoryLabel }}
-          </SfLink>
-        </SfListItem>
+        <!-- Col -->
+        <div class="flex flex-col md:flex-row justify-between gap-[25px] lg:gap-[30px] grow">
+          <!-- Col -->
+          <div class="">
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px]">How To Buy</h3>
+            <ul class="flex flex-col gap-[10px] md:gap-[16px]">
+              <li><a href="#" class="hover:underline">Payment methods</a></li>
+              <li><a href="#" class="hover:underline">Order pickup</a></li>
+              <li><a href="#" class="hover:underline">Purchase status</a></li>
+              <li><a href="#" class="hover:underline">Track orders</a></li>
+              <li><a href="#" class="hover:underline">Returns</a></li>
+            </ul>
+          </div>
+          <!-- Col -->
+          <div class="">
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px]">Help</h3>
+            <ul class="flex flex-col gap-[10px] md:gap-[16px]">
+              <li><a href="#" class="hover:underline">Help centers</a></li>
+              <li><a href="#" class="hover:underline">Security & fraud</a></li>
+              <li><a href="#" class="hover:underline">Feedback</a></li>
+              <li><a href="#" class="hover:underline">Contact</a></li>
+            </ul>
+          </div>
+          <!-- Col -->
+          <div class="">
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px]">Services</h3>
+            <ul class="flex flex-col gap-[10px] md:gap-[16px]">
+              <li><a href="#" class="hover:underline">Gift cards</a></li>
+              <li><a href="#" class="hover:underline">Order pickup</a></li>
+              <li><a href="#" class="hover:underline">Purchase status</a></li>
+              <li><a href="#" class="hover:underline">Track orders</a></li>
+            </ul>
+          </div>
+          <!-- Col -->
+          <div class=" shrink-0">
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px] text-nowrap">About</h3>
+            <ul class="flex flex-col gap-[10px] md:gap-[16px]">
+              <li><a href="#" class="hover:underline">About Us</a></li>
+              <li><a href="#" class="hover:underline">Order pickup</a></li>
+              <li><a href="#" class="hover:underline">Purchase status</a></li>
+              <li><a href="#" class="hover:underline">Track orders</a></li>
+              <li><a href="#" class="hover:underline">Returns</a></li>
+            </ul>
+          </div>
+          <!-- Col -->
+          <div class="">
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[40px]">Contact Us</h3>
+            <ul class="flex flex-col gap-[10px] md:gap-[16px]">
+              <li><a href="#" class="flex items-center gap-[15px] hover:underline"><NuxtImg
+                    src="img/phone.svg" alt="erpgap-icon" class="w-[42px]" />
+                  <p>+1 222-333-444</p>
+                </a></li>
+              <li><a href="#" class="flex items-center gap-[15px] hover:underline"><NuxtImg
+                    src="img/email.svg" alt="erpgap-icon" class="w-[42px]" />
+                  <p>info@erpgap.com</p>
+                </a></li>
+            </ul>
+            <h3 class="text-[20px] font-semibold my-[15px] md:my-[40px]">Follow Us</h3>
+            <ul class="flex items-center gap-[24px]">
+              <li><a href="#"><NuxtImg src="img/x.svg" alt="erpgap-icon" class="w-[42px]" /></a></li>
+              <li><a href="#"><NuxtImg src="img/linkedin.svg" alt="erpgap-icon" class="w-[42px]" /></a></li>
+              <li><a href="#"><NuxtImg src="img/github.svg" alt="erpgap-icon" class="w-[42px]" /></a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-    <hr>
-    <div class="py-10 md:flex md:mx-auto max-w-[1336px]">
+    <div class="bg-[#191919] text-white">
       <div
-        v-for="{ label, icon, link, details } in contactOptions"
-        :key="label"
-        class="mx-auto my-4 text-center"
+        class="narrow-container flex flex-col sm:flex-row items-center justify-between gap-4 py-6 sm:py-9"
       >
-        <component
-          :is="icon"
-          size="lg"
-        />
-        <p class="py-1 my-2 font-medium typography-text-lg font-body">
-          <SfLink
-            variant="secondary"
-            class="no-underline text-neutral-600 hover:underline hover:!text-neutral-900 active:underline active:!text-neutral-900"
-            :href="link"
-          >
-            {{ label }}
-          </SfLink>
-        </p>
-        <p
-          v-for="option in details"
-          :key="option"
-          class="leading-5 typography-text-sm text-neutral-600 font-body"
-        >
-          {{ option }}
-        </p>
-      </div>
-    </div>
-    <div class="bg-neutral-900">
-      <div
-        class="px-4 md:px-6 xl:px-8 xxl:px-0 max-w-[1336px] justify-end py-10 md:flex md:py-6 mx-auto"
-      >
-        <div class="flex justify-center py-2 gap-x-4 md:self-start">
-          <SfButton
-            v-for="{ label, link, icon } in socialMedia"
-            :key="label"
-            tag="a"
-            square
-            variant="tertiary"
-            class="text-white active:text-white hover:text-white hover:!bg-neutral-500 active:!bg-transparent"
-            :href="link"
-            :aria-label="`Go to ${label} page`"
-          >
-            <component
-              :is="icon"
-              loading="lazy"
-            />
-          </SfButton>
-        </div>
         <div
-          class="flex items-center justify-center gap-6 py-2 my-4 md:ml-auto md:my-0"
+          class="flex items-center justify-center gap-4 sm:gap-6"
         >
           <SfLink
             v-for="{ label, link } in bottomLinks"
             :key="label"
             variant="secondary"
-            class="text-white no-underline typography-text-sm active:text-white active:underline hover:text-white hover:underline"
+            class="!text-white no-underline hover:underline text-[14px] text-normal"
             :href="link"
           >
             {{ label }}
           </SfLink>
         </div>
         <p
-          class="flex items-center justify-center py-2 pb-14 md:pb-2 leading-5 text-center typography-text-sm text-white/50 font-body md:ml-6"
+          class="flex items-center justify-center text-[14px] text-normal"
         >
-          @{{ new Date().getFullYear() }} Alokai - by&nbsp;<a
+          @{{ new Date().getFullYear() }} Alokai by&nbsp;<a
             class="underline"
             href="https://www.erpgap.com/"
           >ERPGAP</a>
@@ -213,33 +218,6 @@ const categories = [
     ],
   },
 ]
-const socialMedia = [
-  {
-    label: 'Facebook',
-    link: '#',
-    icon: SfIconFacebook,
-  },
-  {
-    label: 'Twitter',
-    link: '#',
-    icon: SfIconTwitter,
-  },
-  {
-    label: 'Instagram',
-    link: '#',
-    icon: SfIconInstagram,
-  },
-  {
-    label: 'Pinterest',
-    link: '#',
-    icon: SfIconPinterest,
-  },
-  {
-    label: 'Youtube',
-    link: '#',
-    icon: SfIconYoutube,
-  },
-]
 const contactOptions = [
   {
     label: 'Help center',
@@ -262,11 +240,11 @@ const contactOptions = [
 ]
 const bottomLinks = [
   {
-    label: 'Terms',
+    label: 'Privacy policy',
     link: '#',
   },
   {
-    label: 'Privacy policy',
+    label: 'Terms of Service',
     link: '#',
   },
 ]

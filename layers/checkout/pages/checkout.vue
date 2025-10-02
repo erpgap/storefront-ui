@@ -20,7 +20,7 @@ if (totalItemsInCart?.value === 0) {
 </script>
 
 <template>
-  <div class="md:px-0 mb-20">
+  <div class="narrow-container md:px-0 mb-20">
     <CheckoutHeader />
     <div v-if="cart?.order?.id">
       <div class="lg:grid lg:grid-cols-12 md:gap-x-6">

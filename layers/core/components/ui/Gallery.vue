@@ -67,7 +67,6 @@ const allImages = computed(() => [
       wrapper-class="h-full m-auto"
       is-active-index-centered
       buttons-placement="none"
-      :drag="{ containerWidth: true }"
     >
       <div
         v-for="({ imageSrc, alt }, index) in allImages"

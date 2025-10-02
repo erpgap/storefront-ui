@@ -20,7 +20,7 @@ await loadCart()
   </div>
   <div
     v-else-if="cart?.order?.websiteOrderLine?.length ?? 0 > 0"
-    class="pb-20"
+    class="narrow-container pb-20"
   >
     <div class="flex justify-between mt-8 mb-10">
       <h1 class="font-bold typography-headline-3 md:typography-headline-2">
