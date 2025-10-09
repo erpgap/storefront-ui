@@ -9,7 +9,7 @@ const { isAuthenticated } = useAuth()
 <template>
   <!-- <ClientOnly> -->
   <SfButton
-    class="text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 mr-1 -ml-0.5 rounded-md"
+    class="group relative text-black hover:bg-white active:bg-white rounded-md"
     variant="tertiary"
     :to="isAuthenticated ? '/my-account/personal-data' : '/login'"
     :tag="NuxtLink"
@@ -19,6 +19,7 @@ const { isAuthenticated } = useAuth()
       <Icon
         :name="isAuthenticated ? 'ion:person' : 'ion:person-outline'"
         size="22px"
+        class="!text-black"
       />
     </template>
   </SfButton>

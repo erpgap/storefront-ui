@@ -1,30 +1,41 @@
 <script setup lang="ts">
-import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefront-ui/vue'
-import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
+import {
+  SfButton,
+  SfIconTune,
+  useDisclosure,
+  SfLoaderCircular,
+} from '@storefront-ui/vue'
 import type { Product } from '~/graphql'
 
 const route = useRoute()
-
-const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
-
 const { isOpen, open, close } = useDisclosure()
+const { getFacetsFromURL } = useUiHelpers()
+
+// searching on algolia with query params
+const { search, searchInputValue, loading } = useSearch()
+
+searchInputValue.value = route.query.search as string
+// fetch products with query params + ids from algolia
 const {
   loadProductTemplateList,
   organizedAttributes,
-  loading,
   productTemplateList,
   totalItems,
   stockCount,
-} = useProductTemplateList(String(cleanFullPath.value))
+} = useProductTemplateList(route.fullPath)
 
 provide('stockCount', stockCount)
 
-const { loadCategory, category } = useCategory()
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
-const { getFacetsFromURL } = useUiHelpers()
 
-const maxVisiblePages = useState('category-max-visible-pages', () => 1)
-const setMaxVisiblePages = (isWide: boolean) => (maxVisiblePages.value = isWide ? 5 : 1)
+const breadcrumbs = [
+  { name: 'Home', link: '/' },
+  { name: 'Search', link: '/' },
+]
+
+const maxVisiblePages = useState('search-page-max-visible', () => 1)
+const setMaxVisiblePages = (isWide: boolean) =>
+  (maxVisiblePages.value = isWide ? 5 : 1)
 
 watch(isWideScreen, value => setMaxVisiblePages(value))
 watch(isTabletScreen, (value) => {
@@ -33,72 +44,45 @@ watch(isTabletScreen, (value) => {
   }
 })
 
-watch(
-  () => route.query,
-  async (newValue, oldValue) => {
-    delete newValue['list-view']
-    delete oldValue['list-view']
+await search()
 
-    if (!isEqual(oldValue, newValue)) {
-      await loadProductTemplateList(getFacetsFromURL(route.query))
-    }
-  },
+await loadProductTemplateList(
+  getFacetsFromURL(route.query),
 )
 
 const pagination = computed(() => ({
   currentPage: route?.query?.page ? Number(route.query.page) : 1,
-  totalPages: Math.ceil(totalItems.value / 20) || 1,
+  totalPages: Math.ceil(totalItems.value / 12) || 1,
   totalItems: totalItems.value,
-  itemsPerPage: 20,
-  pageOptions: [5, 10, 15, 20],
+  itemsPerPage: 12,
+  pageOptions: [5, 12, 15, 20],
 }))
 
-const seoData = computed(() => {
-  if (category.value && Object.keys(category.value).length > 0) {
-    return generateSeo<SeoEntity>(category.value, 'Category')
-  }
-
-  const fallbackEntity: SeoEntity = {
-    name: 'Category',
-    metaTitle: `Category | ${route.path.split('/').pop() || 'Products'}`,
-    metaDescription: 'Browse our product categories',
-  }
-
-  return generateSeo<SeoEntity>(fallbackEntity, 'Category')
+onMounted(() => {
+  setMaxVisiblePages(isWideScreen.value)
 })
-
-useHead(seoData)
-
-watch(
-  () => route.path,
-  async (newSlug, oldSlug) => {
-    if (newSlug && newSlug !== oldSlug) {
-      await loadCategory({ slug: String(newSlug) })
-    }
-  },
-  { immediate: true },
-)
-
-setMaxVisiblePages(isWideScreen.value)
-
-await loadProductTemplateList(getFacetsFromURL(route.query))
 </script>
 
 <template>
-  <div class="narrow-container pb-20">
+  <div class="pb-20">
     <UiBreadcrumb
-      :breadcrumbs="category.breadcrumb"
+      :breadcrumbs="breadcrumbs"
       class="self-start mt-5 mb-5"
     />
+    <h1
+      v-if="route.query.search"
+      class="font-bold typography-headline-3 md:typography-headline-2 mb-10"
+    >
+      Results for "{{ route.query.search }}"
+    </h1>
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
-        <LazyCategoryFilterSidebar
-          v-if="$viewport.isGreaterOrEquals('desktopSmall')"
+        <CategoryFilterSidebar
+          class="hidden lg:block"
           :attributes="organizedAttributes"
-          :categories="[]"
+          :categories="categories"
         />
         <LazyCategoryMobileSidebar
-          v-if="$viewport.isLessThan('desktopSmall')"
           :is-open="isOpen"
           @close="close"
         >
@@ -106,14 +90,14 @@ await loadProductTemplateList(getFacetsFromURL(route.query))
             <CategoryFilterSidebar
               class="block lg:hidden"
               :attributes="organizedAttributes"
-              :categories="[]"
+              :categories="categories"
               @close="close"
             />
           </template>
         </LazyCategoryMobileSidebar>
       </div>
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
-        <div v-if="!loading">
+        <template v-if="!loading">
           <div class="flex justify-between items-center mb-6">
             <span class="font-bold font-headings md:text-lg">{{ totalItems }} Products
             </span>
@@ -137,9 +121,10 @@ await loadProductTemplateList(getFacetsFromURL(route.query))
               :key="productTemplate.id"
               :name="productTemplate?.name || ''"
               loading="eager"
-              :slug="mountUrlSlugForProductVariant(
-                (productTemplate.firstVariant || productTemplate) as Product,
-              )
+              :slug="
+                mountUrlSlugForProductVariant(
+                  (productTemplate.firstVariant || productTemplate) as Product,
+                )
               "
               :image-url="
                 $getImage(
@@ -150,19 +135,18 @@ await loadProductTemplateList(getFacetsFromURL(route.query))
                 )
               "
               :image-alt="productTemplate?.name || ''"
-              :regular-price="getRegularPrice(productTemplate.firstVariant as Product)
+              :regular-price="
+                getRegularPrice(productTemplate.firstVariant as Product) || 250
               "
-              :special-price="getSpecialPrice(productTemplate.firstVariant as Product)
+              :special-price="
+                getSpecialPrice(productTemplate.firstVariant as Product)
               "
               :rating-count="123"
               :rating="Number(4)"
               :first-variant="productTemplate.firstVariant as Product"
             />
           </section>
-          <CategoryEmptyState
-            v-else
-            :page="pagination.currentPage"
-          />
+          <CategoryEmptyState v-else />
           <LazyUiPagination
             v-if="pagination.totalPages > 1"
             class="mt-5"
@@ -171,16 +155,12 @@ await loadProductTemplateList(getFacetsFromURL(route.query))
             :page-size="pagination.itemsPerPage"
             :max-visible-pages="maxVisiblePages"
           />
-        </div>
-        <div
-          v-else
-          class="w-full text-center"
-        >
-          <SfLoaderCircular
-            size="xl"
-            class="mt-[160px]"
-          />
-        </div>
+        </template>
+        <template v-else>
+          <div class="w-full text-center">
+            <SfLoaderCircular size="base" />
+          </div>
+        </template>
       </div>
     </div>
   </div>

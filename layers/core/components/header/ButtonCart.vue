@@ -10,7 +10,7 @@ await loadCart()
 <template>
   <ClientOnly>
     <SfButton
-      class="group relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 rounded-md"
+      class="group relative text-black hover:bg-white active:bg-white rounded-md"
       :tag="NuxtLink"
       to="/cart"
       variant="tertiary"
@@ -20,10 +20,11 @@ await loadCart()
         <Icon
           :name="totalItemsInCart > 0 ? 'ion:cart-sharp' : 'ion:cart-outline'"
           size="22px"
+          class="!text-black"
         />
         <SfBadge
           :content="totalItemsInCart"
-          class="outline outline-primary-700 bg-white !text-neutral-900 group-hover:outline-primary-800 group-active:outline-primary-900 flex justify-center"
+          class="outline outline-[#B8B8B8] !bg-[#f7f7f7] !text-black flex justify-center"
           data-testid="cart-badge"
         />
       </template>
