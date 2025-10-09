@@ -12,7 +12,7 @@ await loadUser(true) */
   <TheHeader />
   <main
     :class="[
-      'mx-auto px-4 pt-4 pb-20 md:px-0 md:mt-4',
+      'mx-auto px-4 pt-4 pb-20 md:px-0 md:mt-4 narrow-container',
       { 'md:mb-8': heading },
       heading ? 'md:max-w-[630px]' : 'md:max-w-[677px]',
     ]"

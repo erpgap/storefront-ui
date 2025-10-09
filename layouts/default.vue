@@ -3,13 +3,10 @@
 <template>
   <TheHeader />
 
-  <main class="w-full narrow-container bg-white">
-    <slot />
-  </main>
+  <slot />
 
   <LazyNewsletter />
 
-  <LazyBottomNavbar hydrate-on-visible />
   <LazyTheFooter hydrate-on-visible />
 
   <WishlistSidebar />

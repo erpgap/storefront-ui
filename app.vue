@@ -7,7 +7,7 @@ nuxtApp.hook('page:finish', () => {
 </script>
 
 <template>
-  <div class="h-screen justify-center align-middle">
+  <div class="min-h-screen justify-center align-middle">
     <NuxtLoadingIndicator
       color="white"
       :height="4"

@@ -182,7 +182,7 @@ const hasProductData = computed(() => {
 
 <template>
   <NuxtErrorBoundary>
-    <div>
+    <div class="narrow-container">
       <UiBreadcrumb
         v-if="productTemplate?.breadcrumb?.length"
         :breadcrumbs="productTemplate?.breadcrumb"
