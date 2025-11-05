@@ -1,101 +1,117 @@
 import type { ProductFilterInput, QueryProductsArgs } from '~/graphql'
 
 export const useUiHelpers = () => {
-  const route: any = useRoute()
+  const route = useRoute()
   const router = useRouter()
 
-  const { query, path } = route
-
-  const queryParamsNotFilters = ['page', 'sort', 'itemsPerPage']
+  // chaves da URL que NÃO são filtros de atributos
+  const queryParamsNotFilters = ['page', 'sort', 'itemsPerPage', 'search']
   const localePrefixes = ['/en', '/de', '/ru']
-  const pathToSlug = (): string => {
+
+  const pathToSlug = (): string | null => {
+    const path = route.path?.replace(/\/$/, '') || ''
     for (const localePrefix of localePrefixes) {
       if (path.startsWith(localePrefix)) {
-        return path.replace(localePrefix, '')
+        const p = path.replace(localePrefix, '')
+        return p === '' ? null : p
       }
     }
-    const cleanPath = path?.replace(/\/$/, '')
-    return cleanPath
+    if (path === '/' || path === '/search') return null
+    return path || null
   }
 
-  const cleanFullSearchIndex = computed(() => getUniqueUrlFromRouteFilteringByAttributes(
-    route.path,
-    route,
-  ))
+  const cleanFullSearchIndex = computed(() =>
+    getUniqueUrlFromRouteFilteringByAttributes(route.path, route),
+  )
 
+  /**
+   * Transforma a query (URL) em argumentos para a query GraphQL
+   */
   const getFacetsFromURL = (
-    query: any,
+    query: Record<string, any>,
     ids: number[] = [],
   ): QueryProductsArgs => {
     const filters: string[] = []
-    const newQuery = { ...query }
 
-    if (newQuery) {
-      Object.keys(newQuery).forEach((filterKey) => {
-        if (![...queryParamsNotFilters, 'Price'].includes(filterKey)) {
-          if (query[filterKey].includes(',')) {
-            query[filterKey]?.split(',').forEach((item) => {
-              filters.push(item)
-            })
-          }
-          else {
-            const label = query[filterKey]?.split(',')[0]
-            filters.push(label)
-          }
-        }
-      })
-    }
+    // coleta atributos personalizados (exceto Price/Availability e parâmetros de controle)
+    Object.keys(query || {}).forEach((key) => {
+      if (![...queryParamsNotFilters, 'Price', 'Availability'].includes(key)) {
+        const raw = String(query[key] ?? '')
+        if (!raw) return
+        raw.split(',').forEach((val) => {
+          if (val) filters.push(val)
+        })
+      }
+    })
 
-    const price = query?.Price?.split('-')
-    const availability = query?.Availability ? true : false
+    // preço
+    const rawPrice = (query?.price ?? query?.Price ?? '') as string
+    const [minS, maxS] = String(rawPrice).split('-')
+    const minPrice = minS && !isNaN(Number(minS)) ? Number(minS) : undefined
+    const maxPrice = maxS && !isNaN(Number(maxS)) ? Number(maxS) : undefined
 
+    // disponibilidade: manter **string** "true" para não quebrar no backend
+    const availabilityStr =
+      query?.Availability && String(query.Availability).toLowerCase() === 'true'
+        ? 'true'
+        : undefined
+
+    // paginação/ordenação
     const pageSize = query.itemsPerPage ? parseInt(query.itemsPerPage) : 20
-    const sort = query?.sort?.split(',') || []
-    const page = query?.page || 1
+    const page = query?.page ? parseInt(query.page) : 1
 
-    const productFilters = {
-      minPrice: Number(price?.[0]) || null,
-      maxPrice: Number(price?.[1]) || null,
+    const sortParts = String(query?.sort ?? '').split(',')
+    // GraphQL espera chaves específicas; usamos cast para alinhar
+    const sort =
+      sortParts.length === 2
+        ? ({ [sortParts[0]]: sortParts[1] } as any)
+        : undefined
+
+    // filtro do GraphQL (tipagem estrita -> fazemos cast no retorno)
+    const productFilters: Partial<ProductFilterInput> = {
+      minPrice,
+      maxPrice,
       attribValues: filters,
-      categorySlug: path === '/' || path === '/search' ? null : pathToSlug(),
-      inStock: availability,
-      ids: ids,
-    } as ProductFilterInput
+      categorySlug: pathToSlug(),
+      // IMPORTANTE: string "true" (ou undefined) — evita 500 no backend
+      inStock: availabilityStr as any,
+      ids,
+    }
 
     return {
       pageSize,
-      currentPage: parseInt(page),
-      sort: { [sort[0]]: sort[1] },
-      filter: productFilters,
-      search: query?.search,
+      currentPage: page,
+      sort: sort as any,
+      filter: productFilters as ProductFilterInput,
+      search: query?.search ?? undefined,
     }
   }
-  const facetsFromUrlToFilter = () => {
-    const formattedFilters: any = []
-    Object.keys(query).forEach((label) => {
-      if (queryParamsNotFilters.includes(label)) return
 
-      const valueList = query[label].split(',')
-      valueList.forEach((value: string) => {
-        if (label === 'Price') {
-          const item = {
-            filterName: label,
-            label: `${value.slice(0, 2)}`,
-            id: value,
-          }
-          formattedFilters.push(item)
+  /**
+   * Reconstrói o array de filtros selecionados a partir da URL (SSR/refresh)
+   */
+  const facetsFromUrlToFilter = () => {
+    const q = route.query as Record<string, any>
+    const out: any[] = []
+
+    Object.keys(q).forEach((label) => {
+      if (queryParamsNotFilters.includes(label)) return
+      const raw = String(q[label] ?? '')
+      if (!raw) return
+
+
+      const parts = raw.split(',').filter(Boolean)
+      for (const value of parts) {
+        if (label === 'price' || label === 'Price') {
+          out.push({ filterName: 'price', label: value, id: value })
+        } else if (label === 'Availability') {
+          out.push({ filterName: 'Availability', label: 'true', id: 'true' })
+        } else {
+          out.push({ filterName: label, label: value, id: value })
         }
-        else {
-          const item = {
-            filterName: label,
-            label: value,
-            id: value,
-          }
-          formattedFilters.push(item)
-        }
-      })
+      }
     })
-    return formattedFilters
+    return out
   }
 
   const selectedFilters = useState<any[]>(
@@ -103,50 +119,39 @@ export const useUiHelpers = () => {
     () => facetsFromUrlToFilter() || [],
   )
 
-  const isFilterSelected = (option: any) => {
-    return selectedFilters.value.some(
-      (filter: { id: any }) => String(filter.id) === String(option.id),
-    )
-  }
+  const isFilterSelected = (option: any) =>
+    selectedFilters.value.some((f) => String(f.id) === String(option.id))
 
-  const isStockSelected = () => {
-    return selectedFilters.value.some(
-      (filter: { filterName: string, id: string }) =>
-        filter.filterName === 'Availability' && filter.id === 'true',
+  const isStockSelected = () =>
+    selectedFilters.value.some(
+      (f) => f.filterName === 'Availability' && String(f.id) === 'true',
     )
-  }
+
 
   const changeFilters = (filters: any[], sort: string) => {
-    const formattedFilters: any = {}
-    filters.forEach((element) => {
-      if (element.filterName === 'Price') {
-        element.label = element.id
-      }
+    const q: Record<string, string> = {}
 
-      if (formattedFilters[element.filterName]) {
-        formattedFilters[element.filterName] += `,${element.label}`
-        return
+    for (const el of filters) {
+      if (String(el.filterName).toLowerCase() === 'price') {
+        q.price = String(el.id)           // ex.: "0-250"
+        continue
       }
-      formattedFilters[element.filterName] = `${element.label}`
-    })
-
-    let allQuery: any = {}
-    if (filters.length > 0) {
-      allQuery = { ...formattedFilters }
-    }
-    else {
-      allQuery = { ...formattedFilters }
-      if (query.itemsPerPage) {
-        allQuery = { itemsPerPage: query.itemsPerPage }
+      if (el.filterName === 'Availability') {
+        q.Availability = 'true' // string
+        continue
       }
+      const key = String(el.filterName)
+      q[key] = q[key] ? `${q[key]},${el.label}` : String(el.label)
     }
 
-    if (sort) {
-      allQuery.sort = sort
-    }
+    if (sort) q.sort = String(sort)
 
-    delete allQuery.page
-    router.push({ query: allQuery })
+    const current = route.query as Record<string, any>
+    if (current.itemsPerPage) q.itemsPerPage = String(current.itemsPerPage)
+
+    delete q.page
+
+    router.push({ path: route.path, query: q })
   }
 
   return {
@@ -155,7 +160,6 @@ export const useUiHelpers = () => {
     facetsFromUrlToFilter,
     isFilterSelected,
     isStockSelected,
-
     selectedFilters,
   }
 }

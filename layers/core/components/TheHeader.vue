@@ -3,7 +3,10 @@ const { loadCategoriesForMegaMenu, categoriesForMegaMenu } = useMegaMenuCategori
 
 provide('categoriesForMegaMenu', categoriesForMegaMenu)
 
-await loadCategoriesForMegaMenu({ filter: { parent: true }, pageSize: 4 })
+await loadCategoriesForMegaMenu({ filter: {
+  parent: true,
+  id: null
+}, pageSize: 4 })
 </script>
 
 <template>

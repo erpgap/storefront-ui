@@ -3,7 +3,7 @@ import { SfScrollable, SfButton } from '@storefront-ui/vue'
 </script>
 
 <template>
-  <div class="narrow-container pt-[40px] pb-[40px] md:pt-[80px] md:pb-[120px]">
+  <div class="narrow-container pt-[40px] pb-[40px] md:pt-[80px] md:pb-[120px] space-y-6 md:space-y-10">
     <h3 class="text-[24px] sm:text-[28px] font-normal mb-[30px] md:mb-[50px]">
       Shop by Category
     </h3>
@@ -85,7 +85,7 @@ import { SfScrollable, SfButton } from '@storefront-ui/vue'
       buttons-placement="none"
       class="items-center pb-8 flex md:hidden"
       data-testid="category-slider"
-      drag="true"
+      :drag="true"
     >
       <div class="min-w-[300px] max-w-[300px]">
         <a href="#">

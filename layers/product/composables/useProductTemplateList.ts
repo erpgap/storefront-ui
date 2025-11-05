@@ -1,129 +1,192 @@
-import type { AttributeFacet, AttributeValue, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql'
+import type {
+  AttributeFacet,
+  AttributeValue,
+  Product,
+  ProductTemplateListResponse,
+  QueryProductsArgs,
+} from '~/graphql'
 import { QueryName } from '~/server/queries'
 
-export const useProductTemplateList = (customIndex: string = '') => {
-  const { $sdk } = useNuxtApp()
+/** Mostrar todos os facets mesmo com 1 opção (ajuda no debug) */
+const SHOW_ALL_FACETS = true
+
+type FilterCount = {
+  id?: number | string
+  type?: string
+  total?: number
+}
+
+export const useProductTemplateList = (customIndex = '') => {
+  // Tipagem prática do sdk para evitar 'unknown'
+  const nuxtApp = useNuxtApp() as any
+  const $sdk: () => any = nuxtApp.$sdk
+
   const route = useRoute()
 
   const categorySlugIndex = computed(() => route.fullPath)
-  const cleanFullSearchIndex = computed(() => getUniqueUrlFromRouteFilteringByAttributes(route.path, route))
+  const cleanFullSearchIndex = computed(() =>
+    getUniqueUrlFromRouteFilteringByAttributes(route.path, route),
+  )
 
-  const minPrice = useState<number | null>(`min-price-template-list${categorySlugIndex.value}${customIndex}`, () => null)
-  const maxPrice = useState<number | null>(`max-price-template-list${categorySlugIndex.value}${customIndex}`, () => null)
-  const loading = useState(`loading-product-template-list${customIndex}`, () => false)
-  const stockCount = useState<number>(`stock-count${categorySlugIndex.value}${customIndex}`, () => 0)
-  const totalItems = useState<number>(`total-items${cleanFullSearchIndex.value}${customIndex}`, () => 0)
-  const productTemplateList = useState<Product[]>(`product-template-list${cleanFullSearchIndex.value}${customIndex}`, () => [])
-  const organizedAttributes = useState<AttributeFacet[]>(`attributes${categorySlugIndex.value}${customIndex}`, () => [])
+  const minPrice = useState<number | null>(
+    `min-price-template-list${categorySlugIndex.value}${customIndex}`,
+    () => null,
+  )
+  const maxPrice = useState<number | null>(
+    `max-price-template-list${categorySlugIndex.value}${customIndex}`,
+    () => null,
+  )
+  const loading = useState<boolean>(
+    `loading-product-template-list${customIndex}`,
+    () => false,
+  )
+  const stockCount = useState<number>(
+    `stock-count${categorySlugIndex.value}${customIndex}`,
+    () => 0,
+  )
+  const totalItems = useState<number>(
+    `total-items${cleanFullSearchIndex.value}${customIndex}`,
+    () => 0,
+  )
+  const productTemplateList = useState<Product[]>(
+    `product-template-list${cleanFullSearchIndex.value}${customIndex}`,
+    () => [],
+  )
+  const organizedAttributes = useState<AttributeFacet[]>(
+    `attributes${categorySlugIndex.value}${customIndex}`,
+    () => [],
+  )
 
-  const updateVariablesFromData = (data: ProductTemplateListResponse | null) => {
-    productTemplateList.value = data?.products?.products || []
-    minPrice.value = data?.products?.minPrice || null
-    maxPrice.value = data?.products?.maxPrice || null
-    totalItems.value = data?.products?.totalCount || 0
+  function updateVariablesFromData(data: ProductTemplateListResponse | null) {
+    const products = data?.products
+    productTemplateList.value = products?.products || []
+    minPrice.value = (products as any)?.minPrice ?? null
+    maxPrice.value = (products as any)?.maxPrice ?? null
+    totalItems.value = products?.totalCount || 0
+
+    //console.log('[GQL] attributeValues:', products?.attributeValues)
+    //console.log('[GQL] filterCounts:', products?.filterCounts)
 
     computeAttributes(
-      data?.products?.attributeValues as AttributeValue[],
-      data?.products?.filterCounts as any[],
+      (products?.attributeValues as AttributeValue[]) || [],
+      (products?.filterCounts as FilterCount[]) || [],
     )
   }
 
   const loadProductTemplateList = async (params: QueryProductsArgs) => {
-    const { data, status } = await useAsyncData(
-      `${cleanFullSearchIndex.value}${customIndex}`,
-      () =>
-        $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>(
-          { queryName: QueryName.GetProductTemplateListQuery },
-          params,
-          { headers: useRequestHeaders() },
-        ),
-      { lazy: import.meta.client },
-    )
+    loading.value = true
+    try {
+      const { data, error } =
+        await useAsyncData<ProductTemplateListResponse>(
+          `product-list:${cleanFullSearchIndex.value}${customIndex}`,
+          () =>
+            $sdk().odoo.query(
+              { queryName: QueryName.GetProductTemplateListQuery },
+              params,
+              { headers: useRequestHeaders() },
+            ),
+          {
+            server: true,   // roda no SSR
+            lazy: false,    // executa imediatamente
+            default: () => null,
+          },
+        )
 
-    updateVariablesFromData(data.value)
-
-    watch(status, () => {
-      if (status.value === 'pending') {
-        totalItems.value = 0
-        loading.value = true
+      if (error.value) {
+        console.error('[useProductTemplateList] GQL error:', error.value)
       }
-      if (status.value === 'success' || status.value === 'error') {
-        loading.value = false
-      }
-    })
 
-    watch(data, () => {
-      updateVariablesFromData(data.value)
-    })
+      updateVariablesFromData(data.value ?? null)
+    } catch (err) {
+      console.error('[useProductTemplateList] load error:', err)
+      productTemplateList.value = []
+    } finally {
+      loading.value = false
+    }
   }
 
-  const computeAttributes = (attributes: AttributeValue[], filterCounts: any[]) => {
-    const data: AttributeFacet[] = []
+  function computeAttributes(
+    attributes: AttributeValue[] = [],
+    filterCounts: FilterCount[] = [],
+  ) {
+    console.log(
+      '[compute] attrs len:',
+      attributes?.length,
+      'filterCounts len:',
+      filterCounts?.length,
+    )
 
-    attributes?.forEach((item: any) => {
-      const current = data.find(
-        (itemData: { attributeName: any }) =>
-          itemData.attributeName === item.attribute?.name,
-      )
+    const facetsMap = new Map<string, AttributeFacet>()
 
-      if (!current) {
-        data.push({
-          id: String(item.attribute.id),
-          label: item.attribute?.name,
-          attributeName: item.attribute?.name,
+    for (const item of attributes) {
+      const attr = (item as any)?.attribute
+      const attrName: string | undefined = attr?.name
+      const attrId: number | string | undefined = attr?.id
+      if (!attrName || !attrId) continue
+
+      let facet = facetsMap.get(attrName)
+      if (!facet) {
+        facet = {
+          id: String(attrId),
+          label: attrName,
+          attributeName: attrName,
           open: true,
           size: 10,
-          type: item.displayType,
+          type: (item as any)?.displayType,
           options: [],
           search: '',
-        })
+        }
+        facetsMap.set(attrName, facet)
       }
 
-      data
-        ?.find(
-          (itemData: { attributeName: any }) =>
-            itemData?.attributeName === item?.attribute?.name,
-        )
-        .options.push({
-          id: String(item.search),
-          value: item.id,
-          label: item.name,
-          htmlColor: item.htmlColor,
-          total:
-            filterCounts?.find(filter => filter.id === item?.id)?.total || 0,
-        })
-    })
+      const fc = filterCounts.find((f) => f?.id === (item as any)?.id)
+      const total = fc?.total ?? 0
 
-    const inStockFilterCount = filterCounts?.find(filter => filter.type === 'in_stock')
-    if (inStockFilterCount) {
-      stockCount.value = inStockFilterCount.total || 0
+      facet.options.push({
+        id: String((item as any)?.search),
+        value: (item as any)?.id,
+        label: (item as any)?.name,
+        htmlColor: (item as any)?.htmlColor,
+        total,
+      })
     }
 
-    const queryParamsKeys = Object.keys(route.query)
+    const inStockFilterCount = filterCounts.find((f) => f?.type === 'in_stock')
+    if (inStockFilterCount) stockCount.value = inStockFilterCount.total || 0
 
-    organizedAttributes.value = data.filter((item) => {
-      if (item.options.length === 1) {
-        return false
-      }
-      if (queryParamsKeys?.filter(item => item !== 'sort' && item !== 'list-view').length > 0) {
-        return true
-      }
+    const built: AttributeFacet[] = Array.from(facetsMap.values())
 
-      return item.options.length > 1
+    //console.log('[compute] data result before filter:', built)
+
+    if (SHOW_ALL_FACETS) {
+      organizedAttributes.value = built
+        .slice()
+        .sort((a: AttributeFacet, b: AttributeFacet) => Number(a.id) - Number(b.id))
+    } else {
+      const queryParamsKeys = Object.keys(route.query)
+      organizedAttributes.value = built
+        .filter((facet: AttributeFacet) => {
+          if (facet.options.length === 1) return false
+          if (
+            queryParamsKeys.filter((k) => k !== 'sort' && k !== 'list-view')
+              .length > 0
+          ) {
+            return true
+          }
+          return facet.options.length > 1
+        })
+        .sort((a: AttributeFacet, b: AttributeFacet) => Number(a.id) - Number(b.id))
+    }
+
+    organizedAttributes.value.forEach((facet: AttributeFacet) => {
+      facet.options = facet.options.sort((a, b) => a.label.localeCompare(b.label))
     })
-    organizedAttributes.value = organizedAttributes.value.sort(
-      (a, b) => Number(a.id) - Number(b.id),
-    )
-    organizedAttributes.value.forEach((item) => {
-      item.options = item.options.sort((a, b) =>
-        a.label.localeCompare(b.label),
-      )
-    })
+
+    console.log('[compute] organizedAttributes:', organizedAttributes.value)
   }
 
   return {
     loadProductTemplateList,
-
     minPrice,
     maxPrice,
     loading,
