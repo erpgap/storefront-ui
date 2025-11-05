@@ -10,60 +10,53 @@ export default `
   metaKeyword
   metaTitle
   jsonLd
-  firstVariant{
+  firstVariant {
     id
     combinationInfoVariant
     slug
-    variantAttributeValues{
+    variantAttributeValues {
       id
       name
       displayType
-      name
       htmlColor
       search
-      attribute{
-        id
-        name
-      }
+      attribute { id name }
     }
   }
-  ${alternativeProductsFragment}
-  ${frequentlyTogetherProductsFragment}
   smallImage
   price
   name
   description
   image
   imageFilename
-  mediaGallery{
-    id
-    name
-    image
-    imageFilename
-  }
+  mediaGallery { id name image imageFilename }
   combinationInfo
   slug
-  sku 
+  sku
   isInWishlist
+
   categories {
     id
     name
     slug
-    parent{
-      parent{
+    parent {
+      id
+      name
+      slug
+      parent {
         id
+        name
+        slug
       }
     }
   }
+
   attributeValues {
     id
     name
     displayType
     priceExtra
-    attribute {
-      id
-      name
-    }
+    attribute { id name }
     search
   }
 `

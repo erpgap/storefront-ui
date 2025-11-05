@@ -2,6 +2,8 @@
 import { SfButton } from '@storefront-ui/vue'
 
 const NuxtLink = resolveComponent('NuxtLink')
+
+defineProps<{ banners?: any[] }>()
 </script>
 
 <template>

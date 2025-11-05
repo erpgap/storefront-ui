@@ -6,87 +6,89 @@ import type {
   WishlistData,
   WishlistLoadResponse,
   WishlistRemoveItemResponse,
+  WishlistItems,
 } from '~/graphql'
 import { MutationName } from '~/server/mutations'
 import { QueryName } from '~/server/queries'
 
 export const useWishlist = () => {
-  const { $sdk } = useNuxtApp()
-  const loading = ref(false)
-  const wishlist = useState<WishlistData>(
-    'wishlist',
-    () => ({} as WishlistData),
-  )
+  const { $sdk } = useNuxtApp() as any
   const toast = useToast()
 
-  const loadWishlist = async () => {
-    try {
-      loading.value = true
+  const loading = ref(false)
 
-      const data = await $sdk().odoo.query<
-        MutationWishlistAddItemArgs,
-        WishlistLoadResponse
-      >({
-        queryName: QueryName.WishlistLoadQuery,
+  // Estado global único
+  const wishlist = useState<WishlistData>('wishlist', () => ({ wishlistItems: [], totalCount: 0 } as unknown as WishlistData))
+  const fetchedOnce = useState<boolean>('wishlist-fetched-once', () => false)
+
+  // Evitar concorrência
+  let inflight: Promise<void> | null = null
+
+  const loadWishlist = async (): Promise<void> => {
+    // 👉 nunca no SSR
+    if (import.meta.server) return
+    // 👉 se já carregou nesta sessão, não repete
+    if (fetchedOnce.value) return
+    // 👉 se já há uma chamada a decorrer, espera-a
+    if (inflight) return await inflight
+
+    loading.value = true
+
+    inflight = $sdk().odoo
+      .query({ queryName: QueryName.WishlistLoadQuery })
+      .then((raw: unknown) => {
+        const data = raw as WishlistLoadResponse
+        const safe: WishlistItems = data?.wishlistItems ?? { totalCount: 0, wishlistItems: [] }
+        wishlist.value = safe
+        fetchedOnce.value = true
+      })
+      .catch((err: any) => {
+        toast.error(err?.data?.message ?? 'Falha ao carregar a wishlist.')
+      })
+      .finally(() => {
+        loading.value = false
+        inflight = null
       })
 
-      wishlist.value = data?.wishlistItems || []
-    }
-    catch (error) {
-      toast.error(error.data?.message)
-    }
-    finally {
-      loading.value = false
-    }
+    await inflight
   }
 
   const wishlistAddItem = async (productId: number) => {
     try {
       loading.value = true
-      const data = await $sdk().odoo.mutation<
-        MutationWishlistAddItemArgs,
-        WishlistAddItemResponse
-      >({ mutationName: MutationName.WishlistAddItem }, { productId })
+      const data = await $sdk().odoo.mutation(
+        { mutationName: MutationName.WishlistAddItem },
+        { productId }
+      ) as WishlistAddItemResponse
 
-      wishlist.value = data?.wishlistAddItem
-    }
-    catch (error) {
-      toast.error(error.data?.message)
-    }
-    finally {
+      wishlist.value = data?.wishlistAddItem ?? wishlist.value
+
+    } catch (error: any) {
+      toast.error(error?.data?.message ?? 'Não foi possível adicionar à wishlist.')
+    } finally {
       loading.value = false
     }
   }
 
-  const getProductFromProductId = (productId: number) => {
-    return wishlist.value?.wishlistItems?.find(
-      item => item?.product?.id === productId,
-    )
-  }
+  const getProductFromProductId = (productId: number) =>
+    wishlist.value?.wishlistItems?.find((item: any) => item?.product?.id === productId)
 
   const wishlistRemoveItem = async (productId: number) => {
     const wishlistItem = getProductFromProductId(productId)
-
-    if (!wishlistItem) {
-      return
-    }
+    if (!wishlistItem) return
 
     try {
       loading.value = true
-      const data = await $sdk().odoo.mutation<
-        MutationWishlistRemoveItemArgs,
-        WishlistRemoveItemResponse
-      >(
-        { mutationName: MutationName.WishlistRemoveItem },
-        { wishId: wishlistItem.id },
-      )
+      const data = await $sdk().odoo.mutation(
+        { mutationName: MutationName.WishlistAddItem },
+        { productId }
+      ) as WishlistAddItemResponse
 
-      wishlist.value = data?.wishlistRemoveItem
-    }
-    catch (error) {
-      toast.error(error.data?.message)
-    }
-    finally {
+      wishlist.value = data?.wishlistAddItem ?? wishlist.value
+
+    } catch (error: any) {
+      toast.error(error?.data?.message ?? 'Não foi possível remover da wishlist.')
+    } finally {
       loading.value = false
     }
   }
@@ -95,19 +97,13 @@ export const useWishlist = () => {
     return wishlist.value?.wishlistItems?.length || 0
   })
 
-  const isInWishlist = (productId: number) => {
-    return (
-      wishlist.value?.wishlistItems?.some(
-        item => item?.product?.id === productId,
-      ) || false
-    )
-  }
+  const isInWishlist = (productId: number) =>
+    wishlist.value?.wishlistItems?.some((i: any) => i?.product?.id === productId) || false
 
   return {
     loading,
     wishlist,
     wishlistTotalItems,
-
     isInWishlist,
     loadWishlist,
     wishlistAddItem,

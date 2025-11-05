@@ -1,119 +1,157 @@
-import { onClickOutside, useToggle, useDebounceFn } from '@vueuse/core'
+import { useDebounceFn, useToggle } from '@vueuse/core'
 import type { Product } from '~/graphql'
+import { useProductTemplateList } from '../../product/composables/useProductTemplateList'
 
 /**
- * @Responsabilities
- *  1 - FETCH from odoo
- *  2 - Higlighth the results
- *  3 - Handle modal state
+ * @Responsibilities
+ *  1) Buscar sugestões no Odoo
+ *  2) Destacar resultados (feito no componente de lista)
+ *  3) Controlar estado do modal/lista de resultados
  */
 export const useSearch = (formSearchTemplateRef?: any) => {
   const route = useRoute()
   const router = useRouter()
 
-  // search modal
-  const searchModalClose = () => searchModalToggle(false)
-  const searchModalOpen = useState('search-ref-${formSearchTemplateRef}', () => false)
+  // ---------- Modal / dropdown ----------
+  const searchModalOpen = useState(
+    `search-ref-${formSearchTemplateRef ?? 'default'}`,
+    () => false,
+  )
   const searchModalToggle = useToggle(searchModalOpen)
+  const searchModalClose = () => searchModalToggle(false)
   const isSearchModalOpen = computed(() => searchModalOpen.value)
 
-  // odoo search
+  // ---------- Fonte de dados (Odoo) ----------
   const {
     loadProductTemplateList,
     productTemplateList,
     totalItems,
     organizedAttributes,
-    loading,
+    loading, // loading do composable de produtos
   } = useProductTemplateList(route.fullPath)
-  const searchInputValue = useState(`odoo-search-input-${formSearchTemplateRef}`, () => '')
+
+  // ---------- Estado local da busca ----------
+  const searchInputValue = ref('') // texto digitado
   const highlightedIndex = ref(-1)
   const showResultSearch = ref(false)
 
+  // Sincroniza o input com a URL (?search=...)
   watch(
-    () => route.query,
-    () => {
-      searchInputValue.value = ''
+    () => route.query.search,
+    (v) => {
+      searchInputValue.value = (v as string) || ''
     },
+    { immediate: true },
   )
 
-  watch(searchInputValue,
-    (newValue) => {
-      if (!newValue) showResultSearch.value = false
-    })
+  // Esconde dropdown quando o input é apagado
+  watch(searchInputValue, (v) => {
+    if (!v) {
+      showResultSearch.value = false
+      searchModalOpen.value = false
+      highlightedIndex.value = -1
+    }
+  })
 
+  // ---------- Buscar sugestões (com debounce) ----------
   const search = useDebounceFn(async () => {
-    loading.value = true
+    const query = searchInputValue.value?.trim() || ''
 
-    if (searchInputValue.value.length < 3) {
+    // Se termo curto, fecha e sai
+    if (query.length < 3) {
+      showResultSearch.value = false
+      searchModalOpen.value = false
+      highlightedIndex.value = -1
       return
     }
 
-    await loadProductTemplateList(
-      {
-        search: searchInputValue.value,
+    try {
+      loading.value = true
+      await loadProductTemplateList({
+        search: query,
         pageSize: 12,
-      },
-    )
+      })
 
-    showResultSearch.value = true
-    searchModalOpen.value = true
+      // Abre dropdown se houver hits
+      const hasHits = (productTemplateList.value?.length || 0) > 0
+      showResultSearch.value = hasHits
+      searchModalOpen.value = hasHits
+      highlightedIndex.value = hasHits ? 0 : -1
+    } finally {
+      loading.value = false
+    }
+  }, 300)
 
-    loading.value = false
-  }, 1000)
-
+  // ---------- Derivados ----------
   const searchHits = computed(() => productTemplateList.value || [])
 
+  // ---------- Navegação ----------
   const enterPress = () => {
-    if (!searchInputValue.value) return
+    const q = searchInputValue.value?.trim()
+    if (!q) return
     showResultSearch.value = false
     searchModalOpen.value = false
-    router.push(`/search?search=${searchInputValue.value}`)
+    router.push({ path: '/search', query: { search: q } }) // sem 'page' => reseta paginação
   }
 
   const selectHit = (selected: Product) => {
-    if (!searchInputValue.value) return
+    // A) Ir para a PDP do item selecionado
     showResultSearch.value = false
     searchModalOpen.value = false
-    router.push(`${mountUrlSlugForProductVariant((selected.firstVariant) as Product)}`)
+    if (selected?.firstVariant) {
+      router.push(
+        `${mountUrlSlugForProductVariant(selected.firstVariant as Product)}`
+      )
+    }
   }
 
+  // ---------- Teclado (setas) ----------
   const highlightPrevious = () => {
-    if (highlightedIndex.value === 0) {
-      highlightedIndex.value = productTemplateList.value?.length - 1
-    }
-    else {
-      highlightedIndex.value -= 1
-    }
+    const len = searchHits.value.length || 0
+    if (!len) return
+    highlightedIndex.value = (highlightedIndex.value - 1 + len) % len
   }
 
   const highlightNext = () => {
-    if (highlightedIndex.value === searchHits.value.length - 1) {
-      highlightedIndex.value = 0
-    }
-    else {
-      highlightedIndex.value += 1
-    }
+    const len = searchHits.value.length || 0
+    if (!len) return
+    highlightedIndex.value = (highlightedIndex.value + 1) % len
   }
 
   return {
-    // search modal
-    searchModalClose,
+    // modal
     isSearchModalOpen,
     searchModalOpen,
     searchModalToggle,
+    searchModalClose,
 
-    // odoo search
+    // busca
     searchInputValue,
+    search,
+    searchHits,
+    showResultSearch,
+    highlightedIndex,
     highlightNext,
     highlightPrevious,
-    highlightedIndex,
-    search,
     selectHit,
-    showResultSearch,
-    searchHits,
+    enterPress,
+
+    // dados auxiliares
     totalItems,
     organizedAttributes,
     productTemplateList,
-    enterPress,
+    loading,
   }
 }
+function computed(arg0: () => any) {
+  throw new Error('Function not implemented.')
+}
+
+function ref(arg0: string) {
+  throw new Error('Function not implemented.')
+}
+
+function watch(arg0: () => any, arg1: (v: any) => void, arg2: { immediate: boolean }) {
+  throw new Error('Function not implemented.')
+}
+
