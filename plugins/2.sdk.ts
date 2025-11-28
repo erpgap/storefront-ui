@@ -2,7 +2,7 @@ import { initSDK, buildModule } from '@vue-storefront/sdk'
 import type { OdooModuleType } from '@erpgap/odoo-sdk'
 import { OdooModule } from '@erpgap/odoo-sdk'
 import { useToast } from 'vue-toastification'
-import { defineNuxtPlugin } from '#app'
+import { defineNuxtPlugin } from 'nuxt/app'
 
 const SHOULD_BYPASS_ERROR_QUERIES = [
   'LoadUserQuery',

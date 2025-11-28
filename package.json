@@ -49,6 +49,7 @@
     "nuxt-typed-router": "^3.6.3",
     "nuxt-viewport": "2.2.0",
     "object-hash": "^3.0.0",
+    "rxjs": "^7.8.2",
     "typescript": "^5.8.2",
     "vue-router": "^4.3.2",
     "vue-toastification": "next"
@@ -57,7 +58,7 @@
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@eslint/js": "^9.17.0",
-    "@graphql-codegen/cli": "^4.0.1",
+    "@graphql-codegen/cli": "^6.1.0",
     "@graphql-codegen/client-preset": "^4.0.1",
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
