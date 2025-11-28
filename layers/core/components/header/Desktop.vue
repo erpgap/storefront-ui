@@ -26,7 +26,7 @@ const searchInputValue = ref<string>(String(route.query.search || ''))
 
 watch(
   () => route.query.search,
-  (v) => { searchInputValue.value = String(v || '') },
+  (v: any) => { searchInputValue.value = String(v || '') },
 )
 
 function enterPress() {
@@ -102,12 +102,11 @@ const goTo = (slug: string) => { close(); router.push(slug) }
       <div class="py-3.5 border-b border-[#E5E7EB]">
         <div class="w-full narrow-container">
           <ul class="flex gap-10">
-            <li><p><a href="#" class="text-[14px] text-black uppercase tracking-[0.5px]">Living Room Seating</a></p></li>
-            <li><p><a href="#" class="text-[14px] text-black uppercase tracking-[0.5px]">Tables</a></p></li>
-            <li><p><a href="#" class="text-[14px] text-black uppercase tracking-[0.5px]">Bedroom Furniture</a></p></li>
-            <li><p><a href="#" class="text-[14px] text-black uppercase tracking-[0.5px]">Storage & Shelving</a></p></li>
-            <li><p><a href="#" class="text-[14px] text-black uppercase tracking-[0.5px]">Lighting</a></p></li>
-            <li><p><a href="#" class="text-[14px] text-black uppercase tracking-[0.5px]">Home Office</a></p></li>
+            <li v-for="category in categoriesForMegaMenu" :key="category.id">
+              <NuxtLink :to="`/category/${category.id}`" class="text-[14px] text-black uppercase tracking-[0.5px]">
+                {{ category.name }}
+              </NuxtLink>
+            </li>
           </ul>
         </div>
       </div>
