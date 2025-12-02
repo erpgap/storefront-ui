@@ -1,29 +1,28 @@
 <script lang="ts" setup>
 import { SfScrollable } from '@storefront-ui/vue'
-import { ref, computed, type PropType } from 'vue'
 import type { ImageGalleryItem } from '~/graphql'
 
 const props = defineProps({
   mainImage: {
     type: Object as PropType<ImageGalleryItem>,
-    required: true,
+    required: false,
   },
   thumbs: {
     type: Array as PropType<ImageGalleryItem[]>,
     default: () => [],
   },
+ 
 })
 
 const thumbsRef = ref<HTMLElement>()
 const activeIndex = ref(0)
-
 const allImages = computed(() => [
   {
     imageSrc: props.mainImage.url,
     imageThumbSrc: props.mainImage.url,
     alt: props.mainImage.alt,
   },
-  ...props.thumbs.map(thumb => ({
+  ...props.thumbs.map((thumb: { url: any; alt: any }) => ({
     imageSrc: thumb.url,
     imageThumbSrc: thumb.url,
     alt: thumb.alt,
@@ -54,8 +53,8 @@ const allImages = computed(() => [
           provider="odooProvider"
           :alt="alt"
           class="object-cover"
-          width="78"
-          height="78"
+          width="100"
+          height="100"
           :src="imageThumbSrc"
         />
       </button>
@@ -75,7 +74,7 @@ const allImages = computed(() => [
       >
         <NuxtImg
           provider="odooProvider"
-          :width="380"
+          :width="505"
           :height="505"
           :aria-label="alt"
           :aria-hidden="activeIndex !== index"

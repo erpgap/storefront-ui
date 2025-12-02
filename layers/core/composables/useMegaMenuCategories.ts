@@ -32,7 +32,6 @@ export const useMegaMenuCategories = () => {
   return {
     loading,
     categoriesForMegaMenu,
-
     loadCategoriesForMegaMenu,
   }
 }

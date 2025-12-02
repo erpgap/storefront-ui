@@ -1,25 +1,38 @@
 <script setup lang="ts">
 import {
-  SfButton, SfChip, SfCounter, SfIconFavorite, SfIconFavoriteFilled, SfIconPackage, SfIconSafetyCheck, SfIconSell, SfIconShoppingCart,
-  SfIconShoppingCartCheckout, SfIconWarehouse, SfLink, SfLoaderCircular, SfRating, SfThumbnail
-} from '@storefront-ui/vue'
-import type { LocationQueryRaw } from 'vue-router'
-import type { ImageGalleryItem, OrderLine, Product, QueryProductVariantArgs } from '~/graphql'
-import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
+  SfButton,
+  SfChip,
+  SfCounter,
+  SfIconFavorite,
+  SfIconFavoriteFilled,
+  SfIconPackage,
+  SfIconSafetyCheck,
+  SfIconSell,
+  SfIconShoppingCart,
+  SfIconShoppingCartCheckout,
+  SfIconWarehouse,
+  SfLink,
+  SfLoaderCircular,
+  SfRating,
+} from '@storefront-ui/vue';
+import type { LocationQueryRaw } from 'vue-router';
+import type { ImageGalleryItem, OrderLine, Product } from '~/graphql';
+import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper';
+import { useProductGetters } from '~/layers/product/composables/useProductGetters';
+import { useProductTemplate } from '~/layers/product/composables/useProductTemplate';
+import { useProductVariant } from '~/layers/product/composables/useProductVariant';
 
-const route = useRoute()
-
-const cleanPath = computed(() => route?.path?.replace(/\/$/, ''))
-const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
+const route = useRoute();
+const cleanPath = computed(() => route?.path?.replace(/\/$/, ''));
+const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''));
 
 const {
   loadProductTemplate,
   productTemplate,
   loadingProductTemplate,
   getAllColors,
-  getAllMaterials,
-  getAllSizes,
-} = useProductTemplate(cleanPath.value)
+  breadcrumbs,
+} = useProductTemplate(cleanPath.value);
 
 const {
   loadProductVariant,
@@ -27,184 +40,185 @@ const {
   productVariant,
   getRegularPrice,
   getSpecialPrice,
-} = useProductVariant(cleanFullPath.value)
+} = useProductVariant(cleanFullPath.value);
 
-const { addProductToRecentViews } = useRecentViewProducts()
-const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
-const { cart, cartAdd } = useCart()
+const { addProductToRecentViews } = useRecentViewProducts();
+const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist();
+const { cart, cartAdd } = useCart();
 
-// ---------------- SEO ----------------
-const seoData = computed(() => {
-  if (productVariant.value?.id) {
-    return generateSeo<SeoEntity>(productVariant.value, 'Product')
-  }
-  const fallbackEntity: SeoEntity = {
-    name: 'Product',
-    metaTitle: `Product | ${route.path.split('/').pop() || 'Store'}`,
-    metaDescription: 'Check out this amazing product in our store',
-  }
-  return generateSeo<SeoEntity>(fallbackEntity, 'Product')
-})
-useHead(seoData)
+useHead(generateSeo<SeoEntity>(productVariant.value || productTemplate.value, 'Product'));
 
-// ---------------- Params / seleção ----------------
-const params = computed(() => ({
-  combinationId: Object.values(route.query)?.map(value => parseInt(value as string)),
-  productTemplateId: productTemplate?.value?.id,
-}))
+const templateColorsSnapshot = ref<any[]>([]);
+const originalTemplateId = ref<number | null>(null);
 
-const selectedSize = computed(() =>
-  route.query.Size ? Number(route.query.Size) : getAllSizes?.value?.[0]?.value,
-)
-const selectedColor = computed(() =>
-  route.query.Color ? Number(route.query.Color) : getAllColors?.value?.[0]?.value,
-)
-const selectedMaterial = computed(() =>
-  route.query.Material ? Number(route.query.Material) : getAllMaterials?.value?.[0]?.value,
-)
+watch(cleanPath, () => {
+  templateColorsSnapshot.value = [];
+  originalTemplateId.value = null;
+});
 
-const productDetailsOpen = ref(true)
-const quantitySelectorValue = ref(1)
-
-// ---------------- Filtros via query ----------------
-const updateFilter = async (filter: LocationQueryRaw | undefined) => {
-  const query: LocationQueryRaw = {}
-  if (selectedMaterial.value && selectedMaterial.value !== 0) query.Material = selectedMaterial.value
-  if (selectedColor.value && selectedColor.value !== 0) query.Color = selectedColor.value
-  if (selectedSize.value && selectedSize.value !== 0) query.Size = selectedSize.value
-  if (filter) {
-    Object.entries(filter).forEach(([key, value]) => {
-      query[encodeURIComponent(key)] = value
-    })
-  }
-  await navigateTo({ query })
-}
-
-// ---------------- Auxiliares ----------------
-const tomorrow = computed(() => {
-  const date = new Date()
-  date.setDate(date.getDate() + 1)
-  return date.toDateString().slice(0, 10)
-})
-
-const productsInCart = computed(() => {
-  return (
-    cart.value?.order?.websiteOrderLine?.find(
-      (orderLine: OrderLine) => orderLine.product?.id === productVariant?.value.id,
-    )?.quantity || 0
-  )
-})
-
-function toTitle(s: string) {
-  return String(s || '')
-    .trim()
-    .split(/\s+/)
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ')
-}
-
-type CatNode = { name?: string; slug?: string; parent?: CatNode | null }
-
-const depth = (n?: CatNode | null) => {
-  let d = 0
-  while (n) { d++; n = n.parent ?? null }
-  return d
-}
-
-function buildCrumbsFromCategories(cats?: CatNode[]) {
-  if (!Array.isArray(cats) || cats.length === 0) return []
-
-  const depth = (n?: CatNode | null) => { let d = 0; while (n) { d++; n = n.parent ?? null } return d }
-  const deepest = cats.reduce((best, c) => (depth(c) > depth(best) ? c : best), cats[0])
-
-  const chain: CatNode[] = []
-  let cur: CatNode | null | undefined = deepest
-  while (cur) { chain.unshift(cur); cur = cur.parent ?? null }
-
-  return chain
-    .filter(c => !!c?.name && String(c.name).trim().toLowerCase() !== 'all')
-    .map((c, i) => ({
-      name: i === 0 ? String(c.name).toUpperCase() : toTitle(String(c.name)),
-      link: c.slug ? undefined : undefined,
-    }))
-}
-
-// ---------------- Breadcrumb (PDP) ----------------
-const pdpBreadcrumbs = computed(() => {
-  const pt: any = productTemplate.value
-  const pv: any = productVariant.value
-
-  const cats = (pt?.categories?.length ? pt.categories : pv?.categories) as CatNode[] | undefined
-  let catCrumbs = buildCrumbsFromCategories(cats)
-
-  if (!catCrumbs.length) {
-    try {
-      const raw = pt?.breadcrumb || pv?.breadcrumb
-      const arr = typeof raw === 'string' ? JSON.parse(raw) : Array.isArray(raw) ? raw : []
-      if (arr.length) {
-        catCrumbs = arr.map((i: any, idx: number) => ({
-          name: idx === 0 ? String(i?.name || '').toUpperCase() : toTitle(i?.name),
-          link: i?.slug || '/',
-        }))
-      }
-    } catch { /* ignore */ }
-  }
-
-  return [
-    { name: 'Home', link: '/' },
-    ...catCrumbs,
-    { name: pv?.name || pt?.name || '', link: cleanPath.value },
-  ]
-})
-
-// ---------------- Ações (carrinho / wishlist) ----------------
-const handleCartAdd = async () => {
-  let id = productVariant?.value.id
-  if (!productVariant.value.combinationInfoVariant) {
-    id = Number(productVariant?.value?.id)
-  }
-  await cartAdd(id, quantitySelectorValue.value)
-}
-const handleWishlistAddItem = async (firstVariant: { id: number }) => {
-  await wishlistAddItem(firstVariant.id)
-}
-const handleWishlistRemoveItem = async (firstVariant: { id: number }) => {
-  await wishlistRemoveItem(firstVariant.id)
-}
-
-// ---------------- Reagir a mudanças de variação ----------------
 watch(
-  () => params.value,
-  async (newValue: QueryProductVariantArgs, oldValue: any) => {
-    if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
-      await loadProductVariant(newValue)
-      addProductToRecentViews(productTemplate.value?.id)
+  () => (getAllColors as any)?.value,
+  (newColors: string | any[]) => {
+    if (
+      !templateColorsSnapshot.value.length &&
+      Array.isArray(newColors) &&
+      newColors.length
+    ) {
+      templateColorsSnapshot.value = newColors;
     }
   },
-  { deep: true },
-)
+  { immediate: true },
+);
 
-// ---------------- Imagens ----------------
-const { getMainImage, getThumbs } = useProductGetters(productVariant as unknown as Ref<Product>)
-const mainImage = computed(() => getMainImage(380, 505))
-const thumbs = computed(() => getThumbs(78, 78))
+const colorOptions = computed(() => {
+  if (templateColorsSnapshot.value.length) {
+    return templateColorsSnapshot.value.map((c: any) => ({
+      id: Number(c.value ?? c.id),
+      label: c.label ?? c.name,
+    }));
+  }
 
-// ---------------- Carregamento inicial ----------------
-await loadProductTemplate({ slug: cleanPath.value })
-if (productTemplate.value?.id) {
-  await loadProductVariant({
-    combinationId: Object.values(route.query)?.map(value => parseInt(value as string)),
-    productTemplateId: productTemplate?.value?.id,
-  })
-}
+  const variant = productVariant.value as any;
+  const attrs = Array.isArray(variant?.attributeValues)
+    ? variant.attributeValues
+    : [];
 
-// ---------------- Estados da página ----------------
-const isLoadingPage = computed(() => {
-  const hasTemplate = productTemplate.value?.id
-  const hasVariant = productVariant.value?.id
-  return loadingProductTemplate.value || loadingProductVariant.value || !hasTemplate || !hasVariant
-})
-const hasProductData = computed(() => !!(productTemplate.value?.id && productVariant.value?.id))
+  if (attrs.length) {
+    return attrs.map((av: any) => ({
+      id: Number(av.id),
+      label: av.name,
+    }));
+  }
+
+  return [];
+});
+
+const selectedColor = computed(() => {
+  if (route.query.Color) return Number(route.query.Color);
+  return colorOptions.value?.[0]?.id ?? null;
+});
+
+const quantitySelectorValue = ref(1);
+
+const updateFilter = async (filter: LocationQueryRaw | undefined) => {
+  const query: LocationQueryRaw = {};
+
+  if (selectedColor.value && selectedColor.value !== 0) {
+    query.Color = selectedColor.value;
+  }
+
+  if (filter) {
+    Object.entries(filter).forEach(([key, value]) => {
+      query[encodeURIComponent(key)] = value;
+    });
+  }
+
+  await navigateTo({ query });
+};
+
+const tomorrow = computed(() => {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  return date.toDateString().slice(0, 10);
+});
+
+const productsInCart = computed(() => {
+  if (!productVariant.value?.id) return 0;
+  return (
+    cart.value?.order?.websiteOrderLine?.find(
+      (orderLine: OrderLine) => orderLine.product?.id === productVariant.value.id,
+    )?.quantity || 0
+  );
+});
+
+const handleCartAdd = async () => {
+  if (!productVariant.value?.id) return;
+  await cartAdd(productVariant.value.id, quantitySelectorValue.value);
+};
+
+const handleWishlistAddItem = async () => {
+  if (!productVariant.value?.id) return;
+  await wishlistAddItem(productVariant.value.id);
+};
+
+const handleWishlistRemoveItem = async () => {
+  if (!productVariant.value?.id) return;
+  await wishlistRemoveItem(productVariant.value.id);
+};
+
+watch(
+  productTemplate,
+  async (newValue: { id: any }, oldValue: any) => {
+    if (!newValue?.id) {
+      return;
+    }
+
+    if (!originalTemplateId.value) {
+      originalTemplateId.value = Number(newValue.id);
+    }
+
+    addProductToRecentViews(Number(newValue.id));
+
+    if (!productVariant.value?.id) {
+      const hasColors = getAllColors?.value?.length > 0;
+
+      if (hasColors) {
+        const routeColor = route.query.Color;
+        const fallbackColor = getAllColors?.value?.[0]?.value;
+
+        const colorId = routeColor ? Number(routeColor) : fallbackColor;
+
+        if (!colorId) return;
+
+        await loadProductVariant({
+          productTemplateId: originalTemplateId.value,
+          combinationId: [colorId],
+        });
+      } else {
+        await loadProductVariant({
+          productTemplateId: originalTemplateId.value,
+          combinationId: [],
+        });
+      }
+    }
+  },
+  { immediate: true },
+);
+
+watch(
+  () => route.query.Color,
+  async (colorId: any) => {
+    if (!originalTemplateId.value) {
+      return;
+    }
+
+    const combinationId = Number(colorId);
+    if (!combinationId) {
+      return;
+    }
+
+    await loadProductVariant({
+      productTemplateId: originalTemplateId.value,
+      combinationId: [combinationId],
+    });
+  },
+);
+
+const { getMainImage, getThumbs } = useProductGetters(productTemplate, productVariant);
+const mainImage = computed<ImageGalleryItem>(
+  () => getMainImage(380, 505) || ({} as ImageGalleryItem),
+);
+const thumbs = computed<ImageGalleryItem[]>(() => getThumbs(200, 200) || []);
+
+await loadProductTemplate({ slug: cleanPath.value });
+
+const isLoadingPage = computed(
+  () => loadingProductTemplate.value || loadingProductVariant.value,
+);
+
+const hasProductData = computed(
+  () => !!productTemplate.value?.id && !!productVariant.value?.id,
+);
 </script>
 
 
@@ -212,30 +226,21 @@ const hasProductData = computed(() => !!(productTemplate.value?.id && productVar
 <template>
   <NuxtErrorBoundary>
     <div class="narrow-container">
-      <UiBreadcrumb :breadcrumbs="pdpBreadcrumbs" class="self-start mt-5 mb-10" />
+      <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-10" />
       <div v-if="isLoadingPage" class="w-full flex flex-col items-center justify-center min-h-[60vh]">
         <SfLoaderCircular size="xl" class="my-32" />
       </div>
       <div v-else-if="hasProductData" class="md:grid grid-areas-product-page grid-cols-product-page gap-x-6">
-        <section class="grid-in-left-top md:h-full xl:max-h-[700px]">
-          <LazyUiGallery :main-image="mainImage || {} as ImageGalleryItem" :thumbs="thumbs" />
+        <section class="grid-in-left-top md:h-full xl:max-h-[500px]">
+          <LazyUiGallery :main-image="mainImage" :thumbs="thumbs" />
         </section>
         <section class="col-span-5 grid-in-right md:mb-0">
           <div class="p-6 xl:p-6 md:border md:border-neutral-100 md:shadow-lg md:rounded-md md:sticky md:top-20"
             data-testid="purchase-card">
-            <!--
-            <div
-              class="inline-flex items-center justify-center font-medium rounded-none bg-secondary-800 text-sm p-1.5 gap-1 mb-4">
-              <SfIconSell color="white" size="sm" class="mr-1" />
-              <span class="mr-1 text-white">{{ $t(`sale`) }}</span>
-            </div>-->
             <h1 class="mb-1 font-bold typography-headline-4" data-testid="product-name">
               {{ productVariant?.name }}
             </h1>
-            <div v-if="
-              productVariant
-              && productVariant?.combinationInfoVariant?.has_discounted_price
-            " class="my-1">
+            <div v-if="productVariant?.combinationInfoVariant?.has_discounted_price" class="my-1">
               <div
                 class="inline-flex items-center justify-center font-medium rounded-none bg-secondary-800 text-sm p-1.5 gap-1 mb-4">
                 <SfIconSell color="white" size="sm" class="mr-1" />
@@ -262,19 +267,18 @@ const hasProductData = computed(() => !!(productTemplate.value?.id && productVar
                 26 reviews
               </SfLink>
             </div>
-            <p class="mb-4 font-normal typography-text-sm" data-testid="product-description">
-              {{ productVariant?.description }}
-            </p>
+
             <div class="py-4 mb-4 border-gray-200 border-y">
               <div v-show="productsInCart"
                 class="w-full mb-4 bg-primary-200 p-2 rounded-md text-center text-primary-700">
                 <SfIconShoppingCartCheckout />
                 {{ productsInCart }} products in cart
               </div>
+
               <div class="flex flex-col md:flex-row flex-wrap gap-4">
                 <UiQuantitySelector v-model="quantitySelectorValue" :value="quantitySelectorValue"
                   class="min-w-[145px] flex-grow flex-shrink-0 basis-0" />
-                <SfButton :disabled="loadingProductVariant || productVariant.stock <= 0" type="button" size="lg"
+                <SfButton :disabled="loadingProductTemplate" type="button" size="lg"
                   class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap" @click="handleCartAdd">
                   <template #prefix>
                     <SfIconShoppingCart size="sm" />
@@ -282,17 +286,35 @@ const hasProductData = computed(() => !!(productTemplate.value?.id && productVar
                   {{ $t("addToCart") }}
                 </SfButton>
               </div>
+
+              <div class="lg:px-4 mt-6" data-testid="product-properties">
+                <fieldset v-if="colorOptions.length" class="pb-2 flex">
+                  <span v-for="color in colorOptions" :key="color.id" class="mr-2 mb-2 uppercase">
+                    <SfChip class="min-w-[48px]" size="sm" :model-value="color.id === selectedColor"
+                      @update:model-value="
+                        $event && color.id !== selectedColor
+                          ? updateFilter({ Color: color.id.toString() })
+                          : null
+                        ">
+                      {{ color.label }}
+                    </SfChip>
+                  </span>
+                </fieldset>
+              </div>
+
+
               <div class="flex justify-center mt-4 gap-x-4">
-                <SfButton type="button" size="sm" variant="tertiary" :class="productVariant?.isInWishlist ? 'bg-primary-100' : 'bg-white'
-                  " @click="
-                    isInWishlist(productVariant?.id as number)
-                      ? handleWishlistRemoveItem(productVariant)
-                      : handleWishlistAddItem(productVariant)
-                    ">
-                  <SfIconFavoriteFilled v-show="isInWishlist(productVariant?.id as number)" size="sm" />
-                  <SfIconFavorite v-show="!isInWishlist(productVariant?.id as number)" size="sm" />
+                <SfButton type="button" size="sm" variant="tertiary" v-if="productVariant" @click="
+                  isInWishlist(productVariant.id as number)
+                    ? handleWishlistRemoveItem()
+                    : handleWishlistAddItem()
+                  ">
+
+                  <SfIconFavoriteFilled v-show="isInWishlist(productVariant.id as number)" size="sm" />
+
+                  <SfIconFavorite v-show="!isInWishlist(productVariant.id as number)" size="sm" />
                   {{
-                    isInWishlist(productVariant?.id as number)
+                    isInWishlist(productVariant.id as number)
                       ? $t('wishlist.removeFromWishlist')
                       : $t('wishlist.addToWishlist')
                   }}
@@ -340,84 +362,25 @@ const hasProductData = computed(() => !!(productTemplate.value?.id && productVar
         </section>
         <section class="grid-in-left-bottom md:mt-8">
           <UiDivider class="mt-10 mb-6" />
-          <div class="lg:px-4" data-testid="product-properties">
-            <fieldset v-if="getAllSizes && getAllSizes?.length" class="pb-4 flex">
-              <legend class="block mb-2 text-base font-medium leading-6 text-neutral-900">
-                Size
-              </legend>
-              <span v-for="{ label, value } in getAllSizes" :key="value" class="mr-2 mb-2 uppercase">
-                <SfChip class="min-w-[48px]" size="sm" :v-model="value" :input-props="{
-                  onClick: (e: { preventDefault: () => any }) => value == selectedSize && e.preventDefault(),
-                }" :model-value="value == selectedSize" @update:model-value="
-                  value != selectedSize
-                  && updateFilter({ ['Size']: value.toString() })
-                  ">
-                  {{ label }}
-                </SfChip>
-              </span>
-            </fieldset>
-            <fieldset v-if="getAllMaterials && getAllMaterials?.length" class="pb-4 flex">
-              <legend class="block mb-2 text-base font-medium leading-6 text-neutral-900">
-                Material
-              </legend>
-              <span v-for="{ label, value } in getAllMaterials" :key="value" class="mr-2 mb-2 uppercase">
-                <SfChip class="min-w-[48px]" size="sm" :v-model="value" :input-props="{
-                  onClick: (e: { preventDefault: () => any }) =>
-                    value == selectedMaterial && e.preventDefault(),
-                }" :model-value="value == selectedMaterial" @update:model-value="
-                  value != selectedMaterial
-                  && updateFilter({ ['Material']: value.toString() })
-                  ">
-                  {{ label }}
-                </SfChip>
-              </span>
-            </fieldset>
-            <fieldset v-if="getAllColors && getAllColors?.length" class="pb-2 flex">
-              <legend class="block mb-2 text-base font-medium leading-6 text-neutral-900">
-                Color
-              </legend>
-              <span v-for="{ label, value } in getAllColors" :key="value" class="mr-2 mb-2 uppercase">
-                <SfChip class="min-w-[48px]" size="sm" :v-model="value" :input-props="{
-                  onClick: (e: { preventDefault: () => any }) =>
-                    value == selectedColor && e.preventDefault(),
-                }" :model-value="value == selectedColor" @update:model-value="
-                  value != selectedColor
-                  && updateFilter({ ['Color']: value.toString() })
-                  ">
-                  <template #prefix>
-                    <SfThumbnail size="sm" :style="{ background: label }" />
-                  </template>
-                  {{ label }}
-                </SfChip>
-              </span>
-            </fieldset>
-          </div>
+
           <UiDivider class="my-4 md:mt-6" />
-          <div data-testid="product-accordion">
-            <UiAccordionItem v-model="productDetailsOpen"
-              summary-class="md:rounded-md w-full hover:bg-neutral-100 py-2 lg:pl-4 pr-3 flex justify-between items-center">
-              <template #summary>
-                <h2 class="font-bold font-headings text-lg leading-6 md:text-2xl">
-                  {{ $t("productDetails") }}
-                </h2>
-              </template>
-              <p>
-                {{ productVariant?.description }}
-              </p>
-            </UiAccordionItem>
+          <div>
+            <h2 class="font-bold font-headings text-lg leading-6 md:text-2xl">
+              {{ $t("productDetails") }}
+            </h2>
+            <p>
+              {{ productTemplate?.description }}
+            </p>
+
             <UiDivider class="my-4" />
-            <UiAccordionItem
-              summary-class="md:rounded-md w-full hover:bg-neutral-100 py-2 lg:pl-4 pr-3 flex justify-between items-center">
-              <template #summary>
-                <h2 class="font-bold font-headings text-lg leading-6 md:text-2xl">
-                  {{ $t("customerReviews") }}
-                </h2>
-              </template>
-              <p>
-                Lightweight • Non slip • Flexible outsole • Easy to wear on and
-                off
-              </p>
-            </UiAccordionItem>
+
+            <h2 class="font-bold font-headings text-lg leading-6 md:text-2xl">
+              {{ $t("customerReviews") }}
+            </h2>
+            <p>
+              Lightweight • Non slip • Flexible outsole • Easy to wear on and
+              off
+            </p>
           </div>
         </section>
         <UiDivider class="mt-4 mb-2" />
@@ -437,10 +400,7 @@ const hasProductData = computed(() => !!(productTemplate.value?.id && productVar
     </div>
     <template #error="{ error }">
       <div>
-        <NuxtImg :src="mainImageUrl" alt="Nome do produto" width="800" height="1000"
-          sizes="(max-width: 768px) 100vw, 800px" format="webp" preload loading="eager"
-          :img-attrs="{ fetchpriority: 'high' }" class="object-cover w-auto h-full" />
-        <p class="mt-8 font-medium">
+        <p class="mt-8 font-.medium">
           {{ $t("emptyStateText") }}
         </p>
       </div>

@@ -8,6 +8,8 @@ import type {
 import { QueryName } from '~/server/queries'
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
+
+
 export const useProductTemplate = (slug: string) => {
   const cleanSlug = slug?.endsWith('/') ? slug?.slice(0, -1) : slug
   const { $sdk } = useNuxtApp()
@@ -16,9 +18,16 @@ export const useProductTemplate = (slug: string) => {
     'loading-product-template',
     () => false,
   )
-  const productTemplate = useState<CustomProductWithStockFromRedis>(`product-${cleanSlug}`,
+  const productTemplate = useState<CustomProductWithStockFromRedis>(`template-${cleanSlug}`,
     () => ({} as CustomProductWithStockFromRedis),
   )
+
+  const breadcrumbs = computed(() => {
+    const productName
+      = productTemplate.value?.name
+        || productTemplate.value?.firstVariant?.name
+        || 'Product'
+})
 
   const loadProductTemplate = async (params: QueryProductArgs) => {
     if (productTemplate?.value?.id) {
@@ -135,7 +144,7 @@ export const useProductTemplate = (slug: string) => {
 
   return {
     loadProductTemplate,
-
+    breadcrumbs,
     getAllSizes,
     getAllColors,
     getAllMaterials,

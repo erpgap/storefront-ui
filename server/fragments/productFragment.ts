@@ -10,6 +10,16 @@ export default `
   metaKeyword
   metaTitle
   jsonLd
+  productVariants {
+    id
+    image
+    mediaGallery {
+      id
+      image
+      imageFilename
+      name
+    }
+}
   firstVariant {
     id
     combinationInfoVariant
@@ -23,13 +33,24 @@ export default `
       attribute { id name }
     }
   }
+    variantAttributeValues {
+      id
+      name
+      htmlColor
+      attribute { id name }
+    }
   smallImage
   price
   name
   description
   image
   imageFilename
-  mediaGallery { id name image imageFilename }
+  mediaGallery { 
+    id 
+    name 
+    image 
+    imageFilename 
+    }
   combinationInfo
   slug
   sku
