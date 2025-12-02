@@ -12,6 +12,10 @@ export default `
         description
         image
         imageFilename
+        mediaGallery{
+          id
+          image
+        }
         combinationInfoVariant
         slug
         metaTitle
