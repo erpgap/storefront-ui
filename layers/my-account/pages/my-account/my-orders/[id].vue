@@ -15,14 +15,14 @@ onMounted(async () => {
 
 watch(
   isOpen,
-  (isOpen) => {
+  (isOpen: any) => {
     if (!isOpen) router.push('/my-account/my-orders')
   },
   { immediate: true },
 )
 
 const linesWithoutUndefinedProducts = computed(() => {
-  return order.value?.reportOrderLine?.filter(item => item.product !== null)
+  return order.value?.reportOrderLine?.filter((item: { product: null }) => item.product !== null)
 })
 
 const NuxtLink = resolveComponent('NuxtLink')
@@ -98,11 +98,16 @@ const NuxtLink = resolveComponent('NuxtLink')
                 <ProductCardHorizontal v-if="line.product" :product="line.product" />
               </td>
 
-              <td class="p-4 lg:whitespace-nowrap typography-text-base">
+              <!-- <td class="p-4 lg:whitespace-nowrap typography-text-base">
                 {{
                   $currency(Number(line.product?.combinationInfo.price)) || "--"
                 }}
-              </td>
+              </td> -->
+              <td class="p-4 typography-text-base">
+                {{
+                  $currency(line.product?.price) || "--"
+                }}
+              </td> 
               <td class="p-4 typography-text-base">
                 {{ line.quantity || "--" }}
               </td>
