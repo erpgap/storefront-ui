@@ -75,7 +75,7 @@
                 :tag="NuxtLink"
                 :to="link"
                 :class="[
-                  'first-of-type:py-4 md:first-of-type:px-4 md:first-of-type:py-2 px-0 md:px-4 rounded-md active:bg-primary-100 !text-neutral-900',
+                  'first-of-type:py-4 md:first-of-type:px-4 md:first-of-type:py-2 px-0 md:px-4 rounded-md active:bg-primary-100 !text-neutral-900 hover:bg-primary-100',
                   {
                     'font-medium bg-primary-100':
                       router.currentRoute.value.path === link,

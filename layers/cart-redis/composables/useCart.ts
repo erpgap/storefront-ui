@@ -31,7 +31,7 @@ export const useCart = () => {
 
       cart.value = data.value.cart
       cartCounter.value = Number(data.value.cart?.order?.websiteOrderLine?.length || 0)
-      frequentlyTogetherProducts.value = (data.value.cart.frequentlyBoughtTogether || []).filter((p): p is Product => p !== null)
+      frequentlyTogetherProducts.value = (data.value.cart.frequentlyBoughtTogether || []).filter((p: null): p is Product => p !== null)
     }
     catch (error: any) {
       return toast.error(error.data.message)
@@ -113,7 +113,7 @@ export const useCart = () => {
   const totalItemsInCart = computed(() => {
     return (
       cart.value.order?.websiteOrderLine?.reduce(
-        (acc, item) => acc + (item.quantity ?? 0),
+        (acc: any, item: { quantity: any }) => acc + (item.quantity ?? 0),
         0,
       ) || 0
     )
