@@ -47,6 +47,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
       </SfLink>
       <div
         class="absolute top-0 left-0 text-white bg-secondary-600 py-1 pl-1.5 pr-2 text-xs font-medium"
+        v-if="variantHasDiscountedPrice"
       >
         <SfIconSell
           size="xs"
@@ -88,7 +89,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
       >
         <span
           v-if="orderLine.priceSubtotal"
-          class="text-secondary-700 sm:order-1 font-bold typography-text-sm sm:typography-text-lg sm:ml-auto"
+          class="text-black sm:order-1 font-bold typography-text-sm sm:typography-text-lg sm:ml-auto"
         >
           {{ $currency(orderLine.priceSubtotal) }}
           <span
