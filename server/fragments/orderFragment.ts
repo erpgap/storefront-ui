@@ -38,7 +38,7 @@ websiteOrderLine {
     image
     imageFilename
     displayName
-    combinationInfo
+    #combinationInfo
     slug
     variantAttributeValues{
       id
@@ -61,7 +61,7 @@ reportOrderLine {
     image
     imageFilename
     displayName
-    combinationInfo
+    #combinationInfo
     slug
     variantAttributeValues{
       id
@@ -84,7 +84,7 @@ orderLines {
     image
     imageFilename
     displayName
-    combinationInfo
+    #combinationInfo
     slug
     variantAttributeValues{
       id
