@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import {
   SfButton,
-  SfDrawer,
   SfInput,
-  SfListItem,
   useDisclosure,
   useTrapFocus,
 } from '@storefront-ui/vue'
@@ -104,7 +102,7 @@ const goTo = (slug: string) => { close(); router.push(slug) }
           <ul class="flex gap-10">
             <li v-for="category in categoriesForMegaMenu" :key="category.id">
               <NuxtLink :to="`/category/${category.id}`" class="text-[14px] text-black uppercase tracking-[0.5px]">
-                {{ category.name }}
+                {{ category.name }} 
               </NuxtLink>
             </li>
           </ul>

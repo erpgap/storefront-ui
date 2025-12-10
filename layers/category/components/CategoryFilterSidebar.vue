@@ -118,13 +118,13 @@ function selectPriceFilter(option: { id: string; label: string; values: string }
 
 const selectedPrice = computed<string>({
   get() {
-    const cur = selectedFilters.value.find(f => String(f.filterName).toLowerCase() === 'price')
+    const cur = selectedFilters.value.find((f: { filterName: any }) => String(f.filterName).toLowerCase() === 'price')
     return (cur?.id as string) || ''
   },
   set(val: string) {
     // remove qualquer faixa anterior
     selectedFilters.value = selectedFilters.value.filter(
-      f => String(f.filterName).toLowerCase() !== 'price'
+      (      f: { filterName: any }) => String(f.filterName).toLowerCase() !== 'price'
     )
     // se recebeu um valor, grava a nova faixa
     if (val) {
@@ -148,10 +148,10 @@ function isPriceChecked(values: string) {
 }
 
 function isStockSelected() {
-  return selectedFilters.value.some(f => f.filterName === 'Availability' && String(f.id) === 'true')
+  return selectedFilters.value.some((f: { filterName: string; id: any }) => f.filterName === 'Availability' && String(f.id) === 'true')
 }
 function selectStockFilter() {
-  const idx = selectedFilters.value.findIndex(f => f.filterName === 'Availability')
+  const idx = selectedFilters.value.findIndex((f: { filterName: string }) => f.filterName === 'Availability')
   if (idx !== -1) selectedFilters.value.splice(idx, 1)
   else selectedFilters.value.push({ filterName: 'Availability', label: 'true', id: 'true' })
   applyFiltersInstantly()
@@ -160,11 +160,11 @@ function selectStockFilter() {
 function isFilterSelected(opt: { id?: string | number; value?: string | number }) {
   const token = String(opt?.id ?? opt?.value ?? '')
   if (!token) return false
-  return selectedFilters.value.some(f => String(f.label) === token || String(f.id) === token)
+  return selectedFilters.value.some((f: { label: any; id: any }) => String(f.label) === token || String(f.id) === token)
 }
 function selectFilter(facet: { label: string }, option: { id: string; value?: string | number; label: string }) {
   const token = String(option.id)
-  const idx = selectedFilters.value.findIndex(f => String(f.label) === token)
+  const idx = selectedFilters.value.findIndex((f: { label: any }) => String(f.label) === token)
   if (idx !== -1) selectedFilters.value.splice(idx, 1)
   else selectedFilters.value.push({ filterName: facet.label, label: token, id: option.id })
   applyFiltersInstantly()
@@ -172,7 +172,7 @@ function selectFilter(facet: { label: string }, option: { id: string; value?: st
 
 /* ------------------------ Aplica filtros (na URL) ------------------------- */
 function applyFiltersInstantly() {
-  const filters = selectedFilters.value.filter(x => typeof x === 'object')
+  const filters = selectedFilters.value.filter((x: any) => typeof x === 'object')
   changeFilters(filters, sort.value)
 }
 
@@ -186,7 +186,7 @@ function clearFilters() {
 <template>
   <aside class="w-full lg:max-w-[376px] relative">
     <h5
-      class="py-2 px-4 mb-6 bg-neutral-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md">
+      class="py-2 px-4 mb-6 bg-primary-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md">
       Sort by
     </h5>
     <div class="px-2">
@@ -200,7 +200,7 @@ function clearFilters() {
     </div>
 
     <h5
-      class="py-2 px-4 mt-6 mb-4 bg-neutral-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md">
+      class="py-2 px-4 mt-6 mb-4 bg-primary-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md">
       Filter
     </h5>
 

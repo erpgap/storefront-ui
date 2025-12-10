@@ -55,13 +55,13 @@ reportOrderLine {
   id
   name
   priceSubtotal
+  priceUnit
   product {
     id
     name
     image
     imageFilename
     displayName
-    price
     #combinationInfo
     slug
     variantAttributeValues{
