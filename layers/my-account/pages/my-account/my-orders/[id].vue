@@ -98,14 +98,9 @@ const NuxtLink = resolveComponent('NuxtLink')
                 <ProductCardHorizontal v-if="line.product" :product="line.product" />
               </td>
 
-              <!-- <td class="p-4 lg:whitespace-nowrap typography-text-base">
-                {{
-                  $currency(Number(line.product?.combinationInfo.price)) || "--"
-                }}
-              </td> -->
               <td class="p-4 typography-text-base">
                 {{
-                  $currency(line.product?.price) || "--"
+                  $currency(line.priceUnit) || "--"
                 }}
               </td> 
               <td class="p-4 typography-text-base">

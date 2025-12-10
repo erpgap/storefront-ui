@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
+const { loadCategoriesForMegaMenu, categoriesForMegaMenu } = useMegaMenuCategories()
 
 type HomeData = {
   websiteHomepage?: SeoEntity
@@ -21,14 +22,17 @@ const { data, error } = await useAsyncData<HomeData>(
   }
 )
 
-const home       = computed(() => data.value?.websiteHomepage ?? null)
-const categories = computed(() => data.value?.categories?.categories ?? [])
+const home = computed(() => data.value?.websiteHomepage ?? null)
+await loadCategoriesForMegaMenu({ filter: {
+  parent: true,
+  id: null
+} })
 
 if (home.value) useHead(generateSeo<SeoEntity>(home.value, 'Home'))
 
 if (import.meta.client) {
   console.log('[HOME] payload:', data.value)
-  console.log('[HOME] categories:', categories.value)
+  console.log('[HOME] categories:', categoriesForMegaMenu.value)
 }
 </script>
 
@@ -36,7 +40,7 @@ if (import.meta.client) {
   <div>
     <MainBanner />
 
-    <Categories :items="categories" />
+    <Categories :items="categoriesForMegaMenu" />
 
     <BannerRight />
 

@@ -20,10 +20,12 @@ export default  `
         id
         name
         slug
+        imageFilename
         childs {
           id
           name
           slug
+          imageFilename
         }
         parent { id name slug }
       }

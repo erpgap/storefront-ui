@@ -66,7 +66,7 @@ await loadCart()
         <UiOrderSummary :cart="cart">
           <NuxtLink to="/checkout">
             <SfButton
-              size="lg"
+              size="lg"}
               class="w-full mb-4 md:mb-0"
             >
               {{ $t('goToCheckout') }}
