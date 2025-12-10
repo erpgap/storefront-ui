@@ -53,7 +53,7 @@ export default `
     }
   combinationInfo
   slug
-  sku
+  #skufalse
   isInWishlist
 
   categories {

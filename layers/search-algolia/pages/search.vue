@@ -5,12 +5,9 @@ import type { Product } from '~/graphql'
 const route = useRoute()
 const { isOpen, open, close } = useDisclosure()
 
-
-// Helpers
 const { getFacetsFromURL } = useUiHelpers()
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
-// Busca / lista de produtos
 const {
   loadProductTemplateList,
   organizedAttributes,
@@ -54,13 +51,12 @@ watch(
   }
 )
 
-// Paginação (12 por página)
 const maxVisiblePages = useState('search-page-max-visible', () => 1)
 const setMaxVisiblePages = (isWide: boolean) =>
   (maxVisiblePages.value = isWide ? 5 : 1)
 
-watch(isWideScreen, value => setMaxVisiblePages(value))
-watch(isTabletScreen, (value) => value && isOpen.value && close())
+watch(isWideScreen, (value: boolean) => setMaxVisiblePages(value))
+watch(isTabletScreen, (value: any) => value && isOpen.value && close())
 
 const pagination = computed(() => ({
   currentPage: route?.query?.page ? Number(route.query.page) : 1,
@@ -79,7 +75,7 @@ onMounted(() => setMaxVisiblePages(isWideScreen.value))
     <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
 
     <h1 v-if="route.query.search" class="font-bold typography-headline-3 md:typography-headline-2 mb-10">
-      Results for "{{ route.query.search }}"
+      Results for "{{ route.query.search }}" 
     </h1>
 
     <div class="grid grid-cols-12 lg:gap-x-6">
@@ -99,7 +95,7 @@ onMounted(() => setMaxVisiblePages(isWideScreen.value))
         <template v-if="!loading">
           <div class="flex justify-between items-center mb-6">
             <span class="font-bold font-headings md:text-lg">
-              {{ totalItems }} Products
+              {{ totalItems }} Products 
             </span>
             <SfButton variant="tertiary" class="lg:hidden whitespace-nowrap" @click="open">
               <template #prefix>

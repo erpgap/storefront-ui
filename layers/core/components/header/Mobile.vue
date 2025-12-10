@@ -107,6 +107,27 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
             </ul>
           </div>
 
+          <div class="mt-auto">
+            <ul class="flex">
+              <li class="flex-1 border-t border-r border-[#E5E7EB]">
+                <a href="/my-account"
+                  class="block bg-[#f7f7f7] h-full w-full py-4 text-center flex items-center justify-center gap-3">
+                  <Icon :name="isAuthenticated ? 'ion:person' : 'ion:person-outline'" size="22px" class="!text-black" />
+                  Account
+                </a>
+              </li>
+              <li class="flex-1 border-t border-[#E5E7EB]">
+                <a href="#"
+                  class="block bg-[#f7f7f7] h-full w-full py-4 text-center flex items-center justify-center gap-3">
+                  <Icon :name="wishlistTotalItems > 0 ? 'mdi:heart' : 'mdi:heart-outline'" size="22px"
+                    class="!text-black" />
+                  Wishlist
+                </a>
+              </li>
+            </ul>
+          </div>
+
+
         </SfDrawer>
       </transition>
       <!-- Icon -->

@@ -30,68 +30,64 @@ onMounted(async () => {
 const handleGiftCardPayment = async () => {
   await makeGiftCardPayment()
 }
+
+const errorMsg = computed(() => {
+  if (hasFullPaymentWithGiftCard.value) return ""
+
+  if (!selectedProvider.value) {
+    return "Selecione um método de pagamento antes de continuar."
+  }
+
+  if (!isPaymentWithCardReady.value) {
+    return "O pagamento ainda não está pronto. Aguarde um momento."
+  }
+
+  if (loading.value) {
+    return "Estamos processando o pagamento..."
+  }
+
+  return ""
+})
+
 </script>
 
 <template>
   <UiOrderSummary>
-    <SfButton
-      v-if="hasFullPaymentWithGiftCard"
-      size="lg"
-      class="w-full mb-4 md:mb-0"
-      :disabled="discountLoading"
-      @click.prevent="handleGiftCardPayment"
-    >
+    <SfButton v-if="hasFullPaymentWithGiftCard" size="lg" class="w-full mb-4 md:mb-0" :disabled="discountLoading"
+      @click.prevent="handleGiftCardPayment">
       {{ $t("placeOrder") }}
     </SfButton>
 
-    <SfButton
-      v-else
-      size="lg"
-      class="w-full mb-4 md:mb-0"
-      :disabled="!selectedProvider || !isPaymentWithCardReady || loading"
-      @click="providerPaymentHandler"
-    >
+    <SfButton v-else size="lg" class="w-full mb-4 md:mb-0"
+      :disabled="!selectedProvider || !isPaymentWithCardReady || loading" @click="providerPaymentHandler">
       {{ $t("placeOrder") }}
     </SfButton>
+
+    <p v-if="errorMsg" class="text-sm text-red-500 text-center mt-2">
+      {{ errorMsg }}
+    </p>
 
     <p class="text-sm text-center mt-4 pb-4 md:pb-0">
-      <i18n-t
-        keypath="termsInfo"
-        scope="global"
-      >
+      <i18n-t keypath="termsInfo" scope="global">
         <template #terms>
-          <SfLink
-            href="#"
-            class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
-          >
+          <SfLink href="#" class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded">
             {{ $t("termsAndConditions") }}
           </SfLink>
         </template>
         <template #privacyPolicy>
-          <SfLink
-            href="#"
-            class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
-          >
+          <SfLink href="#" class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded">
             {{ $t("privacyPolicy") }}
           </SfLink>
         </template>
       </i18n-t>
     </p>
-    <component
-      :is="getPaymentProviderComponentName(selectedProvider?.code)"
-      v-if="
-        showPaymentModal
-          && !!selectedProvider?.code
-          && !hasFullPaymentWithGiftCard
-      "
-      :key="selectedProvider?.id"
-      :provider="selectedProvider"
-      :cart="cart"
-      @is-payment-ready="($event: any) => (isPaymentWithCardReady = $event)"
-      @provider-payment-handler="
+    <component :is="getPaymentProviderComponentName(selectedProvider?.code)" v-if="
+      showPaymentModal
+      && !!selectedProvider?.code
+      && !hasFullPaymentWithGiftCard
+    " :key="selectedProvider?.id" :provider="selectedProvider" :cart="cart"
+      @is-payment-ready="($event: any) => (isPaymentWithCardReady = $event)" @provider-payment-handler="
         ($event: any) => (providerPaymentHandler = $event)
-      "
-      @payment-loading="($event: any) => (loading = $event)"
-    />
+      " @payment-loading="($event: any) => (loading = $event)" />
   </UiOrderSummary>
 </template>
