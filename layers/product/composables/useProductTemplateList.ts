@@ -7,7 +7,6 @@ import type {
 } from '~/graphql'
 import { QueryName } from '~/server/queries'
 
-/** Mostrar todos os facets mesmo com 1 opção (ajuda no debug) */
 const SHOW_ALL_FACETS = true
 
 type FilterCount = {
@@ -17,7 +16,6 @@ type FilterCount = {
 }
 
 export const useProductTemplateList = (customIndex = '') => {
-  // Tipagem prática do sdk para evitar 'unknown'
   const nuxtApp = useNuxtApp() as any
   const $sdk: () => any = nuxtApp.$sdk
 
@@ -57,39 +55,51 @@ export const useProductTemplateList = (customIndex = '') => {
     () => [],
   )
 
-  function updateVariablesFromData(data: ProductTemplateListResponse | null) {
-    const products = data?.products
-    productTemplateList.value = products?.products || []
-    minPrice.value = (products as any)?.minPrice ?? null
-    maxPrice.value = (products as any)?.maxPrice ?? null
-    totalItems.value = products?.totalCount || 0
-
-    //console.log('[GQL] attributeValues:', products?.attributeValues)
-    //console.log('[GQL] filterCounts:', products?.filterCounts)
-
-    computeAttributes(
-      (products?.attributeValues as AttributeValue[]) || [],
-      (products?.filterCounts as FilterCount[]) || [],
-    )
-  }
+    function updateVariablesFromData(data: ProductTemplateListResponse | null) {
+      const products = data?.products
+  
+        console.log('---------------- BACKEND RAW FACETS ----------------')
+        console.log('attributeValues:', JSON.stringify(products?.attributeValues, null, 2))
+        console.log('filterCounts:', JSON.stringify(products?.filterCounts, null, 2))
+        console.log('totalCount:', products?.totalCount)
+        console.log('products returned:', products?.products?.length)
+        console.log('----------------------------------------------------')
+  
+      productTemplateList.value = products?.products || []
+      minPrice.value = (products as any)?.minPrice ?? null
+      maxPrice.value = (products as any)?.maxPrice ?? null
+      totalItems.value = products?.totalCount || 0
+  
+      computeAttributes(
+        (products?.attributeValues as AttributeValue[]) || [],
+        (products?.filterCounts as FilterCount[]) || [],
+      )
+    } 
 
   const loadProductTemplateList = async (params: QueryProductsArgs) => {
     loading.value = true
+     console.log('[PARAMS SEND TO BACK]', JSON.stringify(params, null, 2))
     try {
       const { data, error } =
         await useAsyncData<ProductTemplateListResponse>(
           `product-list:${cleanFullSearchIndex.value}${customIndex}`,
-          () =>
-            $sdk().odoo.query(
+          () => {
+              console.log(
+                "%c[DEBUG FRONT → BACK] PARAMS ENVIADOS PARA O BACKEND:",
+                "background:#4400aa; color:white; padding:4px",
+                JSON.stringify(params, null, 2)
+              )
+            return $sdk().odoo.query(
               { queryName: QueryName.GetProductTemplateListQuery },
               params,
               { headers: useRequestHeaders() },
-            ),
-          {
-            server: true,   // roda no SSR
-            lazy: false,    // executa imediatamente
-            default: () => null,
+            )
           },
+          {
+            server: true,
+            lazy: false,
+            default: () => null,
+          }
         )
 
       if (error.value) {
@@ -156,7 +166,7 @@ export const useProductTemplateList = (customIndex = '') => {
 
     const built: AttributeFacet[] = Array.from(facetsMap.values())
 
-    //console.log('[compute] data result before filter:', built)
+    console.log('[compute] data result before filter:', built)
 
     if (SHOW_ALL_FACETS) {
       organizedAttributes.value = built

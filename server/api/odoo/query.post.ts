@@ -18,7 +18,7 @@ const customCache = cachedFunction(
       },
       body: JSON.stringify({ query: Queries[body?.[0]?.queryName], variables: body?.[1] }),
     })
-
+   
     return response
   },
   {
