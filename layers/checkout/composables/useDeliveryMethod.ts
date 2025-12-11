@@ -1,4 +1,5 @@
 import { useToast } from 'vue-toastification'
+import { debounce } from 'lodash-es'
 import type {
   ShippingMethod,
   DeliveryMethodListResponse,
@@ -40,7 +41,7 @@ export const useDeliveryMethod = () => {
     }
   }
 
-  const setDeliveryMethod = async (shippingMethodId: number) => {
+  const _setDeliveryMethod = async (shippingMethodId: number) => {
     try {
       loading.value = true
       await $sdk().odoo.mutation<
@@ -55,10 +56,12 @@ export const useDeliveryMethod = () => {
       loading.value = false
     }
   }
+  const setDeliveryMethod = debounce(_setDeliveryMethod, 500)
 
   return {
     loadDeliveryMethods,
     setDeliveryMethod,
+    setDeliveryMethodImmediate: _setDeliveryMethod,
     deliveryMethods,
     loading,
   }

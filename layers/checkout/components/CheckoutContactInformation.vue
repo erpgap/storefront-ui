@@ -31,7 +31,7 @@ const { commit: commitName, undo: undoName } = useManualRefHistory(name)
 
 watch(
   () => props.partnerData,
-  (newPartnerData) => {
+  (newPartnerData: { isPublic: any; id: number }) => {
     if (newPartnerData.isPublic && newPartnerData.id === 4) {
       name.value = ''
     }
