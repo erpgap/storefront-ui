@@ -2,8 +2,12 @@
 import { ref, onMounted } from 'vue'
 import { SfListItem, SfRadio, SfIconBlock } from '@storefront-ui/vue'
 
-const { deliveryMethods, loadDeliveryMethods, setDeliveryMethod }
-  = useDeliveryMethod()
+const {
+  deliveryMethods,
+  loadDeliveryMethods,
+  setDeliveryMethod,
+  setDeliveryMethodImmediate,
+} = useDeliveryMethod()
 
 const radioModel = ref('')
 
@@ -16,14 +20,18 @@ defineProps({
 
 await loadDeliveryMethods()
 
-watch(() => deliveryMethods, async () => {
-  if (!deliveryMethods?.value?.length) return
-  radioModel.value = String(deliveryMethods.value[0]?.id)
-  await setDeliveryMethod(deliveryMethods.value[0]?.id)
-}, {
-  deep: true,
-  immediate: true,
-})
+watch(
+  () => deliveryMethods,
+  async () => {
+    if (!deliveryMethods?.value?.length) return
+    radioModel.value = String(deliveryMethods.value[0]?.id)
+    await setDeliveryMethodImmediate(deliveryMethods.value[0]?.id)
+  },
+  {
+    deep: true,
+    immediate: true,
+  },
+)
 
 const handleSelectShippingMethod = async (shippingMethodId: number) => {
   radioModel.value = String(shippingMethodId)
