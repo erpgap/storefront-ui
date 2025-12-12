@@ -78,17 +78,11 @@ export const useProductTemplateList = (customIndex = '') => {
 
   const loadProductTemplateList = async (params: QueryProductsArgs) => {
     loading.value = true
-     console.log('[PARAMS SEND TO BACK]', JSON.stringify(params, null, 2))
     try {
       const { data, error } =
-        await useAsyncData<ProductTemplateListResponse>(
+        await useAsyncData(
           `product-list:${cleanFullSearchIndex.value}${customIndex}`,
           () => {
-              console.log(
-                "%c[DEBUG FRONT → BACK] PARAMS ENVIADOS PARA O BACKEND:",
-                "background:#4400aa; color:white; padding:4px",
-                JSON.stringify(params, null, 2)
-              )
             return $sdk().odoo.query(
               { queryName: QueryName.GetProductTemplateListQuery },
               params,

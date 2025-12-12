@@ -142,8 +142,8 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     productTemplateList,
     loading,
   }
-}
-function computed(arg0: () => any) {
+
+/*   function computed(arg0: () => any) {
   throw new Error('Function not implemented.')
 }
 
@@ -153,5 +153,7 @@ function ref(arg0: string) {
 
 function watch(arg0: () => any, arg1: (v: any) => void, arg2: { immediate: boolean }) {
   throw new Error('Function not implemented.')
+} */
 }
+
 

@@ -5,7 +5,6 @@ import {
   useDisclosure,
   SfLoaderCircular,
 } from '@storefront-ui/vue'
-import { useRoute } from 'vue-router'
 
 import { useProductTemplateList } from '../../product/composables/useProductTemplateList'
 import { useProductAttributes } from '../../product/composables/useProductAttributes'
