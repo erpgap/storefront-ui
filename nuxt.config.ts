@@ -192,7 +192,3 @@ export default defineNuxtConfig({
     },
   },
 })
-function Critters(arg0: { preload: string; pruneSource: boolean; reduceInlineStyles: boolean; inlineFonts: boolean }): any {
-  throw new Error('Function not implemented.')
-}
-

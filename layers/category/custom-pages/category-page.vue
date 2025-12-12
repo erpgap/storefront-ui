@@ -3,6 +3,8 @@ import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefro
 import { useUiHelpers } from '../../category/composables/useUiHelpers'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 import type { Product } from '~/graphql'
+import { isEqual } from 'lodash-es'
+
 
 const route = useRoute()
 const { isOpen, open, close } = useDisclosure()
@@ -52,7 +54,7 @@ if (import.meta.client) {
       delete cleanNew['list-view']
       delete cleanOld['list-view']
 
-      if (!isEqual(cleanOld, cleanNew)) {
+      if (oldValue === undefined || !isEqual(cleanOld, cleanNew)) {
         await fetchList(route.query)
       }
     },

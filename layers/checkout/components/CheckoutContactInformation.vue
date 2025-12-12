@@ -46,6 +46,8 @@ const handleUpdatePartnerData = async () => {
     email: String(email.value),
     name: String(name.value),
     subscribeNewsletter: subscribeNewsletter.value,
+    mobile: null,
+    phone: null
   }
   await updatePartner(data)
 
