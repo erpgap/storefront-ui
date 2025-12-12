@@ -21,7 +21,7 @@ export const useStateList = (countryId: number) => {
         async () => await $sdk().odoo.query<
           CountryFilterInput,
           StatesResponse
-        >({ queryName: QueryName.GetStates }, param.value),
+        >({ queryName: QueryName.GetStatesQuery }, param.value),
       )
       states.value = data.value?.country.states || []
     }
