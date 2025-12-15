@@ -85,7 +85,7 @@ const errorMsg = computed(() => {
       showPaymentModal
       && !!selectedProvider?.code
       && !hasFullPaymentWithGiftCard
-    " :key="selectedProvider?.id" :provider="selectedProvider" :cart="cart"
+    " :key="selectedProvider?.id" :provider="selectedProvider"showPaymentModal :cart="cart"
       @is-payment-ready="($event: any) => (isPaymentWithCardReady = $event)" @provider-payment-handler="
         ($event: any) => (providerPaymentHandler = $event)
       " @payment-loading="($event: any) => (loading = $event)" />

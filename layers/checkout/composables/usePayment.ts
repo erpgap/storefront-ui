@@ -17,9 +17,12 @@ export const usePayment = () => {
       loading.value = true
       const { data } = await useAsyncData('payment-providers', async () => await $sdk().odoo.query<any, PaymentMethodListResponse>({
         queryName: QueryName.GetPaymentMethodsQuery,
-      }))
+      }),
+      )
 
       paymentProviders.value = data.value?.paymentProviders || []
+      console.log('paymentProviders:  ', paymentProviders.value)
+      console.log('Response data:', JSON.stringify(data.value))
     }
     catch (error: any) {
       toast.error(error?.data?.message)
