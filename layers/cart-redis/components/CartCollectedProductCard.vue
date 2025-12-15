@@ -46,8 +46,8 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
         />
       </SfLink>
       <div
-        class="absolute top-0 left-0 text-white bg-secondary-600 py-1 pl-1.5 pr-2 text-xs font-medium"
         v-if="variantHasDiscountedPrice"
+        class="absolute top-0 left-0 text-white bg-secondary-600 py-1 pl-1.5 pr-2 text-xs font-medium"
       >
         <SfIconSell
           size="xs"
@@ -108,10 +108,9 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
           ${{ orderLine.priceTotal }}
         </span>
         <UiQuantitySelector
-          v-model="orderLine.quantity"
           :min-value="1"
           :max-value="Number(orderLine.product?.stock)"
-          :value="Number(orderLine.quantity)"
+          :model-value="Number(orderLine.quantity)"
           class="mt-4 sm:mt-0"
           @update:model-value="updateItemQuantity(orderLine.id, $event)"
         />

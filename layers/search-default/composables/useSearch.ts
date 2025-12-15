@@ -38,14 +38,14 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   // Sincroniza o input com a URL (?search=...)
   watch(
     () => route.query.search,
-    (v) => {
+    (v: string) => {
       searchInputValue.value = (v as string) || ''
     },
     { immediate: true },
   )
 
   // Esconde dropdown quando o input é apagado
-  watch(searchInputValue, (v) => {
+  watch(searchInputValue, (v: any) => {
     if (!v) {
       showResultSearch.value = false
       searchModalOpen.value = false
@@ -72,7 +72,6 @@ export const useSearch = (formSearchTemplateRef?: any) => {
         pageSize: 12,
       })
 
-      // Abre dropdown se houver hits
       const hasHits = (productTemplateList.value?.length || 0) > 0
       showResultSearch.value = hasHits
       searchModalOpen.value = hasHits

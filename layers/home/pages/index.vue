@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
+
 const { loadCategoriesForMegaMenu, categoriesForMegaMenu } = useMegaMenuCategories()
 
 type HomeData = {
   websiteHomepage?: SeoEntity
-  categories?: { categories: Array<{ id: string; name: string; slug: string }> }
+  categories?: { categories: Array<{ id: string, name: string, slug: string }> }
 }
 
 const headers = useRequestHeaders(['cookie'])
@@ -19,13 +20,13 @@ const { data, error } = await useAsyncData<HomeData>(
     server: true,
     lazy: false,
     dedupe: 'defer',
-  }
+  },
 )
 
 const home = computed(() => data.value?.websiteHomepage ?? null)
 await loadCategoriesForMegaMenu({ filter: {
   parent: true,
-  id: null
+  id: null,
 } })
 
 if (home.value) useHead(generateSeo<SeoEntity>(home.value, 'Home'))

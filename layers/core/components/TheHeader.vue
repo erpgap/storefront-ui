@@ -5,7 +5,7 @@ provide('categoriesForMegaMenu', categoriesForMegaMenu)
 
 await loadCategoriesForMegaMenu({ filter: {
   parent: true,
-  id: null
+  id: null,
 } })
 </script>
 

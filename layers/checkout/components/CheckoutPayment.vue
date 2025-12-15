@@ -20,7 +20,9 @@ const {
 const selectedProvider = ref<PaymentProvider | null>(null)
 const showPaymentModal = ref<boolean>(false)
 
-await loadPaymentMethods()
+onMounted(async () => {
+  await loadPaymentMethods()
+})
 
 watch(() => paymentProviders.value, () => {
   if (paymentProviders.value.length > 0) {

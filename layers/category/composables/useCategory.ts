@@ -6,7 +6,7 @@ import type {
 } from '~/graphql'
 import { QueryName } from '~/server/queries/index'
 
-export const useCategory = () => {
+export const useCategory = (categorySlugIndex?: string) => {
   const { $sdk } = useNuxtApp()
 
   const loading = useState('category-loading', () => false)

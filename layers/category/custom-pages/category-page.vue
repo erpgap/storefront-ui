@@ -4,6 +4,7 @@ import { useUiHelpers } from '../../category/composables/useUiHelpers'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 import type { Product } from '~/graphql'
 import { isEqual } from 'lodash-es'
+import { onMounted } from 'vue'
 
 
 const route = useRoute()
@@ -45,6 +46,12 @@ onServerPrefetch(async () => {
   await fetchList(route.query)
 })
 
+onMounted(async () => {
+  if (!productTemplateList.value || productTemplateList.value.length === 0) {
+    await fetchList(route.query);
+  }
+})
+
 if (import.meta.client) {
   watch(
     () => route.query,
@@ -58,7 +65,7 @@ if (import.meta.client) {
         await fetchList(route.query)
       }
     },
-    { immediate: true, deep: true },
+    { deep: true },
   )
 }
 

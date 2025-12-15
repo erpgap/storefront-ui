@@ -58,14 +58,15 @@ export const useWishlist = () => {
       loading.value = true
       const data = await $sdk().odoo.mutation(
         { mutationName: MutationName.WishlistAddItem },
-        { productId }
+        { productId },
       ) as WishlistAddItemResponse
 
       wishlist.value = data?.wishlistAddItem ?? wishlist.value
-
-    } catch (error: any) {
+    }
+    catch (error: any) {
       toast.error(error?.data?.message ?? 'Não foi possível adicionar à wishlist.')
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -81,14 +82,15 @@ export const useWishlist = () => {
       loading.value = true
       const data = await $sdk().odoo.mutation(
         { mutationName: MutationName.WishlistAddItem },
-        { productId }
+        { productId },
       ) as WishlistAddItemResponse
 
       wishlist.value = data?.wishlistAddItem ?? wishlist.value
-
-    } catch (error: any) {
+    }
+    catch (error: any) {
       toast.error(error?.data?.message ?? 'Não foi possível remover da wishlist.')
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }

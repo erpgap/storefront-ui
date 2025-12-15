@@ -10,13 +10,11 @@ const props = defineProps({
     default: '',
     required: false,
   },
-  products:{
+  products: {
     type: String,
     required: false,
-  }
+  },
 })
-
-
 
 const { loadProductTemplateList, productTemplateList }
   = useProductTemplateListForRecentViews()

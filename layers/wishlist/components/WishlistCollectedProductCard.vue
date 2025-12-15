@@ -15,19 +15,19 @@ const props = defineProps<{
 
 /** Normaliza os preços vindos do GraphQL (snake/camel) */
 const currentPrice = computed<number>(() => {
-  const p = (props.product as any)
+  const p = props.product as any
   return Number(
-    p?.combinationInfoVariant?.price ??
-      p?.price ??
-      0,
+    p?.combinationInfoVariant?.price
+    ?? p?.price
+    ?? 0,
   )
 })
 
 const listPrice = computed<number | null>(() => {
-  const p = (props.product as any)
-  const lp =
-    p?.combinationInfoVariant?.list_price ??
-    p?.listPrice
+  const p = props.product as any
+  const lp
+    = p?.combinationInfoVariant?.list_price
+      ?? p?.listPrice
   return lp == null ? null : Number(lp)
 })
 
@@ -40,7 +40,7 @@ const hasDiscount = computed<boolean>(() => {
 
 /** Imagem / slug */
 const imageSrc = computed<string>(() => {
-  const p = (props.product as any)
+  const p = props.product as any
   return p?.image ?? '/images/product.webp'
 })
 const imageAlt = computed<string>(() => String((props.product as any)?.imageFilename ?? ''))
@@ -52,7 +52,10 @@ const imageAlt = computed<string>(() => String((props.product as any)?.imageFile
     data-testid="cart-product-card"
   >
     <div class="min-w-[114px] w-[114px] overflow-hidden rounded-md">
-      <SfLink :to="mountUrlSlugForProductVariant(product)" :tag="NuxtLink">
+      <SfLink
+        :to="mountUrlSlugForProductVariant(product)"
+        :tag="NuxtLink"
+      >
         <NuxtImg
           provider="odooProvider"
           class="border rounded-md border-neutral-200"

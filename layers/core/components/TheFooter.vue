@@ -1,13 +1,17 @@
 <template>
   <footer class="bg-[#f7f7f7]">
-        <div class="footer-top text-black">
+    <div class="footer-top text-black">
       <div
-        class="narrow-container pt-[50px] lg:pt-[90px] pb-[60px] lg:pb-[190px] flex flex-col xl:flex-row justify-between gap-[60px] xl:gap-[100px]">
+        class="narrow-container pt-[50px] lg:pt-[90px] pb-[60px] lg:pb-[190px] flex flex-col xl:flex-row justify-between gap-[60px] xl:gap-[100px]"
+      >
         <!-- Col -->
         <div>
           <div class="min-w-[180px]">
             <!-- Logo -->
-            <NuxtLink to="/" aria-label="Sf Homepage">
+            <NuxtLink
+              to="/"
+              aria-label="Sf Homepage"
+            >
               <AlokaiLogo class="w-auto h-9" />
             </NuxtLink>
           </div>
@@ -16,64 +20,200 @@
         <div class="flex flex-col md:flex-row justify-between gap-[25px] lg:gap-[30px] grow">
           <!-- Col -->
           <div class="">
-            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px]">How To Buy</h3>
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px]">
+              How To Buy
+            </h3>
             <ul class="flex flex-col gap-[10px] md:gap-[16px]">
-              <li><a href="#" class="hover:underline">Payment methods</a></li>
-              <li><a href="#" class="hover:underline">Order pickup</a></li>
-              <li><a href="#" class="hover:underline">Purchase status</a></li>
-              <li><a href="#" class="hover:underline">Track orders</a></li>
-              <li><a href="#" class="hover:underline">Returns</a></li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Payment methods</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Order pickup</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Purchase status</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Track orders</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Returns</a>
+              </li>
             </ul>
           </div>
           <!-- Col -->
           <div class="">
-            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px]">Help</h3>
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px]">
+              Help
+            </h3>
             <ul class="flex flex-col gap-[10px] md:gap-[16px]">
-              <li><a href="#" class="hover:underline">Help centers</a></li>
-              <li><a href="#" class="hover:underline">Security & fraud</a></li>
-              <li><a href="#" class="hover:underline">Feedback</a></li>
-              <li><a href="#" class="hover:underline">Contact</a></li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Help centers</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Security & fraud</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Feedback</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Contact</a>
+              </li>
             </ul>
           </div>
           <!-- Col -->
           <div class="">
-            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px]">Services</h3>
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px]">
+              Services
+            </h3>
             <ul class="flex flex-col gap-[10px] md:gap-[16px]">
-              <li><a href="#" class="hover:underline">Gift cards</a></li>
-              <li><a href="#" class="hover:underline">Order pickup</a></li>
-              <li><a href="#" class="hover:underline">Purchase status</a></li>
-              <li><a href="#" class="hover:underline">Track orders</a></li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Gift cards</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Order pickup</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Purchase status</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Track orders</a>
+              </li>
             </ul>
           </div>
           <!-- Col -->
           <div class=" shrink-0">
-            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px] text-nowrap">About</h3>
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[30px] text-nowrap">
+              About
+            </h3>
             <ul class="flex flex-col gap-[10px] md:gap-[16px]">
-              <li><a href="#" class="hover:underline">About Us</a></li>
-              <li><a href="#" class="hover:underline">Order pickup</a></li>
-              <li><a href="#" class="hover:underline">Purchase status</a></li>
-              <li><a href="#" class="hover:underline">Track orders</a></li>
-              <li><a href="#" class="hover:underline">Returns</a></li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >About Us</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Order pickup</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Purchase status</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Track orders</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:underline"
+                >Returns</a>
+              </li>
             </ul>
           </div>
           <!-- Col -->
           <div class="">
-            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[40px]">Contact Us</h3>
+            <h3 class="text-[20px] font-semibold mb-[15px] md:mb-[40px]">
+              Contact Us
+            </h3>
             <ul class="flex flex-col gap-[10px] md:gap-[16px]">
-              <li><a href="#" class="flex items-center gap-[15px] hover:underline"><NuxtImg
-                    src="img/phone.svg" alt="erpgap-icon" class="w-[42px]" />
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center gap-[15px] hover:underline"
+                ><NuxtImg
+                   src="img/phone.svg"
+                   alt="erpgap-icon"
+                   class="w-[42px]"
+                 />
                   <p>+1 222-333-444</p>
-                </a></li>
-              <li><a href="#" class="flex items-center gap-[15px] hover:underline"><NuxtImg
-                    src="img/email.svg" alt="erpgap-icon" class="w-[42px]" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center gap-[15px] hover:underline"
+                ><NuxtImg
+                   src="img/email.svg"
+                   alt="erpgap-icon"
+                   class="w-[42px]"
+                 />
                   <p>info@erpgap.com</p>
-                </a></li>
+                </a>
+              </li>
             </ul>
-            <h3 class="text-[20px] font-semibold my-[15px] md:my-[40px]">Follow Us</h3>
+            <h3 class="text-[20px] font-semibold my-[15px] md:my-[40px]">
+              Follow Us
+            </h3>
             <ul class="flex items-center gap-[24px]">
-              <li><a href="#"><NuxtImg src="img/x.svg" alt="erpgap-icon" class="w-[42px]" /></a></li>
-              <li><a href="#"><NuxtImg src="img/linkedin.svg" alt="erpgap-icon" class="w-[42px]" /></a></li>
-              <li><a href="#"><NuxtImg src="img/github.svg" alt="erpgap-icon" class="w-[42px]" /></a></li>
+              <li>
+                <a href="#"><NuxtImg
+                  src="img/x.svg"
+                  alt="erpgap-icon"
+                  class="w-[42px]"
+                /></a>
+              </li>
+              <li>
+                <a href="#"><NuxtImg
+                  src="img/linkedin.svg"
+                  alt="erpgap-icon"
+                  class="w-[42px]"
+                /></a>
+              </li>
+              <li>
+                <a href="#"><NuxtImg
+                  src="img/github.svg"
+                  alt="erpgap-icon"
+                  class="w-[42px]"
+                /></a>
+              </li>
             </ul>
           </div>
         </div>
