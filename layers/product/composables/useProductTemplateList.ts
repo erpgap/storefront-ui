@@ -13,25 +13,23 @@ export const useProductTemplateList = (customIndex = '') => {
   const nuxtApp = useNuxtApp() as any
   const $sdk: () => any = nuxtApp.$sdk
   const route = useRoute()
+  const params = ref<QueryProductsArgs>({})
 
-  // Use computed instead of useState for derived values
   const { data, error, execute, pending } = useAsyncData<ProductTemplateListResponse>(
     `product-template-list-${customIndex}`,
-    () => 
+    () =>
       $sdk().odoo.query(
         { queryName: QueryName.GetProductTemplateListQuery },
         params.value,
         { headers: useRequestHeaders() },
       ),
     {
-      server: true,     
-      lazy: false,      
-      immediate: true,   
+      server: true,
+      lazy: false,
+      immediate: true,
       default: () => null,
     },
   )
-
-  const params = ref<QueryProductsArgs>({})
 
   const productTemplateList = computed(() => data.value?.products?.products || [])
   const minPrice = computed(() => (data.value?.products as any)?.minPrice ?? null)
@@ -141,5 +139,6 @@ export const useProductTemplateList = (customIndex = '') => {
     organizedAttributes,
     totalItems,
     stockCount,
+    error,
   }
 }

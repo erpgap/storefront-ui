@@ -1,15 +1,11 @@
 <template>
   <div>
-    <div
-      id="dropin-container"
-      ref="dropinDivElement"
-      class="mt-4"
-    />
+    <div id="dropin-container" ref="dropinDivElement" class="mt-4" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import AdyenCheckout from '@adyen/adyen-web'
+import { AdyenCheckout } from '@adyen/adyen-web';
 import '@adyen/adyen-web/dist/adyen.css'
 import type { PaymentProvider } from '~/graphql'
 
@@ -63,6 +59,8 @@ onMounted(async () => {
     environment: acquirerInfo.value.state === 'test' ? 'test' : 'live',
     clientKey: acquirerInfo.value.client_key,
     paymentMethodsResponse: paymentMethods.value,
+
+
     analytics: {
       enabled: false,
     },
@@ -113,7 +111,7 @@ onMounted(async () => {
       const data = await getPaymentConfirmation()
       const paymentSuccess
         = data?.order?.lastTransaction?.state === 'Authorized'
-          || data.order?.lastTransaction?.state === 'Confirmed'
+        || data.order?.lastTransaction?.state === 'Confirmed'
 
       emit('paymentLoading', false)
       if (paymentSuccess) {
@@ -135,7 +133,7 @@ onMounted(async () => {
       showPaymentMethods: true,
       showPayButton: false,
       setStatusAutomatically: true,
-      onSelect: (component) => {
+      onSelect: (component: { isValid: any }) => {
         if (component.isValid) {
           emit('isPaymentReady', true)
           return

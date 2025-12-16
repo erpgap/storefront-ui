@@ -68,7 +68,7 @@ async function resetPasswordWithRetry(email: string, max = 3) {
       await resetPassword({ email })
       return
     } catch (e: any) {
-      const msg: string =
+      const msg: string =resetPassword
         e?.response?._data?.message || e?.message || ''
 
       // erro de concorrência do Postgres (serialize)

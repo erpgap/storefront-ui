@@ -170,14 +170,8 @@ export default defineNuxtConfig({
 
   sitemap: {
     sources: ['/api/sitemap/urls/products', '/api/sitemap/urls/categories'],
-    runtimeCacheStorage: { driver: process.env.NUXT_STORAGE_DRIVER || 'redis' },
+    //runtimeCacheStorage: { driver: process.env.NUXT_STORAGE_DRIVER || 'redis' },
   },
-/*
-  tailwindcss: {
-    viewer: false,
-    cssPath: '~/assets/css/tailwind.css',
-    exposeConfig: false,
-  },*/
 
   viewport: {
     breakpoints: {

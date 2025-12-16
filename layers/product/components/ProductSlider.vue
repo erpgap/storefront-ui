@@ -27,7 +27,7 @@ await loadProductTemplateList({ pageSize: numOfProducts })
       buttons-placement="block"
       class="items-center pb-10"
       data-testid="product-slider"
-      drag="true"
+      :drag="true"
     >
       <LazyUiProductCard
         v-for="productTemplate in productTemplateList"

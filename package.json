@@ -18,7 +18,7 @@
     "commit": "git-cz"
   },
   "dependencies": {
-    "@adyen/adyen-web": "4.7.3",
+    "@adyen/adyen-web": "^4.7.3",
     "@apollo/client": "^4.0.9",
     "@cloudinary/url-gen": "^1.22.0",
     "@erpgap/odoo-sdk": "^2.2.2",
