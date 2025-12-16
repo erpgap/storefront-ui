@@ -1,27 +1,27 @@
-import { useToast } from 'vue-toastification'
-import { debounce } from 'lodash-es'
+import { useToast } from 'vue-toastification';
+import { debounce } from 'lodash-es';
 import type {
   ShippingMethod,
   DeliveryMethodListResponse,
   MutationSetShippingMethodArgs,
   DeliveryMethodResponse,
-} from '~/graphql'
-import { MutationName } from '~/server/mutations'
-import { QueryName } from '~/server/queries'
+} from '~/graphql';
+import { MutationName } from '~/server/mutations';
+import { QueryName } from '~/server/queries';
+import { useCheckout } from './useCheckout';
 
 export const useDeliveryMethod = () => {
-  const { $sdk } = useNuxtApp()
-
-  const loading = ref(false)
-  const toast = useToast()
+  const { $sdk } = useNuxtApp();
+  const { loading, setLoading } = useCheckout();
+  const toast = useToast();
   const deliveryMethods = useState<ShippingMethod[]>(
     'delivery-method',
     () => [],
-  )
+  );
 
   const loadDeliveryMethods = async () => {
-    loading.value = true
     try {
+      setLoading(true);
       const { data } = await useAsyncData('shipping-methods', async () =>
         await $sdk().odoo.query<
           any,
@@ -29,34 +29,30 @@ export const useDeliveryMethod = () => {
         >({
           queryName: QueryName.GetDeliveryMethodsQuery,
         }),
-      )
+      );
 
-      deliveryMethods.value = data.value?.deliveryMethods || []
+      deliveryMethods.value = data.value?.deliveryMethods || [];
+    } catch (error: any) {
+      toast.error(error?.data?.message);
+    } finally {
+      setLoading(false);
     }
-    catch (error: any) {
-      toast.error(error?.data?.message)
-    }
-    finally {
-      loading.value = false
-    }
-  }
+  };
 
   const _setDeliveryMethod = async (shippingMethodId: number) => {
     try {
-      loading.value = true
+      setLoading(true);
       await $sdk().odoo.mutation<
         MutationSetShippingMethodArgs,
         DeliveryMethodResponse
-      >({ mutationName: MutationName.ShippingMethod }, { shippingMethodId })
+      >({ mutationName: MutationName.ShippingMethod }, { shippingMethodId });
+    } catch (error: any) {
+      toast.error(error?.data?.message);
+    } finally {
+      setLoading(false);
     }
-    catch (error: any) {
-      toast.error(error?.data?.message)
-    }
-    finally {
-      loading.value = false
-    }
-  }
-  const setDeliveryMethod = debounce(_setDeliveryMethod, 500)
+  };
+  const setDeliveryMethod = debounce(_setDeliveryMethod, 500);
 
   return {
     loadDeliveryMethods,
@@ -64,5 +60,5 @@ export const useDeliveryMethod = () => {
     setDeliveryMethodImmediate: _setDeliveryMethod,
     deliveryMethods,
     loading,
-  }
-}
+  };
+};
