@@ -20,18 +20,10 @@ defineProps({
 
 await loadDeliveryMethods()
 
-watch(
-  () => deliveryMethods,
-  async () => {
-    if (!deliveryMethods?.value?.length) return
-    radioModel.value = String(deliveryMethods.value[0]?.id)
-    await setDeliveryMethodImmediate(deliveryMethods.value[0]?.id)
-  },
-  {
-    deep: true,
-    immediate: true,
-  },
-)
+if (deliveryMethods?.value?.length) {
+  radioModel.value = String(deliveryMethods.value[0]?.id)
+  await setDeliveryMethodImmediate(deliveryMethods.value[0]?.id)
+}
 
 const handleSelectShippingMethod = async (shippingMethodId: number) => {
   radioModel.value = String(shippingMethodId)

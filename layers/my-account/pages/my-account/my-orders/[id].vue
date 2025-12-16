@@ -30,6 +30,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 <template>
     <ClientOnly>
+     <template #fallback></template>
       <UiModal v-model="isOpen" fullscreen as="section" role="dialog" :open="isOpen" :overlay="false"
         v-if="isOpen && linesWithoutUndefinedProducts" class="fixed left-0 right-0 bottom-0  z-[900] overflow-y-auto bg-transparent"
         >

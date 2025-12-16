@@ -113,7 +113,8 @@
     "paypalIconAlt": "Paypal Icon",
     "applePayIconAlt": "Apple Pay Icon",
     "googlePayIconAlt": "Google Pay icon",
-    "promoOrGiftcard": "Promo code or gift card"
+    "promoOrGiftcard": "Promo code or gift card",
+    "loadingPayment": "Loading Payment...."
   },
   "shippingMethod": {
     "heading": "Shipping details",
@@ -125,7 +126,9 @@
     "missingShippingAddress": "add shipping address",
     "missingEmail": "add customer email",
     "missingShippingDetails": "add shipping details",
-    "missingPaymentMethod": "choose payment method"
+    "missingPaymentMethod": "choose payment method",
+    "missingPaymentWithCard": "Payment is not ready yet",
+    "missingProvider": "Select Payment method"
   },
   "size": "Size",
   "color": "Color",

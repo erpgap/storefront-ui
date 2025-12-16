@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefront-ui/vue'
-import { useUiHelpers } from '../../category/composables/useUiHelpers'
-import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
-import type { Product } from '~/graphql'
-import { isEqual } from 'lodash-es'
-import { onMounted } from 'vue'
+import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefront-ui/vue';
+import { useUiHelpers } from '../../category/composables/useUiHelpers';
+import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper';
+import type { Product } from '~/graphql';
 
+const route = useRoute();
+const { isOpen, open, close } = useDisclosure();
 
-const route = useRoute()
-const { isOpen, open, close } = useDisclosure()
-
-const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
-
+const { getFacetsFromURL } = useUiHelpers();
+const { getRegularPrice, getSpecialPrice } = useProductAttributes();
+const { loadCategory, category } = useCategory();
 const {
   loadProductTemplateList,
   organizedAttributes,
@@ -19,97 +17,69 @@ const {
   productTemplateList,
   totalItems,
   stockCount,
-} = useProductTemplateList(String(cleanFullPath.value))
+  error: productListError,
+} = useProductTemplateList(String(route.fullPath.replace(/\/$/, '')));
 
-provide('stockCount', stockCount)
+provide('stockCount', stockCount);
 
-const { loadCategory, category } = useCategory()
-const { getRegularPrice, getSpecialPrice } = useProductAttributes()
-const { getFacetsFromURL } = useUiHelpers()
+const maxVisiblePages = useState('category-max-visible-pages', () => 1);
+const setMaxVisiblePages = (isWide: boolean) => (maxVisiblePages.value = isWide ? 5 : 1);
 
-const maxVisiblePages = useState('category-max-visible-pages', () => 1)
-const setMaxVisiblePages = (isWide: boolean) => (maxVisiblePages.value = isWide ? 5 : 1)
-
-watch(isWideScreen, (value: boolean) => setMaxVisiblePages(value))
+watch(isWideScreen, (value: boolean) => setMaxVisiblePages(value));
 watch(isTabletScreen, (value: any) => {
-  if (value && isOpen.value) close()
-})
-
-async function fetchList(q: Record<string, any>) {
-  const facets: Record<string, any> = getFacetsFromURL(q) || {}
-  if (q?.search) facets.search = String(q.search)
-  await loadProductTemplateList(facets)
-}
-
-onServerPrefetch(async () => {
-  await loadCategory({ slug: String(route.path) })
-  await fetchList(route.query)
-})
-
-onMounted(async () => {
-  if (!productTemplateList.value || productTemplateList.value.length === 0) {
-    await fetchList(route.query);
+  if (value && isOpen.value) {
+    close();
   }
-})
-
-if (import.meta.client) {
-  watch(
-    () => route.query,
-    async (newValue: any, oldValue: any) => {
-      const cleanNew = { ...newValue }
-      const cleanOld = { ...oldValue }
-      delete cleanNew['list-view']
-      delete cleanOld['list-view']
-
-      if (oldValue === undefined || !isEqual(cleanOld, cleanNew)) {
-        await fetchList(route.query)
-      }
-    },
-    { deep: true },
-  )
-}
-
-const safeAttributes = computed(() =>
-  Array.isArray((organizedAttributes as any)?.value)
-    ? (organizedAttributes as any).value
-    : [],
-)
-
-const pagination = computed(() => ({
-  currentPage: route?.query?.page ? Number(route.query.page) : 1,
-  totalPages: Math.ceil(totalItems.value / 20) || 1,
-  totalItems: totalItems.value,
-  itemsPerPage: 20,
-  pageOptions: [5, 10, 15, 20],
-}))
-
-const seoData = computed(() => {
-  if (category.value && Object.keys(category.value).length > 0) {
-    return generateSeo<SeoEntity>(category.value, 'Category')
-  }
-
-  const fallbackEntity: SeoEntity = {
-    name: 'Category',
-    metaTitle: `Category | ${route.path.split('/').pop() || 'Products'}`,
-    metaDescription: 'Browse our product categories',
-  }
-
-  return generateSeo<SeoEntity>(fallbackEntity, 'Category')
-})
-
-useHead(seoData)
+});
 
 watch(
-  () => route.path,
-  async (newSlug: any, oldSlug: any) => {
-    if (newSlug && newSlug !== oldSlug) {
-      await loadCategory({ slug: String(newSlug) })
-      await fetchList(route.query)
+  () => route.query,
+  async (newValue: { [x: string]: any; }, oldValue: { [x: string]: any; }) => {
+    const cleanNew = { ...newValue }
+    const cleanOld = { ...oldValue }
+    delete cleanNew['list-view']
+    delete cleanOld['list-view']
+
+    if (!isEqual(oldValue, newValue)) {
+      await loadProductTemplateList(getFacetsFromURL(route.query))
     }
   },
 )
 
-setMaxVisiblePages(isWideScreen.value)
+
+const safeAttributes = computed(() =>
+  Array.isArray(organizedAttributes.value) ? organizedAttributes.value : []
+);
+
+const pagination = computed(() => {
+  const itemsPerPage = 20;
+  const totalPages = Math.ceil(totalItems.value / itemsPerPage) || 1;
+  return {
+    currentPage: Number(route.query.page) || 1,
+    totalPages: totalPages,
+    totalItems: totalItems.value,
+    itemsPerPage: itemsPerPage,
+    pageOptions: [5, 10, 15, 20],
+  };
+});
+
+const seoData = computed(() => {
+  if (category.value && Object.keys(category.value).length > 0) {
+    return generateSeo<SeoEntity>(category.value, 'Category');
+  }
+
+  const fallbackEntity: SeoEntity = {
+    name: 'Category',
+    metaTitle: `Category | ${route.path.split('/').pop() || 'Products'}`, 
+    metaDescription: 'Browse our product categories',
+  };
+  return generateSeo<SeoEntity>(fallbackEntity, 'Category');
+});
+
+useHead(seoData);
+
+setMaxVisiblePages(isWideScreen.value);
+await loadProductTemplateList(getFacetsFromURL(route.query))
 </script>
 
 <template>
@@ -142,7 +112,7 @@ setMaxVisiblePages(isWideScreen.value)
             class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8">
             <LazyUiProductCard v-for="productTemplate in productTemplateList" :key="productTemplate.id"
               :name="productTemplate?.name || ''" loading="eager" :slug="mountUrlSlugForProductVariant(
-                (productTemplate.firstVariant || productTemplate) as Product,
+                (productTemplate) as Product,
               )
                 " :image-url="$getImage(
                 String(productTemplate.image),

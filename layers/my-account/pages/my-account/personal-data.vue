@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { UiAlert } from '#components'
 import {
   SfButton,
   SfIconClose,
   SfModal,
   useDisclosure,
 } from '@storefront-ui/vue'
+import { errorMessages } from '@vue/compiler-sfc'
 import { unrefElement } from '@vueuse/core'
 
 definePageMeta({
@@ -13,6 +15,8 @@ definePageMeta({
 })
 const { isOpen, open, close } = useDisclosure()
 const { loadUser, user, updatePartner, updatePassword } = useAuth()
+const { loadCart } = useCart()
+const errorMessage = ref('')
 const lastActiveElement = ref()
 const modalElement = ref()
 const openedForm = ref('')
@@ -31,15 +35,30 @@ const closeModal = () => {
 
 const saveNewContactInfo = async (userData: any) => {
   await updatePartner({
-    id: user.value?.id,
+    //id: user.value?.id,
     email: userData?.email ? userData?.email : user.value?.email,
     name: userData?.fullName ? userData.fullName : user.value?.name,
     subscribeNewsletter: userData?.subscribeNewsletter,
+    mobile: userData?.mobile,
+    phone: userData?.phone
   })
+  await clearNuxtData('/api/odoo/cart-load')
+  await loadCart()
   closeModal()
 }
 
+const hasNumberAndSymbol = (value: string) =>
+  /^(?=.*\d)(?=.*[^a-zA-Z0-9]).+$/.test(value)
+
+const isValidPassword = (value: string) =>
+  value.length >= 8 && hasNumberAndSymbol(value)
+
 const saveNewPassword = async (passwords: any) => {
+  if (!isValidPassword(passwords.firstNewPassword)) {
+    errorMessage.value = 'Password must have 8 or more characters with a mix of letters, numbers and symbols.'
+    return
+  }
+
   if (passwords.firstNewPassword === passwords.secondNewPassword) {
     await updatePassword({
       currentPassword: passwords.oldPassword,
@@ -47,7 +66,10 @@ const saveNewPassword = async (passwords: any) => {
     })
     closeModal()
   }
+
+
 }
+
 onMounted(async () => {
   await loadUser(true)
 })
@@ -55,66 +77,35 @@ onMounted(async () => {
 
 <template>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-  <AccountProfileData
-    class="col-span-3"
-    :header="$t('account.accountSettings.personalData.contactInformation')"
-    :button-text="$t('account.accountSettings.personalData.edit')"
-    @on-click="openModal('contactInformation')"
-  >
+  <AccountProfileData class="col-span-3" :header="$t('account.accountSettings.personalData.contactInformation')"
+    :button-text="$t('account.accountSettings.personalData.edit')" @on-click="openModal('contactInformation')">
     <p>{{ user?.name }}</p>
     <p>{{ user?.email }}</p>
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-  <AccountProfileData
-    class="col-span-3"
-    :header="$t('account.accountSettings.personalData.yourPassword')"
-    :button-text="$t('account.accountSettings.personalData.change')"
-    @on-click="openModal('passwordChange')"
-  >
+  <AccountProfileData class="col-span-3" :header="$t('account.accountSettings.personalData.yourPassword')"
+    :button-text="$t('account.accountSettings.personalData.change')" @on-click="openModal('passwordChange')">
     ******
   </AccountProfileData>
   <UiDivider class="w-screen -mx-4 md:col-span-3 md:w-auto md:mx-0" />
-  <UiOverlay
-    v-if="isOpen"
-    :visible="isOpen"
-  >
-    <SfModal
-      ref="modalElement"
-      v-model="isOpen"
-      tag="section"
-      role="dialog"
-      class="h-full w-full overflow-auto md:w-[600px] md:h-fit"
-      aria-labelledby="address-modal-title"
-    >
+  <UiOverlay v-if="isOpen" :visible="isOpen">
+    <SfModal ref="modalElement" v-model="isOpen" tag="section" role="dialog"
+      class="h-full w-full overflow-auto md:w-[600px] md:h-fit" aria-labelledby="address-modal-title">
       <header>
-        <SfButton
-          type="button"
-          square
-          variant="tertiary"
-          class="absolute right-2 top-2"
-          @click="closeModal"
-        >
+        <SfButton type="button" square variant="tertiary" class="absolute right-2 top-2" @click="closeModal">
           <SfIconClose />
         </SfButton>
-        <h3
-          id="address-modal-title"
-          class="text-neutral-900 text-lg md:text-2xl font-bold mb-6"
-        >
+        <h3 id="address-modal-title" class="text-neutral-900 text-lg md:text-2xl font-bold mb-6">
           {{ $t(`account.accountSettings.personalData.${openedForm}`) }}
         </h3>
       </header>
-      <AccountContactInformation
-        v-if="openedForm === 'contactInformation'"
-        :full-name="user?.name"
-        :email="user?.email"
-        @on-save="saveNewContactInfo"
-        @on-cancel="closeModal"
-      />
-      <AccountFormPassword
-        v-else-if="openedForm === 'passwordChange'"
-        @on-save="saveNewPassword"
-        @on-cancel="closeModal"
-      />
+      <UiAlert v-if="errorMessage" class="mb-4" variant="error">
+        {{ errorMessage }}
+      </UiAlert>
+      <AccountContactInformation v-if="openedForm === 'contactInformation'" :full-name="user?.name" :email="user?.email"
+        @on-save="saveNewContactInfo" @on-cancel="closeModal" />
+      <AccountFormPassword v-else-if="openedForm === 'passwordChange'" @on-save="saveNewPassword"
+        @on-cancel="closeModal" />
     </SfModal>
   </UiOverlay>
 </template>

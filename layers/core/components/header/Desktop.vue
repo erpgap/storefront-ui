@@ -47,10 +47,8 @@ const goTo = (slug: string) => { close(); router.push(slug) }
       class="fixed !w-screen !h-screen inset-0 bg-neutral-500 bg-opacity-50 transition-opacity duration-1000 top-index"
     />
     <header ref="menuRef" class="text-white w-full bg-white">
-      <!-- Top -->
       <div class="py-5 border-b border-[#E5E7EB]">
         <div class="h-full w-full narrow-container flex items-center justify-between">
-          <!-- Search -->
           <form
             ref="formSearchTemplateRef"
             role="search"
@@ -82,12 +80,10 @@ const goTo = (slug: string) => { close(); router.push(slug) }
             </SfInput>
           </form>
 
-          <!-- Logo -->
           <NuxtLink to="/" aria-label="Sf Homepage" class="h-6 md:h-7">
             <AlokaiLogo />
           </NuxtLink>
 
-          <!-- Icons -->
           <nav class="min-w-[300px] flex flex-nowrap justify-end items-center gap-x-1" aria-label="SF Navigation">
             <HeaderButtonWishlist />
             <HeaderButtonCart />
@@ -96,7 +92,6 @@ const goTo = (slug: string) => { close(); router.push(slug) }
         </div>
       </div>
 
-      <!-- Bottom -->
       <div class="py-3.5 border-b border-[#E5E7EB]">
         <div class="w-full narrow-container">
           <ul class="flex gap-10">

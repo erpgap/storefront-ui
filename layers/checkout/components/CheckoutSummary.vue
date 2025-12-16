@@ -21,6 +21,8 @@ const hasFullPaymentWithGiftCard = computed(() =>
 
 onMounted(async () => {
   await loadPaymentMethods()
+  showPaymentModal.value = true
+    selectedProvider.value = paymentProviders.value[0]
   if (paymentProviders.value.length > 0) {
     showPaymentModal.value = true
     selectedProvider.value = paymentProviders.value[0]
@@ -30,25 +32,6 @@ onMounted(async () => {
 const handleGiftCardPayment = async () => {
   await makeGiftCardPayment()
 }
-
-const errorMsg = computed(() => {
-  if (hasFullPaymentWithGiftCard.value) return ""
-
-  if (!selectedProvider.value) {
-    return "Selecione um método de pagamento antes de continuar."
-  }
-
-  if (!isPaymentWithCardReady.value) {
-    return "O pagamento ainda não está pronto. Aguarde um momento."
-  }
-
-  if (loading.value) {
-    return "Estamos processando o pagamento..."
-  }
-
-  return ""
-})
-
 </script>
 
 <template>
@@ -63,8 +46,16 @@ const errorMsg = computed(() => {
       {{ $t("placeOrder") }}
     </SfButton>
 
-    <p v-if="errorMsg" class="text-sm text-red-500 text-center mt-2">
-      {{ errorMsg }}
+    <p v-if="!isPaymentWithCardReady" class="text-sm text-red-500 text-center mt-2">
+      {{ $t("validation.missingPaymentWithCard") }}
+    </p>
+
+    <p v-if="!selectedProvider" class="text-sm text-red-500 text-center mt-2">
+      {{ $t("validation.missingProvider") }}
+    </p>
+
+    <p v-if="loading" class="text-sm text-red-500 text-center mt-2">
+      {{ $t("checkoutPayment.loadingPayment") }}
     </p>
 
     <p class="text-sm text-center mt-4 pb-4 md:pb-0">
@@ -81,13 +72,16 @@ const errorMsg = computed(() => {
         </template>
       </i18n-t>
     </p>
-    <component :is="getPaymentProviderComponentName(selectedProvider?.code)" v-if="
+    <component :is="getPaymentProviderComponentName(selectedProvider?.code)" 
+    v-if="
       showPaymentModal
       && !!selectedProvider?.code
-      && !hasFullPaymentWithGiftCard
-    " :key="selectedProvider?.id" :provider="selectedProvider"showPaymentModal :cart="cart"
-      @is-payment-ready="($event: any) => (isPaymentWithCardReady = $event)" @provider-payment-handler="
-        ($event: any) => (providerPaymentHandler = $event)
-      " @payment-loading="($event: any) => (loading = $event)" />
+      && !hasFullPaymentWithGiftCard" 
+      :key="selectedProvider?.id" :provider="selectedProvider" 
+      :cart="cart" 
+      :show-payment-modal="showPaymentModal"
+      @is-payment-ready="($event: any) => (isPaymentWithCardReady = $event)" 
+      @provider-payment-handler="($event: any) => (providerPaymentHandler = $event)" 
+      @payment-loading="($event: any) => (loading = $event)" />
   </UiOrderSummary>
 </template>
