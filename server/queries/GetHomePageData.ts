@@ -1,5 +1,5 @@
-export default  `
-  query GetHomePageData(
+export default  
+`query GetHomePageData(
     $currentPage: Int = 1
     $pageSize: Int = 6
   ) {
@@ -30,7 +30,5 @@ export default  `
         parent { id name slug }
       }
     }
-
-
   }
 `
