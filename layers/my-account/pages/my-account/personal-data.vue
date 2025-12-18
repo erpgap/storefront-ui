@@ -8,6 +8,7 @@ import {
 } from '@storefront-ui/vue'
 import { errorMessages } from '@vue/compiler-sfc'
 import { unrefElement } from '@vueuse/core'
+import { useToast } from 'vue-toastification'
 
 definePageMeta({
   layout: 'account',
@@ -15,8 +16,7 @@ definePageMeta({
 })
 const { isOpen, open, close } = useDisclosure()
 const { loadUser, user, updatePartner, updatePassword } = useAuth()
-const { loadCart } = useCart()
-const errorMessage = ref('')
+const toast = useToast()
 const lastActiveElement = ref()
 const modalElement = ref()
 const openedForm = ref('')
@@ -42,8 +42,6 @@ const saveNewContactInfo = async (userData: any) => {
     mobile: userData?.mobile,
     phone: userData?.phone
   })
-  await clearNuxtData('/api/odoo/cart-load')
-  await loadCart()
   closeModal()
 }
 
@@ -54,20 +52,20 @@ const isValidPassword = (value: string) =>
   value.length >= 8 && hasNumberAndSymbol(value)
 
 const saveNewPassword = async (passwords: any) => {
-  if (!isValidPassword(passwords.firstNewPassword)) {
-    errorMessage.value = 'Password must have 8 or more characters with a mix of letters, numbers and symbols.'
-    return
-  }
-
   if (passwords.firstNewPassword === passwords.secondNewPassword) {
-    await updatePassword({
-      currentPassword: passwords.oldPassword,
-      newPassword: passwords.firstNewPassword,
-    })
-    closeModal()
+    if (!isValidPassword(passwords.firstNewPassword)) {
+      toast.error('Password must have 8 or more characters with a mix of letters, numbers and symbols.')
+      return
+    } else {
+      await updatePassword({
+        currentPassword: passwords.oldPassword,
+        newPassword: passwords.firstNewPassword,
+      })
+      closeModal()
+    }
+  }else{
+    toast.error('Passwords don´t match')
   }
-
-
 }
 
 onMounted(async () => {
@@ -99,9 +97,6 @@ onMounted(async () => {
           {{ $t(`account.accountSettings.personalData.${openedForm}`) }}
         </h3>
       </header>
-      <UiAlert v-if="errorMessage" class="mb-4" variant="error">
-        {{ errorMessage }}
-      </UiAlert>
       <AccountContactInformation v-if="openedForm === 'contactInformation'" :full-name="user?.name" :email="user?.email"
         @on-save="saveNewContactInfo" @on-cancel="closeModal" />
       <AccountFormPassword v-else-if="openedForm === 'passwordChange'" @on-save="saveNewPassword"
