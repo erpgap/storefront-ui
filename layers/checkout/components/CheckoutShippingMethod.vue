@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { SfListItem, SfRadio, SfIconBlock } from '@storefront-ui/vue'
 
 const {

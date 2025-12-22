@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AdyenCheckout } from '@adyen/adyen-web';
+import AdyenCheckout from '@adyen/adyen-web';
 import '@adyen/adyen-web/dist/adyen.css'
 import type { PaymentProvider } from '~/graphql'
 
@@ -53,6 +53,19 @@ onMounted(async () => {
   await openAdyenTransaction()
   await getAdyenAcquirerInfo()
   await getAdyenPaymentMethods()
+
+  console.log('ProviderAdyen acquirerInfo:', acquirerInfo.value)
+  console.log('ProviderAdyen paymentMethods:', paymentMethods.value)
+
+  if (!acquirerInfo.value?.client_key) {
+    loading.value = false;
+    return;
+   }
+
+   if (!paymentMethods.value || Object.keys(paymentMethods.value).length === 0) {
+    loading.value = false;
+    return;
+  }
 
   const configuration = {
     locale: 'en-EN',
@@ -115,11 +128,11 @@ onMounted(async () => {
 
       emit('paymentLoading', false)
       if (paymentSuccess) {
-        router.push('/thank-you')
+        navigateTo('/checkout/thank-you')
         return
       }
 
-      router.push('/payment-fail')
+      router.push('/checkout/payment-fail')
     },
   }
 

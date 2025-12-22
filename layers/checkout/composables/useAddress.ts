@@ -124,14 +124,14 @@ export const useAddresses = () => {
     if (type === AddressEnum.Billing) {
       const address = data?.updateAddress
       const index = billingAddresses.value.findIndex(
-        addr => addr.id === address.id,
+        (        addr: { id: any }) => addr.id === address.id,
       )
       billingAddresses.value[index] = address
     }
     else {
       const address = data?.updateAddress
       const index = shippingAddresses.value.findIndex(
-        addr => addr.id === address.id,
+        (        addr: { id: any }) => addr.id === address.id,
       )
       shippingAddresses.value[index] = address
     }

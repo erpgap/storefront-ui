@@ -98,7 +98,7 @@
           <ul>
             <SfListItem
               :tag="NuxtLink"
-              class="py-4 md:py-2 mt-4 rounded-md active:bg-primary-100 !text-neutral-900"
+              class="py-4 md:py-2 mt-4 rounded-md active:bg-primary-100 !text-neutral-900 hover:bg-primary-100"
               @click="handleLogout"
             >
               <template #prefix>

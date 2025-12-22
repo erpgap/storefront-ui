@@ -14,10 +14,10 @@ import type { PaymentProvider } from '~/graphql'
 const {
   loadPaymentMethods,
   paymentProviders,
-  loading: paymentLoading,
+  selectedProvider,
+  updateSelectedProvider,
 } = usePayment()
 
-const selectedProvider = ref<PaymentProvider | null>(null)
 const showPaymentModal = ref<boolean>(false)
 
 onMounted(async () => {
@@ -27,14 +27,10 @@ onMounted(async () => {
 watch(() => paymentProviders.value, () => {
   if (paymentProviders.value.length > 0) {
     showPaymentModal.value = true
-    selectedProvider.value = paymentProviders.value[0]
+    updateSelectedProvider(paymentProviders.value[0])
   }
 }, {
   deep: true,
   immediate: true,
 })
-
-function updateSelectedProvider(provider: PaymentProvider) {
-  selectedProvider.value = provider
-}
 </script>
