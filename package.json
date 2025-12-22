@@ -73,6 +73,7 @@
     "@nuxtjs/seo": "^3.2.2",
     "@types/object-hash": "^3.0.6",
     "@vue/compiler-sfc": "^3.5.22",
+    "critters": "^0.0.23",
     "critters-webpack-plugin": "^3.0.2",
     "eslint": "^9.17.0",
     "eslint-plugin-vue": "^9.32.0",

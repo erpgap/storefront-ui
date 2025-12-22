@@ -50,7 +50,7 @@ if (totalItemsInCart?.value === 0) {
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0 mb-10" />
         </div>
         <div class="col-span-5 md:s  await clearNuxtData('/api/odoo/cart-load')
-ticky md:top-20 h-fit">
+          ticky md:top-20 h-fit">
           <CheckoutSummary />
         </div>
       </div>

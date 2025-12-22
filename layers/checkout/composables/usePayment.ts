@@ -11,6 +11,14 @@ export const usePayment = () => {
     'payment-providers',
     () => [],
   )
+  const selectedProvider = useState<PaymentProvider | null>(
+    'selected-payment-provider',
+    () => null,
+  )
+
+  const updateSelectedProvider = (provider: PaymentProvider) => {
+    selectedProvider.value = provider
+  }
 
   const loadPaymentMethods = async () => {
     try {
@@ -54,5 +62,7 @@ export const usePayment = () => {
     paymentProviders,
     getPaymentConfirmation,
     loading,
+    selectedProvider,
+    updateSelectedProvider,
   }
 }

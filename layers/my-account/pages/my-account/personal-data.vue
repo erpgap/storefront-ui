@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { UiAlert } from '#components'
 import {
   SfButton,
   SfIconClose,
   SfModal,
   useDisclosure,
 } from '@storefront-ui/vue'
-import { errorMessages } from '@vue/compiler-sfc'
 import { unrefElement } from '@vueuse/core'
 import { useToast } from 'vue-toastification'
 

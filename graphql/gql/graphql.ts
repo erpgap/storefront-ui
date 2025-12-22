@@ -51,6 +51,31 @@ export enum AddressType {
   PrivateAddress = 'PrivateAddress'
 }
 
+export type AdyenPaymentDetailsResult = {
+  __typename?: 'AdyenPaymentDetailsResult';
+  adyenPaymentDetails: Maybe<Scalars['GenericScalar']['output']>;
+};
+
+export type AdyenPaymentMethodsResult = {
+  __typename?: 'AdyenPaymentMethodsResult';
+  adyenPaymentMethods: Maybe<Scalars['GenericScalar']['output']>;
+};
+
+export type AdyenPaymentsResult = {
+  __typename?: 'AdyenPaymentsResult';
+  adyenPayments: Maybe<Scalars['GenericScalar']['output']>;
+};
+
+export type AdyenProviderInfoResult = {
+  __typename?: 'AdyenProviderInfoResult';
+  adyenProviderInfo: Maybe<Scalars['GenericScalar']['output']>;
+};
+
+export type AdyenTransactionResult = {
+  __typename?: 'AdyenTransactionResult';
+  transaction: Maybe<Scalars['GenericScalar']['output']>;
+};
+
 export type ApplyCouponList = ApplyCoupons & {
   __typename?: 'ApplyCouponList';
   error: Maybe<Scalars['String']['output']>;
@@ -487,6 +512,16 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Add new billing or shipping address and set it on the shopping cart. */
   addAddress: Maybe<Partner>;
+  /** Submit the Adyen Payment Details. */
+  adyenPaymentDetails: Maybe<AdyenPaymentDetailsResult>;
+  /** Get Adyen Payment Methods. */
+  adyenPaymentMethods: Maybe<AdyenPaymentMethodsResult>;
+  /** Make Adyen Payment request. */
+  adyenPayments: Maybe<AdyenPaymentsResult>;
+  /** Get Adyen Provider Info. */
+  adyenProviderInfo: Maybe<AdyenProviderInfoResult>;
+  /** Create Adyen Transaction */
+  adyenTransaction: Maybe<AdyenTransactionResult>;
   /** Apply Coupon */
   applyCoupon: Maybe<ApplyCouponList>;
   /** Apply Gift Card */
@@ -547,6 +582,38 @@ export type Mutation = {
 export type MutationAddAddressArgs = {
   address: InputMaybe<AddAddressInput>;
   type: AddressEnum;
+};
+
+
+export type MutationAdyenPaymentDetailsArgs = {
+  paymentDetails: Scalars['GenericScalar']['input'];
+  providerId: Scalars['Int']['input'];
+  transactionReference: Scalars['String']['input'];
+};
+
+
+export type MutationAdyenPaymentMethodsArgs = {
+  providerId: Scalars['Int']['input'];
+};
+
+
+export type MutationAdyenPaymentsArgs = {
+  accessToken: Scalars['String']['input'];
+  browserInfo: Scalars['GenericScalar']['input'];
+  paymentMethod: Scalars['GenericScalar']['input'];
+  providerId: Scalars['Int']['input'];
+  transactionReference: Scalars['String']['input'];
+};
+
+
+export type MutationAdyenProviderInfoArgs = {
+  providerId: Scalars['Int']['input'];
+};
+
+
+export type MutationAdyenTransactionArgs = {
+  providerId: Scalars['Int']['input'];
+  tokenizationRequested?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 

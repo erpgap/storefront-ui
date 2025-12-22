@@ -14,23 +14,13 @@ import { QueryName } from '~/server/queries'
 export const useWishlist = () => {
   const { $sdk } = useNuxtApp() as any
   const toast = useToast()
-
   const loading = ref(false)
-
-  // Estado global único
   const wishlist = useState<WishlistData>('wishlist', () => ({ wishlistItems: [], totalCount: 0 } as unknown as WishlistData))
   const fetchedOnce = useState<boolean>('wishlist-fetched-once', () => false)
 
-  // Evitar concorrência
   let inflight: Promise<void> | null = null
 
   const loadWishlist = async (): Promise<void> => {
-    // 👉 nunca no SSR
-    if (import.meta.server) return
-    // 👉 se já carregou nesta sessão, não repete
-    if (fetchedOnce.value) return
-    // 👉 se já há uma chamada a decorrer, espera-a
-    if (inflight) return await inflight
 
     loading.value = true
 

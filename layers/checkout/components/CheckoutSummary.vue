@@ -8,16 +8,26 @@ const router = useRouter()
 const { makeGiftCardPayment, loading: discountLoading } = useDiscount()
 const { loadPaymentMethods, paymentProviders } = usePayment()
 
-const selectedProvider = ref<PaymentProvider | null>(null)
+const {selectedProvider}= usePayment()
 const isPaymentWithCardReady = ref(false)
 const providerPaymentHandler = ref()
 const loading = ref(false)
-const showPaymentModal = ref(false)
+const showPaymentModal = ref(true)
 const giftCards = ref(cart.value?.order?.giftCards)
 
 const hasFullPaymentWithGiftCard = computed(() =>
   giftCards.value?.length > 0 && cart.value?.order?.amountTotal === 0,
 )
+
+watchEffect(() => {
+  console.log('CheckoutSummary button state:', {
+    selectedProvider: selectedProvider.value,
+    isPaymentWithCardReady: isPaymentWithCardReady.value,
+    loading: loading.value,
+    disabled: !selectedProvider.value || !isPaymentWithCardReady.value || loading.value,
+  })
+})
+
 
 onMounted(async () => {
   await loadPaymentMethods()
@@ -27,7 +37,7 @@ onMounted(async () => {
     showPaymentModal.value = true
     selectedProvider.value = paymentProviders.value[0]
   }
-})
+}) 
 
 const handleGiftCardPayment = async () => {
   await makeGiftCardPayment()
