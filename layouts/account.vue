@@ -50,7 +50,7 @@
       >
         <div
           :class="[
-            'border-t md:border border-neutral-200 pt-4 pb-4 md:p-4 md:rounded-md min-w-[300px] md:block',
+            'border-t md:border border-neutral-200 pt-4 pb-4 md:p-4 md:rounded-md min-w-[300px] md:block max-h-[500px] overflow-y-auto',
             { hidden: !isRoot },
           ]"
         >

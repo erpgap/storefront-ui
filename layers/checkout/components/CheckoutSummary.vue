@@ -19,16 +19,6 @@ const hasFullPaymentWithGiftCard = computed(() =>
   giftCards.value?.length > 0 && cart.value?.order?.amountTotal === 0,
 )
 
-watchEffect(() => {
-  console.log('CheckoutSummary button state:', {
-    selectedProvider: selectedProvider.value,
-    isPaymentWithCardReady: isPaymentWithCardReady.value,
-    loading: loading.value,
-    disabled: !selectedProvider.value || !isPaymentWithCardReady.value || loading.value,
-  })
-})
-
-
 onMounted(async () => {
   await loadPaymentMethods()
   showPaymentModal.value = true
@@ -87,7 +77,8 @@ const handleGiftCardPayment = async () => {
       showPaymentModal
       && !!selectedProvider?.code
       && !hasFullPaymentWithGiftCard" 
-      :key="selectedProvider?.id" :provider="selectedProvider" 
+      :key="selectedProvider?.id" 
+      :provider="selectedProvider" 
       :cart="cart" 
       :show-payment-modal="showPaymentModal"
       @is-payment-ready="($event: any) => (isPaymentWithCardReady = $event)" 

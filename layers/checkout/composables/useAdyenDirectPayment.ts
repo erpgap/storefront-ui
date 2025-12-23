@@ -47,7 +47,6 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
       { providerId },
     )
 
-    console.log('adyen transaction data', data)
     transaction.value = data?.adyenTransaction?.transaction || {}
   }
 
@@ -61,7 +60,6 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
       },
       { providerId },
     )
-    console.log('adyen acquirer info', data)
     acquirerInfo.value
       = data?.adyenProviderInfo?.adyenProviderInfo || {}
   }
@@ -72,7 +70,6 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
         MutationAdyenPaymentMethodsArgs,
         AdyenPaymentMethodsResponse
       >({ mutationName: MutationName.AdyenPaymentMethods }, { providerId }))
-    console.log('adyen payment methods', data)
     paymentMethods.value
       = data?.value?.adyenPaymentMethods?.adyenPaymentMethods || []
   }
