@@ -36,6 +36,7 @@ const router = useRouter()
 const dropinDivElement = ref(null)
 const loading = ref(false)
 const { getPaymentConfirmation } = usePayment()
+const { removeMultipleItemsFromCart } = useCart()
 
 const {
   openAdyenTransaction,
@@ -128,6 +129,8 @@ onMounted(async () => {
 
       emit('paymentLoading', false)
       if (paymentSuccess) {
+        const lineIds = props.cart.order.websiteOrderLine.map((line: { id: any; }) => line.id)
+        await removeMultipleItemsFromCart(lineIds)
         navigateTo('/checkout/thank-you')
         return
       }
