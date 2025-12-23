@@ -37,7 +37,7 @@ if (totalItemsInCart?.value === 0) {
           <UiDivider class="w-screen md:w-auto -mx-4 md:mx-0" />
           <LazyCheckoutAddressForm :heading="$t('billing.heading')" :description="$t('billing.description')"
             :button-text="$t('billing.addButton')" :type="AddressEnum.Billing"
-            :saved-address="cart.order?.partnerInvoice as Partner" />
+            :saved-address="cart.order?.partnerInvoice as Partner"  />
 
           <UiDivider class-name="w-screen md:w-auto -mx-4 md:mx-0" />
 

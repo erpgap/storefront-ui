@@ -51,7 +51,7 @@ const handleSelectShippingMethod = async (shippingMethodId: number) => {
           v-for="{ id, name } in deliveryMethods"
           :key="id"
           tag="label"
-          class="border rounded-md items-start"
+          class="border rounded-md items-start hover:bg-primary-100"
           @click="handleSelectShippingMethod(id)"
         >
           <div class="flex gap-2">

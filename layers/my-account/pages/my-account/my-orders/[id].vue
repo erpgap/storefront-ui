@@ -43,7 +43,7 @@ const NuxtLink = resolveComponent('NuxtLink')
             </SfButton>
           </header>
           <main class="mt-4">
-            <ul class="bg-neutral-100 p-4 rounded-md md:columns-2 mb-6">
+            <ul class="bg-neutral-100 p-4 rounded-md md:columns-2 mb-6 bg-primary-100">
               <li>
                 <p class="font-medium">
                   {{ $t("account.myOrders.orderDetails.orderId") }}
