@@ -110,6 +110,29 @@ export const useCart = () => {
     }
   }
 
+  const removeMultipleItemsFromCart = async (lineIds: number[]) => {
+    const params: MutationCartRemoveMultipleItemsArgs = {
+      lineIds,
+    }
+
+    loading.value = true
+
+    try {
+      const data = await $sdk().odoo.mutation<MutationCartRemoveMultipleItemsArgs, CartRemoveItemResponse>(
+        { mutationName: MutationName.CartRemoveItem }, params,
+      )
+
+      cart.value = data.cartRemoveMultipleItems
+      cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
+    }
+    catch (error: any) {
+      return toast.error(error.data.message)
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   const totalItemsInCart = computed(() => {
     return (
       cart.value.order?.websiteOrderLine?.reduce(
@@ -124,6 +147,7 @@ export const useCart = () => {
     cartAdd,
     updateItemQuantity,
     removeItemFromCart,
+    removeMultipleItemsFromCart,
     frequentlyTogetherProducts,
     loading,
     cart,
