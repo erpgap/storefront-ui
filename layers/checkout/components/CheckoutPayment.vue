@@ -1,10 +1,7 @@
 <template>
   <div v-if="showPaymentModal">
-    <ProviderListOptions
-      :active-provider="selectedProvider || paymentProviders[0]"
-      :payment-providers="paymentProviders"
-      @update:active-payment="updateSelectedProvider"
-    />
+    <ProviderListOptions :active-provider="selectedProvider || paymentProviders[0]"
+      :payment-providers="paymentProviders" @update:active-payment="updateSelectedProvider" />
   </div>
 </template>
 
@@ -20,9 +17,9 @@ const {
 
 const showPaymentModal = ref<boolean>(false)
 
-onMounted(async () => {
-  await loadPaymentMethods()
-})
+  onMounted(async () => {
+    await loadPaymentMethods()
+  })
 
 watch(() => paymentProviders.value, () => {
   if (paymentProviders.value.length > 0) {

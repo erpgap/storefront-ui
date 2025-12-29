@@ -4,8 +4,6 @@ import { SfButton } from '@storefront-ui/vue'
 const { loadCart } = useCart()
 
 await loadCart(false)
-
-console.log('*** THANK YOU PAGE RENDERED ***')
 </script>
 
 <template>

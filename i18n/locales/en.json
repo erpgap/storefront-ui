@@ -128,7 +128,10 @@
     "missingShippingDetails": "add shipping details",
     "missingPaymentMethod": "choose payment method",
     "missingPaymentWithCard": "Payment is not ready yet",
-    "missingProvider": "Select Payment method"
+    "missingProvider": "Select Payment method",
+    "missingContactInfo": "Please provide your contact information.",
+    "missingShippingInfo": "Please provide a shipping address.",
+    "missingShippingMethod": "Please select a shipping method."
   },
   "size": "Size",
   "color": "Color",
