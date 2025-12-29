@@ -63,8 +63,8 @@ const isCartUpdateLoading = false
 const handleSaveAddress = async () => {
   const data: UpdateAddressInput = {
     name: name.value,
-    street: street.value?.split(' ')?.[0] || '',
-    street2: street.value?.split(' ')?.[1] || '',
+    street: street.value?.split(' ')?.[0],
+    street2: street.value?.split(' ')?.[1],
     city: city.value,
     zip: zip.value,
     phone: phone.value,

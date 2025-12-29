@@ -55,9 +55,6 @@ onMounted(async () => {
   await getAdyenAcquirerInfo()
   await getAdyenPaymentMethods()
 
-  console.log('ProviderAdyen acquirerInfo:', acquirerInfo.value)
-  console.log('ProviderAdyen paymentMethods:', paymentMethods.value)
-
   if (!acquirerInfo.value?.client_key) {
     loading.value = false;
     return;

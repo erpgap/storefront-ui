@@ -30,11 +30,6 @@ await loadCategoriesForMegaMenu({ filter: {
 } })
 
 if (home.value) useHead(generateSeo<SeoEntity>(home.value, 'Home'))
-
-if (import.meta.client) {
-  console.log('[HOME] payload:', data.value)
-  console.log('[HOME] categories:', categoriesForMegaMenu.value)
-}
 </script>
 
 <template>

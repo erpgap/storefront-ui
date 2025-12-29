@@ -14,6 +14,7 @@ export const useDeliveryMethod = () => {
   const { $sdk } = useNuxtApp();
   const { loading, setLoading } = useCheckout();
   const toast = useToast();
+  const { loadCart } = useCart();
   const deliveryMethods = useState<ShippingMethod[]>(
     'delivery-method',
     () => [],
@@ -46,6 +47,7 @@ export const useDeliveryMethod = () => {
         MutationSetShippingMethodArgs,
         DeliveryMethodResponse
       >({ mutationName: MutationName.ShippingMethod }, { shippingMethodId });
+      await loadCart();
     } catch (error: any) {
       toast.error(error?.data?.message);
     } finally {

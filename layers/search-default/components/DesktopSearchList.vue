@@ -20,7 +20,7 @@ const makeSearchBold = (text: string) => {
 
 <template>
   <ul v-if="hits?.length > 0" tabindex="-1" role="listbox"
-    class="absolute top-12 bg-white shadow-md rounded-md w-full overflow-hidden">
+    class="absolute top-12 bg-white shadow-md rounded-md w-full overflow-hidden z-60">
     <li v-for="(product, index) in hits" :key="product.id" class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
       role="option" @click="$emit('select', product)">
       <span class="text-black text-sm font-medium capitalize" v-html="makeSearchBold(product.name)" />

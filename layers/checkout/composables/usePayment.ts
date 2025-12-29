@@ -29,8 +29,6 @@ export const usePayment = () => {
       )
 
       paymentProviders.value = data.value?.paymentProviders || []
-      console.log('paymentProviders:  ', paymentProviders.value)
-      console.log('Response data:', JSON.stringify(data.value))
     }
     catch (error: any) {
       toast.error(error?.data?.message)

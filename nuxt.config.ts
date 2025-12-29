@@ -25,12 +25,6 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: process.env.NODE_ENV === 'production' ? [
-      Critters({
-        preload: 'swap',
-        pruneSource: true,
-        reduceInlineStyles: true,
-        inlineFonts: false, 
-      }) as any,
     ] : []
   },
   tailwindcss: { 
