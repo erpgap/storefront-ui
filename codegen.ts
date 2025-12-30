@@ -4,7 +4,7 @@ const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
-      'http://localhost:8069/graphql/vsf': {},
+      'https://vsf-odoo18-dev.labs.erpgap.com/graphql/vsf': {},
     },
   ],
   config: {

@@ -23,10 +23,13 @@ export default defineNuxtConfig({
     ...(process.env.NODE_ENV === 'development' ? ['@nuxt/test-utils/module'] : []),
   ],
 
-  vite: {
-    plugins: process.env.NODE_ENV === 'production' ? [
-    ] : []
+vite: {
+    optimizeDeps: {
+      include: ['lodash-es'],
+    },
   },
+
+
   tailwindcss: { 
     viewer: false,
     cssPath: '~/assets/css/tailwind.css',
@@ -119,7 +122,8 @@ export default defineNuxtConfig({
     mode: 'init', 
   },
 
-  device: { refreshOnResize: true },
+  device: { refreshOnResize: true, 
+    defaultUserAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36' },
 
   eslint: {
     config: { stylistic: true },
