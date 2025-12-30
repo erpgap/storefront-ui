@@ -50,9 +50,11 @@ export default defineNitroPlugin((nitroApp) => {
           name: handler.route,
           getKey: (event: H3Event) => {
             const headers = getRequestHeaders(event)
-            const userAgent: any = headers['user-agent']
-
-            const flags = generateFlags(headers, userAgent)
+            const userAgent = headers['user-agent']
+            if (!userAgent) {
+              return `desktop-${event.path}`
+            }
+            const flags = generateFlags(headers, String(userAgent))
 
             if (flags.isDesktop) {
               return `desktop-${event.path}`
