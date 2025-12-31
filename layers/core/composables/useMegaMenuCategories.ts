@@ -12,28 +12,25 @@ export const useMegaMenuCategories = () => {
   const categoriesForMegaMenu = useState<Category[]>('mega-menu-categories', () => [])
 
   const loadCategoriesForMegaMenu = async (params: QueryCategoriesArgs) => {
-    loading.value = true
+    loading.value = true;
     try {
-      /*
-      const { data } = await useAsyncData('categories-megamenu', async () =>
+      const { data, error } = await useAsyncData('categories-megamenu', async () =>
         await $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse>(
           { queryName: QueryName.GetCategoriesQuery }, params,
-        ),
-      */
-      const data = await $sdk().odoo.query<QueryCategoriesArgs, CategoryListResponse>(
-        { queryName: QueryName.GetCategoriesQuery },
-        params,
-      )
-      /*if (data?.value?.categories) {
-              categoriesForMegaMenu.value = data.value.categories?.categories */
-      if (data?.categories) {
-        categoriesForMegaMenu.value = data.categories?.categories
+        ))
+
+      if (error.value) {
+        console.error('Erro ao carregar categorias:', error.value)
+        return
       }
+
+      if (data.value?.categories) {
+        categoriesForMegaMenu.value = data.value.categories?.categories
+      }
+    } finally {
+      loading.value = false;
     }
-    finally {
-      loading.value = false
-    }
-  }
+  };
 
   return {
     loading,

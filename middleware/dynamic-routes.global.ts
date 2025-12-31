@@ -17,6 +17,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
     })
 
     if (!routeData?.value?.data) {
+      if (slug.startsWith('/.well-known/')) {
+        return
+      }
       console.warn('[dynamic-routes] Route does not exist or invalid:', slug)
       return
     }
