@@ -7,7 +7,9 @@ const customCache = cachedFunction(
     const config = useRuntimeConfig(event)
     const body = await readBody(event)
 
-    const response: any = await $fetch.raw(`${config.public.odooBaseUrl}graphql/vsf`, {
+    const odooGraphQLUrl = new URL('/graphql/vsf', config.public.odooBaseUrl).toString();
+
+    const response: any = await $fetch.raw(odooGraphQLUrl, {
       method: 'POST',
       headers: {
         'accept': 'application/json',
@@ -26,7 +28,6 @@ const customCache = cachedFunction(
     staleMaxAge: Number(process.env?.NUXT_SWR_CACHE_TIME || 3600),
     getKey: async (event) => {
       const body = await readBody(event)
-
       const session = await useSession(event, {
         password: 'b013b03ac2231e0b448e9a22ba488dcf',
       })
@@ -112,6 +113,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    console.error('Unhandled error in /api/odoo/query.post.ts:', error) 
     throw createError({
       statusCode: 500,
       data: error?.data,

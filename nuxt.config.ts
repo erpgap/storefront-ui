@@ -1,6 +1,8 @@
 // nuxt.config.ts
 import { defineNuxtConfig } from 'nuxt/config'
 
+console.log('NUXT_PUBLIC_ODOO_BASE_URL from nuxt.config.ts:', process.env.NUXT_PUBLIC_ODOO_BASE_URL);
+
 export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
@@ -68,13 +70,13 @@ vite: {
       'LoadUserQuery',
     ],
     public: {
-      odooBaseImageUrl: '',
-      odooBaseUrl: '',
-      middlewareUrl: '',
-      currencySymbol: '',
-      currencySeparator: '',
-      currencyDecimal: '',
-      currencyPrecision: '',
+      odooBaseImageUrl: process.env.NUXT_PUBLIC_ODOO_BASE_IMAGE_URL,
+      odooBaseUrl: process.env.NUXT_PUBLIC_ODOO_BASE_URL,
+      middlewareUrl: process.env.NUXT_PUBLIC_MIDDLEWARE_URL,
+      currencySymbol: process.env.NUXT_PUBLIC_CURRENCY_SYMBOL || '$',
+      currencySeparator: process.env.NUXT_PUBLIC_CURRENCY_SEPARATOR,
+      currencyDecimal: process.env.NUXT_PUBLIC_CURRENCY_DECIMAL,
+      currencyPrecision: process.env.NUXT_PUBLIC_CURRENCY_PRECISION,
     },
   },
 
