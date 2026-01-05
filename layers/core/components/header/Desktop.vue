@@ -28,12 +28,6 @@ const router = useRouter()
 const route = useRoute()
 const NuxtLink = resolveComponent('NuxtLink')
 const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
-/* 
-
-watch(
-  () => route.query.search,
-  (v: any) => { searchInputValue.value = String(v || '') },
-) */
 
 watch(searchInputValue, () => {
   search()

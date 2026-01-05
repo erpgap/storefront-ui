@@ -1,9 +1,12 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
+
 // nuxt.config.ts
 import { defineNuxtConfig } from 'nuxt/config'
-
 console.log('NUXT_PUBLIC_ODOO_BASE_URL from nuxt.config.ts:', process.env.NUXT_PUBLIC_ODOO_BASE_URL);
-
 export default defineNuxtConfig({
+  extends: [
+    '@erpgap/recent-view-products',
+  ],
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
@@ -21,36 +24,18 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-viewport',
     '@nuxtjs/sitemap',
-    '@nuxtjs/critters',
-    ...(process.env.NODE_ENV === 'development' ? ['@nuxt/test-utils/module'] : []),
   ],
-
-vite: {
-    optimizeDeps: {
-      include: ['lodash-es'],
-    },
-  },
-
-
-  tailwindcss: { 
-    viewer: false,
-    cssPath: '~/assets/css/tailwind.css',
-    exposeConfig: false,
-   },
-
-
-  devtools: { enabled: process.env.NODE_ENV === 'development' },
+  devtools: { enabled: true },
 
   app: {
     head: {
-      viewport: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no',
-      title: 'Alokai - Demo',
-      htmlAttrs: { lang: 'en' },
+      viewport:
+        'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=no',
+      title: 'Alokai',
+      htmlAttrs: {
+        lang: 'en',
+      },
       meta: [{ name: 'robots', content: 'index, follow' }],
-      link: [
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-      ],
     },
   },
 
@@ -66,8 +51,6 @@ vite: {
       'LoadCartQuery',
       'WishlistLoadQuery',
       'GetAddressesQuery',
-      'GetOrdersQuery',
-      'LoadUserQuery',
     ],
     public: {
       odooBaseImageUrl: process.env.NUXT_PUBLIC_ODOO_BASE_IMAGE_URL,
@@ -84,9 +67,12 @@ vite: {
     transpile: ['vue-toastification'],
   },
 
+  routeRules: {
+    '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+  },
+
   experimental: {
     asyncContext: true,
-    payloadExtraction: true,
   },
 
   compatibilityDate: '2024-11-06',
@@ -96,59 +82,66 @@ vite: {
     prerender: {
       routes: ['/'], 
     },
-    routeRules: {
-      //'/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) || 60 },
-      '/': { headers: { 'Cache-Control': 'public, max-age=0, s-maxage=60, stale-while-revalidate=86400' } },
-      '/**': { headers: { 'Cache-Control': 'public, max-age=0, s-maxage=60, stale-while-revalidate=86400' } },
-      'assets/**': {
-        headers: {
-          'Cache-Control': 'public, max-age=0, s-maxage=60, stale-while-revalidate=86400',
-        },
+    storage: {
+      cache: {
+        driver: process.env.NUXT_STORAGE_DRIVER,
+        url: process.env.NUXT_STORAGE_URL,
       },
-      'public/**': {
-        headers: {
-          'Cache-Control': 'public, max-age=0, s-maxage=60, stale-while-revalidate=86400',
-        },
+      slug: {
+        driver: process.env.NUXT_STORAGE_DRIVER,
+        url: process.env.NUXT_STORAGE_URL,
+        ttl: process.env?.NUXT_SWR_CACHE_TIME || 3600,
       },
-      '/_nuxt/**': {
-        headers: { 'Cache-Control': 'public, max-age=31536000, immutable' }
+    },
+    devStorage: {
+      cache: {
+        driver: process.env.NUXT_STORAGE_DRIVER,
+        url: process.env.NUXT_STORAGE_URL,
       },
-      '/_ipx/**': {
-        headers: { 'Cache-Control': 'public, max-age=31536000, immutable' }
+      slug: {
+        driver: process.env.NUXT_STORAGE_DRIVER,
+        url: process.env.NUXT_STORAGE_URL,
+        ttl: process.env?.NUXT_SWR_CACHE_TIME || 3600,
       },
     },
   },
 
+  vite: {
+    optimizeDeps: {
+      include: ['lodash-es'],
+    },
+  },
 
   delayHydration: {
-    mode: 'init', 
+    mode: 'init',
   },
 
-  device: { refreshOnResize: true, 
-    defaultUserAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36' },
-
+  device: {
+    refreshOnResize: true,
+  },
   eslint: {
-    config: { stylistic: true },
+    config: {
+      stylistic: true,
+    },
   },
-
 
   googleFonts: {
-    families: { 'Red Hat Display': [400, 500, 700] },
-    display: 'swap',
-    preconnect: true,
-    preload: true,          
-    download: true,        
-    inject: true,
-    useStylesheet: true, 
+    families: {
+      'Red Hat Display': [400, 500, 700],
+    },
   },
 
-
   i18n: {
-    locales: [{ code: 'en', file: 'en.json' }],
+    legacy: false,
+    locales: [
+      {
+        code: 'en',
+        file: 'en.json',
+      },
+    ],
     strategy: 'no_prefix',
     lazy: true,
     defaultLocale: 'en',
-    langDir: 'locales',
   },
 
   image: {
@@ -159,7 +152,13 @@ vite: {
       },
     },
     screens: {
-      '2xl': 1536, xxl: 1440, xl: 1280, lg: 1024, md: 768, sm: 640, xs: 376,
+      '2xl': 1536,
+      'xxl': 1440,
+      'xl': 1280,
+      'lg': 1024,
+      'md': 768,
+      'sm': 640,
+      'xs': 376,
     },
   },
 
@@ -170,7 +169,13 @@ vite: {
 
   sitemap: {
     sources: ['/api/sitemap/urls/products', '/api/sitemap/urls/categories'],
-    runtimeCacheStorage: { driver: process.env.NUXT_STORAGE_DRIVER || 'redis' },
+    runtimeCacheStorage: {
+      driver: process.env.NUXT_STORAGE_DRIVER,
+    },
+  },
+
+  tailwindcss: {
+    viewer: false,
   },
 
   viewport: {
@@ -179,10 +184,13 @@ vite: {
       desktop: 1280,
       desktopMedium: 1440,
       desktopWide: 1600,
+
       mobile: 320,
       mobileMedium: 375,
       mobileWide: 425,
+
       tablet: 768,
     },
   },
+
 })

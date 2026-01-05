@@ -6,18 +6,6 @@ const props = defineProps<{
   items: Category[]
 }>()
 
-const staticImages = [
-  'living-room-seating',
-  'tables',
-  'bedroom-furniture',
-  'storage-and-shelving',
-  'lighting',
-  'home-office',
-]
-
-const getCategoryImageByIndex = (index: number) => {
-  return staticImages[index]
-}
 </script>
 
 <template>
@@ -33,9 +21,12 @@ const getCategoryImageByIndex = (index: number) => {
       >
         <NuxtLink :to="`/category/${category.id}`">
           <NuxtImg
-            :src="`/img/categories/${getCategoryImageByIndex(index)}.jpg`"
+            provider="odooProvider"
+            :src="category.image"
             class="w-full"
             :alt="category.name"
+            width="400"
+            height="300"
           />
           <p class="text-[16px] uppercase tracking-[0.5px] flex items-center gap-3 mt-5">{{ category.name }}<svg
             xmlns="http://www.w3.org/2000/svg"
@@ -65,9 +56,12 @@ const getCategoryImageByIndex = (index: number) => {
       >
         <NuxtLink :to="`/category/${category.id}`">
           <NuxtImg
-            :src="`/img/categories/${getCategoryImageByIndex(index)}.jpg`"
+            provider="odooProvider"
+            :src="category.image"
             class="w-full"
             :alt="category.name"
+            width="200"
+            height="200"
           />
           <p class="text-[16px] uppercase tracking-[0.5px] flex items-center gap-3 mt-5">
             {{ category.name }}
