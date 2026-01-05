@@ -41,7 +41,9 @@ export default `
           }
         }
       }
-    }category(slug: $slug, id: $id) {
+    }
+    
+    category(slug: $slug, id: $id) {
       id
       name
       slug
