@@ -1,5 +1,6 @@
 <script setup>
 import { SfButton, SfLink, SfIconMoreHoriz, useDropdown } from '@storefront-ui/vue'
+import { unref } from 'vue'
 
 const props = defineProps({
   breadcrumbs: {
@@ -29,11 +30,14 @@ const normalizedBreadcrumbs = computed(() => {
 })
 
 const computedBreadcrumbs = computed(() => {
-  const arr = (normalizedBreadcrumbs.value || []).map(item => ({
-    ...item,
-    name: item.name === 'home' ? 'home' : String(item.name).toLowerCase(),
-    link: item.link || item.slug,
-  }))
+  const arr = (normalizedBreadcrumbs.value || []).map((item) => {
+    const name = unref(item.label) || unref(item.name)
+    return {
+      ...item,
+      name: name === 'home' ? 'home' : String(name ?? '').toLowerCase(),
+      link: item.link || item.slug,
+    }
+  })
   if (!arr.length) return [{ name: 'home', link: '/' }]
   const first = arr[0]
   if (first.name === 'home' && first.link === '/') return arr

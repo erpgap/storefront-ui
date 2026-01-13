@@ -6,10 +6,10 @@ import type { Product } from '~/graphql';
 
 const route = useRoute();
 const { isOpen, open, close } = useDisclosure();
-
+const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
 const { getFacetsFromURL } = useUiHelpers();
 const { getRegularPrice, getSpecialPrice } = useProductAttributes();
-const { loadCategory, category } = useCategory();
+const { category, loadCategory, breadcrumbs } = useCategory(String(cleanFullPath.value));
 const {
   loadProductTemplateList,
   organizedAttributes,
@@ -46,7 +46,6 @@ watch(
   },
 )
 
-
 const safeAttributes = computed(() =>
   Array.isArray(organizedAttributes.value) ? organizedAttributes.value : []
 );
@@ -77,21 +76,32 @@ const seoData = computed(() => {
 });
 
 useHead(seoData);
-
 setMaxVisiblePages(isWideScreen.value);
-await loadProductTemplateList(getFacetsFromURL(route.query))
+
+const facets = getFacetsFromURL(route.query);
+if (facets.filter?.categorySlug) {
+  await loadCategory({ slug: facets.filter.categorySlug });
+}
+await loadProductTemplateList(facets);
+
+const uiBreadcrumbs = computed(() =>
+  (breadcrumbs.value ?? []).map((b: any) => ({
+    label: b.label,
+    link: b.link,
+  })),
+)
 </script>
 
 <template>
   <div class="narrow-container pb-20">
-    <UiBreadcrumb :breadcrumbs="category.breadcrumb" class="self-start mt-5 mb-5" />
+    <UiBreadcrumb :breadcrumbs="uiBreadcrumbs" class="self-start mt-5 mb-5" />
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
         <LazyCategoryFilterSidebar v-if="$viewport.isGreaterOrEquals('desktopSmall')" :attributes="safeAttributes"
           :categories="[]" />
         <LazyCategoryMobileSidebar v-if="$viewport.isLessThan('desktopSmall')" :is-open="isOpen" @close="close">
           <template #default>
-            <CategoryFilterSidebar class="block lg:hidden" :attributes="organizedAttributes" :categories="[]"
+            <LazyCategoryFilterSidebar class="block lg:hidden" :attributes="organizedAttributes" :categories="[]"
               @close="close" />
           </template>
         </LazyCategoryMobileSidebar>
@@ -111,7 +121,7 @@ await loadProductTemplateList(getFacetsFromURL(route.query))
           <section v-if="productTemplateList.length > 0"
             class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8">
             <LazyUiProductCard v-for="productTemplate in productTemplateList" :key="productTemplate.id"
-              :name="productTemplate?.name || ''" loading="eager" :slug="mountUrlSlugForProductVariant(
+              :name="productTemplate?.name || ''" :slug="mountUrlSlugForProductVariant(
                 (productTemplate) as Product,
               )
                 " :image-url="$getImage(

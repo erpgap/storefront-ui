@@ -51,7 +51,6 @@ export default `
     image 
     imageFilename 
     }
-  combinationInfo
   slug
   #skufalse
   isInWishlist

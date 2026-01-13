@@ -22,6 +22,10 @@ import { useProductGetters } from '~/layers/product/composables/useProductGetter
 import { useProductTemplate } from '~/layers/product/composables/useProductTemplate';
 import { useProductVariant } from '~/layers/product/composables/useProductVariant';
 
+definePageMeta({
+  key: (route) => route.fullPath
+});
+
 const route = useRoute();
 const cleanPath = computed(() => route?.path?.replace(/\/$/, ''));
 const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''));
@@ -46,7 +50,55 @@ const { addProductToRecentViews } = useRecentViewProducts();
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist();
 const { cart, cartAdd } = useCart();
 
-useHead(generateSeo<SeoEntity>(productVariant.value || productTemplate.value, 'Product'));
+await loadProductTemplate({ slug: cleanPath.value });
+
+if (productTemplate.value?.id) {
+  const routeColor = route.query.Color;
+
+  let colorIdToLoad = routeColor ? Number(routeColor) : null;
+
+  if (!colorIdToLoad) {
+    const colors = getAllColors.value || [];
+    if (colors.length > 0) {
+      colorIdToLoad = Number(colors[0].value || colors[0].id);
+    }
+  }
+
+  if (colorIdToLoad) {
+    await loadProductVariant({
+      productTemplateId: Number(productTemplate.value.id),
+      combinationId: [colorIdToLoad],
+    });
+  } else {
+    await loadProductVariant({
+      productTemplateId: Number(productTemplate.value.id),
+      combinationId: [],
+    });
+  }
+}
+
+const seoData = computed(() => {
+  if (productVariant.value?.id) {
+    const product = productVariant.value;
+    const seoEntity: SeoEntity = {
+      ...product,
+      metaTitle: product.metaTitle || product.name || 'Product',
+      metaDescription: product.metaDescription || product.description || 'Check out this amazing product!',
+      metaKeyword: product.metaKeyword || product.name,
+    };
+    return generateSeo(seoEntity, 'Product')
+  }
+  else {
+    const fallbackEntity: SeoEntity = {
+      name: 'Product',
+      metaTitle: `Product | ${route.path.split('/').pop() || 'Store'}`,
+      metaDescription: 'Check out this amazing product in our store',
+      metaKeyword: 'Product'
+    }
+    return generateSeo(fallbackEntity, 'Product')
+  }
+})
+useHead(seoData)
 
 const templateColorsSnapshot = ref<any[]>([]);
 const originalTemplateId = ref<number | null>(null);
@@ -89,7 +141,6 @@ const colorOptions = computed(() => {
       label: av.name,
     }));
   }
-
   return [];
 });
 
@@ -112,7 +163,6 @@ const updateFilter = async (filter: LocationQueryRaw | undefined) => {
       query[encodeURIComponent(key)] = value;
     });
   }
-
   await navigateTo({ query });
 };
 
@@ -149,38 +199,12 @@ const handleWishlistRemoveItem = async () => {
 watch(
   productTemplate,
   async (newValue: { id: any }, oldValue: any) => {
-    if (!newValue?.id) {
-      return;
-    }
+    if (!newValue?.id) return;
 
     if (!originalTemplateId.value) {
       originalTemplateId.value = Number(newValue.id);
     }
-
     addProductToRecentViews(Number(newValue.id));
-
-    if (!productVariant.value?.id) {
-      const hasColors = getAllColors?.value?.length > 0;
-
-      if (hasColors) {
-        const routeColor = route.query.Color;
-        const fallbackColor = getAllColors?.value?.[0]?.value;
-
-        const colorId = routeColor ? Number(routeColor) : fallbackColor;
-
-        if (!colorId) return;
-
-        await loadProductVariant({
-          productTemplateId: originalTemplateId.value,
-          combinationId: [colorId],
-        });
-      } else {
-        await loadProductVariant({
-          productTemplateId: originalTemplateId.value,
-          combinationId: [],
-        });
-      }
-    }
   },
   { immediate: true },
 );
@@ -188,14 +212,9 @@ watch(
 watch(
   () => route.query.Color,
   async (colorId: any) => {
-    if (!originalTemplateId.value) {
-      return;
-    }
-
+    if (!originalTemplateId.value) return;
     const combinationId = Number(colorId);
-    if (!combinationId) {
-      return;
-    }
+    if (!combinationId) return;
 
     await loadProductVariant({
       productTemplateId: originalTemplateId.value,
@@ -210,54 +229,60 @@ const mainImage = computed<ImageGalleryItem>(
 );
 const thumbs = computed<ImageGalleryItem[]>(() => getThumbs(200, 200) || []);
 
-await loadProductTemplate({ slug: cleanPath.value });
-
-const isLoadingPage = computed(
-  () => loadingProductTemplate.value || loadingProductVariant.value,
-);
-
 const hasProductData = computed(
-  () => !!productTemplate.value?.id && !!productVariant.value?.id,
+  () => !!productTemplate.value?.id
 );
 </script>
-
-
 
 <template>
   <NuxtErrorBoundary>
     <div class="narrow-container">
       <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-10" />
-      <div v-if="isLoadingPage" class="w-full flex flex-col items-center justify-center min-h-[60vh]">
-        <SfLoaderCircular size="xl" class="my-32" />
-      </div>
-      <div v-else-if="hasProductData" class="md:grid grid-areas-product-page grid-cols-product-page gap-x-6">
+
+      <div v-if="hasProductData" class="min-h-screen md:grid grid-areas-product-page grid-cols-product-page gap-x-6">
+
         <section class="grid-in-left-top md:h-full xl:max-h-[500px]">
-          <LazyUiGallery :main-image="mainImage" :thumbs="thumbs" />
+          <div class="min-h-[400px] md:min-h-[500px] aspect-[380/505]">
+            <UiGallery :main-image="mainImage" :thumbs="thumbs" />
+          </div>
         </section>
+
         <section class="col-span-5 grid-in-right md:mb-0">
-          <div class="p-6 xl:p-6 md:border md:border-neutral-100 md:shadow-lg md:rounded-md md:sticky md:top-20"
+          <div
+            class="p-6 xl:p-6 md:border md:border-neutral-100 md:shadow-lg md:rounded-md md:sticky md:top-20 min-h-[400px]"
             data-testid="purchase-card">
+
             <h1 class="mb-1 font-bold typography-headline-4" data-testid="product-name">
-              {{ productVariant?.name }}
+              {{ productVariant?.name || productTemplate?.name }}
             </h1>
-            <div v-if="productVariant?.combinationInfoVariant?.has_discounted_price" class="my-1">
-              <div
-                class="inline-flex items-center justify-center font-medium rounded-none bg-secondary-800 text-sm p-1.5 gap-1 mb-4">
-                <SfIconSell color="white" size="sm" class="mr-1" />
-                <span class="mr-1 text-white">{{ $t(`sale`) }}</span>
+
+            <div class="my-1 min-h-[40px] flex items-center">
+              <div v-if="productVariant?.id" class="transition-opacity duration-300 ease-in">
+                <div v-if="productVariant?.combinationInfoVariant?.has_discounted_price">
+                  <div
+                    class="inline-flex items-center justify-center font-medium rounded-none bg-secondary-800 text-sm p-1.5 gap-1 mr-4">
+                    <SfIconSell color="white" size="sm" class="mr-1" />
+                    <span class="mr-1 text-white">{{ $t(`sale`) }}</span>
+                  </div>
+                  <span class="mr-2 text-black font-bold font-headings text-2xl">
+                    {{ $currency(getSpecialPrice) }}
+                  </span>
+                  <span class="text-base font-normal text-neutral-500 line-through">
+                    {{ $currency(getRegularPrice) }}
+                  </span>
+                </div>
+                <div v-else>
+                  <span class="mr-2 text-black font-bold font-headings text-2xl">
+                    {{ $currency(getRegularPrice) }}
+                  </span>
+                </div>
               </div>
-              <span class="mr-2 text-black font-bold font-headings text-2xl" data-testid="price">
-                {{ $currency(getSpecialPrice) }}
-              </span>
-              <span class="text-base font-normal text-neutral-500 line-through">
-                {{ $currency(getRegularPrice) }}
-              </span>
+
+              <div v-else class="flex flex-col gap-1">
+                <div class="w-32 h-8 bg-neutral-100/50 animate-pulse rounded-md"></div>
+              </div>
             </div>
-            <div v-else class="my-1">
-              <span class="mr-2 text-black font-bold font-headings text-2xl" data-testid="price">
-                {{ $currency(getRegularPrice) }}
-              </span>
-            </div>
+
             <div class="inline-flex items-center mt-4 mb-2">
               <SfRating size="xs" :value="4" :max="5" />
               <SfCounter class="ml-1" size="xs">
@@ -278,8 +303,10 @@ const hasProductData = computed(
               <div class="flex flex-col md:flex-row flex-wrap gap-4">
                 <UiQuantitySelector v-model="quantitySelectorValue" :value="quantitySelectorValue"
                   class="min-w-[145px] flex-grow flex-shrink-0 basis-0" />
-                <SfButton :disabled="loadingProductTemplate" type="button" size="lg"
-                  class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap" @click="handleCartAdd">
+
+                <SfButton :disabled="loadingProductTemplate || !productVariant?.id" type="button" size="lg"
+                  class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap transition-opacity duration-200"
+                  @click="handleCartAdd">
                   <template #prefix>
                     <SfIconShoppingCart size="sm" />
                   </template>
@@ -302,16 +329,13 @@ const hasProductData = computed(
                 </fieldset>
               </div>
 
-
               <div class="flex justify-center mt-4 gap-x-4">
                 <SfButton type="button" size="sm" variant="tertiary" v-if="productVariant" @click="
                   isInWishlist(productVariant.id as number)
                     ? handleWishlistRemoveItem()
                     : handleWishlistAddItem()
                   ">
-
                   <SfIconFavoriteFilled v-show="isInWishlist(productVariant.id as number)" size="sm" />
-
                   <SfIconFavorite v-show="!isInWishlist(productVariant.id as number)" size="sm" />
                   {{
                     isInWishlist(productVariant.id as number)
@@ -321,6 +345,7 @@ const hasProductData = computed(
                 </SfButton>
               </div>
             </div>
+
             <div class="flex first:mt-4">
               <SfIconPackage size="sm" class="flex-shrink-0 mr-1 text-neutral-500" />
               <p class="text-sm">
@@ -358,12 +383,13 @@ const hasProductData = computed(
                 </template>
               </i18n-t>
             </div>
+
           </div>
         </section>
+
         <section class="grid-in-left-bottom md:mt-8">
           <UiDivider class="mt-10 mb-6" />
 
-          <UiDivider class="my-4 md:mt-6" />
           <div>
             <h2 class="font-bold font-headings text-lg leading-6 md:text-2xl">
               {{ $t("productDetails") }}
@@ -383,8 +409,10 @@ const hasProductData = computed(
             </p>
           </div>
         </section>
+
         <UiDivider class="mt-4 mb-2" />
       </div>
+
       <section v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether" class="lg:mx-4 mt-28">
         <LazyProductSlider text="Recommended with this product"
           :product-template-list="productTemplate?.frequentlyBoughtTogether" />
@@ -392,12 +420,13 @@ const hasProductData = computed(
       <section v-if="!loadingProductTemplate && productTemplate?.alternativeProducts" class="lg:mx-4 mb-20">
         <LazyProductSlider text="Alternative product" :product-template-list="productTemplate?.alternativeProducts" />
       </section>
-      <section v-if="!loadingProductTemplate" class="lg:mx-4 mb-20">
+      <section class="lg:mx-4 mb-20">
         <ClientOnly>
           <LazyProductRecentViewSlider text="Your recent views" />
         </ClientOnly>
       </section>
     </div>
+
     <template #error="{ error }">
       <div>
         <p class="mt-8 font-.medium">

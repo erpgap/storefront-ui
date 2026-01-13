@@ -6,7 +6,6 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 <template>
   <div class="relative">
-    <!-- Img -->
     <div class="img bg-[#f7f7f7] flex justify-start">
       <NuxtImg
         src="/img/home/banner-3.jpg"
@@ -14,7 +13,6 @@ const NuxtLink = resolveComponent('NuxtLink')
         class="w-full md:w-1/2 max-h-[400px] md:max-h-full md:h-[500px] lg:h-[550px] 2xl:h-[620px] object-cover object-center"
       />
     </div>
-    <!-- Text -->
     <div class="text narrow-container w-full md:absolute top-[47%] left-[50%] -translate-half bg-[#F7F7F7] md:bg-transparent py-7 flex justify-end">
       <div class="md:max-w-[47%] lg:max-w-[470px] text-black flex flex-col items-start gap-4">
         <h1 class="text-[28px] md:text-[36px] font-normal">

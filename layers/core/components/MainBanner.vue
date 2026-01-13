@@ -8,7 +8,6 @@ defineProps<{ banners?: any[] }>()
 
 <template>
   <div class="relative">
-    <!-- Img -->
     <div class="img">
       <NuxtImg
         v-if="$viewport.isGreaterOrEquals('tablet')"
@@ -23,7 +22,6 @@ defineProps<{ banners?: any[] }>()
         class="w-full max-h-[400px] object-cover object-center"
       />
     </div>
-    <!-- Text -->
     <div class="text narrow-container w-full md:absolute top-[47%] left-[50%] -translate-half bg-[#F7F7F7] md:bg-transparent py-7">
       <div class="max-w-[470px] text-black md:text-white flex flex-col items-start gap-4">
         <h1 class="text-[28px] md:text-[36px] font-normal">

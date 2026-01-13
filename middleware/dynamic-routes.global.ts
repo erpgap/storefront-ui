@@ -1,4 +1,4 @@
-import { useRouter } from '#app'
+import { useRouter } from 'nuxt/app'
 
 export default defineNuxtRouteMiddleware(async (to) => {
   // Skip middleware if route exists in the static route tree
@@ -37,7 +37,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
       return
     }
 
-    // Add the new route dynamically
     router.addRoute({
       path: to.path,
       name: slug.replace(/^\//, '').replace(/\//g, '-'),

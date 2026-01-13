@@ -12,13 +12,9 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
 <template>
   <div>
     <MainBanner />
-
     <Categories :items="categoriesForMegaMenu" />
-
     <BannerRight />
-
     <LazyProductRecentViewSlider heading="Shop our Best Sellers" />
-
     <BannerLeft />
   </div>
 </template>
