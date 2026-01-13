@@ -65,7 +65,7 @@ const safeAttributes = computed(() =>
 
 const breadcrumbs = [
   { name: 'Home', link: '/' },
-  { name: 'Search', link: '/' },
+  { name: 'Search', link: '/search' },
 ]
 </script>
 

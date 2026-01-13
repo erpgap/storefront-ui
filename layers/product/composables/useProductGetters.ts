@@ -59,8 +59,6 @@ export const useProductGetters = (
         add(img.id, img.image, img.name),
       )
     }
-
-    console.log('BASE IMAGES ⇒', images)
     return images
   }
 

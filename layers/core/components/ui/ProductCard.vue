@@ -75,7 +75,7 @@ const handleWishlistRemoveItem = async (firstVariant: CustomProductWithStockFrom
     class="relative flex flex-col"
   >
     <div class="relative">
-      <NuxtLink :to="slug">
+      <NuxtLink :to="slug" prefetch>
         <NuxtImg
           :src="imageUrl"
           :alt="imageAlt"

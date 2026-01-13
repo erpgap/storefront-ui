@@ -4,9 +4,9 @@
 import { defineNuxtConfig } from 'nuxt/config'
 console.log('NUXT_PUBLIC_ODOO_BASE_URL from nuxt.config.ts:', process.env.NUXT_PUBLIC_ODOO_BASE_URL);
 export default defineNuxtConfig({
-  extends: [
+/*   extends: [
     '@erpgap/recent-view-products',
-  ],
+  ], */
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
@@ -60,6 +60,7 @@ export default defineNuxtConfig({
       currencySeparator: process.env.NUXT_PUBLIC_CURRENCY_SEPARATOR,
       currencyDecimal: process.env.NUXT_PUBLIC_CURRENCY_DECIMAL,
       currencyPrecision: process.env.NUXT_PUBLIC_CURRENCY_PRECISION,
+      siteURL: process.env.NUXT_PUBLIC_MIDDLEWARE_URL, 
     },
   },
 
@@ -69,10 +70,20 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+    '/_nuxt/**': {
+      headers: {
+        'cache-control': 'public, max-age=31536000, immutable'
+      }
+    },
+    '/product/**': { 
+      swr: 3600,
+    },
+    '/img/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
   },
 
   experimental: {
     asyncContext: true,
+    componentIslands: true,
   },
 
   compatibilityDate: '2024-11-06',
@@ -129,15 +140,15 @@ export default defineNuxtConfig({
     families: {
       'Red Hat Display': [400, 500, 700],
     },
+    display: 'swap',
+    preload: true,
+    preconnect: true,
   },
 
   i18n: {
     legacy: false,
     locales: [
-      {
-        code: 'en',
-        file: 'en.json',
-      },
+      { code: 'en', file: 'en.json', },
     ],
     strategy: 'no_prefix',
     lazy: true,
@@ -168,10 +179,18 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    sources: ['/api/sitemap/urls/products', '/api/sitemap/urls/categories'],
-    runtimeCacheStorage: {
-      driver: process.env.NUXT_STORAGE_DRIVER,
+    cacheTtl: 1000 * 60 * 60,
+    runtimeCacheStorage: true,
+    sitemaps: {
+    products: {
+      sources: ['/api/sitemap/urls/products'],
+      defaults: { changefreq: 'daily', priority: 0.8 },
     },
+    categories: {
+      sources: ['/api/sitemap/urls/categories'],
+      defaults: { changefreq: 'weekly', priority: 1.0 },
+    },
+  },
   },
 
   tailwindcss: {
@@ -184,11 +203,9 @@ export default defineNuxtConfig({
       desktop: 1280,
       desktopMedium: 1440,
       desktopWide: 1600,
-
       mobile: 320,
       mobileMedium: 375,
       mobileWide: 425,
-
       tablet: 768,
     },
   },
