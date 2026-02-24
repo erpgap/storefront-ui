@@ -5,7 +5,7 @@ import type {
   MutationApplyCouponArgs,
   MutationApplyGiftCardArgs,
 } from '~/graphql';
-import { MutationName } from '~/server/mutations';
+import { MutationName } from '~~/server/mutations';
 import { useCheckout } from './useCheckout';
 
 export const useDiscount = () => {

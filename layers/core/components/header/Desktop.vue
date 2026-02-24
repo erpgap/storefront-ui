@@ -6,8 +6,8 @@ import {
   useTrapFocus,
 } from '@storefront-ui/vue'
 import { onClickOutside } from '@vueuse/core'
-import type { Category } from '~/graphql'
-import DesktopSearchList from '~/layers/search-default/components/DesktopSearchList.vue'
+import type { Category } from '~~/graphql'
+import DesktopSearchList from '../../../search-default/components/DesktopSearchList.vue'
 
 const { isOpen, toggle, close } = useDisclosure()
 

@@ -138,7 +138,7 @@ export default defineNuxtModule({
         pages.push({
           name: slug.replace(/^\//, '').replace(/\//g, '-'),
           path: slug,
-          file: '~/layers/category/custom-pages/category-page.vue',
+          file: '#layers/category/custom-pages/category-page.vue',
         })
       })
 
@@ -146,7 +146,7 @@ export default defineNuxtModule({
         pages.push({
           name: slug.replace(/^\//, '').replace(/\//g, '-'),
           path: slug,
-          file: '~/layers/product/custom-pages/product-page.vue',
+          file: '#layers/product/custom-pages/product-page.vue',
         })
       })
 

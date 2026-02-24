@@ -2,6 +2,7 @@
 
 // nuxt.config.ts
 import { defineNuxtConfig } from 'nuxt/config'
+import path from 'path' // Added this line
 console.log('NUXT_PUBLIC_ODOO_BASE_URL from nuxt.config.ts:', process.env.NUXT_PUBLIC_ODOO_BASE_URL);
 export default defineNuxtConfig({
 /*   extends: [
@@ -14,10 +15,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxt/image',
     '@nuxt/scripts',
-    '@nuxtjs/device',
     '@nuxtjs/google-fonts',
-    'nuxt-lodash',
-    'nuxt-icon',
     'nuxt-delay-hydration',
     'nuxt-typed-router',
     '@nuxtjs/robots',
@@ -37,6 +35,10 @@ export default defineNuxtConfig({
       },
       meta: [{ name: 'robots', content: 'index, follow' }],
     },
+  },
+
+   future: {
+    compatibilityVersion: 4,
   },
 
   site: {
@@ -121,15 +123,18 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: ['lodash-es'],
     },
+    resolve: {
+      alias: {
+        '/node_modules': path.resolve(__dirname, './node_modules'),
+        '/layers': path.resolve(__dirname, './layers'),
+      },
+    },
   },
 
   delayHydration: {
     mode: 'init',
   },
 
-  device: {
-    refreshOnResize: true,
-  },
   eslint: {
     config: {
       stylistic: true,
@@ -159,7 +164,7 @@ export default defineNuxtConfig({
     providers: {
       odooProvider: {
         name: 'odooProvider',
-        provider: '~/providers/odoo-provider.ts',
+        provider: path.resolve(__dirname, './providers/odoo-provider.ts'),
       },
     },
     screens: {
@@ -195,6 +200,10 @@ export default defineNuxtConfig({
 
   tailwindcss: {
     viewer: false,
+  },
+
+  alias: {
+    '#layers': path.resolve(__dirname, './layers')
   },
 
   viewport: {

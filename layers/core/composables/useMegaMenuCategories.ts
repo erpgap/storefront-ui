@@ -3,7 +3,7 @@ import type {
   CategoryListResponse,
   Category,
 } from '~/graphql'
-import { QueryName } from '~/server/queries'
+import { QueryName } from '~~/server/queries'
 
 export const useMegaMenuCategories = () => {
   const { $sdk } = useNuxtApp()

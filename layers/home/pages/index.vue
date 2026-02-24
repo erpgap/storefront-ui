@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
-import { useMegaMenuCategories } from '~/layers/core/composables/useMegaMenuCategories'
+import { useMegaMenuCategories } from '~~/layers/core/composables/useMegaMenuCategories'
 
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
 const { categoriesForMegaMenu } = useMegaMenuCategories()

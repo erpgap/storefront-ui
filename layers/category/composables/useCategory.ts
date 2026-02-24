@@ -5,7 +5,7 @@ import type {
   QueryCategoryArgs,
   BreadcrumbItem,
 } from '~/graphql'
-import { QueryName } from '~/server/queries/index'
+import { QueryName } from '~~/server/queries/index'
 
 
 export const useCategory = (categorySlugIndex: string) => {

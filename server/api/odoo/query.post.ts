@@ -1,6 +1,6 @@
 import hasher from 'object-hash'
 import type { Partner } from '~/graphql'
-import { Queries } from '~/server/queries'
+import { Queries } from '~~/server/queries'
 
 const customCache = cachedFunction(
   async (event: any) => {
