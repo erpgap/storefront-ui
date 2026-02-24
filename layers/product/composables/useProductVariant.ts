@@ -3,7 +3,7 @@ import type {
   ProductVariantResponse,
   QueryProductVariantArgs,
 } from '~/graphql'
-import { QueryName } from '~/server/queries'
+import { QueryName } from '~~/server/queries'
 
 export const useProductVariant = (slugWithCombinationIds: string) => {
   const { $sdk } = useNuxtApp()

@@ -8,8 +8,8 @@ import type {
   WishlistRemoveItemResponse,
   WishlistItems,
 } from '~/graphql'
-import { MutationName } from '~/server/mutations'
-import { QueryName } from '~/server/queries'
+import { MutationName } from '~~/server/mutations'
+import { QueryName } from '~~/server/queries'
 
 export const useWishlist = () => {
   const { $sdk } = useNuxtApp() as any

@@ -3,7 +3,7 @@ import type {
   MutationNewsletterSubscribeArgs,
   NewsletterSubscribeResponse,
 } from '~/graphql'
-import { MutationName } from '~/server/mutations'
+import { MutationName } from '~~/server/mutations'
 
 const toast = useToast()
 

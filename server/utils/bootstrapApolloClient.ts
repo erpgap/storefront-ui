@@ -1,8 +1,8 @@
 import type { EventHandler, EventHandlerRequest } from 'h3'
 import type { MiddlewareConfig } from '@erpgap/odoo-sdk-api-client/server'
 import { createApiClient } from '@erpgap/odoo-sdk-api-client/server'
-import { Mutations } from '~/server/mutations'
-import { Queries } from '~/server/queries'
+import { Mutations } from '~~/server/mutations'
+import { Queries } from '~~/server/queries'
 
 export const bootstrapApolloClient = (event: any) => {
     const config: MiddlewareConfig = {

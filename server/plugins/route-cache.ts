@@ -1,4 +1,3 @@
-import generateFlags from '@nuxtjs/device/runtime/generateFlags'
 import type { EventHandler, RouterMethod, H3Event } from 'h3'
 
 const routesToSkipCache = [
@@ -20,6 +19,7 @@ const routesToSkipCache = [
   '/__nuxt_island/**',
   '/_ipx/**',
   '/_scripts/**',
+  '/api/_nuxt_icon/**',
 ]
 
 type Handler = {
@@ -49,17 +49,12 @@ export default defineNitroPlugin((nitroApp) => {
           group: 'pages',
           name: handler.route,
           getKey: (event: H3Event) => {
-            const headers = getRequestHeaders(event)
-            const userAgent = headers['user-agent']
-            if (!userAgent) {
-              return `desktop-${event.path}`
+            const userAgent = getRequestHeader(event, 'user-agent')
+            const isMobile = /Mobi|Android/i.test(userAgent || '')
+            if (isMobile) {
+              return `mobile-${event.path}`
             }
-            const flags = generateFlags(headers, String(userAgent))
-
-            if (flags.isDesktop) {
-              return `desktop-${event.path}`
-            }
-            return `mobile-${event.path}`
+            return `desktop-${event.path}`
           },
           shouldInvalidateCache: (event: H3Event) => {
             return false

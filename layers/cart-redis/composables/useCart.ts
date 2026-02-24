@@ -10,13 +10,13 @@ import type {
   MutationCartUpdateMultipleItemsArgs,
   Product,
 } from '~/graphql'
-import { MutationName } from '~/server/mutations'
+import { MutationName } from '~~/server/mutations'
 
 export const useCart = () => {
   const { $sdk } = useNuxtApp()
   const cartCounter = useCookie<number>('cart-counter')
   const toast = useToast()
-  const cart = useState<Cart>('cart', () => ({}) as Cart)
+  const cart = useState<Cart>('cart', () => (({}) as Cart))
   const frequentlyTogetherProducts = useState<Product[]>('frequently-together-products', () => [])
 
   const loading = ref(false)
@@ -24,7 +24,9 @@ export const useCart = () => {
   const loadCart = async () => {
     try {
       loading.value = true
-      const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`)
+      const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`, {
+        deep: true
+      })
 
       if (!data.value?.cart)
         return

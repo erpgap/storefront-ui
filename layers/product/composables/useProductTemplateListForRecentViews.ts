@@ -3,7 +3,7 @@ import type {
   ProductTemplateListResponse,
   QueryProductsArgs,
 } from '~/graphql'
-import { QueryName } from '~/server/queries/index'
+import { QueryName } from '~~/server/queries/index'
 
 export const useProductTemplateListForRecentViews = () => {
   const { list } = useRecentViewProducts()
@@ -25,14 +25,14 @@ export const useProductTemplateListForRecentViews = () => {
       } as any,
     }
 
-    const { data } = await useAsyncData(
-      () =>
-        $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>(
-          { queryName: QueryName.GetProductTemplateListQueryForRecentViews },
-          params,
-          { headers: useRequestHeaders() },
-        ),
-    )
+    const { data } = await useAsyncData('product-template-list-for-recent-views', () =>
+      $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>(
+        { queryName: QueryName.GetProductTemplateListQueryForRecentViews },
+        params,
+        { headers: useRequestHeaders() },
+      ), {
+      deep: true
+    })
 
     loading.value = false
     productTemplateList.value = data?.value?.products?.products || []

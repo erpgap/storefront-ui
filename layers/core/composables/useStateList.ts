@@ -17,12 +17,12 @@ export const useStateList = (countryId: number) => {
       return
     }
     try {
-      const { data } = await useAsyncData(
-        async () => await $sdk().odoo.query<
-          CountryFilterInput,
-          StatesResponse
-        >({ queryName: QueryName.GetStatesQuery }, param.value),
-      )
+      const { data } = await useAsyncData(.params.slug, async () => await $sdk().odoo.query<
+        CountryFilterInput,
+        StatesResponse
+      >({ queryName: QueryName.GetStatesQuery }, param.value), {
+        deep: true
+      })
       states.value = data.value?.country.states || []
     }
     catch (error: any) {

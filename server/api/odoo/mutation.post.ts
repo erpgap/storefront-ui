@@ -1,4 +1,4 @@
-import { Mutations } from '~/server/mutations'
+import { Mutations } from '~~/server/mutations'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)

@@ -7,7 +7,7 @@ import type {
   ProductResponse,
   QueryProductArgs,
 } from '~/graphql'
-import { QueryName } from '~/server/queries'
+import { QueryName } from '~~/server/queries'
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
