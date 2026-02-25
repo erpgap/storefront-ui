@@ -4,9 +4,8 @@ import sfTypography from '@storefront-ui/typography'
 
 export default <Config>{
   presets: [tailwindConfig],
-  content: ['./layers/**/*.vue', './layers/**/*.vue', './pages/**/*.vue', 'node_modules/@storefront-ui/vue/**/*.{js,mjs}'],
+  content: ['./app/**/*.{vue,js,ts}', './layers/**/*.vue', './server/**/*.{ts,js}', 'node_modules/@storefront-ui/vue/**/*.{js,mjs}'],
   plugins: [sfTypography],
-  css: ['~/assets/css/tailwind.css'],
 
   theme: {
     extend: {
