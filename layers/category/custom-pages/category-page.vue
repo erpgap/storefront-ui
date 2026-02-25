@@ -2,7 +2,13 @@
 import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefront-ui/vue';
 import { useUiHelpers } from '../../category/composables/useUiHelpers';
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper';
-import type { Product } from '~/graphql';
+import type { Product } from '~~/graphql';
+import { useCategory } from '../composables/useCategory';
+import { isEqual } from 'lodash-es';
+import { useRoute } from 'vue-router';
+import { useProductAttributes } from '~~/layers/product/composables/useProductAttributes';
+import { useProductTemplateList } from '~~/layers/product/composables/useProductTemplateList';
+import { useState } from 'nuxt/app';
 
 const route = useRoute();
 const { isOpen, open, close } = useDisclosure();

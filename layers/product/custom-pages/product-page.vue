@@ -16,7 +16,7 @@ import {
   SfRating,
 } from '@storefront-ui/vue';
 import type { LocationQueryRaw } from 'vue-router';
-import type { ImageGalleryItem, OrderLine, Product } from '~/graphql';
+import type { ImageGalleryItem, OrderLine, Product } from '~~/graphql';
 import generateSeo, { type SeoEntity } from '~~/app/utils/buildSEOHelper';
 import { useProductGetters } from '~~/layers/product/composables/useProductGetters';
 import { useProductTemplate } from '~~/layers/product/composables/useProductTemplate';

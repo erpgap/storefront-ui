@@ -4,7 +4,7 @@ import type {
   MakeGiftCardPaymentResponse,
   MutationApplyCouponArgs,
   MutationApplyGiftCardArgs,
-} from '~/graphql';
+} from '~~/graphql';
 import { MutationName } from '~~/server/mutations';
 import { useCheckout } from './useCheckout';
 

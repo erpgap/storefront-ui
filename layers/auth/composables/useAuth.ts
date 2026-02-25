@@ -15,7 +15,7 @@ import type {
   SignInUserResponse,
   SignUpUserResponse,
   UpdatePasswordResponse,
-} from '~/graphql'
+} from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
 import { QueryName } from '~~/server/queries'
 

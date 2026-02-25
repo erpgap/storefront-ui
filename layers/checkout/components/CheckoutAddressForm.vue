@@ -16,7 +16,7 @@ import type {
   Partner,
   State,
   UpdateAddressInput,
-} from '~/graphql'
+} from '~~/graphql'
 
 const props = defineProps({
   heading: String,

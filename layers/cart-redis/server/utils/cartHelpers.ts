@@ -1,4 +1,4 @@
-import type { AttributeValue, Cart, OrderLine } from '~/graphql'
+import type { AttributeValue, Cart, OrderLine } from '~~/graphql'
 
 export const reduceCart = (cartData: Cart) => ({
   order: {

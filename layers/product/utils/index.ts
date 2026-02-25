@@ -1,4 +1,4 @@
-import type { Product } from '~/graphql'
+import type { Product } from '~~/graphql'
 
 export const mountUrlSlugForProductVariant = (product: Product): string => {
   const params

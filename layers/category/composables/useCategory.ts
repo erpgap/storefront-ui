@@ -4,7 +4,7 @@ import type {
   QueryCategoriesArgs,
   QueryCategoryArgs,
   BreadcrumbItem,
-} from '~/graphql'
+} from '~~/graphql'
 import { QueryName } from '~~/server/queries/index'
 
 

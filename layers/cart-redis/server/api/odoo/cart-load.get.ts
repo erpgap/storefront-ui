@@ -1,5 +1,5 @@
 import type { Endpoints } from '@erpgap/odoo-sdk-api-client'
-import type { CustomProductWithStockFromRedis } from '~/graphql'
+import type { CustomProductWithStockFromRedis } from '~~/graphql'
 
 export default defineEventHandler(async (event: any) => {
   const websiteId = 1 // Example website ID, adjust when defined

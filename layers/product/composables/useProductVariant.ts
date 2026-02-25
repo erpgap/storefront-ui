@@ -2,7 +2,7 @@ import type {
   Product,
   ProductVariantResponse,
   QueryProductVariantArgs,
-} from '~/graphql'
+} from '~~/graphql'
 import { QueryName } from '~~/server/queries'
 
 export const useProductVariant = (slugWithCombinationIds: string) => {

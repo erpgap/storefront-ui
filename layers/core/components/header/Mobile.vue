@@ -16,7 +16,7 @@ import {
 } from '#components'
 import type {
   Category,
-} from '~/graphql'
+} from '~~/graphql'
 
 const {
   isOpen,

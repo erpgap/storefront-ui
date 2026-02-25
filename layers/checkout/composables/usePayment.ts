@@ -1,6 +1,9 @@
+import { useAsyncData } from 'nuxt/app'
+import { useNuxtApp } from 'nuxt/app'
+import { useState } from 'nuxt/app'
 import { useToast } from 'vue-toastification'
-import type { PaymentProvider, PaymentMethodListResponse } from '~/graphql'
-import { QueryName } from '~/server/queries'
+import type { PaymentProvider, PaymentMethodListResponse } from '~~/graphql'
+import { QueryName } from '~~/server/queries'
 
 export const usePayment = () => {
   const { $sdk } = useNuxtApp()

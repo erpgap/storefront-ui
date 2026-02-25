@@ -6,7 +6,7 @@ import type {
   CustomProductWithStockFromRedis,
   ProductResponse,
   QueryProductArgs,
-} from '~/graphql'
+} from '~~/graphql'
 import { QueryName } from '~~/server/queries'
 
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()

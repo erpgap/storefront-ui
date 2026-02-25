@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { SfScrollable } from '@storefront-ui/vue'
-import type { Category } from '~/graphql'
+import type { Category } from '~~/graphql'
 
 const props = defineProps<{
   items: Category[]

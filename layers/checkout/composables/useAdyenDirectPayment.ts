@@ -12,8 +12,8 @@ import type {
   Mutation,
   AdyenPaymentsResponse,
   MutationAdyenPaymentsArgs,
-} from '~/graphql'
-import { MutationName } from '~/server/mutations'
+} from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
 
 
 const useAdyenDirectPayment = (providerId: number, cartId?: number) => {

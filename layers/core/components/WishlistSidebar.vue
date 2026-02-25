@@ -6,7 +6,7 @@ import {
   SfIconClose,
   useTrapFocus,
 } from '@storefront-ui/vue'
-import type { Product } from '~/graphql'
+import type { Product } from '~~/graphql'
 
 const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading }
   = useWishlist()

@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PaymentProvider } from '~/graphql'
+import type { PaymentProvider } from '~~/graphql'
 
 interface AdyenDropinType {
   handleAction: (action: any) => void
