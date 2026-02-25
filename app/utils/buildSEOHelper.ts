@@ -1,4 +1,4 @@
-import type { Meta } from '@unhead/vue'
+import type { Meta } from '#imports'
 
 export interface SeoEntity {
   metaTitle?: string | null
@@ -70,32 +70,26 @@ const generateSeo = <T extends SeoEntity>(
     title: defaultTitle,
     meta: [
       {
-        hid: 'title',
         name: 'title',
         content: entity?.metaTitle || `${entity?.name} | ${entity?.id}`,
       },
       entity?.metaDescription && {
-        hid: 'description',
         name: 'description',
         content: entity.metaDescription,
       },
       entity?.metaDescription && {
-        hid: 'og:description',
         name: 'og:description',
         content: entity.metaDescription,
       },
       {
-        hid: 'og:title',
         name: 'og:title',
         content: defaultTitle,
       },
       {
-        hid: 'twitter:title',
         name: 'twitter:title',
         content: defaultTitle,
       },
       entity?.metaDescription && {
-        hid: 'twitter:description',
         name: 'twitter:description',
         content: entity.metaDescription,
       },
