@@ -1,6 +1,6 @@
 import { onClickOutside, useToggle } from '@vueuse/core'
 import { debounce } from 'lodash-es'
-import type { QueryProductsArgs } from '~/graphql';
+import type { QueryProductsArgs } from '~~/graphql';
 
 /**
  * @Responsabilities

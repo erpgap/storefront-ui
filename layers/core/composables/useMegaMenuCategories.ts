@@ -2,7 +2,7 @@ import type {
   QueryCategoriesArgs,
   CategoryListResponse,
   Category,
-} from '~/graphql'
+} from '~~/graphql'
 import { QueryName } from '~~/server/queries'
 
 export const useMegaMenuCategories = () => {

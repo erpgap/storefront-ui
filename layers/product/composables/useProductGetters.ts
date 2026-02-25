@@ -2,7 +2,7 @@ import type {
   CustomProductWithStockFromRedis,
   ImageGalleryItem,
   Product,
-} from '~/graphql'
+} from '~~/graphql'
 
 type BaseImage = { id: number; url: string; alt: string }
 

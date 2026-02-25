@@ -17,9 +17,9 @@ import {
   type MutationDeleteAddressArgs,
   type DeleteAddressResponse,
   type responseAddresses,
-} from '~/graphql'
-import { MutationName } from '~/server/mutations'
-import { QueryName } from '~/server/queries'
+} from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
+import { QueryName } from '~~/server/queries'
 
 export const useAddresses = () => {
   const { $sdk } = useNuxtApp()

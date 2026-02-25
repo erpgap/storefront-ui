@@ -20,6 +20,7 @@ const routesToSkipCache = [
   '/_ipx/**',
   '/_scripts/**',
   '/api/_nuxt_icon/**',
+  '/api/_nuxt_icon/',
 ]
 
 type Handler = {
@@ -32,13 +33,24 @@ type Handler = {
 export default defineNitroPlugin((nitroApp) => {
   const handlerList: Handler[] = eval('handlers')
 
-  const skipRoutesSet = new Set(routesToSkipCache)
+/*   const skipRoutesSet = new Set(routesToSkipCache)
 
   const enHandler = handlerList.filter((r) => {
     const isRouteToSkip = skipRoutesSet.has(r.route)
 
     return !isRouteToSkip
+  }) */
+
+    const shouldSkip = (route: string) => {
+  return routesToSkipCache.some((skip) => {
+    const normalized = skip.replace('/**', '')
+    return route.startsWith(normalized)
   })
+}
+
+const enHandler = handlerList.filter((r) => {
+  return !shouldSkip(r.route)
+})
 
   if (enHandler.length > 0) {
     enHandler.forEach((handler) => {

@@ -4,8 +4,8 @@ import type {
   Order,
   Orders,
   QueryOrderArgs,
-} from '~/graphql'
-import { QueryName } from '~/server/queries'
+} from '~~/graphql'
+import { QueryName } from '~~/server/queries'
 
 export const useOrders = () => {
   const { $sdk } = useNuxtApp()

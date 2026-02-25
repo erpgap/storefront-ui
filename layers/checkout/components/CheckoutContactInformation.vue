@@ -6,7 +6,7 @@ import {
   SfModal,
   useDisclosure,
 } from '@storefront-ui/vue'
-import type { MutationCreateUpdatePartnerArgs, Partner } from '~/graphql'
+import type { MutationCreateUpdatePartnerArgs, Partner } from '~~/graphql'
 
 const { updatePartner } = useAuth()
 

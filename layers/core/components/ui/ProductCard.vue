@@ -7,7 +7,7 @@ import {
   SfIconFavorite,
   SfIconFavoriteFilled,
 } from '@storefront-ui/vue'
-import type { CustomProductWithStockFromRedis, Product } from '~/graphql'
+import type { CustomProductWithStockFromRedis, Product } from '~~/graphql'
 
 defineProps({
   imageUrl: {

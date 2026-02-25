@@ -9,7 +9,7 @@ import type {
   MutationCartRemoveMultipleItemsArgs,
   MutationCartUpdateMultipleItemsArgs,
   Product,
-} from '~/graphql'
+} from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
 
 export const useCart = () => {

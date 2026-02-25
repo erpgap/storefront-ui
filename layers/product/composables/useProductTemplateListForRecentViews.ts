@@ -2,7 +2,7 @@ import type {
   Product,
   ProductTemplateListResponse,
   QueryProductsArgs,
-} from '~/graphql'
+} from '~~/graphql'
 import { QueryName } from '~~/server/queries/index'
 
 export const useProductTemplateListForRecentViews = () => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SfButton, SfLink } from '@storefront-ui/vue'
 
-import type { PaymentProvider } from '~/graphql'
+import type { PaymentProvider } from '~~/graphql'
 
 const { cart, loadCart } = useCart()
 

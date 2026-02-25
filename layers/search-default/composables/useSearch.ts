@@ -1,5 +1,5 @@
 import { useDebounceFn, useToggle } from '@vueuse/core'
-import type { Product } from '~/graphql'
+import type { Product } from '~~/graphql'
 import { useProductTemplateList } from '../../product/composables/useProductTemplateList'
 
 /**

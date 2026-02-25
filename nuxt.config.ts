@@ -2,12 +2,12 @@
 
 // nuxt.config.ts
 import { defineNuxtConfig } from 'nuxt/config'
-import path from 'path' // Added this line
+import path from 'path'
 console.log('NUXT_PUBLIC_ODOO_BASE_URL from nuxt.config.ts:', process.env.NUXT_PUBLIC_ODOO_BASE_URL);
 export default defineNuxtConfig({
-/*   extends: [
-    '@erpgap/recent-view-products',
-  ], */
+ /*  extends: [                                                          
+    '@erpgap/recent-view-products',                                      
+   ], */ 
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
@@ -71,17 +71,11 @@ export default defineNuxtConfig({
     transpile: ['vue-toastification'],
   },
 
-  routeRules: {
-    '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
-    '/_nuxt/**': {
-      headers: {
-        'cache-control': 'public, max-age=31536000, immutable'
-      }
+ $production: {
+    routeRules: {
+      '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
     },
-    '/product/**': { 
-      swr: 3600,
-    },
-    '/img/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+
   },
 
   experimental: {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AddressEnum, type Partner } from '~/graphql'
+import { AddressEnum, type Partner } from '~~/graphql'
 
 const { cart, loadCart, totalItemsInCart } = useCart()
 const { loadCountries } = useCountryList()

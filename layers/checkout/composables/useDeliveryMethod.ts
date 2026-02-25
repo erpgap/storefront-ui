@@ -5,9 +5,9 @@ import type {
   DeliveryMethodListResponse,
   MutationSetShippingMethodArgs,
   DeliveryMethodResponse,
-} from '~/graphql';
-import { MutationName } from '~/server/mutations';
-import { QueryName } from '~/server/queries';
+} from '~~/graphql';
+import { MutationName } from '~~/server/mutations';
+import { QueryName } from '~~/server/queries';
 import { useCheckout } from './useCheckout';
 
 export const useDeliveryMethod = () => {

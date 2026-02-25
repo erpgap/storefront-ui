@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { SfScrollable } from '@storefront-ui/vue'
-import type { ImageGalleryItem } from '~/graphql'
+import type { ImageGalleryItem } from '~~/graphql'
 
 const props = defineProps({
   mainImage: {

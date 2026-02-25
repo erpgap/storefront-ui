@@ -4,7 +4,7 @@ import {
   SfIconSell,
   SfLink,
 } from '@storefront-ui/vue'
-import type { CustomOrderLineWithStockFromRedis, OrderLine, Product } from '~/graphql'
+import type { CustomOrderLineWithStockFromRedis, OrderLine, Product } from '~~/graphql'
 
 const NuxtLink = resolveComponent('NuxtLink')
 

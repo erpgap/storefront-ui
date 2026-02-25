@@ -5,7 +5,7 @@ import {
   PaymentTransactionState,
   type Order,
   type PaymentTransaction,
-} from '~/graphql'
+} from '~~/graphql'
 
 definePageMeta({
   layout: 'account',

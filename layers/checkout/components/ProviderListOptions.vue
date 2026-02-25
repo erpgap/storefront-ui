@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PaymentProvider } from '~/graphql'
+import type { PaymentProvider } from '~~/graphql'
 
 type CheckoutPaymentProps = {
   activeProvider: PaymentProvider
