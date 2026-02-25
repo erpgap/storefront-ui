@@ -22,6 +22,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-viewport',
     '@nuxtjs/sitemap',
+    '@nuxt/icon',
   ],
   devtools: { enabled: true },
 
@@ -130,6 +131,8 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  css: ['~/assets/css/tailwind.css'],
 
   delayHydration: {
     mode: 'init',

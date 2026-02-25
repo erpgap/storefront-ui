@@ -54,7 +54,6 @@
     "nuxt-viewport": "2.2.0",
     "object-hash": "^3.0.0",
     "rxjs": "^7.8.2",
-    "tailwindcss": "^4.2.1",
     "typescript": "^5.8.2",
     "vue-router": "^4.3.2",
     "vue-toastification": "next"
