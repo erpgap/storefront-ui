@@ -1,4 +1,4 @@
-import { useRouter } from '#app'
+import { useRouter } from 'nuxt/app'
 
 export default defineNuxtRouteMiddleware(async (to) => {
   // Skip middleware if route exists in the static route tree
@@ -17,13 +17,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
     })
 
     if (!routeData?.value?.data) {
+      if (slug.startsWith('/.well-known/')) {
+        return
+      }
       console.warn('[dynamic-routes] Route does not exist or invalid:', slug)
       return
     }
 
     const routeComponents = {
-      category: () => import('~/layers/category/custom-pages/category-page.vue'),
-      product: () => import('~/layers/product/custom-pages/product-page.vue'),
+      category: () => import('#layers/category/custom-pages/category-page.vue'),
+      product: () => import('#layers/product/custom-pages/product-page.vue'),
     }
 
     const routeType = routeData.value.data as keyof typeof routeComponents
@@ -34,7 +37,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
       return
     }
 
-    // Add the new route dynamically
     router.addRoute({
       path: to.path,
       name: slug.replace(/^\//, '').replace(/\//g, '-'),

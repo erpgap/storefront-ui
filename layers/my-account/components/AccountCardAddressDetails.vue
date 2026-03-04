@@ -3,7 +3,7 @@ import { SfButton, SfIconClose, useDisclosure } from '@storefront-ui/vue'
 import type {
   AddressEnum,
   AddressFormFieldsInputExtendedFields,
-  Partner } from '~/graphql'
+  Partner } from '~~/graphql'
 
 const { isOpen, open, close } = useDisclosure()
 const { deleteAddress, loadAddresses } = useAddresses()

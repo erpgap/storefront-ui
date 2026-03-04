@@ -1,4 +1,4 @@
-import { QueryName } from '~/server/queries/'
+import { QueryName } from '~~/server/queries/'
 
 /**
  * This plugin is responsible for managing the product response.

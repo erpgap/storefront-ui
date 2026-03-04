@@ -1,129 +1,137 @@
-import type { AttributeFacet, AttributeValue, Product, ProductTemplateListResponse, QueryProductsArgs } from '~/graphql'
-import { QueryName } from '~/server/queries'
+import type { AttributeFacet, AttributeValue, Product, ProductTemplateListResponse, QueryProductsArgs } from '~~/graphql'
+import { QueryName } from '~~/server/queries'
 
-export const useProductTemplateList = (customIndex: string = '') => {
-  const { $sdk } = useNuxtApp()
+const SHOW_ALL_FACETS = true
+
+type FilterCount = {
+  id?: number | string
+  type?: string
+  total?: number
+}
+
+export const useProductTemplateList = (customIndex = '') => {
+  const nuxtApp = useNuxtApp() as any
+  const $sdk: () => any = nuxtApp.$sdk
   const route = useRoute()
+  const params = ref<QueryProductsArgs>({})
 
-  const categorySlugIndex = computed(() => route.fullPath)
-  const cleanFullSearchIndex = computed(() => getUniqueUrlFromRouteFilteringByAttributes(route.path, route))
+  const { data, error, execute, pending } = useAsyncData<ProductTemplateListResponse>(
+    `product-template-list-${customIndex}`,
+    () =>
+      $sdk().odoo.query(
+        { queryName: QueryName.GetProductTemplateListQuery },
+        params.value,
+        { headers: useRequestHeaders() },
+      ),
+    {
+      server: true,
+      lazy: false,
+      immediate: true,
+      default: () => null,
+    },
+  )
 
-  const minPrice = useState<number | null>(`min-price-template-list${categorySlugIndex.value}${customIndex}`, () => null)
-  const maxPrice = useState<number | null>(`max-price-template-list${categorySlugIndex.value}${customIndex}`, () => null)
-  const loading = useState(`loading-product-template-list${customIndex}`, () => false)
-  const stockCount = useState<number>(`stock-count${categorySlugIndex.value}${customIndex}`, () => 0)
-  const totalItems = useState<number>(`total-items${cleanFullSearchIndex.value}${customIndex}`, () => 0)
-  const productTemplateList = useState<Product[]>(`product-template-list${cleanFullSearchIndex.value}${customIndex}`, () => [])
-  const organizedAttributes = useState<AttributeFacet[]>(`attributes${categorySlugIndex.value}${customIndex}`, () => [])
+  const productTemplateList = computed(() => data.value?.products?.products || [])
+  const minPrice = computed(() => (data.value?.products as any)?.minPrice ?? null)
+  const maxPrice = computed(() => (data.value?.products as any)?.maxPrice ?? null)
+  const totalItems = computed(() => data.value?.products?.totalCount || 0)
 
-  const updateVariablesFromData = (data: ProductTemplateListResponse | null) => {
-    productTemplateList.value = data?.products?.products || []
-    minPrice.value = data?.products?.minPrice || null
-    maxPrice.value = data?.products?.maxPrice || null
-    totalItems.value = data?.products?.totalCount || 0
+  const organizedAttributes = computed(() => {
+    const attributes = (data.value?.products?.attributeValues as AttributeValue[]) || []
+    const filterCounts = (data.value?.products?.filterCounts as FilterCount[]) || []
+    
+    return computeAttributes(attributes, filterCounts)
+  })
 
-    computeAttributes(
-      data?.products?.attributeValues as AttributeValue[],
-      data?.products?.filterCounts as any[],
-    )
+  const stockCount = computed(() => {
+    const filterCounts = (data.value?.products?.filterCounts as FilterCount[]) || []
+    const inStockFilterCount = filterCounts.find(f => f?.type === 'in_stock')
+    return inStockFilterCount?.total || 0
+  })
+
+  const loading = computed(() => pending.value)
+
+  watch(error, (newError: any) => {
+    if (newError) {
+      console.error('[useProductTemplateList] GQL error:', newError)
+    }
+  })
+
+  const loadProductTemplateList = async (newParams: QueryProductsArgs) => {
+    params.value = newParams
+    await execute()
   }
 
-  const loadProductTemplateList = async (params: QueryProductsArgs) => {
-    const { data, status } = await useAsyncData(
-      `${cleanFullSearchIndex.value}${customIndex}`,
-      () =>
-        $sdk().odoo.query<QueryProductsArgs, ProductTemplateListResponse>(
-          { queryName: QueryName.GetProductTemplateListQuery },
-          params,
-          { headers: useRequestHeaders() },
-        ),
-      { lazy: import.meta.client },
-    )
+  function computeAttributes(
+    attributes: AttributeValue[] = [],
+    filterCounts: FilterCount[] = [],
+  ): AttributeFacet[] {
+    const facetsMap = new Map<string, AttributeFacet>()
 
-    updateVariablesFromData(data.value)
+    for (const item of attributes) {
+      const attr = (item as any)?.attribute
+      const attrName: string | undefined = attr?.name
+      const attrId: number | string | undefined = attr?.id
+      if (!attrName || !attrId) continue
 
-    watch(status, () => {
-      if (status.value === 'pending') {
-        totalItems.value = 0
-        loading.value = true
-      }
-      if (status.value === 'success' || status.value === 'error') {
-        loading.value = false
-      }
-    })
-
-    watch(data, () => {
-      updateVariablesFromData(data.value)
-    })
-  }
-
-  const computeAttributes = (attributes: AttributeValue[], filterCounts: any[]) => {
-    const data: AttributeFacet[] = []
-
-    attributes?.forEach((item: any) => {
-      const current = data.find(
-        (itemData: { attributeName: any }) =>
-          itemData.attributeName === item.attribute?.name,
-      )
-
-      if (!current) {
-        data.push({
-          id: String(item.attribute.id),
-          label: item.attribute?.name,
-          attributeName: item.attribute?.name,
+      let facet = facetsMap.get(attrName)
+      if (!facet) {
+        facet = {
+          id: String(attrId),
+          label: attrName,
+          attributeName: attrName,
           open: true,
           size: 10,
-          type: item.displayType,
+          type: (item as any)?.displayType,
           options: [],
           search: '',
-        })
+        }
+        facetsMap.set(attrName, facet)
       }
 
-      data
-        ?.find(
-          (itemData: { attributeName: any }) =>
-            itemData?.attributeName === item?.attribute?.name,
-        )
-        .options.push({
-          id: String(item.search),
-          value: item.id,
-          label: item.name,
-          htmlColor: item.htmlColor,
-          total:
-            filterCounts?.find(filter => filter.id === item?.id)?.total || 0,
-        })
-    })
+      const fc = filterCounts.find(f => f?.id === (item as any)?.id)
+      const total = fc?.total ?? 0
 
-    const inStockFilterCount = filterCounts?.find(filter => filter.type === 'in_stock')
-    if (inStockFilterCount) {
-      stockCount.value = inStockFilterCount.total || 0
+      facet.options.push({
+        id: String((item as any)?.search),
+        value: (item as any)?.id,
+        label: (item as any)?.name,
+        htmlColor: (item as any)?.htmlColor,
+        total,
+      })
     }
 
-    const queryParamsKeys = Object.keys(route.query)
+    const built: AttributeFacet[] = Array.from(facetsMap.values())
 
-    organizedAttributes.value = data.filter((item) => {
-      if (item.options.length === 1) {
-        return false
-      }
-      if (queryParamsKeys?.filter(item => item !== 'sort' && item !== 'list-view').length > 0) {
-        return true
-      }
+    let result: AttributeFacet[]
+    
+    if (SHOW_ALL_FACETS) {
+      result = built
+        .slice()
+        .sort((a, b) => Number(a.id) - Number(b.id))
+    } else {
+      const queryParamsKeys = Object.keys(route.query)
+      result = built
+        .filter((facet) => {
+          if (facet.options.length === 1) return false
+          if (queryParamsKeys.filter(k => k !== 'sort' && k !== 'list-view').length > 0) {
+            return true
+          }
+          return facet.options.length > 1
+        })
+        .sort((a, b) => Number(a.id) - Number(b.id))
+    }
 
-      return item.options.length > 1
+    // Sort options within each facet
+    result.forEach((facet) => {
+      facet.options = facet.options.sort((a, b) => a.label.localeCompare(b.label))
     })
-    organizedAttributes.value = organizedAttributes.value.sort(
-      (a, b) => Number(a.id) - Number(b.id),
-    )
-    organizedAttributes.value.forEach((item) => {
-      item.options = item.options.sort((a, b) =>
-        a.label.localeCompare(b.label),
-      )
-    })
+
+    return result
   }
 
   return {
     loadProductTemplateList,
-
     minPrice,
     maxPrice,
     loading,
@@ -131,5 +139,6 @@ export const useProductTemplateList = (customIndex: string = '') => {
     organizedAttributes,
     totalItems,
     stockCount,
+    error,
   }
 }

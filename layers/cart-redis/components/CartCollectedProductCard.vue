@@ -4,7 +4,7 @@ import {
   SfIconSell,
   SfLink,
 } from '@storefront-ui/vue'
-import type { CustomOrderLineWithStockFromRedis, OrderLine, Product } from '~/graphql'
+import type { CustomOrderLineWithStockFromRedis, OrderLine, Product } from '~~/graphql'
 
 const NuxtLink = resolveComponent('NuxtLink')
 
@@ -46,6 +46,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
         />
       </SfLink>
       <div
+        v-if="variantHasDiscountedPrice"
         class="absolute top-0 left-0 text-white bg-secondary-600 py-1 pl-1.5 pr-2 text-xs font-medium"
       >
         <SfIconSell
@@ -88,7 +89,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
       >
         <span
           v-if="orderLine.priceSubtotal"
-          class="text-secondary-700 sm:order-1 font-bold typography-text-sm sm:typography-text-lg sm:ml-auto"
+          class="text-black sm:order-1 font-bold typography-text-sm sm:typography-text-lg sm:ml-auto"
         >
           {{ $currency(orderLine.priceSubtotal) }}
           <span
@@ -107,10 +108,9 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
           ${{ orderLine.priceTotal }}
         </span>
         <UiQuantitySelector
-          v-model="orderLine.quantity"
           :min-value="1"
           :max-value="Number(orderLine.product?.stock)"
-          :value="Number(orderLine.quantity)"
+          :model-value="Number(orderLine.quantity)"
           class="mt-4 sm:mt-0"
           @update:model-value="updateItemQuantity(orderLine.id, $event)"
         />

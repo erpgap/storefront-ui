@@ -7,6 +7,8 @@ export default `
         id
         name
         slug
+        imageFilename
+        image
         childs {
           id
           name

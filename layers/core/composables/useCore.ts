@@ -2,8 +2,8 @@ import { useToast } from 'vue-toastification'
 import type {
   MutationNewsletterSubscribeArgs,
   NewsletterSubscribeResponse,
-} from '~/graphql'
-import { MutationName } from '~/server/mutations'
+} from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
 
 const toast = useToast()
 

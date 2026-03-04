@@ -1,4 +1,9 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+
+const { loadWishlist } = useWishlist()
+if (import.meta.client) onMounted(() => { loadWishlist() })
+
+</script>
 
 <template>
   <TheHeader />

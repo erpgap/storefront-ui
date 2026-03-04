@@ -19,6 +19,11 @@ import type {
 } from './gql/graphql'
 import type { AsyncData } from '#app'
 
+export interface BreadcrumbItem {
+  label: string;
+  link: string;
+}
+
 export type CategoryListResponse =
   {
     categories: {

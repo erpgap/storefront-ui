@@ -1,20 +1,21 @@
-import type { Homepage, WebsiteHomepageResponse } from '~/graphql'
-import { QueryName } from '~/server/queries'
+import type { Homepage, WebsiteHomepageResponse } from '~~/graphql'
+import { QueryName } from '~~/server/queries'
 
 export const useWebsiteHomePage = () => {
   const { $sdk } = useNuxtApp()
-  const websiteHomepage = useState<Homepage>('websiteHomepage', () => ({}) as Homepage)
+  const websiteHomepage = useState<Homepage>('websiteHomepage', () => (({}) as Homepage))
   const loading = ref(false)
 
   const getWebsiteHomepage = async () => {
     loading.value = true
     try {
-      const { data } = await useAsyncData<any, WebsiteHomepageResponse>(() =>
+      const { data } = await useAsyncData<any, WebsiteHomepageResponse>('website-homepage', () =>
         $sdk().odoo.query({ queryName: QueryName.GetWebsiteHomepageQuery },
           {},
           { headers: useRequestHeaders() },
-        ),
-      )
+        ), {
+        deep: true
+      })
 
       if (data.value) {
         websiteHomepage.value = data.value?.websiteHomepage as Homepage

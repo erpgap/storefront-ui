@@ -15,9 +15,9 @@ import type {
   SignInUserResponse,
   SignUpUserResponse,
   UpdatePasswordResponse,
-} from '~/graphql'
-import { MutationName } from '~/server/mutations'
-import { QueryName } from '~/server/queries'
+} from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
+import { QueryName } from '~~/server/queries'
 
 export const useAuth = () => {
   const { $sdk } = useNuxtApp()

@@ -10,6 +10,10 @@ const props = defineProps({
     default: '',
     required: false,
   },
+  products: {
+    type: String,
+    required: false,
+  },
 })
 
 const { loadProductTemplateList, productTemplateList }

@@ -6,18 +6,18 @@ import type {
   WishlistData,
   WishlistLoadResponse,
   WishlistRemoveItemResponse,
-} from '~/graphql'
-import { MutationName } from '~/server/mutations'
-import { QueryName } from '~/server/queries'
+  WishlistItems,
+} from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
+import { QueryName } from '~~/server/queries'
 
 export const useWishlist = () => {
-  const { $sdk } = useNuxtApp()
-  const loading = ref(false)
-  const wishlist = useState<WishlistData>(
-    'wishlist',
-    () => ({} as WishlistData),
-  )
+  const { $sdk } = useNuxtApp() as any
   const toast = useToast()
+  const loading = ref(false)
+  const wishlist = useState<WishlistData>('wishlist', () => ({ wishlistItems: [], totalCount: 0 } as unknown as WishlistData))
+  const fetchedOnce = useState<boolean>('wishlist-fetched-once', () => false)
+
 
   const loadWishlist = async () => {
     try {
@@ -60,7 +60,7 @@ export const useWishlist = () => {
 
   const getProductFromProductId = (productId: number) => {
     return wishlist.value?.wishlistItems?.find(
-      item => item?.product?.id === productId,
+      (      item: { product: { id: number } }) => item?.product?.id === productId,
     )
   }
 
@@ -81,7 +81,7 @@ export const useWishlist = () => {
         { wishId: wishlistItem.id },
       )
 
-      wishlist.value = data?.wishlistRemoveItem
+      wCishlist.value = data?.wishlistRemoveItem
     }
     catch (error) {
       toast.error(error.data?.message)
@@ -91,6 +91,7 @@ export const useWishlist = () => {
     }
   }
 
+
   const wishlistTotalItems = computed(() => {
     return wishlist.value?.wishlistItems?.length || 0
   })
@@ -98,7 +99,7 @@ export const useWishlist = () => {
   const isInWishlist = (productId: number) => {
     return (
       wishlist.value?.wishlistItems?.some(
-        item => item?.product?.id === productId,
+        (        item: { product: { id: number } }) => item?.product?.id === productId,
       ) || false
     )
   }
@@ -107,7 +108,6 @@ export const useWishlist = () => {
     loading,
     wishlist,
     wishlistTotalItems,
-
     isInWishlist,
     loadWishlist,
     wishlistAddItem,

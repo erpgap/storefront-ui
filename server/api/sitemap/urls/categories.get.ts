@@ -1,8 +1,16 @@
 import { defineSitemapEventHandler } from '#imports'
 import type { SitemapUrlInput } from '#sitemap/types'
-import type { Category } from '~/graphql'
 
-export default defineSitemapEventHandler(async (event: any) => {
+export default defineSitemapEventHandler(async (event) => {
+  const config = useRuntimeConfig()
+  const odooUrl = config.public.odooBaseUrl
+
+  // Log para debug em produção (verificar logs do servidor)
+  if (!odooUrl) {
+    console.error('[Sitemap Categories] NUXT_PUBLIC_ODOO_BASE_URL is missing!')
+    return []
+  }
+
   const query = `
     query {
       categories(pageSize: 1000) {
@@ -12,24 +20,25 @@ export default defineSitemapEventHandler(async (event: any) => {
       }
     }
   `
-  const odooBaseUrl = `${process.env?.NUXT_PUBLIC_ODOO_BASE_URL}graphql/vsf`
+  
+  try {
+    const response = await $fetch(`${odooUrl}graphql/vsf`, {
+      method: 'POST',
+      body: { query },
+    })
 
-  const response = await $fetch(odooBaseUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query }),
-  })
+    const categories = response?.data?.categories?.categories || []
+    console.log(`[Sitemap Categories] Fetched ${categories.length} categories`)
 
-  const categories: Category[] = response?.data?.categories?.categories || []
+    return categories
+      .filter((c: any) => c.slug && c.slug !== 'false')
+      .map((c: any) => ({
+        loc: c.slug,
+        _sitemap: 'categories',
+      } satisfies SitemapUrlInput))
 
-  const sitemapUrls = categories
-    .filter((category: Category) => category.slug && category.slug !== 'false')
-    .map((category: any) => ({
-      loc: category.slug,
-      _sitemap: 'categories',
-    } satisfies SitemapUrlInput))
-
-  return sitemapUrls
+  } catch (error) {
+    console.error('[Sitemap Categories] Error fetching from Odoo:', error)
+    return []
+  }
 })

@@ -1,25 +1,21 @@
 <script setup lang="ts">
-import type { QueryProductsArgs } from '~/graphql'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
+import { useMegaMenuCategories } from '~~/layers/core/composables/useMegaMenuCategories.ts'
+import { useWebsiteHomePage } from '~~/layers/core/composables/useWebsiteHomePage.ts'
 
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
+const { categoriesForMegaMenu } = useMegaMenuCategories()
 
 await getWebsiteHomepage()
-
 useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
 </script>
 
 <template>
   <div>
     <MainBanner />
-
-    <Categories />
-
+    <Categories :items="categoriesForMegaMenu" />
     <BannerRight />
-
     <LazyProductRecentViewSlider heading="Shop our Best Sellers" />
-
     <BannerLeft />
-    
   </div>
 </template>

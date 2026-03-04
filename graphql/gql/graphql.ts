@@ -236,12 +236,18 @@ export type Company = {
 };
 
 export type ContactUsParams = {
+  attachments: InputMaybe<Array<InputMaybe<ContactusAttachmentInput>>>;
   company: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   message: Scalars['String']['input'];
   name: Scalars['String']['input'];
   phone: InputMaybe<Scalars['String']['input']>;
   subject: Scalars['String']['input'];
+};
+
+export type ContactusAttachmentInput = {
+  fileData: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type Countries = {

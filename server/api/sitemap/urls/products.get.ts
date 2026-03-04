@@ -1,44 +1,73 @@
 import { defineSitemapEventHandler } from '#imports'
 import type { SitemapUrlInput } from '#sitemap/types'
-import type { Product } from '~/graphql'
 
-export default defineSitemapEventHandler(async (event: any) => {
-  const query = `
-query GetProducts {
-  products(pageSize: 1000) {
-    products {
-      slug
-      image
-      imageFilename
-    }
+export default defineSitemapEventHandler(async (event) => {
+  const config = useRuntimeConfig()
+  const odooUrl = config.public.odooBaseUrl
+  
+  if (!odooUrl) {
+    console.error('[Sitemap Products] Env var missing')
+    return []
   }
-}
-`
 
-  const odooBaseUrl = `${process.env?.NUXT_PUBLIC_ODOO_BASE_URL}graphql/vsf`
+  const pageSize = 1000 
+  let allProducts: any[] = []
+  let currentPage = 1
+  let hasMore = true
 
-  const data = await $fetch(odooBaseUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query }),
-  })
+  const query = `
+    query GetProducts($pageSize: Int, $currentPage: Int) {
+      products(pageSize: $pageSize, currentPage: $currentPage) {
+        totalCount
+        products {
+          id
+          slug
+          image
+          imageFilename
+        }
+      }
+    }
+  `
 
-  return data?.data?.products?.products?.map((product: Product) => {
-    const url: SitemapUrlInput = {
-      loc: product.slug,
+  console.log('[Sitemap Products] Starting fetch...')
+
+  try {
+    while (hasMore) {
+      const response = await $fetch(`${odooUrl}graphql/vsf`, {
+        method: 'POST',
+        body: { 
+          query,
+          variables: { pageSize, currentPage }
+        }
+      })
+
+      const data = response?.data?.products
+      const products = data?.products || []
+      const totalCount = data?.totalCount || 0
+      
+      allProducts = [...allProducts, ...products]
+      console.log(`[Sitemap Products] Page ${currentPage}: Fetched ${products.length} (Total: ${allProducts.length}/${totalCount})`)
+
+      const totalPages = Math.ceil(totalCount / pageSize)
+      if (currentPage >= totalPages || products.length === 0) {
+        hasMore = false
+      } else {
+        currentPage++
+      }
+    }
+  } catch (e) {
+    console.error('[Sitemap Products] Failed to fetch products:', e)
+    return [] 
+  }
+
+  return allProducts.map((product) => {
+    return {
+      loc: `${product.slug}-${product.id}`,
       _sitemap: 'products',
-    }
-
-    if (product.image) {
-      url.images = [{
+      images: product.image ? [{
         loc: product.image,
-        caption: product.imageFilename || '',
-        title: product.imageFilename || '',
-      }]
-    }
-
-    return url
-  }) satisfies SitemapUrlInput[] || []
+        title: product.imageFilename || ''
+      }] : []
+    } satisfies SitemapUrlInput
+  })
 })

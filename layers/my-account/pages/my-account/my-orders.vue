@@ -5,7 +5,7 @@ import {
   PaymentTransactionState,
   type Order,
   type PaymentTransaction,
-} from '~/graphql'
+} from '~~/graphql'
 
 definePageMeta({
   layout: 'account',
@@ -42,7 +42,7 @@ const NuxtLink = resolveComponent('NuxtLink')
       <caption class="hidden">
         List of orders
       </caption>
-      <thead class="border-b-2 border-neutral-200">
+      <thead class="border-b-2 border-neutral-200 ">
         <tr>
           <th class="py-4 pr-4 font-medium">
             {{ $t("account.myOrders.orderId") }}
@@ -98,7 +98,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     <h3 class="typography-headline-3 font-bold mb-4 mt-6">
       {{ $t("account.myOrders.noOrders") }}
     </h3>
-    <SfButton variant="secondary" class="!ring-neutral-200">
+    <SfButton :tag="NuxtLink" variant="secondary" class="!ring-neutral-200" :to="'/search'">
       {{ $t("account.myOrders.continue") }}
     </SfButton>
   </div>

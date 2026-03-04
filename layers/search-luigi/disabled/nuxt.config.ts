@@ -5,7 +5,8 @@ export default defineNuxtConfig({
       script: [
         {
           src: 'https://scripts.luigisbox.com/LBX-732226.js',
-          async: true,
+          defer: true,
+          //async: true,
         },
       ],
     },

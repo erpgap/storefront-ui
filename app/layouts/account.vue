@@ -50,7 +50,7 @@
       >
         <div
           :class="[
-            'border-t md:border border-neutral-200 pt-4 pb-4 md:p-4 md:rounded-md min-w-[300px] md:block',
+            'border-t md:border border-neutral-200 pt-4 pb-4 md:p-4 md:rounded-md min-w-[300px] md:block max-h-[500px] overflow-y-auto',
             { hidden: !isRoot },
           ]"
         >
@@ -75,7 +75,7 @@
                 :tag="NuxtLink"
                 :to="link"
                 :class="[
-                  'first-of-type:py-4 md:first-of-type:px-4 md:first-of-type:py-2 px-0 md:px-4 rounded-md active:bg-primary-100 !text-neutral-900',
+                  'first-of-type:py-4 md:first-of-type:px-4 md:first-of-type:py-2 px-0 md:px-4 rounded-md active:bg-primary-100 !text-neutral-900 hover:bg-primary-100',
                   {
                     'font-medium bg-primary-100':
                       router.currentRoute.value.path === link,
@@ -98,7 +98,7 @@
           <ul>
             <SfListItem
               :tag="NuxtLink"
-              class="py-4 md:py-2 mt-4 rounded-md active:bg-primary-100 !text-neutral-900"
+              class="py-4 md:py-2 mt-4 rounded-md active:bg-primary-100 !text-neutral-900 hover:bg-primary-100"
               @click="handleLogout"
             >
               <template #prefix>

@@ -7,7 +7,7 @@ import {
   SfIconFavorite,
   SfIconFavoriteFilled,
 } from '@storefront-ui/vue'
-import type { CustomProductWithStockFromRedis, Product } from '~/graphql'
+import type { CustomProductWithStockFromRedis, Product } from '~~/graphql'
 
 defineProps({
   imageUrl: {
@@ -75,7 +75,7 @@ const handleWishlistRemoveItem = async (firstVariant: CustomProductWithStockFrom
     class="relative flex flex-col"
   >
     <div class="relative">
-      <NuxtLink :to="slug">
+      <NuxtLink :to="slug" prefetch>
         <NuxtImg
           :src="imageUrl"
           :alt="imageAlt"

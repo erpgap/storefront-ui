@@ -17,9 +17,9 @@ import {
   type MutationDeleteAddressArgs,
   type DeleteAddressResponse,
   type responseAddresses,
-} from '~/graphql'
-import { MutationName } from '~/server/mutations'
-import { QueryName } from '~/server/queries'
+} from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
+import { QueryName } from '~~/server/queries'
 
 export const useAddresses = () => {
   const { $sdk } = useNuxtApp()
@@ -124,14 +124,14 @@ export const useAddresses = () => {
     if (type === AddressEnum.Billing) {
       const address = data?.updateAddress
       const index = billingAddresses.value.findIndex(
-        addr => addr.id === address.id,
+        (        addr: { id: any }) => addr.id === address.id,
       )
       billingAddresses.value[index] = address
     }
     else {
       const address = data?.updateAddress
       const index = shippingAddresses.value.findIndex(
-        addr => addr.id === address.id,
+        (        addr: { id: any }) => addr.id === address.id,
       )
       shippingAddresses.value[index] = address
     }

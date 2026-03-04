@@ -1,44 +1,65 @@
 import type {
-  CustomProductWithStockFromRedis,
+  Product,
   ProductVariantResponse,
   QueryProductVariantArgs,
-} from '~/graphql'
-import { QueryName } from '~/server/queries'
+} from '~~/graphql'
+import { QueryName } from '~~/server/queries'
 
 export const useProductVariant = (slugWithCombinationIds: string) => {
   const { $sdk } = useNuxtApp()
 
   const loadingProductVariant = ref(false)
-  const productVariant = useState<CustomProductWithStockFromRedis>(
-    `product-${slugWithCombinationIds}`,
-    () => ({}) as CustomProductWithStockFromRedis,
-  )
+  const productVariant = useState<Product>(`product-${slugWithCombinationIds}`, () => ({}) as Product)
+
 
   const loadProductVariant = async (params: QueryProductVariantArgs) => {
     try {
       loadingProductVariant.value = true
-
-      const { data, status } = await useAsyncData(
-        `product-variant-${slugWithCombinationIds}`,
-        () => $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>(
-          { queryName: QueryName.GetProductVariantQuery },
-          params,
-        ),
+      const res = await $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>(
+        { queryName: QueryName.GetProductVariantQuery },
+        params,
       )
 
-      await until(status).toBe('success')
+      productVariant.value = (res?.productVariant?.product || {}) as Product
 
-      productVariant.value = (data?.value?.productVariant?.product) || {} as CustomProductWithStockFromRedis
-
-      await nextTick()
-    }
-    catch (error) {
+      if (!productVariant.value?.id) {
+        showError({
+          status: 404,
+          message: 'Product not found',
+        })
+      }
+    } catch (error) {
       console.error('Error loading product variant:', error)
-    }
-    finally {
+      showError({
+        status: 500,
+        message: 'Error loading product variant',
+      })
+    } finally {
       loadingProductVariant.value = false
     }
   }
+
+
+  const categoriesForBreadcrumb = computed(() => {
+    return (
+      productVariant.value?.categories
+        ?.filter((category: { name: string }) => category.name !== 'All')
+        ?.map((item: { name: any; slug: any }) => ({ name: item.name, link: item.slug }))
+        ?.flat() || []
+    )
+  })
+
+  const breadcrumbs = computed(() => {
+    return [
+      { name: 'Home', link: '/' },
+      ...categoriesForBreadcrumb.value,
+      {
+        name: productVariant?.value?.name,
+        link: `product/${productVariant?.value?.name}`,
+      },
+    ]
+  })
+
 
   const getImages = computed(() => {
     return [
@@ -62,11 +83,12 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   )
 
   return {
-    loadingProductVariant: readonly(loadingProductVariant),
-    productVariant: readonly(productVariant),
+    loadingProductVariant,
+    productVariant: computed(() => productVariant.value),
     getImages,
     getRegularPrice,
     getSpecialPrice,
     loadProductVariant,
+    breadcrumbs,
   }
 }

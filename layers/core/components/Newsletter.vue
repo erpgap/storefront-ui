@@ -14,7 +14,7 @@ const subscribeNewsletter = async () => {
 </script>
 
 <template>
-  <div class="relative border-t border-b border-[#E5E7EB]">
+  <div class="relative border-t border-b border-[#E5E7EB] h-[260px] sm:h-auto">
     <div class="flex flex-wrap gap-4 items-center justify-center sm:justify-between narrow-container py-8 sm:py-14">
       <div class="text-center sm:text-left">
         <h3 class="text-[24px] sm:text-[28px] font-normal mb-[5px]">
@@ -27,7 +27,7 @@ const subscribeNewsletter = async () => {
       <form class="w-full sm:w-auto flex border border-black rounded-md mb-4 sm:mb-0" @submit.prevent="subscribeNewsletter()">
         <UiFormEmailInput 
           v-model="inputValue" 
-          @is-field-valid="(n) => (emailValidation = n)" 
+          @is-field-valid="(n: any) => (emailValidation = n)" 
           class="w-full sm:min-w-[300px]"
         />
         <SfButton :disabled="!emailValidation" type="submit" class="!bg-white !border-none !ring-none !shadow-none">

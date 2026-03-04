@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { SfButton, SfInput, SfIconVisibility } from '@storefront-ui/vue'
 import { useToast } from 'vue-toastification'
-import type { MutationChangePasswordArgs } from '~/graphql'
+import type { MutationChangePasswordArgs } from '~~/graphql'
 
 const { changeForgottenPassword } = useAuth()
 const route = useRoute()

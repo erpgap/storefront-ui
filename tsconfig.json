@@ -1,4 +1,19 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json"
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "paths": {
+      "~~": ["."],
+      "~~/*": ["./*"],
+      "@@": ["."],
+      "@@/*": ["./*"]
+    }
+  },
+  "include": [
+    "**/*",
+    ".nuxt/types/imports.d.ts",
+    ".nuxt/types/nitro-imports.d.ts",
+    ".nuxt/types/shared-imports.d.ts"
+  ]
 }

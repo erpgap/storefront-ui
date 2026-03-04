@@ -26,7 +26,7 @@ websiteOrderLine {
   priceSubtotal
   coupon {
     id
-  code
+    code
   }
   giftCard {
     id
@@ -38,7 +38,7 @@ websiteOrderLine {
     image
     imageFilename
     displayName
-    combinationInfo
+    #combinationInfo
     slug
     variantAttributeValues{
       id
@@ -55,13 +55,14 @@ reportOrderLine {
   id
   name
   priceSubtotal
+  priceUnit
   product {
     id
     name
     image
     imageFilename
     displayName
-    combinationInfo
+    #combinationInfo
     slug
     variantAttributeValues{
       id
@@ -84,7 +85,7 @@ orderLines {
     image
     imageFilename
     displayName
-    combinationInfo
+    #combinationInfo
     slug
     variantAttributeValues{
       id
