@@ -44,7 +44,7 @@ const handleSignup = async () => {
     :heading="$t('auth.signup.heading')"
   >
     <UiAlert
-      class="w-full p-4 md:p-6 mb-6 !justify-start typography-text-base"
+      class="w-full p-4 md:p-6 mb-6 !justify-start typography-text-base !bg-[#f7f7f7]"
       variant="neutral"
     >
       <i18n-t keypath="auth.signup.bannerText">

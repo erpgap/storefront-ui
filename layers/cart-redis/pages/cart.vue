@@ -66,7 +66,7 @@ await loadCart()
         <UiOrderSummary :cart="cart">
           <NuxtLink to="/checkout">
             <SfButton
-              size="lg"
+              size="lg"}
               class="w-full mb-4 md:mb-0"
             >
               {{ $t('goToCheckout') }}
@@ -108,5 +108,9 @@ await loadCart()
     <h2 class="mt-8">
       {{ $t('emptyCart') }}
     </h2>
+    <br><br>
+    <SfButton :tag="NuxtLink" variant="secondary" class="!ring-neutral-200" :to="'/search'">
+      {{ $t("account.myOrders.continue") }}
+    </SfButton>
   </div>
 </template>

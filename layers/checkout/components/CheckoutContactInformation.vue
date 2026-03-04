@@ -6,7 +6,7 @@ import {
   SfModal,
   useDisclosure,
 } from '@storefront-ui/vue'
-import type { MutationCreateUpdatePartnerArgs, Partner } from '~/graphql'
+import type { MutationCreateUpdatePartnerArgs, Partner } from '~~/graphql'
 
 const { updatePartner } = useAuth()
 
@@ -31,7 +31,7 @@ const { commit: commitName, undo: undoName } = useManualRefHistory(name)
 
 watch(
   () => props.partnerData,
-  (newPartnerData) => {
+  (newPartnerData: { isPublic: any; id: number }) => {
     if (newPartnerData.isPublic && newPartnerData.id === 4) {
       name.value = ''
     }
@@ -46,6 +46,8 @@ const handleUpdatePartnerData = async () => {
     email: String(email.value),
     name: String(name.value),
     subscribeNewsletter: subscribeNewsletter.value,
+    mobile: null,
+    phone: null
   }
   await updatePartner(data)
 

@@ -6,5 +6,6 @@
     "source.fixAll.eslint": "always",
     "source.organizeImports": "never"
   },
-  "svg.preview.background": "dark-transparent"
+  "svg.preview.background": "dark-transparent",
+  "vue3snippets.enable-compile-vue-file-on-did-save-code": false
 }

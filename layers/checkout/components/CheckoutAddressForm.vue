@@ -16,7 +16,7 @@ import type {
   Partner,
   State,
   UpdateAddressInput,
-} from '~/graphql'
+} from '~~/graphql'
 
 const props = defineProps({
   heading: String,
@@ -63,8 +63,8 @@ const isCartUpdateLoading = false
 const handleSaveAddress = async () => {
   const data: UpdateAddressInput = {
     name: name.value,
-    street: street.value?.split(' ')?.[0] || '',
-    street2: street.value?.split(' ')?.[1] || '',
+    street: street.value?.split(' ')?.[0],
+    street2: street.value?.split(' ')?.[1],
     city: city.value,
     zip: zip.value,
     phone: phone.value,
@@ -226,7 +226,7 @@ const handleCloseModal = () => {
 
           <div class="md:col-span-3 flex flex-col-reverse md:flex-row justify-end mt-6 gap-4">
             <SfButton type="reset" class="" variant="secondary" @click="handleCloseModal">
-              {{ $t("contactInfo.cancel") }}
+              {{ $t("contactInfo.cancel")}}
             </SfButton>
             <SfButton type="submit" class="min-w-[120px]" :disabled="isCartUpdateLoading">
               <SfLoaderCircular v-if="isCartUpdateLoading" class="flex justify-center items-center" size="sm" />

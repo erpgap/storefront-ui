@@ -1,7 +1,9 @@
 import { useToast } from 'vue-toastification'
-import { QueryName } from '~/server/queries'
+import { QueryName } from '~~/server/queries'
 
-import type { Countries, CountriesResponse } from '~/graphql'
+import type { Countries, CountriesResponse } from '~~/graphql'
+import { useAsyncData, useState } from 'nuxt/app'
+import { useNuxtApp } from 'nuxt/app'
 
 export const useCountryList = () => {
   const { $sdk } = useNuxtApp()

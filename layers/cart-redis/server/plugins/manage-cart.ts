@@ -1,7 +1,7 @@
 import { updateCart, reduceCart } from '../utils/cartHelpers.js'
-import { AddressType, type Cart } from '~/graphql'
-import { MutationName } from '~/server/mutations'
-import { QueryName } from '~/server/queries'
+import { AddressType, type Cart } from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
+import { QueryName } from '~~/server/queries'
 
 /**
  * This plugin is responsible for managing the cart cache.

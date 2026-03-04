@@ -11,7 +11,7 @@ import {
   type AddAddressInput,
   type AddressFormFieldsInputExtendedFields,
   type UpdateAddressInput,
-} from '~/graphql'
+} from '~~/graphql'
 
 const { updateAddress, addAddress, loading } = useAddresses()
 

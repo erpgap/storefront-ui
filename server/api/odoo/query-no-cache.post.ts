@@ -1,4 +1,4 @@
-import { Queries } from '~/server/queries'
+import { Queries } from '~~/server/queries'
 
 export default defineEventHandler(async (event: any) => {
   const config = useRuntimeConfig(event)

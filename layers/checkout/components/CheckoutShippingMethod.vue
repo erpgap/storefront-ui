@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { SfListItem, SfRadio, SfIconBlock } from '@storefront-ui/vue'
 
-const { deliveryMethods, loadDeliveryMethods, setDeliveryMethod }
-  = useDeliveryMethod()
+const {
+  deliveryMethods,
+  loadDeliveryMethods,
+  setDeliveryMethod,
+  setDeliveryMethodImmediate,
+} = useDeliveryMethod()
 
 const radioModel = ref('')
 
@@ -16,14 +19,10 @@ defineProps({
 
 await loadDeliveryMethods()
 
-watch(() => deliveryMethods, async () => {
-  if (!deliveryMethods?.value?.length) return
+if (deliveryMethods?.value?.length) {
   radioModel.value = String(deliveryMethods.value[0]?.id)
-  await setDeliveryMethod(deliveryMethods.value[0]?.id)
-}, {
-  deep: true,
-  immediate: true,
-})
+  await setDeliveryMethodImmediate(deliveryMethods.value[0]?.id)
+}
 
 const handleSelectShippingMethod = async (shippingMethodId: number) => {
   radioModel.value = String(shippingMethodId)
@@ -52,7 +51,7 @@ const handleSelectShippingMethod = async (shippingMethodId: number) => {
           v-for="{ id, name } in deliveryMethods"
           :key="id"
           tag="label"
-          class="border rounded-md items-start"
+          class="border rounded-md items-start hover:bg-primary-100"
           @click="handleSelectShippingMethod(id)"
         >
           <div class="flex gap-2">

@@ -8,146 +8,171 @@ import {
   SfSelect,
   SfThumbnail,
 } from '@storefront-ui/vue'
+import { useRoute, useRouter } from 'vue-router'
 
-const emit = defineEmits(['close'])
-const props = defineProps({
-  attributes: {
-    type: Array,
-    required: true,
-  },
-  categories: {
-    type: Object,
-    required: true,
-  },
-})
+type FacetOption = {
+  id: string | number
+  value?: string | number
+  label: string
+  total?: number
+  htmlColor?: string
+  values?: string
+}
 
-const stockCount = inject('stockCount')
+type Facet = {
+  id: string | number | null
+  label: string
+  type: 'price' | 'select' | 'radio' | 'color' | 'in-stock'
+  attributeName?: string
+  options?: FacetOption[]
+}
 
+const emit = defineEmits<{ (e: 'close'): void }>()
+const props = defineProps<{ attributes: Facet[], categories: any[] }>()
+
+const stockCount = inject('stockCount') as number | undefined
 const route = useRoute()
 const router = useRouter()
-const {
-  changeFilters,
-  isFilterSelected,
-  isStockSelected,
-  selectedFilters,
-} = useUiHelpers()
+const { changeFilters } = useUiHelpers()
 
-const sort = useState('sort', () =>
-  route.query?.sort ? String(route.query.sort) : '',
-)
-
-const sortBy = computed(() => getSortOptions({ input: { sort: sort.value } }))
-const changeSorting = (newSort: string) => {
+const sort = useState('sort', () => (route.query?.sort ? String(route.query.sort) : ''))
+const sortOptions = [
+  { id: 'name-asc', value: 'name,ASC', attrName: 'Name (A → Z)' },
+  { id: 'name-desc', value: 'name,DESC', attrName: 'Name (Z → A)' },
+  { id: 'price-asc', value: 'price,ASC', attrName: 'Price (low → high)' },
+  { id: 'price-desc', value: 'price,DESC', attrName: 'Price (high → low)' },
+]
+const sortBy = computed(() => ({ options: sortOptions, selected: sort.value || 'name,ASC' }))
+function changeSorting(newSort: string) {
   sort.value = newSort
-
   applyFiltersInstantly()
 }
-const getSortOptions = (searchData: { input: any }) => ({
-  options: sortOptions,
-  selected: searchData.input.sort || 'name,ASC',
-})
 
-const facets = computed(() => [
+const facets = computed<Facet[]>(() => [
   {
     id: null,
-    label: 'Price',
+    label: 'price',
     type: 'price',
     options: [
       { id: 'pr1', label: 'Under $250.00', values: '0-250' },
       { id: 'pr2', label: '$250.00 - $500.00', values: '250-500' },
       { id: 'pr3', label: '$500.00 - $750.00', values: '500-750' },
       { id: 'pr4', label: '$750.00 - $1000.00', values: '750-1000' },
-      { id: 'pr5', label: '$1000.00- $1500.00', values: '1000-1500' },
+      { id: 'pr5', label: '$1000.00 - $1500.00', values: '1000-1500' },
+      { id: 'pr6', label: '$1500.00 - $2000.00', values: '1500-2000' },
     ],
   },
-  ...props.attributes,
-  {
-    id: 888,
-    label: 'Availability',
-    type: 'in-stock',
-  },
+  ...(props.attributes ?? []),
+  { id: 888, label: 'Availability', type: 'in-stock' },
 ])
 
-const selectPriceFilter = (option: { id: string, label: string, values: string }) => {
+const selectedFilters = useState<any[]>('search-selected-filters', () => [])
+
+function syncFromQuery() {
+  const q = route.query
+  const next: any[] = []
+
+  if (typeof q.price === 'string' && q.price) {
+    next.push({ filterName: 'Price', label: 'price-range', id: q.price })
+  }
+
+  if (String(q.in_stock).toLowerCase() === 'true') {
+    next.push({ filterName: 'Availability', label: 'true', id: 'true' })
+  }
+
+  Object.entries(q).forEach(([key, val]) => {
+    if (['page', 'pageSize', 'sort', 'price', 'in_stock'].includes(key)) return
+    const values = String(val).split(',').filter(Boolean)
+    values.forEach(v => next.push({ filterName: key, label: v, id: v }))
+  })
+
+  selectedFilters.value = next
+}
+onMounted(syncFromQuery)
+watch(() => route.query, syncFromQuery, { deep: true })
+
+/* function isPriceFilterSelected(values: string) {
+  return selectedFilters.value.some(
+    (    f: { filterName: any; id: any }) => String(f.filterName).toLowerCase() === 'price' &&
+         String(f.id) === String(values)
+  )
+}
+
+function selectPriceFilter(option: { id: string; label: string; values: string }) {
   const wasSelected = isPriceFilterSelected(option.values)
 
-  selectedFilters.value = selectedFilters.value.filter(
-    (filter: any) => filter.filterName !== 'Price',
-  )
+  selectedFilters.value = selectedFilters.value.filter((f: { filterName: string }) => f.filterName !== 'price')
 
   if (!wasSelected) {
     selectedFilters.value.push({
-      filterName: 'Price',
+      filterName: 'price',
       label: option.id,
       id: option.values,
     })
   }
 
   applyFiltersInstantly()
+} */
+
+const selectedPrice = computed<string>({
+  get() {
+    const cur = selectedFilters.value.find((f: { filterName: any }) => String(f.filterName).toLowerCase() === 'price')
+    return (cur?.id as string) || ''
+  },
+  set(val: string) {
+    selectedFilters.value = selectedFilters.value.filter(
+      (f: { filterName: any }) => String(f.filterName).toLowerCase() !== 'price',
+    )
+    if (val) {
+      selectedFilters.value.push({
+        filterName: 'price',
+        label: val,
+        id: val,
+      })
+    }
+    applyFiltersInstantly()
+  },
+})
+
+function togglePrice(values: string) {
+  selectedPrice.value = (selectedPrice.value === values) ? '' : values
 }
 
-const isPriceFilterSelected = (values: string) => {
-  return selectedFilters.value.some(
-    (filter: any) => filter.filterName === 'Price' && filter.id === values,
-  )
+function isPriceChecked(values: string) {
+  return selectedPrice.value === values
 }
 
-const selectFilter = (
-  facet: { label: string },
-  option: { id: string, value: string, label: string },
-) => {
-  const isColor = facet?.label === 'Color'
-  const idToUse = isColor ? option.id : option.id
-  const labelToUse = isColor ? option.id : option.id
-
-  const alreadySelectedIndex = selectedFilters.value.findIndex(
-    (filter: { label: string }) => String(filter.label) === String(labelToUse),
-  )
-
-  if (alreadySelectedIndex !== -1) {
-    selectedFilters.value.splice(alreadySelectedIndex, 1)
-  }
-  else {
-    selectedFilters.value.push({
-      filterName: facet?.label,
-      label: labelToUse,
-      id: idToUse,
-    })
-  }
-
+function isStockSelected() {
+  return selectedFilters.value.some((f: { filterName: string, id: any }) => f.filterName === 'Availability' && String(f.id) === 'true')
+}
+function selectStockFilter() {
+  const idx = selectedFilters.value.findIndex((f: { filterName: string }) => f.filterName === 'Availability')
+  if (idx !== -1) selectedFilters.value.splice(idx, 1)
+  else selectedFilters.value.push({ filterName: 'Availability', label: 'true', id: 'true' })
   applyFiltersInstantly()
 }
 
-const selectStockFilter = () => {
-  const alreadySelectedIndex = selectedFilters.value.findIndex(
-    filter => filter.filterName === 'Availability',
-  )
-
-  if (alreadySelectedIndex !== -1) {
-    selectedFilters.value.splice(alreadySelectedIndex, 1)
-  }
-  else {
-    selectedFilters.value.push({
-      filterName: 'Availability',
-      label: 'true',
-      id: true,
-    })
-  }
-
+function isFilterSelected(opt: { id?: string | number, value?: string | number }) {
+  const token = String(opt?.id ?? opt?.value ?? '')
+  if (!token) return false
+  return selectedFilters.value.some((f: { label: any, id: any }) => String(f.label) === token || String(f.id) === token)
+}
+function selectFilter(facet: { label: string }, option: { id: string, value?: string | number, label: string }) {
+  const token = String(option.id)
+  const idx = selectedFilters.value.findIndex((f: { label: any }) => String(f.label) === token)
+  if (idx !== -1) selectedFilters.value.splice(idx, 1)
+  else selectedFilters.value.push({ filterName: facet.label, label: token, id: option.id })
   applyFiltersInstantly()
 }
 
-const applyFiltersInstantly = () => {
-  const filters = selectedFilters.value.filter((item: any) => {
-    return typeof item === 'object'
-  })
-
+function applyFiltersInstantly() {
+  const filters = selectedFilters.value.filter((x: any) => typeof x === 'object')
   changeFilters(filters, sort.value)
 }
 
-const clearFilters = () => {
+function clearFilters() {
   selectedFilters.value = []
-  router.push({ query: {} })
+  router.push({ path: route.path, query: {} })
   emit('close')
 }
 </script>
@@ -155,7 +180,7 @@ const clearFilters = () => {
 <template>
   <aside class="w-full lg:max-w-[376px] relative">
     <h5
-      class="py-2 px-4 mb-6 bg-neutral-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
+      class="py-2 px-4 mb-6 bg-primary-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
     >
       Sort by
     </h5>
@@ -176,25 +201,64 @@ const clearFilters = () => {
         </option>
       </SfSelect>
     </div>
+
     <h5
-      class="py-2 px-4 mt-6 mb-4 bg-neutral-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
+      class="py-2 px-4 mt-6 mb-4 bg-primary-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
     >
       Filter
     </h5>
+
     <ul>
       <li
         v-for="(facet, index) in facets"
         :key="index"
         class="mb-6"
       >
-        <h6
-          class="px-2 py-2 font-medium typography-headline-5 border-b border-neutral-200"
-        >
-          {{ facet?.label }}
+        <h6 class="px-2 py-2 font-medium typography-headline-5 border-b border-neutral-200">
+          {{ facet.label }}
         </h6>
 
+        <!-- COLOR -->
         <div
-          v-if="facet.type == 'price'"
+          v-if="facet.type === 'color'"
+          class="mt-4"
+        >
+          <SfListItem
+            v-for="{ id, value, label, htmlColor, total } in facet.options!"
+            :key="id"
+            size="sm"
+            tag="label"
+            :class="['px-4 bg-transparent hover:bg-transparent', { 'font-medium': isFilterSelected({ id }) }]"
+            :selected="isFilterSelected({ id })"
+          >
+            <template #prefix>
+              <SfCheckbox
+                :value="label"
+                class="appearance-none peer hidden"
+                :model-value="isFilterSelected({ id })"
+                @update:model-value="selectFilter(facet as any, { id: String(id), value: value as any, label: String(label) })"
+              />
+              <span
+                class="inline-flex items-center justify-center p-1 transition duration-300 rounded-full cursor-pointer ring-1 ring-neutral-200 ring-inset
+                       outline-offset-2 outline-secondary-600 peer-checked:ring-2 peer-checked:ring-primary-700 peer-hover:bg-primary-500
+                       peer-[&:not(:checked):hover]:ring-primary-100 peer-active:bg-primary-200 peer-active:ring-primary-300"
+              >
+                <SfThumbnail
+                  size="sm"
+                  :style="{ backgroundColor: htmlColor as string }"
+                />
+              </span>
+            </template>
+            <div class="w-full flex justify-between cursor-pointer">
+              <span>{{ label }}</span>
+              <span class="text-[16px] text-[#808080]">({{ total }})</span>
+            </div>
+          </SfListItem>
+        </div>
+
+        <!-- PRICE -->
+        <div
+          v-if="facet.type === 'price'"
           class="mt-4"
         >
           <fieldset id="radio-price">
@@ -202,37 +266,38 @@ const clearFilters = () => {
               v-for="option in facet.options"
               :key="option.id"
               tag="label"
-              @click.prevent="selectPriceFilter(option)"
+              class="cursor-pointer hover:bg-primary-200 rounded-md transition-colors"
+              @click.prevent="togglePrice((option as any).values)"
             >
               <template #prefix>
                 <SfRadio
-                  :model-value="isPriceFilterSelected(option.values) ? option.values : null"
-                  :value="option.values"
-                  :name="facet.label"
+                  :model-value="isPriceChecked((option as any).values) ? (option as any).values : null"
+                  :value="(option as any).values"
+                  :name="'price'"
                   class="flex items-center"
                   :class="{
                     'bg-primary-700 border-primary-700 hover:bg-primary-800':
-                      isPriceFilterSelected(option.values),
+                      isPriceChecked((option as any).values),
                   }"
                 />
               </template>
               <span
                 class="text-sm mr-2 cursor-pointer"
-                :class="{
-                  'font-medium': isPriceFilterSelected(option.values),
-                }"
-              >{{ option.label }}
+                :class="{ 'font-medium': isPriceChecked((option as any).values) }"
+              >
+                {{ option.label }}
               </span>
             </SfListItem>
           </fieldset>
         </div>
 
+        <!-- SELECT -->
         <ul
           v-if="facet.type === 'select'"
           class="grid grid-cols-2 gap-2 px-3 mt-4"
         >
           <li
-            v-for="{ id, value, label, total } in facet.options"
+            v-for="{ id, value, label, total } in facet.options!"
             :key="id"
           >
             <SfChip
@@ -240,7 +305,7 @@ const clearFilters = () => {
               size="sm"
               :input-props="{ value }"
               :model-value="isFilterSelected({ id, value })"
-              @update:model-value="selectFilter(facet, { id, value, label })"
+              @update:model-value="selectFilter(facet as any, { id: String(id), value: value as any, label: String(label) })"
             >
               <div class="w-full flex justify-center gap-2">
                 <span>{{ label }}</span>
@@ -255,7 +320,7 @@ const clearFilters = () => {
           class="grid grid-cols-2 gap-2 px-3 mt-4"
         >
           <li
-            v-for="{ id, value, label, total } in facet.options"
+            v-for="{ id, value, label, total } in facet.options!"
             :key="id"
           >
             <SfChip
@@ -263,7 +328,7 @@ const clearFilters = () => {
               size="sm"
               :input-props="{ value }"
               :model-value="isFilterSelected({ id, value })"
-              @update:model-value="selectFilter(facet, { id, value, label })"
+              @update:model-value="selectFilter(facet as any, { id: String(id), value: value as any, label: String(label) })"
             >
               <div class="w-full flex justify-center gap-2">
                 <span>{{ label }}</span>
@@ -273,55 +338,14 @@ const clearFilters = () => {
           </li>
         </ul>
 
+        <!-- IN STOCK -->
         <div
-          v-if="facet.type == 'color'"
-          class="mt-4"
-        >
-          <SfListItem
-            v-for="{ id, value, label, htmlColor, total } in facet.options"
-            :key="id"
-            size="sm"
-            tag="label"
-            :class="[
-              'px-4 bg-transparent hover:bg-transparent',
-              {
-                'font-medium': isFilterSelected({ id }),
-              },
-            ]"
-            :selected="isFilterSelected({ id })"
-          >
-            <template #prefix>
-              <SfCheckbox
-                :value="label"
-                class="appearance-none peer hidden"
-                :model-value="isFilterSelected({ id })"
-                @update:model-value="
-                  selectFilter(facet, { id, value, label })
-                "
-              />
-              <span
-                class="inline-flex items-center justify-center p-1 transition duration-300 rounded-full cursor-pointer ring-1 ring-neutral-200 ring-inset outline-offset-2 outline-secondary-600 peer-checked:ring-2 peer-checked:ring-primary-700 peer-hover:bg-primary-100 peer-[&:not(:checked):hover]:ring-primary-200 peer-active:bg-primary-200 peer-active:ring-primary-300 peer-disabled:cursor-not-allowed peer-disabled:bg-disabled-100 peer-disabled:opacity-50 peer-disabled:ring-1 peer-disabled:ring-disabled-200 peer-disabled:hover:ring-disabled-200 peer-checked:hover:ring-primary-700 peer-checked:active:ring-primary-700 peer-focus-visible:outline"
-              >
-                <SfThumbnail
-                  size="sm"
-                  :style="{ backgroundColor: htmlColor }"
-                />
-              </span>
-            </template>
-            <div class="w-full flex justify-between cursor-pointer">
-              <span>{{ label }}</span>
-              <span class="text-[16px] text-[#808080]">({{ total }})</span>
-            </div>
-          </SfListItem>
-        </div>
-
-        <div
-          v-if="facet.type == 'in-stock'"
+          v-if="facet.type === 'in-stock'"
           class="mt-4"
         >
           <div
             class="flex items-center gap-2 px-4 cursor-pointer"
-            :class="{ 'pointer-events-none opacity-50': stockCount === 0 }"
+            :class="{ 'pointer-events-none opacity-50': (stockCount ?? 0) === 0 }"
           >
             <SfCheckbox
               :model-value="isStockSelected()"
@@ -329,21 +353,20 @@ const clearFilters = () => {
             />
             <div class="w-full flex justify-between">
               <span>In stock</span>
-              <span class="text-[16px] text-[#808080]">({{ stockCount }})</span>
+              <span class="text-[16px] text-[#808080]">({{ stockCount ?? 0 }})</span>
             </div>
           </div>
         </div>
       </li>
     </ul>
-    <div
-      class="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:justify-between px-3 lg:px-0 mt-6"
-    >
+
+    <div class="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:justify-between px-3 lg:px-0 mt-6">
       <SfButton
         variant="secondary"
-        class="w-full mr-3"
+        class="w-full mr-3 bg-black hover:bg-neutral-800 text-white border-none"
         @click="clearFilters"
       >
-        {{ $t("clearFilters") }}
+        {{ $t('clearFilters') }}
       </SfButton>
     </div>
   </aside>

@@ -5,7 +5,7 @@ import {
   useDisclosure,
   SfLoaderCircular,
 } from '@storefront-ui/vue'
-import type { Product } from '~/graphql'
+import type { Product } from '~~/graphql'
 
 const route = useRoute()
 const { isOpen, open, close } = useDisclosure()

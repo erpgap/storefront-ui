@@ -12,8 +12,9 @@ import type {
   Mutation,
   AdyenPaymentsResponse,
   MutationAdyenPaymentsArgs,
-} from '~/graphql'
-import { MutationName } from '~/server/mutations'
+} from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
+
 
 const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
   const { $sdk } = useNuxtApp()
@@ -59,7 +60,6 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
       },
       { providerId },
     )
-
     acquirerInfo.value
       = data?.adyenProviderInfo?.adyenProviderInfo || {}
   }
@@ -70,7 +70,6 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
         MutationAdyenPaymentMethodsArgs,
         AdyenPaymentMethodsResponse
       >({ mutationName: MutationName.AdyenPaymentMethods }, { providerId }))
-
     paymentMethods.value
       = data?.value?.adyenPaymentMethods?.adyenPaymentMethods || []
   }

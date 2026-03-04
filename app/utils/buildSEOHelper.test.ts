@@ -28,32 +28,26 @@ describe('generateSeo', () => {
       title: 'Test Meta Title',
       meta: [
         {
-          hid: 'title',
           name: 'title',
           content: 'Test Meta Title',
         },
         {
-          hid: 'description',
           name: 'description',
           content: 'Test meta description',
         },
         {
-          hid: 'og:description',
           name: 'og:description',
           content: 'Test meta description',
         },
         {
-          hid: 'og:title',
           name: 'og:title',
           content: 'Test Meta Title',
         },
         {
-          hid: 'twitter:title',
           name: 'twitter:title',
           content: 'Test Meta Title',
         },
         {
-          hid: 'twitter:description',
           name: 'twitter:description',
           content: 'Test meta description',
         },
@@ -87,7 +81,6 @@ describe('generateSeo', () => {
 
     expect(result.title).toBe('Test Product')
     expect(result.meta).toContainEqual({
-      hid: 'title',
       name: 'title',
       content: 'Test Product | test-id',
     })
@@ -115,17 +108,17 @@ describe('generateSeo', () => {
 
     expect(result.meta).not.toContainEqual(
       expect.objectContaining({
-        hid: 'description',
+        name: 'description',
       }),
     )
     expect(result.meta).not.toContainEqual(
       expect.objectContaining({
-        hid: 'og:description',
+        name: 'og:description',
       }),
     )
     expect(result.meta).not.toContainEqual(
       expect.objectContaining({
-        hid: 'twitter:description',
+        name: 'twitter:description',
       }),
     )
   })
@@ -199,17 +192,14 @@ describe('generateSeo', () => {
     expect(result.title).toBe('category page')
     expect(result.meta).toEqual([
       {
-        hid: 'title',
         name: 'title',
         content: 'undefined | undefined',
       },
       {
-        hid: 'og:title',
         name: 'og:title',
         content: 'category page',
       },
       {
-        hid: 'twitter:title',
         name: 'twitter:title',
         content: 'category page',
       },

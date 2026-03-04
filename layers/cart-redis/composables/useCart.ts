@@ -9,14 +9,14 @@ import type {
   MutationCartRemoveMultipleItemsArgs,
   MutationCartUpdateMultipleItemsArgs,
   Product,
-} from '~/graphql'
-import { MutationName } from '~/server/mutations'
+} from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
 
 export const useCart = () => {
   const { $sdk } = useNuxtApp()
   const cartCounter = useCookie<number>('cart-counter')
   const toast = useToast()
-  const cart = useState<Cart>('cart', () => ({}) as Cart)
+  const cart = useState<Cart>('cart', () => (({}) as Cart))
   const frequentlyTogetherProducts = useState<Product[]>('frequently-together-products', () => [])
 
   const loading = ref(false)
@@ -24,14 +24,16 @@ export const useCart = () => {
   const loadCart = async () => {
     try {
       loading.value = true
-      const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`)
+      const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`, {
+        deep: true
+      })
 
       if (!data.value?.cart)
         return
 
       cart.value = data.value.cart
       cartCounter.value = Number(data.value.cart?.order?.websiteOrderLine?.length || 0)
-      frequentlyTogetherProducts.value = (data.value.cart.frequentlyBoughtTogether || []).filter((p): p is Product => p !== null)
+      frequentlyTogetherProducts.value = (data.value.cart.frequentlyBoughtTogether || []).filter((p: null): p is Product => p !== null)
     }
     catch (error: any) {
       return toast.error(error.data.message)
@@ -110,10 +112,33 @@ export const useCart = () => {
     }
   }
 
+  const removeMultipleItemsFromCart = async (lineIds: number[]) => {
+    const params: MutationCartRemoveMultipleItemsArgs = {
+      lineIds,
+    }
+
+    loading.value = true
+
+    try {
+      const data = await $sdk().odoo.mutation<MutationCartRemoveMultipleItemsArgs, CartRemoveItemResponse>(
+        { mutationName: MutationName.CartRemoveItem }, params,
+      )
+
+      cart.value = data.cartRemoveMultipleItems
+      cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
+    }
+    catch (error: any) {
+      return toast.error(error.data.message)
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   const totalItemsInCart = computed(() => {
     return (
       cart.value.order?.websiteOrderLine?.reduce(
-        (acc, item) => acc + (item.quantity ?? 0),
+        (acc: any, item: { quantity: any }) => acc + (item.quantity ?? 0),
         0,
       ) || 0
     )
@@ -124,6 +149,7 @@ export const useCart = () => {
     cartAdd,
     updateItemQuantity,
     removeItemFromCart,
+    removeMultipleItemsFromCart,
     frequentlyTogetherProducts,
     loading,
     cart,

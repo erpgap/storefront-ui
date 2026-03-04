@@ -1,38 +1,96 @@
 import type {
+  CustomProductWithStockFromRedis,
   ImageGalleryItem,
   Product,
-} from '~/graphql'
+} from '~~/graphql'
+
+type BaseImage = { id: number; url: string; alt: string }
 
 export const useProductGetters = (
-  product: Ref<Product>,
+  productTemplate: Ref<CustomProductWithStockFromRedis>,
+  productVariant: Ref<Product | null>,
 ) => {
+  const normalize = (arr: any) => (Array.isArray(arr) ? arr : [])
+
+  const getBaseImages = (): BaseImage[] => {
+    const pt: any = productTemplate.value
+    const pv: any = productVariant.value
+
+    const images: BaseImage[] = []
+    const seen = new Set<string>()
+
+    const add = (id?: number, url?: string | null, alt?: string | null) => {
+      if (!url) return
+      const trimmed = url.trim()
+      if (!trimmed || seen.has(trimmed)) return
+      seen.add(trimmed)
+      images.push({
+        id: id ?? pv?.id ?? pt?.id,
+        url: trimmed,
+        alt: String(alt || pv?.name || pt?.name || ''),
+      })
+    }
+
+    if (!pt && !pv) return images
+
+    let currentVariant: any = null
+    const variantId = pv?.id
+    if (variantId && Array.isArray(pt?.productVariants)) {
+      currentVariant = pt.productVariants.find(
+        (v: any) => v.id === variantId,
+      )
+    }
+
+    if (currentVariant) {
+      add(currentVariant.id, currentVariant.image, currentVariant.name)
+      normalize(currentVariant.mediaGallery).forEach((img: any) =>
+        add(img.id, img.image, img.name),
+      )
+    } else if (pv) {
+      add(pv.id, pv.image, pv.name)
+      normalize(pv.mediaGallery).forEach((img: any) =>
+        add(img.id, img.image, img.name),
+      )
+    }
+
+    if (pt) {
+      add(pt.id, pt.image, pt.name)
+      normalize(pt.mediaGallery).forEach((img: any) =>
+        add(img.id, img.image, img.name),
+      )
+    }
+    return images
+  }
+
   const getMainImage = (
-    width: string | number,
-    height: string | number,
+    width: number | string,
+    height: number | string,
   ): ImageGalleryItem | null => {
-    if (!product.value?.image) return null
+    const base = getBaseImages()
+    const img = base[0]
+    if (!img) return null
+
     return {
-      id: product.value.id,
-      url: String(product.value.image),
-      alt: String(product.value.imageFilename),
+      id: img.id,
+      url: img.url,
+      alt: img.alt,
       width,
       height,
     }
   }
 
   const getThumbs = (
-    width: string | number,
-    height: string | number,
+    width: number | string,
+    height: number | string,
   ): ImageGalleryItem[] => {
-    return (
-      (product?.value?.mediaGallery?.map(image => ({
-        id: image.id,
-        url: String(image.image),
-        alt: String(image.imageFilename),
-        width,
-        height,
-      })) as ImageGalleryItem[]) || []
-    )
+    const base = getBaseImages()
+    return base.slice(1).map(img => ({
+      id: img.id,
+      url: img.url,
+      alt: img.alt,
+      width,
+      height,
+    }))
   }
 
   return {

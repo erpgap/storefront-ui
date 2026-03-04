@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
-import type { Product } from '~/graphql'
+import type { Product } from '~~/graphql'
 
 defineProps({
   product: {
@@ -27,8 +27,8 @@ defineProps({
         )
         "
         :alt="product?.imageFilename ?? ''"
-        width="300"
-        height="300"
+        width="370"
+        height="370"
         loading="lazy"
         format="webp"
       />

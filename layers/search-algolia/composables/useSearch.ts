@@ -1,4 +1,6 @@
 import { onClickOutside, useToggle } from '@vueuse/core'
+import { debounce } from 'lodash-es'
+import type { QueryProductsArgs } from '~~/graphql';
 
 /**
  * @Responsabilities
@@ -37,15 +39,39 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   )
 
   const search = async () => {
+    console.log('Search function called with searchInputValue:', searchInputValue.value);
     loading.value = true
 
-    await loadProductTemplateList(getFacetsFromURL(route.query))
+    const params: QueryProductsArgs = {
+      ...getFacetsFromURL(route.query),
+      search: searchInputValue.value,
+    };
+    
+    await loadProductTemplateList(params)
     showResultSearch.value = true
+    console.log('showResultSearch after loadProductTemplateList:', showResultSearch.value);
 
     loading.value = false
   }
+  const debouncedSearch = debounce(search, 300)
 
-  const searchHits = computed(() => productTemplateList.value || [])
+  // Watch searchInputValue to trigger search-as-you-type
+  watch(searchInputValue, (newValue) => {
+    console.log('searchInputValue changed:', newValue);
+    if (newValue) {
+      debouncedSearch()
+    } else {
+      showResultSearch.value = false
+      console.log('showResultSearch (cleared):', showResultSearch.value);
+      // Optionally clear productTemplateList if desired when input is empty
+      // productTemplateList.value = []
+    }
+  })
+
+  const searchHits = computed(() => {
+    console.log('searchHits computed:', productTemplateList.value);
+    return productTemplateList.value || []
+  })
 
   const selectHit = (hit: string) => {
     if (!hit && !searchInputValue.value) return
@@ -74,6 +100,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
 
   onClickOutside(formSearchTemplateRef, () => {
     showResultSearch.value = false
+    console.log('onClickOutside: showResultSearch set to false');
   })
 
   return {
