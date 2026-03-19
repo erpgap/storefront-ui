@@ -73,17 +73,24 @@ export const reduceCart = (cartData: Cart) => ({
 })
 
 export async function updateCart(event: any, updateData: any) {
-  const session = await useSession(event, {
-    password: 'b013b03ac2231e0b448e9a22ba488dcf',
-  })
+  const cartId = updateData.order?.id || updateData.id
 
-  const keyName = `cache:cart:${session?.id}`
-  const currentCart = (await useStorage().getItem<{ cart: Cart }>(
+  if (cartId) {
+    console.log(`[cart-redis] Setting cart-id cookie: ${cartId}`)
+    setCookie(event, 'cart-id', cartId.toString(), {
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      path: '/',
+    })
+  }
+
+  const keyName = `cache:cart:${cartId}`
+  const currentCart = (await useStorage('cart').getItem<{ cart: Cart }>(
     keyName,
   )) || { cart: {} }
 
   const updatedCart = Object.assign({}, currentCart.cart, updateData)
   const reducedCart = reduceCart(updatedCart as Cart)
 
-  useStorage().setItem(keyName, { cart: reducedCart })
+  console.log(`[cart-redis] Updating storage for key: ${keyName}`)
+  await useStorage('cart').setItem(keyName, { cart: reducedCart })
 }
