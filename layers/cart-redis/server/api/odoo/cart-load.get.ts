@@ -3,11 +3,11 @@ import type { CustomProductWithStockFromRedis } from '~/graphql'
 
 export default defineEventHandler(async (event: any) => {
   const websiteId = 1 // Example website ID, adjust when defined
-  const session = await useSession(event, {
-    password: 'b013b03ac2231e0b448e9a22ba488dcf',
-  })
-  const keyName = `cache:cart:${session?.id}`
-  const data = await useStorage().getItem(keyName)
+  
+  const cartId = getCookie(event, 'cart-id')
+  const keyName = `cache:cart:${cartId}`
+    
+  const data: any = await useStorage('cart').getItem(keyName)
 
   for (const orderLine of data?.cart?.order?.websiteOrderLine || []) {
     const stock = await useStorage('stock').getItem<string>(
