@@ -4,6 +4,15 @@
 import { defineNuxtConfig } from 'nuxt/config'
 import path from 'path'
 console.log('NUXT_PUBLIC_ODOO_BASE_URL from nuxt.config.ts:', process.env.NUXT_PUBLIC_ODOO_BASE_URL);
+
+const swrCacheTime = Number(process.env?.NUXT_SWR_CACHE_TIME || 3600)
+const storageDriver = process.env.NUXT_STORAGE_DRIVER || 'memory'
+const storageUrl = process.env.NUXT_STORAGE_URL
+const storageConfig = {
+  driver: storageDriver,
+  ...(storageUrl ? { url: storageUrl } : {}),
+}
+
 export default defineNuxtConfig({
  /*  extends: [                                                          
     '@erpgap/recent-view-products',                                      
@@ -50,6 +59,10 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    cacheInvalidationKey: process.env.NUXT_CACHE_INVALIDATION_KEY,
+    cacheInvalidationSigningSecret: process.env.NUXT_CACHE_INVALIDATION_SIGNING_SECRET,
+    cacheInvalidationStorageDriver: storageDriver,
+    cacheInvalidationStorageUrl: storageUrl,
     shouldByPassCacheQueryNames: [
       'LoadCartQuery',
       'WishlistLoadQuery',
@@ -92,24 +105,20 @@ export default defineNuxtConfig({
     },
     storage: {
       cache: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
+        ...storageConfig,
       },
       slug: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
-        ttl: process.env?.NUXT_SWR_CACHE_TIME || 3600,
+        ...storageConfig,
+        ttl: swrCacheTime,
       },
     },
     devStorage: {
       cache: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
+        ...storageConfig,
       },
       slug: {
-        driver: process.env.NUXT_STORAGE_DRIVER,
-        url: process.env.NUXT_STORAGE_URL,
-        ttl: process.env?.NUXT_SWR_CACHE_TIME || 3600,
+        ...storageConfig,
+        ttl: swrCacheTime,
       },
     },
   },
