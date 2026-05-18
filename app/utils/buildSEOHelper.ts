@@ -99,6 +99,12 @@ const generateSeo = <T extends SeoEntity>(
         type: 'application/ld+json',
         children: JSON.stringify(jsonLdObject),
       },
+    ].filter(Boolean),
+    link: [
+      {
+        rel: 'canonical',
+        href,
+      },
     ],
   }
 }
