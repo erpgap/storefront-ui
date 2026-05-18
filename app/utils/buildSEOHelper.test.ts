@@ -145,7 +145,7 @@ describe('generateSeo', () => {
     expect(result.script).toEqual([
       {
         type: 'application/ld+json',
-        children: '"{\\"@context\\": \\"https://schema.org\\", \\"@type\\": \\"Product\\"}"',
+        children: '{"@context":"https://schema.org","@type":"Product"}',
       },
     ])
   })
