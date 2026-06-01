@@ -906,6 +906,10 @@ export type Product = {
   /** Specific to Product Template */
   productVariants: Maybe<Array<Product>>;
   qty: Maybe<Scalars['Float']['output']>;
+  /** Average customer rating (0-5) */
+  ratingAvg: Maybe<Scalars['Float']['output']>;
+  /** Total number of customer reviews */
+  ratingCount: Maybe<Scalars['Int']['output']>;
   ribbon: Maybe<Ribbon>;
   showAvailableQty: Maybe<Scalars['Boolean']['output']>;
   sku: Maybe<Scalars['String']['output']>;
