@@ -24,8 +24,8 @@ const customCache = cachedFunction(
     return response
   },
   {
-    maxAge: Number(process.env?.NUXT_SWR_CACHE_TIME || 3600),
-    staleMaxAge: Number(process.env?.NUXT_SWR_CACHE_TIME || 3600),
+    maxAge: Number(process.env.NUXT_SWR_CACHE_TIME),
+    staleMaxAge: Number(process.env.NUXT_SWR_CACHE_TIME),
     getKey: async (event) => {
       const body = await readBody(event)
       const session = await useSession(event, {
