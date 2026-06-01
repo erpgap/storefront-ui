@@ -3,10 +3,9 @@
 // nuxt.config.ts
 import { defineNuxtConfig } from 'nuxt/config'
 import path from 'path'
-console.log('NUXT_PUBLIC_ODOO_BASE_URL from nuxt.config.ts:', process.env.NUXT_PUBLIC_ODOO_BASE_URL);
 
-const swrCacheTime = Number(process.env?.NUXT_SWR_CACHE_TIME || 3600)
-const storageDriver = process.env.NUXT_STORAGE_DRIVER || 'memory'
+const swrCacheTime = Number(process.env.NUXT_SWR_CACHE_TIME)
+const storageDriver = process.env.NUXT_STORAGE_DRIVER
 const storageUrl = process.env.NUXT_STORAGE_URL
 const storageConfig = {
   driver: storageDriver,
@@ -72,7 +71,7 @@ export default defineNuxtConfig({
       odooBaseImageUrl: process.env.NUXT_PUBLIC_ODOO_BASE_IMAGE_URL,
       odooBaseUrl: process.env.NUXT_PUBLIC_ODOO_BASE_URL,
       middlewareUrl: process.env.NUXT_PUBLIC_MIDDLEWARE_URL,
-      currencySymbol: process.env.NUXT_PUBLIC_CURRENCY_SYMBOL || '$',
+      currencySymbol: process.env.NUXT_PUBLIC_CURRENCY_SYMBOL,
       currencySeparator: process.env.NUXT_PUBLIC_CURRENCY_SEPARATOR,
       currencyDecimal: process.env.NUXT_PUBLIC_CURRENCY_DECIMAL,
       currencyPrecision: process.env.NUXT_PUBLIC_CURRENCY_PRECISION,
