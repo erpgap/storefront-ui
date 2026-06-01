@@ -7,13 +7,8 @@ export default defineNuxtModule({
     name: 'routes-generator',
   },
   async setup(_, nuxt) {
-    const odooBaseUrl: string = process.env?.NUXT_PUBLIC_ODOO_BASE_URL ? `${process.env.NUXT_PUBLIC_ODOO_BASE_URL}/graphql/vsf` : ''
-    const swrValue = Number(process.env.NUXT_SWR_CACHE_TIME || 300)
-
-    if (!odooBaseUrl) {
-      console.error('[routes-generator] ODOO_BASE_URL is not set')
-      return
-    }
+    const odooBaseUrl = `${process.env.NUXT_PUBLIC_ODOO_BASE_URL}/graphql/vsf`
+    const swrValue = Number(process.env.NUXT_SWR_CACHE_TIME)
 
     const categoriesQuery = `
            query {
