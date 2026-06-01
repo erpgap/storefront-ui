@@ -6,16 +6,18 @@ export const useUiHelpers = () => {
 
   const queryParamsNotFilters = ['page', 'sort', 'itemsPerPage', 'search']
   const localePrefixes = ['/en', '/de', '/ru']
+  // Routes that browse the full catalog (category scope is null) rather than a category.
+  const globalCatalogRoutes = ['/', '/search', '/products']
 
   const pathToSlug = (): string | null => {
     const path = route.path?.replace(/\/$/, '') || ''
     for (const localePrefix of localePrefixes) {
       if (path.startsWith(localePrefix)) {
         const p = path.replace(localePrefix, '')
-        return p === '' ? null : p
+        return p === '' || globalCatalogRoutes.includes(p) ? null : p
       }
     }
-    if (path === '/' || path === '/search') return null
+    if (globalCatalogRoutes.includes(path)) return null
     return path || null
   }
 

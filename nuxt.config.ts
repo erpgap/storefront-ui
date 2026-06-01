@@ -87,6 +87,7 @@ export default defineNuxtConfig({
  $production: {
     routeRules: {
       '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+      '/products': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
     },
 
   },
