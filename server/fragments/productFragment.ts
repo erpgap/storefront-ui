@@ -13,10 +13,12 @@ export default `
   productVariants {
     id
     image
+    imageUrl
     mediaGallery {
       id
       image
       imageFilename
+      imageUrl
       name
     }
 }
@@ -45,11 +47,13 @@ export default `
   description
   image
   imageFilename
+  imageUrl
   mediaGallery { 
     id 
     name 
     image 
     imageFilename 
+    imageUrl
     }
   slug
   #skufalse

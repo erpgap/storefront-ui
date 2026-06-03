@@ -35,8 +35,10 @@ query (
         name
         image
         imageFilename
+        imageUrl
       }
       image
+      imageUrl
       name
       slug      
     }

@@ -6,6 +6,7 @@ wishlistItems {
       name
       description
       image
+      imageUrl
       price
       imageFilename
       isInWishlist
