@@ -39,11 +39,10 @@ const hasDiscount = computed<boolean>(() => {
 })
 
 /** Imagem / slug */
-const imageSrc = computed<string>(() => {
-  const p = props.product as any
-  return p?.image ?? '/images/product.webp'
-})
-const imageAlt = computed<string>(() => String((props.product as any)?.imageFilename ?? ''))
+const imageSrc = computed<string>(() =>
+  (props.product as any)?.imageUrl ?? '',
+)
+const imageAlt = computed<string>(() => String(props.product?.name ?? ''))
 </script>
 
 <template>

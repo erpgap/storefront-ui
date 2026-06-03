@@ -35,8 +35,7 @@ websiteOrderLine {
   product {
     id
     name
-    image
-    imageFilename
+    imageUrl
     displayName
     #combinationInfo
     slug
@@ -59,8 +58,7 @@ reportOrderLine {
   product {
     id
     name
-    image
-    imageFilename
+    imageUrl
     displayName
     #combinationInfo
     slug
@@ -82,8 +80,7 @@ orderLines {
   product {
     id
     name
-    image
-    imageFilename
+    imageUrl
     displayName
     #combinationInfo
     slug

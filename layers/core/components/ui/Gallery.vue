@@ -44,8 +44,14 @@ const allImages = computed(() =>
         :aria-label="alt" :aria-current="activeIndex === index"
         class="md:w-[78px] md:h-auto relative shrink-0 pb-1 mx-4 border-b-4 snap-start cursor-pointer focus-visible:outline focus-visible:outline-offset transition-colors flex-grow md:flex-grow-0"
         :class="activeIndex === index ? 'border-primary-700' : 'border-transparent'" @click="activeIndex = index">
-        <NuxtImg provider="odooProvider" :alt="alt" class="object-cover" width="100" height="100"
-          :src="imageThumbSrc" />
+        <NuxtImg
+          provider="odooProvider"
+          :alt="alt"
+          class="object-cover"
+          width="100"
+          height="100"
+          :src="imageThumbSrc"
+        />
       </button>
     </SfScrollable>
     <SfScrollable
@@ -54,9 +60,16 @@ const allImages = computed(() =>
       buttons-placement="none">
       <div v-for="({ imageSrc, alt }, index) in allImages" :key="`${alt}-${index}`"
         class="flex justify-center h-full basis-full shrink-0 grow snap-center">
-        <NuxtImg provider="odooProvider" :width="380" 
-  :height="505" class="object-cover w-full h-full" :alt="alt"
-          :src="imageSrc" :loading="index === 0 ? 'eager' : 'lazy'" fetchpriority="high" />
+        <NuxtImg
+          provider="odooProvider"
+          :width="380"
+          :height="505"
+          class="object-cover w-full h-full"
+          :alt="alt"
+          :src="imageSrc"
+          :loading="index === 0 ? 'eager' : 'lazy'"
+          fetchpriority="high"
+        />
       </div>
     </SfScrollable>
   </div>
