@@ -64,8 +64,8 @@ export const useProductVariant = (slugWithCombinationIds: string) => {
   const getImages = computed(() => {
     return [
       {
-        imageSrc: productVariant?.value?.image,
-        imageThumbSrc: productVariant?.value?.image,
+        imageSrc: productVariant?.value?.imageUrl,
+        imageThumbSrc: productVariant?.value?.imageUrl,
         alt: productVariant.value?.name,
       },
     ]
