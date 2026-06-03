@@ -1,9 +1,13 @@
 import { defineSitemapEventHandler } from '#imports'
 import type { SitemapUrlInput } from '#sitemap/types'
+import { buildOdooImageUrl } from '~/utils/odooImage'
+
+const SITEMAP_IMAGE_SIZE = 800
 
 export default defineSitemapEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const odooUrl = config.public.odooBaseUrl
+  const odooBaseImageUrl = config.public.odooBaseImageUrl
   
   if (!odooUrl) {
     console.error('[Sitemap Products] Env var missing')
@@ -24,6 +28,7 @@ export default defineSitemapEventHandler(async (event) => {
           slug
           image
           imageFilename
+          imageUrl
         }
       }
     }
@@ -61,12 +66,21 @@ export default defineSitemapEventHandler(async (event) => {
   }
 
   return allProducts.map((product) => {
+    const imageLoc = product.imageUrl
+      ? buildOdooImageUrl(
+          product.imageUrl,
+          SITEMAP_IMAGE_SIZE,
+          SITEMAP_IMAGE_SIZE,
+          odooBaseImageUrl,
+        )
+      : product.image
+
     return {
       loc: `${product.slug}-${product.id}`,
       _sitemap: 'products',
-      images: product.image ? [{
-        loc: product.image,
-        title: product.imageFilename || ''
+      images: imageLoc ? [{
+        loc: imageLoc,
+        title: product.imageFilename || '',
       }] : []
     } satisfies SitemapUrlInput
   })
