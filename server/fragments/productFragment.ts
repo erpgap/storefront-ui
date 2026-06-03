@@ -12,12 +12,9 @@ export default `
   jsonLd
   productVariants {
     id
-    image
     imageUrl
     mediaGallery {
       id
-      image
-      imageFilename
       imageUrl
       name
     }
@@ -41,18 +38,13 @@ export default `
       htmlColor
       attribute { id name }
     }
-  smallImage
   price
   name
   description
-  image
-  imageFilename
   imageUrl
   mediaGallery { 
     id 
     name 
-    image 
-    imageFilename 
     imageUrl
     }
   slug
