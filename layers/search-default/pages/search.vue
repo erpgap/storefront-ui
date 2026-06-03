@@ -9,7 +9,6 @@ import {
 import { useProductTemplateList } from '../../product/composables/useProductTemplateList'
 import { useProductAttributes } from '../../product/composables/useProductAttributes'
 import { useUiHelpers } from '../../category/composables/useUiHelpers'
-import { useNuxtApp } from 'nuxt/app'
 
 type Product = { slug?: string; stock?: number; qty?: number;[k: string]: any }
 
@@ -29,7 +28,6 @@ provide('stockCount', stockCount)
 
 const { getFacetsFromURL } = useUiHelpers()
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
-const { $getImage } = useNuxtApp()
 
 const slugFor = (pt: any) => pt?.firstVariant?.slug || pt?.slug || ''
 
@@ -118,7 +116,7 @@ const breadcrumbs = [
 
           <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8">
             <LazyUiProductCard v-for="pt in productTemplateList" :key="pt.id" :name="pt?.name || ''" loading="eager"
-              :slug="slugFor(pt)" :image-url="$getImage(String(pt.image), 370, 370, String(pt.imageFilename))"
+              :slug="slugFor(pt)" :image-url="pt.imageUrl ?? ''"
               :image-alt="pt?.name || ''" :regular-price="getRegularPrice(pt.firstVariant as any)"
               :special-price="getSpecialPrice(pt.firstVariant as any)" :rating-count="123" :rating="Number(4)"
               :first-variant="normalizeVariant(pt.firstVariant as any)" />

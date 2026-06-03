@@ -29,16 +29,10 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
         :tag="NuxtLink"
       >
         <NuxtImg
+          provider="odooProvider"
           class="w-full h-auto border rounded-md border-neutral-200"
-          :src="
-            $getImage(
-              String(orderLine.product?.image),
-              370,
-              370,
-              String(orderLine.product?.imageFilename),
-            )
-          "
-          :alt="orderLine.product?.imageFilename ?? ''"
+          :src="orderLine.product?.imageUrl ?? orderLine.product?.image ?? ''"
+          :alt="orderLine.product?.name ?? ''"
           width="300"
           height="300"
           loading="lazy"

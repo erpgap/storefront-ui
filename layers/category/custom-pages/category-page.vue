@@ -130,12 +130,7 @@ const uiBreadcrumbs = computed(() =>
               :name="productTemplate?.name || ''" :slug="mountUrlSlugForProductVariant(
                 (productTemplate) as Product,
               )
-                " :image-url="$getImage(
-                String(productTemplate.image),
-                370,
-                370,
-                String(productTemplate.imageFilename),
-              )
+                " :image-url="productTemplate.imageUrl ?? ''"
                 " :image-alt="productTemplate?.name || ''" :regular-price="getRegularPrice(productTemplate.firstVariant as Product)
                 " :special-price="getSpecialPrice(productTemplate.firstVariant as Product)
                 " :rating-count="123" :rating="Number(4)" :first-variant="productTemplate.firstVariant as Product" />

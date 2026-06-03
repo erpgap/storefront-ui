@@ -2,10 +2,9 @@
 import { SfScrollable } from '@storefront-ui/vue'
 import type { Category } from '~~/graphql'
 
-const props = defineProps<{
+defineProps<{
   items: Category[]
 }>()
-
 </script>
 
 <template>
@@ -16,15 +15,15 @@ const props = defineProps<{
 
     <ul class="hidden md:grid grid-cols-3 gap-x-5 gap-y-10">
       <li
-        v-for="(category, index) in items"
+        v-for="category in items"
         :key="category.id"
       >
         <NuxtLink :to="`/category/${category.id}`">
           <NuxtImg
             provider="odooProvider"
-            :src="category.image"
+            :src="category.imageUrl ?? category.image ?? ''"
             class="w-full"
-            :alt="category.name"
+            :alt="category.name ?? ''"
             width="400"
             height="300"
           />
@@ -50,16 +49,16 @@ const props = defineProps<{
       :drag="true"
     >
       <div
-        v-for="(category, index) in items"
+        v-for="category in items"
         :key="category.id"
         class="min-w-[200px] max-w-[300px]"
       >
         <NuxtLink :to="`/category/${category.id}`">
           <NuxtImg
             provider="odooProvider"
-            :src="category.image"
+            :src="category.imageUrl ?? category.image ?? ''"
             class="w-full"
-            :alt="category.name"
+            :alt="category.name ?? ''"
             width="200"
             height="200"
           />
