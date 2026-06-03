@@ -26,8 +26,6 @@ export default defineSitemapEventHandler(async (event) => {
         products {
           id
           slug
-          image
-          imageFilename
           imageUrl
         }
       }
@@ -73,14 +71,13 @@ export default defineSitemapEventHandler(async (event) => {
           SITEMAP_IMAGE_SIZE,
           odooBaseImageUrl,
         )
-      : product.image
+      : undefined
 
     return {
       loc: `${product.slug}-${product.id}`,
       _sitemap: 'products',
       images: imageLoc ? [{
         loc: imageLoc,
-        title: product.imageFilename || '',
       }] : []
     } satisfies SitemapUrlInput
   })
