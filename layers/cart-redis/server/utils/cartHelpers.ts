@@ -26,6 +26,7 @@ export const reduceCart = (cartData: Cart) => ({
         id: line?.product?.id,
         image: line?.product?.image,
         imageFilename: line?.product?.imageFilename,
+        imageUrl: line?.product?.imageUrl,
         qty: line?.product?.qty,
         slug: line?.product?.slug,
         variantAttributeValues: line?.product?.variantAttributeValues?.map((attr: AttributeValue) => ({
