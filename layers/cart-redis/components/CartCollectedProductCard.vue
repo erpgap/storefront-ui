@@ -31,7 +31,7 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
         <NuxtImg
           provider="odooProvider"
           class="w-full h-auto border rounded-md border-neutral-200"
-          :src="orderLine.product?.imageUrl ?? orderLine.product?.image ?? ''"
+          :src="orderLine.product?.imageUrl ?? ''"
           :alt="orderLine.product?.name ?? ''"
           width="300"
           height="300"
