@@ -37,6 +37,7 @@ websiteOrderLine {
     name
     image
     imageFilename
+    imageUrl
     displayName
     #combinationInfo
     slug
@@ -61,6 +62,7 @@ reportOrderLine {
     name
     image
     imageFilename
+    imageUrl
     displayName
     #combinationInfo
     slug
@@ -84,6 +86,7 @@ orderLines {
     name
     image
     imageFilename
+    imageUrl
     displayName
     #combinationInfo
     slug

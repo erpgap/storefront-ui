@@ -7,6 +7,7 @@ export default `
     description
     image
     imageFilename
+    imageUrl
     slug
     firstVariant{
       id
