@@ -58,14 +58,7 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
         class="min-w-[300px] max-w-[300px] sm:min-w-[322px] sm:max-w-[322px]"
         :slug=" mountUrlSlugForProductVariant(productTemplate.firstVariant as Product) || '' "
         :name="productTemplate?.name || ''"
-        :image-url="
-          $getImage(
-            String(productTemplate.image),
-            370,
-            370,
-            String(productTemplate.imageFilename),
-          )
-        "
+        :image-url="productTemplate.imageUrl ?? ''"
         :image-alt="productTemplate?.name || ''"
         :regular-price="getRegularPrice(productTemplate.firstVariant as Product)"
         :special-price="getSpecialPrice(productTemplate.firstVariant as Product)"

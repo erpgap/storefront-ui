@@ -4,13 +4,18 @@ import type {
   Product,
 } from '~~/graphql'
 
-type BaseImage = { id: number; url: string; alt: string }
+type BaseImage = {
+  id: number
+  imageUrl: string | null
+  legacyImage: string | null
+  alt: string
+}
 
 export const useProductGetters = (
   productTemplate: Ref<CustomProductWithStockFromRedis>,
   productVariant: Ref<Product | null>,
 ) => {
-  const normalize = (arr: any) => (Array.isArray(arr) ? arr : [])
+  const normalize = (arr: unknown) => (Array.isArray(arr) ? arr : [])
 
   const getBaseImages = (): BaseImage[] => {
     const pt: any = productTemplate.value
@@ -19,14 +24,20 @@ export const useProductGetters = (
     const images: BaseImage[] = []
     const seen = new Set<string>()
 
-    const add = (id?: number, url?: string | null, alt?: string | null) => {
-      if (!url) return
-      const trimmed = url.trim()
-      if (!trimmed || seen.has(trimmed)) return
-      seen.add(trimmed)
+    const add = (
+      id?: number,
+      imageUrl?: string | null,
+      legacyImage?: string | null,
+      alt?: string | null,
+    ) => {
+      const dedupeKey = imageUrl?.trim() || legacyImage?.trim()
+      if (!dedupeKey || seen.has(dedupeKey)) return
+
+      seen.add(dedupeKey)
       images.push({
         id: id ?? pv?.id ?? pt?.id,
-        url: trimmed,
+        imageUrl: imageUrl?.trim() || null,
+        legacyImage: legacyImage?.trim() || null,
         alt: String(alt || pv?.name || pt?.name || ''),
       })
     }
@@ -41,56 +52,56 @@ export const useProductGetters = (
       )
     }
 
-    if (currentVariant) {
-      add(currentVariant.id, currentVariant.image, currentVariant.name)
-      normalize(currentVariant.mediaGallery).forEach((img: any) =>
-        add(img.id, img.image, img.name),
-      )
-    } else if (pv) {
-      add(pv.id, pv.image, pv.name)
-      normalize(pv.mediaGallery).forEach((img: any) =>
-        add(img.id, img.image, img.name),
+    const addFromEntity = (entity: any) => {
+      add(entity?.id, entity?.imageUrl, entity?.image, entity?.name)
+      normalize(entity?.mediaGallery).forEach((img: any) =>
+        add(img.id, img.imageUrl, img.image, img.name),
       )
     }
 
-    if (pt) {
-      add(pt.id, pt.image, pt.name)
-      normalize(pt.mediaGallery).forEach((img: any) =>
-        add(img.id, img.image, img.name),
-      )
+    if (currentVariant) {
+      addFromEntity(currentVariant)
+    } else if (pv) {
+      addFromEntity(pv)
     }
+
+    if (pt) {
+      addFromEntity(pt)
+    }
+
     return images
   }
+
+  const toGalleryItem = (
+    image: BaseImage,
+    width: number | string,
+    height: number | string,
+  ): ImageGalleryItem => ({
+    id: image.id,
+    url: image.imageUrl ?? image.legacyImage ?? '',
+    alt: image.alt,
+    width,
+    height,
+  })
 
   const getMainImage = (
     width: number | string,
     height: number | string,
   ): ImageGalleryItem | null => {
-    const base = getBaseImages()
-    const img = base[0]
-    if (!img) return null
+    const img = getBaseImages()[0]
+    if (!img?.imageUrl && !img?.legacyImage) return null
 
-    return {
-      id: img.id,
-      url: img.url,
-      alt: img.alt,
-      width,
-      height,
-    }
+    return toGalleryItem(img, width, height)
   }
 
   const getThumbs = (
     width: number | string,
     height: number | string,
   ): ImageGalleryItem[] => {
-    const base = getBaseImages()
-    return base.slice(1).map(img => ({
-      id: img.id,
-      url: img.url,
-      alt: img.alt,
-      width,
-      height,
-    }))
+    return getBaseImages()
+      .slice(1)
+      .filter(img => img.imageUrl || img.legacyImage)
+      .map(img => toGalleryItem(img, width, height))
   }
 
   return {

@@ -33,10 +33,9 @@ query (
     }
       tags {        
         name
-        image
-        imageFilename
+        imageUrl
       }
-      image
+      imageUrl
       name
       slug      
     }

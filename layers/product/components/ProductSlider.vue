@@ -35,7 +35,7 @@ await loadProductTemplateList({ pageSize: numOfProducts })
         class="min-w-[300px] max-w-[300px] md:min-w-[320px] md:max-w-[320px]"
         :slug="mountUrlSlugForProductVariant(productTemplate.firstVariant as Product) || ''"
         :name="productTemplate?.name || ''"
-        :image-url="$getImage(String(productTemplate.image), 370, 370, String(productTemplate.imageFilename))"
+        :image-url="productTemplate.imageUrl ?? ''"
         :image-alt="productTemplate?.name || ''"
         :regular-price="getRegularPrice(productTemplate.firstVariant as Product)"
         :special-price="getSpecialPrice(productTemplate.firstVariant as Product)"

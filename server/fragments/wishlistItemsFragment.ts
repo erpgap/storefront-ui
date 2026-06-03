@@ -5,9 +5,8 @@ wishlistItems {
       id
       name
       description
-      image
+      imageUrl
       price
-      imageFilename
       isInWishlist
       variantAttributeValues{
         id

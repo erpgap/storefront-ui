@@ -3,7 +3,6 @@
 // nuxt.config.ts
 import { defineNuxtConfig } from 'nuxt/config'
 import path from 'path'
-console.log('NUXT_PUBLIC_ODOO_BASE_URL from nuxt.config.ts:', process.env.NUXT_PUBLIC_ODOO_BASE_URL);
 
 const swrCacheTime = Number(process.env?.NUXT_SWR_CACHE_TIME || 3600)
 const storageDriver = process.env.NUXT_STORAGE_DRIVER || 'memory'
@@ -18,6 +17,7 @@ export default defineNuxtConfig({
     '@erpgap/recent-view-products',                                      
    ], */ 
   modules: [
+    './modules/env-check',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
@@ -191,7 +191,7 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    cacheTtl: 1000 * 60 * 60,
+    cacheTtl: swrCacheTime * 1000,
     runtimeCacheStorage: true,
     sitemaps: {
     products: {
@@ -201,6 +201,10 @@ export default defineNuxtConfig({
     categories: {
       sources: ['/api/sitemap/urls/categories'],
       defaults: { changefreq: 'weekly', priority: 1.0 },
+    },
+    blogs: {
+      sources: ['/api/sitemap/urls/blogs'],
+      defaults: { changefreq: 'weekly', priority: 0.6 },
     },
   },
   },
