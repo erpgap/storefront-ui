@@ -190,7 +190,7 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    cacheTtl: 1000 * 60 * 60,
+    cacheTtl: swrCacheTime * 1000,
     runtimeCacheStorage: true,
     sitemaps: {
     products: {
@@ -200,6 +200,10 @@ export default defineNuxtConfig({
     categories: {
       sources: ['/api/sitemap/urls/categories'],
       defaults: { changefreq: 'weekly', priority: 1.0 },
+    },
+    blogs: {
+      sources: ['/api/sitemap/urls/blogs'],
+      defaults: { changefreq: 'weekly', priority: 0.6 },
     },
   },
   },
