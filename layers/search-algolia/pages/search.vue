@@ -126,14 +126,7 @@ onMounted(() => {
                   (productTemplate.firstVariant || productTemplate) as Product,
                 )
               "
-              :image-url="
-                $getImage(
-                  String(productTemplate.image),
-                  370,
-                  370,
-                  String(productTemplate.imageFilename),
-                )
-              "
+              :image-url="productTemplate.imageUrl ?? ''"
               :image-alt="productTemplate?.name || ''"
               :regular-price="
                 getRegularPrice(productTemplate.firstVariant as Product) || 250

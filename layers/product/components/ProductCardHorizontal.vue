@@ -18,15 +18,10 @@ defineProps({
   >
     <div class="relative overflow-hidden rounded-md w-[100px]">
       <NuxtImg
+        provider="odooProvider"
         class="w-full h-auto border rounded-md border-neutral-200"
-        :src="$getImage(
-          String(product?.image),
-          370,
-          370,
-          String(product?.imageFilename),
-        )
-        "
-        :alt="product?.imageFilename ?? ''"
+        :src="product?.imageUrl ?? product?.image ?? ''"
+        :alt="product?.name ?? ''"
         width="370"
         height="370"
         loading="lazy"
