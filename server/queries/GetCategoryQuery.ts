@@ -7,7 +7,6 @@ export default `
       breadcrumb
       metaTitle
       metaImage
-      imageFilename
       metaKeyword
       metaDescription
       jsonLd
@@ -50,7 +49,6 @@ export default `
       breadcrumb
       metaTitle
       metaImage
-      imageFilename
       metaKeyword
       metaDescription
       jsonLd

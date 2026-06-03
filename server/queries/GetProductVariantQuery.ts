@@ -6,16 +6,12 @@ export default `
     ) {
       product {
         id
-        smallImage
         price
         name
         description
-        image
-        imageFilename
         imageUrl
         mediaGallery{
           id
-          image
           imageUrl
         }
         combinationInfoVariant
