@@ -3,7 +3,6 @@
 // nuxt.config.ts
 import { defineNuxtConfig } from 'nuxt/config'
 import path from 'path'
-console.log('NUXT_PUBLIC_ODOO_BASE_URL from nuxt.config.ts:', process.env.NUXT_PUBLIC_ODOO_BASE_URL);
 
 const swrCacheTime = Number(process.env?.NUXT_SWR_CACHE_TIME || 3600)
 const storageDriver = process.env.NUXT_STORAGE_DRIVER || 'memory'
@@ -18,6 +17,7 @@ export default defineNuxtConfig({
     '@erpgap/recent-view-products',                                      
    ], */ 
   modules: [
+    './modules/env-check',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
