@@ -102,6 +102,7 @@ export type BlogPost = {
   id: Maybe<Scalars['Int']['output']>;
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
   jsonLd: Maybe<Scalars['GenericScalar']['output']>;
   name: Maybe<Scalars['String']['output']>;
   publishedDate: Maybe<Scalars['String']['output']>;
@@ -180,6 +181,7 @@ export type Category = {
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
   jsonLd: Maybe<Scalars['GenericScalar']['output']>;
   metaDescription: Maybe<Scalars['String']['output']>;
   metaImage: Maybe<Scalars['String']['output']>;
@@ -219,6 +221,7 @@ export type Company = {
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
   mobile: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   phone: Maybe<Scalars['String']['output']>;
@@ -259,7 +262,6 @@ export type Country = {
   __typename?: 'Country';
   code: Scalars['String']['output'];
   id: Scalars['Int']['output'];
-  imageUrl: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   states: Maybe<Array<State>>;
 };
@@ -784,6 +786,7 @@ export type Partner = {
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
   isCompany: Scalars['Boolean']['output'];
   isPublic: Maybe<Scalars['Boolean']['output']>;
   mobile: Maybe<Scalars['String']['output']>;
@@ -818,6 +821,7 @@ export type PaymentMethod = {
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
   imagePaymentForm: Maybe<Scalars['String']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   providers: Maybe<Array<PaymentProvider>>;
   sequence: Maybe<Scalars['Int']['output']>;
@@ -886,6 +890,7 @@ export type Product = {
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
   isInStock: Maybe<Scalars['Boolean']['output']>;
   isInWishlist: Maybe<Scalars['Boolean']['output']>;
   /** Specific to Product Variant */
@@ -949,6 +954,7 @@ export type ProductImage = {
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   video: Maybe<Scalars['String']['output']>;
 };
@@ -983,6 +989,7 @@ export type ProductTag = {
   color: Maybe<Scalars['String']['output']>;
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   visibleOnEcommerce: Maybe<Scalars['Boolean']['output']>;
 };
@@ -1331,6 +1338,7 @@ export type WebsiteMenuImage = {
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
   sequence: Maybe<Scalars['Int']['output']>;
   subtitle: Maybe<Scalars['String']['output']>;
   tag: Maybe<Scalars['String']['output']>;
