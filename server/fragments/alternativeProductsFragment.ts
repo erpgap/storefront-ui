@@ -5,8 +5,6 @@ export default `
     displayName
     price
     description
-    image
-    imageFilename
     imageUrl
     slug
     firstVariant{
