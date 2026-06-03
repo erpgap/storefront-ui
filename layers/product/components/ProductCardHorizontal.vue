@@ -20,7 +20,7 @@ defineProps({
       <NuxtImg
         provider="odooProvider"
         class="w-full h-auto border rounded-md border-neutral-200"
-        :src="product?.imageUrl ?? product?.image ?? ''"
+        :src="product?.imageUrl ?? ''"
         :alt="product?.name ?? ''"
         width="370"
         height="370"

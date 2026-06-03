@@ -21,7 +21,7 @@ defineProps<{
         <NuxtLink :to="`/category/${category.id}`">
           <NuxtImg
             provider="odooProvider"
-            :src="category.imageUrl ?? category.image ?? ''"
+            :src="category.imageUrl ?? ''"
             class="w-full"
             :alt="category.name ?? ''"
             width="400"
@@ -56,7 +56,7 @@ defineProps<{
         <NuxtLink :to="`/category/${category.id}`">
           <NuxtImg
             provider="odooProvider"
-            :src="category.imageUrl ?? category.image ?? ''"
+            :src="category.imageUrl ?? ''"
             class="w-full"
             :alt="category.name ?? ''"
             width="200"
