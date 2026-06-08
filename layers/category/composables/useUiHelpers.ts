@@ -29,6 +29,7 @@ export const useUiHelpers = () => {
  const getFacetsFromURL = (
     query: Record<string, any>,
     ids: number[] = [],
+    defaultPageSize = 20,
   ): QueryProductsArgs => {
     const filters: string[] = []
 
@@ -53,7 +54,7 @@ export const useUiHelpers = () => {
         ? 'true'
         : undefined
 
-    const pageSize = query.itemsPerPage ? parseInt(query.itemsPerPage) : 20
+    const pageSize = query.itemsPerPage ? parseInt(query.itemsPerPage) : defaultPageSize
     const page = query?.page ? parseInt(query.page) : 1
 
     const sortParts = String(query?.sort ?? '').split(',')

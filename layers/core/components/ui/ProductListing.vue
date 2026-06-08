@@ -40,7 +40,7 @@ const {
   productTemplateList,
   totalItems,
   stockCount,
-} = useProductTemplateList(String(route.fullPath.replace(/\/$/, '')))
+} = useProductTemplateList(String(route.fullPath.replace(/\/$/, '')), props.itemsPerPage)
 
 provide('stockCount', stockCount)
 
@@ -63,7 +63,7 @@ watch(
     delete cleanOld['list-view']
 
     if (!isEqual(cleanOld, cleanNew)) {
-      await loadProductTemplateList(getFacetsFromURL(route.query))
+      await loadProductTemplateList(getFacetsFromURL(route.query, [], props.itemsPerPage))
     }
   },
 )
@@ -90,7 +90,7 @@ if (props.seoEntity) {
 
 setMaxVisiblePages(isWideScreen.value)
 
-await loadProductTemplateList(getFacetsFromURL(route.query))
+await loadProductTemplateList(getFacetsFromURL(route.query, [], props.itemsPerPage))
 
 defineExpose({ totalItems, loading, loadProductTemplateList })
 </script>

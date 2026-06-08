@@ -1,5 +1,6 @@
 import type { AttributeFacet, AttributeValue, Product, ProductTemplateListResponse, QueryProductsArgs } from '~~/graphql'
 import { QueryName } from '~~/server/queries'
+import { useUiHelpers } from '~~/layers/category/composables/useUiHelpers'
 
 const SHOW_ALL_FACETS = true
 
@@ -9,11 +10,28 @@ type FilterCount = {
   total?: number
 }
 
-export const useProductTemplateList = (customIndex = '') => {
+export const useProductTemplateList = (customIndex = '', defaultPageSize = 20) => {
   const nuxtApp = useNuxtApp() as any
   const $sdk: () => any = nuxtApp.$sdk
   const route = useRoute()
-  const params = ref<QueryProductsArgs>({})
+  const { getFacetsFromURL } = useUiHelpers()
+
+  const resolveParams = (override: QueryProductsArgs = {}): QueryProductsArgs => {
+    const fromUrl = getFacetsFromURL(route.query as Record<string, any>, [], defaultPageSize)
+
+    return {
+      ...fromUrl,
+      pageSize: override.pageSize ?? fromUrl.pageSize ?? defaultPageSize,
+      currentPage: override.currentPage ?? fromUrl.currentPage ?? 1,
+      ...override,
+      filter: {
+        ...fromUrl.filter,
+        ...override.filter,
+      },
+    }
+  }
+
+  const params = ref<QueryProductsArgs>(resolveParams())
 
   const { data, error, execute, pending } = useAsyncData<ProductTemplateListResponse>(
     `product-template-list-${customIndex}`,
@@ -26,7 +44,7 @@ export const useProductTemplateList = (customIndex = '') => {
     {
       server: true,
       lazy: false,
-      immediate: true,
+      immediate: false,
       default: () => null,
     },
   )
@@ -57,8 +75,8 @@ export const useProductTemplateList = (customIndex = '') => {
     }
   })
 
-  const loadProductTemplateList = async (newParams: QueryProductsArgs) => {
-    params.value = newParams
+  const loadProductTemplateList = async (newParams: QueryProductsArgs = {}) => {
+    params.value = resolveParams(newParams)
     await execute()
   }
 

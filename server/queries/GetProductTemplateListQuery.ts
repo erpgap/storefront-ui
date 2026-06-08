@@ -4,7 +4,7 @@ export default `
 query(
   $filter: ProductFilterInput
   $currentPage: Int
-  $pageSize: Int = 0
+  $pageSize: Int = 20
   $search: String
   $sort: ProductSortInput
 ) {
