@@ -77,12 +77,12 @@ export async function updateCart(event: any, updateData: any) {
   })
 
   const keyName = `cache:cart:${session?.id}`
-  const currentCart = (await useStorage().getItem<{ cart: Cart }>(
+  const currentCart = (await useStorage('cart').getItem<{ cart: Cart }>(
     keyName,
   )) || { cart: {} }
 
   const updatedCart = Object.assign({}, currentCart.cart, updateData)
   const reducedCart = reduceCart(updatedCart as Cart)
 
-  useStorage().setItem(keyName, { cart: reducedCart })
+  useStorage('cart').setItem(keyName, { cart: reducedCart })
 }
