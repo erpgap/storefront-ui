@@ -18,7 +18,7 @@ defineProps<{
         v-for="category in items"
         :key="category.id"
       >
-        <NuxtLink :to="`/category/${category.id}`">
+        <NuxtLink :to="category.slug">
           <NuxtImg
             provider="odooProvider"
             :src="category.imageUrl ?? ''"
@@ -53,7 +53,7 @@ defineProps<{
         :key="category.id"
         class="min-w-[200px] max-w-[300px]"
       >
-        <NuxtLink :to="`/category/${category.id}`">
+        <NuxtLink :to="category.slug">
           <NuxtImg
             provider="odooProvider"
             :src="category.imageUrl ?? ''"

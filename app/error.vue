@@ -22,7 +22,7 @@ const error = useError()
       </p>
       <div class="my-10">
         <SfButton
-          to="/category/53"
+          to="/"
           class="hidden md:flex"
           variant="secondary"
           :tag="NuxtLink"
@@ -47,7 +47,7 @@ const error = useError()
       </p>
       <div class="my-10">
         <SfButton
-          to="/category/53"
+          to="/"
           class="hidden md:flex"
           variant="secondary"
           :tag="NuxtLink"

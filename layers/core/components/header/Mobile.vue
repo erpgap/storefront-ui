@@ -145,7 +145,7 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
               >
                 <p>
                   <NuxtLink
-                    :to="`/category/${category.id}`"
+                    :to="category.slug"
                     class="flex justify-between items-center border-b border-[#e5e7eb] text-[16px] text-black font-medium py-4"
                     @click="close()"
                   >

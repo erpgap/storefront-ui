@@ -84,7 +84,7 @@ const goTo = (slug: string) => { close(); router.push(slug) }
         <div class="w-full narrow-container">
           <ul class="flex gap-10">
             <li v-for="category in categoriesForMegaMenu" :key="category.id">
-              <NuxtLink :to="`/category/${category.id}`" class="text-[14px] text-black uppercase tracking-[0.5px]">
+              <NuxtLink :to="category.slug" class="text-[14px] text-black uppercase tracking-[0.5px]">
                 {{ category.name }}
               </NuxtLink>
             </li>
