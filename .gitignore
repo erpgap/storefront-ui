@@ -109,3 +109,5 @@ version
 !config/example.json
 config/*.json
 .prettierrc
+
+openspec/
