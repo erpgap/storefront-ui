@@ -71,7 +71,7 @@ export const useCategory = (categorySlugIndex: string) => {
     let currentLink = '';
     for (const cat of categoriesInPath) {
       if (cat.slug) {
-        currentLink = `/category/${cat.slug}`;
+        currentLink = cat.slug;
         categoryPath.push({
           label: cat.name || '',
           link: currentLink,
