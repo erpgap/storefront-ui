@@ -107,19 +107,33 @@ export default defineNuxtConfig({
     storage: {
       cache: {
         ...storageConfig,
+        ttl: swrCacheTime,
       },
       slug: {
         ...storageConfig,
         ttl: swrCacheTime,
+      },
+      cart: {
+        ...storageConfig,
+      },
+      stock: {
+        ...storageConfig,
       },
     },
     devStorage: {
       cache: {
         ...storageConfig,
+        ttl: swrCacheTime,
       },
       slug: {
         ...storageConfig,
         ttl: swrCacheTime,
+      },
+      cart: {
+        ...storageConfig,
+      },
+      stock: {
+        ...storageConfig,
       },
     },
   },
