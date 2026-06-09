@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefront-ui/vue'
-import { isEqual } from 'lodash-es'
-import { useRoute } from 'vue-router'
-import { useUiHelpers } from '~~/layers/category/composables/useUiHelpers'
 import { useProductAttributes } from '~~/layers/product/composables/useProductAttributes'
 import { useProductTemplateList } from '~~/layers/product/composables/useProductTemplateList'
-import { useState } from 'nuxt/app'
-import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
+import generateSeo, { type SeoEntity } from '~~/app/utils/buildSEOHelper'
 import type { Product } from '~~/graphql'
 
-type Breadcrumb = { label: string, link: string }
+type Breadcrumb = { label: string; link: string }
 
 const props = withDefaults(
   defineProps<{
@@ -30,7 +26,6 @@ const props = withDefaults(
 
 const route = useRoute()
 const { isOpen, open, close } = useDisclosure()
-const { getFacetsFromURL } = useUiHelpers()
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
 const {
@@ -40,49 +35,22 @@ const {
   productTemplateList,
   totalItems,
   stockCount,
-} = useProductTemplateList(String(route.fullPath.replace(/\/$/, '')), props.itemsPerPage)
+} = useProductTemplateList(route.fullPath.replace(/\/$/, ''), props.itemsPerPage)
 
 provide('stockCount', stockCount)
 
 const maxVisiblePages = useState(`${props.stateKey}-max-visible-pages`, () => 1)
-const setMaxVisiblePages = (isWide: boolean) => (maxVisiblePages.value = isWide ? 5 : 1)
+const setMaxVisiblePages = (wide: boolean) => { maxVisiblePages.value = wide ? 5 : 1 }
 
-watch(isWideScreen, (value: boolean) => setMaxVisiblePages(value))
-watch(isTabletScreen, (value: boolean) => {
-  if (value && isOpen.value) {
-    close()
-  }
-})
+watch(isWideScreen, setMaxVisiblePages)
+watch(isTabletScreen, (isTablet: boolean) => { if (isTablet && isOpen.value) close() })
 
-watch(
-  () => route.query,
-  async (newValue: Record<string, any>, oldValue: Record<string, any>) => {
-    const cleanNew = { ...newValue }
-    const cleanOld = { ...oldValue }
-    delete cleanNew['list-view']
-    delete cleanOld['list-view']
-
-    if (!isEqual(cleanOld, cleanNew)) {
-      await loadProductTemplateList(getFacetsFromURL(route.query, [], props.itemsPerPage))
-    }
-  },
-)
-
-const safeAttributes = computed(() =>
+const attributes = computed(() =>
   Array.isArray(organizedAttributes.value) ? organizedAttributes.value : [],
 )
 
-const pagination = computed(() => {
-  const itemsPerPage = props.itemsPerPage
-  const totalPages = Math.ceil(totalItems.value / itemsPerPage) || 1
-  return {
-    currentPage: Number(route.query.page) || 1,
-    totalPages,
-    totalItems: totalItems.value,
-    itemsPerPage,
-    pageOptions: [5, 10, 15, 20],
-  }
-})
+const currentPage = computed(() => Number(route.query.page) || 1)
+const totalPages = computed(() => Math.ceil(totalItems.value / props.itemsPerPage) || 1)
 
 if (props.seoEntity) {
   useHead(generateSeo<SeoEntity>(props.seoEntity, 'Category'))
@@ -90,7 +58,7 @@ if (props.seoEntity) {
 
 setMaxVisiblePages(isWideScreen.value)
 
-await loadProductTemplateList(getFacetsFromURL(route.query, [], props.itemsPerPage))
+await loadProductTemplateList()
 
 defineExpose({ totalItems, loading, loadProductTemplateList })
 </script>
@@ -108,30 +76,31 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
     >
       {{ heading }}
     </h1>
+
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
         <LazyCategoryFilterSidebar
           v-if="$viewport.isGreaterOrEquals('desktopSmall')"
-          :attributes="safeAttributes"
+          :attributes="attributes"
           :categories="[]"
         />
         <LazyCategoryMobileSidebar
-          v-if="$viewport.isLessThan('desktopSmall')"
+          v-else
           :is-open="isOpen"
           @close="close"
         >
           <template #default>
             <LazyCategoryFilterSidebar
-              class="block lg:hidden"
-              :attributes="safeAttributes"
+              :attributes="attributes"
               :categories="[]"
               @close="close"
             />
           </template>
         </LazyCategoryMobileSidebar>
       </div>
+
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
-        <div v-if="!loading">
+        <template v-if="!loading">
           <div class="flex justify-between items-center mb-6">
             <span class="font-bold font-headings md:text-lg">{{ totalItems }} Products</span>
             <SfButton
@@ -145,37 +114,41 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
               Filter
             </SfButton>
           </div>
+
           <section
             v-if="productTemplateList.length > 0"
             class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8"
           >
             <LazyUiProductCard
-              v-for="productTemplate in productTemplateList"
-              :key="productTemplate.id"
-              :name="productTemplate?.name || ''"
-              :slug="mountUrlSlugForProductVariant(productTemplate as Product)"
-              :image-url="productTemplate.imageUrl ?? ''"
-              :image-alt="productTemplate.name ?? ''"
-              :regular-price="getRegularPrice(productTemplate.firstVariant as Product)"
-              :special-price="getSpecialPrice(productTemplate.firstVariant as Product)"
+              v-for="product in productTemplateList"
+              :key="product.id"
+              :name="product.name ?? ''"
+              :slug="mountUrlSlugForProductVariant(product as Product)"
+              :image-url="product.imageUrl ?? ''"
+              :image-alt="product.name ?? ''"
+              :regular-price="getRegularPrice(product.firstVariant as Product)"
+              :special-price="getSpecialPrice(product.firstVariant as Product)"
               :rating-count="123"
-              :rating="Number(4)"
-              :first-variant="productTemplate.firstVariant as Product"
+              :rating="4"
+              :first-variant="product.firstVariant as Product"
             />
           </section>
+
           <CategoryEmptyState
             v-else
-            :page="pagination.currentPage"
+            :page="currentPage"
           />
+
           <LazyUiPagination
-            v-if="pagination.totalPages > 1"
+            v-if="totalPages > 1"
             class="mt-5"
-            :current-page="pagination.currentPage"
-            :total-items="pagination.totalItems"
-            :page-size="pagination.itemsPerPage"
+            :current-page="currentPage"
+            :total-items="totalItems"
+            :page-size="itemsPerPage"
             :max-visible-pages="maxVisiblePages"
           />
-        </div>
+        </template>
+
         <div
           v-else
           class="w-full text-center"
