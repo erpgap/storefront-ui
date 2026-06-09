@@ -92,24 +92,13 @@ export const useUiHelpers = () => {
   }
 
   const changeFilters = (filters: any[], sort: string) => {
-    const formattedFilters: any = {}
+    const formattedFilters: Record<string, string> = {}
     filters.forEach((element) => {
-      if (element.filterName === 'Size') {
-        if (formattedFilters[element.filterName]) {
-          formattedFilters[
-            element.filterName
-          ] += `,${element.id}-${element.label}`
-          return
-        }
-        formattedFilters[element.filterName] = `${element.id}-${element.label}`
-      }
-      else {
-        if (formattedFilters[element.filterName]) {
-          formattedFilters[element.filterName] += `,${element.id}`
-          return
-        }
-        formattedFilters[element.filterName] = `${element.id}`
-      }
+      const key = String(element.filterName)
+      const value = String(element.label ?? element.id)
+      formattedFilters[key] = formattedFilters[key]
+        ? `${formattedFilters[key]},${value}`
+        : value
     })
 
     let allQuery: any = {}
