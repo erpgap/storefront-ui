@@ -9,6 +9,7 @@ import {
   SfThumbnail,
 } from '@storefront-ui/vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useUiHelpers } from '~~/layers/category/composables/useUiHelpers'
 
 type FacetOption = {
   id: string | number
@@ -33,7 +34,12 @@ const props = defineProps<{ attributes: Facet[], categories: any[] }>()
 const stockCount = inject('stockCount') as number | undefined
 const route = useRoute()
 const router = useRouter()
-const { changeFilters } = useUiHelpers()
+const {
+  changeFilters,
+  selectedFilters,
+  isFilterSelected,
+  isStockSelected,
+} = useUiHelpers()
 
 const sort = useState('sort', () => (route.query?.sort ? String(route.query.sort) : ''))
 const sortOptions = [
@@ -65,31 +71,6 @@ const facets = computed<Facet[]>(() => [
   ...(props.attributes ?? []),
   { id: 888, label: 'Availability', type: 'in-stock' },
 ])
-
-const selectedFilters = useState<any[]>('search-selected-filters', () => [])
-
-function syncFromQuery() {
-  const q = route.query
-  const next: any[] = []
-
-  if (typeof q.price === 'string' && q.price) {
-    next.push({ filterName: 'Price', label: 'price-range', id: q.price })
-  }
-
-  if (String(q.in_stock).toLowerCase() === 'true') {
-    next.push({ filterName: 'Availability', label: 'true', id: 'true' })
-  }
-
-  Object.entries(q).forEach(([key, val]) => {
-    if (['page', 'pageSize', 'sort', 'price', 'in_stock'].includes(key)) return
-    const values = String(val).split(',').filter(Boolean)
-    values.forEach(v => next.push({ filterName: key, label: v, id: v }))
-  })
-
-  selectedFilters.value = next
-}
-onMounted(syncFromQuery)
-watch(() => route.query, syncFromQuery, { deep: true })
 
 /* function isPriceFilterSelected(values: string) {
   return selectedFilters.value.some(
@@ -142,9 +123,6 @@ function isPriceChecked(values: string) {
   return selectedPrice.value === values
 }
 
-function isStockSelected() {
-  return selectedFilters.value.some((f: { filterName: string, id: any }) => f.filterName === 'Availability' && String(f.id) === 'true')
-}
 function selectStockFilter() {
   const idx = selectedFilters.value.findIndex((f: { filterName: string }) => f.filterName === 'Availability')
   if (idx !== -1) selectedFilters.value.splice(idx, 1)
@@ -152,16 +130,16 @@ function selectStockFilter() {
   applyFiltersInstantly()
 }
 
-function isFilterSelected(opt: { id?: string | number, value?: string | number }) {
-  const token = String(opt?.id ?? opt?.value ?? '')
-  if (!token) return false
-  return selectedFilters.value.some((f: { label: any, id: any }) => String(f.label) === token || String(f.id) === token)
-}
 function selectFilter(facet: { label: string }, option: { id: string, value?: string | number, label: string }) {
   const token = String(option.id)
-  const idx = selectedFilters.value.findIndex((f: { label: any }) => String(f.label) === token)
-  if (idx !== -1) selectedFilters.value.splice(idx, 1)
-  else selectedFilters.value.push({ filterName: facet.label, label: token, id: option.id })
+  if (isFilterSelected(option)) {
+    selectedFilters.value = selectedFilters.value.filter(
+      (f: { id: unknown, label: unknown }) => String(f.id) !== token && String(f.label) !== token,
+    )
+  }
+  else {
+    selectedFilters.value.push({ filterName: facet.label, label: token, id: option.id })
+  }
   applyFiltersInstantly()
 }
 
