@@ -123,7 +123,7 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
               v-for="product in productTemplateList"
               :key="product.id"
               :name="product.name ?? ''"
-              :slug="mountUrlSlugForProductVariant(product as Product)"
+              :slug="mountUrlSlugForProductVariant((product.firstVariant ?? product) as Product)"
               :image-url="product.imageUrl ?? ''"
               :image-alt="product.name ?? ''"
               :regular-price="getRegularPrice(product.firstVariant as Product)"
