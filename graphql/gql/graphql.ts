@@ -888,6 +888,8 @@ export type Product = {
   firstVariant: Maybe<Product>;
   frequentlyBoughtTogether: Maybe<Array<Product>>;
   id: Scalars['Int']['output'];
+  image: Maybe<Scalars['String']['output']>;
+  imageFilename: Maybe<Scalars['String']['output']>;
   imageUrl: Maybe<Scalars['String']['output']>;
   isInStock: Maybe<Scalars['Boolean']['output']>;
   isInWishlist: Maybe<Scalars['Boolean']['output']>;
@@ -917,6 +919,7 @@ export type Product = {
   showAvailableQty: Maybe<Scalars['Boolean']['output']>;
   sku: Maybe<Scalars['String']['output']>;
   slug: Maybe<Scalars['String']['output']>;
+  smallImage: Maybe<Scalars['String']['output']>;
   status: Maybe<Scalars['Int']['output']>;
   tags: Maybe<Array<ProductTag>>;
   thumbnail: Maybe<Scalars['String']['output']>;
@@ -949,6 +952,8 @@ export type ProductFilterInput = {
 export type ProductImage = {
   __typename?: 'ProductImage';
   id: Scalars['Int']['output'];
+  image: Maybe<Scalars['String']['output']>;
+  imageFilename: Maybe<Scalars['String']['output']>;
   imageUrl: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   video: Maybe<Scalars['String']['output']>;
