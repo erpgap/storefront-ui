@@ -220,6 +220,10 @@ export default defineNuxtConfig({
       sources: ['/api/sitemap/urls/blogs'],
       defaults: { changefreq: 'weekly', priority: 0.6 },
     },
+    pages: {
+      urls: ['/', '/products', '/search'],
+      defaults: { changefreq: 'weekly', priority: 0.9 },
+    },
   },
   },
 
