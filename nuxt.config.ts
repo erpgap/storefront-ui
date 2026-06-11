@@ -205,8 +205,11 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    cacheTtl: swrCacheTime * 1000,
-    runtimeCacheStorage: true,
+    cacheMaxAgeSeconds: swrCacheTime,
+    runtimeCacheStorage: {
+      driver: storageDriver,
+      ...(storageUrl ? { url: storageUrl } : {}),
+    },
     sitemaps: {
     products: {
       sources: ['/api/sitemap/urls/products'],
