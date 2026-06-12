@@ -14,20 +14,33 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  excludeId: {
+    type: Number,
+    required: false,
+    default: undefined,
+  },
 })
 
 const { loadProductTemplateList, productTemplateList }
   = useProductTemplateListForRecentViews()
 
 await loadProductTemplateList()
+
+const filteredList = computed(() => {
+  if (!props.excludeId) return productTemplateList.value
+  return productTemplateList.value.filter(
+    (p: { firstVariant?: { combinationInfoVariant?: { product_template_id?: number } } }) =>
+      p.firstVariant?.combinationInfoVariant?.product_template_id !== props.excludeId,
+  )
+})
 </script>
 
 <template>
-  <section v-if="productTemplateList?.length > 0">
+  <section v-if="filteredList?.length > 0">
     <LazyProductSlider
       :heading="props.heading"
       :text="props.text"
-      :product-template-list="productTemplateList"
+      :product-template-list="filteredList"
     />
   </section>
 </template>

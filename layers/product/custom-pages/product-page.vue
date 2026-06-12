@@ -334,7 +334,7 @@ const thumbs = computed<ImageGalleryItem[]>(() => getThumbs(200, 200) ?? [])
       </section>
       <section class="lg:mx-4 mb-20">
         <ClientOnly>
-          <LazyProductRecentViewSlider text="Your recent views" />
+          <LazyProductRecentViewSlider text="Your recent views" :exclude-id="Number(productTemplate?.id)" />
         </ClientOnly>
       </section>
     </div>

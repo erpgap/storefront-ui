@@ -2,46 +2,54 @@
 import { SfScrollable } from '@storefront-ui/vue'
 import type { Product } from '~~/graphql'
 
-defineProps({
+const props = defineProps({
   heading: String,
   text: String,
+  productTemplateList: {
+    type: Array<Product>,
+    default: () => [],
+  },
 })
 
-const { loadProductTemplateList, loading, productTemplateList } = useProductTemplateList('')
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
-
-const numOfProducts = 10
-await loadProductTemplateList({ pageSize: numOfProducts })
 </script>
 
 <template>
-  <div class="narrow-container pt-[40px] pb-[40px] md:pt-[80px] md:pb-[120px]">
-    <h2 class="text-[24px] sm:text-[28px] font-normal mb-[30px] md:mb-[50px]" v-if="heading">
-      {{ heading }}
-    </h2>
-    <p class="my-4 typography-text-lg">
+  <div class="narrow-container py-[40px] md:py-[80px]">
+    <div class="flex flex-col sm:flex-row flex-wrap justify-between items-start sm:items-center gap-4 mb-[30px] md:mb-[50px]">
+      <h2
+        v-if="heading"
+        class="text-[24px] sm:text-[28px] font-normal"
+      >
+        {{ heading }}
+      </h2>
+    </div>
+    <p
+      v-if="text"
+      class="my-4 typography-text-lg"
+    >
       {{ text }}
     </p>
     <SfScrollable
-      v-if="productTemplateList.length > 0"
+      v-if="props.productTemplateList?.length > 0"
       buttons-placement="block"
-      class="items-center pb-10"
+      class="items-center pb-8 sm:pb-12 sm:mb-20"
       data-testid="product-slider"
-      :drag="true"
+      drag="true"
     >
       <LazyUiProductCard
-        v-for="productTemplate in productTemplateList"
-        :key="productTemplate.id"
-        class="min-w-[300px] max-w-[300px] md:min-w-[320px] md:max-w-[320px]"
-        :slug="mountUrlSlugForProductVariant(productTemplate.firstVariant as Product) || ''"
+        v-for="(productTemplate, index) in props.productTemplateList"
+        :key="productTemplate?.id || index"
+        class="min-w-[300px] max-w-[300px] sm:min-w-[322px] sm:max-w-[322px]"
+        :slug=" mountUrlSlugForProductVariant(productTemplate.firstVariant as Product) || '' "
         :name="productTemplate?.name || ''"
         :image-url="productTemplate.imageUrl ?? ''"
         :image-alt="productTemplate?.name || ''"
         :regular-price="getRegularPrice(productTemplate.firstVariant as Product)"
         :special-price="getSpecialPrice(productTemplate.firstVariant as Product)"
         :is-in-wishlist="productTemplate?.isInWishlist || false"
-        :rating-count="productTemplate.ratingCount"
-        :rating="productTemplate.rating"
+        :rating-count="0"
+        :rating="0"
         :first-variant="productTemplate.firstVariant as Product"
       />
     </SfScrollable>
@@ -49,25 +57,28 @@ await loadProductTemplateList({ pageSize: numOfProducts })
 </template>
 
 <style scoped>
-:deep(button[aria-label="Next"]),
 :deep(button[aria-label="Previous"]) {
+  position: absolute;
+  bottom: 0;
+  right: 4rem;
+}
+:deep(button[aria-label="Next"]) {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+:deep(button[aria-label="Previous"]),
+:deep(button[aria-label="Next"]) {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #E5E7EB!important;
+  box-shadow: none!important;
   padding: 0!important;
-  width: 50px!important;
-  height: 50px!important;
   background-color: white!important;
-  position: absolute!important;
-  top: 0!important;
-  right: 0!important;
-  transform: translateY(-190%);
 }
-
-:deep(button[aria-label="Previous"]) {
-  right: 3.25rem!important;
-}
-
-:deep(button[aria-label="Next"] svg),
-:deep(button[aria-label="Previous"] svg) {
-  width: 35px!important;
-  height: auto!important;
+:deep(button[aria-label="Previous"]) svg,
+:deep(button[aria-label="Next"]) svg {
+  width: 35px;
+  height: 35px;
 }
 </style>
