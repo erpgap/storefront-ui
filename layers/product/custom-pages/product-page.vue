@@ -120,12 +120,15 @@ const handleWishlistToggle = async () => {
   }
 }
 
+onMounted(() => {
+  if (productTemplate.value?.id) addProductToRecentViews(Number(productTemplate.value.id))
+})
+
 watch(
-  productTemplate,
-  (newValue: CustomProductWithStockFromRedis) => {
-    if (newValue?.id) addProductToRecentViews(Number(newValue.id))
+  () => productTemplate.value?.id,
+  (id: number) => {
+    if (id) addProductToRecentViews(Number(id))
   },
-  { immediate: true },
 )
 
 const { getMainImage, getThumbs } = useProductGetters(productTemplate, productVariant)
