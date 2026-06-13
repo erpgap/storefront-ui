@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import {
-  SfIconRemoveShoppingCart,
-  SfIconSell,
-  SfLink,
-} from '@storefront-ui/vue'
-import type { CustomOrderLineWithStockFromRedis, OrderLine, Product } from '~~/graphql'
+import { SfIconClose, SfLink } from '@storefront-ui/vue'
+import type { CustomOrderLineWithStockFromRedis, Product } from '~~/graphql'
 
 const NuxtLink = resolveComponent('NuxtLink')
 
-defineProps({
+const props = defineProps({
   orderLine: {
     type: Object as PropType<CustomOrderLineWithStockFromRedis>,
     required: true,
@@ -16,98 +12,80 @@ defineProps({
 })
 
 const { updateItemQuantity, removeItemFromCart } = useCart()
+
+const hasDiscount = computed(
+  () => !!props.orderLine.product?.combinationInfoVariant?.has_discounted_price,
+)
+const oldPrice = computed(
+  () => (props.orderLine.product?.combinationInfoVariant?.list_price || 0) * (props.orderLine.quantity ?? 1),
+)
 </script>
 
 <template>
-  <div
-    class="relative flex first:border-t border-b-[1px] border-neutral-200 hover:shadow-lg min-w-[320px] p-4 last:mb-0"
-    data-testid="cart-product-card"
-  >
-    <div class="relative overflow-hidden rounded-md w-[100px] sm:w-[176px]">
-      <SfLink
-        :to="mountUrlSlugForProductVariant(orderLine.product as Product)"
-        :tag="NuxtLink"
-      >
-        <NuxtImg
-          provider="odooProvider"
-          class="w-full h-auto border rounded-md border-neutral-200"
-          :src="orderLine.product?.imageUrl ?? ''"
-          :alt="orderLine.product?.name ?? ''"
-          width="300"
-          height="300"
-          loading="lazy"
-          format="webp"
-        />
-      </SfLink>
-      <div
-        v-if="variantHasDiscountedPrice"
-        class="absolute top-0 left-0 text-white bg-secondary-600 py-1 pl-1.5 pr-2 text-xs font-medium"
-      >
-        <SfIconSell
-          size="xs"
-          class="mr-1"
-        />
-        {{ $t("sale") }}
-      </div>
-    </div>
-    <div class="flex flex-col pl-4 min-w-[180px] flex-1">
-      <div class="flex justify-between">
-        <SfLink
-          :tag="NuxtLink"
-          :to="mountUrlSlugForProductVariant(orderLine.product as Product)"
-          variant="secondary"
-          class="no-underline typography-text-sm sm:typography-text-lg cursor-pointer"
-        >
-          {{ orderLine?.product?.name || orderLine?.name }}
-        </SfLink>
-        <SfIconRemoveShoppingCart
-          class="cursor-pointer"
+  <div class="flex gap-4 sm:gap-5 py-5" data-testid="cart-product-card">
+    <SfLink
+      :tag="NuxtLink"
+      :to="mountUrlSlugForProductVariant(orderLine.product as Product)"
+      class="shrink-0 w-[84px] sm:w-[96px] aspect-[4/5] overflow-hidden rounded-[2px] bg-primary-50"
+    >
+      <NuxtImg
+        provider="odooProvider"
+        class="w-full h-full object-cover"
+        :src="orderLine.product?.imageUrl ?? ''"
+        :alt="orderLine.product?.name ?? ''"
+        width="280"
+        height="373"
+        loading="lazy"
+        format="webp"
+      />
+    </SfLink>
+
+    <div class="flex flex-col flex-1 min-w-0">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <SfLink
+            :tag="NuxtLink"
+            :to="mountUrlSlugForProductVariant(orderLine.product as Product)"
+            variant="secondary"
+            class="no-underline text-[15px] font-medium leading-snug"
+          >
+            {{ orderLine?.product?.name || orderLine?.name }}
+          </SfLink>
+          <ul
+            v-if="orderLine.product?.variantAttributeValues?.length"
+            class="mt-1.5 text-[13px] text-primary-500 space-y-0.5"
+          >
+            <li
+              v-for="attribute in orderLine.product?.variantAttributeValues"
+              :key="attribute.id"
+            >
+              <span class="text-primary-400">{{ attribute.attribute?.name }}:</span>
+              <span class="ml-1">{{ attribute.name }}</span>
+            </li>
+          </ul>
+        </div>
+        <button
+          type="button"
+          aria-label="Remove item"
+          class="shrink-0 text-primary-400 hover:text-black transition-colors"
           @click="removeItemFromCart(orderLine.id)"
-        />
+        >
+          <SfIconClose size="sm" />
+        </button>
       </div>
-      <div class="my-2 sm:mb-0">
-        <ul
-          class="text-xs font-normal leading-5 sm:typography-text-sm text-neutral-700"
-        >
-          <li
-            v-for="attribute in orderLine.product?.variantAttributeValues"
-            :key="attribute.id"
-          >
-            <span class="mr-1">{{ attribute.attribute?.name }}:</span>
-            <span class="font-medium">{{ attribute.name }}</span>
-          </li>
-        </ul>
-      </div>
-      <div
-        class="items-start sm:items-center sm:mt-auto flex flex-col sm:flex-row"
-      >
-        <span
-          v-if="orderLine.priceSubtotal"
-          class="text-black sm:order-1 font-bold typography-text-sm sm:typography-text-lg sm:ml-auto"
-        >
-          {{ $currency(orderLine.priceSubtotal) }}
-          <span
-            v-if="orderLine.product?.combinationInfoVariant?.has_discounted_price"
-            class="text-neutral-500 ml-2 line-through typography-text-xs sm:typography-text-sm font-normal"
-          >
-            ${{
-              orderLine.product?.combinationInfoVariant?.price * (orderLine?.quantity ?? 1)
-            }}
-          </span>
-        </span>
-        <span
-          v-else
-          class="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg"
-        >
-          ${{ orderLine.priceTotal }}
-        </span>
+
+      <div class="mt-3 flex items-center justify-between gap-4">
         <UiQuantitySelector
-          :min-value="1"
-          :max-value="Number(orderLine.product?.stock)"
           :model-value="Number(orderLine.quantity)"
-          class="mt-4 sm:mt-0"
-          @update:model-value="updateItemQuantity(orderLine.id, $event)"
+          :max-qty="Number(orderLine.product?.stock) || 10"
+          @update:model-value="updateItemQuantity(orderLine.id, Number($event))"
         />
+        <p class="text-[15px] text-right whitespace-nowrap">
+          {{ $currency(orderLine.priceSubtotal || 0) }}
+          <span v-if="hasDiscount" class="ml-2 text-[13px] text-primary-300 line-through">
+            {{ $currency(oldPrice) }}
+          </span>
+        </p>
       </div>
     </div>
   </div>

@@ -16,6 +16,7 @@ export const useCart = () => {
   const { $sdk } = useNuxtApp()
   const cartCounter = useCookie<number>('cart-counter')
   const toast = useToast()
+  const { openCartSideBar } = useCartUiState()
   const cart = useState<Cart>('cart', () => (({}) as Cart))
   const frequentlyTogetherProducts = useState<Product[]>('frequently-together-products', () => [])
 
@@ -24,19 +25,21 @@ export const useCart = () => {
   const loadCart = async () => {
     try {
       loading.value = true
-      const { data } = await useFetch<{ cart: Cart }>(`/api/odoo/cart-load`, {
-        deep: true
-      })
+      // Use a direct fetch (not cached useFetch) so every call returns the
+      // current cart — useFetch would return a stale cached payload on
+      // client-side navigation. useRequestFetch forwards the session cookie
+      // on SSR so the cart still resolves on reload.
+      const data = await useRequestFetch()<{ cart: Cart }>(`/api/odoo/cart-load`)
 
-      if (!data.value?.cart)
+      if (!data?.cart)
         return
 
-      cart.value = data.value.cart
-      cartCounter.value = Number(data.value.cart?.order?.websiteOrderLine?.length || 0)
-      frequentlyTogetherProducts.value = (data.value.cart.frequentlyBoughtTogether || []).filter((p: null): p is Product => p !== null)
+      cart.value = data.cart
+      cartCounter.value = Number(data.cart?.order?.websiteOrderLine?.length || 0)
+      frequentlyTogetherProducts.value = (data.cart.frequentlyBoughtTogether || []).filter((p: null): p is Product => p !== null)
     }
     catch (error: any) {
-      return toast.error(error.data.message)
+      return toast.error(error.data?.message)
     }
     finally {
       loading.value = false
@@ -58,7 +61,7 @@ export const useCart = () => {
       cart.value = data.cartAddMultipleItems
 
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
-      toast.success('Product has been added to cart')
+      openCartSideBar()
     }
     catch (error: any) {
       return toast.error(error.data.message)
@@ -81,7 +84,6 @@ export const useCart = () => {
       )
       cart.value = data.cartUpdateMultipleItems
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
-      toast.success('Product updated successfully')
     }
     catch (error: any) {
       return toast.error(error.data.message)
@@ -102,7 +104,6 @@ export const useCart = () => {
 
       cart.value = data.cartRemoveMultipleItems
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
-      toast.success('Product removed successfully')
     }
     catch (error: any) {
       return toast.error(error.data.message)

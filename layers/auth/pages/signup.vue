@@ -21,7 +21,7 @@ const subscriptionsModel = ref<boolean>()
 
 const NuxtLink = resolveComponent('NuxtLink')
 const { isOpen, open } = useDisclosure()
-const { signup, loading } = useAuth()
+const { signup, loading, authError } = useAuth()
 const router = useRouter()
 
 const fullName = computed(
@@ -66,6 +66,14 @@ const handleSignup = async () => {
       class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8"
       @submit.prevent="handleSignup"
     >
+      <p
+        v-if="authError"
+        class="border border-red-200 bg-red-50 text-red-700 text-[13px] px-3 py-2.5"
+        role="alert"
+      >
+        {{ authError }}
+      </p>
+
       <label>
         <UiFormLabel>{{ $t("form.firstNameLabel") }} *</UiFormLabel>
         <SfInput

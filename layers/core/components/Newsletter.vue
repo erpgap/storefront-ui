@@ -6,10 +6,14 @@ const { newsletterSubscribe } = useCore()
 
 const inputValue = ref('')
 const emailValidation = ref()
+const subscribed = ref(false)
 
 const subscribeNewsletter = async () => {
-  await newsletterSubscribe({ email: inputValue.value })
-  inputValue.value = ''
+  const ok = await newsletterSubscribe({ email: inputValue.value })
+  if (ok) {
+    subscribed.value = true
+    inputValue.value = ''
+  }
 }
 </script>
 
@@ -22,7 +26,15 @@ const subscribeNewsletter = async () => {
       <p class="text-white/60 mb-9">
         Be first to know about new collections, private sales and design stories.
       </p>
+      <p
+        v-if="subscribed"
+        class="max-w-[480px] mx-auto border border-white/25 text-white text-[14px] py-3.5 px-5"
+        role="status"
+      >
+        Thanks — you're on the list. Look out for our next drop.
+      </p>
       <form
+        v-else
         class="flex flex-col sm:flex-row gap-3 max-w-[480px] mx-auto"
         @submit.prevent="subscribeNewsletter()"
       >

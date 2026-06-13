@@ -13,4 +13,5 @@ if (import.meta.client) onMounted(() => { loadWishlist() })
   <LazyTheFooter hydrate-on-visible />
 
   <WishlistSidebar />
+  <CartSidebar />
 </template>

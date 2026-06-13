@@ -37,7 +37,7 @@ websiteOrderLine {
     name
     imageUrl
     displayName
-    #combinationInfo
+    combinationInfoVariant
     slug
     variantAttributeValues{
       id
@@ -60,7 +60,7 @@ reportOrderLine {
     name
     imageUrl
     displayName
-    #combinationInfo
+    combinationInfoVariant
     slug
     variantAttributeValues{
       id
@@ -82,7 +82,7 @@ orderLines {
     name
     imageUrl
     displayName
-    #combinationInfo
+    combinationInfoVariant
     slug
     variantAttributeValues{
       id

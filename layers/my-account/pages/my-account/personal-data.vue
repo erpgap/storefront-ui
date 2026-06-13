@@ -6,7 +6,6 @@ import {
   useDisclosure,
 } from '@storefront-ui/vue'
 import { unrefElement } from '@vueuse/core'
-import { useToast } from 'vue-toastification'
 
 definePageMeta({
   layout: 'account',
@@ -14,12 +13,13 @@ definePageMeta({
 })
 const { isOpen, open, close } = useDisclosure()
 const { loadUser, user, updatePartner, updatePassword } = useAuth()
-const toast = useToast()
 const lastActiveElement = ref()
 const modalElement = ref()
 const openedForm = ref('')
+const passwordError = ref('')
 const openModal = async (modalName: string) => {
   openedForm.value = modalName
+  passwordError.value = ''
   lastActiveElement.value = document.activeElement
   open()
   await nextTick()
@@ -50,20 +50,20 @@ const isValidPassword = (value: string) =>
   value.length >= 8 && hasNumberAndSymbol(value)
 
 const saveNewPassword = async (passwords: any) => {
-  if (passwords.firstNewPassword === passwords.secondNewPassword) {
-    if (!isValidPassword(passwords.firstNewPassword)) {
-      toast.error('Password must have 8 or more characters with a mix of letters, numbers and symbols.')
-      return
-    } else {
-      await updatePassword({
-        currentPassword: passwords.oldPassword,
-        newPassword: passwords.firstNewPassword,
-      })
-      closeModal()
-    }
-  }else{
-    toast.error('Passwords don´t match')
+  passwordError.value = ''
+  if (passwords.firstNewPassword !== passwords.secondNewPassword) {
+    passwordError.value = 'Passwords don\'t match.'
+    return
   }
+  if (!isValidPassword(passwords.firstNewPassword)) {
+    passwordError.value = 'Password must have 8 or more characters with a mix of letters, numbers and symbols.'
+    return
+  }
+  await updatePassword({
+    currentPassword: passwords.oldPassword,
+    newPassword: passwords.firstNewPassword,
+  })
+  closeModal()
 }
 
 onMounted(async () => {
@@ -97,8 +97,12 @@ onMounted(async () => {
       </header>
       <AccountContactInformation v-if="openedForm === 'contactInformation'" :full-name="user?.name" :email="user?.email"
         @on-save="saveNewContactInfo" @on-cancel="closeModal" />
-      <AccountFormPassword v-else-if="openedForm === 'passwordChange'" @on-save="saveNewPassword"
-        @on-cancel="closeModal" />
+      <template v-else-if="openedForm === 'passwordChange'">
+        <p v-if="passwordError" class="border border-red-200 bg-red-50 text-red-700 text-[13px] px-3 py-2.5 mb-4" role="alert">
+          {{ passwordError }}
+        </p>
+        <AccountFormPassword @on-save="saveNewPassword" @on-cancel="closeModal" />
+      </template>
     </SfModal>
   </UiOverlay>
 </template>

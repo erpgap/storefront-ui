@@ -7,7 +7,9 @@ export default defineEventHandler(async (event: any) => {
     password: 'b013b03ac2231e0b448e9a22ba488dcf',
   })
   const keyName = `cache:cart:${session?.id}`
-  const data = await useStorage().getItem(keyName)
+  // Cart is persisted under the 'cart' storage mount (see cartHelpers.updateCart),
+  // so it must be read from the same mount — not the default root storage.
+  const data = await useStorage('cart').getItem(keyName)
 
   for (const orderLine of data?.cart?.order?.websiteOrderLine || []) {
     const stock = await useStorage('stock').getItem<string>(

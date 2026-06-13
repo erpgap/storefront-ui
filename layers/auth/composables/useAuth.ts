@@ -28,6 +28,7 @@ export const useAuth = () => {
   const toast = useToast()
 
   const loading = ref(false)
+  const authError = useState<string>('auth-error', () => '')
   const resetEmail = useCookie<string>('reset-email')
 
   const loadUser = async (withoutCache: boolean = false) => {
@@ -59,8 +60,6 @@ export const useAuth = () => {
     if (userCookie.value?.id) {
       userCookie.value = data?.createUpdatePartner?.id
     }
-
-    toast.success('Partner updated successfully')
   }
 
   const logout = async () => {
@@ -74,6 +73,7 @@ export const useAuth = () => {
   const signup = async (params: MutationRegisterArgs) => {
     try {
       loading.value = true
+      authError.value = ''
       const data = await $sdk().odoo.mutation<MutationRegisterArgs, SignUpUserResponse>(
         {
           mutationName: MutationName.RegisterUserMutation,
@@ -85,7 +85,7 @@ export const useAuth = () => {
       router.push('/my-account/personal-data')
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      authError.value = error?.data?.message || 'We couldn\'t create your account. Please try again.'
       return
     }
     finally {
@@ -96,6 +96,7 @@ export const useAuth = () => {
   const login = async (params: MutationLoginArgs) => {
     try {
       loading.value = true
+      authError.value = ''
       const data = await $sdk().odoo.mutation<
         MutationLoginArgs,
         SignInUserResponse
@@ -104,6 +105,9 @@ export const useAuth = () => {
       userCookie.value = data?.login?.user?.partner
       user.value = data?.login?.user?.partner as Partner
       router.push('/my-account/personal-data')
+    }
+    catch (error: any) {
+      authError.value = error?.data?.message || 'The email or password you entered is incorrect.'
     }
     finally {
       loading.value = false
@@ -188,6 +192,7 @@ export const useAuth = () => {
     changeForgottenPassword,
     user,
     loading,
+    authError,
     successResetEmail,
     updatePassword,
     loadUser,

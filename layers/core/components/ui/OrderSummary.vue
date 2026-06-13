@@ -1,76 +1,74 @@
 <script setup lang="ts">
-const { cart } = useCart()
+const { cart, totalItemsInCart } = useCart()
+
+// Shipping & tax are only known once a method/address is set. Until then show
+// a note instead of misleading "$0.00" rows (matches the mini-cart drawer).
+const hasBreakdown = computed(() => {
+  const tax = Number(cart.value?.order?.amountTax) || 0
+  const shipping = Number(cart.value?.order?.shippingMethod?.price) || 0
+  return tax > 0 || shipping > 0
+})
 </script>
 
 <template>
   <div
-    class="shadow-lg md:rounded-md md:border md:border-neutral-100"
+    class="border border-primary-100 rounded-[2px]"
     data-testid="order-summary"
   >
-    <div
-      class="flex justify-between items-end py-2 px-4 md:px-6 md:pt-6 md:pb-4"
-    >
-      <p class="typography-headline-4 font-bold md:typography-headline-3">
+    <div class="flex justify-between items-baseline px-5 md:px-6 pt-6 pb-4">
+      <p class="text-[18px] font-medium tracking-[-0.01em]">
         {{ $t("orderSummary") }}
       </p>
-      <p
-        class="typography-text-base font-medium"
-        data-testid="total-in-cart"
-      >
-        {{
-          $t("itemsInCart", { count: cart?.order?.websiteOrderLine?.length })
-        }}
+      <p class="text-[13px] text-primary-500" data-testid="total-in-cart">
+        {{ $t("itemsInCart", { count: totalItemsInCart }) }}
       </p>
     </div>
-    <div class="px-4 pb-4 mt-3 md:px-6 md:pb-6 md:mt-0">
-      <div class="flex justify-between typography-text-base mb-2">
-        <div class="flex flex-col grow pr-2 gap-2">
-          <p>{{ $t("itemsSubtotal") }}</p>
-          <p>{{ $t("delivery") }}</p>
-          <p>{{ $t("estimatedTax") }}</p>
-        </div>
-        <div class="flex flex-col gap-2 text-right">
-          <p data-testid="special-price">
-            {{ $currency(cart?.order?.amountSubtotal || 0) }}
-          </p>
-          <p>
-            {{ $currency(cart?.order?.shippingMethod?.price || 0) }}
-          </p>
-          <p>{{ $currency(Number(cart?.order?.amountTax)) }}</p>
-        </div>
+
+    <div class="px-5 md:px-6 pb-6 text-[14px]">
+      <div class="flex justify-between py-1.5">
+        <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("itemsSubtotal") }}</span>
+        <span data-testid="special-price">{{ $currency(cart?.order?.amountSubtotal || 0) }}</span>
       </div>
+
+      <template v-if="hasBreakdown">
+        <div class="flex justify-between py-1.5">
+          <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("delivery") }}</span>
+          <span>{{ $currency(cart?.order?.shippingMethod?.price || 0) }}</span>
+        </div>
+        <div class="flex justify-between py-1.5">
+          <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("estimatedTax") }}</span>
+          <span>{{ $currency(Number(cart?.order?.amountTax)) }}</span>
+        </div>
+      </template>
+      <p v-else class="py-1.5 text-[13px] text-primary-400">
+        Shipping &amp; taxes calculated at checkout.
+      </p>
+
       <div
         v-if="cart.order?.coupons"
-        class="flex justify-between typography-text-base mb-2"
+        class="flex justify-between py-1.5"
       >
-        <p class="flex grow pr-2">
-          {{ $t("discounts", { count: cart.order.coupons.length }) }}
-        </p>
-        <p class="flex text-right">
-          {{ $currency(Number(cart.order?.amountDiscounts)) }}
-        </p>
+        <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("discounts", { count: cart.order.coupons.length }) }}</span>
+        <span>{{ $currency(Number(cart.order?.amountDiscounts)) }}</span>
       </div>
       <div
         v-if="cart.order?.giftCards"
-        class="flex justify-between typography-text-base mb-4"
+        class="flex justify-between py-1.5"
       >
-        <p class="flex grow pr-2">
-          {{ $t("giftCard", { count: cart.order.giftCards.length }) }}
-        </p>
-        <p class="flex text-right">
-          {{ $currency(Number(cart.order?.amountGiftCards)) }}
-        </p>
+        <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("giftCard", { count: cart.order.giftCards.length }) }}</span>
+        <span>{{ $currency(Number(cart.order?.amountGiftCards)) }}</span>
       </div>
-      <div
-        class="flex justify-between typography-headline-4 md:typography-headline-3 font-bold pb-4 mb-4"
-      >
-        <p>{{ $t("total") }}</p>
-        <p data-testid="total">
+
+      <div class="flex justify-between items-baseline mt-4 pt-4 border-t border-primary-100">
+        <span class="text-[16px] font-medium uppercase tracking-[0.08em]">{{ $t("total") }}</span>
+        <span class="text-[18px] font-medium" data-testid="total">
           {{ $currency(Number(cart?.order?.amountTotal)) }}
-        </p>
+        </span>
       </div>
-      <UiDivider class="my-4 w-auto" />
-      <slot />
+
+      <div class="mt-6">
+        <slot />
+      </div>
     </div>
   </div>
 </template>

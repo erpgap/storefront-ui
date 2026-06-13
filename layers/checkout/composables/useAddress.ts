@@ -81,7 +81,6 @@ export const useAddresses = () => {
       )
 
       await loadAddresses(type)
-      toast.success('Address has been successfully saved')
     }
     catch (error: any) {
       toast.error(error?.data?.message)
@@ -99,7 +98,6 @@ export const useAddresses = () => {
       DeleteAddressResponse
     >({ mutationName: MutationName.DeleteAddress }, { address })
 
-      toast.success('Address has been successfully removed')
     }
     catch (error: any) {
       toast.error(error?.data?.message)
@@ -136,7 +134,6 @@ export const useAddresses = () => {
       shippingAddresses.value[index] = address
     }
 
-    toast.success('Address has been successfully updated')
     }
     catch (error: any) {
       toast.error(error?.data?.message)
@@ -159,7 +156,6 @@ export const useAddresses = () => {
     >({ mutationName: MutationName.SelectCurrentAddress }, { address, type })
 
     await loadAddresses(type)
-    toast.success(`Current ${type} address saved successfully`)
     }
     catch (error: any) {
       toast.error(error?.data?.message)
