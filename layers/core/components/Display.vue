@@ -63,7 +63,7 @@ const items = ref([
           <SfButton
             class="!bg-black text-white"
             :tag="NuxtLink"
-            to="/search"
+            to="/products"
           >
             {{ item.buttonText }}
           </SfButton>

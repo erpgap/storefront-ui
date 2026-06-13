@@ -27,7 +27,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 <template>
   <NuxtLayout name="auth" :heading="$t('auth.login.heading')">
-    <form class="border-neutral-200 md:border flex flex-col gap-4 md:p-6 rounded-md" @submit.prevent="handleLogin">
+    <form class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8" @submit.prevent="handleLogin">
       <label>
         <UiFormLabel>{{ $t("form.emailLabel") }}</UiFormLabel>
         <SfInput v-model="email" name="email" type="email" autocomplete="email" required />

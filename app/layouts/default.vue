@@ -10,8 +10,6 @@ if (import.meta.client) onMounted(() => { loadWishlist() })
 
   <slot />
 
-  <LazyNewsletter />
-
   <LazyTheFooter hydrate-on-visible />
 
   <WishlistSidebar />

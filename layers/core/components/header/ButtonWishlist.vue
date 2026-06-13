@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { SfButton, SfBadge } from '@storefront-ui/vue'
+import { SfButton } from '@storefront-ui/vue'
 
 const { toggleWishlistSideBar } = useWishlistUiState()
 const { loadWishlist, wishlistTotalItems } = useWishlist()
@@ -24,36 +24,26 @@ onMounted(async () => {
       @click="handleOpenWishListSidebar"
     >
       <template #prefix>
-        <Icon
-          :name="wishlistTotalItems > 0 ? 'mdi:heart' : 'mdi:heart-outline'"
-          size="22px"
-          class="!text-black"
-        />
-        <SfBadge
-          :content="wishlistTotalItems"
-          class="outline outline-[#B8B8B8] !bg-[#f7f7f7] !text-black flex justify-center"
-          data-testid="wishlist-badge"
-        />
+        <span class="relative inline-flex">
+          <UiLineIcon name="heart" :filled="wishlistTotalItems > 0" class="!text-black" />
+          <span
+            v-if="wishlistTotalItems > 0"
+            class="absolute -top-1.5 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-black text-white text-[10px] leading-none font-medium flex items-center justify-center"
+            data-testid="wishlist-badge"
+          >{{ wishlistTotalItems }}</span>
+        </span>
       </template>
     </SfButton>
 
     <template #fallback>
       <SfButton
-        class="group relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 mr-1 -ml-0.5 rounded-md"
+        class="group relative text-black hover:bg-white active:bg-white mr-1 -ml-0.5 rounded-md"
         type="button"
         variant="tertiary"
         square
       >
         <template #prefix>
-          <Icon
-            name="mdi:heart-outline"
-            size="22px"
-          />
-          <SfBadge
-            :content="0"
-            class="outline outline-primary-700 bg-white !text-neutral-900 group-hover:outline-primary-800 group-active:outline-primary-900 flex justify-center"
-            data-testid="wishlist-badge"
-          />
+          <UiLineIcon name="heart" class="!text-black" />
         </template>
       </SfButton>
     </template>

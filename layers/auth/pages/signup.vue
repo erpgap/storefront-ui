@@ -63,7 +63,7 @@ const handleSignup = async () => {
 
     <form
       data-testid="signup-form"
-      class="flex flex-col md:border md:border-neutral-200 rounded-md gap-4 md:p-6"
+      class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8"
       @submit.prevent="handleSignup"
     >
       <label>

@@ -9,6 +9,16 @@ export default <Config>{
 
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        body: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+      },
+      // Sharp 2px corners app-wide (matches the redesign's buttons). `rounded-md`
+      // is the default radius used across buttons, inputs, and cards.
+      borderRadius: {
+        md: '2px',
+        lg: '2px',
+      },
       screens: {
         xxl: '1440px',
         xs: '376px',

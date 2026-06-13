@@ -119,7 +119,6 @@
       </div>
     </div>
   </main>
-  <Newsletter />
   <LazyTheFooter hydrate-on-visible />
   <LazyBottomNavbar v-if="$viewport.isLessThan('desktopSmall')" />
 </template>
