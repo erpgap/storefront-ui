@@ -89,9 +89,11 @@ await loadCart()
     <section
       class="lg:mx-4 mt-36"
     >
-      <LazyProductRecentViewSlider
-        text="Your recent views"
-      />
+      <ClientOnly>
+        <LazyProductRecentViewSlider
+          text="Your recent views"
+        />
+      </ClientOnly>
     </section>
   </div>
   <div

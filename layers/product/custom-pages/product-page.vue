@@ -120,12 +120,15 @@ const handleWishlistToggle = async () => {
   }
 }
 
+onMounted(() => {
+  if (productTemplate.value?.id) addProductToRecentViews(Number(productTemplate.value.id))
+})
+
 watch(
-  productTemplate,
-  (newValue: CustomProductWithStockFromRedis) => {
-    if (newValue?.id) addProductToRecentViews(Number(newValue.id))
+  () => productTemplate.value?.id,
+  (id: number) => {
+    if (id) addProductToRecentViews(Number(id))
   },
-  { immediate: true },
 )
 
 const { getMainImage, getThumbs } = useProductGetters(productTemplate, productVariant)
@@ -334,7 +337,7 @@ const thumbs = computed<ImageGalleryItem[]>(() => getThumbs(200, 200) ?? [])
       </section>
       <section class="lg:mx-4 mb-20">
         <ClientOnly>
-          <LazyProductRecentViewSlider text="Your recent views" />
+          <LazyProductRecentViewSlider text="Your recent views" :exclude-id="Number(productTemplate?.id)" />
         </ClientOnly>
       </section>
     </div>
