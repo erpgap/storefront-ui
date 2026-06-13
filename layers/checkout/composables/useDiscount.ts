@@ -36,7 +36,6 @@ export const useDiscount = () => {
         response = await applyGiftCard({ promo: promoCode });
       }
 
-      toast.success('Promotion has been applied!');
     } finally {
       setLoading(false);
     }

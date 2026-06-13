@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import { SfButton, SfInput, SfIconVisibility } from '@storefront-ui/vue'
-import { useToast } from 'vue-toastification'
 import type { MutationChangePasswordArgs } from '~~/graphql'
 
 const { changeForgottenPassword } = useAuth()
 const route = useRoute()
-const toast = useToast()
 
 defineEmits(['on-cancel'])
 
@@ -27,7 +25,6 @@ const handleSubmit = async () => {
 
   if (changePasswordArgs.value.newPassword !== repeatPassword.value) {
     passwordsDoesntMatch.value = true
-    toast.error('Passwords doesnt match')
     return
   }
 
@@ -100,6 +97,13 @@ const handleSubmit = async () => {
                 </template>
               </SfInput>
             </label>
+            <p
+              v-if="passwordsDoesntMatch"
+              class="mt-3 text-[13px] text-red-700"
+              role="alert"
+            >
+              Passwords don't match.
+            </p>
             <div class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4">
               <SfButton
                 type="reset"

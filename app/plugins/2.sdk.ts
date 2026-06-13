@@ -4,17 +4,26 @@ import { OdooModule } from '@erpgap/odoo-sdk'
 import { useToast } from 'vue-toastification'
 import { defineNuxtPlugin } from 'nuxt/app'
 
+// Requests whose errors are handled inline by their own flow (so the global
+// error toast must NOT also fire — avoids duplicate/clashing feedback).
 const SHOULD_BYPASS_ERROR_QUERIES = [
   'LoadUserQuery',
   'LoadCartQuery',
+]
+const SHOULD_BYPASS_ERROR_MUTATIONS = [
+  'LoginMutation',
+  'RegisterUserMutation',
 ]
 
 const avoidErrorThrowForSomeRequests = (options: any) => {
   if (options.body) {
     try {
-      const queryName = JSON.parse(options.body)?.[0]?.queryName
+      const payload = JSON.parse(options.body)?.[0] ?? {}
 
-      if (SHOULD_BYPASS_ERROR_QUERIES?.includes(queryName)) {
+      if (SHOULD_BYPASS_ERROR_QUERIES?.includes(payload?.queryName)) {
+        return true
+      }
+      if (SHOULD_BYPASS_ERROR_MUTATIONS?.includes(payload?.mutationName)) {
         return true
       }
 

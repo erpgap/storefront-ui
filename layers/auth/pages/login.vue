@@ -11,12 +11,11 @@ definePageMeta({
   layout: false,
 })
 
-const { login, loading } = useAuth()
+const { login, loading, authError } = useAuth()
 
 const email = ref('')
 const password = ref('')
 const rememberMe = ref<boolean>()
-const isLoading = ref<boolean>()
 
 const handleLogin = async () => {
   await login({ email: email.value, password: password.value })
@@ -28,6 +27,14 @@ const NuxtLink = resolveComponent('NuxtLink')
 <template>
   <NuxtLayout name="auth" :heading="$t('auth.login.heading')">
     <form class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8" @submit.prevent="handleLogin">
+      <p
+        v-if="authError"
+        class="flex items-start gap-2 border border-red-200 bg-red-50 text-red-700 text-[13px] px-3 py-2.5"
+        role="alert"
+      >
+        {{ authError }}
+      </p>
+
       <label>
         <UiFormLabel>{{ $t("form.emailLabel") }}</UiFormLabel>
         <SfInput v-model="email" name="email" type="email" autocomplete="email" required />
@@ -43,8 +50,8 @@ const NuxtLink = resolveComponent('NuxtLink')
         {{ $t("auth.login.rememberMeLabel") }}
       </label>
 
-      <SfButton type="submit" class="mt-2" :disabled="isLoading">
-        <SfLoaderCircular v-if="isLoading" class="flex justify-center items-center" size="base" />
+      <SfButton type="submit" class="mt-2" :disabled="loading">
+        <SfLoaderCircular v-if="loading" class="flex justify-center items-center" size="base" />
         <span v-else>
           {{ $t("auth.login.submitLabel") }}
         </span>

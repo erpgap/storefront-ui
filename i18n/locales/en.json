@@ -34,7 +34,7 @@
   "myCart": "My Cart",
   "orderSummary": "Order Summary",
   "itemsInCart": "(Items: {count})",
-  "itemsSubtotal": "Items subtotal",
+  "itemsSubtotal": "Subtotal",
   "originalPrice": "Original price",
   "savings": "Savings",
   "estimatedTax": "Estimated Sales Tax",

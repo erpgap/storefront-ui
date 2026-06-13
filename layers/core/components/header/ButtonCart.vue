@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { SfButton } from '@storefront-ui/vue'
 
-const NuxtLink = resolveComponent('NuxtLink')
 const { loadCart, totalItemsInCart } = useCart()
+const { toggleCartSideBar } = useCartUiState()
 
 await loadCart()
 </script>
@@ -11,10 +11,11 @@ await loadCart()
   <ClientOnly>
     <SfButton
       class="group relative text-black hover:bg-white active:bg-white rounded-md"
-      :tag="NuxtLink"
-      to="/cart"
+      type="button"
       variant="tertiary"
       square
+      aria-label="Open cart"
+      @click="toggleCartSideBar()"
     >
       <template #prefix>
         <span class="relative inline-flex">
@@ -31,10 +32,10 @@ await loadCart()
     <template #fallback>
       <SfButton
         class="group relative text-black hover:bg-white active:bg-white rounded-md"
-        :tag="NuxtLink"
-        to="/cart"
+        type="button"
         variant="tertiary"
         square
+        aria-label="Open cart"
       >
         <template #prefix>
           <UiLineIcon name="cart" class="!text-black" />

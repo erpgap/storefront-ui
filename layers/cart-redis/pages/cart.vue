@@ -54,25 +54,26 @@ await loadCart()
       data-testid="cart-page-content"
     >
       <div class="col-span-7 mb-10 lg:mb-0">
-        <div
-          v-for="orderLine in cart.order?.websiteOrderLine"
-          :key="orderLine?.id"
-        >
-          <CartCollectedProductCard :order-line="orderLine" />
+        <div class="border-t border-primary-100 divide-y divide-primary-100">
+          <CartCollectedProductCard
+            v-for="orderLine in cart.order?.websiteOrderLine"
+            :key="orderLine?.id"
+            :order-line="orderLine"
+          />
         </div>
       </div>
-      <div class="col-span-5 md:sticky md:top-20 h-fit">
-        <UiDiscount />
+      <div class="col-span-5 md:sticky md:top-36 h-fit">
         <UiOrderSummary :cart="cart">
           <NuxtLink to="/checkout">
             <SfButton
-              size="lg"}
+              size="lg"
               class="w-full mb-4 md:mb-0"
             >
               {{ $t('goToCheckout') }}
             </SfButton>
           </NuxtLink>
         </UiOrderSummary>
+        <UiDiscount />
       </div>
     </div>
     <section
