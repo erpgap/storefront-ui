@@ -81,7 +81,7 @@ export const useWishlist = () => {
         { wishId: wishlistItem.id },
       )
 
-      wCishlist.value = data?.wishlistRemoveItem
+      wishlist.value = data?.wishlistRemoveItem
     }
     catch (error) {
       toast.error(error.data?.message)
