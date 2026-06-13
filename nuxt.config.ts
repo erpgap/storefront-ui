@@ -164,7 +164,7 @@ export default defineNuxtConfig({
 
   googleFonts: {
     families: {
-      'Red Hat Display': [400, 500, 700],
+      Inter: [300, 400, 500, 600, 700],
     },
     display: 'swap',
     preload: true,

@@ -15,7 +15,7 @@ onMounted(async () => {
 })
 
 if (totalItemsInCart?.value === 0) {
-  await navigateTo('/search')
+  await navigateTo('/products')
 }
 </script>
 

@@ -25,7 +25,7 @@ const NuxtLink = resolveComponent('NuxtLink')
           type="button"
           class="!bg-black !text-white !border-none !ring-none !shadow-none min-h-[48px] text-[16px] font-normal tracking-[0.5px] px-7 gap-3 mb-2"
         >
-          <NuxtLink to="/search"> SHOP NEW ARRIVALS  </NuxtLink>
+          <NuxtLink to="/products"> SHOP NEW ARRIVALS  </NuxtLink>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"

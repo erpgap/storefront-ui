@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="auth">
     <div
-      class="mx-auto text-center rounded-md border border-neutral-200 p-4 md:p-6 mt-2"
+      class="mx-auto text-center border border-primary-100 p-6 md:p-8 mt-2"
     >
       <div
         class="w-full min-h-[330px] flex flex-col gap-4 items-center justify-center"

@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="auth" :heading="$t('auth.resetPassword.heading')">
       <form
-        class="pb-4 md:p-6 mt-10 md:border md:border-neutral-200 rounded-md"
+        class="mt-10 border border-primary-100 p-6 md:p-8"
         @submit.prevent="resetPasswordHandler"
       >
         <p class="mb-6">

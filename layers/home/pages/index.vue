@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
-import { useMegaMenuCategories } from '~~/layers/core/composables/useMegaMenuCategories.ts'
 import { useWebsiteHomePage } from '~~/layers/core/composables/useWebsiteHomePage.ts'
 
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
-const { categoriesForMegaMenu } = useMegaMenuCategories()
 
 await getWebsiteHomepage()
 useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
@@ -13,9 +11,8 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
 <template>
   <div>
     <MainBanner />
-    <Categories :items="categoriesForMegaMenu" />
+    <Categories />
+    <BestSellers />
     <BannerRight />
-    <LazyProductRecentViewSlider heading="Shop our Best Sellers" />
-    <BannerLeft />
   </div>
 </template>

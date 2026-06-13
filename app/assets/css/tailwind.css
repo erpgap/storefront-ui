@@ -6,6 +6,22 @@
   .narrow-container {
     @apply px-4 md:px-6 xl:px-8 xxl:px-0 max-w-[1336px] mx-auto;
   }
+
+  /* ============================================================
+     GLOBAL BUTTON — the redesign's button is the app-wide standard:
+     sharp 2px corners, and the primary (filled) button is solid black
+     with white text + uppercase tracking, on every page.
+     ============================================================ */
+  [data-testid="button"] {
+    @apply !rounded-[2px];
+  }
+  /* SfButton's "primary" variant ships with `bg-primary-700`; retarget it
+     to the redesign's solid black CTA. Tertiary/icon buttons (which have no
+     `bg-primary-700` class) are intentionally left untouched. */
+  [data-testid="button"][class*="bg-primary-700"] {
+    @apply !bg-primary-900 hover:!bg-primary-700 active:!bg-primary-700 !text-white !shadow-none uppercase tracking-[0.1em];
+  }
+
   .scrollbar-hidden {
     -ms-overflow-style: none;
     scrollbar-width: none;

@@ -16,11 +16,7 @@ const { isAuthenticated } = useAuth()
     square
   >
     <template #prefix>
-      <Icon
-        :name="isAuthenticated ? 'ion:person' : 'ion:person-outline'"
-        size="22px"
-        class="!text-black"
-      />
+      <UiLineIcon name="account" class="!text-black" />
     </template>
   </SfButton>
   <!--

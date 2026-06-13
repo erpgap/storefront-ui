@@ -40,7 +40,7 @@ const handleSubmit = async () => {
 
 <template>
   <div class="p-8">
-    <div class="mx-auto rounded-md p-4 md:p-6 mt-8">
+    <div class="mx-auto border border-primary-100 p-6 md:p-8 mt-8">
       <div class="w-full min-h-[330px] flex flex-col gap-4 items-center justify-center">
         <h1 class="text-3xl font-bold mb-4">
           Change your password

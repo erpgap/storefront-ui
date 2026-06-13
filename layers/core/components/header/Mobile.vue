@@ -52,7 +52,7 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
   <header
     ref="menuRef"
     :class="[
-      'text-black flex w-full py-3.5 bg-white border-b border-[#E5E7EB]',
+      'text-black flex w-full py-3.5',
     ]"
   >
     <div class="flex items-center justify-between h-full w-full narrow-container">
