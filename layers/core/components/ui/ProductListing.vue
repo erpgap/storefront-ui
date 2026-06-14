@@ -56,7 +56,8 @@ const currentPage = computed(() => Number(route.query.page) || 1)
 const totalPages = computed(() => Math.ceil(totalItems.value / props.itemsPerPage) || 1)
 
 if (props.seoEntity) {
-  useHead(generateSeo<SeoEntity>(props.seoEntity, 'Category'))
+  const { origin, pathname } = useRequestURL()
+  useHead(generateSeo<SeoEntity>(props.seoEntity, 'Category', `${origin}${pathname}`))
 }
 
 setMaxVisiblePages(isWideScreen.value)

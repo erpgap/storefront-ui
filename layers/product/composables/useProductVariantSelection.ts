@@ -2,6 +2,8 @@ import type { Ref } from 'vue'
 import type { LocationQueryRaw } from 'vue-router'
 import type { AttributeValue, CustomProductWithStockFromRedis } from '~~/graphql'
 import {
+  buildAxisValue,
+  extractAxisId,
   getVariantAxisNames,
   resolveCombinationIds,
 } from '~~/layers/product/utils'
@@ -45,12 +47,12 @@ export const useProductVariantSelection = (
   const selectedValues = computed<Record<string, number>>(() => {
     const result: Record<string, number> = {}
     for (const name of variantAxisNames.value) {
-      const raw = route.query[name]
+      const raw = route.query[name.toLowerCase()] ?? route.query[name]
       if (raw == null || raw === '') continue
       const value = Array.isArray(raw) ? raw[0] : raw
       if (typeof value === 'string') {
-        const id = Number(value)
-        if (id > 0) result[name] = id
+        const id = extractAxisId(value)
+        if (id && id > 0) result[name] = id
       }
     }
     return result
@@ -64,9 +66,10 @@ export const useProductVariantSelection = (
     const query: LocationQueryRaw = {}
 
     for (const name of variantAxisNames.value) {
-      const value = route.query[name]
+      const key = name.toLowerCase()
+      const value = route.query[key] ?? route.query[name]
       if (value != null && value !== '') {
-        query[name] = value as string
+        query[key] = value as string
       }
     }
 
@@ -75,8 +78,20 @@ export const useProductVariantSelection = (
     await navigateTo({ query })
   }
 
+  /**
+   * Selects a value for a variant axis, writing the readable `slug-id` form to
+   * the URL (e.g. ?color=black-33) while preserving the other axes.
+   */
+  const selectAxisValue = (
+    axisName: string,
+    id: number,
+    label?: string | null,
+  ) => updateVariantQuery({ [axisName.toLowerCase()]: buildAxisValue(label, id) })
+
   watch(
-    () => variantAxisNames.value.map(name => route.query[name]),
+    () => variantAxisNames.value.map(
+      name => route.query[name.toLowerCase()] ?? route.query[name],
+    ),
     async () => {
       if (!productTemplate.value?.id) return
       const combinationId = resolveCombinationIds(productTemplate.value, route.query)
@@ -89,5 +104,6 @@ export const useProductVariantSelection = (
     colorOptions,
     selectedValues,
     updateVariantQuery,
+    selectAxisValue,
   }
 }

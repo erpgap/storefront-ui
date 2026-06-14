@@ -20,12 +20,23 @@ import { useProductGetters } from '~~/layers/product/composables/useProductGette
 import { useProductTemplate } from '~~/layers/product/composables/useProductTemplate'
 import { useProductVariant } from '~~/layers/product/composables/useProductVariant'
 import { useProductVariantSelection } from '~~/layers/product/composables/useProductVariantSelection'
-import { resolveCombinationIds } from '~~/layers/product/utils'
+import {
+  getCombinationIdsFromQuery,
+  getValidAttributeValueIds,
+  getVariantAxisNames,
+  resolveCombinationIds,
+} from '~~/layers/product/utils'
 
 definePageMeta({ key: route => route.fullPath })
 
 const route = useRoute()
 const cleanPath = computed(() => route.path.replace(/\/$/, ''))
+
+// Resolve the canonical URL here in setup (valid Nuxt context). The canonical
+// drops the query string so variant params (e.g. ?Color=46) consolidate onto
+// the product URL.
+const { origin: reqOrigin, pathname: reqPathname } = useRequestURL()
+const canonicalUrl = `${reqOrigin}${reqPathname}`
 
 const {
   loadProductTemplate,
@@ -47,6 +58,19 @@ const { cart, cartAdd } = useCart()
 
 await loadProductTemplate({ slug: cleanPath.value })
 
+// Reject URLs that reference an attribute value the product doesn't have
+// (e.g. ?color=black-333) with a 404 instead of silently rendering a broken page.
+if (productTemplate.value?.id) {
+  const validIds = getValidAttributeValueIds(productTemplate.value)
+  const requestedIds = getCombinationIdsFromQuery(
+    route.query,
+    getVariantAxisNames(productTemplate.value),
+  )
+  if (requestedIds.some(id => !validIds.has(id))) {
+    throw createError({ statusCode: 404, statusMessage: 'Variant not found' })
+  }
+}
+
 if (productTemplate.value?.id) {
   await loadProductVariant({
     productTemplateId: Number(productTemplate.value.id),
@@ -54,7 +78,7 @@ if (productTemplate.value?.id) {
   })
 }
 
-const { colorOptions, selectedValues, updateVariantQuery } = useProductVariantSelection(
+const { colorOptions, selectedValues, selectAxisValue } = useProductVariantSelection(
   productTemplate,
   combinationId =>
     loadProductVariant({
@@ -74,7 +98,7 @@ const seoData = computed(() => {
       metaDescription: product.metaDescription || product.description || 'Check out this amazing product!',
       metaKeyword: product.metaKeyword || product.name,
     }
-    return generateSeo(seoEntity, 'Product')
+    return generateSeo(seoEntity, 'Product', canonicalUrl)
   }
 
   const fallbackEntity: SeoEntity = {
@@ -83,7 +107,7 @@ const seoData = computed(() => {
     metaDescription: 'Check out this amazing product in our store',
     metaKeyword: 'Product',
   }
-  return generateSeo(fallbackEntity, 'Product')
+  return generateSeo(fallbackEntity, 'Product', canonicalUrl)
 })
 useHead(seoData)
 
@@ -229,7 +253,7 @@ const categoryEyebrow = computed(() => {
                   :class="color.id === selectedColor
                     ? 'border-black bg-primary-50 text-black font-medium'
                     : 'border-primary-200 text-primary-500 hover:border-primary-400 hover:text-black'"
-                  @click="color.id !== selectedColor && updateVariantQuery({ Color: color.id.toString() })"
+                  @click="color.id !== selectedColor && selectAxisValue('Color', color.id, color.label)"
                 >
                   {{ color.label }}
                 </button>
