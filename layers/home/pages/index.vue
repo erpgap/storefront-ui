@@ -5,7 +5,8 @@ import { useWebsiteHomePage } from '~~/layers/core/composables/useWebsiteHomePag
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
 
 await getWebsiteHomepage()
-useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home'))
+const { origin, pathname } = useRequestURL()
+useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home', `${origin}${pathname}`))
 </script>
 
 <template>

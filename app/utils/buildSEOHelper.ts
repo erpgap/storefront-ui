@@ -41,11 +41,13 @@ const validateSEO = (entity: SeoEntity, fullPath: string, entityType: string) =>
 
   warnings.forEach(warning => console.warn(warning))
 }
-const { href } = useRequestURL()
 const generateSeo = <T extends SeoEntity>(
   entity: T,
   entityType: string,
-
+  // Clean canonical URL (origin + pathname, no query) resolved by the caller in
+  // a valid setup context. Passing it in avoids calling useRequestURL() here,
+  // which would throw when generateSeo runs inside a lazily-evaluated computed.
+  href = '',
 ) => {
   validateSEO(entity, href, entityType)
 
