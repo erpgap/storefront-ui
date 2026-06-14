@@ -162,7 +162,7 @@ function clearFilters() {
     >
       Sort by
     </h5>
-    <div class="px-2">
+    <div class="px-2 mb-6">
       <SfSelect
         v-model="sortBy.selected"
         placeholder="Select sorting"
@@ -179,12 +179,6 @@ function clearFilters() {
         </option>
       </SfSelect>
     </div>
-
-    <h5
-      class="py-2 px-4 mt-6 mb-4 bg-primary-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
-    >
-      Filter
-    </h5>
 
     <ul>
       <li
