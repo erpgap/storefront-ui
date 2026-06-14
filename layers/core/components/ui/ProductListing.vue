@@ -2,6 +2,7 @@
 import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefront-ui/vue'
 import { useProductAttributes } from '~~/layers/product/composables/useProductAttributes'
 import { useProductTemplateList } from '~~/layers/product/composables/useProductTemplateList'
+import { useScrollToTopOnListingChange } from '~~/layers/core/composables/useScrollToTopOnListingChange'
 import generateSeo, { type SeoEntity } from '~~/app/utils/buildSEOHelper'
 import type { Product } from '~~/graphql'
 
@@ -36,6 +37,8 @@ const {
   totalItems,
   stockCount,
 } = useProductTemplateList(route.fullPath.replace(/\/$/, ''), props.itemsPerPage)
+
+useScrollToTopOnListingChange(loading)
 
 provide('stockCount', stockCount)
 
