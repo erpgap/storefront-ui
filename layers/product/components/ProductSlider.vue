@@ -48,8 +48,8 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
         :regular-price="getRegularPrice(productTemplate.firstVariant as Product)"
         :special-price="getSpecialPrice(productTemplate.firstVariant as Product)"
         :is-in-wishlist="productTemplate?.isInWishlist || false"
-        :rating-count="0"
-        :rating="0"
+        :rating-count="(productTemplate as any)?.ratingCount ?? 0"
+        :rating="(productTemplate as any)?.ratingAvg ?? 0"
         :first-variant="productTemplate.firstVariant as Product"
       />
     </SfScrollable>

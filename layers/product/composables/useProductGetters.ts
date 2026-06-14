@@ -59,14 +59,21 @@ export const useProductGetters = (
       )
     }
 
-    if (currentVariant) {
-      addFromEntity(currentVariant)
-    } else if (pv) {
-      addFromEntity(pv)
-    }
+    const variantSource = currentVariant ?? pv
+    const variantCount = Array.isArray(pt?.productVariants)
+      ? pt.productVariants.length
+      : 0
 
-    if (pt) {
+    // With multiple variants, each one carries its own (colour-specific) image,
+    // so show the selected variant's image. With a single variant, that image is
+    // just a duplicate of the template's, so use the template to avoid showing
+    // the same photo twice.
+    if (variantCount > 1 && variantSource) {
+      addFromEntity(variantSource)
+      if (!images.length && pt) addFromEntity(pt)
+    } else if (pt) {
       addFromEntity(pt)
+      if (!images.length && variantSource) addFromEntity(variantSource)
     }
 
     return images

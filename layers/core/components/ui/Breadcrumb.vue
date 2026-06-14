@@ -31,24 +31,26 @@ const normalizedBreadcrumbs = computed(() => {
 
 const computedBreadcrumbs = computed(() => {
   const arr = (normalizedBreadcrumbs.value || []).map((item) => {
-    const name = unref(item.label) || unref(item.name)
+    const rawLink = item.link || item.slug || ''
     return {
       ...item,
-      name: name === 'home' ? 'home' : String(name ?? '').toLowerCase(),
-      link: item.link || item.slug,
+      // Keep the real name casing (e.g. "Backpack") instead of lowercasing it.
+      name: String(unref(item.label) ?? unref(item.name) ?? '').trim(),
+      // Collapse accidental double slashes in links (e.g. "/men//accessories").
+      link: typeof rawLink === 'string' ? rawLink.replace(/\/{2,}/g, '/') : rawLink,
     }
   })
-  if (!arr.length) return [{ name: 'home', link: '/' }]
+  if (!arr.length) return [{ name: 'Home', link: '/' }]
   const first = arr[0]
-  if (first.name === 'home' && first.link === '/') return arr
-  return [{ name: 'home', link: '/' }, ...arr]
+  if (first.name?.toLowerCase() === 'home' && first.link === '/') return arr
+  return [{ name: 'Home', link: '/' }, ...arr]
 })
 </script>
 
 <template>
   <nav
     data-testid="breadcrumbs"
-    class="inline-flex items-center text-sm font-normal font-body"
+    class="inline-flex items-center text-[13px] font-normal font-body"
   >
     <ol class="flex w-auto leading-none group md:flex-wrap pl-0">
       <li class="flex items-center sm:hidden text-neutral-500 z-1">
@@ -97,14 +99,14 @@ const computedBreadcrumbs = computed(() => {
       <li
         v-for="(item, index) in computedBreadcrumbs"
         :key="item.name"
-        class="peer hidden sm:flex items-center peer-[:nth-of-type(even)]:before:content-['/'] peer-[:nth-of-type(even)]:before:px-2 peer-[:nth-of-type(even)]:before:leading-5 last-of-type:flex last-of-type:before:font-normal last-of-type:before:text-neutral-500 text-neutral-500 last-of-type:text-neutral-900 last-of-type:font-medium"
+        class="peer hidden sm:flex items-center peer-[:nth-of-type(even)]:before:content-['/'] peer-[:nth-of-type(even)]:before:px-1.5 peer-[:nth-of-type(even)]:before:leading-5 peer-[:nth-of-type(even)]:before:text-primary-200 last-of-type:flex last-of-type:before:font-normal last-of-type:before:text-primary-200 text-primary-400 last-of-type:text-black"
       >
         <SfLink
           v-if="index < computedBreadcrumbs.length - 1"
           :tag="item.link ? NuxtLink : 'div'"
           :to="item.link"
           variant="secondary"
-          class="leading-5 no-underline hover:underline active:underline whitespace-nowrap outline-secondary-600 text-inherit"
+          class="leading-5 no-underline hover:text-black whitespace-nowrap outline-secondary-600 text-inherit transition-colors"
         >
           {{ item.name }}
         </SfLink>

@@ -13,13 +13,18 @@
      with white text + uppercase tracking, on every page.
      ============================================================ */
   [data-testid="button"] {
-    @apply !rounded-[2px];
+    @apply !rounded-[2px] !text-[13px];
   }
   /* SfButton's "primary" variant ships with `bg-primary-700`; retarget it
      to the redesign's solid black CTA. Tertiary/icon buttons (which have no
      `bg-primary-700` class) are intentionally left untouched. */
   [data-testid="button"][class*="bg-primary-700"] {
-    @apply !bg-primary-900 hover:!bg-primary-700 active:!bg-primary-700 !text-white !shadow-none uppercase tracking-[0.1em];
+    @apply !bg-primary-900 hover:!bg-primary-700 active:!bg-primary-700 !text-white !shadow-none uppercase tracking-[0.1em] !text-[13px];
+  }
+
+  /* Rating: filled stars in brand black (empty stars stay grey) */
+  [data-testid="rating"] [data-testid="star-filled"] {
+    color: #0a0a0a;
   }
 
   .scrollbar-hidden {

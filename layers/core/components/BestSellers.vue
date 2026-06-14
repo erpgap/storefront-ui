@@ -64,16 +64,7 @@ const toggleWishlist = (variant: CustomProductWithStockFromRedis) => {
             class="absolute top-3.5 right-3.5 z-[2] grid place-items-center w-[38px] h-[38px] rounded-full bg-white/90 text-primary-600 transition-all duration-300 hover:text-black lg:opacity-0 lg:-translate-y-1.5 lg:group-hover:opacity-100 lg:group-hover:translate-y-0"
             @click="toggleWishlist(product.firstVariant as CustomProductWithStockFromRedis)"
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              :fill="isInWishlist(product.firstVariant?.id) ? 'currentColor' : 'none'"
-              stroke="currentColor"
-              stroke-width="1.5"
-            >
-              <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10Z" />
-            </svg>
+            <UiLineIcon name="heart" :filled="isInWishlist(product.firstVariant?.id)" :size="18" />
           </button>
 
           <button

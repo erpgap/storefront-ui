@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { SfScrollable } from '@storefront-ui/vue'
 import type { ImageGalleryItem } from '~~/graphql'
 
 const props = defineProps({
@@ -11,7 +10,6 @@ const props = defineProps({
     type: Array as PropType<ImageGalleryItem[]>,
     default: () => [],
   },
-
 })
 
 const activeIndex = ref(0)
@@ -19,58 +17,72 @@ const allImages = computed(() =>
   [
     ...(props.mainImage?.url
       ? [
-        {
-          imageSrc: props.mainImage.url,
-          imageThumbSrc: props.mainImage.url,
-          alt: props.mainImage.alt,
-        },
-      ]
+          {
+            imageSrc: props.mainImage.url,
+            imageThumbSrc: props.mainImage.url,
+            alt: props.mainImage.alt,
+          },
+        ]
       : []),
-    ...props.thumbs.map((thumb: { url: any; alt: any }) => ({
+    ...props.thumbs.map((thumb: { url: any, alt: any }) => ({
       imageSrc: thumb.url,
       imageThumbSrc: thumb.url,
       alt: thumb.alt,
     })),
-  ].filter((image) => image.imageSrc)
+  ].filter(image => image.imageSrc),
 )
+
+// Reset to the first image when the set changes (e.g. switching colour variant).
+watch(() => props.mainImage?.url, () => {
+  activeIndex.value = 0
+})
+
+const activeImage = computed(() => allImages.value[activeIndex.value] ?? allImages.value[0])
 </script>
 
 <template>
-  <div class="relative flex w-full max-h-[600px] aspect-[4/3]">
-    <SfScrollable ref="thumbsRef"
-      class="items-center w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-      direction="vertical" :active-index="activeIndex" buttons-placement="none">
-      <button v-for="({ imageThumbSrc, alt }, index) in allImages" :key="`${alt}-${index}-thumbnail`" type="button"
-        :aria-label="alt" :aria-current="activeIndex === index"
-        class="md:w-[78px] md:h-auto relative shrink-0 pb-1 mx-4 border-b-4 snap-start cursor-pointer focus-visible:outline focus-visible:outline-offset transition-colors flex-grow md:flex-grow-0"
-        :class="activeIndex === index ? 'border-primary-700' : 'border-transparent'" @click="activeIndex = index">
+  <div class="flex gap-3 md:gap-4">
+    <!-- Thumbnails -->
+    <div
+      v-if="allImages.length > 1"
+      class="flex flex-col gap-2.5 md:gap-3 shrink-0"
+    >
+      <button
+        v-for="({ imageThumbSrc, alt }, index) in allImages"
+        :key="`${alt}-${index}-thumbnail`"
+        type="button"
+        :aria-label="alt"
+        :aria-current="activeIndex === index"
+        class="w-[60px] md:w-[72px] aspect-[4/5] overflow-hidden rounded-[2px] border transition-all duration-200 cursor-pointer focus-visible:outline focus-visible:outline-offset"
+        :class="activeIndex === index
+          ? 'border-black opacity-100'
+          : 'border-primary-200 opacity-60 hover:opacity-100 hover:border-primary-300'"
+        @click="activeIndex = index"
+      >
         <NuxtImg
           provider="odooProvider"
           :alt="alt"
-          class="object-cover"
+          class="w-full h-full object-cover"
           width="100"
-          height="100"
+          height="125"
           :src="imageThumbSrc"
         />
       </button>
-    </SfScrollable>
-    <SfScrollable
-      class="w-full h-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-      :active-index="activeIndex" direction="vertical" wrapper-class="h-full m-auto" is-active-index-centered
-      buttons-placement="none">
-      <div v-for="({ imageSrc, alt }, index) in allImages" :key="`${alt}-${index}`"
-        class="flex justify-center h-full basis-full shrink-0 grow snap-center">
-        <NuxtImg
-          provider="odooProvider"
-          :width="380"
-          :height="505"
-          class="object-cover w-full h-full"
-          :alt="alt"
-          :src="imageSrc"
-          :loading="index === 0 ? 'eager' : 'lazy'"
-          fetchpriority="high"
-        />
-      </div>
-    </SfScrollable>
+    </div>
+
+    <!-- Main image -->
+    <div class="flex-1 aspect-[4/5] bg-primary-50 rounded-[2px] overflow-hidden flex items-center justify-center">
+      <NuxtImg
+        v-if="activeImage"
+        provider="odooProvider"
+        :width="560"
+        :height="700"
+        class="w-full h-full object-cover"
+        :alt="activeImage.alt"
+        :src="activeImage.imageSrc"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
   </div>
 </template>
