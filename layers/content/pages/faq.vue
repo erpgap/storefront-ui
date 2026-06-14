@@ -80,7 +80,7 @@ const groups = [
 
       <p class="mt-16 text-primary-600 font-light">
         Still stuck? Reach the team via our
-        <NuxtLink to="/about" class="underline hover:text-black">contact details</NuxtLink>.
+        <NuxtLink to="/contact" class="underline hover:text-black">contact details</NuxtLink>.
       </p>
     </div>
   </div>
