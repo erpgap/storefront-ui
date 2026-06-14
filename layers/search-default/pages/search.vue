@@ -9,6 +9,7 @@ import {
 import { useProductTemplateList } from '../../product/composables/useProductTemplateList'
 import { useProductAttributes } from '../../product/composables/useProductAttributes'
 import { useUiHelpers } from '../../category/composables/useUiHelpers'
+import { useScrollToTopOnListingChange } from '../../core/composables/useScrollToTopOnListingChange'
 
 type Product = { slug?: string; stock?: number; qty?: number;[k: string]: any }
 
@@ -23,6 +24,8 @@ const {
   productTemplateList,
   stockCount,
 } = useProductTemplateList(route.fullPath)
+
+useScrollToTopOnListingChange(loading)
 
 provide('stockCount', stockCount)
 
