@@ -35,5 +35,6 @@ useHead({
     :breadcrumbs="breadcrumbs"
     :items-per-page="20"
     state-key="products-page"
+    default-sort="popular,DESC"
   />
 </template>
