@@ -6,9 +6,9 @@ const linkColumns = [
     title: 'Shop',
     links: [
       { label: 'Top Sellers', link: '/products' },
-      { label: 'New Arrivals', link: '/products' },
-      { label: 'Women', link: '/products' },
-      { label: 'Men', link: '/products' },
+      { label: 'New Arrivals', link: '/products?sort=newest,DESC' },
+      { label: 'Women', link: '/women' },
+      { label: 'Men', link: '/men' },
     ],
   },
   {

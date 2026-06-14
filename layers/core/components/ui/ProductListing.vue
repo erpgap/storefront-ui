@@ -15,6 +15,7 @@ const props = withDefaults(
     seoEntity?: SeoEntity | null
     itemsPerPage?: number
     stateKey?: string
+    defaultSort?: string
   }>(),
   {
     breadcrumbs: () => [],
@@ -22,6 +23,7 @@ const props = withDefaults(
     seoEntity: null,
     itemsPerPage: 20,
     stateKey: 'product-listing',
+    defaultSort: '',
   },
 )
 
@@ -36,7 +38,7 @@ const {
   productTemplateList,
   totalItems,
   stockCount,
-} = useProductTemplateList(route.fullPath.replace(/\/$/, ''), props.itemsPerPage)
+} = useProductTemplateList(route.fullPath.replace(/\/$/, ''), props.itemsPerPage, props.defaultSort)
 
 useScrollToTopOnListingChange(loading)
 

@@ -82,7 +82,7 @@ function buildAttributeFacets(
   return sorted
 }
 
-export const useProductTemplateList = (customIndex = '', defaultPageSize = 20) => {
+export const useProductTemplateList = (customIndex = '', defaultPageSize = 20, defaultSort = '') => {
   const nuxtApp = useNuxtApp() as any
   const $sdk: () => any = nuxtApp.$sdk
   const route = useRoute()
@@ -98,9 +98,20 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = 20) =
     const fromUrl = getFacetsFromURL(listingQuery.value as Record<string, any>, [], defaultPageSize)
     const override = paramOverride.value ?? {}
 
+    // Apply a default sort only when the URL doesn't specify one, so a bare
+    // /products lands on the chosen order (e.g. popular) while explicit
+    // ?sort=... and the sort dropdown keep working.
+    const urlHasSort = Boolean((route.query as Record<string, unknown>)?.sort)
+    let sort = fromUrl.sort
+    if (!urlHasSort && defaultSort) {
+      const [field, direction] = defaultSort.split(',')
+      if (field) sort = { [field]: direction || 'DESC' } as QueryProductsArgs['sort']
+    }
+
     return {
       ...fromUrl,
       ...override,
+      sort: override.sort ?? sort,
       pageSize: override.pageSize ?? fromUrl.pageSize ?? defaultPageSize,
       currentPage: override.currentPage ?? fromUrl.currentPage ?? 1,
       filter: {

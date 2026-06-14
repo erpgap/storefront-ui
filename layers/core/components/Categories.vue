@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 const NuxtLink = resolveComponent('NuxtLink')
 
-// TODO: point each card to a real category slug (links handled later)
 const categories = [
-  { name: 'Women', image: '/img/home/cat_women_sand.jpg', link: '/products' },
-  { name: 'Men', image: '/img/home/cat_men_sand.jpg', link: '/products' },
-  { name: 'Accessories', image: '/img/home/cat_accessories_sand.jpg', link: '/products' },
+  { name: 'Women', image: '/img/home/cat_women_sand.jpg', link: '/women' },
+  { name: 'Men', image: '/img/home/cat_men_sand.jpg', link: '/men' },
+  { name: 'Accessories', image: '/img/home/cat_accessories_sand.jpg', link: '/women/accessories' },
 ]
 </script>
 

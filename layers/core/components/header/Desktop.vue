@@ -13,9 +13,9 @@ const { isOpen: isSearchOpen, toggle: toggleSearch, close: closeSearch } = useDi
 // TODO: point each nav item to a real category slug (links handled later)
 const navItems = [
   { label: 'Top Sellers', link: '/products' },
-  { label: 'New Arrivals', link: '/products' },
-  { label: 'Women', link: '/products' },
-  { label: 'Men', link: '/products' },
+  { label: 'New Arrivals', link: '/products?sort=newest,DESC' },
+  { label: 'Women', link: '/women' },
+  { label: 'Men', link: '/men' },
 ]
 
 const menuRef = ref()
