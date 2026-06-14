@@ -6,9 +6,9 @@ const linkColumns = [
     title: 'Shop',
     links: [
       { label: 'Top Sellers', link: '/products' },
+      { label: 'New Arrivals', link: '/products' },
       { label: 'Women', link: '/products' },
       { label: 'Men', link: '/products' },
-      { label: 'Accessories', link: '/products' },
     ],
   },
   {
@@ -47,7 +47,7 @@ const socials = [
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.6fr_repeat(3,1fr)] gap-10 py-[72px]">
         <div>
           <NuxtLink to="/" aria-label="Sf Homepage" class="inline-block mb-5">
-            <AlokaiLogo class="w-auto h-9" />
+            <AlokaiLogo class="text-[22px]" />
           </NuxtLink>
           <p class="font-light text-[14px] text-primary-400 max-w-[280px]">
             Considered, timeless fashion in natural fabrics — made to wear well and last.

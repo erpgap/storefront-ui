@@ -102,34 +102,22 @@ const handleWishlistRemoveItem = async (firstVariant: CustomProductWithStockFrom
             : handleWishlistAddItem(firstVariant as CustomProductWithStockFromRedis)
         "
       >
-        <SfIconFavoriteFilled
-          v-if="isInWishlist(firstVariant?.id)"
-          size="sm"
-          class="!text-black"
-        />
-        <SfIconFavorite
-          v-else
-          size="sm"
-          class="!text-black"
-        />
+        <UiLineIcon name="heart" :filled="isInWishlist(firstVariant?.id)" :size="18" class="!text-black" />
       </SfButton>
     </div>
     <div
       class="flex flex-col justify-between gap-2.5 h-full mt-3"
     >
-      <div class="flex items-center">
-        <p class="!text-[14px] !text-black">4.1</p>
+      <div v-if="(ratingCount ?? 0) > 0" class="flex items-center text-[14px] text-black">
         <SfRating
           size="xs"
-          :value="4"
+          :value="Math.round(rating ?? 0)"
           :max="5"
-          class="!text-black mx-1"
+          class="mr-1"
         />
-        <SfCounter
-          size="xs"
-          class="!text-[14px] !text-black"
-        >
-          20
+        <span>({{ (rating ?? 0).toFixed(1) }})</span>
+        <SfCounter size="xs" class="!text-[14px] !text-primary-400 ml-1">
+          {{ ratingCount }}
         </SfCounter>
       </div>
       <NuxtLink

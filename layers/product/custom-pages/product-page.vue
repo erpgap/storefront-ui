@@ -11,7 +11,6 @@ import {
   SfIconShoppingCart,
   SfIconShoppingCartCheckout,
   SfIconWarehouse,
-  SfLink,
   SfLoaderCircular,
   SfRating,
 } from '@storefront-ui/vue'
@@ -136,206 +135,167 @@ const mainImage = computed<ImageGalleryItem>(
   () => getMainImage(380, 505) ?? ({} as ImageGalleryItem),
 )
 const thumbs = computed<ImageGalleryItem[]>(() => getThumbs(200, 200) ?? [])
+
+const selectedColorLabel = computed(
+  () => colorOptions.value.find((c: any) => c.id === selectedColor.value)?.label ?? '',
+)
+const savings = computed(() => {
+  const r = Number((getRegularPrice as any)?.value ?? getRegularPrice ?? 0)
+  const s = Number((getSpecialPrice as any)?.value ?? getSpecialPrice ?? 0)
+  return Math.max(0, r - s)
+})
+const ratingAvg = computed(() => Number((productVariant.value as any)?.ratingAvg ?? (productTemplate.value as any)?.ratingAvg ?? 0))
+const ratingCount = computed(() => Number((productVariant.value as any)?.ratingCount ?? (productTemplate.value as any)?.ratingCount ?? 0))
+const categoryEyebrow = computed(() => {
+  // The product's first category from GraphQL, e.g. "Bags" for product 49.
+  const first = productTemplate.value?.categories?.[0] as any
+  return first?.name ?? ''
+})
 </script>
 
 <template>
   <NuxtErrorBoundary>
     <div class="narrow-container">
-      <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-10" />
+      <UiBreadcrumb :breadcrumbs="breadcrumbs" class="mt-6 mb-8" />
 
-      <div
-        v-if="productTemplate?.id"
-        class="min-h-screen md:grid grid-areas-product-page grid-cols-product-page gap-x-6"
-      >
-        <section class="grid-in-left-top md:h-full xl:max-h-[500px]">
-          <div class="min-h-[400px] md:min-h-[500px] aspect-[380/505]">
-            <UiGallery :main-image="mainImage" :thumbs="thumbs" />
-          </div>
-        </section>
+      <div v-if="productTemplate?.id">
+        <!-- Gallery + purchase -->
+        <div class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+          <!-- Gallery + details -->
+          <section class="lg:self-start">
+            <div class="max-w-[560px] mx-auto lg:mx-0">
+              <UiGallery :main-image="mainImage" :thumbs="thumbs" />
+            </div>
 
-        <section class="col-span-5 grid-in-right md:mb-0">
-          <div
-            class="p-6 xl:p-6 md:border md:border-neutral-100 md:shadow-lg md:rounded-md md:sticky md:top-20 min-h-[400px]"
+            <!-- Details (under the gallery so the purchase card can stay sticky longer) -->
+            <div v-if="productTemplate?.description" class="mt-12 lg:mt-16 max-w-[560px] mx-auto lg:mx-0">
+              <h2 class="font-light tracking-[-0.01em] text-[clamp(22px,2.4vw,30px)] mb-4">
+                {{ $t('productDetails') }}
+              </h2>
+              <p class="text-primary-600 font-light leading-relaxed">
+                {{ productTemplate?.description }}
+              </p>
+            </div>
+          </section>
+
+          <!-- Purchase info -->
+          <section
+            class="mt-10 lg:mt-0 lg:sticky lg:top-32 lg:self-start h-fit"
             data-testid="purchase-card"
           >
-            <h1 class="mb-1 font-bold typography-headline-4" data-testid="product-name">
+            <p v-if="categoryEyebrow" class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-400 mb-3">
+              {{ categoryEyebrow }}
+            </p>
+            <h1
+              class="font-light tracking-[-0.02em] leading-tight text-[clamp(26px,3vw,38px)]"
+              data-testid="product-name"
+            >
               {{ productVariant?.name || productTemplate?.name }}
             </h1>
 
-            <div class="my-1 min-h-[40px] flex items-center">
+            <!-- Rating -->
+            <div v-if="ratingCount > 0" class="inline-flex items-center gap-2 mt-3 text-[13px] text-primary-500">
+              <SfRating size="xs" :value="Math.round(ratingAvg)" :max="5" />
+              <span>({{ ratingAvg.toFixed(1) }})</span>
+              <span class="text-primary-200">·</span>
+              <span>{{ ratingCount }} reviews</span>
+            </div>
+
+            <!-- Price -->
+            <div class="mt-5 min-h-[40px] flex items-baseline flex-wrap gap-x-3 gap-y-1">
               <template v-if="productVariant?.id">
-                <div
-                  v-if="productVariant?.combinationInfoVariant?.has_discounted_price"
-                  class="transition-opacity duration-300 ease-in"
-                >
-                  <div class="inline-flex items-center justify-center font-medium rounded-none bg-secondary-800 text-sm p-1.5 gap-1 mr-4">
-                    <SfIconSell color="white" size="sm" class="mr-1" />
-                    <span class="mr-1 text-white">{{ $t('sale') }}</span>
-                  </div>
-                  <span class="mr-2 text-black font-bold font-headings text-2xl">
-                    {{ $currency(getSpecialPrice) }}
-                  </span>
-                  <span class="text-base font-normal text-neutral-500 line-through">
-                    {{ $currency(getRegularPrice) }}
-                  </span>
-                </div>
-                <div v-else class="transition-opacity duration-300 ease-in">
-                  <span class="mr-2 text-black font-bold font-headings text-2xl">
-                    {{ $currency(getRegularPrice) }}
-                  </span>
-                </div>
-              </template>
-              <div v-else class="flex flex-col gap-1">
-                <div class="w-32 h-8 bg-neutral-100/50 animate-pulse rounded-md" />
-              </div>
-            </div>
-
-            <div class="inline-flex items-center mt-4 mb-2">
-              <SfRating size="xs" :value="4" :max="5" />
-              <SfCounter class="ml-1" size="xs">
-                26
-              </SfCounter>
-              <SfLink href="#" variant="secondary" class="ml-2 text-xs text-neutral-500">
-                26 reviews
-              </SfLink>
-            </div>
-
-            <div class="py-4 mb-4 border-gray-200 border-y">
-              <div
-                v-show="productsInCart"
-                class="w-full mb-4 bg-primary-200 p-2 rounded-md text-center text-primary-700"
-              >
-                <SfIconShoppingCartCheckout />
-                {{ productsInCart }} products in cart
-              </div>
-
-              <div class="flex flex-col md:flex-row flex-wrap gap-4">
-                <UiQuantitySelector
-                  v-model="quantitySelectorValue"
-                  :value="quantitySelectorValue"
-                  class="min-w-[145px] flex-grow flex-shrink-0 basis-0"
-                />
-
-                <SfButton
-                  :disabled="loadingProductTemplate || !productVariant?.id"
-                  type="button"
-                  size="lg"
-                  class="flex-grow-[2] flex-shrink basis-auto whitespace-nowrap transition-opacity duration-200"
-                  @click="handleCartAdd"
-                >
-                  <template #prefix>
-                    <SfIconShoppingCart size="sm" />
-                  </template>
-                  {{ $t('addToCart') }}
-                </SfButton>
-              </div>
-
-              <div v-if="colorOptions.length" class="lg:px-4 mt-6" data-testid="product-properties">
-                <fieldset class="pb-2 flex">
-                  <span
-                    v-for="color in colorOptions"
-                    :key="color.id"
-                    class="mr-2 mb-2 uppercase"
-                  >
-                    <SfChip
-                      class="min-w-[48px]"
-                      size="sm"
-                      :model-value="color.id === selectedColor"
-                      @update:model-value="
-                        $event && color.id !== selectedColor
-                          ? updateVariantQuery({ Color: color.id.toString() })
-                          : null
-                      "
-                    >
-                      {{ color.label }}
-                    </SfChip>
-                  </span>
-                </fieldset>
-              </div>
-
-              <div v-if="productVariant" class="flex justify-center mt-4 gap-x-4">
-                <SfButton type="button" size="sm" variant="tertiary" @click="handleWishlistToggle">
-                  <SfIconFavoriteFilled
-                    v-if="isInWishlist(productVariant.id as number)"
-                    size="sm"
-                  />
-                  <SfIconFavorite v-else size="sm" />
-                  {{
-                    isInWishlist(productVariant.id as number)
-                      ? $t('wishlist.removeFromWishlist')
-                      : $t('wishlist.addToWishlist')
-                  }}
-                </SfButton>
-              </div>
-            </div>
-
-            <div class="flex first:mt-4">
-              <SfIconPackage size="sm" class="flex-shrink-0 mr-1 text-neutral-500" />
-              <p class="text-sm">
-                <i18n-t keypath="additionalInfo.shipping" scope="global">
-                  <template #date>{{ tomorrow }}</template>
-                  <template #addAddress>
-                    <SfLink class="ml-1" href="#" variant="secondary">
-                      {{ $t('additionalInfo.addAddress') }}
-                    </SfLink>
-                  </template>
-                </i18n-t>
-              </p>
-            </div>
-
-            <div class="flex mt-4">
-              <SfIconWarehouse size="sm" class="flex-shrink-0 mr-1 text-neutral-500" />
-              <p class="text-sm">
-                <i18n-t keypath="additionalInfo.pickup" scope="global">
-                  <template #checkAvailability>
-                    <SfLink class="ml-1" href="#" variant="secondary">
-                      {{ $t('additionalInfo.checkAvailability') }}
-                    </SfLink>
-                  </template>
-                </i18n-t>
-              </p>
-            </div>
-
-            <div class="flex mt-4">
-              <SfIconSafetyCheck size="sm" class="flex-shrink-0 mr-1 text-neutral-500" />
-              <i18n-t keypath="additionalInfo.returns" scope="global">
-                <template #details>
-                  <SfLink class="ml-1" href="#" variant="secondary">
-                    {{ $t('additionalInfo.details') }}
-                  </SfLink>
+                <template v-if="productVariant?.combinationInfoVariant?.has_discounted_price">
+                  <span class="text-[24px] font-medium">{{ $currency(getSpecialPrice) }}</span>
+                  <span class="text-[16px] text-primary-300 line-through">{{ $currency(getRegularPrice) }}</span>
+                  <span class="text-[13px] text-primary-500">You save {{ $currency(savings) }}</span>
                 </template>
-              </i18n-t>
+                <span v-else class="text-[24px] font-medium">{{ $currency(getRegularPrice) }}</span>
+              </template>
+              <div v-else class="w-32 h-8 bg-primary-50 animate-pulse rounded-[2px]" />
             </div>
-          </div>
-        </section>
 
-        <section class="grid-in-left-bottom md:mt-8">
-          <UiDivider class="mt-10 mb-6" />
-          <div>
-            <h2 class="font-bold font-headings text-lg leading-6 md:text-2xl">
-              {{ $t('productDetails') }}
-            </h2>
-            <p>{{ productTemplate?.description }}</p>
+            <!-- Color variants -->
+            <div v-if="colorOptions.length" class="mt-8" data-testid="product-properties">
+              <p class="text-[12px] tracking-[0.16em] uppercase font-medium text-primary-400 mb-3">
+                Color<span v-if="selectedColorLabel" class="text-black"> — {{ selectedColorLabel }}</span>
+              </p>
+              <fieldset class="flex flex-wrap gap-2.5">
+                <button
+                  v-for="color in colorOptions"
+                  :key="color.id"
+                  type="button"
+                  :aria-pressed="color.id === selectedColor"
+                  class="min-w-[64px] h-[42px] px-4 rounded-[2px] text-[12px] tracking-[0.06em] uppercase border transition-colors duration-200"
+                  :class="color.id === selectedColor
+                    ? 'border-black bg-primary-50 text-black font-medium'
+                    : 'border-primary-200 text-primary-500 hover:border-primary-400 hover:text-black'"
+                  @click="color.id !== selectedColor && updateVariantQuery({ Color: color.id.toString() })"
+                >
+                  {{ color.label }}
+                </button>
+              </fieldset>
+            </div>
 
-            <UiDivider class="my-4" />
+            <!-- Quantity -->
+            <div class="mt-8">
+              <p class="text-[12px] tracking-[0.16em] uppercase font-medium text-primary-400 mb-3">
+                Quantity
+              </p>
+              <UiQuantitySelector
+                v-model="quantitySelectorValue"
+                :value="quantitySelectorValue"
+                class="w-[140px]"
+              />
+            </div>
 
-            <h2 class="font-bold font-headings text-lg leading-6 md:text-2xl">
-              {{ $t('customerReviews') }}
-            </h2>
-            <p>Lightweight • Non slip • Flexible outsole • Easy to wear on and off</p>
-          </div>
-        </section>
+            <!-- Actions -->
+            <div class="mt-6 flex gap-3">
+              <SfButton
+                :disabled="loadingProductTemplate || !productVariant?.id"
+                type="button"
+                size="lg"
+                class="flex-1 min-h-[54px] text-[13px] font-medium"
+                @click="handleCartAdd"
+              >
+                {{ $t('addToCart') }}
+              </SfButton>
+              <SfButton
+                v-if="productVariant"
+                type="button"
+                variant="tertiary"
+                square
+                :aria-label="isInWishlist(productVariant.id as number) ? $t('wishlist.removeFromWishlist') : $t('wishlist.addToWishlist')"
+                class="min-h-[54px] w-[54px] shrink-0 !border !border-primary-200 !text-black hover:!border-black hover:!bg-transparent"
+                @click="handleWishlistToggle"
+              >
+                <UiLineIcon name="heart" :filled="isInWishlist(productVariant.id as number)" :size="20" />
+              </SfButton>
+            </div>
 
-        <UiDivider class="mt-4 mb-2" />
+            <p
+              v-show="productsInCart"
+              class="mt-3 flex items-center gap-1.5 text-[13px] text-primary-500"
+            >
+              <UiLineIcon name="cart" :size="16" />
+              {{ productsInCart }} in your cart
+            </p>
+
+            <!-- Reassurance -->
+            <p class="mt-7 pt-6 border-t border-primary-100 text-[13px] text-primary-500">
+              Complimentary shipping over $150 · 30-day returns
+            </p>
+          </section>
+        </div>
       </div>
 
-      <section v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether" class="lg:mx-4 mt-28">
+      <!-- Recommendations -->
+      <section v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether" class="mt-24">
         <LazyProductSlider text="Recommended with this product" :product-template-list="productTemplate.frequentlyBoughtTogether" />
       </section>
-      <section v-if="!loadingProductTemplate && productTemplate?.alternativeProducts" class="lg:mx-4 mb-20">
+      <section v-if="!loadingProductTemplate && productTemplate?.alternativeProducts" class="mb-10">
         <LazyProductSlider text="Alternative product" :product-template-list="productTemplate.alternativeProducts" />
       </section>
-      <section class="lg:mx-4 mb-20">
+      <section class="mb-20">
         <ClientOnly>
           <LazyProductRecentViewSlider text="Your recent views" :exclude-id="Number(productTemplate?.id)" />
         </ClientOnly>

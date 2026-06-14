@@ -117,9 +117,9 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
       <NuxtLink
         to="/"
         aria-label="Sf Homepage"
-        class="h-6 mt-[-3px]"
+        class="text-black"
       >
-        <AlokaiLogo class="h-full w-auto" />
+        <AlokaiLogo class="text-[17px]" />
       </NuxtLink>
       <!-- Nav -->
       <transition
@@ -200,11 +200,7 @@ const categoriesForMegaMenu = inject<Category[]>('categoriesForMegaMenu')
                   href="#"
                   class="block bg-[#f7f7f7] h-full w-full py-4 text-center flex items-center justify-center gap-3"
                 >
-                  <Icon
-                    :name="wishlistTotalItems > 0 ? 'mdi:heart' : 'mdi:heart-outline'"
-                    size="22px"
-                    class="!text-black"
-                  />
+                  <UiLineIcon name="heart" :size="22" class="!text-black" />
                   Wishlist
                 </a>
               </li>

@@ -13,9 +13,9 @@ const { isOpen: isSearchOpen, toggle: toggleSearch, close: closeSearch } = useDi
 // TODO: point each nav item to a real category slug (links handled later)
 const navItems = [
   { label: 'Top Sellers', link: '/products' },
+  { label: 'New Arrivals', link: '/products' },
   { label: 'Women', link: '/products' },
   { label: 'Men', link: '/products' },
-  { label: 'Accessories', link: '/products' },
 ]
 
 const menuRef = ref()
@@ -63,7 +63,7 @@ onClickOutside(searchPanelRef, () => {
         </nav>
 
         <!-- Center: brand -->
-        <NuxtLink to="/" aria-label="Sf Homepage" class="justify-self-center h-6 md:h-7">
+        <NuxtLink to="/" aria-label="Sf Homepage" class="justify-self-center text-[26px] md:text-[28px] text-black">
           <AlokaiLogo />
         </NuxtLink>
 

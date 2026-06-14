@@ -73,7 +73,7 @@ onMounted(async () => {
     >
       <template #prefix>
         <div class="relative">
-          <SfIconFavorite />
+          <UiLineIcon name="heart" :size="24" />
           <SfBadge
             v-if="wishlistTotalItems"
             :content="wishlistTotalItems"

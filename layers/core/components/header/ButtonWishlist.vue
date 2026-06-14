@@ -25,7 +25,7 @@ onMounted(async () => {
     >
       <template #prefix>
         <span class="relative inline-flex">
-          <UiLineIcon name="heart" :filled="wishlistTotalItems > 0" class="!text-black" />
+          <UiLineIcon name="heart" class="!text-black" />
           <span
             v-if="wishlistTotalItems > 0"
             class="absolute -top-1.5 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-black text-white text-[10px] leading-none font-medium flex items-center justify-center"

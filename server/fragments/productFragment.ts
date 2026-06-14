@@ -3,6 +3,8 @@ import frequentlyTogetherProductsFragment from './frequentlyTogetherProductsFrag
 
 export default `
   id
+  ratingAvg
+  ratingCount
   breadcrumb
   jsonLdBreadcrumb
   metaDescription
