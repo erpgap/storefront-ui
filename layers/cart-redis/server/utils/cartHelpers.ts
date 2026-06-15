@@ -1,6 +1,7 @@
 import type { AttributeValue, Cart, OrderLine } from '~~/graphql'
 
 export const reduceCart = (cartData: Cart) => ({
+  frequentlyBoughtTogether: cartData?.frequentlyBoughtTogether ?? null,
   order: {
     id: cartData?.order?.id,
     amountTotal: cartData?.order?.amountTotal,
