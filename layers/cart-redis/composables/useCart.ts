@@ -21,6 +21,8 @@ export const useCart = () => {
   const frequentlyTogetherProducts = useState<Product[]>('frequently-together-products', () => [])
 
   const loading = ref(false)
+  // Inline add-to-cart error, shown near the button (cleared on each attempt).
+  const cartError = ref('')
 
   const loadCart = async () => {
     try {
@@ -53,6 +55,7 @@ export const useCart = () => {
 
     try {
       loading.value = true
+      cartError.value = ''
 
       const data = await $sdk().odoo.mutation<MutationCartAddMultipleItemsArgs, CartAddItemResponse>(
         { mutationName: MutationName.CartAddItem }, params,
@@ -64,7 +67,7 @@ export const useCart = () => {
       openCartSideBar()
     }
     catch (error: any) {
-      return toast.error(error.data.message)
+      cartError.value = error?.data?.message || error?.message || 'Could not add to cart. Please try again.'
     }
     finally {
       loading.value = false
@@ -153,6 +156,7 @@ export const useCart = () => {
     removeMultipleItemsFromCart,
     frequentlyTogetherProducts,
     loading,
+    cartError,
     cart,
     totalItemsInCart,
   }
