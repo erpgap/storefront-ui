@@ -35,7 +35,7 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
       buttons-placement="block"
       class="items-center pb-8 sm:pb-12 sm:mb-20"
       data-testid="product-slider"
-      drag="true"
+      :drag="true"
     >
       <LazyUiProductCard
         v-for="(productTemplate, index) in props.productTemplateList"
