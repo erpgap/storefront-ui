@@ -25,7 +25,7 @@ const isActive = (value: string) => selectedValue.value === value
 const dropdownOpened = ref(false)
 const toggle = () => { dropdownOpened.value = !dropdownOpened.value }
 const close = () => { dropdownOpened.value = false }
-const { referenceRef, floatingRef } = useDropdown({ dropdownOpened, onClose: close })
+const { referenceRef, floatingRef, style } = useDropdown({ dropdownOpened, onClose: close })
 
 function selectSort(value: string) {
   sort.value = value
@@ -42,7 +42,7 @@ function selectSort(value: string) {
   >
     <SfButton
       variant="tertiary"
-      class="whitespace-nowrap"
+      class="w-full font-normal !justify-between whitespace-nowrap hover:bg-transparent active:bg-transparent"
       type="button"
       :aria-label="$t('sortBy')"
       :aria-expanded="dropdownOpened"
@@ -61,7 +61,8 @@ function selectSort(value: string) {
     <ul
       v-if="dropdownOpened"
       ref="floatingRef"
-      class="absolute right-0 mt-1 py-2 min-w-[220px] bg-white rounded-md shadow-md border border-neutral-100 z-50"
+      :style="style"
+      class="py-2 w-[240px] max-w-[calc(100vw-2rem)] bg-white rounded-md shadow-md border border-neutral-100 z-50"
     >
       <li
         v-for="option in sortOptions"
@@ -69,8 +70,8 @@ function selectSort(value: string) {
       >
         <button
           type="button"
-          class="flex items-center justify-between w-full px-4 py-2 text-left text-sm hover:bg-primary-100 transition-colors"
-          :class="{ 'font-medium text-primary-700': isActive(option.value) }"
+          class="flex items-center justify-between w-full px-4 py-2 text-left text-sm hover:underline transition-colors"
+          :class="{ 'font-medium text-primary-700 underline': isActive(option.value) }"
           @click="selectSort(option.value)"
         >
           {{ option.attrName }}

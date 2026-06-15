@@ -104,21 +104,30 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
 
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
         <template v-if="!loading">
-          <div class="flex justify-between items-center mb-6">
-            <span class="font-bold font-headings md:text-lg">{{ totalItems }} Products</span>
-            <div class="flex items-center gap-2">
-              <CategorySortDropdown />
-              <SfButton
-                variant="tertiary"
-                class="lg:hidden whitespace-nowrap"
+          <div class="lg:hidden mb-6">
+            <div class="flex w-full items-stretch border-y border-neutral-200 rounded-md divide-x divide-neutral-200 overflow-visible">
+              <div class="flex-1 flex items-center relative overflow-visible">
+                <CategorySortDropdown class="w-full" />
+              </div>
+              <button
+                type="button"
+                class="flex-1 flex items-center justify-between gap-2 px-4 py-2.5 whitespace-nowrap"
                 @click="open"
               >
-                <template #prefix>
-                  <SfIconTune />
-                </template>
-                Filter
-              </SfButton>
+                {{ $t('refineBy') }}
+                <SfIconTune />
+              </button>
             </div>
+            <p class="mt-4 px-4">
+              {{ $t('numberOfProducts', { count: totalItems }) }}
+            </p>
+          </div>
+
+          <div class="hidden lg:flex justify-between items-center mb-6">
+            <span class="md:text-lg">
+              {{ $t('numberOfProducts', { count: totalItems }) }}
+            </span>
+            <CategorySortDropdown />
           </div>
 
           <section
