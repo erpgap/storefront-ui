@@ -312,18 +312,20 @@ const categoryEyebrow = computed(() => {
         </div>
       </div>
 
-      <!-- Recommendations -->
-      <section v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether" class="mt-24">
-        <LazyProductSlider text="Frequently Bought Together" :product-template-list="productTemplate.frequentlyBoughtTogether" />
-      </section>
-      <section v-if="!loadingProductTemplate && productTemplate?.alternativeProducts" class="mb-10">
-        <LazyProductSlider text="Similar Products" :product-template-list="productTemplate.alternativeProducts" />
-      </section>
-      <section class="mb-20">
-        <ClientOnly>
-          <LazyProductRecentViewSlider text="Your Recent Views" :exclude-id="Number(productTemplate?.id)" />
-        </ClientOnly>
-      </section>
+      <!-- Recommendations (separated from the product details area above) -->
+      <div class="mt-20 md:mt-32">
+        <section v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether">
+          <LazyProductSlider text="Frequently Bought Together" :product-template-list="productTemplate.frequentlyBoughtTogether" />
+        </section>
+        <section v-if="!loadingProductTemplate && productTemplate?.alternativeProducts">
+          <LazyProductSlider text="Similar Products" :product-template-list="productTemplate.alternativeProducts" />
+        </section>
+        <section class="mb-16">
+          <ClientOnly>
+            <LazyProductRecentViewSlider text="Your Recent Views" :exclude-id="Number(productTemplate?.id)" />
+          </ClientOnly>
+        </section>
+      </div>
     </div>
 
     <template #error>
