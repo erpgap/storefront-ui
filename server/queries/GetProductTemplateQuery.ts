@@ -1,4 +1,6 @@
 import productFragment from '../fragments/productFragment'
+import frequentlyTogetherProductsFragment from '../fragments/frequentlyTogetherProductsFragment'
+import alternativeProductsFragment from '../fragments/alternativeProductsFragment'
 
 export default `
   query(
@@ -12,6 +14,8 @@ export default `
       barcode: $barcode
     ) {
         ${productFragment}
+        ${frequentlyTogetherProductsFragment}
+        ${alternativeProductsFragment}
     }
   }
 `

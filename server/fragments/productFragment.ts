@@ -1,6 +1,3 @@
-import alternativeProductsFragment from './alternativeProductsFragment'
-import frequentlyTogetherProductsFragment from './frequentlyTogetherProductsFragment'
-
 export default `
   id
   ratingAvg

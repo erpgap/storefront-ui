@@ -1,13 +1,6 @@
 <script lang="ts" setup>
-import {
-  SfRating,
-  SfCounter,
-  SfButton,
-  SfIconShoppingCart,
-  SfIconFavorite,
-  SfIconFavoriteFilled,
-} from '@storefront-ui/vue'
-import type { CustomProductWithStockFromRedis, Product } from '~~/graphql'
+import { SfRating } from '@storefront-ui/vue'
+import type { CustomProductWithStockFromRedis } from '~~/graphql'
 
 defineProps({
   imageUrl: {
@@ -25,10 +18,6 @@ defineProps({
   slug: {
     type: String,
     required: true,
-  },
-  description: {
-    type: String,
-    required: false,
   },
   ratingCount: {
     type: Number,
@@ -58,23 +47,17 @@ defineProps({
   },
 })
 
-const { cartAdd } = useCart()
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
 
-const handleWishlistAddItem = async (firstVariant: CustomProductWithStockFromRedis) => {
-  await wishlistAddItem(firstVariant.id)
-}
-
-const handleWishlistRemoveItem = async (firstVariant: CustomProductWithStockFromRedis) => {
-  await wishlistRemoveItem(firstVariant.id)
+const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
+  if (!variant?.id) return
+  isInWishlist(variant.id) ? wishlistRemoveItem(variant.id) : wishlistAddItem(variant.id)
 }
 </script>
 
 <template>
-  <div
-    class="relative flex flex-col"
-  >
-    <div class="relative">
+  <div class="group relative flex flex-col">
+    <div class="relative overflow-hidden rounded-[3px] bg-primary-50">
       <NuxtLink :to="slug" prefetch>
         <NuxtImg
           provider="odooProvider"
@@ -82,79 +65,47 @@ const handleWishlistRemoveItem = async (firstVariant: CustomProductWithStockFrom
           :alt="imageAlt"
           :width="370"
           :height="370"
-          class="rounded-md"
+          class="w-full aspect-square object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           :loading="loading"
         />
       </NuxtLink>
 
-      <SfButton
+      <button
         type="button"
-        variant="tertiary"
-        size="sm"
-        square
-        :class="[
-          'absolute top-0 right-0 mr-2 mt-2 !bg-white border border-[#E5E7EB] !rounded-full'
-        ]"
         aria-label="Add to wishlist"
-        @click="
-          isInWishlist(firstVariant?.id)
-            ? handleWishlistRemoveItem(firstVariant as CustomProductWithStockFromRedis)
-            : handleWishlistAddItem(firstVariant as CustomProductWithStockFromRedis)
-        "
+        class="absolute top-3 right-3 z-[2] grid place-items-center w-[44px] h-[44px] rounded-full bg-white/90 text-primary-700 transition-colors duration-200 hover:text-black"
+        @click="toggleWishlist(firstVariant)"
       >
-        <UiLineIcon name="heart" :filled="isInWishlist(firstVariant?.id)" :size="18" class="!text-black" />
-      </SfButton>
+        <UiLineIcon name="heart" :filled="isInWishlist(firstVariant?.id)" :size="24" />
+      </button>
     </div>
-    <div
-      class="flex flex-col justify-between gap-2.5 h-full mt-3"
-    >
-      <div v-if="(ratingCount ?? 0) > 0" class="flex items-center text-[14px] text-black">
-        <SfRating
-          size="xs"
-          :value="Math.round(rating ?? 0)"
-          :max="5"
-          class="mr-1"
-        />
-        <span>({{ (rating ?? 0).toFixed(1) }})</span>
-        <SfCounter size="xs" class="!text-[14px] !text-primary-400 ml-1">
-          {{ ratingCount }}
-        </SfCounter>
-      </div>
+
+    <div class="pt-3">
       <NuxtLink
         :to="slug"
-        variant="secondary"
-        class="no-underline self-start text-left text-[16px] leading-[1.2]"
+        class="block text-[15px] font-medium leading-tight"
       >
         {{ name }}
       </NuxtLink>
-      <p
-        v-if="description"
-        class="block font-normal leading-5 typography-text-sm text-neutral-700"
-      >
-        {{ description }}
+
+      <!-- Price: new (special) on the left, old (regular) struck through on the right -->
+      <p class="mt-1.5 flex items-baseline gap-2">
+        <span class="text-[16px] font-medium text-black">{{ $currency(specialPrice) }}</span>
+        <span
+          v-if="regularPrice"
+          class="text-[14px] text-primary-300 line-through"
+        >{{ $currency(regularPrice) }}</span>
       </p>
-      <div class="flex justify-between">
-        <div class="block">
-          <span class="font-bold text-[16px]">{{
-            $currency(specialPrice)
-          }}</span>
-          <span
-            v-if="regularPrice"
-            class="ml-1.5 font-normal text-[16px] line-through text-[#8E8E8E]"
-          >{{ $currency(regularPrice) }}</span>
-        </div>
-        <!-- <SfButton
-          type="button"
-          class="ottom-2"
-          size="sm"
-          :disabled="!firstVariant?.stock || firstVariant?.stock <= 0"
-          @click="cartAdd(firstVariant?.id, 1)"
-        >
-          <template #prefix>
-            <SfIconShoppingCart size="sm" />
-          </template>
-          Add
-        </SfButton> -->
+
+      <!-- Reviews live at the bottom of the card -->
+      <div
+        v-if="(ratingCount ?? 0) > 0"
+        class="mt-2 inline-flex items-center gap-1.5 text-[13px] text-primary-500"
+      >
+        <SfRating size="xs" :value="Math.round(rating ?? 0)" :max="5" />
+        <span>({{ (rating ?? 0).toFixed(1) }})</span>
+        <span class="text-primary-200">·</span>
+        <span>{{ ratingCount }} reviews</span>
       </div>
     </div>
   </div>

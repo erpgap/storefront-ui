@@ -31,13 +31,15 @@ query (
         }
       }
     }
-      tags {        
+      tags {
         name
         imageUrl
       }
       imageUrl
       name
-      slug      
+      slug
+      ratingAvg
+      ratingCount
     }
   }
 }

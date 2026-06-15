@@ -314,14 +314,14 @@ const categoryEyebrow = computed(() => {
 
       <!-- Recommendations -->
       <section v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether" class="mt-24">
-        <LazyProductSlider text="Recommended with this product" :product-template-list="productTemplate.frequentlyBoughtTogether" />
+        <LazyProductSlider text="Frequently Bought Together" :product-template-list="productTemplate.frequentlyBoughtTogether" />
       </section>
       <section v-if="!loadingProductTemplate && productTemplate?.alternativeProducts" class="mb-10">
-        <LazyProductSlider text="Alternative product" :product-template-list="productTemplate.alternativeProducts" />
+        <LazyProductSlider text="Similar Products" :product-template-list="productTemplate.alternativeProducts" />
       </section>
       <section class="mb-20">
         <ClientOnly>
-          <LazyProductRecentViewSlider text="Your recent views" :exclude-id="Number(productTemplate?.id)" />
+          <LazyProductRecentViewSlider text="Your Recent Views" :exclude-id="Number(productTemplate?.id)" />
         </ClientOnly>
       </section>
     </div>

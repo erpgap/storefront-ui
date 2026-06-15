@@ -7,6 +7,8 @@ export default `
     description
     imageUrl
     slug
+    ratingAvg
+    ratingCount
     firstVariant{
       id
       combinationInfoVariant

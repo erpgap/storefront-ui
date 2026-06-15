@@ -81,7 +81,7 @@ await loadCart()
       class="lg:mx-4 mt-36"
     >
       <LazyProductSlider
-        heading="Frequently bought together"
+        heading="Frequently Bought Together"
         text="You may also like"
         :product-template-list="frequentlyTogetherProducts"
       />
@@ -91,7 +91,7 @@ await loadCart()
     >
       <ClientOnly>
         <LazyProductRecentViewSlider
-          text="Your recent views"
+          text="Your Recent Views"
         />
       </ClientOnly>
     </section>
