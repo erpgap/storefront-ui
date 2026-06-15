@@ -6,6 +6,7 @@ import {
   SfInput,
   SfLoaderCircular,
 } from '@storefront-ui/vue'
+import { isValidEmail } from '~~/app/utils/validation'
 
 definePageMeta({
   layout: false,
@@ -18,10 +19,11 @@ const password = ref('')
 const rememberMe = ref<boolean>()
 // Turns on once the user attempts to submit, so empty required fields go red.
 const showErrors = ref(false)
+const emailValid = computed(() => isValidEmail(email.value))
 
 const handleLogin = async () => {
   showErrors.value = true
-  if (!email.value.trim() || !password.value.trim()) return
+  if (!emailValid.value || !password.value.trim()) return
   await login({ email: email.value, password: password.value })
 }
 
@@ -38,7 +40,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     <form novalidate class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8" @submit.prevent="handleLogin">
       <label>
         <UiFormLabel>{{ $t("form.emailLabel") }}</UiFormLabel>
-        <SfInput v-model="email" name="email" type="email" autocomplete="email" :invalid="showErrors && !email.trim()" />
+        <SfInput v-model="email" name="email" type="email" autocomplete="email" :invalid="showErrors && !emailValid" />
       </label>
 
       <label>
