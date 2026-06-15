@@ -106,16 +106,19 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
         <template v-if="!loading">
           <div class="flex justify-between items-center mb-6">
             <span class="font-bold font-headings md:text-lg">{{ totalItems }} Products</span>
-            <SfButton
-              variant="tertiary"
-              class="lg:hidden whitespace-nowrap"
-              @click="open"
-            >
-              <template #prefix>
-                <SfIconTune />
-              </template>
-              Filter
-            </SfButton>
+            <div class="flex items-center gap-2">
+              <CategorySortDropdown />
+              <SfButton
+                variant="tertiary"
+                class="lg:hidden whitespace-nowrap"
+                @click="open"
+              >
+                <template #prefix>
+                  <SfIconTune />
+                </template>
+                Filter
+              </SfButton>
+            </div>
           </div>
 
           <section
