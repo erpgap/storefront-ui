@@ -40,7 +40,6 @@ const socials = [
 
 <template>
   <div>
-    <ValueProps />
     <Newsletter />
     <footer class="bg-white border-t border-primary-100 text-black">
       <div class="narrow-container">

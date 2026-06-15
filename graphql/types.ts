@@ -16,6 +16,7 @@ import type {
   ApplyCouponList,
   ApplyGiftCardList,
   OrderLine,
+  Lead,
 } from './gql/graphql'
 import type { AsyncData } from '#app'
 
@@ -337,6 +338,13 @@ export type GetOrderResponse = AsyncData<
 export type NewsletterSubscribeResponse = AsyncData<
   {
     newsletterSubscribe: boolean
+  },
+  H3Error
+>
+
+export type ContactUsResponse = AsyncData<
+  {
+    contactUs: Lead
   },
   H3Error
 >

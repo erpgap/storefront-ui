@@ -8,19 +8,41 @@ useHead({
   meta: [{ name: 'description', content: 'Get in touch with the team behind Alokai.' }],
 })
 
-const form = reactive({ name: '', email: '', subject: '', message: '' })
-const sent = ref(false)
+const { contactUs, loading, apiError } = useCore()
 
-const submit = () => {
-  // Demo store — no backend. Acknowledge locally.
-  sent.value = true
+const form = reactive({ name: '', email: '', phone: '', subject: '', message: '' })
+const sent = ref(false)
+// Turns on once the user attempts to submit, so empty required fields go red.
+const showErrors = ref(false)
+
+const isComplete = () =>
+  !!form.name.trim() && !!form.email.trim() && !!form.phone.trim()
+  && !!form.subject.trim() && !!form.message.trim()
+
+const submit = async () => {
+  showErrors.value = true
+  if (!isComplete()) return
+
+  const ok = await contactUs({
+    contactus: {
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      subject: form.subject,
+      message: form.message,
+    },
+  })
+  if (ok) sent.value = true
 }
 
 const reset = () => {
   form.name = ''
   form.email = ''
+  form.phone = ''
   form.subject = ''
   form.message = ''
+  apiError.value = ''
+  showErrors.value = false
   sent.value = false
 }
 
@@ -59,38 +81,59 @@ const channels = [
         </div>
 
         <!-- Form / success -->
-        <div class="border border-primary-100 p-6 md:p-8">
+        <div class="border border-primary-100 p-6 md:p-8 self-start">
           <div v-if="sent" class="flex flex-col items-start gap-4 py-6">
-            <SfIconCheckCircle class="text-black" />
-            <h3 class="text-[22px] font-light tracking-[-0.01em]">Message sent</h3>
+            <div class="flex items-center gap-2.5">
+              <SfIconCheckCircle class="text-black" />
+              <h3 class="text-[22px] font-light tracking-[-0.01em]">Message sent</h3>
+            </div>
             <p class="text-primary-500 font-light max-w-[420px]">
-              Thanks for reaching out{{ form.name ? `, ${form.name}` : '' }}. This is a demo store, so no
-              message was actually delivered — but on a live ERPGAP build, we'd be in touch shortly.
+              Thanks for reaching out{{ form.name ? `, ${form.name}` : '' }}. We've received your
+              message and will get back to you shortly.
             </p>
-            <SfButton variant="tertiary" class="!px-0" @click="reset">Send another message</SfButton>
+            <button
+              type="button"
+              class="text-[13px] font-medium underline underline-offset-4 decoration-primary-300 hover:decoration-black transition-colors"
+              @click="reset"
+            >
+              Send another message
+            </button>
           </div>
 
-          <form v-else class="flex flex-col gap-5" @submit.prevent="submit">
+          <form v-else novalidate class="flex flex-col gap-5" @submit.prevent="submit">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <label>
                 <UiFormLabel>Name</UiFormLabel>
-                <SfInput v-model="form.name" name="name" required />
+                <SfInput v-model="form.name" name="name" :invalid="showErrors && !form.name.trim()" />
               </label>
               <label>
                 <UiFormLabel>Email</UiFormLabel>
-                <SfInput v-model="form.email" name="email" type="email" required />
+                <SfInput v-model="form.email" name="email" type="email" :invalid="showErrors && !form.email.trim()" />
+              </label>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <label>
+                <UiFormLabel>Phone</UiFormLabel>
+                <SfInput v-model="form.phone" name="phone" type="tel" :invalid="showErrors && !form.phone.trim()" />
+              </label>
+              <label>
+                <UiFormLabel>Subject</UiFormLabel>
+                <SfInput v-model="form.subject" name="subject" :invalid="showErrors && !form.subject.trim()" />
               </label>
             </div>
             <label>
-              <UiFormLabel>Subject</UiFormLabel>
-              <SfInput v-model="form.subject" name="subject" required />
-            </label>
-            <label>
               <UiFormLabel>Message</UiFormLabel>
-              <SfTextarea v-model="form.message" name="message" :rows="5" required class="w-full" />
+              <SfTextarea v-model="form.message" name="message" :rows="5" :invalid="showErrors && !form.message.trim()" class="w-full" />
             </label>
-            <SfButton type="submit" class="self-start min-h-[52px] px-8 text-[13px] font-medium">
-              Send message
+            <UiFormError v-if="apiError">
+              {{ apiError }}
+            </UiFormError>
+            <SfButton
+              type="submit"
+              :disabled="loading"
+              class="self-start min-h-[52px] px-8 text-[13px] font-medium"
+            >
+              {{ loading ? 'Sending…' : 'Send message' }}
             </SfButton>
           </form>
         </div>
