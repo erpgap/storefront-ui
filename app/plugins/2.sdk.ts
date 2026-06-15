@@ -14,6 +14,7 @@ const SHOULD_BYPASS_ERROR_MUTATIONS = [
   'LoginMutation',
   'RegisterUserMutation',
   'ContactUsMutation',
+  'NewsletterSubscribeMutation',
 ]
 
 const avoidErrorThrowForSomeRequests = (options: any) => {

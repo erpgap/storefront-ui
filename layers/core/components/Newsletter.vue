@@ -2,7 +2,7 @@
 import { SfButton } from '@storefront-ui/vue'
 import { ref } from 'vue'
 
-const { newsletterSubscribe } = useCore()
+const { newsletterSubscribe, loading, apiError } = useCore()
 
 const inputValue = ref('')
 const emailValidation = ref()
@@ -45,14 +45,18 @@ const subscribeNewsletter = async () => {
           @is-field-valid="(n: any) => (emailValidation = n)"
         />
         <SfButton
-          :disabled="!emailValidation"
+          :disabled="!emailValidation || loading"
           type="submit"
           variant="tertiary"
           class="!bg-white !text-black hover:!bg-primary-50 !border-none !ring-0 !shadow-none h-[48px] sm:h-auto px-7 text-[13px] tracking-[0.12em] uppercase font-medium disabled:!opacity-60"
         >
-          Subscribe
+          {{ loading ? 'Subscribing…' : 'Subscribe' }}
         </SfButton>
       </form>
+
+      <UiFormError v-if="apiError && !subscribed" class="max-w-[480px] mx-auto mt-4">
+        {{ apiError }}
+      </UiFormError>
     </div>
   </section>
 </template>
