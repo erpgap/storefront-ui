@@ -16,39 +16,44 @@ const { login, loading, authError } = useAuth()
 const email = ref('')
 const password = ref('')
 const rememberMe = ref<boolean>()
+// Turns on once the user attempts to submit, so empty required fields go red.
+const showErrors = ref(false)
 
 const handleLogin = async () => {
+  showErrors.value = true
+  if (!email.value.trim() || !password.value.trim()) return
   await login({ email: email.value, password: password.value })
 }
+
+// Clear any error carried over from another auth page (shared global state).
+onMounted(() => {
+  authError.value = ''
+})
 
 const NuxtLink = resolveComponent('NuxtLink')
 </script>
 
 <template>
   <NuxtLayout name="auth" :heading="$t('auth.login.heading')">
-    <form class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8" @submit.prevent="handleLogin">
-      <p
-        v-if="authError"
-        class="flex items-start gap-2 border border-red-200 bg-red-50 text-red-700 text-[13px] px-3 py-2.5"
-        role="alert"
-      >
-        {{ authError }}
-      </p>
-
+    <form novalidate class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8" @submit.prevent="handleLogin">
       <label>
         <UiFormLabel>{{ $t("form.emailLabel") }}</UiFormLabel>
-        <SfInput v-model="email" name="email" type="email" autocomplete="email" required />
+        <SfInput v-model="email" name="email" type="email" autocomplete="email" :invalid="showErrors && !email.trim()" />
       </label>
 
       <label>
         <UiFormLabel>{{ $t("form.passwordLabel") }}</UiFormLabel>
-        <UiFormPasswordInput v-model="password" name="password" autocomplete="current-password" required />
+        <UiFormPasswordInput v-model="password" name="password" autocomplete="current-password" :invalid="showErrors && !password.trim()" />
       </label>
 
       <label class="mt-2 flex items-center gap-2">
         <SfCheckbox v-model="rememberMe" name="rememberMe" />
         {{ $t("auth.login.rememberMeLabel") }}
       </label>
+
+      <UiFormError v-if="authError">
+        {{ authError }}
+      </UiFormError>
 
       <SfButton type="submit" class="mt-2" :disabled="loading">
         <SfLoaderCircular v-if="loading" class="flex justify-center items-center" size="base" />

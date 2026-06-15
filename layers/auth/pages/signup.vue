@@ -36,6 +36,11 @@ const handleSignup = async () => {
     subscribeNewsletter: subscriptionsModel.value === true,
   })
 }
+
+// Clear any error carried over from another auth page (shared global state).
+onMounted(() => {
+  authError.value = ''
+})
 </script>
 
 <template>

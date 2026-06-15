@@ -26,6 +26,7 @@ import SelectCurrentAddress from './SelectCurrentAddress'
 import DeleteAddress from './DeleteAddress'
 import NewsletterSubscribeMutation from './NewsletterSubscribeMutation'
 import ShippingMethod from './ShippingMethod'
+import ContactUsMutation from './ContactUsMutation'
 
 enum MutationName {
   LoginMutation = 'LoginMutation',
@@ -56,6 +57,7 @@ enum MutationName {
   ApplyCouponMutation = 'ApplyCouponMutation',
   MakeGiftCardPaymentMutation = 'MakeGiftCardPaymentMutation',
   ShippingMethod = 'ShippingMethod',
+  ContactUsMutation = 'ContactUsMutation',
 }
 
 const Mutations: Record<MutationName, string> = {
@@ -87,6 +89,7 @@ const Mutations: Record<MutationName, string> = {
   ApplyCouponMutation,
   MakeGiftCardPaymentMutation,
   ShippingMethod,
+  ContactUsMutation,
 }
 
 export { Mutations, MutationName }

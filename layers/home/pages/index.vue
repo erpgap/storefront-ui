@@ -15,5 +15,6 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home', `${origin}${pathna
     <Categories />
     <BestSellers />
     <BannerRight />
+    <ValueProps />
   </div>
 </template>

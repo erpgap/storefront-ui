@@ -244,7 +244,7 @@ export type ContactUsParams = {
   email: Scalars['String']['input'];
   message: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  phone: InputMaybe<Scalars['String']['input']>;
+  phone: Scalars['String']['input'];
   subject: Scalars['String']['input'];
 };
 
