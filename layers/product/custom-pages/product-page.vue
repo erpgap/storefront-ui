@@ -11,7 +11,6 @@ import {
   SfIconShoppingCart,
   SfIconShoppingCartCheckout,
   SfIconWarehouse,
-  SfLoaderCircular,
   SfRating,
 } from '@storefront-ui/vue'
 import type { CustomProductWithStockFromRedis, ImageGalleryItem, OrderLine } from '~~/graphql'
@@ -54,7 +53,7 @@ const {
 
 const { addProductToRecentViews } = useRecentViewProducts()
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
-const { cart, cartAdd } = useCart()
+const { cart, cartAdd, loading: cartLoading, cartError } = useCart()
 
 await loadProductTemplate({ slug: cleanPath.value })
 
@@ -275,13 +274,13 @@ const categoryEyebrow = computed(() => {
             <!-- Actions -->
             <div class="mt-6 flex gap-3">
               <SfButton
-                :disabled="loadingProductTemplate || !productVariant?.id"
+                :disabled="loadingProductTemplate || !productVariant?.id || cartLoading"
                 type="button"
                 size="lg"
                 class="flex-1 min-h-[54px] text-[13px] font-medium"
                 @click="handleCartAdd"
               >
-                {{ $t('addToCart') }}
+                {{ cartLoading ? 'Adding…' : $t('addToCart') }}
               </SfButton>
               <SfButton
                 v-if="productVariant"
@@ -295,6 +294,10 @@ const categoryEyebrow = computed(() => {
                 <UiLineIcon name="heart" :filled="isInWishlist(productVariant.id as number)" :size="20" />
               </SfButton>
             </div>
+
+            <UiFormError v-if="cartError" class="mt-3">
+              {{ cartError }}
+            </UiFormError>
 
             <p
               v-show="productsInCart"
