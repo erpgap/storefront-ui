@@ -25,12 +25,6 @@ const decrement = () => {
     emit('update:modelValue', props.modelValue - 1)
   }
 }
-
-const handleUpdate = (event: Event) => {
-  if (props.modelValue < props.maxQty && props.modelValue > 1) {
-    emit('update:modelValue', (event?.target as any)?.value)
-  }
-}
 </script>
 
 <template>
@@ -59,7 +53,7 @@ const handleUpdate = (event: Event) => {
         role="spinbutton"
         data-testid="quantity-selector-input"
         aria-label="Quantity Selector"
-        @input="handleUpdate"
+        readonly
       >
       <SfButton
         type="button"
