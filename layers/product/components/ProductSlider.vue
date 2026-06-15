@@ -15,7 +15,7 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 </script>
 
 <template>
-  <div class="narrow-container py-[40px] md:py-[80px]">
+  <div class="narrow-container py-[20px] md:py-[32px]">
     <!-- Section title — same style as the PDP "Product Details" heading -->
     <div class="mb-[30px] md:mb-[44px]">
       <h2

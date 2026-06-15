@@ -78,7 +78,7 @@ await loadCart()
     </div>
     <section
       v-if="frequentlyTogetherProducts?.length > 0"
-      class="lg:mx-4 mt-36"
+      class="lg:mx-4 mt-12"
     >
       <LazyProductSlider
         heading="Frequently Bought Together"
@@ -87,7 +87,7 @@ await loadCart()
       />
     </section>
     <section
-      class="lg:mx-4 mt-36"
+      class="lg:mx-4"
     >
       <ClientOnly>
         <LazyProductRecentViewSlider
