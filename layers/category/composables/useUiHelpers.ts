@@ -140,6 +140,7 @@ export const useUiHelpers = () => {
 
     const current = route.query as Record<string, any>
     if (current.itemsPerPage) q.itemsPerPage = String(current.itemsPerPage)
+    if (current.search) q.search = String(current.search)
 
     delete q.page
 
