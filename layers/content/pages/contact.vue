@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SfInput, SfTextarea, SfButton, SfIconCheckCircle } from '@storefront-ui/vue'
+import { isValidEmail } from '~~/app/utils/validation'
 
 const NuxtLink = resolveComponent('NuxtLink')
 
@@ -15,8 +16,10 @@ const sent = ref(false)
 // Turns on once the user attempts to submit, so empty required fields go red.
 const showErrors = ref(false)
 
+const emailValid = computed(() => isValidEmail(form.email))
+
 const isComplete = () =>
-  !!form.name.trim() && !!form.email.trim() && !!form.phone.trim()
+  !!form.name.trim() && emailValid.value && !!form.phone.trim()
   && !!form.subject.trim() && !!form.message.trim()
 
 const submit = async () => {
@@ -108,7 +111,7 @@ const channels = [
               </label>
               <label>
                 <UiFormLabel>Email</UiFormLabel>
-                <SfInput v-model="form.email" name="email" type="email" :invalid="showErrors && !form.email.trim()" />
+                <SfInput v-model="form.email" name="email" type="email" :invalid="showErrors && !emailValid" />
               </label>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { isValidEmail } from '~~/app/utils/validation'
+
 const model = defineModel()
 
 const emit = defineEmits(['is-field-valid'])
@@ -10,7 +12,7 @@ const clearError = () => {
 }
 
 const validateEmail = () => {
-  const isValid = /^\S+@\S+\.\S+$/.test(String(model.value))
+  const isValid = isValidEmail(model.value)
   showError.value = !isValid
   emit('is-field-valid', isValid)
 }
