@@ -16,6 +16,7 @@ export const useCore = () => {
   ): Promise<boolean> => {
     try {
       loading.value = true
+      apiError.value = ''
 
       await $sdk().odoo.mutation<
         MutationNewsletterSubscribeArgs,
@@ -23,6 +24,10 @@ export const useCore = () => {
       >({ mutationName: MutationName.NewsletterSubscribeMutation }, params)
 
       return true
+    }
+    catch (error: any) {
+      apiError.value = error?.data?.message || error?.message || 'Something went wrong. Please try again.'
+      return false
     }
     finally {
       loading.value = false
