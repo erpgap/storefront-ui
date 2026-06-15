@@ -62,7 +62,7 @@ await loadCart()
           />
         </div>
       </div>
-      <div class="col-span-5 md:sticky md:top-36 h-fit">
+      <div class="col-span-5 md:sticky md:top-36 self-start h-fit">
         <UiOrderSummary :cart="cart">
           <NuxtLink to="/checkout">
             <SfButton
