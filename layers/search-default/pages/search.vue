@@ -71,7 +71,7 @@ const breadcrumbs = [
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-[1900px] px-12 md:px-20 xl:px-32 2xl:px-40 pb-20">
+  <div class="narrow-container pb-20">
     <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
 
     <h1 v-if="route.query?.search" class="font-bold typography-headline-3 md:typography-headline-2 mb-10">
@@ -105,16 +105,30 @@ const breadcrumbs = [
         </div>
 
         <div v-else-if="Array.isArray(productTemplateList) && productTemplateList.length > 0">
-          <div class="flex justify-between items-center mb-6">
-            <span class="font-bold font-headings md:text-lg">
-              {{ totalItems }} Products
-            </span>
-            <SfButton variant="tertiary" class="lg:hidden whitespace-nowrap" @click="open">
-              <template #prefix>
+          <div class="lg:hidden mb-6">
+            <div class="flex w-full items-stretch border-y border-neutral-200 rounded-md divide-x divide-neutral-200 overflow-visible">
+              <div class="flex-1 flex items-center relative overflow-visible">
+                <CategorySortDropdown class="w-full" />
+              </div>
+              <button
+                type="button"
+                class="flex-1 flex items-center justify-between gap-2 px-4 py-2.5 whitespace-nowrap"
+                @click="open"
+              >
+                {{ $t('refineBy') }}
                 <SfIconTune />
-              </template>
-              Filter
-            </SfButton>
+              </button>
+            </div>
+            <p class="mt-4 px-4">
+              {{ $t('numberOfProducts', { count: totalItems }) }}
+            </p>
+          </div>
+
+          <div class="hidden lg:flex justify-between items-center mb-6">
+            <span class="md:text-lg">
+              {{ $t('numberOfProducts', { count: totalItems }) }}
+            </span>
+            <CategorySortDropdown />
           </div>
 
           <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8">

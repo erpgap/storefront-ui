@@ -5,7 +5,6 @@ import {
   SfChip,
   SfListItem,
   SfRadio,
-  SfSelect,
   SfThumbnail,
 } from '@storefront-ui/vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -41,18 +40,8 @@ const {
   isStockSelected,
 } = useUiHelpers()
 
+// Shared with CategorySortDropdown; read here so applyFiltersInstantly preserves the active sort.
 const sort = useState('sort', () => (route.query?.sort ? String(route.query.sort) : ''))
-const sortOptions = [
-  { id: 'name-asc', value: 'name,ASC', attrName: 'Name (A → Z)' },
-  { id: 'name-desc', value: 'name,DESC', attrName: 'Name (Z → A)' },
-  { id: 'price-asc', value: 'price,ASC', attrName: 'Price (low → high)' },
-  { id: 'price-desc', value: 'price,DESC', attrName: 'Price (high → low)' },
-]
-const sortBy = computed(() => ({ options: sortOptions, selected: sort.value || 'name,ASC' }))
-function changeSorting(newSort: string) {
-  sort.value = newSort
-  applyFiltersInstantly()
-}
 
 const facets = computed<Facet[]>(() => [
   {
@@ -157,35 +146,6 @@ function clearFilters() {
 
 <template>
   <aside class="w-full lg:max-w-[376px] relative">
-    <h5
-      class="py-2 px-4 mb-6 bg-primary-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
-    >
-      Sort by
-    </h5>
-    <div class="px-2">
-      <SfSelect
-        v-model="sortBy.selected"
-        placeholder="Select sorting"
-        :aria-label="$t('sortBy')"
-        @update:model-value="changeSorting"
-      >
-        <option
-          v-for="{ id, value, attrName } in sortBy.options"
-          :key="id"
-          :selected="sortBy.selected === value"
-          :value="value"
-        >
-          {{ attrName }}
-        </option>
-      </SfSelect>
-    </div>
-
-    <h5
-      class="py-2 px-4 mt-6 mb-4 bg-primary-100 typography-headline-6 font-bold text-neutral-900 uppercase tracking-widest md:rounded-md"
-    >
-      Filter
-    </h5>
-
     <ul>
       <li
         v-for="(facet, index) in facets"
