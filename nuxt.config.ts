@@ -138,6 +138,11 @@ export default defineNuxtConfig({
     },
   },
 
+  routeRules: {
+    '/sitemap_index.xml': { swr: swrCacheTime },
+    '/__sitemap__/**': { swr: swrCacheTime },
+  },
+
   vite: {
     optimizeDeps: {
       include: ['lodash-es'],
