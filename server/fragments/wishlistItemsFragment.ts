@@ -7,6 +7,8 @@ wishlistItems {
       description
       imageUrl
       price
+      ratingAvg
+      ratingCount
       isInWishlist
       variantAttributeValues{
         id

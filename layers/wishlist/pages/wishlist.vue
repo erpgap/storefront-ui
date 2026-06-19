@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { SfButton, SfIconArrowBack, SfIconClose, SfLoaderCircular } from '@storefront-ui/vue'
+import { SfButton, SfIconArrowBack, SfLoaderCircular } from '@storefront-ui/vue'
 import type { Product } from '~~/graphql'
+import { useProductAttributes } from '~~/layers/product/composables/useProductAttributes'
 
 const NuxtLink = resolveComponent('NuxtLink')
 
-const { wishlist, wishlistTotalItems, wishlistRemoveItem, loadWishlist, loading } = useWishlist()
-const { cartAdd } = useCart()
+const { wishlist, loadWishlist, loading } = useWishlist()
+const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
 useHead({ title: 'Wishlist — Alokai' })
 
@@ -16,10 +17,6 @@ onMounted(async () => {
 })
 
 const items = computed(() => wishlist.value?.wishlistItems ?? [])
-
-const price = (p: any) => Number(p?.combinationInfoVariant?.price ?? p?.price ?? 0)
-const listPrice = (p: any) => Number(p?.combinationInfoVariant?.list_price ?? 0)
-const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price && listPrice(p) > price(p)
 </script>
 
 <template>
@@ -43,63 +40,22 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
     <!-- Items grid -->
     <div
       v-else-if="items.length"
-      class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10"
+      class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5"
       data-testid="wishlist-grid"
     >
-      <article
+      <LazyUiProductCard
         v-for="item in items"
         :key="item?.id"
-        class="group relative flex flex-col"
-      >
-        <div class="relative overflow-hidden rounded-[2px] bg-primary-50">
-          <NuxtLink :to="mountUrlSlugForProductVariant(item?.product as Product) || ''" prefetch>
-            <NuxtImg
-              provider="odooProvider"
-              :src="(item?.product as any)?.imageUrl ?? ''"
-              :alt="item?.product?.name ?? ''"
-              :width="370"
-              :height="494"
-              class="w-full aspect-[3/4] object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              loading="lazy"
-            />
-          </NuxtLink>
-
-          <button
-            type="button"
-            aria-label="Remove from wishlist"
-            class="absolute top-2 right-2 z-[2] grid place-items-center w-11 h-11 rounded-full text-primary-600 transition-colors hover:text-black"
-            @click="wishlistRemoveItem((item?.product as any)?.id)"
-          >
-            <span class="grid place-items-center w-[34px] h-[34px] rounded-full bg-white/90 shadow-sm">
-              <SfIconClose size="sm" />
-            </span>
-          </button>
-
-          <button
-            type="button"
-            class="absolute left-3.5 right-3.5 bottom-3.5 z-[2] h-[46px] !rounded-[2px] bg-primary-900 text-white text-[12px] tracking-[0.14em] uppercase font-medium transition-all duration-300 hover:bg-primary-700 lg:opacity-0 lg:translate-y-3 lg:group-hover:opacity-100 lg:group-hover:translate-y-0"
-            @click="cartAdd((item?.product as any)?.id, 1)"
-          >
-            Add to Bag
-          </button>
-        </div>
-
-        <div class="pt-4">
-          <NuxtLink
-            :to="mountUrlSlugForProductVariant(item?.product as Product) || ''"
-            class="block text-[15px] font-medium leading-tight"
-          >
-            {{ item?.product?.name }}
-          </NuxtLink>
-          <p class="mt-1.5 text-[14px] text-primary-600">
-            <span
-              v-if="hasDiscount(item?.product)"
-              class="text-primary-300 line-through mr-2"
-            >{{ $currency(listPrice(item?.product)) }}</span>
-            {{ $currency(price(item?.product)) }}
-          </p>
-        </div>
-      </article>
+        :name="item?.product?.name ?? ''"
+        :slug="mountUrlSlugForProductVariant(item?.product as Product) || ''"
+        :image-url="(item?.product as any)?.imageUrl ?? ''"
+        :image-alt="item?.product?.name ?? ''"
+        :regular-price="getRegularPrice(item?.product as Product)"
+        :special-price="getSpecialPrice(item?.product as Product)"
+        :rating-count="(item?.product as any)?.ratingCount ?? 0"
+        :rating="(item?.product as any)?.ratingAvg ?? 0"
+        :first-variant="item?.product as Product"
+      />
     </div>
 
     <!-- Empty -->
