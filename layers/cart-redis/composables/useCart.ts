@@ -91,6 +91,9 @@ export const useCart = () => {
     catch (error: any) {
       return toast.error(error.data.message)
     }
+    finally {
+      loading.value = false
+    }
   }
 
   const removeItemFromCart = async (lineId: number) => {
