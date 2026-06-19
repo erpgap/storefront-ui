@@ -37,7 +37,10 @@ const NuxtLink = resolveComponent('NuxtLink')
     {{ $t("account.myOrders.heading") }}
   </h2>
 
-  <div v-if="orders?.orders" class="col-span-3">
+  <div v-if="loading" class="w-full text-center">
+    <SfLoaderCircular size="xl" class="mt-[160px]" />
+  </div>
+  <div v-else-if="orders?.orders?.length" class="col-span-3">
     <table class="hidden md:block text-left typography-text-sm mx-4">
       <caption class="hidden">
         List of orders
@@ -89,10 +92,7 @@ const NuxtLink = resolveComponent('NuxtLink')
       </tbody>
     </table>
   </div>
-  <div v-else class="w-full text-center">
-    <SfLoaderCircular size="xl" class="mt-[160px]" />
-  </div>
-  <div v-if="orders?.orders?.length === 0" class="col-span-3 text-center mt-8">
+  <div v-else class="col-span-3 text-center mt-8">
     <NuxtImg src="/images/empty-cart.svg" :alt="$t('account.myOrders.noOrdersAltText')" width="192" height="192"
       class="mx-auto" loading="lazy" />
     <h3 class="typography-headline-3 font-bold mb-4 mt-6">
