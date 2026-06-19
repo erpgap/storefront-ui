@@ -80,9 +80,9 @@ const oldPrice = computed(
           :max-qty="Number(orderLine.product?.stock) || 10"
           @update:model-value="updateItemQuantity(orderLine.id, Number($event))"
         />
-        <p class="text-[15px] text-right whitespace-nowrap">
-          {{ $currency(orderLine.priceSubtotal || 0) }}
-          <span v-if="hasDiscount" class="ml-2 text-[13px] text-primary-300 line-through">
+        <p class="flex items-baseline justify-end gap-2 whitespace-nowrap">
+          <span class="text-[16px] font-medium text-black">{{ $currency(orderLine.priceSubtotal || 0) }}</span>
+          <span v-if="hasDiscount" class="text-[14px] text-primary-300 line-through">
             {{ $currency(oldPrice) }}
           </span>
         </p>
