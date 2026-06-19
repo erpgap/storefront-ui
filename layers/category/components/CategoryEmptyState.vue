@@ -16,10 +16,10 @@ defineProps({
       class="flex flex-col items-center md:mt-16"
     >
       <NuxtImg
-        src="/images/something-went-wrong.svg"
+        src="/images/something-went-wrong.png"
         :alt="$t('emptyStateAltText')"
-        width="300"
-        height="300"
+        width="200"
+        height="295"
       />
       <p class="mt-8 font-medium">
         {{ $t("emptyStateText3", { page }) }}
