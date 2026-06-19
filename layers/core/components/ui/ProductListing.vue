@@ -12,6 +12,7 @@ const props = withDefaults(
   defineProps<{
     breadcrumbs?: Breadcrumb[]
     heading?: string
+    description?: string
     seoEntity?: SeoEntity | null
     itemsPerPage?: number
     stateKey?: string
@@ -20,6 +21,7 @@ const props = withDefaults(
   {
     breadcrumbs: () => [],
     heading: '',
+    description: '',
     seoEntity: null,
     itemsPerPage: 20,
     stateKey: 'product-listing',
@@ -38,6 +40,8 @@ const {
   productTemplateList,
   totalItems,
   stockCount,
+  minPrice,
+  maxPrice,
 } = useProductTemplateList(route.fullPath.replace(/\/$/, ''), props.itemsPerPage, props.defaultSort)
 
 useScrollToTopOnListingChange(loading)
@@ -57,6 +61,26 @@ const attributes = computed(() =>
 const currentPage = computed(() => Number(route.query.page) || 1)
 const totalPages = computed(() => Math.ceil(totalItems.value / props.itemsPerPage) || 1)
 
+// The API returns the category price range (min/maxPrice) for most categories,
+// but not all. When it's missing, derive a sensible range from the loaded
+// products' prices so the slider still spans real values instead of 0–2000.
+const derivedPrices = computed(() =>
+  productTemplateList.value
+    .map((p: any) => Number(getSpecialPrice((p.firstVariant ?? p) as Product)) || 0)
+    .filter((n: number) => n > 0),
+)
+// Use the API range only when it's a valid span; some categories return 0/0
+// (or null), in which case we derive from the products on the page.
+const hasApiRange = computed(() =>
+  minPrice.value != null && maxPrice.value != null && Number(maxPrice.value) > Number(minPrice.value),
+)
+const effectiveMinPrice = computed(() =>
+  hasApiRange.value ? minPrice.value : (derivedPrices.value.length ? Math.min(...derivedPrices.value) : null),
+)
+const effectiveMaxPrice = computed(() =>
+  hasApiRange.value ? maxPrice.value : (derivedPrices.value.length ? Math.max(...derivedPrices.value) : null),
+)
+
 if (props.seoEntity) {
   const { origin, pathname } = useRequestURL()
   useHead(generateSeo<SeoEntity>(props.seoEntity, 'Category', `${origin}${pathname}`))
@@ -65,6 +89,14 @@ if (props.seoEntity) {
 setMaxVisiblePages(isWideScreen.value)
 
 await loadProductTemplateList()
+
+// A requested page beyond the available range (e.g. /men?page=4 when there are
+// fewer pages) is a URL that doesn't exist — return a 404 instead of an empty
+// listing. Page 1 is always valid, so a genuinely empty result (no products /
+// filtered to zero) still renders the empty state.
+if (currentPage.value > totalPages.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+}
 
 defineExpose({ totalItems, loading, loadProductTemplateList })
 </script>
@@ -76,12 +108,23 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
       :breadcrumbs="breadcrumbs"
       class="self-start mt-5 mb-5"
     />
-    <h1
-      v-if="heading"
-      class="font-bold typography-headline-3 md:typography-headline-2 mb-10"
+    <div
+      v-if="heading || description"
+      class="mb-10"
     >
-      {{ heading }}
-    </h1>
+      <h1
+        v-if="heading"
+        class="font-bold typography-headline-3 md:typography-headline-2"
+      >
+        {{ heading }}
+      </h1>
+      <p
+        v-if="description"
+        class="mt-4 max-w-[56ch] text-primary-500 font-light leading-relaxed"
+      >
+        {{ description }}
+      </p>
+    </div>
 
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
@@ -89,6 +132,8 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
           v-if="$viewport.isGreaterOrEquals('desktopSmall')"
           :attributes="attributes"
           :categories="[]"
+          :min-price="effectiveMinPrice"
+          :max-price="effectiveMaxPrice"
         />
         <LazyCategoryMobileSidebar
           v-else
@@ -99,6 +144,8 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
             <LazyCategoryFilterSidebar
               :attributes="attributes"
               :categories="[]"
+              :min-price="effectiveMinPrice"
+              :max-price="effectiveMaxPrice"
               @close="close"
             />
           </template>
@@ -108,34 +155,34 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
         <template v-if="!loading">
           <div class="lg:hidden mb-6">
-            <div class="flex w-full items-stretch border-y border-neutral-200 rounded-md divide-x divide-neutral-200 overflow-visible">
-              <div class="flex-1 flex items-center relative overflow-visible">
-                <CategorySortDropdown class="w-full" />
-              </div>
+            <div class="flex gap-3">
+              <CategorySortDropdown class="flex-1" />
               <button
                 type="button"
-                class="flex-1 flex items-center justify-between gap-2 px-4 py-2.5 whitespace-nowrap"
+                class="flex-1 flex items-center justify-center gap-2 border border-primary-900 rounded-md px-4 py-2.5 text-xs uppercase tracking-[0.1em] font-medium whitespace-nowrap"
                 @click="open"
               >
                 {{ $t('refineBy') }}
-                <SfIconTune />
+                <SfIconTune size="sm" />
               </button>
             </div>
-            <p class="mt-4 px-4">
-              {{ $t('numberOfProducts', { count: totalItems }) }}
+            <p class="mt-4 text-sm text-primary-500">
+              <span class="text-primary-900 font-semibold tabular-nums">{{ totalItems }}</span>
+              {{ $t('products') }}
             </p>
           </div>
 
-          <div class="hidden lg:flex justify-between items-center mb-6">
-            <span class="md:text-lg">
-              {{ $t('numberOfProducts', { count: totalItems }) }}
+          <div class="hidden lg:flex justify-between items-center pb-4 mb-6 border-b border-neutral-200">
+            <span class="text-sm text-primary-500">
+              <span class="text-primary-900 font-semibold tabular-nums">{{ totalItems }}</span>
+              {{ $t('products') }}
             </span>
             <CategorySortDropdown />
           </div>
 
           <section
             v-if="productTemplateList.length > 0"
-            class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8"
+            class="grid grid-cols-2 md:grid-cols-3 gap-5"
           >
             <LazyUiProductCard
               v-for="product in productTemplateList"

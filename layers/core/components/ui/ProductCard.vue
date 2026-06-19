@@ -57,7 +57,7 @@ const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
 
 <template>
   <div class="group relative flex flex-col">
-    <div class="relative overflow-hidden rounded-[3px] bg-primary-50">
+    <div class="relative overflow-hidden rounded-[3px] bg-gradient-to-br from-[#efefef] to-[#e2e2e2]">
       <NuxtLink :to="slug" prefetch>
         <NuxtImg
           provider="odooProvider"

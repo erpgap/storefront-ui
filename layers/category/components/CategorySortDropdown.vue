@@ -6,6 +6,8 @@ import { useUiHelpers } from '~~/layers/category/composables/useUiHelpers'
 type SortOption = { id: string; value: string; attrName: string }
 
 const sortOptions: SortOption[] = [
+  { id: 'popular-desc', value: 'popular,DESC', attrName: 'Top Sellers' },
+  { id: 'newest-desc', value: 'newest,DESC', attrName: 'New Arrivals' },
   { id: 'name-asc', value: 'name,ASC', attrName: 'Name: A to Z' },
   { id: 'name-desc', value: 'name,DESC', attrName: 'Name: Z to A' },
   { id: 'price-asc', value: 'price,ASC', attrName: 'Price: Low to High' },
@@ -42,13 +44,13 @@ function selectSort(value: string) {
   >
     <SfButton
       variant="tertiary"
-      class="w-full font-normal !justify-between whitespace-nowrap hover:bg-transparent active:bg-transparent"
+      class="w-full !justify-between whitespace-nowrap !border !border-neutral-200 hover:!border-primary-900 !rounded-md !px-4 !py-2.5 !text-xs !uppercase !tracking-[0.1em] !font-medium !text-primary-900 hover:!bg-transparent active:!bg-transparent"
       type="button"
       :aria-label="$t('sortBy')"
       :aria-expanded="dropdownOpened"
       @click="toggle"
     >
-      <span class="hidden sm:inline">{{ $t('sortBy') }}:&nbsp;</span>{{ selectedLabel }}
+      <span class="hidden sm:inline normal-case tracking-normal font-normal text-primary-400">{{ $t('sortBy') }}:&nbsp;</span>{{ selectedLabel }}
       <template #suffix>
         <SfIconExpandMore
           size="sm"

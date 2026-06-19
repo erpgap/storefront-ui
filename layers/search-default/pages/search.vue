@@ -106,32 +106,32 @@ const breadcrumbs = [
 
         <div v-else-if="Array.isArray(productTemplateList) && productTemplateList.length > 0">
           <div class="lg:hidden mb-6">
-            <div class="flex w-full items-stretch border-y border-neutral-200 rounded-md divide-x divide-neutral-200 overflow-visible">
-              <div class="flex-1 flex items-center relative overflow-visible">
-                <CategorySortDropdown class="w-full" />
-              </div>
+            <div class="flex gap-3">
+              <CategorySortDropdown class="flex-1" />
               <button
                 type="button"
-                class="flex-1 flex items-center justify-between gap-2 px-4 py-2.5 whitespace-nowrap"
+                class="flex-1 flex items-center justify-center gap-2 border border-primary-900 rounded-md px-4 py-2.5 text-xs uppercase tracking-[0.1em] font-medium whitespace-nowrap"
                 @click="open"
               >
                 {{ $t('refineBy') }}
-                <SfIconTune />
+                <SfIconTune size="sm" />
               </button>
             </div>
-            <p class="mt-4 px-4">
-              {{ $t('numberOfProducts', { count: totalItems }) }}
+            <p class="mt-4 text-sm text-primary-500">
+              <span class="text-primary-900 font-semibold tabular-nums">{{ totalItems }}</span>
+              {{ $t('products') }}
             </p>
           </div>
 
-          <div class="hidden lg:flex justify-between items-center mb-6">
-            <span class="md:text-lg">
-              {{ $t('numberOfProducts', { count: totalItems }) }}
+          <div class="hidden lg:flex justify-between items-center pb-4 mb-6 border-b border-neutral-200">
+            <span class="text-sm text-primary-500">
+              <span class="text-primary-900 font-semibold tabular-nums">{{ totalItems }}</span>
+              {{ $t('products') }}
             </span>
             <CategorySortDropdown />
           </div>
 
-          <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-8">
+          <section class="grid grid-cols-2 md:grid-cols-3 gap-5 mt-8">
             <LazyUiProductCard v-for="pt in productTemplateList" :key="pt.id" :name="pt?.name || ''" loading="eager"
               :slug="slugFor(pt)" :image-url="pt.imageUrl ?? ''"
               :image-alt="pt?.name || ''" :regular-price="getRegularPrice(pt.firstVariant as any)"
