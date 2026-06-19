@@ -23,7 +23,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     <div class="narrow-container relative w-full">
       <div class="max-w-[620px]">
         <p class="text-[12px] tracking-[0.22em] uppercase font-medium text-white/70 mb-5">
-          New Collection — 2026
+          New Collection — {{ new Date().getFullYear() }}
         </p>
         <h1 class="font-light leading-[1.05] tracking-[-0.02em] text-[clamp(40px,6vw,80px)] mb-5">
           Timeless Style, Everyday Ease
