@@ -37,7 +37,7 @@ watch(searchInputValue, () => {
   search()
 })
 
-useTrapFocus(searchPanelRef, { activeState: isSearchOpen, arrowKeysUpDown: true, initialFocus: 'container' })
+useTrapFocus(searchPanelRef, { activeState: isSearchOpen, arrowKeysUpDown: true, initialFocus: 'autofocus' })
 
 onClickOutside(searchPanelRef, () => {
   showResultSearch.value = false
