@@ -19,6 +19,9 @@ const hasDiscount = computed(
 const oldPrice = computed(
   () => (props.orderLine.product?.combinationInfoVariant?.list_price || 0) * (props.orderLine.quantity ?? 1),
 )
+const savings = computed(
+  () => (hasDiscount.value ? Math.max(0, oldPrice.value - (props.orderLine.priceSubtotal || 0)) : 0),
+)
 </script>
 
 <template>
@@ -53,14 +56,14 @@ const oldPrice = computed(
           </SfLink>
           <ul
             v-if="orderLine.product?.variantAttributeValues?.length"
-            class="mt-1.5 text-[13px] text-primary-500 space-y-0.5"
+            class="mt-2 text-[12px] tracking-[0.14em] uppercase font-medium space-y-1"
           >
             <li
               v-for="attribute in orderLine.product?.variantAttributeValues"
               :key="attribute.id"
+              class="text-primary-400"
             >
-              <span class="text-primary-400">{{ attribute.attribute?.name }}:</span>
-              <span class="ml-1">{{ attribute.name }}</span>
+              {{ attribute.attribute?.name }}<span class="text-black"> — {{ attribute.name }}</span>
             </li>
           </ul>
         </div>
@@ -80,12 +83,17 @@ const oldPrice = computed(
           :max-qty="Number(orderLine.product?.stock) || 10"
           @update:model-value="updateItemQuantity(orderLine.id, Number($event))"
         />
-        <p class="flex items-baseline justify-end gap-2 whitespace-nowrap">
-          <span class="text-[16px] font-medium text-black">{{ $currency(orderLine.priceSubtotal || 0) }}</span>
-          <span v-if="hasDiscount" class="text-[14px] text-primary-300 line-through">
-            {{ $currency(oldPrice) }}
-          </span>
-        </p>
+        <div class="text-right whitespace-nowrap">
+          <p class="flex items-baseline justify-end gap-2">
+            <span class="text-[16px] font-medium text-black">{{ $currency(orderLine.priceSubtotal || 0) }}</span>
+            <span v-if="hasDiscount" class="text-[14px] text-primary-300 line-through">
+              {{ $currency(oldPrice) }}
+            </span>
+          </p>
+          <p v-if="savings > 0" class="mt-0.5 text-[13px] text-primary-500">
+            You save {{ $currency(savings) }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
