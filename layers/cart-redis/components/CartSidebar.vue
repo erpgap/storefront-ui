@@ -92,11 +92,11 @@ const goTo = (to: string) => {
                   <SfIconClose size="sm" />
                 </button>
               </div>
-              <p class="mt-1.5 text-[14px]">
-                {{ $currency(line?.priceSubtotal || 0) }}
+              <p class="mt-1.5 flex items-baseline gap-2">
+                <span class="text-[16px] font-medium text-black">{{ $currency(line?.priceSubtotal || 0) }}</span>
                 <span
                   v-if="line?.product?.combinationInfoVariant?.has_discounted_price"
-                  class="ml-2 text-[13px] text-primary-300 line-through"
+                  class="text-[14px] text-primary-300 line-through"
                 >
                   {{ $currency((line?.product?.combinationInfoVariant?.list_price || 0) * (line?.quantity || 1)) }}
                 </span>

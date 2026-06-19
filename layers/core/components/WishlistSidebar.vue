@@ -100,9 +100,9 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
                   <SfIconClose size="sm" />
                 </button>
               </div>
-              <p class="mt-1.5 text-[14px]">
-                {{ $currency(price(item?.product)) }}
-                <span v-if="hasDiscount(item?.product)" class="ml-2 text-[13px] text-primary-300 line-through">
+              <p class="mt-1.5 flex items-baseline gap-2">
+                <span class="text-[16px] font-medium text-black">{{ $currency(price(item?.product)) }}</span>
+                <span v-if="hasDiscount(item?.product)" class="text-[14px] text-primary-300 line-through">
                   {{ $currency(listPrice(item?.product)) }}
                 </span>
               </p>
