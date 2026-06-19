@@ -23,7 +23,7 @@ const props = withDefaults(
     heading: '',
     description: '',
     seoEntity: null,
-    itemsPerPage: 20,
+    itemsPerPage: 18,
     stateKey: 'product-listing',
     defaultSort: '',
   },
