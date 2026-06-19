@@ -29,7 +29,7 @@ export const useUiHelpers = () => {
  const getFacetsFromURL = (
     query: Record<string, any>,
     ids: number[] = [],
-    defaultPageSize = 20,
+    defaultPageSize = 18,
   ): QueryProductsArgs => {
     const filters: string[] = []
 
