@@ -14,6 +14,13 @@ import { useScrollToTopOnListingChange } from '../../core/composables/useScrollT
 type Product = { slug?: string; stock?: number; qty?: number;[k: string]: any }
 
 const route = useRoute()
+
+// A bare /search with no query term has nothing to show — send users to the
+// full catalog instead.
+if (!String(route.query.search ?? '').trim()) {
+  await navigateTo('/products', { redirectCode: 301 })
+}
+
 const { isOpen, open, close } = useDisclosure()
 
 const {
