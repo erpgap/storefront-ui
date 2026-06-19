@@ -82,7 +82,6 @@ await loadCart()
     >
       <LazyProductSlider
         heading="Frequently Bought Together"
-        text="You may also like"
         :product-template-list="frequentlyTogetherProducts"
       />
     </section>
