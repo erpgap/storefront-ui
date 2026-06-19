@@ -71,7 +71,7 @@ async function addAddress(event: any, body: any) {
 
     const keyName = `cache:cart:${session?.id}`
     const currentCart
-      = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || ({} as any)
+      = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || { cart: {} as Cart }
     if (requestBody[1].type === 'Shipping') {
       currentCart.cart.order.partnerShipping = body.addAddress
       currentCart.cart.order.partner.isPublic = body.addAddress?.isPublic || false
@@ -81,8 +81,8 @@ async function addAddress(event: any, body: any) {
       currentCart.cart.order.partner.isPublic = body.addAddress?.isPublic || false
     }
 
-    const reducedCart = reduceCart(currentCart as Cart)
-    await useStorage('cart').setItem(keyName, reducedCart)
+    const reducedCart = reduceCart(currentCart.cart as Cart)
+    await useStorage('cart').setItem(keyName, { cart: reducedCart })
   }
 }
 
@@ -95,7 +95,7 @@ async function updateAddress(event: any, body: any) {
 
     const keyName = `cache:cart:${session?.id}`
     const currentCart
-      = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || ({} as any)
+      = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || { cart: {} as Cart }
 
     if (body.updateAddress?.addressType === AddressType.DeliveryAddress) {
       currentCart.cart.order.partnerShipping = body.updateAddress
@@ -106,8 +106,8 @@ async function updateAddress(event: any, body: any) {
       currentCart.cart.order.partner.isPublic = body.updateAddress?.isPublic || false
     }
 
-    const reducedCart = reduceCart(currentCart as Cart)
-    await useStorage('cart').setItem(keyName, reducedCart)
+    const reducedCart = reduceCart(currentCart.cart as Cart)
+    await useStorage('cart').setItem(keyName, { cart: reducedCart })
   }
 }
 
@@ -120,11 +120,11 @@ async function createUpdatePartner(event: any, body: any) {
 
     const keyName = `cache:cart:${session?.id}`
     const currentCart
-      = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || ({} as any)
+      = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || { cart: {} as Cart }
     currentCart.cart.order.partner = body.createUpdatePartner
 
-    const reducedCart = reduceCart(currentCart as Cart)
-    await useStorage('cart').setItem(keyName, reducedCart)
+    const reducedCart = reduceCart(currentCart.cart as Cart)
+    await useStorage('cart').setItem(keyName, { cart: reducedCart })
   }
 }
 
