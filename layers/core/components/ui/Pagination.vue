@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SfButton, SfIconChevronLeft, SfIconChevronRight } from '@storefront-ui/vue'
+import { SfIconChevronLeft, SfIconChevronRight } from '@storefront-ui/vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -41,140 +41,126 @@ const goToPage = (page: number) => {
 
 <template>
   <nav
-    class="flex justify-between items-end border-t border-neutral-200"
+    class="pager"
     role="navigation"
     aria-label="pagination"
     data-testid="pagination"
   >
     <!-- Previous -->
-    <SfButton
+    <button
       type="button"
-      size="lg"
+      class="pg"
       aria-label="Go to previous page"
       :disabled="currentPage <= 1"
-      variant="tertiary"
-      class="gap-3"
       @click="goToPage(currentPage - 1)"
     >
-      <template #prefix>
-        <SfIconChevronLeft />
-      </template>
-      <span class="hidden sm:inline-flex">Previous</span>
-    </SfButton>
+      <SfIconChevronLeft size="sm" />
+    </button>
 
-    <!-- Page numbers -->
-    <ul class="flex justify-center">
-      <!-- First page (when not in window) -->
-      <li v-if="!pagination.pages.includes(1)">
-        <div
-          class="flex pt-1 border-t-4"
-          :class="currentPage === 1 ? 'font-medium !border-primary-500' : 'border-transparent'"
-        >
-          <button
-            type="button"
-            class="px-4 py-3 md:w-12 rounded-md text-neutral-500 hover:bg-primary-100 hover:text-primary-800 active:bg-primary-200 active:text-primary-900"
-            :aria-current="currentPage === 1 || undefined"
-            @click="goToPage(1)"
-          >
-            1
-          </button>
-        </div>
-      </li>
+    <!-- First page (when outside the window) -->
+    <button
+      v-if="!pagination.pages.includes(1)"
+      type="button"
+      class="pg"
+      :class="{ 'cur': currentPage === 1 }"
+      @click="goToPage(1)"
+    >
+      1
+    </button>
+    <span
+      v-if="pagination.startPage > 2"
+      class="pg ell"
+      aria-hidden="true"
+    >…</span>
 
-      <!-- Left ellipsis -->
-      <li v-if="pagination.startPage > 2" aria-hidden="true">
-        <div class="flex pt-1 border-t-4 border-transparent">
-          <span class="px-4 py-3 md:w-12 rounded-md text-neutral-500">...</span>
-        </div>
-      </li>
+    <!-- Window pages -->
+    <button
+      v-for="page in pagination.pages"
+      :key="page"
+      type="button"
+      class="pg"
+      :class="{ 'cur': currentPage === page }"
+      :aria-current="currentPage === page || undefined"
+      @click="goToPage(page)"
+    >
+      {{ page }}
+    </button>
 
-      <!-- Second-to-last page on mobile (when on last page with 1 visible) -->
-      <li v-if="maxVisiblePages === 1 && currentPage === pagination.totalPages">
-        <div class="flex pt-1 border-t-4 border-transparent">
-          <button
-            type="button"
-            class="px-4 py-3 md:w-12 rounded-md text-neutral-500 hover:bg-primary-100 hover:text-primary-800 active:bg-primary-200 active:text-primary-900"
-            @click="goToPage(pagination.totalPages - 1)"
-          >
-            {{ pagination.totalPages - 1 }}
-          </button>
-        </div>
-      </li>
-
-      <!-- Window pages -->
-      <li
-        v-for="page in pagination.pages"
-        :key="page"
-      >
-        <div
-          class="flex pt-1 border-t-4"
-          :class="currentPage === page ? 'font-medium !border-primary-700' : 'border-transparent'"
-        >
-          <button
-            type="button"
-            class="px-4 py-3 md:w-12 text-neutral-500 rounded-md hover:bg-primary-100 hover:text-primary-800 active:bg-primary-200 active:text-primary-900"
-            :class="{ '!text-neutral-900': currentPage === page }"
-            :aria-current="currentPage === page || undefined"
-            @click="goToPage(page)"
-          >
-            {{ page }}
-          </button>
-        </div>
-      </li>
-
-      <!-- Second page on mobile (when on first page with 1 visible) -->
-      <li v-if="maxVisiblePages === 1 && currentPage === 1">
-        <div class="flex pt-1 border-t-4 border-transparent">
-          <button
-            type="button"
-            class="px-4 py-3 md:w-12 rounded-md text-neutral-500 hover:bg-primary-100 hover:text-primary-800 active:bg-primary-200 active:text-primary-900"
-            aria-label="Second page"
-            @click="goToPage(2)"
-          >
-            2
-          </button>
-        </div>
-      </li>
-
-      <!-- Right ellipsis -->
-      <li v-if="pagination.endPage < pagination.totalPages - 1" aria-hidden="true">
-        <div class="flex pt-1 border-t-4 border-transparent">
-          <span class="px-4 py-3 md:w-12 rounded-md text-neutral-500">...</span>
-        </div>
-      </li>
-
-      <!-- Last page (when not in window) -->
-      <li v-if="!pagination.pages.includes(pagination.totalPages)">
-        <div
-          class="flex pt-1 border-t-4"
-          :class="currentPage === pagination.totalPages ? 'font-medium !border-primary-500' : 'border-transparent'"
-        >
-          <button
-            type="button"
-            class="px-4 py-3 md:w-12 rounded-md text-neutral-500 hover:bg-primary-100 hover:text-primary-800 active:bg-primary-200 active:text-primary-900"
-            :aria-current="currentPage === pagination.totalPages || undefined"
-            @click="goToPage(pagination.totalPages)"
-          >
-            {{ pagination.totalPages }}
-          </button>
-        </div>
-      </li>
-    </ul>
+    <!-- Last page (when outside the window) -->
+    <span
+      v-if="pagination.endPage < pagination.totalPages - 1"
+      class="pg ell"
+      aria-hidden="true"
+    >…</span>
+    <button
+      v-if="!pagination.pages.includes(pagination.totalPages)"
+      type="button"
+      class="pg"
+      :class="{ 'cur': currentPage === pagination.totalPages }"
+      @click="goToPage(pagination.totalPages)"
+    >
+      {{ pagination.totalPages }}
+    </button>
 
     <!-- Next -->
-    <SfButton
+    <button
       type="button"
-      size="lg"
+      class="pg"
       aria-label="Go to next page"
       :disabled="currentPage >= pagination.totalPages"
-      variant="tertiary"
-      class="gap-3"
       @click="goToPage(currentPage + 1)"
     >
-      <span class="hidden sm:inline-flex">Next</span>
-      <template #suffix>
-        <SfIconChevronRight />
-      </template>
-    </SfButton>
+      <SfIconChevronRight size="sm" />
+    </button>
   </nav>
 </template>
+
+<style scoped>
+.pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 48px;
+}
+.pg {
+  min-width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0 8px;
+  border: 1px solid #e5e5e5;
+  border-radius: 2px;
+  background: #fff;
+  color: #525252;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+}
+.pg:hover:not(.cur):not(:disabled) {
+  border-color: #0a0a0a;
+  color: #0a0a0a;
+}
+.pg:focus-visible {
+  outline: 2px solid #0a0a0a;
+  outline-offset: 2px;
+}
+.pg.cur {
+  background: #0a0a0a;
+  border-color: #0a0a0a;
+  color: #fff;
+  cursor: default;
+}
+.pg:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.pg.ell {
+  border-color: transparent;
+  color: #a3a3a3;
+  background: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pg { transition: none; }
+}
+</style>

@@ -3,6 +3,8 @@ import { useRequestURL } from 'nuxt/app'
 
 const PAGE_PATH = '/products'
 const TITLE = 'All Products | Browse our full catalog'
+// Visible on-page heading (the SEO TITLE above keeps its "| Browse…" suffix).
+const HEADING = 'All Products'
 const DESCRIPTION
   = 'Browse the full product catalog. Filter by attributes and price, sort, and explore everything we have to offer.'
 
@@ -33,6 +35,8 @@ useHead({
 <template>
   <UiProductListing
     :breadcrumbs="breadcrumbs"
+    :heading="HEADING"
+    :description="DESCRIPTION"
     :items-per-page="20"
     state-key="products-page"
     default-sort="popular,DESC"

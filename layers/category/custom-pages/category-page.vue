@@ -32,6 +32,8 @@ const uiBreadcrumbs = computed(() =>
   <UiProductListing
     :breadcrumbs="uiBreadcrumbs"
     :seo-entity="seoEntity"
+    :heading="category?.name || ''"
+    :description="category?.metaDescription || ''"
     :items-per-page="20"
     state-key="category"
   />

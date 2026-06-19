@@ -16,6 +16,8 @@ query(
     sort: $sort
   ) {
     totalCount
+    minPrice
+    maxPrice
     filterCounts
     attributeValues {
       id
