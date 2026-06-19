@@ -97,7 +97,7 @@ export type AttributeValue = {
 
 export type BlogPost = {
   __typename?: 'BlogPost';
-  authorId: Maybe<Partner>;
+  author: Maybe<Partner>;
   content: Maybe<Scalars['String']['output']>;
   id: Maybe<Scalars['Int']['output']>;
   image: Maybe<Scalars['String']['output']>;
