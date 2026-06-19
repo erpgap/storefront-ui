@@ -49,7 +49,7 @@ function isStaticPublicPage(page: NuxtPage): boolean {
   if (EXCLUDED_PATHS.has(page.path)) {
     return false
   }
-  // Skip dynamic routes (e.g. /storyblok/:storyblok()) — they cannot be
+  // Skip dynamic routes (those with a route param) — they cannot be
   // enumerated to a concrete URL at build time.
   if (page.path.includes(':') || page.path.includes('*')) {
     return false
