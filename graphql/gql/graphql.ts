@@ -97,7 +97,7 @@ export type AttributeValue = {
 
 export type BlogPost = {
   __typename?: 'BlogPost';
-  authorId: Maybe<Partner>;
+  author: Maybe<Partner>;
   content: Maybe<Scalars['String']['output']>;
   id: Maybe<Scalars['Int']['output']>;
   image: Maybe<Scalars['String']['output']>;
@@ -244,7 +244,7 @@ export type ContactUsParams = {
   email: Scalars['String']['input'];
   message: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  phone: InputMaybe<Scalars['String']['input']>;
+  phone: Scalars['String']['input'];
   subject: Scalars['String']['input'];
 };
 

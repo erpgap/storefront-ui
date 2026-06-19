@@ -229,7 +229,7 @@ export default defineNuxtConfig({
       defaults: { changefreq: 'weekly', priority: 0.6 },
     },
     pages: {
-      urls: ['/', '/products', '/search'],
+      sources: ['/api/sitemap/urls/pages'],
       defaults: { changefreq: 'weekly', priority: 0.9 },
     },
   },
