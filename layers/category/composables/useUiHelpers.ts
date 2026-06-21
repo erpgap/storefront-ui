@@ -115,8 +115,16 @@ export const useUiHelpers = () => {
   }
 
   const selectedFilters = useState<any[]>(
-    `category-selected-filters${cleanFullSearchIndex.value}`,
+    'category-selected-filters',
     () => facetsFromUrlToFilter() || [],
+  )
+
+  // The URL is the source of truth for active filters. Re-sync on every
+  // navigation so selections don't leak across pages — e.g. selecting a
+  // category, leaving, and returning to a clean /products shows no selection.
+  watch(
+    () => route.fullPath,
+    () => { selectedFilters.value = facetsFromUrlToFilter() || [] },
   )
 
   const isFilterSelected = (option: any) =>
