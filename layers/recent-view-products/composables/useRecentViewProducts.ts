@@ -1,4 +1,4 @@
-const MAX_RECENT_VIEWS = 20
+const MAX_RECENT_VIEWS = 12
 const COOKIE_NAME = 'recent-view-products'
 const COOKIE_MAX_AGE = 3600 * 24 * 30
 
