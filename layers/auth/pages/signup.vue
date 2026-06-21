@@ -116,9 +116,6 @@ onMounted(() => {
             autocomplete="current-password"
             required
           />
-          <UiFormHelperText class="mb-2">{{
-            $t("form.passwordHint")
-          }}</UiFormHelperText>
         </label>
       </div>
 
