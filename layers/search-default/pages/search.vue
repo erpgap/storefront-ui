@@ -142,7 +142,8 @@ const breadcrumbs = [
             <LazyUiProductCard v-for="pt in productTemplateList" :key="pt.id" :name="pt?.name || ''" loading="eager"
               :slug="slugFor(pt)" :image-url="pt.imageUrl ?? ''"
               :image-alt="pt?.name || ''" :regular-price="getRegularPrice(pt.firstVariant as any)"
-              :special-price="getSpecialPrice(pt.firstVariant as any)" :rating-count="123" :rating="Number(4)"
+              :special-price="getSpecialPrice(pt.firstVariant as any)"
+              :rating-count="(pt as any)?.ratingCount ?? 0" :rating="(pt as any)?.ratingAvg ?? 0"
               :first-variant="normalizeVariant(pt.firstVariant as any)" />
           </section>
 
