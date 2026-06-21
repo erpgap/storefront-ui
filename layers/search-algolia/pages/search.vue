@@ -152,8 +152,8 @@ onMounted(() => {
               :special-price="
                 getSpecialPrice(productTemplate.firstVariant as Product)
               "
-              :rating-count="123"
-              :rating="Number(4)"
+              :rating-count="(productTemplate as any)?.ratingCount ?? 0"
+              :rating="(productTemplate as any)?.ratingAvg ?? 0"
               :first-variant="productTemplate.firstVariant as Product"
             />
           </section>
