@@ -12,12 +12,15 @@ type FacetOption = {
   values?: string
 }
 
+type FacetGroup = { label: string, options: FacetOption[] }
+
 type Facet = {
   id: string | number | null
   label: string
-  type: 'price' | 'select' | 'radio' | 'color' | 'in-stock'
+  type: 'price' | 'select' | 'radio' | 'color' | 'in-stock' | 'category'
   attributeName?: string
   options?: FacetOption[]
+  groups?: FacetGroup[]
 }
 
 const emit = defineEmits<{ (e: 'close'): void }>()
@@ -41,7 +44,24 @@ const {
 // Shared with CategorySortDropdown; read here so applyFiltersInstantly preserves the active sort.
 const sort = useState('sort', () => (route.query?.sort ? String(route.query.sort) : ''))
 
+// Category filter — only on the full catalog (/products). Category pages are
+// already scoped to a category. Grouped by parent so duplicate leaf names
+// (e.g. Bags under both Women and Men) are unambiguous.
+const { categoriesForMegaMenu } = useMegaMenuCategories()
+const showCategoryFilter = computed(() => route.path === '/products')
+const categoryGroups = computed<FacetGroup[]>(() =>
+  (categoriesForMegaMenu.value || [])
+    .map((top: any) => ({
+      label: String(top?.name ?? ''),
+      options: (top?.childs || []).map((c: any) => ({ id: c.id, label: String(c.name ?? '') })),
+    }))
+    .filter(g => g.label && g.options.length),
+)
+
 const facets = computed<Facet[]>(() => [
+  ...(showCategoryFilter.value && categoryGroups.value.length
+    ? [{ id: 'category', label: 'category', type: 'category', groups: categoryGroups.value } as Facet]
+    : []),
   { id: null, label: 'price', type: 'price' },
   ...(props.attributes ?? []),
   { id: 888, label: 'Availability', type: 'in-stock' },
@@ -229,6 +249,7 @@ const optionLabelById = computed<Record<string, string>>(() => {
   const map: Record<string, string> = {}
   for (const f of facets.value) {
     for (const o of (f.options ?? [])) map[String(o.id)] = o.label
+    for (const g of (f.groups ?? [])) for (const o of g.options) map[String(o.id)] = o.label
   }
   return map
 })
@@ -346,8 +367,46 @@ const hasActive = computed(() => activePills.value.length > 0)
         v-show="isOpen(facet, index)"
         class="pb-6"
       >
+        <!-- CATEGORY (grouped by parent) -->
+        <div v-if="facet.type === 'category'" class="space-y-4">
+          <div
+            v-for="group in facet.groups"
+            :key="group.label"
+          >
+            <p class="text-[11px] tracking-[0.12em] uppercase text-primary-400 mb-1.5">
+              {{ group.label }}
+            </p>
+            <label
+              v-for="{ id, label } in group.options"
+              :key="id"
+              class="flex items-center gap-3 py-1.5 px-1 -mx-1 rounded-md cursor-pointer hover:bg-primary-50"
+            >
+              <span
+                class="w-4 h-4 flex-none grid place-items-center border-[1.5px] rounded-md transition-colors"
+                :class="isFilterSelected({ id }) ? 'bg-primary-900 border-primary-900' : 'border-primary-300'"
+              >
+                <SfIconCheck
+                  v-if="isFilterSelected({ id })"
+                  size="xs"
+                  class="text-white"
+                />
+              </span>
+              <input
+                type="checkbox"
+                class="hidden"
+                :checked="isFilterSelected({ id })"
+                @change="selectFilter(facet as any, { id: String(id), label: String(label) })"
+              >
+              <span
+                class="flex-1 text-sm"
+                :class="{ 'font-medium': isFilterSelected({ id }) }"
+              >{{ label }}</span>
+            </label>
+          </div>
+        </div>
+
         <!-- PRICE -->
-        <div v-if="facet.type === 'price'">
+        <div v-else-if="facet.type === 'price'">
           <template v-if="hasPriceRange">
             <div class="price-range relative h-[30px] mx-0.5">
               <div class="absolute top-[13px] inset-x-0 h-[3px] bg-primary-100 rounded-sm" />
