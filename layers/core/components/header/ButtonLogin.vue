@@ -11,7 +11,7 @@ const { isAuthenticated } = useAuth()
   <SfButton
     class="group relative text-black hover:bg-white active:bg-white rounded-md"
     variant="tertiary"
-    :to="isAuthenticated ? '/my-account/personal-data' : '/login'"
+    :to="isAuthenticated ? '/my-account/my-orders' : '/login'"
     :tag="NuxtLink"
     square
   >
