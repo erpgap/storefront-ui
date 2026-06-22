@@ -73,7 +73,6 @@ await loadCart()
             </SfButton>
           </NuxtLink>
         </UiOrderSummary>
-        <UiDiscount />
       </div>
     </div>
     <section
