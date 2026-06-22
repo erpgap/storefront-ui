@@ -26,4 +26,7 @@ await loadUser(true) */
     <slot />
   </main>
   <TheFooter />
+
+  <WishlistSidebar />
+  <CartSidebar />
 </template>
