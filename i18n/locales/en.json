@@ -329,7 +329,7 @@
     },
     "myOrders": {
       "heading": "Orders",
-      "orderId": "Order ID",
+      "orderId": "Order #",
       "orderDate": "Order date",
       "amount": "Amount",
       "status": "Status",
@@ -343,7 +343,7 @@
       },
       "orderDetails": {
         "heading": "Order details",
-        "orderId": "Order ID",
+        "orderId": "Order #",
         "orderDate": "Order date",
         "paymentAmount": "Payment amount",
         "status": "Status",
