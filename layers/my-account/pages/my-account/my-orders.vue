@@ -6,6 +6,7 @@ import {
   type Order,
   type PaymentTransaction,
 } from '~~/graphql'
+import { formatDate } from '~~/app/utils/date'
 
 definePageMeta({
   layout: 'account',
@@ -65,7 +66,7 @@ const NuxtLink = resolveComponent('NuxtLink')
             {{ order?.name }}
           </td>
           <td class="p-4 lg:whitespace-nowrap">
-            {{ order?.dateOrder }}
+            {{ formatDate(order?.dateOrder) }}
           </td>
           <td class="p-4">
             {{ $currency(order?.amountTotal ? order?.amountTotal : 0) }}

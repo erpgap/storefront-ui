@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SfButton, SfIconClose, useDisclosure } from '@storefront-ui/vue'
+import { formatDate } from '~~/app/utils/date'
 
 
 const route = useRoute()
@@ -54,7 +55,7 @@ const NuxtLink = resolveComponent('NuxtLink')
                 <p class="font-medium">
                   {{ $t("account.myOrders.orderDetails.orderDate") }}
                 </p>
-                <span>{{ order?.dateOrder }}</span>
+                <span>{{ formatDate(order?.dateOrder) }}</span>
               </li>
               <li>
                 <p class="font-medium">
