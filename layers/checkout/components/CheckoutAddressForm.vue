@@ -3,7 +3,6 @@ import {
   SfButton,
   SfCheckbox,
   SfInput,
-  SfLoaderCircular,
   SfModal,
   SfSelect,
   useDisclosure,
@@ -229,10 +228,7 @@ const handleCloseModal = () => {
               {{ $t("contactInfo.cancel")}}
             </SfButton>
             <SfButton type="submit" class="min-w-[120px]" :disabled="isCartUpdateLoading">
-              <SfLoaderCircular v-if="isCartUpdateLoading" class="flex justify-center items-center" size="sm" />
-              <span v-else>
-                {{ $t("contactInfo.save") }}
-              </span>
+              {{ isCartUpdateLoading ? 'Saving…' : $t("contactInfo.save") }}
             </SfButton>
           </div>
         </form>

@@ -4,7 +4,6 @@ import {
   SfLink,
   SfCheckbox,
   SfInput,
-  SfLoaderCircular,
 } from '@storefront-ui/vue'
 import { isValidEmail } from '~~/app/utils/validation'
 
@@ -58,10 +57,7 @@ const NuxtLink = resolveComponent('NuxtLink')
       </UiFormError>
 
       <SfButton type="submit" class="mt-2" :disabled="loading">
-        <SfLoaderCircular v-if="loading" class="flex justify-center items-center" size="base" />
-        <span v-else>
-          {{ $t("auth.login.submitLabel") }}
-        </span>
+        {{ loading ? 'Signing in…' : $t("auth.login.submitLabel") }}
       </SfButton>
       <SfButton :tag="NuxtLink" to="/reset-password" variant="tertiary" data-testid="login-page-reset-button">
         {{ $t("auth.login.forgotPasswordLabel") }}

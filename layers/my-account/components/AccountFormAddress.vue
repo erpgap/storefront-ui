@@ -3,7 +3,6 @@ import {
   SfButton,
   SfCheckbox,
   SfInput,
-  SfLoaderCircular,
 } from '@storefront-ui/vue'
 
 import {
@@ -178,14 +177,7 @@ const handleSubmit = async () => {
         class="min-w-[120px]"
         :disabled="loading"
       >
-        <SfLoaderCircular
-          v-if="loading"
-          class="flex justify-center items-center"
-          size="sm"
-        />
-        <span v-else>
-          {{ $t("contactInfo.save") }}
-        </span>
+        {{ loading ? 'Saving…' : $t("contactInfo.save") }}
       </SfButton>
     </div>
   </form>
