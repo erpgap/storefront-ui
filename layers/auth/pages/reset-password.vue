@@ -36,12 +36,7 @@
             class="flex-1"
             :disabled="isSubmitting || !customerEmail"
           >
-            <template v-if="isSubmitting">
-              <SfLoaderCircular size="base" class="mx-auto" />
-            </template>
-            <template v-else>
-              {{ $t("auth.resetPassword.continue") }}
-            </template>
+            {{ isSubmitting ? 'Sending…' : $t("auth.resetPassword.continue") }}
           </SfButton>
         </div>
       </form>
@@ -50,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { SfButton, SfInput, SfLoaderCircular } from '@storefront-ui/vue'
+import { SfButton, SfInput } from '@storefront-ui/vue'
 import { useToast } from 'vue-toastification'
 
 definePageMeta({ layout: false })
