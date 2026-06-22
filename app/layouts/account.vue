@@ -89,6 +89,9 @@
   </main>
   <LazyTheFooter hydrate-on-visible />
   <LazyBottomNavbar v-if="$viewport.isLessThan('desktopSmall')" />
+
+  <WishlistSidebar />
+  <CartSidebar />
 </template>
 
 <script setup>
