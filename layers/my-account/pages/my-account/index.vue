@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SfLoaderCircular } from '@storefront-ui/vue'
-import type { Order, PaymentTransaction } from '~~/graphql'
+import type { Order } from '~~/graphql'
 import { formatDate } from '~~/app/utils/date'
 
 definePageMeta({
@@ -23,11 +23,6 @@ const latestOrder = computed<Order | null>(() => {
   if (!list.length) return null
   return [...list].sort((a, b) => Number(b?.id) - Number(a?.id))[0] ?? null
 })
-const latestStatus = computed(() => {
-  const t = latestOrder.value?.transactions as PaymentTransaction[] | undefined
-  return t?.[t.length - 1]?.state ?? '--'
-})
-
 const lines = computed<any[]>(() => latestOrder.value?.websiteOrderLine ?? [])
 const itemCount = computed(() =>
   lines.value.reduce((n, l) => n + (Number(l?.quantity) || 0), 0),
@@ -78,10 +73,7 @@ onMounted(async () => {
         :to="`/my-account/my-orders/${latestOrder.id}`"
         class="group block border border-primary-100 rounded-[3px] p-5 transition-colors hover:border-black"
       >
-        <div class="flex items-baseline justify-between gap-3">
-          <span class="text-[15px] font-medium">{{ latestOrder.name }}</span>
-          <span class="text-[12px] tracking-[0.08em] uppercase text-primary-500 whitespace-nowrap">{{ latestStatus }}</span>
-        </div>
+        <span class="block text-[15px] font-medium">#{{ latestOrder.name }}</span>
 
         <div v-if="thumbs.length" class="flex gap-2 mt-4">
           <span

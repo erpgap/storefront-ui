@@ -122,13 +122,30 @@ const findCurrentPage = computed(() =>
   navItems.find(({ link }) => currentPath.value.includes(link)),
 )
 
-const breadcrumbs = computed(() => [
-  { name: t('home'), link: '/' },
-  { name: t('account.heading'), link: '/my-account' },
-  ...(isRoot.value
-    ? []
-    : [{ name: findCurrentPage.value?.label, link: currentPath.value }]),
-])
+// Published by the order-detail page so we can show "#S00004" in the breadcrumb.
+const orderCrumb = useState('account-order-crumb', () => '')
+const route = useRoute()
+const isOrderDetail = computed(
+  () => !!route.params.id && currentPath.value.includes('/my-account/my-orders'),
+)
+
+const breadcrumbs = computed(() => {
+  const crumbs = [
+    { name: t('home'), link: '/' },
+    { name: t('account.heading'), link: '/my-account' },
+  ]
+  if (isRoot.value) return crumbs
+
+  // Order detail: Home / Account / My Orders / #S00004
+  if (isOrderDetail.value) {
+    crumbs.push({ name: t('account.myOrders.section.myOrders'), link: '/my-account/my-orders' })
+    if (orderCrumb.value) crumbs.push({ name: orderCrumb.value, link: currentPath.value })
+    return crumbs
+  }
+
+  crumbs.push({ name: findCurrentPage.value?.label, link: currentPath.value })
+  return crumbs
+})
 
 const handleLogout = async () => {
   await logout()
