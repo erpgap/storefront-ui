@@ -23,7 +23,7 @@ const props = withDefaults(
     heading: '',
     description: '',
     seoEntity: null,
-    itemsPerPage: 20,
+    itemsPerPage: 18,
     stateKey: 'product-listing',
     defaultSort: '',
   },
@@ -193,8 +193,8 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
               :image-alt="product.name ?? ''"
               :regular-price="getRegularPrice(product.firstVariant as Product)"
               :special-price="getSpecialPrice(product.firstVariant as Product)"
-              :rating-count="123"
-              :rating="4"
+              :rating-count="(product as any)?.ratingCount ?? 0"
+              :rating="(product as any)?.ratingAvg ?? 0"
               :first-variant="product.firstVariant as Product"
             />
           </section>

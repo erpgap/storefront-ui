@@ -6,7 +6,15 @@
     />
 
     <NuxtLayout>
-      <NuxtPage :page-key="(route) => route.path" />
+      <NuxtPage :page-key="pageKey" />
     </NuxtLayout>
   </div>
 </template>
+
+<script setup lang="ts">
+// Stable function identity. An inline `(route) => route.path` is a new function
+// on every render of this component; NuxtPage watches `props.pageKey` and fires
+// an (unpaired) `page:loading:start` whenever that identity changes, which leaves
+// the top loading bar stuck on pages that re-render after navigation.
+const pageKey = (route: { path: string }) => route.path
+</script>

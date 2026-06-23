@@ -34,7 +34,7 @@ const uiBreadcrumbs = computed(() =>
     :seo-entity="seoEntity"
     :heading="category?.name || ''"
     :description="category?.metaDescription || ''"
-    :items-per-page="20"
+    :items-per-page="18"
     state-key="category"
   />
 </template>

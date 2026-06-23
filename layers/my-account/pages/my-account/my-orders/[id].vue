@@ -1,137 +1,146 @@
 <script setup lang="ts">
-import { SfButton, SfIconClose, useDisclosure } from '@storefront-ui/vue'
+import { SfLoaderCircular } from '@storefront-ui/vue'
+import { formatDate } from '~~/app/utils/date'
 
+definePageMeta({
+  layout: 'account',
+  middleware: ['auth-check'],
+})
 
 const route = useRoute()
-const router = useRouter()
-const { isOpen } = useDisclosure({ initialValue: true })
 const { getOrderById, order } = useOrders()
-
-onMounted(async () => {
-  // without nextTick data on first click does not load data
-  await nextTick()
-  await getOrderById({ id: parseInt(route.params.id) })
-})
-
-watch(
-  isOpen,
-  (isOpen: any) => {
-    if (!isOpen) router.push('/my-account/my-orders')
-  },
-  { immediate: true },
-)
-
-const linesWithoutUndefinedProducts = computed(() => {
-  return order.value?.reportOrderLine?.filter((item: { product: null }) => item.product !== null)
-})
-
 const NuxtLink = resolveComponent('NuxtLink')
+
+const loaded = ref(false)
+onMounted(async () => {
+  // nextTick: route params aren't settled on first client navigation without it.
+  await nextTick()
+  try {
+    await getOrderById({ id: parseInt(route.params.id as string) })
+  }
+  finally {
+    // Always stop the spinner, even if the fetch fails.
+    loaded.value = true
+  }
+})
+
+const lines = computed(() =>
+  (order.value?.reportOrderLine ?? []).filter((item: any) => item?.product != null),
+)
+const totalItems = computed(() =>
+  lines.value.reduce((n: number, l: any) => n + (Number(l?.quantity) || 0), 0),
+)
+// Publish the order reference so the account layout can show it in the breadcrumb.
+const orderCrumb = useState<string>('account-order-crumb', () => '')
+watch(() => order.value?.name, (n) => { orderCrumb.value = n ? `#${n}` : '' }, { immediate: true })
+onUnmounted(() => { orderCrumb.value = '' })
 </script>
 
 <template>
-    <ClientOnly>
-     <template #fallback></template>
-      <UiModal v-model="isOpen" fullscreen as="section" role="dialog" :open="isOpen" :overlay="false"
-        v-if="isOpen && linesWithoutUndefinedProducts" class="fixed left-0 right-0 bottom-0  z-[900] overflow-y-auto bg-transparent"
+  <div class="col-span-3">
+    <NuxtLink
+      to="/my-account/my-orders"
+      class="inline-flex items-center gap-1.5 text-[13px] text-primary-500 hover:text-black transition-colors mb-6"
+    >
+      <svg width="16" height="12" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M17 7H2M7 1 2 7l5 6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Back to orders
+    </NuxtLink>
+
+    <div v-if="!loaded" class="flex justify-center py-24">
+      <SfLoaderCircular size="xl" />
+    </div>
+
+    <template v-else-if="order?.id">
+      <h2 class="font-bold typography-headline-4 mb-6">
+        #{{ order.name }}
+      </h2>
+
+      <!-- Meta strip -->
+      <div class="grid grid-cols-3 border border-primary-100 rounded-[3px] divide-x divide-primary-100 mb-10">
+        <div class="p-4">
+          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">Date</p>
+          <p class="text-[14px]">{{ formatDate(order.dateOrder) }}</p>
+        </div>
+        <div class="p-4">
+          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">Items</p>
+          <p class="text-[14px]">{{ totalItems }}</p>
+        </div>
+        <div class="p-4">
+          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">Total</p>
+          <p class="text-[14px] font-medium">{{ $currency(Number(order.amountTotal) || 0) }}</p>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <h3 class="text-[12px] tracking-[0.16em] uppercase font-medium text-primary-400 mb-1">
+        Items
+      </h3>
+      <ul class="border-t border-primary-100 divide-y divide-primary-100">
+        <li
+          v-for="(line, i) in lines"
+          :key="i"
+          class="flex items-center gap-4 py-5"
         >
-          <header
-            class="flex justify-between bg-white items-center typography-headline-4 md:typography-headline-3 font-bold">
-            <h3>{{ $t("account.myOrders.orderDetails.heading") }}</h3>
-            <SfButton square variant="tertiary" :tag="NuxtLink" :to="`/my-account/my-orders`"
-              class="md:absolute md:top-2 md:right-2">
-              <SfIconClose class="text-neutral-500" />
-            </SfButton>
-          </header>
-          <main class="mt-4">
-            <ul class="bg-neutral-100 p-4 rounded-md md:columns-2 mb-6 bg-primary-100">
-              <li>
-                <p class="font-medium">
-                  {{ $t("account.myOrders.orderDetails.orderId") }}
-                </p>
-                <span>{{ order?.name }}</span>
-              </li>
-              <li class="my-4 md:mb-0">
-                <p class="font-medium">
-                  {{ $t("account.myOrders.orderDetails.orderDate") }}
-                </p>
-                <span>{{ order?.dateOrder }}</span>
-              </li>
-              <li>
-                <p class="font-medium">
-                  {{ $t("account.myOrders.orderDetails.paymentAmount") }}
-                </p>
-                <span>${{ order?.amountTotal }}</span>
-              </li>
-              <li class="mt-4">
-                <p class="font-medium">
-                  {{ $t("account.myOrders.orderDetails.status") }}
-                </p>
-                <span v-if="order">{{
-                  order.transactions ? order.transactions.length - 1 : "--"
-                  }}</span>
+          <span class="shrink-0 w-[72px] h-[72px] rounded-[2px] bg-primary-50 overflow-hidden">
+            <NuxtImg
+              provider="odooProvider"
+              :src="line.product?.imageUrl ?? ''"
+              :alt="line.product?.name ?? ''"
+              width="72"
+              height="72"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </span>
+          <div class="flex-1 min-w-0">
+            <p class="font-medium leading-snug">{{ line.product?.name }}</p>
+            <ul
+              v-if="line.product?.variantAttributeValues?.length"
+              class="mt-2 text-[12px] tracking-[0.14em] uppercase font-medium space-y-1"
+            >
+              <li
+                v-for="attribute in line.product?.variantAttributeValues"
+                :key="attribute.id"
+                class="text-primary-400"
+              >
+                {{ attribute.attribute?.name }}<span class="text-black"> — {{ attribute.name }}</span>
               </li>
             </ul>
-            <table class="hidden md:table w-full text-left typography-text-sm mx-4 md:mx-0">
-              <caption class="hidden">
-                {{
-                  $t("account.myOrders.orderDetails.tableCaption")
-                }}
-              </caption>
-              <thead>
-                <tr class="border-b-2 border-neutral-200">
-                  <th class="py-3 font-medium">
-                    {{ $t("account.myOrders.orderDetails.product") }}
-                  </th>
-                  <th class="py-3 px-4 font-medium lg:whitespace-nowrap">
-                    {{ $t("account.myOrders.orderDetails.price") }}
-                  </th>
-                  <th class="py-3 px-4 font-medium">
-                    {{ $t("account.myOrders.orderDetails.quantity") }}
-                  </th>
-                  <th class="py-3 px-4 font-medium">
-                    {{ $t("account.myOrders.orderDetails.subtotal") }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(line, i) in linesWithoutUndefinedProducts" :key="i"
-                  class="border-b border-neutral-200 align-top">
-                  <td class="pb-4 pr-4 lg:whitespace-nowrap typography-text-base">
-                    <ProductCardHorizontal v-if="line.product" :product="line.product" />
-                  </td>
+            <p class="mt-1 text-[13px] text-primary-500">
+              Qty {{ line.quantity }} <span class="text-primary-300">·</span> {{ $currency(Number(line.priceUnit) || 0) }}
+            </p>
+          </div>
+          <span class="font-medium whitespace-nowrap">{{ $currency(Number(line.priceSubtotal) || 0) }}</span>
+        </li>
+      </ul>
 
-                  <td class="p-4 typography-text-base">
-                    {{
-                      $currency(line.priceUnit) || "--"
-                    }}
-                  </td>
-                  <td class="p-4 typography-text-base">
-                    {{ line.quantity || "--" }}
-                  </td>
-                  <td class="p-4 typography-text-base">
-                    {{ $currency(Number(line.priceSubtotal)) || "--" }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="flex justify-between pt-4 border-t border-neutral-200 md:border-0">
-              <p>{{ $t("account.myOrders.orderDetails.itemsSubtotal") }}</p>
-              <span>{{ $currency(Number(order?.amountSubtotal)) }}</span>
-            </div>
-            <div class="flex justify-between my-2">
-              <p>{{ $t("account.myOrders.orderDetails.delivery") }}</p>
-              <span>{{ $currency(Number(order?.amountDelivery)) }}</span>
-            </div>
-            <div class="flex justify-between border-b pb-4 border-neutral-200">
-              <p>{{ $t("account.myOrders.orderDetails.estimatedTax") }}</p>
-              <span>{{ $currency(Number(order?.amountTax)) }}</span>
-            </div>
-            <div class="flex justify-between pt-4 typography-text-lg font-medium">
-              <p>{{ $t("account.myOrders.orderDetails.total") }}</p>
-              <span>{{ $currency(Number(order?.amountTotal)) }}</span>
-            </div>
-          </main>
-      </UiModal>
-    </ClientOnly>
-  <NuxtPage />
+      <!-- Summary -->
+      <div class="mt-10 w-full sm:max-w-[360px] sm:ml-auto border border-primary-100 rounded-[2px]">
+        <div class="px-5 md:px-6 py-6 text-[14px]">
+          <div class="flex justify-between py-1.5">
+            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">Subtotal</span>
+            <span>{{ $currency(Number(order.amountSubtotal) || 0) }}</span>
+          </div>
+          <div class="flex justify-between py-1.5">
+            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">Delivery</span>
+            <span>{{ $currency(Number(order.amountDelivery) || 0) }}</span>
+          </div>
+          <div class="flex justify-between py-1.5">
+            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">Tax</span>
+            <span>{{ $currency(Number(order.amountTax) || 0) }}</span>
+          </div>
+          <div class="flex justify-between items-baseline mt-4 pt-4 border-t border-primary-100">
+            <span class="text-[16px] font-medium uppercase tracking-[0.08em]">Total</span>
+            <span class="text-[18px] font-medium">{{ $currency(Number(order.amountTotal) || 0) }}</span>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <p v-else class="py-16 text-center text-primary-500 font-light">
+      We couldn't load this order.
+    </p>
+  </div>
 </template>

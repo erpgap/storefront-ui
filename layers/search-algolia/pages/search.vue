@@ -8,6 +8,13 @@ import {
 import type { Product } from '~~/graphql'
 
 const route = useRoute()
+
+// A bare /search with no query term has nothing to show — send users to the
+// full catalog instead.
+if (!String(route.query.search ?? '').trim()) {
+  await navigateTo('/products', { redirectCode: 301 })
+}
+
 const { isOpen, open, close } = useDisclosure()
 const { getFacetsFromURL } = useUiHelpers()
 
@@ -145,8 +152,8 @@ onMounted(() => {
               :special-price="
                 getSpecialPrice(productTemplate.firstVariant as Product)
               "
-              :rating-count="123"
-              :rating="Number(4)"
+              :rating-count="(productTemplate as any)?.ratingCount ?? 0"
+              :rating="(productTemplate as any)?.ratingAvg ?? 0"
               :first-variant="productTemplate.firstVariant as Product"
             />
           </section>
