@@ -15,7 +15,7 @@ defineProps({
         },
     ]">
         <div class="grid gap-[30px] text-center justify-center items-center">
-            <NuxtImg class="mx-auto" src="/images/something-went-wrong.svg" :alt="$t('emptyStateAltText')"
+            <NuxtImg class="mx-auto" src="/images/something-went-wrong.png" :alt="$t('emptyStateAltText')"
                 width="138" />
 
             <p class=" font-medium text-[18px] text-center text-[#121212]">

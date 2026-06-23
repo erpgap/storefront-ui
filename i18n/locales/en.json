@@ -29,7 +29,8 @@
     "passwordHint": "8 or more characters with a mix of letters, numbers and symbols.",
     "termsAndConditionsLabel": "I declare that I have read and accept the {terms}",
     "subscriptionLabel": "I wish to receive occasional emails about special offers, new products and exclusive promotions. I can cancel my subscription at any time. (Optional)",
-    "asterixHint": "* marked consents are required"
+    "asterixHint": "* marked consents are required",
+    "sameAsShipping": "Same as shipping address"
   },
   "myCart": "My Cart",
   "orderSummary": "Order Summary",
@@ -40,7 +41,15 @@
   "estimatedTax": "Estimated Sales Tax",
   "apply": "Apply",
   "total": "Total",
+  "free": "Free",
+  "item": "item",
+  "items": "items",
   "goToCheckout": "Go to checkout",
+  "trust": {
+    "secure": "Secure checkout",
+    "returns": "30-day returns",
+    "encrypted": "Encrypted"
+  },
   "savingsTag": "You are saving {amount} on your order today!",
   "promoCodePlaceholder": "Enter promo code",
   "delivery": "Delivery",
@@ -329,7 +338,7 @@
     },
     "myOrders": {
       "heading": "Orders",
-      "orderId": "Order ID",
+      "orderId": "Order #",
       "orderDate": "Order date",
       "amount": "Amount",
       "status": "Status",
@@ -343,7 +352,7 @@
       },
       "orderDetails": {
         "heading": "Order details",
-        "orderId": "Order ID",
+        "orderId": "Order #",
         "orderDate": "Order date",
         "paymentAmount": "Payment amount",
         "status": "Status",

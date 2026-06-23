@@ -1,183 +1,97 @@
 <script lang="ts" setup>
-import {
-  SfButton,
-  SfInput,
-  SfSwitch,
-  SfModal,
-  useDisclosure,
-} from '@storefront-ui/vue'
-import type { MutationCreateUpdatePartnerArgs, Partner } from '~~/graphql'
+import { SfInput } from '@storefront-ui/vue'
+import type { Partner } from '~~/graphql'
+import { isValidEmail } from '~~/app/utils/validation'
 
 const { updatePartner } = useAuth()
 
 const props = defineProps({
-  heading: {
-    type: String,
-    required: true,
-  },
-  partnerData: {
-    type: Object as PropType<Partner>,
-    required: true,
-  },
+  heading: { type: String, required: true },
+  step: { type: [String, Number], default: '' },
+  partnerData: { type: Object as PropType<Partner>, required: true },
 })
 
-/**
- * @TODO extract this form behaviour, undo, commit, validate, etc. to a separate form composable
- */
-const { isOpen, open, close } = useDisclosure()
 const { email, name } = toRefs(props.partnerData)
-const { commit: commitEmail, undo: undoEmail } = useManualRefHistory(email)
-const { commit: commitName, undo: undoName } = useManualRefHistory(name)
+if (name.value === 'Public user' || (props.partnerData.isPublic && props.partnerData.id === 4)) {
+  name.value = ''
+}
 
-watch(
-  () => props.partnerData,
-  (newPartnerData: { isPublic: any; id: number }) => {
-    if (newPartnerData.isPublic && newPartnerData.id === 4) {
-      name.value = ''
-    }
-  },
-  { immediate: true },
-)
+const formEl = ref<HTMLElement>()
+const showErrors = ref(false)
+const nameInvalid = computed(() => !String(name.value ?? '').trim())
+const emailInvalid = computed(() => !isValidEmail(String(email.value ?? '')))
+const valid = computed(() => !nameInvalid.value && !emailInvalid.value)
 
-const subscribeNewsletter = ref(true)
-
-const handleUpdatePartnerData = async () => {
-  const data: MutationCreateUpdatePartnerArgs = {
-    email: String(email.value),
-    name: String(name.value),
-    subscribeNewsletter: subscribeNewsletter.value,
-    mobile: null,
-    phone: null
+// One-page checkout: fields are always editable and save themselves on blur
+// once valid (email must be a real address). No Edit/Save round-trip.
+let lastSaved = ''
+const save = async () => {
+  if (!valid.value) return
+  const snap = `${name.value}|${email.value}`
+  if (snap === lastSaved) return
+  lastSaved = snap
+  try {
+    await updatePartner({
+      email: String(email.value),
+      name: String(name.value),
+      subscribeNewsletter: true,
+    })
   }
-  await updatePartner(data)
+  catch {
+    lastSaved = ''
+  }
+}
 
-  commitEmail()
-  commitName()
-  close()
-}
-const handleOpenModal = () => {
-  commitEmail()
-  commitName()
-  open()
-}
-const handleCancel = () => {
-  undoEmail()
-  undoName()
-  close()
-}
+// Called by the page when the shopper presses Place Order. Turns on the red
+// borders and returns the first invalid field to focus (or null if valid).
+defineExpose({
+  validate(): HTMLElement | null {
+    showErrors.value = true
+    if (valid.value) return null
+    const target = nameInvalid.value ? 'name' : 'email'
+    return formEl.value?.querySelector<HTMLElement>(`[name="${target}"]`) ?? null
+  },
+})
 </script>
 
 <template>
-  <div
-    data-testid="checkout-address"
-    class="md:px-4 py-6"
+  <section
+    class="py-7"
+    data-testid="checkout-contact"
   >
-    <div class="flex justify-between items-center">
-      <h2 class="text-neutral-900 text-lg font-bold mb-4">
-        {{ props.heading }}
+    <div class="flex items-center gap-3 mb-5">
+      <span
+        v-if="step"
+        :class="[
+          'w-[26px] h-[26px] rounded-full grid place-items-center text-[12px] shrink-0',
+          valid ? 'bg-black text-white'
+          : showErrors ? 'border border-red-300 text-red-600'
+          : 'border border-primary-200 text-primary-500',
+        ]"
+      >
+        <template v-if="valid">✓</template>
+        <template v-else>{{ step }}</template>
+      </span>
+      <h2 class="text-[13px] tracking-[0.14em] uppercase font-semibold">
+        {{ heading }}
       </h2>
-      <SfButton
-        size="sm"
-        variant="tertiary"
-        @click="handleOpenModal"
-      >
-        {{ partnerData.id ? $t("contactInfo.edit") : $t("contactInfo.add") }}
-      </SfButton>
     </div>
-    <div
-      v-if="partnerData?.name && partnerData?.email"
-      class="mt-2 md:w-[520px]"
-    >
-      <p>{{ name }}</p>
-      <p>{{ email }}</p>
-    </div>
-    <transition
-      enter-active-class="transition duration-200 ease-out"
-      leave-active-class="transition duration-200 ease-out"
-      enter-from-class="opacity-0 translate-y-10"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 translate-y-10"
-    >
-      <SfModal
-        v-model="isOpen"
-        tag="section"
-        role="dialog"
-        class="h-full w-full overflow-auto md:w-[600px] md:h-fit z-50"
-        aria-labelledby="contact-modal-title"
+
+    <div class="md:pl-[38px]">
+      <div
+        ref="formEl"
+        class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 max-w-[640px]"
+        @focusout="save"
       >
-        <header>
-          <SfButton
-            square
-            variant="tertiary"
-            class="absolute right-2 top-2"
-            @click="handleCancel"
-          >
-            <icon
-              name="ion:close"
-              size="20px"
-            />
-          </SfButton>
-          <h3
-            id="contact-modal-title"
-            class="text-neutral-900 text-lg md:text-2xl font-bold mb-4"
-          >
-            {{ $t("contactInfo.heading") }}
-          </h3>
-        </header>
-        <form
-          data-testid="contact-information-form"
-          @submit.prevent="handleUpdatePartnerData"
-        >
-          <label>
-            <UiFormLabel>{{ $t("contactInfo.name") }}</UiFormLabel>
-            <SfInput
-              v-model="name"
-              name="name"
-              type="text"
-              :placeholder="$t('contactInfo.name')"
-              required
-            />
-          </label>
-          <div class="mt-4" />
-          <label>
-            <UiFormLabel>{{ $t("contactInfo.email") }}</UiFormLabel>
-            <SfInput
-              v-model="email"
-              name="email"
-              type="email"
-              :placeholder="$t('contactInfo.email')"
-              required
-            />
-          </label>
-          <div class="mt-4">
-            <label>
-              <UiFormLabel>{{ $t("contactInfo.subescribe") }}</UiFormLabel>
-              <SfSwitch v-model="subscribeNewsletter" />
-            </label>
-          </div>
-          <div class="mt-4 flex flex-col-reverse md:flex-row md:justify-end">
-            <SfButton
-              type="reset"
-              class="md:mr-4"
-              variant="secondary"
-              @click="handleCancel"
-            >
-              {{ $t("contactInfo.cancel") }}
-            </SfButton>
-            <SfButton
-              type="submit"
-              class="min-w-[120px] mb-4 md:mb-0"
-            >
-              {{ $t("contactInfo.save") }}
-            </SfButton>
-          </div>
-        </form>
-      </SfModal>
-    </transition>
-    <div
-      v-if="isOpen"
-      class="fixed !w-screen !h-screen inset-0 bg-neutral-500 bg-opacity-50 transition-opacity duration-1000 top-index"
-    />
-  </div>
+        <label class="block">
+          <UiFormLabel>{{ $t("contactInfo.name") }}</UiFormLabel>
+          <SfInput v-model="name" name="name" type="text" :invalid="showErrors && nameInvalid" />
+        </label>
+        <label class="block">
+          <UiFormLabel>{{ $t("contactInfo.email") }}</UiFormLabel>
+          <SfInput v-model="email" name="email" type="email" :invalid="showErrors && emailInvalid" />
+        </label>
+      </div>
+    </div>
+  </section>
 </template>

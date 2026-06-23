@@ -29,12 +29,12 @@ export const useUiHelpers = () => {
  const getFacetsFromURL = (
     query: Record<string, any>,
     ids: number[] = [],
-    defaultPageSize = 20,
+    defaultPageSize = 18,
   ): QueryProductsArgs => {
     const filters: string[] = []
 
     Object.keys(query || {}).forEach((key) => {
-      if (![...queryParamsNotFilters, 'price', 'Price', 'Availability', 'availability', 'inStock'].includes(key)) {
+      if (![...queryParamsNotFilters, 'price', 'Price', 'Availability', 'availability', 'inStock', 'category'].includes(key)) {
         const raw = String(query[key] ?? '')
         if (!raw) return
         raw.split(',').forEach((val) => {
@@ -42,6 +42,13 @@ export const useUiHelpers = () => {
         })
       }
     })
+
+    // Category filter: ?category=12,15 → filter.categoryId. Kept separate from
+    // attribute facets since these are real category ids, not attribute values.
+    const categoryId = String(query?.category ?? '')
+      .split(',')
+      .map(v => parseInt(v, 10))
+      .filter(n => Number.isFinite(n) && n > 0)
 
     const rawPrice = (query?.price ?? query?.Price ?? '') as string
     const [minS, maxS] = String(rawPrice).split('-')
@@ -68,6 +75,7 @@ export const useUiHelpers = () => {
       maxPrice,
       attribValues: filters,
       categorySlug: pathToSlug(),
+      categoryId: categoryId.length ? categoryId : undefined,
       inStock: availabilityStr as any,
       ids,
     }
@@ -107,8 +115,16 @@ export const useUiHelpers = () => {
   }
 
   const selectedFilters = useState<any[]>(
-    `category-selected-filters${cleanFullSearchIndex.value}`,
+    'category-selected-filters',
     () => facetsFromUrlToFilter() || [],
+  )
+
+  // The URL is the source of truth for active filters. Re-sync on every
+  // navigation so selections don't leak across pages — e.g. selecting a
+  // category, leaving, and returning to a clean /products shows no selection.
+  watch(
+    () => route.fullPath,
+    () => { selectedFilters.value = facetsFromUrlToFilter() || [] },
   )
 
   const isFilterSelected = (option: any) =>

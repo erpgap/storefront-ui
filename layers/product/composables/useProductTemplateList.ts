@@ -82,7 +82,7 @@ function buildAttributeFacets(
   return sorted
 }
 
-export const useProductTemplateList = (customIndex = '', defaultPageSize = 20, defaultSort = '') => {
+export const useProductTemplateList = (customIndex = '', defaultPageSize = 18, defaultSort = '') => {
   const nuxtApp = useNuxtApp() as any
   const $sdk: () => any = nuxtApp.$sdk
   const route = useRoute()

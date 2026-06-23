@@ -33,11 +33,20 @@ const {
 
 const NuxtLink = resolveComponent('NuxtLink')
 
+// On Enter: go to results and close the search panel, so the autocomplete
+// dropdown (which a debounced search would otherwise re-open) doesn't sit on
+// top of the results page. Closing the panel also unfocuses the input.
+const handleSearchEnter = () => {
+  enterPress()
+  showResultSearch.value = false
+  closeSearch()
+}
+
 watch(searchInputValue, () => {
   search()
 })
 
-useTrapFocus(searchPanelRef, { activeState: isSearchOpen, arrowKeysUpDown: true, initialFocus: 'container' })
+useTrapFocus(searchPanelRef, { activeState: isSearchOpen, arrowKeysUpDown: true, initialFocus: 'autofocus' })
 
 onClickOutside(searchPanelRef, () => {
   showResultSearch.value = false
@@ -108,7 +117,7 @@ onClickOutside(searchPanelRef, () => {
                 class="[&::-webkit-search-cancel-button]:appearance-none"
                 wrapper-class="h-11 pr-0 active:!ring-black focus-within:!ring-black hover:!ring-black active:!ring-1 focus-within:!ring-1"
                 size="base"
-                @keydown.enter.prevent="enterPress"
+                @keydown.enter.prevent="handleSearchEnter"
               >
                 <template #suffix>
                   <span class="flex items-center">
@@ -117,7 +126,7 @@ onClickOutside(searchPanelRef, () => {
                       variant="tertiary"
                       square
                       class="rounded-l-none hover:bg-transparent active:bg-transparent"
-                      @click="enterPress"
+                      @click="handleSearchEnter"
                     >
                       <Icon name="ion:search" size="20px" class="text-black" />
                     </SfButton>

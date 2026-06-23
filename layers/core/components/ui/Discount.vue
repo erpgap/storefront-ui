@@ -15,22 +15,21 @@ const handleApplyPromo = async () => {
 </script>
 
 <template>
-  <div class="w-full py-4 flex items-center gap-4">
-    <div class="w-full">
+  <div class="flex items-center gap-2">
+    <div class="flex-1">
       <SfInput
         v-model="promo"
-        size="lg"
         :placeholder="$t('checkoutPayment.promoOrGiftcard')"
       />
     </div>
 
     <SfButton
       :disabled="!promo || loading"
-      size="lg"
       variant="secondary"
+      class="shrink-0"
       @click="handleApplyPromo"
     >
-      {{ $t('apply') }}
+      {{ loading ? 'Applying…' : $t('apply') }}
     </SfButton>
   </div>
 </template>
