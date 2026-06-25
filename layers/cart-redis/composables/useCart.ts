@@ -3,7 +3,6 @@ import type {
   Cart,
   CartAddItemResponse,
   CartRemoveItemResponse,
-  CartResponse,
   CartUpdateItemResponse,
   MutationCartAddMultipleItemsArgs,
   MutationCartRemoveMultipleItemsArgs,
@@ -20,32 +19,38 @@ export const useCart = () => {
   const cart = useState<Cart>('cart', () => (({}) as Cart))
   const frequentlyTogetherProducts = useState<Product[]>('frequently-together-products', () => [])
 
-  const loading = ref(false)
-  // Inline add-to-cart error, shown near the button (cleared on each attempt).
   const cartError = ref('')
 
+  const applyCart = (payload?: { cart?: Cart } | null) => {
+    if (!payload?.cart)
+      return
+
+    cart.value = payload.cart
+    cartCounter.value = Number(payload.cart?.order?.websiteOrderLine?.length || 0)
+    frequentlyTogetherProducts.value = (payload.cart.frequentlyBoughtTogether || []).filter((p: null): p is Product => p !== null)
+  }
+
+  const {
+    data,
+    status,
+    error,
+    refresh: refreshCart,
+  } = useAsyncData<{ cart: Cart }>(
+    'cart',
+    () => useRequestFetch()<{ cart: Cart }>(`/api/odoo/cart-load`),
+    { immediate: false },
+  )
+
+  const loading = computed(() => status.value === 'pending')
+
+  watch(data, (value: { cart?: Cart } | null) => applyCart(value))
+  watch(error, (err: any) => {
+    if (err) toast.error(err.data?.message)
+  })
+
   const loadCart = async () => {
-    try {
-      loading.value = true
-      // Use a direct fetch (not cached useFetch) so every call returns the
-      // current cart — useFetch would return a stale cached payload on
-      // client-side navigation. useRequestFetch forwards the session cookie
-      // on SSR so the cart still resolves on reload.
-      const data = await useRequestFetch()<{ cart: Cart }>(`/api/odoo/cart-load`)
-
-      if (!data?.cart)
-        return
-
-      cart.value = data.cart
-      cartCounter.value = Number(data.cart?.order?.websiteOrderLine?.length || 0)
-      frequentlyTogetherProducts.value = (data.cart.frequentlyBoughtTogether || []).filter((p: null): p is Product => p !== null)
-    }
-    catch (error: any) {
-      return toast.error(error.data?.message)
-    }
-    finally {
-      loading.value = false
-    }
+    await refreshCart()
+    applyCart(data.value)
   }
 
   const cartAdd = async (id: number, quantity: number) => {
