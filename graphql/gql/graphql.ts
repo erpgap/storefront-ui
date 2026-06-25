@@ -222,6 +222,7 @@ export type Company = {
   image: Maybe<Scalars['String']['output']>;
   imageFilename: Maybe<Scalars['String']['output']>;
   imageUrl: Maybe<Scalars['String']['output']>;
+  mobile: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   phone: Maybe<Scalars['String']['output']>;
   socialFacebook: Maybe<Scalars['String']['output']>;
@@ -594,9 +595,10 @@ export type MutationContactUsArgs = {
 
 export type MutationCreateUpdatePartnerArgs = {
   email: Scalars['String']['input'];
+  mobile: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   phone: InputMaybe<Scalars['String']['input']>;
-  subscribeNewsletter: InputMaybe<Scalars['Boolean']['input']>;
+  subscribeNewsletter: Scalars['Boolean']['input'];
 };
 
 
@@ -787,6 +789,7 @@ export type Partner = {
   imageUrl: Maybe<Scalars['String']['output']>;
   isCompany: Scalars['Boolean']['output'];
   isPublic: Maybe<Scalars['Boolean']['output']>;
+  mobile: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   parentId: Maybe<Partner>;
   phone: Maybe<Scalars['String']['output']>;
