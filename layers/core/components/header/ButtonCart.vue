@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { SfButton } from '@storefront-ui/vue'
+import { SfButton } from "@storefront-ui/vue";
 
-const { loadCart, totalItemsInCart } = useCart()
-const { toggleCartSideBar } = useCartUiState()
+const { loadCart, totalItemsInCart } = useCart();
+const { toggleCartSideBar } = useCartUiState();
 
-await loadCart()
+onMounted(() => {
+  loadCart();
+});
 </script>
 
 <template>
@@ -24,7 +26,8 @@ await loadCart()
             v-if="totalItemsInCart > 0"
             class="absolute -top-1.5 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-black text-white text-[10px] leading-none font-medium flex items-center justify-center"
             data-testid="cart-badge"
-          >{{ totalItemsInCart }}</span>
+            >{{ totalItemsInCart }}</span
+          >
         </span>
       </template>
     </SfButton>

@@ -8,30 +8,41 @@ import { QueryName } from '~~/server/queries'
 export const useProductVariant = (slug: string) => {
   const { $sdk } = useNuxtApp()
 
-  const loadingProductVariant = ref(false)
   const productVariant = useState<Product>(`product-${slug}`, () => ({}) as Product)
 
-  const loadProductVariant = async (params: QueryProductVariantArgs) => {
-    try {
-      loadingProductVariant.value = true
-      const res = await $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>(
+  const variantParams = ref<QueryProductVariantArgs | null>(null)
+
+  const { data, status, error, refresh } = useAsyncData<ProductVariantResponse>(
+    `product-variant-${slug}`,
+    () =>
+      $sdk().odoo.query<QueryProductVariantArgs, ProductVariantResponse>(
         { queryName: QueryName.GetProductVariantQuery },
-        params,
-      )
+        variantParams.value as QueryProductVariantArgs,
+        { headers: useRequestHeaders() },
+      ),
+    { immediate: false },
+  )
 
-      productVariant.value = (res?.productVariant?.product || {}) as Product
+  const loadingProductVariant = computed(() => status.value === 'pending')
 
-      if (!productVariant.value?.id) {
-        showError({ statusCode: 404, message: 'Product not found' })
-      }
+  const setVariant = () => {
+    productVariant.value = (data.value?.productVariant?.product || {}) as Product
+    if (!productVariant.value?.id) {
+      showError({ statusCode: 404, message: 'Product not found' })
     }
-    catch (error) {
-      console.error('Error loading product variant:', error)
-      showError({ statusCode: 500, message: 'Error loading product variant' })
-    }
-    finally {
-      loadingProductVariant.value = false
-    }
+  }
+
+  watch(data, () => {
+    if (data.value) setVariant()
+  })
+  watch(error, (err: unknown) => {
+    if (err) showError({ statusCode: 500, message: 'Error loading product variant' })
+  })
+
+  const loadProductVariant = async (params: QueryProductVariantArgs) => {
+    variantParams.value = params
+    await refresh()
+    if (data.value) setVariant()
   }
 
   const categoriesForBreadcrumb = computed(() =>
