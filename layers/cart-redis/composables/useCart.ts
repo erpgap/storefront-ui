@@ -44,13 +44,18 @@ export const useCart = () => {
   const loading = computed(() => status.value === 'pending')
 
   watch(data, (value: { cart?: Cart } | null) => applyCart(value))
-  watch(error, (err: any) => {
-    if (err) toast.error(err.data?.message)
-  })
 
-  const loadCart = async () => {
+  // `showError` lets post-order pages (thank-you / payment-fail) load the cart
+  // quietly: after an order the draft cart no longer exists and Odoo returns
+  // "Cart does not exist", which is expected there and shouldn't toast. The
+  // error is surfaced here (rather than via a global watcher) so callers can
+  // opt out of it.
+  const loadCart = async (showError = true) => {
     await refreshCart()
     applyCart(data.value)
+    if (error.value && showError) {
+      toast.error((error.value as any)?.data?.message)
+    }
   }
 
   const cartAdd = async (id: number, quantity: number) => {

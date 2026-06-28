@@ -7,14 +7,22 @@ const { cart, loadCart, totalItemsInCart } = useCart()
 const { loadCountries } = useCountryList()
 const { loadUser } = useAuth()
 
-await loadCart()
+// Quietly: a missing cart is handled below by redirecting, so no error toast.
+await loadCart(false)
 await loadCountries()
 
 onMounted(async () => {
   await loadUser(true)
 })
 
-if (totalItemsInCart?.value === 0) {
+// If the cart can't be retrieved at all — e.g. the session was lost, so Odoo
+// returns "Cart does not exist" — there's nothing to check out. Send the
+// shopper to the homepage rather than render a broken/empty checkout.
+if (!cart.value?.order?.id) {
+  await navigateTo('/')
+}
+// A valid but empty cart: nothing to pay for, point them back to the catalog.
+else if (totalItemsInCart?.value === 0) {
   await navigateTo('/products')
 }
 
@@ -42,6 +50,16 @@ const validateCheckout = (): boolean => {
   return true
 }
 provide('checkoutValidate', validateCheckout)
+
+// The payment widget now lives in the Payment section (under the provider
+// selection), but the "Place Order" button lives in the summary. Share the
+// provider's submit handler + loading state between them.
+const paymentHandler = ref<(() => void) | null>(null)
+const paymentLoading = ref(false)
+const paymentError = ref('')
+provide('paymentHandler', paymentHandler)
+provide('paymentLoading', paymentLoading)
+provide('paymentError', paymentError)
 </script>
 
 <template>

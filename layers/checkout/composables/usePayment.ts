@@ -41,7 +41,10 @@ export const usePayment = () => {
     }
   }
 
-  const getPaymentConfirmation = async () => {
+  // `showError` lets callers probe the confirmation silently (e.g. the
+  // thank-you page, which redirects home when there's no order rather than
+  // surfacing a toast).
+  const getPaymentConfirmation = async (showError = true) => {
     try {
       loading.value = true
       const data = await $sdk().odoo.query<any, any>({
@@ -51,7 +54,7 @@ export const usePayment = () => {
       return data?.paymentConfirmation
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      if (showError) toast.error(error?.data?.message)
     }
     finally {
       loading.value = false

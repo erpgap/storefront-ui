@@ -20,10 +20,15 @@ defineProps({
 
 await loadDeliveryMethods()
 
-if (deliveryMethods?.value?.length) {
-  radioModel.value = String(deliveryMethods.value[0]?.id)
-  await setDeliveryMethodImmediate(deliveryMethods.value[0]?.id)
-}
+// Auto-select the first method whenever the list becomes available. This runs
+// reactively because the methods often load only after the shipping address is
+// entered (the address save triggers a reload).
+watch(deliveryMethods, async (methods) => {
+  if (methods?.length && !radioModel.value) {
+    radioModel.value = String(methods[0]?.id)
+    await setDeliveryMethodImmediate(methods[0]?.id)
+  }
+}, { immediate: true })
 
 const handleSelectShippingMethod = async (shippingMethodId: number) => {
   radioModel.value = String(shippingMethodId)

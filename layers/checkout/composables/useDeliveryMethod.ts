@@ -23,16 +23,18 @@ export const useDeliveryMethod = () => {
   const loadDeliveryMethods = async () => {
     try {
       setLoading(true);
-      const { data } = await useAsyncData('shipping-methods', async () =>
-        await $sdk().odoo.query<
-          any,
-          DeliveryMethodListResponse
-        >({
-          queryName: QueryName.GetDeliveryMethodsQuery,
-        }),
-      );
+      // Always fetch fresh: the available delivery methods depend on the order's
+      // shipping address, which is set partway through checkout. A cached
+      // (useAsyncData) result would keep returning the empty "no address yet"
+      // list even after the address has been filled in.
+      const data = await $sdk().odoo.queryNoCache<
+        any,
+        DeliveryMethodListResponse
+      >({
+        queryName: QueryName.GetDeliveryMethodsQuery,
+      });
 
-      deliveryMethods.value = data.value?.deliveryMethods || [];
+      deliveryMethods.value = data?.deliveryMethods || [];
     } catch (error: any) {
       toast.error(error?.data?.message);
     } finally {

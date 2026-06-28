@@ -27,6 +27,8 @@ import DeleteAddress from './DeleteAddress'
 import NewsletterSubscribeMutation from './NewsletterSubscribeMutation'
 import ShippingMethod from './ShippingMethod'
 import ContactUsMutation from './ContactUsMutation'
+import StripeGetInlineFormValues from './StripeGetInlineFormValues'
+import StripeTransaction from './StripeTransaction'
 
 enum MutationName {
   LoginMutation = 'LoginMutation',
@@ -58,6 +60,8 @@ enum MutationName {
   MakeGiftCardPaymentMutation = 'MakeGiftCardPaymentMutation',
   ShippingMethod = 'ShippingMethod',
   ContactUsMutation = 'ContactUsMutation',
+  StripeGetInlineFormValues = 'StripeGetInlineFormValues',
+  StripeTransaction = 'StripeTransaction',
 }
 
 const Mutations: Record<MutationName, string> = {
@@ -90,6 +94,8 @@ const Mutations: Record<MutationName, string> = {
   MakeGiftCardPaymentMutation,
   ShippingMethod,
   ContactUsMutation,
+  StripeGetInlineFormValues,
+  StripeTransaction,
 }
 
 export { Mutations, MutationName }

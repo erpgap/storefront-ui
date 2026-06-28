@@ -21,6 +21,12 @@
   [data-testid="button"][class*="bg-primary-700"] {
     @apply !bg-primary-900 hover:!bg-primary-700 active:!bg-primary-700 !text-white !shadow-none uppercase tracking-[0.1em] !text-[13px];
   }
+  /* SfButton's "secondary" (outlined) variant ships with `ring-primary-700`.
+     Match the primary CTA's uppercase tracking so both variants read
+     consistently across the app. Tertiary/icon buttons (no ring) stay as-is. */
+  [data-testid="button"][class*="ring-primary-700"] {
+    @apply uppercase tracking-[0.1em];
+  }
 
   /* Rating: filled stars in brand black (empty stars stay grey) */
   [data-testid="rating"] [data-testid="star-filled"] {

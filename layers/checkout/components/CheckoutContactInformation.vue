@@ -19,6 +19,7 @@ if (name.value === 'Public user' || (props.partnerData.isPublic && props.partner
 const formEl = ref<HTMLElement>()
 const showErrors = ref(false)
 const nameInvalid = computed(() => !String(name.value ?? '').trim())
+const emailEmpty = computed(() => !String(email.value ?? '').trim())
 const emailInvalid = computed(() => !isValidEmail(String(email.value ?? '')))
 const valid = computed(() => !nameInvalid.value && !emailInvalid.value)
 
@@ -86,10 +87,14 @@ defineExpose({
         <label class="block">
           <UiFormLabel>{{ $t("contactInfo.name") }}</UiFormLabel>
           <SfInput v-model="name" name="name" type="text" :invalid="showErrors && nameInvalid" />
+          <UiFieldError v-if="showErrors && nameInvalid">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("contactInfo.email") }}</UiFormLabel>
           <SfInput v-model="email" name="email" type="email" :invalid="showErrors && emailInvalid" />
+          <UiFieldError v-if="showErrors && emailInvalid">
+            {{ emailEmpty ? $t("form.fieldRequired") : $t("form.invalidEmail") }}
+          </UiFieldError>
         </label>
       </div>
     </div>

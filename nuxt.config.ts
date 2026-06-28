@@ -63,10 +63,19 @@ export default defineNuxtConfig({
     cacheInvalidationSigningSecret: process.env.NUXT_CACHE_INVALIDATION_SIGNING_SECRET,
     cacheInvalidationStorageDriver: storageDriver,
     cacheInvalidationStorageUrl: storageUrl,
+    // Per-user / order-specific data must never be served from the shared SWR
+    // cache — on /checkout and /my-account that would show a stale snapshot
+    // (orders, payment state, cart, addresses, delivery methods). Static
+    // reference data (countries/states) is intentionally left cacheable.
     shouldByPassCacheQueryNames: [
       'LoadCartQuery',
       'WishlistLoadQuery',
       'GetAddressesQuery',
+      'GetOrdersQuery',
+      'GetOrderQuery',
+      'GetPaymentMethodsQuery',
+      'GetPaymentConfirmation',
+      'GetDeliveryMethodsQuery',
     ],
     public: {
       odooBaseImageUrl: process.env.NUXT_PUBLIC_ODOO_BASE_IMAGE_URL,
