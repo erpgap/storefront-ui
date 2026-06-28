@@ -52,7 +52,7 @@ onMounted(() => {
       class="w-full p-4 md:p-6 mb-6 !justify-start typography-text-base !bg-[#f7f7f7]"
       variant="neutral"
     >
-      <i18n-t keypath="auth.signup.bannerText">
+      <i18n-t tag="span" keypath="auth.signup.bannerText">
         <template #login>
           <SfLink
             :tag="NuxtLink"

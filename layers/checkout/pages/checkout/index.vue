@@ -72,45 +72,52 @@ provide('paymentError', paymentError)
       v-if="cart?.order?.id"
       class="lg:grid lg:grid-cols-12 lg:gap-x-12"
     >
-      <!-- Left: inline steps -->
-      <div class="lg:col-span-7 divide-y divide-primary-100">
-        <LazyCheckoutContactInformation
-          v-if="cart?.order?.partner"
-          ref="contactRef"
-          :step="1"
-          :heading="$t('contactInfo.heading')"
-          :partner-data="cart?.order?.partner as Partner"
-        />
-        <LazyCheckoutAddressForm
-          ref="shippingRef"
-          :step="2"
-          :heading="$t('shipping.heading')"
-          :description="$t('shipping.description')"
-          :button-text="$t('shipping.addButton')"
-          :type="AddressEnum.Shipping"
-          :saved-address="cart.order?.partnerShipping as Partner"
-        />
-        <LazyCheckoutAddressForm
-          ref="billingRef"
-          :step="3"
-          :heading="$t('billing.heading')"
-          :description="$t('billing.description')"
-          :button-text="$t('billing.addButton')"
-          :type="AddressEnum.Billing"
-          :saved-address="cart.order?.partnerInvoice as Partner"
-        />
-        <LazyCheckoutShippingMethod
-          ref="methodRef"
-          :step="4"
-        />
-        <LazyCheckoutPayment :step="5" />
-      </div>
-
-      <!-- Right: shared order summary (sticky) -->
-      <div class="lg:col-span-5 mt-10 lg:mt-0">
+      <!-- Order summary: collapsed at the top on mobile, sticky on the right on
+           desktop (placed via grid columns; first in DOM so it leads on mobile). -->
+      <div class="lg:col-start-8 lg:col-span-5 lg:row-start-1 mb-8 lg:mb-0">
         <div class="lg:sticky lg:top-24 h-fit">
           <CheckoutSummary />
         </div>
+      </div>
+
+      <!-- Inline steps (left column on desktop) -->
+      <div class="lg:col-start-1 lg:col-span-7 lg:row-start-1">
+        <div class="divide-y divide-primary-100">
+          <LazyCheckoutContactInformation
+            v-if="cart?.order?.partner"
+            ref="contactRef"
+            :step="1"
+            :heading="$t('contactInfo.heading')"
+            :partner-data="cart?.order?.partner as Partner"
+          />
+          <LazyCheckoutAddressForm
+            ref="shippingRef"
+            :step="2"
+            :heading="$t('shipping.heading')"
+            :description="$t('shipping.description')"
+            :button-text="$t('shipping.addButton')"
+            :type="AddressEnum.Shipping"
+            :saved-address="cart.order?.partnerShipping as Partner"
+          />
+          <LazyCheckoutAddressForm
+            ref="billingRef"
+            :step="3"
+            :heading="$t('billing.heading')"
+            :description="$t('billing.description')"
+            :button-text="$t('billing.addButton')"
+            :type="AddressEnum.Billing"
+            :saved-address="cart.order?.partnerInvoice as Partner"
+          />
+          <LazyCheckoutShippingMethod
+            ref="methodRef"
+            :step="4"
+          />
+          <LazyCheckoutPayment :step="5" />
+        </div>
+
+        <!-- Mobile: Place Order + payment error right after the payment form
+             (on desktop the button lives at the foot of the summary instead). -->
+        <CheckoutPlaceOrder class="lg:hidden mt-8" />
       </div>
     </div>
   </div>

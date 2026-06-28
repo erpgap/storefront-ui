@@ -34,12 +34,12 @@
         </h1>
       </div>
       <div
-        class="md:flex gap-10 pb-20"
+        class="flex flex-col md:flex-row gap-10 pb-20"
         data-testid="account-page-sidebar"
       >
         <nav
           :class="[
-            'border-t md:border border-primary-100 md:rounded-md min-w-[280px] md:p-2 max-h-[500px] overflow-y-auto md:block',
+            'order-2 md:order-1 md:self-start border-t md:border border-primary-100 md:rounded-md min-w-[280px] md:p-2 max-h-[500px] overflow-y-auto md:block',
             { hidden: !isRoot },
           ]"
         >
@@ -76,7 +76,7 @@
             {{ $t("account.logout") }}
           </button>
         </nav>
-        <div class="flex-1">
+        <div class="flex-1 order-1 md:order-2">
           <section
             class="grid grid-cols-1 2xs:grid-cols-2 gap-4 md:gap-y-6 md:gap-x-2 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 md:mb-5"
             data-testid="category-grid"
@@ -109,8 +109,6 @@ const { logout } = useAuth()
 const navItems = [
   { label: t('account.myOrders.section.myOrders'), link: '/my-account/my-orders' },
   { label: t('account.accountSettings.section.personalData'), link: '/my-account/personal-data' },
-  { label: t('account.accountSettings.section.shippingDetails'), link: '/my-account/shipping-details' },
-  { label: t('account.accountSettings.section.billingDetails'), link: '/my-account/billing-details' },
 ]
 
 const currentPath = computed(() => router.currentRoute.value.path)

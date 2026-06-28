@@ -3,9 +3,15 @@ defineProps<{
   // Show the cart line items inside the box (checkout). The cart page lists
   // items in its own column, so it leaves this off.
   showItems?: boolean
+  // Collapse the body behind a tappable header on mobile (checkout). Always
+  // expanded on desktop. The cart page leaves this off.
+  collapsible?: boolean
 }>()
 
 const { cart, totalItemsInCart } = useCart()
+
+// Mobile-only collapse state (desktop always renders the body via `lg:block`).
+const open = ref(false)
 
 const lines = computed<any[]>(() => cart.value?.order?.websiteOrderLine ?? [])
 // Match the product card's discount logic (combinationInfoVariant.list_price).
@@ -21,15 +27,50 @@ const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.p
     class="border border-primary-100 rounded-[2px]"
     data-testid="order-summary"
   >
-    <div class="flex justify-between items-baseline px-5 md:px-6 pt-6 pb-4">
-      <p class="text-[18px] font-medium tracking-[-0.01em]">
+    <component
+      :is="collapsible ? 'button' : 'div'"
+      type="button"
+      class="w-full flex justify-between items-center gap-3 px-5 md:px-6 pt-6 pb-4 text-left"
+      :class="collapsible ? 'lg:pointer-events-none' : ''"
+      @click="collapsible ? (open = !open) : undefined"
+    >
+      <span class="text-[18px] font-medium tracking-[-0.01em]">
         {{ $t("orderSummary") }}
-      </p>
-      <p class="text-[13px] text-primary-500" data-testid="total-in-cart">
-        {{ totalItemsInCart }} {{ totalItemsInCart === 1 ? $t('item') : $t('items') }}
-      </p>
-    </div>
+      </span>
+      <span class="flex items-center gap-3">
+        <!-- Collapsed view (mobile): show the total in the header -->
+        <span
+          v-if="collapsible"
+          class="text-[16px] font-medium lg:hidden"
+        >
+          {{ $currency(Number(cart?.order?.amountTotal) || 0) }}
+        </span>
+        <span
+          class="text-[13px] text-primary-500"
+          :class="collapsible ? 'hidden lg:inline' : ''"
+          data-testid="total-in-cart"
+        >
+          {{ totalItemsInCart }} {{ totalItemsInCart === 1 ? $t('item') : $t('items') }}
+        </span>
+        <svg
+          v-if="collapsible"
+          class="lg:hidden shrink-0 text-primary-400 transition-transform duration-200"
+          :class="{ 'rotate-180': open }"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+    </component>
 
+    <!-- Collapsible body: always shown on desktop, toggled on mobile -->
+    <div :class="collapsible ? [open ? 'block' : 'hidden', 'lg:block'] : ''">
     <!-- Line items (checkout only) -->
     <ul
       v-if="showItems && lines.length"
@@ -71,14 +112,14 @@ const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.p
               {{ attribute.attribute?.name }}<span class="text-black"> — {{ attribute.name }}</span>
             </li>
           </ul>
-        </span>
-        <span class="flex items-baseline gap-2 whitespace-nowrap">
-          <span class="text-[14px]">{{ $currency(line.priceSubtotal || 0) }}</span>
-          <span
-            v-if="hasDiscount(line)"
-            class="text-[12px] text-primary-300 line-through"
-          >
-            {{ $currency(oldPrice(line)) }}
+          <span class="mt-2 flex items-baseline gap-2 text-[14px]">
+            <span>{{ $currency(line.priceSubtotal || 0) }}</span>
+            <span
+              v-if="hasDiscount(line)"
+              class="text-[12px] text-primary-300 line-through"
+            >
+              {{ $currency(oldPrice(line)) }}
+            </span>
           </span>
         </span>
       </li>
@@ -137,6 +178,7 @@ const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.p
           <UiLineIcon name="shield" :size="15" /> {{ $t("trust.encrypted") }}
         </span>
       </div>
+    </div>
     </div>
   </div>
 </template>

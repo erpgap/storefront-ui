@@ -61,7 +61,7 @@ const socials = [
             <li v-for="item in column.links" :key="item.label">
               <NuxtLink
                 :to="item.link"
-                class="block py-[7px] text-[14px] text-primary-500 transition-colors hover:text-black"
+                class="block py-2.5 text-[16px] md:py-[7px] md:text-[14px] text-primary-500 transition-colors hover:text-black"
               >
                 {{ item.label }}
               </NuxtLink>

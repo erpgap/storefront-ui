@@ -22,7 +22,8 @@ const NuxtLink = resolveComponent('NuxtLink')
           >
             <path d="M17 7H2M7 1 2 7l5 6" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
-          {{ $t('backToCart') }}
+          <span class="sm:hidden">{{ $t('back') }}</span>
+          <span class="hidden sm:inline">{{ $t('backToCart') }}</span>
           <span class="absolute left-0 bottom-0 h-px w-0 bg-black transition-all duration-300 group-hover:w-full" />
         </component>
 
