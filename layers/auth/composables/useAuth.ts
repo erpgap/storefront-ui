@@ -31,19 +31,43 @@ export const useAuth = () => {
   const authError = useState<string>('auth-error', () => '')
   const resetEmail = useCookie<string>('reset-email')
 
-  const loadUser = async (withoutCache: boolean = false) => {
+  // `LoadUserQuery` is Odoo's "who am I?" probe and the single source of truth
+  // for session validity. We don't parse error strings to detect an expired
+  // session — instead we trust Odoo's own answer:
+  //   • the query fails (dead session → "User does not exist."), or
+  //   • it returns the public/anonymous partner (`isPublic`, or no id).
+  // Either case means "not authenticated", so we clear the stale auth state.
+  // Returns whether a real, authenticated partner was loaded.
+  const loadUser = async (withoutCache: boolean = false): Promise<boolean> => {
     loading.value = true
 
     const query = withoutCache ? $sdk().odoo.queryNoCache : $sdk().odoo.query
 
-    const data = await query<null, LoadUserQueryResponse>({
-      queryName: QueryName.LoadUserQuery,
-    })
+    try {
+      const data = await query<null, LoadUserQueryResponse>({
+        queryName: QueryName.LoadUserQuery,
+      })
+      const partner = data?.partner
 
-    userCookie.value = data?.partner?.id
-    user.value = data?.partner
+      if (!partner?.id || partner.isPublic) {
+        userCookie.value = null
+        user.value = {} as Partner
+        return false
+      }
 
-    loading.value = false
+      userCookie.value = partner.id
+      user.value = partner
+      return true
+    }
+    catch {
+      // A failed whoami is, by definition, an invalid session.
+      userCookie.value = null
+      user.value = {} as Partner
+      return false
+    }
+    finally {
+      loading.value = false
+    }
   }
 
   const updatePartner = async (params: MutationCreateUpdatePartnerArgs) => {

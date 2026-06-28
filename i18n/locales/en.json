@@ -30,7 +30,9 @@
     "termsAndConditionsLabel": "I declare that I have read and accept the {terms}",
     "subscriptionLabel": "I wish to receive occasional emails about special offers, new products and exclusive promotions. I can cancel my subscription at any time. (Optional)",
     "asterixHint": "* marked consents are required",
-    "sameAsShipping": "Same as shipping address"
+    "sameAsShipping": "Same as shipping address",
+    "fieldRequired": "This field is required",
+    "invalidEmail": "Please enter a valid email address"
   },
   "myCart": "My Cart",
   "orderSummary": "Order Summary",
@@ -101,6 +103,23 @@
   "backToCart": "Back to My Cart",
   "back": "Back",
   "placeOrder": "Place order and pay",
+  "thankYou": {
+    "eyebrow": "Order confirmed",
+    "heading": "Thank you for your order",
+    "message": "We’ve emailed you a confirmation. Your order is now being prepared — we’ll let you know as soon as it ships.",
+    "orderReference": "Order reference",
+    "viewOrders": "View my orders",
+    "continueShopping": "Continue shopping"
+  },
+  "paymentFail": {
+    "eyebrow": "Payment unsuccessful",
+    "heading": "Your payment couldn’t be completed",
+    "message": "Something went wrong while processing your payment, so your order wasn’t placed and you haven’t been charged. Your cart is still saved — please try again or use a different payment method.",
+    "tryAgain": "Try again",
+    "returnToCart": "Return to cart",
+    "needHelp": "Need a hand?",
+    "contactSupport": "Contact support"
+  },
   "termsInfo": "By placing my order, you agree to our {terms} and our {privacyPolicy}",
   "termsAndConditions": "Terms and Conditions",
   "privacyPolicy": "Privacy Policy",

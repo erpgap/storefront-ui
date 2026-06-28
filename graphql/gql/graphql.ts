@@ -529,6 +529,10 @@ export type Mutation = {
   selectAddress: Maybe<Partner>;
   /** Set Shipping Method on Cart */
   setShippingMethod: Maybe<CartData>;
+  /** Values to render the Stripe payment widget. */
+  stripeGetInlineFormValues: Maybe<StripeGetInlineFormValuesResult>;
+  /** Open an Odoo payment and return Stripe processing values. */
+  stripeTransaction: Maybe<StripeTransactionResult>;
   /** Two-Factor Verification */
   totpVerification: Maybe<TwoFactorOutput>;
   /** Update a billing or shipping address and set it on the shopping cart. */
@@ -640,6 +644,17 @@ export type MutationSelectAddressArgs = {
 
 export type MutationSetShippingMethodArgs = {
   shippingMethodId: Scalars['Int']['input'];
+};
+
+
+export type MutationStripeGetInlineFormValuesArgs = {
+  providerId: Scalars['Int']['input'];
+};
+
+
+export type MutationStripeTransactionArgs = {
+  providerId: Scalars['Int']['input'];
+  tokenizationRequested?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -1262,6 +1277,16 @@ export type State = {
   code: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+};
+
+export type StripeGetInlineFormValuesResult = {
+  __typename?: 'StripeGetInlineFormValuesResult';
+  stripeGetInlineFormValues: Maybe<Scalars['GenericScalar']['output']>;
+};
+
+export type StripeTransactionResult = {
+  __typename?: 'StripeTransactionResult';
+  transaction: Maybe<Scalars['GenericScalar']['output']>;
 };
 
 export type TwoFactorOutput = {

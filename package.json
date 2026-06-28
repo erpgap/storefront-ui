@@ -40,6 +40,7 @@
     "@pinia/nuxt": "^0.5.1",
     "@storefront-ui/typography": "^2.6.1",
     "@storefront-ui/vue": "^2.6.3",
+    "@stripe/stripe-js": "^9.8.0",
     "@tailwindcss/vite": "^4.2.1",
     "@types/lodash-es": "^4.17.12",
     "@vue-storefront/sdk": "^2.0.0",
