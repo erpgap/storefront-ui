@@ -70,19 +70,23 @@ const activeImage = computed(() => allImages.value[activeIndex.value] ?? allImag
       </button>
     </div>
 
-    <!-- Main image -->
-    <div class="flex-1 aspect-[4/5] bg-primary-50 rounded-[2px] overflow-hidden flex items-center justify-center">
-      <NuxtImg
-        v-if="activeImage"
-        provider="odooProvider"
-        :width="560"
-        :height="700"
-        class="w-full h-full object-cover"
-        :alt="activeImage.alt"
-        :src="activeImage.imageSrc"
-        loading="eager"
-        fetchpriority="high"
-      />
+    <!-- Main image. NB: keep `flex-1` and `aspect-ratio` on SEPARATE elements —
+         combining them on one flex item makes Safari/Firefox collapse it. The
+         flex item just claims the width; the inner block owns the aspect ratio. -->
+    <div class="flex-1 min-w-0">
+      <div class="w-full aspect-[4/5] bg-primary-50 rounded-[2px] overflow-hidden">
+        <NuxtImg
+          v-if="activeImage"
+          provider="odooProvider"
+          :width="560"
+          :height="700"
+          class="w-full h-full object-cover"
+          :alt="activeImage.alt"
+          :src="activeImage.imageSrc"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
     </div>
   </div>
 </template>

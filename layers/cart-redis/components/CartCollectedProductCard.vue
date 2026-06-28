@@ -77,13 +77,13 @@ const savings = computed(
         </button>
       </div>
 
-      <div class="mt-3 flex items-center justify-between gap-4">
+      <div class="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <UiQuantitySelector
           :model-value="Number(orderLine.quantity)"
           :max-qty="Number(orderLine.product?.stock) || 10"
           @update:model-value="updateItemQuantity(orderLine.id, Number($event))"
         />
-        <div class="text-right whitespace-nowrap">
+        <div class="text-right whitespace-nowrap ml-auto">
           <p class="flex items-baseline justify-end gap-2">
             <span class="text-[16px] font-medium text-black">{{ $currency(orderLine.priceSubtotal || 0) }}</span>
             <span v-if="hasDiscount" class="text-[14px] text-primary-300 line-through">

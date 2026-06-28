@@ -57,15 +57,15 @@ const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
 
 <template>
   <div class="group relative flex flex-col">
-    <div class="relative overflow-hidden rounded-[3px] bg-gradient-to-br from-[#efefef] to-[#e2e2e2]">
-      <NuxtLink :to="slug" prefetch>
+    <div class="relative aspect-square overflow-hidden rounded-[3px] bg-gradient-to-br from-[#efefef] to-[#e2e2e2]">
+      <NuxtLink :to="slug" prefetch class="block w-full h-full">
         <NuxtImg
           provider="odooProvider"
           :src="imageUrl"
           :alt="imageAlt"
           :width="370"
           :height="370"
-          class="w-full aspect-square object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           :loading="loading"
         />
       </NuxtLink>
@@ -100,12 +100,11 @@ const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
       <!-- Reviews live at the bottom of the card -->
       <div
         v-if="(ratingCount ?? 0) > 0"
-        class="mt-2 inline-flex items-center gap-1.5 text-[13px] text-primary-500"
+        class="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[13px] text-primary-500"
       >
         <SfRating size="xs" :value="Math.round(rating ?? 0)" :max="5" />
-        <span>({{ (rating ?? 0).toFixed(1) }})</span>
-        <span class="text-primary-200">·</span>
-        <span>{{ ratingCount }} reviews</span>
+        <span class="whitespace-nowrap">({{ (rating ?? 0).toFixed(1) }})</span>
+        <span class="whitespace-nowrap">{{ ratingCount }} reviews</span>
       </div>
     </div>
   </div>

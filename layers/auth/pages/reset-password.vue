@@ -20,23 +20,22 @@
           />
         </label>
 
-        <div class="mt-6 flex flex-col-reverse md:flex-row gap-4">
+        <div class="mt-6 flex flex-col gap-3">
+          <SfButton
+            type="submit"
+            :disabled="isSubmitting || !customerEmail"
+          >
+            {{ isSubmitting ? 'Sending…' : $t("auth.resetPassword.continue") }}
+          </SfButton>
+
           <SfButton
             :tag="NuxtLink"
             to="/login"
-            class="flex-1"
+            class="!text-base"
             variant="tertiary"
             :disabled="isSubmitting"
           >
             {{ $t("auth.resetPassword.backToLogin") }}
-          </SfButton>
-
-          <SfButton
-            type="submit"
-            class="flex-1"
-            :disabled="isSubmitting || !customerEmail"
-          >
-            {{ isSubmitting ? 'Sending…' : $t("auth.resetPassword.continue") }}
           </SfButton>
         </div>
       </form>
