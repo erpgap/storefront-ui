@@ -2,9 +2,9 @@
 const NuxtLink = resolveComponent('NuxtLink')
 
 const categories = [
-  { name: 'Women', image: '/img/home/cat_women_sand.jpg', link: '/women' },
-  { name: 'Men', image: '/img/home/cat_men_sand.jpg', link: '/men' },
-  { name: 'Accessories', image: '/img/home/cat_accessories_sand.jpg', link: '/women/accessories' },
+  { name: 'Women', image: '/img/home/cat_women_sand.webp', link: '/women' },
+  { name: 'Men', image: '/img/home/cat_men_sand.webp', link: '/men' },
+  { name: 'Accessories', image: '/img/home/cat_accessories_sand.webp', link: '/women/accessories' },
 ]
 </script>
 

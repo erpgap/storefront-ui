@@ -42,7 +42,7 @@ const groups = [
       eyebrow="Help"
       title="Frequently asked questions"
       subtitle="Everything you need to know about ordering, shipping and returns."
-      image="/img/content/faq-banner.jpg"
+      image="/img/content/faq-banner.webp"
     />
 
     <div class="narrow-container py-[clamp(48px,7vw,96px)] max-w-[820px]">

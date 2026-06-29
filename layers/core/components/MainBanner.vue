@@ -6,15 +6,27 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 <template>
   <section class="relative flex items-center overflow-hidden text-white min-h-[min(88vh,760px)]">
-    <!-- Background image -->
+    <!-- Background image — this is the LCP element, so it is eager + high
+         priority and preloaded WITH fetchpriority (the bare `preload` prop emits
+         a <link> without it, which Lighthouse flags).
+         densities="1x" (NO `sizes`) is deliberate: @nuxt/image's `sizes` path is
+         broken in this version (all-equal breakpoints collapse to a bare "100vw"
+         and emit a 1×1/2×2 srcset). Like the product images, 1x serves a single
+         right-sized webp with no retina 2× doubling — which is what keeps mobile
+         correct. webp shrinks the 1920×1080 source from ~290 KB to ~100 KB. -->
     <NuxtImg
-      src="/img/home/hero.jpg"
+      src="/img/home/hero.webp"
       alt=""
       aria-hidden="true"
+      width="1920"
+      height="1080"
+      densities="1x"
+      format="webp"
+      quality="72"
       class="absolute inset-0 w-full h-full object-cover object-center"
       loading="eager"
       fetchpriority="high"
-      preload
+      :preload="{ fetchPriority: 'high' }"
     />
     <!-- Scrim -->
     <div class="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />

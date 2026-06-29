@@ -12,6 +12,9 @@ if (import.meta.client) onMounted(() => { loadWishlist() })
 
   <LazyTheFooter hydrate-on-visible />
 
-  <WishlistSidebar />
-  <CartSidebar />
+  <!-- Off-screen drawers: render server-side but defer hydration to idle time
+       so their JS doesn't compete with the initial render. Idle fires well
+       before a user opens them. -->
+  <LazyWishlistSidebar hydrate-on-idle />
+  <LazyCartSidebar hydrate-on-idle />
 </template>

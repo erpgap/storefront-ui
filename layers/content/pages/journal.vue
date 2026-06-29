@@ -5,10 +5,10 @@ useHead({
 })
 
 const articles = [
-  { category: 'Materials', title: 'Why we choose natural fibres', excerpt: 'Organic cotton, linen and full-grain leather — and how they wear in over time.', date: 'May 2026', image: '/img/content/journal-1.jpg' },
-  { category: 'Design', title: 'The case for fewer, better pieces', excerpt: 'A look at how a considered wardrobe outlasts the trend cycle.', date: 'Apr 2026', image: '/img/content/journal-2.jpg' },
-  { category: 'Craft', title: 'Inside our leather workshop', excerpt: 'Meet the makers shaping every bag, by hand, one at a time.', date: 'Mar 2026', image: '/img/content/journal-3.jpg' },
-  { category: 'Behind the build', title: 'Headless commerce on Odoo', excerpt: 'How ERPGAP connects this storefront to Odoo with the Alokai framework.', date: 'Feb 2026', image: '/img/content/journal-4.jpg' },
+  { category: 'Materials', title: 'Why we choose natural fibres', excerpt: 'Organic cotton, linen and full-grain leather — and how they wear in over time.', date: 'May 2026', image: '/img/content/journal-1.webp' },
+  { category: 'Design', title: 'The case for fewer, better pieces', excerpt: 'A look at how a considered wardrobe outlasts the trend cycle.', date: 'Apr 2026', image: '/img/content/journal-2.webp' },
+  { category: 'Craft', title: 'Inside our leather workshop', excerpt: 'Meet the makers shaping every bag, by hand, one at a time.', date: 'Mar 2026', image: '/img/content/journal-3.webp' },
+  { category: 'Behind the build', title: 'Headless commerce on Odoo', excerpt: 'How ERPGAP connects this storefront to Odoo with the Alokai framework.', date: 'Feb 2026', image: '/img/content/journal-4.webp' },
 ]
 </script>
 
@@ -18,7 +18,7 @@ const articles = [
       eyebrow="Journal"
       title="Stories & ideas"
       subtitle="On design, materials and the craft behind every piece."
-      image="/img/content/journal-banner.jpg"
+      image="/img/content/journal-banner.webp"
     />
 
     <div class="narrow-container py-[clamp(48px,7vw,96px)]">

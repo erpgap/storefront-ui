@@ -103,7 +103,7 @@ await loadCart()
       <!-- Image -->
       <div class="order-1 md:order-2 flex justify-center">
         <NuxtImg
-          src="/img/content/empty-cart.png"
+          src="/img/content/empty-cart.webp"
           alt=""
           aria-hidden="true"
           class="w-[240px] h-[240px] lg:w-[300px] lg:h-[300px] object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.16)]"

@@ -18,7 +18,7 @@ const commitments = [
       eyebrow="Our responsibility"
       title="Made to last, made with care"
       subtitle="Considered design is the most sustainable design — here's how we approach it."
-      image="/img/content/sustainability-banner.jpg"
+      image="/img/content/sustainability-banner.webp"
     />
 
     <!-- Intro -->
@@ -57,7 +57,7 @@ const commitments = [
         </p>
       </div>
       <NuxtImg
-        src="/img/content/sustainability-editorial.jpg"
+        src="/img/content/sustainability-editorial.webp"
         alt="Considered craft"
         class="w-full h-full min-h-[360px] md:min-h-[520px] object-cover object-center md:order-2 order-1"
         loading="lazy"

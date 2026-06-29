@@ -100,7 +100,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     class="col-span-3 flex flex-col items-center text-center py-12 md:py-16"
   >
     <NuxtImg
-      src="/img/content/empty-cart.png"
+      src="/img/content/empty-cart.webp"
       alt=""
       aria-hidden="true"
       class="w-[170px] h-[170px] md:w-[200px] md:h-[200px] object-contain drop-shadow-[0_18px_22px_rgba(0,0,0,0.14)]"

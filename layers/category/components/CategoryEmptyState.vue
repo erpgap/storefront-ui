@@ -16,7 +16,7 @@ defineProps({
       class="flex flex-col items-center md:mt-16"
     >
       <NuxtImg
-        src="/images/something-went-wrong.png"
+        src="/img/something-went-wrong.webp"
         :alt="$t('emptyStateAltText')"
         width="200"
         height="295"

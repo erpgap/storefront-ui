@@ -17,7 +17,7 @@ const options = [
       eyebrow="Help"
       title="Shipping & Delivery"
       subtitle="Considered packaging, carbon-aware carriers and tracking on every order."
-      image="/img/content/shipping-banner.jpg"
+      image="/img/content/shipping-banner.webp"
     />
 
     <div class="narrow-container py-[clamp(48px,7vw,96px)] max-w-[820px]">
