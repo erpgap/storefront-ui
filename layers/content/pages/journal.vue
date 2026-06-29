@@ -30,6 +30,10 @@ const articles = [
             <NuxtImg
               :src="article.image"
               :alt="article.title"
+              width="1344"
+              height="768"
+              sizes="xs:100vw sm:100vw md:50vw lg:50vw xl:50vw xxl:50vw 2xl:50vw"
+              densities="1x"
               class="w-full aspect-[16/10] object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               loading="lazy"
             />

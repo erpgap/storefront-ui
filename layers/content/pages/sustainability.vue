@@ -59,6 +59,10 @@ const commitments = [
       <NuxtImg
         src="/img/content/sustainability-editorial.webp"
         alt="Considered craft"
+        width="896"
+        height="1088"
+        sizes="xs:100vw sm:100vw md:50vw lg:50vw xl:50vw xxl:50vw 2xl:50vw"
+        densities="1x"
         class="w-full h-full min-h-[360px] md:min-h-[520px] object-cover object-center md:order-2 order-1"
         loading="lazy"
       />
