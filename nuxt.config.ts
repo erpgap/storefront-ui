@@ -160,6 +160,9 @@ export default defineNuxtConfig({
       alias: {
         '/node_modules': path.resolve(__dirname, './node_modules'),
         '/layers': path.resolve(__dirname, './layers'),
+        // The Odoo SDK pulls in axios (~35 KB) but only ever uses the ofetch
+        // transport we give it, so stub axios out of the client bundle.
+        axios: path.resolve(__dirname, './stubs/axios.mjs'),
       },
     },
   },
@@ -168,6 +171,16 @@ export default defineNuxtConfig({
 
   delayHydration: {
     mode: 'init',
+  },
+
+  // The app only uses a handful of `ion:` icons (the rest are inline SVG /
+  // UiLineIcon). Scan templates and bundle just those into the client so the
+  // Icon component doesn't fetch icon data from the Iconify API at runtime.
+  icon: {
+    clientBundle: {
+      scan: true,
+      sizeLimitKb: 256,
+    },
   },
 
   eslint: {

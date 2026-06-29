@@ -37,6 +37,7 @@ const {
   loadProductTemplateList,
   organizedAttributes,
   loading,
+  status,
   productTemplateList,
   totalItems,
   stockCount,
@@ -88,7 +89,14 @@ if (props.seoEntity) {
 
 setMaxVisiblePages(isWideScreen.value)
 
-await loadProductTemplateList()
+// On the client's first render the listing is already in the SSR payload, so
+// only fetch when we don't have it yet (server render, or client-side
+// navigation to a different listing). This avoids a duplicate Odoo query on
+// every page load. Filter/sort/page changes still refetch via the composable's
+// `watch`.
+if (status.value !== 'success') {
+  await loadProductTemplateList()
+}
 
 // A requested page beyond the available range (e.g. /men?page=4 when there are
 // fewer pages) is a URL that doesn't exist — return a 404 instead of an empty
