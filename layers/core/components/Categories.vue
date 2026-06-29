@@ -39,7 +39,8 @@ const categories = [
       >
         <NuxtImg
           :src="category.image"
-          :alt="category.name"
+          alt=""
+          aria-hidden="true"
           width="896"
           height="1088"
           sizes="xs:100vw sm:100vw md:33vw lg:33vw xl:33vw xxl:33vw 2xl:33vw"

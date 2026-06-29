@@ -55,9 +55,9 @@ const values = [
           />
         </svg>
         <div>
-          <h4 class="text-[14px] font-semibold tracking-[0.02em]">
+          <h3 class="text-[14px] font-semibold tracking-[0.02em]">
             {{ value.title }}
-          </h4>
+          </h3>
           <p class="text-[13px] text-primary-400 mt-1">
             {{ value.text }}
           </p>

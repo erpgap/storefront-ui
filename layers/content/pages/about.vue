@@ -74,7 +74,7 @@ const stats = [
         loading="lazy"
       />
       <div class="bg-primary-50 flex flex-col justify-center p-[clamp(40px,6vw,96px)]">
-        <p class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-400">
+        <p class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-500">
           The showcase
         </p>
         <h2 class="font-light tracking-[-0.02em] text-[clamp(28px,3.4vw,44px)] my-5">

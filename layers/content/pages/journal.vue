@@ -29,7 +29,8 @@ const articles = [
           <div class="overflow-hidden rounded-[3px] mb-5">
             <NuxtImg
               :src="article.image"
-              :alt="article.title"
+              alt=""
+              aria-hidden="true"
               width="1344"
               height="768"
               sizes="xs:100vw sm:100vw md:50vw lg:50vw xl:50vw xxl:50vw 2xl:50vw"

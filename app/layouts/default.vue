@@ -8,7 +8,9 @@ if (import.meta.client) onMounted(() => { loadWishlist() })
 <template>
   <TheHeader />
 
-  <slot />
+  <main>
+    <slot />
+  </main>
 
   <LazyTheFooter hydrate-on-visible />
 
