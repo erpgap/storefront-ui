@@ -10,6 +10,10 @@ const NuxtLink = resolveComponent('NuxtLink')
       <NuxtImg
         src="/img/home/editorial.webp"
         alt="Made from honest materials"
+        width="896"
+        height="1152"
+        sizes="xs:100vw sm:100vw md:50vw lg:50vw xl:50vw xxl:50vw 2xl:50vw"
+        densities="1x"
         class="w-full h-full min-h-[380px] md:min-h-[520px] object-cover object-center"
         loading="lazy"
       />

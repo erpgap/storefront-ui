@@ -40,6 +40,10 @@ const categories = [
         <NuxtImg
           :src="category.image"
           :alt="category.name"
+          width="896"
+          height="1088"
+          sizes="xs:100vw sm:100vw md:33vw lg:33vw xl:33vw xxl:33vw 2xl:33vw"
+          densities="1x"
           class="w-full aspect-[4/5] object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           loading="lazy"
         />

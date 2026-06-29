@@ -9,17 +9,19 @@ const NuxtLink = resolveComponent('NuxtLink')
     <!-- Background image — this is the LCP element, so it is eager + high
          priority and preloaded WITH fetchpriority (the bare `preload` prop emits
          a <link> without it, which Lighthouse flags).
-         densities="1x" (NO `sizes`) is deliberate: @nuxt/image's `sizes` path is
-         broken in this version (all-equal breakpoints collapse to a bare "100vw"
-         and emit a 1×1/2×2 srcset). Like the product images, 1x serves a single
-         right-sized webp with no retina 2× doubling — which is what keeps mobile
-         correct. webp shrinks the 1920×1080 source from ~290 KB to ~100 KB. -->
+         `sizes` MUST prefix every breakpoint (xs:/sm:/…): @nuxt/image parses a
+         bare "100vw" to a junk key and emits a 1×1 srcset, but prefixed values
+         build a proper width ladder (376w…1536w) so mobile downloads ~1280px
+         instead of the full 1920 (saves ~56 KB on the LCP). densities="1x" keeps
+         it to one candidate per breakpoint (the `w` srcset already handles DPR).
+         webp shrinks the 1920×1080 source from ~290 KB to ~124 KB. -->
     <NuxtImg
       src="/img/home/hero.webp"
       alt=""
       aria-hidden="true"
       width="1920"
       height="1080"
+      sizes="xs:100vw sm:100vw md:100vw lg:100vw xl:100vw xxl:100vw 2xl:100vw"
       densities="1x"
       format="webp"
       quality="72"
