@@ -136,20 +136,19 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
 
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
-        <!-- Show/hide via CSS, NOT v-if on $viewport. nuxt-viewport's
-             fallbackBreakpoint is "desktop", so SSR renders this desktop
-             sidebar; a mobile client with v-if would DELETE it on hydration,
-             shifting the whole grid up (~0.85 CLS). `hidden lg:block` keeps the
-             SSR and client DOM identical — visibility is pure CSS. -->
+        <!-- Render only ONE sidebar instance via v-if. CategoryFilterSidebar
+             writes to a shared useState in a watchEffect, so mounting two copies
+             (e.g. a CSS hidden-desktop one + the mobile drawer's one) makes them
+             ping-pong forever and freezes the page. Viewport v-if keeps it single. -->
         <LazyCategoryFilterSidebar
-          class="hidden lg:block"
+          v-if="$viewport.isGreaterOrEquals('desktopSmall')"
           :attributes="attributes"
           :categories="[]"
           :min-price="effectiveMinPrice"
           :max-price="effectiveMaxPrice"
         />
         <LazyCategoryMobileSidebar
-          class="lg:hidden"
+          v-else
           :is-open="isOpen"
           @close="close"
         >
