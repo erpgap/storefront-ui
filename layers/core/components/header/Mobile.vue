@@ -69,7 +69,15 @@ watch(isOpen, (open: boolean) => {
             :aria-label="$t('navigationMenu')"
             class="!fixed !inset-y-0 !left-0 bg-white w-full h-dvh z-[200] flex flex-col"
           >
-            <div class="flex justify-end shrink-0 px-4 py-3">
+            <div class="flex items-center justify-between shrink-0 px-4 py-3 border-b border-primary-100">
+              <NuxtLink
+                to="/"
+                aria-label="Sf Homepage"
+                class="text-black"
+                @click="close()"
+              >
+                <AlokaiLogo class="text-[18px]" />
+              </NuxtLink>
               <SfButton
                 variant="tertiary"
                 square
