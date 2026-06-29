@@ -57,8 +57,11 @@ const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
 
 <template>
   <div class="group relative flex flex-col">
-    <div class="relative aspect-square overflow-hidden rounded-[3px] bg-gradient-to-br from-[#efefef] to-[#e2e2e2]">
-      <NuxtLink :to="slug" prefetch class="block w-full h-full">
+    <!-- Square via the percentage-padding ratio technique (pt-[100%] = width),
+         not `aspect-ratio` — iOS WebKit mis-sizes aspect-ratio in flex/grid, which
+         collapsed these images. The image is absolutely positioned to fill. -->
+    <div class="relative pt-[100%] overflow-hidden rounded-[3px] bg-gradient-to-br from-[#efefef] to-[#e2e2e2]">
+      <NuxtLink :to="slug" prefetch class="absolute inset-0 block">
         <NuxtImg
           provider="odooProvider"
           :src="imageUrl"
