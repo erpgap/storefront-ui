@@ -24,6 +24,7 @@ defineProps({
         :alt="product?.name ?? ''"
         width="370"
         height="370"
+        densities="1x"
         loading="lazy"
         format="webp"
       />

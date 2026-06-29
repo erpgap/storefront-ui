@@ -68,6 +68,7 @@ const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
           :alt="imageAlt"
           :width="370"
           :height="370"
+          densities="1x"
           class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           :loading="loading"
         />

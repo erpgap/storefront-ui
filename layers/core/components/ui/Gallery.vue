@@ -82,6 +82,7 @@ const activeImage = computed(() => allImages.value[activeIndex.value] ?? allImag
           provider="odooProvider"
           :width="560"
           :height="560"
+          densities="1x"
           class="absolute inset-0 w-full h-full object-cover"
           :alt="activeImage.alt"
           :src="activeImage.imageSrc"
