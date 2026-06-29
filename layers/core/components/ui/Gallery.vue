@@ -81,7 +81,7 @@ const activeImage = computed(() => allImages.value[activeIndex.value] ?? allImag
           v-if="activeImage"
           provider="odooProvider"
           :width="560"
-          :height="700"
+          :height="560"
           class="absolute inset-0 w-full h-full object-cover"
           :alt="activeImage.alt"
           :src="activeImage.imageSrc"

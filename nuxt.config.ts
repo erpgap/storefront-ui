@@ -196,6 +196,11 @@ export default defineNuxtConfig({
   },
 
   image: {
+    // Only 1x candidates. Odoo product images are ~560px sources; requesting 2x
+    // (e.g. 1120x1400 for retina) exceeds the source, and Odoo returns a padded
+    // canvas with the small image centered on white — so the product looks tiny
+    // and centered on high-DPR devices. 1x keeps requests at/below the source.
+    densities: [1],
     providers: {
       odooProvider: {
         name: 'odooProvider',
