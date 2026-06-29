@@ -74,13 +74,15 @@ const activeImage = computed(() => allImages.value[activeIndex.value] ?? allImag
          combining them on one flex item makes Safari/Firefox collapse it. The
          flex item just claims the width; the inner block owns the aspect ratio. -->
     <div class="flex-1 min-w-0">
-      <div class="w-full aspect-[4/5] bg-primary-50 rounded-[2px] overflow-hidden">
+      <!-- 4:5 via percentage-padding (pt-[125%]), not `aspect-ratio` — iOS WebKit
+           mis-sizes aspect-ratio on flex items, collapsing the image. -->
+      <div class="relative pt-[125%] bg-primary-50 rounded-[2px] overflow-hidden">
         <NuxtImg
           v-if="activeImage"
           provider="odooProvider"
           :width="560"
           :height="700"
-          class="w-full h-full object-cover"
+          class="absolute inset-0 w-full h-full object-cover"
           :alt="activeImage.alt"
           :src="activeImage.imageSrc"
           loading="eager"
