@@ -125,7 +125,7 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = 18, d
     () => `product-template-list-${customIndex}-${JSON.stringify(queryArgs.value)}`,
   )
 
-  const { data, error, refresh, pending } = useAsyncData<ProductTemplateListResponse>(
+  const { data, error, refresh, pending, status } = useAsyncData<ProductTemplateListResponse>(
     asyncDataKey,
     () =>
       $sdk().odoo.query(
@@ -172,6 +172,7 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = 18, d
   return {
     loadProductTemplateList,
     loading,
+    status,
     productTemplateList,
     organizedAttributes,
     totalItems,
