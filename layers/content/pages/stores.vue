@@ -29,6 +29,10 @@ const stores = [
             <NuxtImg
               :src="store.image"
               :alt="store.city"
+              width="1152"
+              height="896"
+              sizes="xs:100vw sm:100vw md:33vw lg:33vw xl:33vw xxl:33vw 2xl:33vw"
+              densities="1x"
               class="w-full aspect-[4/3] object-cover"
               loading="lazy"
             />
