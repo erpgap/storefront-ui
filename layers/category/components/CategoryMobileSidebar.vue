@@ -40,7 +40,7 @@ defineEmits<CategorySidebarEmits>()
             </template>
           </SfButton>
         </div>
-        <div class="overflow-y-auto lg:overflow-y-visible py-4 lg:p-0">
+        <div class="overflow-y-auto lg:overflow-y-visible p-4 lg:p-0">
           <slot />
         </div>
       </div>

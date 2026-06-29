@@ -64,7 +64,11 @@ const facets = computed<Facet[]>(() => [
     : []),
   { id: null, label: 'price', type: 'price' },
   ...(props.attributes ?? []),
-  { id: 888, label: 'Availability', type: 'in-stock' },
+  // Availability/in-stock filter hidden for now — it relies on Odoo stock via
+  // the GraphQL API (slow); stock is served from Redis elsewhere. All the
+  // supporting logic and template are kept intact below — re-enable by
+  // uncommenting this line.
+  // { id: 888, label: 'Availability', type: 'in-stock' },
 ])
 
 /* ---------------- price (dual range) ----------------
@@ -379,10 +383,10 @@ const hasActive = computed(() => activePills.value.length > 0)
             <label
               v-for="{ id, label } in group.options"
               :key="id"
-              class="flex items-center gap-3 py-1.5 px-1 -mx-1 rounded-md cursor-pointer hover:bg-primary-50"
+              class="flex items-center gap-3 py-3 lg:py-1.5 px-1 -mx-1 rounded-md cursor-pointer hover:bg-primary-50"
             >
               <span
-                class="w-4 h-4 flex-none grid place-items-center border-[1.5px] rounded-md transition-colors"
+                class="w-5 h-5 lg:w-4 lg:h-4 flex-none grid place-items-center border-[1.5px] rounded-md transition-colors"
                 :class="isFilterSelected({ id }) ? 'bg-primary-900 border-primary-900' : 'border-primary-300'"
               >
                 <SfIconCheck
@@ -398,7 +402,7 @@ const hasActive = computed(() => activePills.value.length > 0)
                 @change="selectFilter(facet as any, { id: String(id), label: String(label) })"
               >
               <span
-                class="flex-1 text-sm"
+                class="flex-1 text-base lg:text-sm"
                 :class="{ 'font-medium': isFilterSelected({ id }) }"
               >{{ label }}</span>
             </label>
@@ -548,10 +552,10 @@ const hasActive = computed(() => activePills.value.length > 0)
           <label
             v-for="{ id, value, label, total } in visibleOptions(facet, index)"
             :key="id"
-            class="flex items-center gap-3 py-1.5 px-1 -mx-1 rounded-md cursor-pointer hover:bg-primary-50"
+            class="flex items-center gap-3 py-3 lg:py-1.5 px-1 -mx-1 rounded-md cursor-pointer hover:bg-primary-50"
           >
             <span
-              class="w-4 h-4 flex-none grid place-items-center border-[1.5px] rounded-md transition-colors"
+              class="w-5 h-5 lg:w-4 lg:h-4 flex-none grid place-items-center border-[1.5px] rounded-md transition-colors"
               :class="isFilterSelected({ id, value }) ? 'bg-primary-900 border-primary-900' : 'border-primary-300'"
             >
               <SfIconCheck
@@ -567,7 +571,7 @@ const hasActive = computed(() => activePills.value.length > 0)
               @change="selectFilter(facet as any, { id: String(id), value: value as any, label: String(label) })"
             >
             <span
-              class="flex-1 text-sm"
+              class="flex-1 text-base lg:text-sm"
               :class="{ 'font-medium': isFilterSelected({ id, value }) }"
             >{{ label }}</span>
             <span class="text-xs text-primary-300 tabular-nums">{{ total }}</span>
