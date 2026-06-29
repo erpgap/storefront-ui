@@ -11,10 +11,13 @@ useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home', `${origin}${pathna
 
 <template>
   <div>
+    <!-- MainBanner is the hero (above the fold) — hydrate normally. Everything
+         below is server-rendered for SEO but defers client hydration until it
+         scrolls into view, cutting initial main-thread work / unused JS. -->
     <MainBanner />
-    <Categories />
-    <BestSellers />
-    <BannerRight />
-    <ValueProps />
+    <LazyCategories hydrate-on-visible />
+    <LazyBestSellers hydrate-on-visible />
+    <LazyBannerRight hydrate-on-visible />
+    <LazyValueProps hydrate-on-visible />
   </div>
 </template>

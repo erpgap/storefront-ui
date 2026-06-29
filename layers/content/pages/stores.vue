@@ -5,9 +5,9 @@ useHead({
 })
 
 const stores = [
-  { city: 'Lisbon', address: 'Rua Garrett 42, 1200-203 Lisboa', hours: 'Mon–Sat 10–20 · Sun 12–18', image: '/img/content/store-lisbon.jpg' },
-  { city: 'London', address: '18 Redchurch Street, Shoreditch, E2 7DJ', hours: 'Mon–Sat 10–19 · Sun 11–17', image: '/img/content/store-london.jpg' },
-  { city: 'New York', address: '76 Greene Street, SoHo, NY 10012', hours: 'Mon–Sun 11–20', image: '/img/content/store-newyork.jpg' },
+  { city: 'Lisbon', address: 'Rua Garrett 42, 1200-203 Lisboa', hours: 'Mon–Sat 10–20 · Sun 12–18', image: '/img/content/store-lisbon.webp' },
+  { city: 'London', address: '18 Redchurch Street, Shoreditch, E2 7DJ', hours: 'Mon–Sat 10–19 · Sun 11–17', image: '/img/content/store-london.webp' },
+  { city: 'New York', address: '76 Greene Street, SoHo, NY 10012', hours: 'Mon–Sun 11–20', image: '/img/content/store-newyork.webp' },
 ]
 </script>
 
@@ -17,7 +17,7 @@ const stores = [
       eyebrow="Visit us"
       title="Our stores"
       subtitle="Come see the collection in person at one of our flagship locations."
-      image="/img/content/stores-banner.jpg"
+      image="/img/content/stores-banner.webp"
     />
 
     <div class="narrow-container py-[clamp(48px,7vw,96px)]">

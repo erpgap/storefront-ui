@@ -8,7 +8,7 @@ const NuxtLink = resolveComponent('NuxtLink')
   <section class="grid grid-cols-1 md:grid-cols-2 items-stretch">
     <div class="md:order-1">
       <NuxtImg
-        src="/img/home/editorial.jpg"
+        src="/img/home/editorial.webp"
         alt="Made from honest materials"
         class="w-full h-full min-h-[380px] md:min-h-[520px] object-cover object-center"
         loading="lazy"

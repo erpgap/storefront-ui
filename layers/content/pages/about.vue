@@ -36,7 +36,7 @@ const stats = [
       eyebrow="About"
       title="Built by ERPGAP"
       subtitle="Alokai is a showcase storefront connecting Odoo to a modern, headless shopping experience."
-      image="/img/content/about-banner.jpg"
+      image="/img/content/about-banner.webp"
     />
 
     <!-- Intro -->
@@ -64,7 +64,7 @@ const stats = [
     <!-- Editorial split -->
     <section class="grid grid-cols-1 md:grid-cols-2 items-stretch">
       <NuxtImg
-        src="/img/content/about-editorial.jpg"
+        src="/img/content/about-editorial.webp"
         alt="Crafted commerce"
         class="w-full h-full min-h-[360px] md:min-h-[520px] object-cover object-center"
         loading="lazy"

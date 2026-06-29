@@ -112,7 +112,7 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
 
         <!-- Empty -->
         <div v-else class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-5">
-          <NuxtImg src="/img/content/empty-wishlist.png" alt="" aria-hidden="true" class="w-[150px] h-[150px] object-contain drop-shadow-[0_16px_20px_rgba(0,0,0,0.14)]" />
+          <NuxtImg src="/img/content/empty-wishlist.webp" alt="" aria-hidden="true" class="w-[150px] h-[150px] object-contain drop-shadow-[0_16px_20px_rgba(0,0,0,0.14)]" />
           <p class="font-light text-[20px] tracking-[-0.01em]">Your wishlist is empty</p>
           <SfButton class="min-h-[48px] px-7 text-[13px] font-medium" @click="goTo('/products')">
             Browse products

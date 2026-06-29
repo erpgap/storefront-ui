@@ -54,7 +54,7 @@ const message = computed(() =>
       <!-- Image -->
       <div class="order-1 lg:order-2 relative min-h-[280px] lg:min-h-full overflow-hidden">
         <NuxtImg
-          src="/img/content/404.jpg"
+          src="/img/content/404.webp"
           alt=""
           aria-hidden="true"
           class="absolute inset-0 w-full h-full object-cover object-center"

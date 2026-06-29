@@ -61,7 +61,7 @@ const channels = [
       eyebrow="Help"
       title="Get in touch"
       subtitle="Questions about an order, or about building your own Alokai storefront? We're here."
-      image="/img/content/contact-banner.jpg"
+      image="/img/content/contact-banner.webp"
     />
 
     <div class="narrow-container py-[clamp(48px,7vw,96px)]">

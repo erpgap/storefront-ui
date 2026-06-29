@@ -184,7 +184,7 @@ onMounted(() => {
     >
       <header class="flex items-center flex-col">
         <NuxtImg
-          src="/images/signup-success.svg"
+          src="/img/signup-success.svg"
           :alt="$t('auth.signup.modal.imageAlt')"
           width="192"
           height="192"

@@ -18,7 +18,7 @@ const steps = [
       eyebrow="Help"
       title="Returns & Exchanges"
       subtitle="Changed your mind? You have 30 days, on us."
-      image="/img/content/returns-banner.jpg"
+      image="/img/content/returns-banner.webp"
     />
 
     <div class="narrow-container py-[clamp(48px,7vw,96px)] max-w-[820px]">
