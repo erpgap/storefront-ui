@@ -72,7 +72,7 @@ onClickOutside(searchPanelRef, () => {
         </nav>
 
         <!-- Center: brand -->
-        <NuxtLink to="/" aria-label="Sf Homepage" class="justify-self-center text-[26px] md:text-[28px] text-black">
+        <NuxtLink to="/" aria-label="Alokai, home" class="justify-self-center text-[26px] md:text-[28px] text-black">
           <AlokaiLogo />
         </NuxtLink>
 

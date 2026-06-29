@@ -45,7 +45,7 @@ const socials = [
       <div class="narrow-container">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.6fr_repeat(3,1fr)] gap-10 py-[72px]">
         <div>
-          <NuxtLink to="/" aria-label="Sf Homepage" class="inline-block mb-5">
+          <NuxtLink to="/" aria-label="Alokai, home" class="inline-block mb-5">
             <AlokaiLogo class="text-[22px]" />
           </NuxtLink>
           <p class="font-light text-[14px] text-primary-400 max-w-[280px]">
@@ -54,9 +54,9 @@ const socials = [
         </div>
 
         <div v-for="column in linkColumns" :key="column.title">
-          <h5 class="text-[12px] font-bold tracking-[0.16em] uppercase mb-5">
+          <h3 class="text-[12px] font-bold tracking-[0.16em] uppercase mb-5">
             {{ column.title }}
-          </h5>
+          </h3>
           <ul>
             <li v-for="item in column.links" :key="item.label">
               <NuxtLink

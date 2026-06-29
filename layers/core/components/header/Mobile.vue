@@ -42,7 +42,7 @@ watch(isOpen, (open: boolean) => {
 
       <NuxtLink
         to="/"
-        aria-label="Sf Homepage"
+        aria-label="Alokai, home"
         class="text-black"
       >
         <AlokaiLogo class="text-[17px]" />
@@ -72,7 +72,7 @@ watch(isOpen, (open: boolean) => {
             <div class="flex items-center justify-between shrink-0 px-4 py-3 border-b border-primary-100">
               <NuxtLink
                 to="/"
-                aria-label="Sf Homepage"
+                aria-label="Alokai, home"
                 class="text-black"
                 @click="close()"
               >

@@ -97,7 +97,7 @@ const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
         <span class="text-[16px] font-medium text-black">{{ $currency(specialPrice) }}</span>
         <span
           v-if="regularPrice"
-          class="text-[14px] text-primary-300 line-through"
+          class="text-[14px] text-primary-400 line-through"
         >{{ $currency(regularPrice) }}</span>
       </p>
 

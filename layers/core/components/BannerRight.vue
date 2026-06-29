@@ -19,7 +19,7 @@ const NuxtLink = resolveComponent('NuxtLink')
       />
     </div>
     <div class="md:order-2 bg-primary-50 flex flex-col justify-center p-[clamp(40px,6vw,96px)]">
-      <p class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-400">
+      <p class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-500">
         Our Philosophy
       </p>
       <h2 class="font-light tracking-[-0.02em] text-[clamp(30px,3.6vw,48px)] my-5">

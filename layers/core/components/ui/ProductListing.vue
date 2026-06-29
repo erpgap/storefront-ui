@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SfButton, SfIconTune, useDisclosure, SfLoaderCircular } from '@storefront-ui/vue'
+import { SfButton, SfIconTune, useDisclosure } from '@storefront-ui/vue'
 import { useProductAttributes } from '~~/layers/product/composables/useProductAttributes'
 import { useProductTemplateList } from '~~/layers/product/composables/useProductTemplateList'
 import { useScrollToTopOnListingChange } from '~~/layers/core/composables/useScrollToTopOnListingChange'
@@ -128,15 +128,20 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
 
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
+        <!-- Show/hide via CSS, NOT v-if on $viewport. nuxt-viewport's
+             fallbackBreakpoint is "desktop", so SSR renders this desktop
+             sidebar; a mobile client with v-if would DELETE it on hydration,
+             shifting the whole grid up (~0.85 CLS). `hidden lg:block` keeps the
+             SSR and client DOM identical — visibility is pure CSS. -->
         <LazyCategoryFilterSidebar
-          v-if="$viewport.isGreaterOrEquals('desktopSmall')"
+          class="hidden lg:block"
           :attributes="attributes"
           :categories="[]"
           :min-price="effectiveMinPrice"
           :max-price="effectiveMaxPrice"
         />
         <LazyCategoryMobileSidebar
-          v-else
+          class="lg:hidden"
           :is-open="isOpen"
           @close="close"
         >
@@ -153,44 +158,49 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
       </div>
 
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
-        <template v-if="!loading">
-          <div class="lg:hidden mb-6">
-            <div class="flex gap-3">
-              <CategorySortDropdown class="flex-1" />
-              <button
-                type="button"
-                class="flex-1 flex items-center justify-center gap-2 border border-primary-900 rounded-md px-4 py-2.5 text-xs uppercase tracking-[0.1em] font-medium whitespace-nowrap"
-                @click="open"
-              >
-                {{ $t('refineBy') }}
-                <SfIconTune size="sm" />
-              </button>
-            </div>
-            <p class="mt-4 text-sm text-primary-500">
-              <span class="text-primary-900 font-semibold tabular-nums">{{ totalItems }}</span>
-              {{ $t('products') }}
-            </p>
+        <div class="lg:hidden mb-6">
+          <div class="flex gap-3">
+            <CategorySortDropdown class="flex-1" />
+            <button
+              type="button"
+              class="flex-1 flex items-center justify-center gap-2 border border-primary-900 rounded-md px-4 py-2.5 text-xs uppercase tracking-[0.1em] font-medium whitespace-nowrap"
+              @click="open"
+            >
+              {{ $t('refineBy') }}
+              <SfIconTune size="sm" />
+            </button>
           </div>
+          <p class="mt-4 text-sm text-primary-500">
+            <span class="text-primary-900 font-semibold tabular-nums">{{ totalItems }}</span>
+            {{ $t('products') }}
+          </p>
+        </div>
 
-          <div class="hidden lg:flex justify-between items-center pb-4 mb-6 border-b border-neutral-200">
-            <span class="text-sm text-primary-500">
-              <span class="text-primary-900 font-semibold tabular-nums">{{ totalItems }}</span>
-              {{ $t('products') }}
-            </span>
-            <CategorySortDropdown />
-          </div>
+        <div class="hidden lg:flex justify-between items-center pb-4 mb-6 border-b border-neutral-200">
+          <span class="text-sm text-primary-500">
+            <span class="text-primary-900 font-semibold tabular-nums">{{ totalItems }}</span>
+            {{ $t('products') }}
+          </span>
+          <CategorySortDropdown />
+        </div>
 
+        <!-- Keep the grid MOUNTED during a refetch (useAsyncData retains the
+             previous items) and just dim it. Swapping the whole grid for a
+             centered spinner collapsed the column height and back, causing a
+             ~0.85 CLS. First row is eager so the LCP image isn't lazy. -->
+        <div :class="['transition-opacity duration-200', loading ? 'opacity-50 pointer-events-none' : '']">
           <section
             v-if="productTemplateList.length > 0"
             class="grid grid-cols-2 md:grid-cols-3 gap-5"
           >
             <LazyUiProductCard
-              v-for="product in productTemplateList"
+              v-for="(product, i) in productTemplateList"
               :key="product.id"
               :name="product.name ?? ''"
               :slug="mountUrlSlugForProductVariant((product.firstVariant ?? product) as Product)"
               :image-url="product.imageUrl ?? ''"
               :image-alt="product.name ?? ''"
+              :loading="i < 6 ? 'eager' : 'lazy'"
               :regular-price="getRegularPrice(product.firstVariant as Product)"
               :special-price="getSpecialPrice(product.firstVariant as Product)"
               :rating-count="(product as any)?.ratingCount ?? 0"
@@ -211,16 +221,6 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
             :total-items="totalItems"
             :page-size="itemsPerPage"
             :max-visible-pages="maxVisiblePages"
-          />
-        </template>
-
-        <div
-          v-else
-          class="w-full text-center"
-        >
-          <SfLoaderCircular
-            size="xl"
-            class="mt-[160px]"
           />
         </div>
       </div>
