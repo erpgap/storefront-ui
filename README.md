@@ -2,7 +2,7 @@
 
 This is a demo project that guides the creation of a Nuxt-based E-commerce project using Alokai (formerly Vue Storefront) integrated with the ODOO ERP.
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Main Pages](#main-pages)
@@ -25,6 +25,7 @@ This is a demo project that guides the creation of a Nuxt-based E-commerce proje
   - [SEO and URL Structure](#seo-and-url-structure)
   - [Performance Optimizations](#performance-optimizations)
 - [Setup and Installation](#setup-and-installation)
+- [Cache Warming](#cache-warming)
 
 
 ## Overview
@@ -35,81 +36,81 @@ The project uses the Alokai SDK to create a modern and high-performance e-commer
 
 The core of the Alokai e-commerce used in this project includes the following pages:
 
-- **🏠 Home** (/) - Homepage with featured products
-- **📂 Category** (/category-page) - Dynamic category pages listing by category slug
-- **📦 Product** (/product-page) - Dynamic product pages listing by product slug
-- **🛒 Cart** (/cart) - Shopping cart
-- **💳 Checkout** (/checkout) - Checkout process
-- **❤️ Wishlist** (/wishlist) - Wishlist page
-- **👤 My Account** (/my-account) - Customer area with:  
-  - 📍 Addresses (/billing-details or /shipping-details)
-  - 📝 Personal information (/personal-data)
+- **Home** (/) - Homepage with featured products
+- **Category** (/category-page) - Dynamic category pages listing by category slug
+- **Product** (/product-page) - Dynamic product pages listing by product slug
+- **Cart** (/cart) - Shopping cart
+- **Checkout** (/checkout) - Checkout process
+- **Wishlist** (/wishlist) - Wishlist page
+- **My Account** (/my-account) - Customer area with:  
+  - Addresses (/billing-details or /shipping-details)
+  - Personal information (/personal-data)
 
 ## Dynamic Routing System
 
-### ⚡ Automatic Route Generation
+### Automatic Route Generation
 The project uses an advanced dynamic route generation system that:
 
-- **🔄 Automatic fetch from ODOO**: During build time, the system queries ODOO via GraphQL to fetch all slugs for products, categories, and website pages
-- **📄 Static route creation**: Automatically generates static pages for each product and category found
-- **⚡ Performance optimization**: Uses Redis cache to optimize lookups and applies automatic SWR (Stale-While-Revalidate) configurations to each generated route
-- **🔗 Real-time route resolution**: Identifies at runtime ([see more here](/middleware/dynamic-routes.global.ts)) new odoo routes and maps to correct type by URL slug and save it on Redis as following:
+- **Automatic fetch from ODOO**: During build time, the system queries ODOO via GraphQL to fetch all slugs for products, categories, and website pages
+- **Static route creation**: Automatically generates static pages for each product and category found
+- **Performance optimization**: Uses Redis cache to optimize lookups and applies automatic SWR (Stale-While-Revalidate) configurations to each generated route
+- **Real-time route resolution**: Identifies at runtime ([see more here](/middleware/dynamic-routes.global.ts)) new odoo routes and maps to correct type by URL slug and save it on Redis as following:
                                     
-                                    - `product.template` → 📦 product
-                                    - `product.public.category` → 📂 category  
-                                    - `alokai.website.page` → 📄 website page
+                                    - `product.template` product
+                                    - `product.public.category` category  
+                                    - `alokai.website.page` website page
 
 ## Key Features
 
-### 1. 🔍 Product Search
+### 1. Product Search
 
-- **🏪 ODOO Default**: Native ODOO search accessible via the header search bar
-- **🔍 Algolia**: Integration with Algolia for advanced search and suggestions
-- **🔍 Luigi**: Alternative search system using Luigi
+- **ODOO Default**: Native ODOO search accessible via the header search bar
+- **Algolia**: Integration with Algolia for advanced search and suggestions
+- **Luigi**: Alternative search system using Luigi
 
-### 2. 🗄️ Advanced Caching System
+### 2. Advanced Caching System
 
-- **🔗 Route Cache**: Optimizes resources by reducing unnecessary API calls
-- **📄 Page Cache**: HTML caching to improve user experience and performance
-- **💾 Storage Layers**: Multi-driver storage system (Redis) for:
-  - 🛒 Cart cache
-  - 📦 Stock cache
-  - 🔗 Slug/route cache
-  - 📊 General data cache
+- **Route Cache**: Optimizes resources by reducing unnecessary API calls
+- **Page Cache**: HTML caching to improve user experience and performance
+- **Storage Layers**: Multi-driver storage system (Redis) for:
+  - Cart cache
+  - Stock cache
+  - Slug/route cache
+  - General data cache
 
-### 3. 💳 Payment Integration
+### 3. Payment Integration
 
-- **💰 Adyen Payment**: Secure and fast payment processing using the Adyen platform
+- **Adyen Payment**: Secure and fast payment processing using the Adyen platform
 
-### 4. 📦 Product Features
+### 4. Product Features
 
-- **🎨 Dynamic Variants**: Size, color, and material selection with automatic URL update
-- **🖼️ Image Gallery**: Gallery system with thumbnails and main image
-- **🔗 Related Products**:
-  - 🛍️ Frequently bought together
-  - 🔄 Alternative products
-  - 👀 Recently viewed
-- **❤️ Wishlist**: Add/remove products from wishlist
-- **📊 Stock Management**: Real-time stock availability check
+- **Dynamic Variants**: Size, color, and material selection with automatic URL update
+- **Image Gallery**: Gallery system with thumbnails and main image
+- **Related Products**:
+  - Frequently bought together
+  - Alternative products
+  - Recently viewed
+- **Wishlist**: Add/remove products from wishlist
+- **Stock Management**: Real-time stock availability check
 
-### 5. 📂 Category System
+### 5. Category System
 
-- **🔍 Filter Navigation**: Sidebar with attribute filters
-- **📄 Pagination**: Responsive pagination system
-- **🍞 Breadcrumbs**: Hierarchical navigation
-- **📱 Responsive View**: Automatic adaptation for mobile and desktop
+- **Filter Navigation**: Sidebar with attribute filters
+- **Pagination**: Responsive pagination system
+- **Breadcrumbs**: Hierarchical navigation
+- **Responsive View**: Automatic adaptation for mobile and desktop
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **🚀 Framework**: Nuxt 3
-- **🎨 UI Components**: Alokai Storefront UI
-- **🏪 Backend**: ODOO ERP
-- **💅 Styling**: Tailwind CSS 3
-- **⚡ Build Tool**: Vite
-- **🗄️ Cache**: Redis (configurable via storage drivers)
-- **🖼️ Images**: Nuxt Image with custom ODOO provider
+- **Framework**: Nuxt 3
+- **UI Components**: Alokai Storefront UI
+- **Backend**: ODOO ERP
+- **Styling**: Tailwind CSS 3
+- **Build Tool**: Vite
+- **Cache**: Redis (configurable via storage drivers)
+- **Images**: Nuxt Image with custom ODOO provider
 
-## 📁 Project Structure (Main paths)
+## Project Structure (Main paths)
 
 ```
 ├── layers/                       # Nuxt layers for modular architecture
@@ -231,7 +232,7 @@ interface CombinationInfoVariant {
 - Stock checks prevent overselling
 
 
-### 🔄 Key Integration Patterns
+### Key Integration Patterns
 
 #### 1. Product Loading Strategy
 ```typescript
@@ -343,20 +344,40 @@ const filters = [
 - **Lazy Loading**: Component-level loading strategies
 
 
-## ⚙️ Setup and Installation
+## Setup and Installation
 
 ```bash
 # Install dependencies
-npm install
+yarn
 
 # Configure environment variables
 cp .env.example .env
 
 # Run in development mode
-npm run dev
+yarn dev
 
 # Build for production
-npm run build
+yarn build
 ```
+
+## Cache Warming
+
+Product, category, and listing pages are server-rendered and their Odoo queries are cached in Redis (SWR, `NUXT_SWR_CACHE_TIME`, default 3600s). After a deploy or a cache flush, the first visitor to each page pays the cold cost of an Odoo round-trip. The `scripts/warm-cache.mjs` script pre-populates that cache so visitors always hit the warm path.
+
+It crawls the storefront over HTTP — no browser and no dependencies — requesting every product page, every category/listing page (including all pagination pages), and the static pages, for both desktop and mobile. Everything is URL-driven, so each request runs the same query and warms the same cache key a real visitor would read. It does not touch search and adds no filter/sort/variant params.
+
+```bash
+# NUXT_PUBLIC_MIDDLEWARE_URL (the storefront site URL) must be set —
+# load it from your env, e.g.:
+source .env && node scripts/warm-cache.mjs
+```
+
+Run it after each deploy or cache flush, and on a schedule shorter than `NUXT_SWR_CACHE_TIME` to keep the cache warm — for example via cron:
+
+```cron
+*/50 * * * * cd /path/to/app && source .env && node scripts/warm-cache.mjs >> /var/log/warm-cache.log 2>&1
+```
+
+To change the concurrency or page size, edit the constants at the top of the script.
 
 For detailed technical implementation, take a look at our main documentation at [docs.alokai.com](https://docs.alokai.com/integrations/odoo).

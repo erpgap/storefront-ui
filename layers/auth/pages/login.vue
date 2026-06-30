@@ -65,7 +65,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     </form>
 
     <UiAlert class="mt-6 w-full p-4 md:p-6 !justify-start typography-text-base !bg-[#f7f7f7]" variant="neutral">
-      <i18n-t tag="span" keypath="auth.login.createAccountBanner">
+      <i18n-t scope="global" tag="span" keypath="auth.login.createAccountBanner">
         <SfLink :tag="NuxtLink" to="signup" variant="primary" data-testid="login-page-signup-button">
           {{ $t("auth.login.createAccountLinkLabel") }}
         </SfLink>

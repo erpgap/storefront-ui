@@ -4,12 +4,10 @@ import type {
   MutationWishlistRemoveItemArgs,
   WishlistAddItemResponse,
   WishlistData,
-  WishlistLoadResponse,
   WishlistRemoveItemResponse,
   WishlistItems,
 } from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
-import { QueryName } from '~~/server/queries'
 
 export const useWishlist = () => {
   const { $sdk } = useNuxtApp() as any
@@ -19,18 +17,20 @@ export const useWishlist = () => {
   const fetchedOnce = useState<boolean>('wishlist-fetched-once', () => false)
 
 
+  // Load from the Redis-backed endpoint (same pattern as the cart): a refresh
+  // reads the persisted wishlist from Redis instead of querying Odoo every time.
+  // Odoo is hit at most once per session (on the first cache miss, inside the
+  // endpoint); add/remove mutations keep Redis fresh via the manage-wishlist plugin.
   const loadWishlist = async () => {
     try {
       loading.value = true
 
-      const data = await $sdk().odoo.query<
-        MutationWishlistAddItemArgs,
-        WishlistLoadResponse
-      >({
-        queryName: QueryName.WishlistLoadQuery,
-      })
+      const data = await useRequestFetch()<{ wishlist?: WishlistData }>(
+        '/api/odoo/wishlist-load',
+      )
 
-      wishlist.value = data?.wishlistItems || []
+      wishlist.value = (data?.wishlist as WishlistData)
+        || ({ wishlistItems: [] } as unknown as WishlistData)
     }
     catch (error) {
       toast.error(error.data?.message)

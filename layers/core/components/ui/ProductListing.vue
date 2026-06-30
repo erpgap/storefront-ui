@@ -5,6 +5,7 @@ import { useProductTemplateList } from '~~/layers/product/composables/useProduct
 import { useScrollToTopOnListingChange } from '~~/layers/core/composables/useScrollToTopOnListingChange'
 import generateSeo, { type SeoEntity } from '~~/app/utils/buildSEOHelper'
 import type { Product } from '~~/graphql'
+import { LISTING_PAGE_SIZE } from '~~/shared/listing.mjs'
 
 type Breadcrumb = { label: string; link: string }
 
@@ -23,7 +24,7 @@ const props = withDefaults(
     heading: '',
     description: '',
     seoEntity: null,
-    itemsPerPage: 18,
+    itemsPerPage: LISTING_PAGE_SIZE,
     stateKey: 'product-listing',
     defaultSort: '',
   },

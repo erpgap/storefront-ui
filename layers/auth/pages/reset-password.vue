@@ -10,7 +10,7 @@
         </p>
 
         <label>
-          <FormLabel>{{ $t("auth.resetPassword.email") }}</FormLabel>
+          <UiFormLabel>{{ $t("auth.resetPassword.email") }}</UiFormLabel>
           <SfInput
             v-model="customerEmail"
             name="email"

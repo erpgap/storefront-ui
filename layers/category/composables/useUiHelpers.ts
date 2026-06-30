@@ -1,4 +1,5 @@
 import type { ProductFilterInput, QueryProductsArgs } from '~~/graphql'
+import { LISTING_PAGE_SIZE } from '~~/shared/listing.mjs'
 
 export const useUiHelpers = () => {
   const route = useRoute()
@@ -29,7 +30,7 @@ export const useUiHelpers = () => {
  const getFacetsFromURL = (
     query: Record<string, any>,
     ids: number[] = [],
-    defaultPageSize = 18,
+    defaultPageSize = LISTING_PAGE_SIZE,
   ): QueryProductsArgs => {
     const filters: string[] = []
 
