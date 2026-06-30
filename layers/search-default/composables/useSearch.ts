@@ -28,7 +28,10 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     totalItems,
     organizedAttributes,
     loading, // loading do composable de produtos
-  } = useProductTemplateList(route.fullPath)
+    // watchRoute=false: this lives in the header and persists across navigation,
+    // so it must NOT refetch on route changes — it queries only when the user
+    // types (see search() below).
+  } = useProductTemplateList(route.fullPath, 12, '', false)
 
   // ---------- Estado local da busca ----------
   const searchInputValue = ref('') // texto digitado

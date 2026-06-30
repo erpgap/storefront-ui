@@ -6,6 +6,7 @@ import type {
 } from '~~/graphql'
 import { QueryName } from '~~/server/queries'
 import { useUiHelpers } from '~~/layers/category/composables/useUiHelpers'
+import { LISTING_PAGE_SIZE } from '~~/shared/listing.mjs'
 
 const SHOW_ALL_FACETS = true
 const IGNORED_QUERY_PARAMS = ['list-view'] as const
@@ -82,7 +83,7 @@ function buildAttributeFacets(
   return sorted
 }
 
-export const useProductTemplateList = (customIndex = '', defaultPageSize = 18, defaultSort = '') => {
+export const useProductTemplateList = (customIndex = '', defaultPageSize = LISTING_PAGE_SIZE, defaultSort = '', watchRoute = true) => {
   const nuxtApp = useNuxtApp() as any
   const $sdk: () => any = nuxtApp.$sdk
   const route = useRoute()
@@ -121,8 +122,16 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = 18, d
     }
   })
 
-  const asyncDataKey = computed(
-    () => `product-template-list-${customIndex}-${JSON.stringify(queryArgs.value)}`,
+  // Listing pages embed queryArgs in the key so filter/sort/page changes fetch
+  // fresh data (useAsyncData auto-refetches when a reactive key changes). The
+  // header search (watchRoute=false) persists in the layout, so a queryArgs-based
+  // key would make EVERY navigation that changes args (a filter, ?page=N, a
+  // category) silently refetch a useless catalog query. It uses a STABLE key and
+  // fetches only when the user types (via loadProductTemplateList).
+  const asyncDataKey = computed(() =>
+    watchRoute
+      ? `product-template-list-${customIndex}-${JSON.stringify(queryArgs.value)}`
+      : `product-template-list-search-${customIndex}`,
   )
 
   const { data, error, refresh, pending, status } = useAsyncData<ProductTemplateListResponse>(
@@ -138,7 +147,13 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = 18, d
       lazy: false,
       immediate: false,
       default: () => null,
-      watch: [listingQuery, paramOverride],
+      // Listing pages watch the URL so filter/sort/page changes refetch. The
+      // header search reuses this composable but is mounted in the layout
+      // (persists across navigation) — it must NOT refetch on every route
+      // change (that fired an unsorted, search-less catalog query → Odoo hit
+      // on every navigation). Such callers pass watchRoute=false and drive
+      // fetches manually via loadProductTemplateList().
+      watch: watchRoute ? [listingQuery, paramOverride] : [paramOverride],
     },
   )
 

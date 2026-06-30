@@ -24,7 +24,9 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     organizedAttributes,
     productTemplateList,
     totalItems,
-  } = useProductTemplateList(String(route.fullPath))
+    // watchRoute=false: header search persists across navigation; it must not
+    // refetch on route changes — only when the user types.
+  } = useProductTemplateList(String(route.fullPath), 12, '', false)
   const { getFacetsFromURL } = useUiHelpers()
   const loading = useState('odoo-search-loading', () => false)
   const searchInputValue = useState('odoo-search-input', () => '')

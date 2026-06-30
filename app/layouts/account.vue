@@ -102,7 +102,7 @@ import {
 } from '@storefront-ui/vue'
 
 const NuxtLink = resolveComponent('NuxtLink')
-const { t } = useI18n()
+const { t } = useI18n({ useScope: 'global' })
 const router = useRouter()
 const { logout } = useAuth()
 

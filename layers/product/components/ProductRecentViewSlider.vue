@@ -24,7 +24,7 @@ const props = defineProps({
 const { loadProductTemplateList, productTemplateList }
   = useProductTemplateListForRecentViews()
 
-await loadProductTemplateList()
+await loadProductTemplateList(props.excludeId)
 
 const filteredList = computed(() => {
   if (!props.excludeId) return productTemplateList.value

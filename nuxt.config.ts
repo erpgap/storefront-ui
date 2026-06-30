@@ -125,6 +125,9 @@ export default defineNuxtConfig({
       cart: {
         ...storageConfig,
       },
+      wishlist: {
+        ...storageConfig,
+      },
       stock: {
         ...storageConfig,
       },
@@ -139,6 +142,9 @@ export default defineNuxtConfig({
         ttl: swrCacheTime,
       },
       cart: {
+        ...storageConfig,
+      },
+      wishlist: {
         ...storageConfig,
       },
       stock: {
