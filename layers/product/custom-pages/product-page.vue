@@ -15,6 +15,7 @@ import {
 } from '@storefront-ui/vue'
 import type { CustomProductWithStockFromRedis, ImageGalleryItem, OrderLine } from '~~/graphql'
 import generateSeo, { type SeoEntity } from '~~/app/utils/buildSEOHelper'
+import { buildOdooImageUrl } from '~~/app/utils/odooImage'
 import { useProductGetters } from '~~/layers/product/composables/useProductGetters'
 import { useProductTemplate } from '~~/layers/product/composables/useProductTemplate'
 import { useProductVariant } from '~~/layers/product/composables/useProductVariant'
@@ -36,6 +37,7 @@ const cleanPath = computed(() => route.path.replace(/\/$/, ''))
 // the product URL.
 const { origin: reqOrigin, pathname: reqPathname } = useRequestURL()
 const canonicalUrl = `${reqOrigin}${reqPathname}`
+const config = useRuntimeConfig()
 
 const {
   loadProductTemplate,
@@ -96,6 +98,14 @@ const seoData = computed(() => {
       metaTitle: product.metaTitle || product.name || 'Product',
       metaDescription: product.metaDescription || product.description || 'Check out this amazing product!',
       metaKeyword: product.metaKeyword || product.name,
+      // Absolute product image for og:image/twitter:image — also how the
+      // Cloudflare AI Search crawler picks up a thumbnail for this page.
+      metaImage: buildOdooImageUrl(
+        (product as any).imageUrl || (productTemplate.value as any)?.imageUrl,
+        1200,
+        630,
+        config.public.odooBaseImageUrl as string,
+      ) || null,
     }
     return generateSeo(seoEntity, 'Product', canonicalUrl)
   }

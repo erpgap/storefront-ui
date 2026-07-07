@@ -22,7 +22,7 @@ describe('generateSeo', () => {
   }
 
   it('should generate SEO object with all metadata', () => {
-    const result = generateSeo(mockEntity, 'product')
+    const result = generateSeo(mockEntity, 'product', 'https://example.com/test-path')
 
     expect(result).toEqual({
       title: 'Test Meta Title',
@@ -36,12 +36,16 @@ describe('generateSeo', () => {
           content: 'Test meta description',
         },
         {
-          name: 'og:description',
+          property: 'og:description',
           content: 'Test meta description',
         },
         {
-          name: 'og:title',
+          property: 'og:title',
           content: 'Test Meta Title',
+        },
+        {
+          property: 'og:image',
+          content: 'https://example.com/image.jpg',
         },
         {
           name: 'twitter:title',
@@ -50,6 +54,14 @@ describe('generateSeo', () => {
         {
           name: 'twitter:description',
           content: 'Test meta description',
+        },
+        {
+          name: 'twitter:image',
+          content: 'https://example.com/image.jpg',
+        },
+        {
+          name: 'twitter:card',
+          content: 'summary_large_image',
         },
       ],
       script: [
@@ -77,7 +89,7 @@ describe('generateSeo', () => {
       metaTitle: null,
     }
 
-    const result = generateSeo(entityWithoutMetaTitle, 'product')
+    const result = generateSeo(entityWithoutMetaTitle, 'product', 'https://example.com/test-path')
 
     expect(result.title).toBe('Test Product')
     expect(result.meta).toContainEqual({
@@ -93,7 +105,7 @@ describe('generateSeo', () => {
       name: null,
     }
 
-    const result = generateSeo(entityWithoutTitleAndName, 'product')
+    const result = generateSeo(entityWithoutTitleAndName, 'product', 'https://example.com/test-path')
 
     expect(result.title).toBe('product page')
   })
@@ -104,7 +116,7 @@ describe('generateSeo', () => {
       metaDescription: null,
     }
 
-    const result = generateSeo(entityWithoutDescription, 'product')
+    const result = generateSeo(entityWithoutDescription, 'product', 'https://example.com/test-path')
 
     expect(result.meta).not.toContainEqual(
       expect.objectContaining({
@@ -129,7 +141,7 @@ describe('generateSeo', () => {
       jsonLd: null,
     }
 
-    const result = generateSeo(entityWithoutJsonLd, 'product')
+    const result = generateSeo(entityWithoutJsonLd, 'product', 'https://example.com/test-path')
 
     expect(result.script).toEqual([])
   })
@@ -140,7 +152,7 @@ describe('generateSeo', () => {
       jsonLd: '{"@context": "https://schema.org", "@type": "Product"}',
     }
 
-    const result = generateSeo(entityWithJsonLdString, 'product')
+    const result = generateSeo(entityWithJsonLdString, 'product', 'https://example.com/test-path')
 
     expect(result.script).toEqual([
       {
@@ -151,7 +163,7 @@ describe('generateSeo', () => {
   })
 
   it('should always include canonical link with current URL', () => {
-    const result = generateSeo(mockEntity, 'product')
+    const result = generateSeo(mockEntity, 'product', 'https://example.com/test-path')
 
     expect(result.link).toContainEqual({
       rel: 'canonical',
@@ -165,7 +177,7 @@ describe('generateSeo', () => {
       name: 'Test Product',
     }
 
-    generateSeo(incompleteEntity, 'product')
+    generateSeo(incompleteEntity, 'product', 'https://example.com/test-path')
 
     expect(console.warn).toHaveBeenCalledWith(
       '[WARNING DEVELOPER] - The product from slug https://example.com/test-path does not have the metaTitle.',
@@ -187,7 +199,7 @@ describe('generateSeo', () => {
   it('should handle empty entity gracefully', () => {
     const emptyEntity: SeoEntity = {}
 
-    const result = generateSeo(emptyEntity, 'category')
+    const result = generateSeo(emptyEntity, 'category', 'https://example.com/test-path')
 
     expect(result.title).toBe('category page')
     expect(result.meta).toEqual([
@@ -196,7 +208,7 @@ describe('generateSeo', () => {
         content: 'undefined | undefined',
       },
       {
-        name: 'og:title',
+        property: 'og:title',
         content: 'category page',
       },
       {

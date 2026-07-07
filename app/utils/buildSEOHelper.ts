@@ -80,12 +80,16 @@ const generateSeo = <T extends SeoEntity>(
         content: entity.metaDescription,
       },
       entity?.metaDescription && {
-        name: 'og:description',
+        property: 'og:description',
         content: entity.metaDescription,
       },
       {
-        name: 'og:title',
+        property: 'og:title',
         content: defaultTitle,
+      },
+      entity?.metaImage && {
+        property: 'og:image',
+        content: entity.metaImage,
       },
       {
         name: 'twitter:title',
@@ -94,6 +98,14 @@ const generateSeo = <T extends SeoEntity>(
       entity?.metaDescription && {
         name: 'twitter:description',
         content: entity.metaDescription,
+      },
+      entity?.metaImage && {
+        name: 'twitter:image',
+        content: entity.metaImage,
+      },
+      entity?.metaImage && {
+        name: 'twitter:card',
+        content: 'summary_large_image',
       },
     ].filter(Boolean) as Meta[],
     script: [
