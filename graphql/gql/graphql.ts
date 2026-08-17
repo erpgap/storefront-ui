@@ -107,7 +107,7 @@ export type BlogPost = {
   name: Maybe<Scalars['String']['output']>;
   publishedDate: Maybe<Scalars['String']['output']>;
   slug: Maybe<Scalars['String']['output']>;
-  tagIds: Maybe<Array<BlogTag>>;
+  tags: Maybe<Array<BlogTag>>;
   teaser: Maybe<Scalars['String']['output']>;
 };
 
@@ -189,7 +189,6 @@ export type Category = {
   metaTitle: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   parent: Maybe<Category>;
-  products: Maybe<Array<Product>>;
   slug: Maybe<Scalars['String']['output']>;
 };
 
@@ -807,8 +806,6 @@ export type Partner = {
   phone: Maybe<Scalars['String']['output']>;
   publicPricelist: Maybe<Pricelist>;
   shippingAddress: Maybe<Partner>;
-  signupToken: Maybe<Scalars['String']['output']>;
-  signupValid: Maybe<Scalars['String']['output']>;
   state: Maybe<State>;
   street: Maybe<Scalars['String']['output']>;
   street2: Maybe<Scalars['String']['output']>;
@@ -1375,7 +1372,6 @@ export type WebsitePage = {
   isPublished: Maybe<Scalars['Boolean']['output']>;
   name: Maybe<Scalars['String']['output']>;
   pageType: Maybe<PageTypeEnum>;
-  products: Maybe<Array<Product>>;
   publishingDate: Maybe<Scalars['String']['output']>;
   website: Maybe<Website>;
   websiteUrl: Maybe<Scalars['String']['output']>;
