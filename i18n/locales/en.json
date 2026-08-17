@@ -319,6 +319,7 @@
   "account": {
     "heading": "My Account",
     "navBarBottomHeading": "Account",
+    "overview": "Overview",
     "logout": "Logout",
     "back": "Back",
     "accountSettings": {

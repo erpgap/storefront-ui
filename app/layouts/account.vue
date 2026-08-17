@@ -52,7 +52,7 @@
                 :to="item.link"
                 :class="[
                   'flex items-center justify-between gap-3 px-4 py-3 md:py-2.5 rounded-md text-[14px] transition-colors',
-                  isActive(item.link)
+                  isActive(item)
                     ? 'bg-primary-50 text-black font-medium'
                     : 'text-primary-600 hover:text-black hover:bg-primary-50',
                 ]"
@@ -106,18 +106,24 @@ const { t } = useI18n({ useScope: 'global' })
 const router = useRouter()
 const { logout } = useAuth()
 
+const path = '/my-account'
+
 const navItems = [
+  { label: t('account.overview'), link: path, exact: true },
   { label: t('account.myOrders.section.myOrders'), link: '/my-account/my-orders' },
   { label: t('account.accountSettings.section.personalData'), link: '/my-account/personal-data' },
 ]
 
 const currentPath = computed(() => router.currentRoute.value.path)
-const path = '/my-account'
 const rootPathRegex = new RegExp(`^${path}/?$`)
 const isRoot = computed(() => rootPathRegex.test(currentPath.value))
-const isActive = (link) => currentPath.value === link || currentPath.value.startsWith(`${link}/`)
+const isActive = ({ link, exact }) =>
+  exact
+    ? rootPathRegex.test(currentPath.value)
+    : currentPath.value === link || currentPath.value.startsWith(`${link}/`)
+// Skip the exact-match root entry so subpages resolve to their own title.
 const findCurrentPage = computed(() =>
-  navItems.find(({ link }) => currentPath.value.includes(link)),
+  navItems.find(({ link, exact }) => !exact && currentPath.value.includes(link)),
 )
 
 // Published by the order-detail page so we can show "#S00004" in the breadcrumb.
