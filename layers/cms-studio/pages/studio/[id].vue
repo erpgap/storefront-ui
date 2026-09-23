@@ -38,6 +38,15 @@ const {
 } = draft
 
 const paletteOpen = ref(true)
+const versionsOpen = ref(false)
+
+async function onRestored() {
+  // Reload rather than patching state: restore changes the live revision, the
+  // draft and the history all at once, and guessing at the new state is how
+  // editors end up looking at something that is not there.
+  await refreshNuxtData(`studio-page-${pageId.value}`)
+  window.location.reload()
+}
 
 /**
  * The position a new block will land at when the merchant picks from the
@@ -386,6 +395,14 @@ const saveLabel = computed(() => ({
         <button
           type="button"
           class="studio-btn"
+          @click="versionsOpen = true"
+        >
+          History
+        </button>
+
+        <button
+          type="button"
+          class="studio-btn"
           @click="discard"
         >
           Discard
@@ -564,6 +581,14 @@ const saveLabel = computed(() => ({
           />
         </div>
       </aside>
+
+      <StudioVersions
+        v-if="versionsOpen"
+        :page-id="pageId"
+        :has-unpublished-changes="saveState === 'dirty' || saveState === 'saving'"
+        @restored="onRestored"
+        @close="versionsOpen = false"
+      />
 
       <!-- Validation summary: blocks needing attention before publish. -->
       <div
