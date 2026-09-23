@@ -131,6 +131,13 @@ export default defineNuxtConfig({
       stock: {
         ...storageConfig,
       },
+      // CMS PoC content. Deliberately NOT ...storageConfig — that defaults to
+      // an in-memory driver, and pages must survive a dev-server restart.
+      // Swapped for the Odoo-backed adapter in server/utils/cmsStore.ts later.
+      cms: {
+        driver: 'fs',
+        base: './.data/cms',
+      },
     },
     devStorage: {
       cache: {
@@ -150,10 +157,22 @@ export default defineNuxtConfig({
       stock: {
         ...storageConfig,
       },
+      // CMS PoC content. Deliberately NOT ...storageConfig — that defaults to
+      // an in-memory driver, and pages must survive a dev-server restart.
+      // Swapped for the Odoo-backed adapter in server/utils/cmsStore.ts later.
+      cms: {
+        driver: 'fs',
+        base: './.data/cms',
+      },
     },
   },
 
   routeRules: {
+    // The studio is a private editing surface: no SWR (it would show stale
+    // drafts and look broken), no prerender, no crawlers.
+    '/studio': { swr: false, prerender: false, robots: false },
+    '/studio/**': { swr: false, prerender: false, robots: false },
+    '/api/cms/**': { swr: false, prerender: false, robots: false },
     '/sitemap_index.xml': { swr: swrCacheTime },
     '/__sitemap__/**': { swr: swrCacheTime },
   },

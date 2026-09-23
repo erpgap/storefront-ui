@@ -111,3 +111,7 @@ config/*.json
 .prettierrc
 
 openspec/
+
+# CMS proof of concept
+.data
+public/img/cms
