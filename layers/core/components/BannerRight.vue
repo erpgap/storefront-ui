@@ -1,15 +1,42 @@
 <script setup lang="ts">
 import { SfButton } from '@storefront-ui/vue'
 
+// CMS-editable via the `editorial` block. Defaults reproduce the previously
+// hard-coded copy, so `<BannerRight />` renders as before.
+const props = withDefaults(defineProps<{
+  eyebrow?: string
+  title?: string
+  body?: string
+  image?: string
+  imageAlt?: string
+  imagePosition?: 'left' | 'right'
+  ctaLabel?: string
+  ctaUrl?: string
+}>(), {
+  eyebrow: 'Our Philosophy',
+  title: 'Made from honest materials',
+  body: 'Every piece is cut from natural fabrics — organic cotton, pure linen, full-grain leather — chosen to wear in beautifully and feel better with every year.',
+  image: '/img/home/editorial.webp',
+  imageAlt: 'Made from honest materials',
+  imagePosition: 'left',
+  ctaLabel: 'Discover the Story',
+  ctaUrl: '/products',
+})
+
 const NuxtLink = resolveComponent('NuxtLink')
+
+// Which half the image sits in. Ordering rather than DOM order keeps the image
+// first in the markup, so it is still the LCP candidate the browser preloads.
+const imageOrder = computed(() => props.imagePosition === 'right' ? 'md:order-2' : 'md:order-1')
+const textOrder = computed(() => props.imagePosition === 'right' ? 'md:order-1' : 'md:order-2')
 </script>
 
 <template>
   <section class="grid grid-cols-1 md:grid-cols-2 items-stretch">
-    <div class="md:order-1">
+    <div :class="imageOrder">
       <NuxtImg
-        src="/img/home/editorial.webp"
-        alt="Made from honest materials"
+        :src="image"
+        :alt="imageAlt"
         width="896"
         height="1152"
         sizes="xs:100vw sm:100vw md:50vw lg:50vw xl:50vw xxl:50vw 2xl:50vw"
@@ -18,24 +45,42 @@ const NuxtLink = resolveComponent('NuxtLink')
         loading="lazy"
       />
     </div>
-    <div class="md:order-2 bg-primary-50 flex flex-col justify-center p-[clamp(40px,6vw,96px)]">
-      <p class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-500">
-        Our Philosophy
+    <div
+      class="bg-primary-50 flex flex-col justify-center p-[clamp(40px,6vw,96px)]"
+      :class="textOrder"
+    >
+      <p
+        v-if="eyebrow"
+        class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-500"
+      >
+        {{ eyebrow }}
       </p>
       <h2 class="font-light tracking-[-0.02em] text-[clamp(30px,3.6vw,48px)] my-5">
-        Made from honest materials
+        {{ title }}
       </h2>
       <p class="font-light text-primary-500 max-w-[440px] mb-8">
-        Every piece is cut from natural fabrics — organic cotton, pure linen, full-grain leather — chosen to wear in beautifully and feel better with every year.
+        {{ body }}
       </p>
       <SfButton
+        v-if="ctaLabel"
         :tag="NuxtLink"
-        to="/products"
+        :to="ctaUrl || '/products'"
         class="self-start min-h-[52px] px-7 gap-3 text-[13px] font-medium"
       >
-        Discover the Story
-        <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M1 7h15M11 1l5 6-5 6" stroke-linecap="round" stroke-linejoin="round" />
+        {{ ctaLabel }}
+        <svg
+          width="18"
+          height="14"
+          viewBox="0 0 18 14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+        >
+          <path
+            d="M1 7h15M11 1l5 6-5 6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </SfButton>
     </div>

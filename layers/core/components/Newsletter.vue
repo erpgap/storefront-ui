@@ -2,6 +2,16 @@
 import { SfButton } from '@storefront-ui/vue'
 import { ref } from 'vue'
 
+// CMS-editable via the `newsletter` block: the merchant owns the wording, the
+// form and where submissions go stay in code.
+withDefaults(defineProps<{
+  title?: string
+  body?: string
+}>(), {
+  title: 'Join the list',
+  body: 'Be first to know about new collections, private sales and design stories.',
+})
+
 const { newsletterSubscribe, loading, apiError } = useCore()
 
 const inputValue = ref('')
@@ -21,10 +31,10 @@ const subscribeNewsletter = async () => {
   <section class="bg-black text-white py-[clamp(64px,9vw,132px)]">
     <div class="narrow-container max-w-[720px] text-center">
       <h2 class="font-light tracking-[-0.02em] text-[clamp(28px,3.4vw,44px)] mb-4">
-        Join the list
+        {{ title }}
       </h2>
       <p class="text-white/60 mb-9">
-        Be first to know about new collections, private sales and design stories.
+        {{ body }}
       </p>
       <p
         v-if="subscribed"
