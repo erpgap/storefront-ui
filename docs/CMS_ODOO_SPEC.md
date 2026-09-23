@@ -3,7 +3,12 @@
 Implementation spec for moving the CMS proof of concept off its local file store
 and onto Odoo.
 
-**Status:** agreed, not yet implemented.
+**Status: built.** Both repos have a `feature/cms` branch, the module is
+installed on `v19_alokai-odoo`, and the whole flow works end to end - sign in,
+create a page, drag blocks, pick real products, publish, roll back, view the
+live URL.
+
+Section 12 records what shipped against the plan, and §14 what is left.
 **Prerequisite reading:** [CMS_POC.md](./CMS_POC.md) for what already works.
 [CMS_ARCHITECTURE.md](./CMS_ARCHITECTURE.md) for *why* Odoo rather than a
 headless CMS — that reasoning still stands. Where the two documents disagree on
@@ -400,30 +405,63 @@ written before this existed keeps rendering untouched and is normalised the next
 time it is saved. That is §4's schema-version pattern in miniature, and it is
 already working in the PoC.
 
-## 12. Build order
+## 12. What shipped
 
-| # | Work | Est. |
+| # | Work | State |
 | --- | --- | --- |
-| 1 | Close §11. Model, ACLs, group, record rules. Install on a DB. | 2d |
-| 2 | Revisions: publish, restore, prune, `restored_from_id`. | 1.5d |
-| 3 | GraphQL reads + `WebsitePage.blocks`. | 1d |
-| 4 | GraphQL writes, group checks, `write_date` guard. | 1.5d |
-| 5 | Odoo-backed `cmsStore.ts`; queries/mutations + `yarn codegen`. | 1.5d |
-| 6 | `/studio/login`, route guard, `cmsCanEdit`. | 1d |
-| 7 | Media → `ir.attachment`. | 1d |
-| 8 | Invalidation both directions; sitemap + warmer. | 1.5d |
-| 9 | `product-ref` / `category-ref` field widgets + mirroring. | 1.5d |
-| 10 | `schemaVersion` + the migration chain. | 1d |
-| 11 | Content languages from `res.lang` instead of the PoC constant. | 0.5d |
-| | **Total** | **~13.5d** |
+| 1 | Model, ACLs, group, record rules | done |
+| 2 | Revisions: publish, restore, prune | done |
+| 3 | GraphQL reads + `WebsitePage.blocks` | done |
+| 4 | GraphQL writes, group checks, `write_date` guard | done |
+| 5 | Odoo-backed `cmsStore` | done |
+| 6 | `/studio/login`, route guard, editor check | done |
+| 7 | Media on `ir.attachment` | done |
+| 8 | Invalidation both directions | done |
+| 9 | `product-ref` / `category-ref` + mirroring | done |
+| 10 | `schemaVersion` + migration chain | done |
+| 11 | Content languages from `res.lang` | done |
 
-Down from the architecture doc's 2–3 weeks, mostly because dropping codegen and
-Python-side schema validation removed real work.
+### 12.1 What testing caught
 
-Steps 1–4 are Odoo-only and independently testable through GraphiQL. Step 5 is
-the point the studio stops using the file store.
+Worth recording, because each was invisible to inspection and only appeared
+when the thing actually ran:
 
----
+- **A duplicate `write`.** `ProductTemplate` already defined `write` further
+  down the class body, which silently replaced the new one. Product changes
+  queued nothing and the code looked correct.
+- **Restore deleted its own source.** Creating a revision prunes, and with a
+  small limit the revision being restored *from* was itself a candidate - so
+  the next line read a deleted record. Content survived because restore copies
+  forward; the audit link did not, which is why `restored_from_number` exists
+  as a plain integer beside the many2one.
+- **`select` fields became per-language maps.** The seeding function's
+  fall-through branch caught them, producing values components could not read.
+- **A new page arrived already failing validation.** Arrays seeded a row even
+  with no minimum, so the hero's optional buttons had an empty required label
+  before the merchant had typed anything.
+- **Locale codes orphaned content.** Odoo's default is `en_US`; content written
+  as `en` failed every required check. Resolution is now tolerant of region
+  variants in both directions.
+- **`''.split(',')` is `['']`.** Which `Number()` makes `0`, which
+  `Number.isInteger` accepts - so an absent `ids` parameter became a search for
+  record id 0 and returned nothing.
+
+Two Odoo 19 API changes also bit: `res.groups.category_id` is now
+`privilege_id` pointing at `res.groups.privilege`, and `_sql_constraints` is
+replaced by `models.Constraint`.
+
+## 14. Not done
+
+- **Cross-browser verification.** Chromium only. No Firefox available in the
+  build environment and WebKit would not launch, so the `dataTransfer.setData`
+  fix for Firefox drag remains reasoned rather than tested.
+- **Odoo-side automated tests.** The addon has a `tests/` directory; none were
+  added. Everything here was verified through the running system, which is not
+  the same thing as a suite that runs in CI.
+- **Migration of the eight hardcoded content pages** and the homepage.
+- **Load testing** against a realistic page and revision count.
+- **`.to_migrate/website_cms`** left in place, pending whether any merchant has
+  it installed on 18.0.
 
 ## 13. Deliberate follow-ups
 
