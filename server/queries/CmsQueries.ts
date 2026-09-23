@@ -74,3 +74,22 @@ export const GetCmsLocalesQuery = `
     }
   }
 `
+
+export const GetCmsProductsQuery = `
+  query ($search: String, $ids: [Int]) {
+    cmsProducts(search: $search, ids: $ids) {
+      id
+      name
+      imageUrl
+    }
+  }
+`
+
+export const GetCmsCategoriesQuery = `
+  query ($search: String) {
+    cmsCategories(search: $search) {
+      id
+      name
+    }
+  }
+`

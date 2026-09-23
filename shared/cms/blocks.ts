@@ -32,6 +32,11 @@ export type FieldType =
   | 'boolean'
   | 'select'
   | 'array'
+  // Real relational references into Odoo. These are the capability a separate
+  // headless CMS could not provide without an id-sync job, and the reason the
+  // content lives in Odoo at all.
+  | 'product-ref'
+  | 'category-ref'
 
 interface FieldCommon {
   name: string
@@ -59,6 +64,12 @@ export interface BooleanField extends FieldCommon {
   default?: boolean
 }
 
+export interface RefField extends FieldCommon {
+  type: 'product-ref' | 'category-ref'
+  /** Maximum number of records that can be picked. */
+  max?: number
+}
+
 export interface SelectField extends FieldCommon {
   type: 'select'
   options: { value: string, label: string }[]
@@ -83,6 +94,7 @@ export type Field =
   | BooleanField
   | SelectField
   | ArrayField
+  | RefField
 
 /**
  * Which field types hold language-specific content.
@@ -291,6 +303,25 @@ export const blockSchemas: BlockSchema[] = [
   },
 
   {
+    name: 'featuredProducts',
+    label: 'Featured Products',
+    description: 'Hand-pick specific products from your catalogue.',
+    dynamic: true,
+    fields: [
+      { name: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'Picked for you' },
+      { name: 'title', label: 'Heading', type: 'text', required: true, default: 'Our Favourites' },
+      {
+        name: 'productIds',
+        label: 'Products',
+        type: 'product-ref',
+        max: 8,
+        required: true,
+        help: 'Prices and stock stay live from Odoo — only the selection is saved.',
+      },
+    ],
+  },
+
+  {
     name: 'valueProps',
     label: 'Value Props',
     description: 'Row of short selling points with icons.',
@@ -395,6 +426,9 @@ function defaultForField(field: Field): unknown {
         { length: field.min ?? 0 },
         () => defaultsFor(field.fields),
       )
+    case 'product-ref':
+    case 'category-ref':
+      return []
     case 'number':
       return field.default ?? field.min ?? 0
     case 'boolean':
@@ -464,6 +498,31 @@ function coerce(
         return field.default ?? allowed[0]
       }
       return value
+    }
+
+    case 'product-ref':
+    case 'category-ref': {
+      // Ids only. The names and images the inspector shows are fetched live
+      // from Odoo and deliberately never stored: a cached product name is a
+      // product name that goes stale.
+      if (!Array.isArray(value)) return []
+
+      const ids = value
+        .map(item => Number(item))
+        .filter(id => Number.isInteger(id) && id > 0)
+
+      if (field.max !== undefined && ids.length > field.max) {
+        issues.push({
+          path,
+          message: `${field.label ?? field.name} allows at most ${field.max}.`,
+        })
+      }
+
+      if (field.required && !ids.length) {
+        issues.push({ path, message: `${field.label ?? field.name} is required.` })
+      }
+
+      return field.max !== undefined ? ids.slice(0, field.max) : ids
     }
 
     case 'array': {

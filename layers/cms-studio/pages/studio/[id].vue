@@ -614,8 +614,9 @@ const saveLabel = computed(() => ({
         class="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 rounded-full bg-amber-500 text-white text-[12px] px-4 py-2 shadow-lg"
         role="status"
       >
-        {{ blocksWithIssues.size }} block{{ blocksWithIssues.size === 1 ? '' : 's' }}
-        need attention before publishing
+        {{ blocksWithIssues.size }}
+        {{ blocksWithIssues.size === 1 ? 'block needs' : 'blocks need' }}
+        attention before publishing
       </div>
     </div>
   </div>

@@ -226,6 +226,13 @@ export type CheckoutRedirectOutput = {
   accessToken: Maybe<Scalars['String']['output']>;
 };
 
+export type CmsLocale = {
+  __typename?: 'CmsLocale';
+  code: Maybe<Scalars['String']['output']>;
+  isDefault: Maybe<Scalars['Boolean']['output']>;
+  label: Maybe<Scalars['String']['output']>;
+};
+
 export type CmsPage = {
   __typename?: 'CmsPage';
   blocks: Maybe<Scalars['GenericScalar']['output']>;
@@ -246,6 +253,14 @@ export type CmsPageList = {
   __typename?: 'CmsPageList';
   pages: Maybe<Array<Maybe<CmsPage>>>;
   totalCount: Maybe<Scalars['Int']['output']>;
+};
+
+/** A product or category a merchant can pick in the inspector. */
+export type CmsRefOption = {
+  __typename?: 'CmsRefOption';
+  id: Maybe<Scalars['Int']['output']>;
+  imageUrl: Maybe<Scalars['String']['output']>;
+  name: Maybe<Scalars['String']['output']>;
 };
 
 export type Company = {
@@ -1143,12 +1158,17 @@ export type Query = {
   category: Maybe<Category>;
   /** Whether the current session may edit content. Asked of Odoo rather than inferred by the client - the storefront never decides this for itself. */
   cmsCanEdit: Maybe<Scalars['Boolean']['output']>;
+  cmsCategories: Maybe<Array<Maybe<CmsRefOption>>>;
+  /** Content languages, from the websites active languages. Not the same list as the storefront UI translations - a merchant may sell in more languages than the interface has been translated into. */
+  cmsLocales: Maybe<Array<Maybe<CmsLocale>>>;
   /** Published page by URL. Public and cacheable. */
   cmsPage: Maybe<CmsPage>;
   /** A page including its draft. Requires the CMS Editor group. */
   cmsPageDraft: Maybe<CmsPage>;
   /** Page list for the studio. Requires the CMS Editor group. */
   cmsPages: Maybe<CmsPageList>;
+  /** Product picker options. This is the capability a separate headless CMS could not provide without an id-sync job. */
+  cmsProducts: Maybe<Array<Maybe<CmsRefOption>>>;
   /** Revision history. Requires the CMS Editor group. */
   cmsRevisions: Maybe<Array<Maybe<PageRevision>>>;
   countries: Maybe<Countries>;
@@ -1219,6 +1239,12 @@ export type QueryCategoryArgs = {
 };
 
 
+export type QueryCmsCategoriesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryCmsPageArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   slug: InputMaybe<Scalars['String']['input']>;
@@ -1227,6 +1253,13 @@ export type QueryCmsPageArgs = {
 
 export type QueryCmsPageDraftArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryCmsProductsArgs = {
+  ids: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 

@@ -19,12 +19,13 @@ type Loader = () => Promise<Component | { default: Component }>
  * (§9.1). BlockRenderer passes `blockId` only to these, so every other
  * component stays free of an attribute it never asked for.
  */
-export const BLOCKS_NEEDING_ID = new Set(['bestSellers'])
+export const BLOCKS_NEEDING_ID = new Set(['bestSellers', 'featuredProducts'])
 
 const components: Record<string, Loader> = {
   hero: () => import('~~/layers/core/components/MainBanner.vue'),
   categories: () => import('~~/layers/core/components/Categories.vue'),
   bestSellers: () => import('~~/layers/core/components/BestSellers.vue'),
+  featuredProducts: () => import('../components/CmsFeaturedProducts.vue'),
   editorial: () => import('~~/layers/core/components/BannerRight.vue'),
   valueProps: () => import('~~/layers/core/components/ValueProps.vue'),
   richText: () => import('../components/CmsRichText.vue'),

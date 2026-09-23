@@ -292,6 +292,15 @@ function rowThumb(row: Record<string, unknown>) {
       />
     </div>
 
+    <!-- product / category reference: real Odoo records, ids only -->
+    <StudioRefPicker
+      v-else-if="field.type === 'product-ref' || field.type === 'category-ref'"
+      :model-value="modelValue"
+      :kind="field.type === 'product-ref' ? 'product' : 'category'"
+      :max="(field as any).max"
+      @update:model-value="value => emit('update:modelValue', value)"
+    />
+
     <!-- text / link -->
     <input
       v-else-if="field.type === 'text' || field.type === 'link'"
