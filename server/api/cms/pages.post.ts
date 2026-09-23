@@ -8,6 +8,7 @@ import type { BlockInstance } from '#shared/cms/blocks'
  * they do is add a hero anyway.
  */
 export default defineEventHandler(async (event) => {
+  const store = useCmsStore(event)
   const body = await readBody<{ title?: string, slug?: string, blank?: boolean }>(event)
 
   const title = String(body?.title ?? '').trim()
@@ -30,5 +31,5 @@ export default defineEventHandler(async (event) => {
         data: { ...seedBlockData('hero'), title: { [DEFAULT_LOCALE]: title } },
       }]
 
-  return cmsStore.create({ title, slug }, starter)
+  return store.create({ title, slug }, starter)
 })

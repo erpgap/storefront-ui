@@ -14,13 +14,20 @@ interface PageRow {
   publishedAt?: string
 }
 
-definePageMeta({ layout: false })
+definePageMeta({ layout: false, middleware: 'studio-auth' })
 useHead({ title: 'Pages — Studio' })
 
 const { data: pages, refresh } = await useFetch<PageRow[]>('/api/cms/pages', {
   key: 'studio-pages',
   default: () => [],
 })
+
+// Which store is behind this. Only used to explain what is unavailable when
+// running without Odoo.
+const { data: session } = await useFetch<{ backend: string }>('/api/cms/session', {
+  key: 'cms-session',
+})
+const backend = computed(() => session.value?.backend ?? 'odoo')
 
 // --- create -----------------------------------------------------------------
 
@@ -258,9 +265,13 @@ function formatDate(iso: string) {
         </li>
       </ul>
 
-      <p class="text-[11px] text-primary-400 mt-6 leading-relaxed">
-        Proof of concept — content is stored in a local file, not yet in Odoo.
-        See <code>server/utils/cmsStore.ts</code> for the swap point.
+      <p
+        v-if="backend === 'file'"
+        class="text-[11px] text-primary-400 mt-6 leading-relaxed"
+      >
+        Running on the local file store, not Odoo. Version history is
+        unavailable in this mode. Unset <code>NUXT_CMS_BACKEND=file</code> to
+        use Odoo.
       </p>
     </main>
   </div>

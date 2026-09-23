@@ -369,10 +369,16 @@ export function getBlockSchema(blockType: string): BlockSchema | undefined {
 function defaultForField(field: Field): unknown {
   switch (field.type) {
     case 'array':
-      // Seed `min` rows (at least one) so a freshly dropped block renders as
-      // something visible rather than collapsing to nothing on the canvas.
+      // Seed exactly `min` rows - not "at least one". Forcing a row into an
+      // array with no minimum meant a brand-new page arrived already failing
+      // validation: the hero's optional buttons seeded one empty row whose
+      // label is required, so the merchant was told to fix something before
+      // they had typed a character.
+      //
+      // Blocks that genuinely need a row declare min: 1, and their empty
+      // required fields do correctly block publishing until filled.
       return Array.from(
-        { length: Math.max(field.min ?? 1, 1) },
+        { length: field.min ?? 0 },
         () => defaultsFor(field.fields),
       )
     case 'number':
@@ -380,10 +386,13 @@ function defaultForField(field: Field): unknown {
     case 'boolean':
       return field.default ?? false
     default:
-      // Seeded into the default language only. Other languages stay absent,
-      // which is what makes "not yet translated" distinguishable from
-      // "deliberately blank".
-      return { [DEFAULT_LOCALE]: field.default ?? '' }
+      // isTranslatable is the single source of truth. A `select` also lands in
+      // this branch and must NOT become a per-language map: "solid white" is
+      // one choice, not one per language, and wrapping it produced values the
+      // components could not read.
+      return isTranslatable(field)
+        ? { [DEFAULT_LOCALE]: field.default ?? '' }
+        : field.default ?? ''
   }
 }
 

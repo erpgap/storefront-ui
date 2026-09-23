@@ -95,6 +95,20 @@ export type AttributeValue = {
   search: Maybe<Scalars['String']['output']>;
 };
 
+/**
+ * Ids the storefront found inside the blocks.
+ *
+ * Odoo cannot extract these itself - the blocks column is opaque to it - so
+ * the layer that understands the content mirrors them in. They exist to
+ * answer "which live pages reference product X?", which is how a product
+ * change invalidates the right pages.
+ */
+export type BlockReferencesInput = {
+  attachmentIds: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  categoryIds: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  productTmplIds: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
+
 export type BlogPost = {
   __typename?: 'BlogPost';
   author: Maybe<Partner>;
@@ -210,6 +224,28 @@ export type CategorySortInput = {
 export type CheckoutRedirectOutput = {
   __typename?: 'CheckoutRedirectOutput';
   accessToken: Maybe<Scalars['String']['output']>;
+};
+
+export type CmsPage = {
+  __typename?: 'CmsPage';
+  blocks: Maybe<Scalars['GenericScalar']['output']>;
+  draftBlocks: Maybe<Scalars['GenericScalar']['output']>;
+  hasUnpublishedChanges: Maybe<Scalars['Boolean']['output']>;
+  id: Maybe<Scalars['Int']['output']>;
+  isPublished: Maybe<Scalars['Boolean']['output']>;
+  liveRevision: Maybe<Scalars['Int']['output']>;
+  metaDescription: Maybe<Scalars['String']['output']>;
+  metaTitle: Maybe<Scalars['String']['output']>;
+  name: Maybe<Scalars['String']['output']>;
+  revisionCount: Maybe<Scalars['Int']['output']>;
+  updatedAt: Maybe<Scalars['String']['output']>;
+  url: Maybe<Scalars['String']['output']>;
+};
+
+export type CmsPageList = {
+  __typename?: 'CmsPageList';
+  pages: Maybe<Array<Maybe<CmsPage>>>;
+  totalCount: Maybe<Scalars['Int']['output']>;
 };
 
 export type Company = {
@@ -505,12 +541,16 @@ export type Mutation = {
   checkoutRedirect: Maybe<CheckoutRedirectOutput>;
   /** Creates a new lead with the contact information. */
   contactUs: Maybe<Lead>;
+  createCmsPage: Maybe<CmsPage>;
   /** Create or update a partner for guest checkout */
   createUpdatePartner: Maybe<Partner>;
   /** Delete a billing or shipping address. */
   deleteAddress: Maybe<DeleteAddress>;
+  deleteCmsPage: Maybe<Scalars['Boolean']['output']>;
   /** Delete MyAccount */
   deleteMyAccount: Maybe<Scalars['Boolean']['output']>;
+  /** Reset the draft to what is live. */
+  discardCmsDraft: Maybe<CmsPage>;
   /** Authenticate user with email and password and retrieves token. */
   login: Maybe<LoginOutput>;
   /** Logout user */
@@ -519,22 +559,27 @@ export type Mutation = {
   makeGiftCardPayment: Maybe<MakeGiftCardPayment>;
   /** Subscribe to newsletter. */
   newsletterSubscribe: Maybe<NewsletterSubscribe>;
+  /** Copy the draft into a new live revision. */
+  publishCmsPage: Maybe<CmsPage>;
   /** Register a new user with email, name and password. */
   register: Maybe<User>;
   /** Send change password url to user's email. */
   resetPassword: Maybe<User>;
+  /** Copy an older revision forward and make it live. */
+  restoreCmsRevision: Maybe<CmsPage>;
+  /** Replace a page draft. */
+  saveCmsDraft: Maybe<CmsPage>;
   /** Select a billing or shipping address to be used on the shopping cart. */
   selectAddress: Maybe<Partner>;
   /** Set Shipping Method on Cart */
   setShippingMethod: Maybe<CartData>;
-  /** Values to render the Stripe payment widget. */
-  stripeGetInlineFormValues: Maybe<StripeGetInlineFormValuesResult>;
-  /** Open an Odoo payment and return Stripe processing values. */
-  stripeTransaction: Maybe<StripeTransactionResult>;
   /** Two-Factor Verification */
   totpVerification: Maybe<TwoFactorOutput>;
+  /** Hide a page from visitors. */
+  unpublishCmsPage: Maybe<CmsPage>;
   /** Update a billing or shipping address and set it on the shopping cart. */
   updateAddress: Maybe<Partner>;
+  updateCmsPage: Maybe<CmsPage>;
   /** Update MyAccount */
   updateMyAccount: Maybe<Partner>;
   /** Update user password. */
@@ -595,6 +640,13 @@ export type MutationContactUsArgs = {
 };
 
 
+export type MutationCreateCmsPageArgs = {
+  blocks: InputMaybe<Scalars['GenericScalar']['input']>;
+  name: Scalars['String']['input'];
+  url: Scalars['String']['input'];
+};
+
+
 export type MutationCreateUpdatePartnerArgs = {
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
@@ -608,6 +660,16 @@ export type MutationDeleteAddressArgs = {
 };
 
 
+export type MutationDeleteCmsPageArgs = {
+  pageId: Scalars['Int']['input'];
+};
+
+
+export type MutationDiscardCmsDraftArgs = {
+  pageId: Scalars['Int']['input'];
+};
+
+
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -617,6 +679,12 @@ export type MutationLoginArgs = {
 
 export type MutationNewsletterSubscribeArgs = {
   email: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationPublishCmsPageArgs = {
+  pageId: Scalars['Int']['input'];
+  references: InputMaybe<BlockReferencesInput>;
 };
 
 
@@ -633,6 +701,19 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationRestoreCmsRevisionArgs = {
+  pageId: Scalars['Int']['input'];
+  revisionId: Scalars['Int']['input'];
+};
+
+
+export type MutationSaveCmsDraftArgs = {
+  blocks: Scalars['GenericScalar']['input'];
+  expectedWriteDate: InputMaybe<Scalars['String']['input']>;
+  pageId: Scalars['Int']['input'];
+};
+
+
 export type MutationSelectAddressArgs = {
   address: InputMaybe<SelectAddressInput>;
   type: AddressEnum;
@@ -644,17 +725,6 @@ export type MutationSetShippingMethodArgs = {
 };
 
 
-export type MutationStripeGetInlineFormValuesArgs = {
-  providerId: Scalars['Int']['input'];
-};
-
-
-export type MutationStripeTransactionArgs = {
-  providerId: Scalars['Int']['input'];
-  tokenizationRequested?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-
 export type MutationTotpVerificationArgs = {
   code: Scalars['String']['input'];
   rememberDevice?: InputMaybe<Scalars['Boolean']['input']>;
@@ -662,8 +732,22 @@ export type MutationTotpVerificationArgs = {
 };
 
 
+export type MutationUnpublishCmsPageArgs = {
+  pageId: Scalars['Int']['input'];
+};
+
+
 export type MutationUpdateAddressArgs = {
   address: UpdateAddressInput;
+};
+
+
+export type MutationUpdateCmsPageArgs = {
+  metaDescription: InputMaybe<Scalars['String']['input']>;
+  metaTitle: InputMaybe<Scalars['String']['input']>;
+  name: InputMaybe<Scalars['String']['input']>;
+  pageId: Scalars['Int']['input'];
+  url: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -776,6 +860,17 @@ export enum OrderStage {
 export type Orders = {
   orders: Maybe<Array<Maybe<Order>>>;
   totalCount: Scalars['Int']['output'];
+};
+
+export type PageRevision = {
+  __typename?: 'PageRevision';
+  author: Maybe<Scalars['String']['output']>;
+  blocks: Maybe<Scalars['GenericScalar']['output']>;
+  createdAt: Maybe<Scalars['String']['output']>;
+  id: Maybe<Scalars['Int']['output']>;
+  isLive: Maybe<Scalars['Boolean']['output']>;
+  number: Maybe<Scalars['Int']['output']>;
+  restoredFrom: Maybe<Scalars['Int']['output']>;
 };
 
 export enum PageTypeEnum {
@@ -1046,6 +1141,16 @@ export type Query = {
   cart: Maybe<Cart>;
   categories: Maybe<Categories>;
   category: Maybe<Category>;
+  /** Whether the current session may edit content. Asked of Odoo rather than inferred by the client - the storefront never decides this for itself. */
+  cmsCanEdit: Maybe<Scalars['Boolean']['output']>;
+  /** Published page by URL. Public and cacheable. */
+  cmsPage: Maybe<CmsPage>;
+  /** A page including its draft. Requires the CMS Editor group. */
+  cmsPageDraft: Maybe<CmsPage>;
+  /** Page list for the studio. Requires the CMS Editor group. */
+  cmsPages: Maybe<CmsPageList>;
+  /** Revision history. Requires the CMS Editor group. */
+  cmsRevisions: Maybe<Array<Maybe<PageRevision>>>;
   countries: Maybe<Countries>;
   country: Country;
   deliveryMethods: Maybe<Array<ShippingMethod>>;
@@ -1111,6 +1216,22 @@ export type QueryCategoriesArgs = {
 export type QueryCategoryArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryCmsPageArgs = {
+  id: InputMaybe<Scalars['Int']['input']>;
+  slug: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryCmsPageDraftArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type QueryCmsRevisionsArgs = {
+  pageId: Scalars['Int']['input'];
 };
 
 
@@ -1273,16 +1394,6 @@ export type State = {
   name: Scalars['String']['output'];
 };
 
-export type StripeGetInlineFormValuesResult = {
-  __typename?: 'StripeGetInlineFormValuesResult';
-  stripeGetInlineFormValues: Maybe<Scalars['GenericScalar']['output']>;
-};
-
-export type StripeTransactionResult = {
-  __typename?: 'StripeTransactionResult';
-  transaction: Maybe<Scalars['GenericScalar']['output']>;
-};
-
 export type TwoFactorOutput = {
   __typename?: 'TwoFactorOutput';
   httponly: Maybe<Scalars['Boolean']['output']>;
@@ -1367,6 +1478,7 @@ export type WebsiteMenuImage = {
 
 export type WebsitePage = {
   __typename?: 'WebsitePage';
+  blocks: Maybe<Scalars['GenericScalar']['output']>;
   content: Maybe<Scalars['String']['output']>;
   id: Maybe<Scalars['Int']['output']>;
   isPublished: Maybe<Scalars['Boolean']['output']>;

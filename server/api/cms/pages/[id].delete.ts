@@ -1,4 +1,5 @@
 export default defineEventHandler(async (event) => {
-  await cmsStore.remove(getRouterParam(event, 'id')!)
+  const store = useCmsStore(event)
+  await store.remove(getRouterParam(event, 'id')!)
   return { ok: true }
 })

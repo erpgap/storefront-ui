@@ -49,7 +49,8 @@ useHead(generateSeo<SeoEntity>(
 <template>
   <div>
     <BlockRenderer
-      :blocks="page!.blocks"
+      v-if="page"
+      :blocks="page.blocks"
       :locale="locale"
     />
   </div>

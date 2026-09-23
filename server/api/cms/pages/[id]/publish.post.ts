@@ -5,8 +5,9 @@ import { validateBlocks } from '#shared/cms/blocks'
  * a required headline left empty should not reach a customer.
  */
 export default defineEventHandler(async (event) => {
+  const store = useCmsStore(event)
   const id = getRouterParam(event, 'id')!
-  const page = await cmsStore.get(id)
+  const page = await store.get(id)
 
   if (!page) {
     throw createError({ statusCode: 404, statusMessage: 'Page not found.' })
@@ -21,7 +22,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const published = await cmsStore.publish(id)
+  const published = await store.publish(id)
 
   // Where the real implementation also fires cache invalidation for the page's
   // URL (§6.5). Skipping it means merchants publish, reload, see stale SWR

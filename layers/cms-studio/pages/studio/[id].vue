@@ -14,7 +14,7 @@ import { CMS_LOCALES, DEFAULT_LOCALE } from '#shared/cms/i18n'
 import { blockRegistry } from '~~/layers/cms/blocks'
 import { useStudioDraft } from '../../composables/useStudioDraft'
 
-definePageMeta({ layout: false })
+definePageMeta({ layout: false, middleware: 'studio-auth' })
 
 const route = useRoute()
 const pageId = computed(() => String(route.params.id))

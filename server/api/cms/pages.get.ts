@@ -1,6 +1,7 @@
 // Page list for the studio.
-export default defineEventHandler(async () => {
-  const pages = await cmsStore.list()
+export default defineEventHandler(async (event) => {
+  const store = useCmsStore(event)
+  const pages = await store.list()
 
   // The list view never needs block bodies — keep the payload small.
   return pages.map(({ draft, publishedBlocks, ...page }) => ({

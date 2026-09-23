@@ -1,5 +1,6 @@
 // Page metadata: title, URL, SEO. Block content goes through draft.put.
 export default defineEventHandler(async (event) => {
+  const store = useCmsStore(event)
   const id = getRouterParam(event, 'id')!
   const body = await readBody<{
     title?: string
@@ -8,5 +9,5 @@ export default defineEventHandler(async (event) => {
     metaDescription?: string
   }>(event)
 
-  return cmsStore.updateMeta(id, body ?? {})
+  return store.updateMeta(id, body ?? {})
 })

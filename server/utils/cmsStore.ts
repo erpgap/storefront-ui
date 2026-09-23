@@ -9,7 +9,9 @@
 //
 // Nothing else in the codebase needs to know which one is in use.
 
+import type { H3Event } from 'h3'
 import type { BlockInstance, CmsPage } from '#shared/cms/blocks'
+import { createOdooCmsStore } from './cmsOdooStore'
 
 export interface PageInput {
   title: string
@@ -206,4 +208,20 @@ const fileStore: CmsStore = {
   },
 }
 
+/**
+ * Picks the backend.
+ *
+ * Odoo is the real store. The file store is kept because it is the only way to
+ * run the studio without an Odoo instance - useful for front-end work and for
+ * demoing on a laptop - and because keeping a second implementation honest is
+ * what proves the interface is actually an interface.
+ *
+ * Set NUXT_CMS_BACKEND=file to use it.
+ */
+export function useCmsStore(event: H3Event): CmsStore {
+  if (process.env.NUXT_CMS_BACKEND === 'file') return fileStore
+  return createOdooCmsStore(event)
+}
+
+/** The file-backed store, for the seed plugin which has no request context. */
 export const cmsStore: CmsStore = fileStore

@@ -6,13 +6,14 @@
  * route that would carry an SWR cache rule in production.
  */
 export default defineEventHandler(async (event) => {
+  const store = useCmsStore(event)
   const slug = String(getQuery(event).slug ?? '')
 
   if (!slug) {
     throw createError({ statusCode: 400, statusMessage: 'slug is required' })
   }
 
-  const page = await cmsStore.getPublishedBySlug(slug)
+  const page = await store.getPublishedBySlug(slug)
   if (!page) return null
 
   return {

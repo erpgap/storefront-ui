@@ -12,11 +12,12 @@ import { validateBlocks } from '#shared/cms/blocks'
  * is the gate that refuses (see publish.post.ts).
  */
 export default defineEventHandler(async (event) => {
+  const store = useCmsStore(event)
   const id = getRouterParam(event, 'id')!
   const body = await readBody<{ blocks?: unknown }>(event)
 
   const { blocks, issues } = validateBlocks(body?.blocks ?? [])
-  const page = await cmsStore.saveDraft(id, blocks)
+  const page = await store.saveDraft(id, blocks)
 
   return { page, issues }
 })

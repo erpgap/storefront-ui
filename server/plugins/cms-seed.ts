@@ -66,6 +66,10 @@ const homepageBlocks = (): BlockInstance[] => [
 ]
 
 export default defineNitroPlugin(async () => {
+  // Only seeds the file store. With Odoo behind the CMS the content is real
+  // and seeding it would be vandalism.
+  if (process.env.NUXT_CMS_BACKEND !== 'file') return
+
   const existing = await cmsStore.list()
   if (existing.length) return
 
