@@ -6,7 +6,7 @@
 import { defineAsyncComponent, hydrateOnVisible } from 'vue'
 import type { Component } from 'vue'
 import type { BlockInstance } from '#shared/cms/blocks'
-import { resolveBlockData } from '#shared/cms/blocks'
+import { migrateBlocks, resolveBlockData } from '#shared/cms/blocks'
 import { DEFAULT_LOCALE } from '#shared/cms/i18n'
 import { BLOCKS_NEEDING_ID, getBlockComponent } from '../blocks'
 
@@ -28,6 +28,10 @@ const props = withDefaults(defineProps<{
   dropIndex: null,
   locale: DEFAULT_LOCALE,
 })
+
+// Old content is upgraded on read, so a page published before a block changed
+// shape keeps rendering without anything being rewritten in the database.
+const blocks = computed(() => migrateBlocks(props.blocks))
 
 defineEmits<{
   select: [id: string]

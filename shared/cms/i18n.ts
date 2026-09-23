@@ -27,20 +27,34 @@ export interface CmsLocale {
 }
 
 /**
- * PoC only. In the real implementation this comes from Odoo's active languages
- * (`res.lang`), NOT from the Nuxt i18n config — a merchant may sell in five
- * languages while the storefront ships UI translations for three. Content
- * languages and interface languages are different lists.
+ * Fallback only. The real list comes from Odoo's active languages via
+ * /api/cms/locales — NOT from the Nuxt i18n config, because a merchant may
+ * sell in five languages while the storefront ships UI translations for three.
+ * Content languages and interface languages are different lists.
+ *
+ * This is what the studio shows before that request returns, and what the
+ * file-backed store uses when there is no Odoo.
  */
 export const CMS_LOCALES: CmsLocale[] = [
-  { code: 'en', label: 'English' },
-  { code: 'pt', label: 'Português' },
-  { code: 'es', label: 'Español' },
+  { code: 'en_US', label: 'English' },
 ]
 
-export const DEFAULT_LOCALE = 'en'
+export const DEFAULT_LOCALE = 'en_US'
 
-export const LOCALE_CODES = CMS_LOCALES.map(locale => locale.code)
+/**
+ * Validates the SHAPE of a language key rather than its membership of a list.
+ *
+ * The check exists to stop arbitrary keys being smuggled through a JSON column
+ * Odoo treats as opaque, and a shape check does that just as well. Matching
+ * against a build-time list would silently discard content in any language the
+ * merchant installed in Odoo but the storefront had not been rebuilt to know
+ * about — exactly the failure nobody notices until a translation goes missing.
+ */
+const LOCALE_PATTERN = /^[a-z]{2,3}(_[A-Z]{2})?$/
+
+export function isLocaleCode(value: string): boolean {
+  return LOCALE_PATTERN.test(value)
+}
 
 export function localeLabel(code: string): string {
   return CMS_LOCALES.find(locale => locale.code === code)?.label ?? code
@@ -56,6 +70,39 @@ export function localeLabel(code: string): string {
  */
 export type Translatable = string | Record<string, string>
 
+/**
+ * Language part of a locale code: `pt_PT` -> `pt`.
+ */
+function language(code: string): string {
+  return code.split('_')[0]!
+}
+
+/**
+ * Finds the best value for `locale` in a per-language map.
+ *
+ * Resolution is tolerant of region variants in both directions, because the
+ * exact code a value was written under is an accident of which language was
+ * installed at the time. Content written as `en` must still serve a visitor
+ * asking for `en_US`, and vice versa — otherwise adding a regional language in
+ * Odoo silently orphans everything already written, which reads to the
+ * merchant as "the CMS deleted my copy".
+ *
+ * Order: exact code, then any variant of the same language, then nothing.
+ */
+function pick(map: Record<string, string>, locale: string): string {
+  const exact = map[locale]
+  if (typeof exact === 'string' && exact.trim()) return exact
+
+  const wanted = language(locale)
+  for (const [code, value] of Object.entries(map)) {
+    if (language(code) === wanted && typeof value === 'string' && value.trim()) {
+      return value
+    }
+  }
+
+  return ''
+}
+
 /** Reads the value for `locale`, falling back to the default language. */
 export function resolveValue(
   raw: unknown,
@@ -66,14 +113,18 @@ export function resolveValue(
   if (!raw || typeof raw !== 'object') return ''
 
   const map = raw as Record<string, string>
-  const wanted = map[locale]
-  if (typeof wanted === 'string' && wanted.trim()) return wanted
 
   // Empty string in the requested language is treated as "not translated yet"
   // rather than "deliberately blank" — a merchant clearing a field to blank it
   // is vanishingly rare next to one who simply has not got to it.
-  const base = map[fallback]
-  return typeof base === 'string' ? base : ''
+  return pick(map, locale) || pick(map, fallback)
+}
+
+/** Whether a map holds usable content for `locale`, variants included. */
+export function hasValueFor(raw: unknown, locale: string): boolean {
+  if (typeof raw === 'string') return Boolean(raw.trim())
+  if (!raw || typeof raw !== 'object') return false
+  return Boolean(pick(raw as Record<string, string>, locale))
 }
 
 /** Writes one language's value, preserving the others. */
@@ -110,10 +161,10 @@ export function toMap(raw: unknown): Record<string, string> {
 
   return Object.fromEntries(
     Object.entries(raw as Record<string, unknown>)
-      // Only known languages survive: the value map's keys come from the
-      // client, so an unknown key is either a bug or an attempt to smuggle
-      // data through an opaque JSON column.
-      .filter(([code, value]) => LOCALE_CODES.includes(code) && typeof value === 'string')
+      // Only well-formed language keys survive: the map's keys come from the
+      // client, so anything else is a bug or an attempt to smuggle data
+      // through a column Odoo treats as opaque.
+      .filter(([code, value]) => isLocaleCode(code) && typeof value === 'string')
       .map(([code, value]) => [code, value as string]),
   )
 }

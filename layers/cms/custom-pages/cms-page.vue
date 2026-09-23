@@ -3,7 +3,7 @@
 // (§4.2 gap 1). Fetches published blocks by URL and hands them to the SAME
 // BlockRenderer the studio canvas uses.
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
-import { DEFAULT_LOCALE, LOCALE_CODES } from '#shared/cms/i18n'
+import { DEFAULT_LOCALE, isLocaleCode } from '#shared/cms/i18n'
 import { useCmsPage } from '../composables/useCmsPage'
 
 const route = useRoute()
@@ -21,7 +21,7 @@ const { data: page } = await useCmsPage(slug.value)
 // storefront has UI translations for.
 const requested = computed(() => String(useRoute().query.lang ?? ''))
 const locale = computed(() =>
-  LOCALE_CODES.includes(requested.value) ? requested.value : DEFAULT_LOCALE)
+  isLocaleCode(requested.value) ? requested.value : DEFAULT_LOCALE)
 
 // A URL with no published page behind it is a 404, not an empty page. Without
 // this the catch-all would answer 200 for every nonexistent URL on the site.

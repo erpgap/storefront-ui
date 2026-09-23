@@ -11,6 +11,7 @@
 // costs roughly two weeks less than the iframe alternative.
 import type { CmsPage } from '#shared/cms/blocks'
 import { CMS_LOCALES, DEFAULT_LOCALE } from '#shared/cms/i18n'
+import type { CmsLocale } from '#shared/cms/i18n'
 import { blockRegistry } from '~~/layers/cms/blocks'
 import { useStudioDraft } from '../../composables/useStudioDraft'
 
@@ -39,6 +40,20 @@ const {
 
 const paletteOpen = ref(true)
 const versionsOpen = ref(false)
+
+// Content languages come from the website's active languages in Odoo, not from
+// the Nuxt i18n config: a merchant may sell in more languages than the
+// storefront interface has been translated into.
+const { data: localeData } = await useFetch<{
+  locales: CmsLocale[]
+  defaultLocale: string
+}>('/api/cms/locales', {
+  key: 'cms-locales',
+  default: () => ({ locales: CMS_LOCALES, defaultLocale: DEFAULT_LOCALE }),
+})
+
+const locales = computed(() => localeData.value?.locales ?? CMS_LOCALES)
+const defaultLocale = computed(() => localeData.value?.defaultLocale ?? DEFAULT_LOCALE)
 
 async function onRestored() {
   // Reload rather than patching state: restore changes the live revision, the
@@ -337,15 +352,18 @@ const saveLabel = computed(() => ({
       <div class="ml-auto flex items-center gap-2">
         <!-- The whole of multi-language editing, from the merchant's side:
              one dropdown. The per-language storage shape never surfaces. -->
-        <label class="flex items-center gap-1.5">
+        <label
+          v-if="locales.length > 1"
+          class="flex items-center gap-1.5"
+        >
           <span class="sr-only">Content language</span>
           <select
             v-model="locale"
             class="studio-btn !normal-case !tracking-normal py-1.5"
-            :class="locale !== DEFAULT_LOCALE ? '!border-amber-500 !text-amber-700' : ''"
+            :class="locale !== defaultLocale ? '!border-amber-500 !text-amber-700' : ''"
           >
             <option
-              v-for="option in CMS_LOCALES"
+              v-for="option in locales"
               :key="option.code"
               :value="option.code"
             >
@@ -355,7 +373,7 @@ const saveLabel = computed(() => ({
         </label>
 
         <span
-          v-if="locale !== DEFAULT_LOCALE"
+          v-if="locale !== defaultLocale"
           class="text-[11px] whitespace-nowrap"
           :class="untranslatedTotal ? 'text-amber-700' : 'text-green-700'"
           role="status"
@@ -410,7 +428,7 @@ const saveLabel = computed(() => ({
 
         <a
           v-if="isPublished"
-          :href="locale === DEFAULT_LOCALE ? page!.slug : `${page!.slug}?lang=${locale}`"
+          :href="locale === defaultLocale ? page!.slug : `${page!.slug}?lang=${locale}`"
           target="_blank"
           rel="noopener"
           class="studio-btn"
@@ -554,10 +572,10 @@ const saveLabel = computed(() => ({
         <div class="p-4 flex flex-col gap-4">
           <!-- Said once, here, instead of a lock message on every hidden field. -->
           <p
-            v-if="locale !== DEFAULT_LOCALE"
+            v-if="locale !== defaultLocale"
             class="text-[11px] text-amber-800 bg-amber-50 rounded p-2.5 leading-snug"
           >
-            Translating {{ CMS_LOCALES.find(l => l.code === locale)?.label }}.
+            Translating {{ locales.find(l => l.code === locale)?.label }}.
             Only text and images appear here — layout and settings are shared
             across languages and are edited in English.
           </p>

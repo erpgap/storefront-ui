@@ -64,3 +64,13 @@ export const GetCmsCanEditQuery = `
     cmsCanEdit
   }
 `
+
+export const GetCmsLocalesQuery = `
+  query {
+    cmsLocales {
+      code
+      label
+      isDefault
+    }
+  }
+`

@@ -11,7 +11,7 @@
 
 import {
   DEFAULT_LOCALE,
-  LOCALE_CODES,
+  hasValueFor,
   resolveValue,
   toMap,
 } from './i18n'
@@ -102,6 +102,8 @@ export function isTranslatable(field: Field): boolean {
 export interface BlockSchema {
   /** Stable identifier. This is what is persisted as `blockType`. */
   name: string
+  /** Current schema version. Omitted means 1. */
+  version?: number
   /** Human label for the palette. */
   label: string
   /** One-line description for the palette. */
@@ -118,6 +120,18 @@ export interface BlockSchema {
 export interface BlockInstance {
   id: string
   blockType: string
+  /**
+   * Which version of this block's schema `data` was written against.
+   *
+   * Content outlives the schema that produced it. When a block's fields change
+   * shape, old content keeps rendering and is upgraded on read by the
+   * migrations below - a pure function in TypeScript, unit testable, rather
+   * than a SQL migration in a repository that does not know what a block is.
+   *
+   * Absent means version 1, which is how every block written before this
+   * existed is treated.
+   */
+  schemaVersion?: number
   data: Record<string, unknown>
 }
 
@@ -501,7 +515,11 @@ function coerce(
       // publish because Portuguese is unfinished would make translation a
       // gate on shipping English, which is backwards — untranslated fields
       // fall back to the default language and the page still renders.
-      if (field.required && !(out[DEFAULT_LOCALE] ?? '').trim()) {
+      // Region-tolerant: content written as `en` satisfies a required field
+      // when the default locale is `en_US`. Without this, installing a
+      // regional language in Odoo would make every existing page fail to
+      // publish.
+      if (field.required && !hasValueFor(out, DEFAULT_LOCALE)) {
         issues.push({ path, message: `${field.label ?? field.name} is required.` })
       }
 
@@ -562,6 +580,9 @@ export function validateBlocks(blocks: unknown): {
     cleaned.push({
       id: typeof block.id === 'string' && block.id ? block.id : `blk_${index}_${Date.now()}`,
       blockType: schema.name,
+      // Anything written now matches the current schema by definition, since
+      // it was just validated against it.
+      schemaVersion: schema.version ?? 1,
       data: validateData(schema.fields, block.data, `blocks[${index}]`, issues),
     })
   })
@@ -654,4 +675,83 @@ export function untranslatedFields(
     }, 0)
 
   return count(schema.fields, data)
+}
+
+
+// ---------------------------------------------------------------------------
+// Schema migrations
+// ---------------------------------------------------------------------------
+// Block content outlives the schema that wrote it. A merchant's page published
+// last year must keep rendering after a block gains, loses or renames a field.
+//
+// These migrations live here rather than in Odoo on purpose. Odoo stores the
+// content and does not know what a block is, so a SQL migration there could
+// not be written against the schema that defines the shape, nor tested against
+// it. Here they are ordinary functions.
+//
+// They run on READ, so nothing has to be rewritten in the database for old
+// content to work. A one-off script can apply them eagerly when convenient.
+
+type BlockMigration = (data: Record<string, unknown>) => Record<string, unknown>
+
+/**
+ * Keyed by block type, then by the version being migrated FROM.
+ *
+ * `{ hero: { 1: fn } }` means "a hero at version 1 becomes version 2 by
+ * running fn". Chains apply in order until the block reaches current.
+ */
+const migrations: Record<string, Record<number, BlockMigration>> = {
+  // Example of the shape, kept deliberately:
+  //
+  // hero: {
+  //   1: data => {
+  //     const { body, ...rest } = data
+  //     return { ...rest, subtitle: body }
+  //   },
+  // },
+}
+
+export function currentSchemaVersion(blockType: string): number {
+  return getBlockSchema(blockType)?.version ?? 1
+}
+
+/** Brings one block up to its schema's current version. */
+export function migrateBlock(block: BlockInstance): BlockInstance {
+  const target = currentSchemaVersion(block.blockType)
+  let version = block.schemaVersion ?? 1
+
+  if (version >= target) {
+    return block.schemaVersion === version ? block : { ...block, schemaVersion: version }
+  }
+
+  let data = block.data
+  const chain = migrations[block.blockType] ?? {}
+
+  while (version < target) {
+    const step = chain[version]
+    if (!step) {
+      // A gap in the chain would silently hand a component the wrong shape.
+      // Stopping leaves the block on its old version, where the renderer's
+      // prop defaults still apply, rather than pretending it was upgraded.
+      console.warn(
+        `[cms] no migration for ${block.blockType} v${version} -> v${version + 1}`,
+      )
+      break
+    }
+    data = step(data)
+    version += 1
+  }
+
+  return { ...block, schemaVersion: version, data }
+}
+
+export function migrateBlocks(blocks: BlockInstance[]): BlockInstance[] {
+  return blocks.map(migrateBlock)
+}
+
+/** How many blocks are not yet on their current schema version. */
+export function outdatedBlockCount(blocks: BlockInstance[]): number {
+  return blocks.filter(
+    block => (block.schemaVersion ?? 1) < currentSchemaVersion(block.blockType),
+  ).length
 }
