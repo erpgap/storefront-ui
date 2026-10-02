@@ -348,15 +348,15 @@ const saveLabel = computed(() => ({
 <template>
   <div class="h-screen flex flex-col bg-white text-black overflow-hidden">
     <!-- Top bar -->
-    <header class="flex-none flex items-center gap-3 px-4 h-14 border-b border-primary-200 bg-white z-20">
+    <header class="studio-chrome flex-none flex items-center gap-3 px-4 h-14 border-b border-white/10 z-20">
       <NuxtLink
         to="/studio"
-        class="text-[13px] text-primary-500 hover:text-black whitespace-nowrap"
+        class="text-[13px] text-white/60 hover:text-white whitespace-nowrap"
       >
         ← Pages
       </NuxtLink>
 
-      <span class="w-px h-5 bg-primary-200" />
+      <span class="w-px h-5 bg-white/15" />
 
       <button
         type="button"
@@ -371,7 +371,7 @@ const saveLabel = computed(() => ({
         <p class="text-[13px] font-medium truncate">
           {{ page!.title }}
         </p>
-        <p class="text-[11px] text-primary-400 truncate">
+        <p class="text-[11px] text-white/45 truncate">
           {{ page!.slug }}
         </p>
       </div>
@@ -412,7 +412,7 @@ const saveLabel = computed(() => ({
 
         <span
           class="text-[11px] whitespace-nowrap"
-          :class="saveState === 'error' ? 'text-red-600' : 'text-primary-400'"
+          :class="saveState === 'error' ? 'text-red-400' : 'text-white/50'"
           role="status"
         >
           {{ saveLabel }}
@@ -534,17 +534,17 @@ const saveLabel = computed(() => ({
       <!-- Palette drawer -->
       <aside
         v-if="paletteOpen"
-        class="absolute top-0 left-0 bottom-0 w-56 bg-white/95 backdrop-blur border-r border-primary-200 p-3 overflow-y-auto z-10 shadow-lg"
+        class="studio-chrome absolute top-0 left-0 bottom-0 w-56 border-r border-white/10 p-3 overflow-y-auto z-10 shadow-xl"
         aria-label="Blocks"
       >
         <p
           v-if="insertAt !== null"
-          class="text-[11px] tracking-[0.14em] uppercase text-blue-700 bg-blue-50 rounded px-2 py-1.5 mb-2 flex items-center justify-between gap-2"
+          class="text-[11px] tracking-[0.14em] uppercase text-blue-200 bg-blue-500/20 rounded px-2 py-1.5 mb-2 flex items-center justify-between gap-2"
         >
           Inserting at {{ insertAt + 1 }}
           <button
             type="button"
-            class="text-blue-700/70 hover:text-blue-900 normal-case tracking-normal"
+            class="text-blue-200/75 hover:text-white normal-case tracking-normal"
             @click="insertAt = null"
           >
             cancel
@@ -552,7 +552,7 @@ const saveLabel = computed(() => ({
         </p>
         <p
           v-else
-          class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-2"
+          class="text-[11px] tracking-[0.14em] uppercase text-white/40 mb-2"
         >
           Drag onto the page
         </p>
@@ -562,18 +562,18 @@ const saveLabel = computed(() => ({
             :key="definition.name"
             type="button"
             draggable="true"
-            class="text-left rounded-md border border-primary-200 p-2.5 cursor-grab hover:border-primary-400 hover:bg-primary-50 transition-colors"
+            class="text-left rounded-md border border-white/15 bg-white/[0.06] p-2.5 cursor-grab hover:border-white/40 hover:bg-white/[0.12] transition-colors"
             @dragstart="onPaletteDragStart($event, definition.name)"
             @dragend="resetDrag"
             @click="insertFromPalette(definition.name)"
           >
             <span class="block text-[13px] font-medium">{{ definition.label }}</span>
-            <span class="block text-[11px] text-primary-400 leading-snug mt-0.5">
+            <span class="block text-[11px] text-white/50 leading-snug mt-0.5">
               {{ definition.description }}
             </span>
           </button>
         </div>
-        <p class="text-[11px] text-primary-400 mt-3 leading-snug">
+        <p class="text-[11px] text-white/40 mt-3 leading-snug">
           {{ insertAt !== null
             ? `Click a block to insert it at position ${insertAt + 1}.`
             : 'Or click a block to add it at the end. To choose the exact position without dragging, hover between two blocks on the page and click “Add block here”.' }}
@@ -583,16 +583,16 @@ const saveLabel = computed(() => ({
       <!-- Inspector drawer -->
       <aside
         v-if="selected && selectedSchema"
-        class="absolute top-0 right-0 bottom-0 w-80 bg-white/95 backdrop-blur border-l border-primary-200 overflow-y-auto z-10 shadow-lg"
+        class="studio-chrome absolute top-0 right-0 bottom-0 w-80 border-l border-white/10 overflow-y-auto z-10 shadow-xl"
         aria-label="Block settings"
       >
-        <div class="sticky top-0 bg-white/95 backdrop-blur flex items-center justify-between px-4 h-12 border-b border-primary-200">
-          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-500">
+        <div class="studio-chrome sticky top-0 flex items-center justify-between px-4 h-12 border-b border-white/10">
+          <p class="text-[11px] tracking-[0.14em] uppercase text-white/60">
             {{ selectedSchema.label }}
           </p>
           <button
             type="button"
-            class="text-primary-400 hover:text-black"
+            class="text-white/50 hover:text-white"
             aria-label="Close settings"
             @click="selectedId = null"
           >
@@ -604,7 +604,7 @@ const saveLabel = computed(() => ({
           <!-- Said once, here, instead of a lock message on every hidden field. -->
           <p
             v-if="locale !== defaultLocale"
-            class="text-[11px] text-amber-800 bg-amber-50 rounded p-2.5 leading-snug"
+            class="text-[11px] text-amber-200 bg-amber-400/15 rounded p-2.5 leading-snug"
           >
             Translating {{ locales.find(l => l.code === locale)?.label }}.
             Only text and images appear here — layout and settings are shared
@@ -613,7 +613,7 @@ const saveLabel = computed(() => ({
 
           <p
             v-if="selectedSchema.dynamic"
-            class="text-[11px] text-primary-500 bg-primary-50 rounded p-2.5 leading-snug"
+            class="text-[11px] text-white/60 bg-white/[0.06] rounded p-2.5 leading-snug"
           >
             Products come live from your catalogue in Odoo. You control the
             wording and how many are shown — not the products themselves.
@@ -654,13 +654,23 @@ const saveLabel = computed(() => ({
 </template>
 
 <style scoped>
+/* One surface for every piece of editor chrome - top bar and both rails.
+   When the tools and the page share a colour you lose the boundary between
+   editing the page and looking at it, which is the whole problem this solves.
+   The canvas stays white and full-bleed so it reads as the page itself. */
+.studio-chrome {
+  color: #fff;
+  background: rgb(23 23 23 / 97%);
+  backdrop-filter: blur(6px);
+}
+
 .studio-btn {
   padding: 0.35rem 0.7rem;
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
-  border: 1px solid rgb(0 0 0 / 18%);
+  border: 1px solid rgb(255 255 255 / 22%);
   border-radius: 0.25rem;
   transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 }
@@ -668,8 +678,8 @@ const saveLabel = computed(() => ({
 /* A visible fill on hover, not just a darker outline - a border going from
    18% to 45% black is close to invisible against a white row. */
 .studio-btn:hover:not(:disabled) {
-  background: rgb(0 0 0 / 5%);
-  border-color: rgb(0 0 0 / 55%);
+  background: rgb(255 255 255 / 12%);
+  border-color: rgb(255 255 255 / 50%);
 }
 
 .studio-btn:disabled {
@@ -678,29 +688,29 @@ const saveLabel = computed(() => ({
 }
 
 .studio-btn--primary {
-  color: #fff;
-  background: #000;
-  border-color: #000;
+  color: #000;
+  background: #fff;
+  border-color: #fff;
 }
 
 /* Lifts to charcoal rather than turning blue. The blue read as a different
    button appearing under the cursor rather than the same one responding. */
 .studio-btn--primary:hover:not(:disabled) {
-  background: #333;
-  border-color: #333;
+  background: rgb(255 255 255 / 82%);
+  border-color: rgb(255 255 255 / 82%);
 }
 
 /* Destructive actions carry their colour in the border too, so the risk is
    legible before the pointer reaches them. */
 .studio-btn--danger {
-  color: rgb(220 38 38);
-  border-color: rgb(220 38 38 / 45%);
+  color: rgb(248 113 113);
+  border-color: rgb(248 113 113 / 45%);
 }
 
 .studio-btn--danger:hover:not(:disabled) {
-  color: rgb(185 28 28);
-  background: rgb(254 242 242);
-  border-color: rgb(220 38 38);
+  color: #fff;
+  background: rgb(220 38 38 / 25%);
+  border-color: rgb(248 113 113);
 }
 
 @media (prefers-reduced-motion: reduce) {

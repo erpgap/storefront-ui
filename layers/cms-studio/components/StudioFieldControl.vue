@@ -191,7 +191,7 @@ function rowThumb(row: Record<string, unknown>) {
   >
     <label
       v-if="field.type !== 'boolean'"
-      class="text-[11px] tracking-[0.12em] uppercase text-primary-500"
+      class="text-[11px] tracking-[0.12em] uppercase text-white/60"
       :for="`f-${fieldPath}`"
     >
       {{ label }}<span
@@ -201,7 +201,7 @@ function rowThumb(row: Record<string, unknown>) {
       > *</span>
       <span
         v-if="needsTranslation"
-        class="ml-1.5 normal-case tracking-normal text-amber-600"
+        class="ml-1.5 normal-case tracking-normal text-amber-300"
       >· not translated</span>
     </label>
 
@@ -246,7 +246,7 @@ function rowThumb(row: Record<string, unknown>) {
     <!-- boolean -->
     <label
       v-else-if="field.type === 'boolean'"
-      class="flex items-center gap-2 text-[13px] cursor-pointer"
+      class="flex items-center gap-2 text-[13px] cursor-pointer text-white/80"
     >
       <input
         v-model="boolValue"
@@ -261,7 +261,7 @@ function rowThumb(row: Record<string, unknown>) {
     <div v-else-if="field.type === 'image'">
       <button
         type="button"
-        class="w-full rounded-md border border-primary-200 overflow-hidden text-left hover:border-primary-400 transition-colors"
+        class="w-full rounded-md border border-white/20 overflow-hidden text-left hover:border-white/50 transition-colors"
         @click="pickerOpen = true"
       >
         <img
@@ -273,11 +273,11 @@ function rowThumb(row: Record<string, unknown>) {
         >
         <span
           v-else
-          class="flex items-center justify-center aspect-[16/9] bg-primary-50 text-[12px] text-primary-400"
+          class="flex items-center justify-center aspect-[16/9] bg-white/[0.06] text-[12px] text-white/50"
         >
           Choose an image
         </span>
-        <span class="block px-2.5 py-2 text-[11px] text-primary-500">
+        <span class="block px-2.5 py-2 text-[11px] text-white/55">
           {{ inherited
             ? `Using the ${localeLabel(DEFAULT_LOCALE)} image · tap to use a different one here`
             : effectiveValue ? 'Replace image' : 'Upload or pick an image' }}
@@ -320,9 +320,9 @@ function rowThumb(row: Record<string, unknown>) {
       <div
         v-for="(row, index) in rows"
         :key="index"
-        class="rounded-md border border-primary-200 overflow-hidden"
+        class="rounded-md border border-white/15 overflow-hidden"
       >
-        <div class="flex items-center gap-2 px-2 py-1.5 bg-primary-50">
+        <div class="flex items-center gap-2 px-2 py-1.5 bg-white/[0.07]">
           <img
             v-if="rowThumb(row)"
             :src="rowThumb(row)!"
@@ -375,7 +375,7 @@ function rowThumb(row: Record<string, unknown>) {
       <button
         v-if="canAdd"
         type="button"
-        class="text-[12px] tracking-[0.08em] uppercase text-primary-600 hover:text-black self-start"
+        class="text-[12px] tracking-[0.08em] uppercase text-white/70 hover:text-white self-start"
         @click="addRow"
       >
         + {{ arrayField.addLabel ?? `Add ${label}` }}
@@ -384,14 +384,14 @@ function rowThumb(row: Record<string, unknown>) {
 
     <p
       v-if="issue"
-      class="text-[11px] text-red-600 leading-snug"
+      class="text-[11px] text-red-300 leading-snug"
       role="alert"
     >
       {{ issue }}
     </p>
     <p
       v-else-if="field.help"
-      class="text-[11px] text-primary-400 leading-snug"
+      class="text-[11px] text-white/45 leading-snug"
     >
       {{ field.help }}
     </p>
@@ -403,15 +403,27 @@ function rowThumb(row: Record<string, unknown>) {
   width: 100%;
   padding: 0.4rem 0.55rem;
   font-size: 13px;
-  color: inherit;
-  background: #fff;
-  border: 1px solid rgb(0 0 0 / 15%);
+  color: #fff;
+  background: rgb(255 255 255 / 9%);
+  border: 1px solid rgb(255 255 255 / 20%);
   border-radius: 0.25rem;
 }
 
+.studio-input::placeholder {
+  color: rgb(255 255 255 / 38%);
+}
+
+/* The native control paints its own menu, so it needs real colours rather
+   than a translucent fill - otherwise the options render white on white. */
+select.studio-input,
+select.studio-input option {
+  color: #fff;
+  background: rgb(38 38 38);
+}
+
 .studio-input--untranslated {
-  border-color: rgb(217 119 6 / 55%);
-  background: rgb(254 252 232 / 60%);
+  border-color: rgb(252 211 77 / 60%);
+  background: rgb(252 211 77 / 10%);
 }
 
 .studio-input:focus-visible {
@@ -426,7 +438,7 @@ function rowThumb(row: Record<string, unknown>) {
 }
 
 .studio-icon-btn:hover:not(:disabled) {
-  color: #000;
+  color: #fff;
 }
 
 .studio-icon-btn:disabled {
