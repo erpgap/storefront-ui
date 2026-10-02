@@ -235,6 +235,8 @@ export type CmsLocale = {
 
 export type CmsPage = {
   __typename?: 'CmsPage';
+  /** How many blocks the draft holds. A count rather than the blocks themselves, so the page list stays small. */
+  blockCount: Maybe<Scalars['Int']['output']>;
   blocks: Maybe<Scalars['GenericScalar']['output']>;
   draftBlocks: Maybe<Scalars['GenericScalar']['output']>;
   hasUnpublishedChanges: Maybe<Scalars['Boolean']['output']>;
