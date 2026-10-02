@@ -1,15 +1,14 @@
-import { seedBlockData } from '#shared/cms/blocks'
-import { DEFAULT_LOCALE } from '#shared/cms/i18n'
-import type { BlockInstance } from '#shared/cms/blocks'
-
 /**
- * Create a page. A brand-new page starts with a hero block rather than an empty
- * canvas — an empty canvas reads as "broken" to a merchant, and the first thing
- * they do is add a hero anyway.
+ * Create a page.
+ *
+ * A new page starts empty. It previously arrived with a hero already on it,
+ * on the reasoning that a blank canvas reads as broken - but it guesses at
+ * what the merchant wanted, and a block they have to delete is worse than one
+ * they have to add. The empty canvas carries its own instructions instead.
  */
 export default defineEventHandler(async (event) => {
   const store = useCmsStore(event)
-  const body = await readBody<{ title?: string, slug?: string, blank?: boolean }>(event)
+  const body = await readBody<{ title?: string, slug?: string }>(event)
 
   const title = String(body?.title ?? '').trim()
   if (!title) {
@@ -21,15 +20,5 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'That URL is too short.' })
   }
 
-  const starter: BlockInstance[] = body?.blank
-    ? []
-    : [{
-        id: `blk_${Math.random().toString(36).slice(2, 10)}`,
-        blockType: 'hero',
-        // Translatable fields are per-language maps; the page title seeds the
-        // default language only.
-        data: { ...seedBlockData('hero'), title: { [DEFAULT_LOCALE]: title } },
-      }]
-
-  return store.create({ title, slug }, starter)
+  return store.create({ title, slug }, [])
 })
