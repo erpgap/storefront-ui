@@ -255,7 +255,7 @@ function formatDate(iso: string) {
             </NuxtLink>
             <button
               type="button"
-              class="studio-btn text-red-600"
+              class="studio-btn studio-btn--danger"
               :aria-label="`Delete ${page.title}`"
               @click="remove(page)"
             >
@@ -299,10 +299,19 @@ function formatDate(iso: string) {
   white-space: nowrap;
   border: 1px solid rgb(0 0 0 / 18%);
   border-radius: 0.25rem;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
-.studio-btn:hover {
-  border-color: rgb(0 0 0 / 45%);
+/* A visible fill on hover, not just a darker outline - a border going from
+   18% to 45% black is close to invisible against a white row. */
+.studio-btn:hover:not(:disabled) {
+  background: rgb(0 0 0 / 5%);
+  border-color: rgb(0 0 0 / 55%);
+}
+
+.studio-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .studio-btn--primary {
@@ -311,8 +320,29 @@ function formatDate(iso: string) {
   border-color: #000;
 }
 
-.studio-btn--primary:hover {
-  background: rgb(37 99 235);
-  border-color: rgb(37 99 235);
+/* Lifts to charcoal rather than turning blue. The blue read as a different
+   button appearing under the cursor rather than the same one responding. */
+.studio-btn--primary:hover:not(:disabled) {
+  background: #333;
+  border-color: #333;
+}
+
+/* Destructive actions carry their colour in the border too, so the risk is
+   legible before the pointer reaches them. */
+.studio-btn--danger {
+  color: rgb(220 38 38);
+  border-color: rgb(220 38 38 / 45%);
+}
+
+.studio-btn--danger:hover:not(:disabled) {
+  color: rgb(185 28 28);
+  background: rgb(254 242 242);
+  border-color: rgb(220 38 38);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio-btn {
+    transition: none;
+  }
 }
 </style>

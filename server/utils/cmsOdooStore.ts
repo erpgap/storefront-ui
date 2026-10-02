@@ -41,6 +41,7 @@ interface OdooCmsPage {
   liveRevision?: number
   updatedAt?: string
   hasUnpublishedChanges?: boolean
+  blockCount?: number
 }
 
 export interface CmsRevision {
@@ -93,9 +94,21 @@ async function callOdoo<T>(
   return response.data as T
 }
 
-/** Odoo's page shape to the storefront's. */
-function toCmsPage(page: OdooCmsPage): CmsPage {
+/**
+ * Odoo's page shape to the storefront's.
+ *
+ * `blockCount` and `hasUnpublishedChanges` are carried through rather than
+ * recomputed. The list query deliberately does not fetch block bodies - that
+ * is what keeps it small - so deriving them here would compute both from
+ * nothing and report every page as empty and unchanged.
+ */
+function toCmsPage(page: OdooCmsPage): CmsPage & {
+  blockCount?: number
+  hasUnpublishedChanges?: boolean
+} {
   return {
+    blockCount: page.blockCount,
+    hasUnpublishedChanges: page.hasUnpublishedChanges,
     id: String(page.id),
     title: page.name,
     slug: page.url,

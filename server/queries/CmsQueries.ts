@@ -14,6 +14,7 @@ const PAGE_FIELDS = `
   liveRevision
   updatedAt
   hasUnpublishedChanges
+  blockCount
 `
 
 export const GetCmsPageQuery = `

@@ -154,6 +154,11 @@ export default defineNuxtModule({
         pages.push({
           name: url.replace(/^\//, '').replace(/\//g, '-'),
           path: url,
+          // Without a file this route resolves to nothing: it matches the URL,
+          // shadows the CMS catch-all, and renders an empty page wrapped in
+          // the site chrome. It stayed invisible for as long as the pages did
+          // not exist in Odoo when the dev server booted.
+          file: '#layers/cms/custom-pages/cms-page.vue',
         })
       })
     })

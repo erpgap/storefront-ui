@@ -24,8 +24,9 @@ export default defineEventHandler(async (event) => {
 
   const published = await store.publish(id)
 
-  // Where the real implementation also fires cache invalidation for the page's
-  // URL (§6.5). Skipping it means merchants publish, reload, see stale SWR
-  // content, and report it as a bug.
+  // Purged here, inline, by the side that owns the cache. Without it the
+  // merchant publishes, reloads, sees the old page and reports it as a bug.
+  await invalidateCmsPageCache(published.slug)
+
   return published
 })

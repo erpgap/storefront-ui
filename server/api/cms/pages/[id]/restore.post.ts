@@ -20,8 +20,13 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'revisionId is required' })
   }
 
-  return createOdooCmsStore(event).restore(
+  const page = await createOdooCmsStore(event).restore(
     getRouterParam(event, 'id')!,
     String(body.revisionId),
   )
+
+  // A rollback changes what visitors see, so it purges like a publish.
+  await invalidateCmsPageCache(page.slug)
+
+  return page
 })
