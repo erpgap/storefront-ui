@@ -49,16 +49,32 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 // first time someone calls it from outside the CMS.
 const count = computed(() => Math.min(Math.max(Number(props.pageSize) || 4, 1), 12))
 
-await loadProductTemplateList({
-  pageSize: count.value,
-  sort: SORTS[props.sort] ?? SORTS.popular,
-  // useProductTemplateList is built for listing pages: it derives a
-  // categorySlug from the current route. On a CMS page - or in the studio -
-  // that means filtering the catalogue by the page's own url, which matches
-  // nothing, so the grid renders empty and the block collapses to zero
-  // height. This block is a curated grid, not a listing, so it clears it.
-  filter: { categorySlug: null },
-} as any)
+function queryArgs() {
+  return {
+    pageSize: count.value,
+    sort: SORTS[props.sort] ?? SORTS.popular,
+    // useProductTemplateList is built for listing pages: it derives a
+    // categorySlug from the current route. On a CMS page - or in the studio -
+    // that means filtering the catalogue by the page's own url, which matches
+    // nothing, so the grid renders empty and the block collapses to zero
+    // height. This block is a curated grid, not a listing, so it clears it.
+    filter: { categorySlug: null },
+  } as any
+}
+
+await loadProductTemplateList(queryArgs())
+
+// Changing the order or the count changes WHICH products these are, so the
+// grid has to go back to Odoo - unlike the headings beside it, which are
+// pure presentation and update through reactivity alone. Without this the
+// merchant picks "Newest first", sees the same four products, and reasonably
+// concludes the setting is broken.
+//
+// Inert in production, where these props never change after render.
+watch(
+  () => [count.value, props.sort],
+  () => { void loadProductTemplateList(queryArgs()) },
+)
 </script>
 
 <template>
