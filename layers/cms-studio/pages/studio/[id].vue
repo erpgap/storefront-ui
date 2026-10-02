@@ -130,6 +130,16 @@ const publishError = ref('')
 
 const isPublished = computed(() => page.value?.published ?? false)
 
+/**
+ * Whether the draft differs from what visitors see.
+ *
+ * Compared directly rather than read off the page record, which is only
+ * accurate at load: the autosave updates the draft without refetching the
+ * page, so a flag from the server goes stale the moment anyone types.
+ */
+const hasUnpublishedChanges = computed(() =>
+  JSON.stringify(blocks.value) !== JSON.stringify(page.value?.publishedBlocks ?? []))
+
 async function publish() {
   publishing.value = true
   publishError.value = ''
@@ -153,8 +163,25 @@ async function publish() {
   }
 }
 
-async function discard() {
-  if (!confirm('Discard all unpublished changes and go back to the live version?')) return
+/**
+ * Throws away the draft and goes back to what visitors currently see.
+ *
+ * Worth being precise about, because the obvious reading - "undo what I did
+ * since opening the editor" - is wrong and much smaller than what happens.
+ * This discards EVERY unpublished change on the page, including ones made in
+ * a previous sitting by someone else. Undo is the per-session tool; this one
+ * is a reset.
+ */
+async function revertToLive() {
+  const message = isPublished.value
+    ? 'Throw away all unpublished changes and go back to the version visitors '
+      + 'see right now?\n\nThis includes changes made earlier or by someone '
+      + 'else, not just the ones you have made since opening the editor.'
+    : 'This page has never been published, so there is no live version to go '
+      + 'back to. Continuing removes every block on it.\n\nContinue?'
+
+  if (!confirm(message)) return
+
   const updated = await $fetch<CmsPage>(`/api/cms/pages/${pageId.value}/discard`, {
     method: 'POST',
   })
@@ -420,10 +447,14 @@ const saveLabel = computed(() => ({
 
         <button
           type="button"
-          class="studio-btn"
-          @click="discard"
+          class="studio-btn studio-btn--danger"
+          :disabled="!hasUnpublishedChanges"
+          :title="isPublished
+            ? 'Throw away all unpublished changes and go back to the live version'
+            : 'Remove every block on this page'"
+          @click="revertToLive"
         >
-          Discard
+          {{ isPublished ? 'Revert to live' : 'Clear page' }}
         </button>
 
         <a
