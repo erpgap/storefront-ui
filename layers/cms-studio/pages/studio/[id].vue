@@ -534,17 +534,17 @@ const saveLabel = computed(() => ({
       <!-- Palette drawer -->
       <aside
         v-if="paletteOpen"
-        class="absolute top-0 left-0 bottom-0 w-56 bg-white/95 backdrop-blur border-r border-primary-200 p-3 overflow-y-auto z-10 shadow-lg"
+        class="absolute top-0 left-0 bottom-0 w-56 bg-neutral-950/95 backdrop-blur border-r border-white/10 p-3 overflow-y-auto z-10 shadow-xl text-white"
         aria-label="Blocks"
       >
         <p
           v-if="insertAt !== null"
-          class="text-[11px] tracking-[0.14em] uppercase text-blue-700 bg-blue-50 rounded px-2 py-1.5 mb-2 flex items-center justify-between gap-2"
+          class="text-[11px] tracking-[0.14em] uppercase text-blue-200 bg-blue-500/20 rounded px-2 py-1.5 mb-2 flex items-center justify-between gap-2"
         >
           Inserting at {{ insertAt + 1 }}
           <button
             type="button"
-            class="text-blue-700/70 hover:text-blue-900 normal-case tracking-normal"
+            class="text-blue-200/80 hover:text-white normal-case tracking-normal"
             @click="insertAt = null"
           >
             cancel
@@ -552,7 +552,7 @@ const saveLabel = computed(() => ({
         </p>
         <p
           v-else
-          class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-2"
+          class="text-[11px] tracking-[0.14em] uppercase text-white/45 mb-2"
         >
           Drag onto the page
         </p>
@@ -562,18 +562,18 @@ const saveLabel = computed(() => ({
             :key="definition.name"
             type="button"
             draggable="true"
-            class="text-left rounded-md border border-primary-200 p-2.5 cursor-grab hover:border-primary-400 hover:bg-primary-50 transition-colors"
+            class="text-left rounded-md border border-white/15 bg-white/[0.04] p-2.5 cursor-grab hover:border-white/40 hover:bg-white/10 focus-visible:border-white/60 transition-colors"
             @dragstart="onPaletteDragStart($event, definition.name)"
             @dragend="resetDrag"
             @click="insertFromPalette(definition.name)"
           >
             <span class="block text-[13px] font-medium">{{ definition.label }}</span>
-            <span class="block text-[11px] text-primary-400 leading-snug mt-0.5">
+            <span class="block text-[11px] text-white/50 leading-snug mt-0.5">
               {{ definition.description }}
             </span>
           </button>
         </div>
-        <p class="text-[11px] text-primary-400 mt-3 leading-snug">
+        <p class="text-[11px] text-white/45 mt-3 leading-snug">
           {{ insertAt !== null
             ? `Click a block to insert it at position ${insertAt + 1}.`
             : 'Or click a block to add it at the end. To choose the exact position without dragging, hover between two blocks on the page and click “Add block here”.' }}
