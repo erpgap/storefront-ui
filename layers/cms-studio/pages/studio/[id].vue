@@ -562,13 +562,13 @@ const saveLabel = computed(() => ({
             :key="definition.name"
             type="button"
             draggable="true"
-            class="text-left rounded-md bg-neutral-900 text-white p-2.5 cursor-grab hover:bg-neutral-700 focus-visible:bg-neutral-700 transition-colors"
+            class="text-left rounded-md border border-primary-200 p-2.5 cursor-grab hover:border-primary-400 hover:bg-primary-50 transition-colors"
             @dragstart="onPaletteDragStart($event, definition.name)"
             @dragend="resetDrag"
             @click="insertFromPalette(definition.name)"
           >
             <span class="block text-[13px] font-medium">{{ definition.label }}</span>
-            <span class="block text-[11px] text-white/60 leading-snug mt-0.5">
+            <span class="block text-[11px] text-primary-400 leading-snug mt-0.5">
               {{ definition.description }}
             </span>
           </button>
