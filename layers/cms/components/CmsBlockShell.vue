@@ -24,6 +24,38 @@ const props = defineProps<{
 defineEmits<{ select: [], remove: [], duplicate: [], moveUp: [], moveDown: [] }>()
 
 const label = computed(() => blockLabel(props.block.blockType))
+
+/**
+ * A block whose component renders nothing collapses to zero height, and then
+ * it cannot be seen, selected, moved or deleted - only found by sweeping the
+ * cursor along a hairline. Several blocks render nothing legitimately: a
+ * product grid with no matches, a text section before any text is typed.
+ *
+ * So the shell measures its own content and stands in for it when there is
+ * none. Measured rather than inferred from the data, because the shell has no
+ * idea what any given component considers "empty".
+ */
+const body = ref<HTMLElement | null>(null)
+const isEmpty = ref(false)
+
+const MIN_VISIBLE_HEIGHT = 24
+
+onMounted(() => {
+  if (!body.value) return
+
+  const measure = () => {
+    const height = body.value?.getBoundingClientRect().height ?? 0
+    isEmpty.value = height < MIN_VISIBLE_HEIGHT
+  }
+
+  measure()
+
+  // Content arrives late - async components, images, product queries - so one
+  // measurement at mount would mark half the canvas empty.
+  const observer = new ResizeObserver(measure)
+  observer.observe(body.value)
+  onBeforeUnmount(() => observer.disconnect())
+})
 </script>
 
 <template>
@@ -35,8 +67,21 @@ const label = computed(() => blockLabel(props.block.blockType))
   >
     <!-- The real component, made inert by the .cms-block__body rule below.
          Nothing reaches into the component itself. -->
-    <div class="cms-block__body">
+    <div
+      ref="body"
+      class="cms-block__body"
+    >
       <slot />
+    </div>
+
+    <!-- Stands in when the component renders nothing, so the block stays
+         visible and usable. -->
+    <div
+      v-if="isEmpty"
+      class="cms-block__empty"
+    >
+      <span>{{ label }}</span>
+      <span class="cms-block__empty-hint">nothing to show yet — select it to add content</span>
     </div>
 
     <!-- Everything interactive lives above the content. -->
@@ -122,6 +167,35 @@ const label = computed(() => blockLabel(props.block.blockType))
   /* Links, buttons and sliders inside the real component must not react. */
   pointer-events: none;
   user-select: none;
+}
+
+.cms-block__empty {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: center;
+  justify-content: center;
+  min-height: 112px;
+  padding: 1.5rem;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 45%);
+  background: repeating-linear-gradient(
+    45deg,
+    rgb(0 0 0 / 2%),
+    rgb(0 0 0 / 2%) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  border: 1px dashed rgb(0 0 0 / 18%);
+}
+
+.cms-block__empty-hint {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: rgb(0 0 0 / 35%);
 }
 
 .cms-block__overlay {

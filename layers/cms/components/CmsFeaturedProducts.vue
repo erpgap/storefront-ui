@@ -43,11 +43,20 @@ const { data } = await useAsyncData<ProductTemplateListResponse | null>(
 )
 
 // Odoo returns them in its own order; the merchant chose theirs.
+//
+// Falls back to the response order if the ids cannot be matched. Without that
+// a single missing field silently empties the grid, which is how this block
+// spent its first outing rendering nothing at all: the query selected
+// firstVariant.id but no product-level id, so every comparison was against
+// undefined.
 const products = computed<Product[]>(() => {
   const found = (data.value?.products?.products ?? []) as Product[]
-  return ids.value
+
+  const ordered = ids.value
     .map(id => found.find(p => Number(p.id) === id))
     .filter(Boolean) as Product[]
+
+  return ordered.length ? ordered : found
 })
 </script>
 

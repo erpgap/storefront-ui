@@ -124,10 +124,25 @@ function propsFor(block: BlockInstance): Record<string, unknown> {
         @move-up="$emit('move', { from: index, to: index - 1 })"
         @move-down="$emit('move', { from: index, to: index + 2 })"
       >
-        <component
-          :is="resolveComponent(block.blockType, index)"
-          v-bind="propsFor(block)"
-        />
+        <!--
+          Suspense matters here. Blocks that fetch their own data - the product
+          ones - have an async setup, and a page's implicit Suspense boundary
+          only covers what was mounted with it. A block dropped onto an
+          already-hydrated canvas has no boundary of its own, so its setup
+          never resolves into output and it renders at zero height: invisible,
+          unselectable, and apparently broken.
+        -->
+        <Suspense>
+          <component
+            :is="resolveComponent(block.blockType, index)"
+            v-bind="propsFor(block)"
+          />
+          <template #fallback>
+            <p class="py-16 text-center text-[12px] tracking-[0.12em] uppercase text-primary-400">
+              Loading…
+            </p>
+          </template>
+        </Suspense>
       </CmsBlockShell>
     </template>
 

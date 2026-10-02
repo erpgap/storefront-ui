@@ -35,6 +35,7 @@ query (
         name
         imageUrl
       }
+      id
       imageUrl
       name
       slug
