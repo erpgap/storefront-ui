@@ -463,6 +463,75 @@ replaced by `models.Constraint`.
 - **`.to_migrate/website_cms`** left in place, pending whether any merchant has
   it installed on 18.0.
 
+## 13A. Content on pages the storefront owns
+
+Two mechanisms, deliberately different.
+
+### The homepage is a page
+
+It already has a url, so it becomes an ordinary CMS page with an `is_system`
+flag: fully editable, but it cannot be deleted and its address is fixed. Both
+guards live in the model, not the UI - hiding a button is a courtesy, the
+model is the rule.
+
+`/` renders CMS blocks when a page is published and the existing markup when
+it is not, behind `NUXT_PUBLIC_CMS_HOMEPAGE`. A storefront with no CMS content
+therefore looks exactly as it did.
+
+**Its SEO still comes from Odoo's `websiteHomepage`, not from the CMS page.**
+Those tags are configured on the website record and have nothing to do with
+which blocks sit below them. Letting the CMS supply them would swap a tuned
+set for a page title.
+
+Measured on a production build, median of five runs, mobile with 4x CPU
+throttle:
+
+| | before | after |
+| --- | ---: | ---: |
+| LCP | 336ms | 336ms |
+| CLS | 0.01 | 0.01 |
+| JavaScript | 206.5KB | 215.1KB |
+| Requests | 64 | 70 |
+
+LCP element is the hero `<img>` in both, and every SEO tag is byte-identical.
+The 8.6KB is blocks loading as async chunks rather than static imports.
+
+### Category and product pages get regions
+
+Those templates are mostly business logic - listings, variants, cart,
+recommendations - and a merchant must not be able to rearrange them. So
+instead of making the pages editable, the developer declares where content is
+allowed:
+
+```vue
+<UiProductListing … />
+<CmsRegion name="category-after" />
+```
+
+There is nowhere else for a block to go, which makes the constraint structural
+rather than a rule somebody has to remember. Adding a slot is one line in a
+template plus one in the install hook.
+
+Regions share the page model, so drafts, revisions, publishing, validation and
+the editor work for them with no second content pipeline. They start empty and
+render nothing.
+
+**Scope is global for now** - one block list under all category pages, one
+under all product pages. Per-record overrides are a nullable column and an
+additive migration whenever a merchant asks; every existing region simply
+becomes the default.
+
+**Publishing a region clears the whole route cache.** Its urls cannot be
+enumerated, and a stale region is wrong on hundreds of pages at once, which is
+worse than a cold cache for a few minutes.
+
+### Seeding
+
+The install hook creates the homepage from a snapshot of the storefront's
+default blocks and declares the regions. Both are idempotent: re-running after
+a release leaves merchant content alone, because by then it is theirs. Block
+shapes drifting is what the schema migrations in §4 are for.
+
 ## 13. Deliberate follow-ups
 
 Not v1, and recorded here so they stay decisions rather than tribal knowledge:
