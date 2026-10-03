@@ -122,7 +122,6 @@ server/utils/cmsStore.ts      the interface, and the file fallback
 
 | | |
 | --- | --- |
-| Drag-and-drop has no touch support | Needs Pointer Events — spec §13 |
 | No rich text | TipTap, sanitised server-side |
 | Region content is global, not per category or product | A nullable column and an additive migration |
 | `content` and `page_type` on the page model are superseded but still present | Removal is a later, separately versioned migration |

@@ -1,4 +1,4 @@
-import { addBlock, createPage, expect, publish, signIn, test, waitForDraftSaved } from './fixtures'
+import { addBlock, createPage, dragOnto, expect, publish, signIn, test, waitForDraftSaved } from './fixtures'
 
 test.describe('the studio', () => {
   test.beforeEach(async ({ page }) => {
@@ -48,9 +48,44 @@ test.describe('the studio', () => {
     await expect(page.locator('.cms-block')).toHaveCount(1)
 
     await page.getByRole('button', { name: 'Add blocks' }).click()
-    await page.locator('aside[aria-label="Blocks"]')
-      .getByRole('button', { name: /^Newsletter/ })
-      .dragTo(page.locator('.cms-block').first(), { targetPosition: { x: 300, y: 20 } })
+    await dragOnto(
+      page,
+      page.locator('aside[aria-label="Blocks"]').getByRole('button', { name: /^Newsletter/ }),
+      page.locator('.cms-block').first(),
+    )
+
+    await expect(page.locator('.cms-block')).toHaveCount(2)
+  })
+
+  test('a press without movement adds the block rather than dragging it', async ({ page }) => {
+    // The drag threshold must not swallow ordinary clicks, or the one path
+    // that works without a pointer stops working.
+    await createPage(page, 'E2E Threshold')
+    const tile = page.locator('aside[aria-label="Blocks"]')
+      .getByRole('button', { name: /^Text Section/ })
+    const box = (await tile.boundingBox())!
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+    await page.mouse.down()
+    // Two pixels: real hands are never perfectly still.
+    await page.mouse.move(box.x + box.width / 2 + 2, box.y + box.height / 2 + 1)
+    await page.mouse.up()
+
+    await expect(page.locator('.cms-block')).toHaveCount(1)
+  })
+
+  test('dropping a block adds exactly one', async ({ page }) => {
+    // pointerup is followed by click, so without suppression a drop would
+    // also run the tile's click handler and add a second block.
+    await createPage(page, 'E2E Double')
+    await addBlock(page, /^Text Section/)
+    await page.getByRole('button', { name: 'Add blocks' }).click()
+
+    await dragOnto(
+      page,
+      page.locator('aside[aria-label="Blocks"]').getByRole('button', { name: /^Newsletter/ }),
+      page.locator('.cms-block').first(),
+    )
 
     await expect(page.locator('.cms-block')).toHaveCount(2)
   })

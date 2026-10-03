@@ -1,5 +1,5 @@
 import { expect, test as base } from '@playwright/test'
-import type { Page } from '@playwright/test'
+import type { Locator, Page } from '@playwright/test'
 
 /**
  * Signing in is the preamble to every studio test, and creating a page is the
@@ -132,4 +132,25 @@ export async function waitForDraftSaved(page: Page, act: () => Promise<void>) {
   await act()
   const result = await response
   expect(result.status(), 'the draft should save').toBeLessThan(400)
+}
+
+/**
+ * Drags with real pointer movement.
+ *
+ * The studio uses Pointer Events, not HTML5 drag, so Playwright's dragTo -
+ * which drives the HTML5 pipeline - does nothing here. Moving the mouse in
+ * steps produces the pointermove stream the studio actually listens to, and
+ * is also what a person does.
+ */
+export async function dragOnto(page: Page, source: Locator, target: Locator, offsetY = 20) {
+  const from = await source.boundingBox()
+  const to = await target.boundingBox()
+  if (!from || !to) throw new Error('drag source or target is not visible')
+
+  await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2)
+  await page.mouse.down()
+  // Several steps: one jump would clear the threshold but produce a single
+  // pointermove, and the drop indicator would never be computed.
+  await page.mouse.move(to.x + to.width / 2, to.y + offsetY, { steps: 20 })
+  await page.mouse.up()
 }

@@ -96,9 +96,10 @@ onMounted(() => {
       class="cms-block__toolbar"
       :class="selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 focus-within:opacity-100'"
     >
+      <!-- touch-action:none via the class, so a drag on a touch screen is a
+           drag rather than a page scroll. -->
       <span
         class="cms-block__handle"
-        draggable="true"
         :title="`Drag to move ${label}`"
         data-cms-drag-handle
         aria-hidden="true"
@@ -245,6 +246,8 @@ onMounted(() => {
   cursor: grab;
   padding: 0 0.15rem;
   letter-spacing: -2px;
+  /* Claims the gesture from the browser's own scrolling on touch. */
+  touch-action: none;
 }
 
 .cms-block__handle:active {

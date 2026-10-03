@@ -12,7 +12,7 @@
 import type { CmsPage } from '#shared/cms/blocks'
 import { CMS_LOCALES, DEFAULT_LOCALE } from '#shared/cms/i18n'
 import type { CmsLocale } from '#shared/cms/i18n'
-import { blockRegistry } from '~~/layers/cms/blocks'
+import { blockLabel, blockRegistry } from '~~/layers/cms/blocks'
 import { useStudioDraft } from '../../composables/useStudioDraft'
 
 definePageMeta({ layout: false, middleware: 'studio-auth' })
@@ -190,24 +190,47 @@ async function revertToLive() {
   selectedId.value = null
 }
 
-// --- drag and drop (§8.3) ---------------------------------------------------
-// Native HTML5 drag events, no library. That is affordable ONLY because
-// CmsBlockShell's overlay turned the canvas into a flat list of uniform
-// rectangles — the geometry below never has to reason about what is inside a
-// block, only where it sits.
+// --- drag and drop ----------------------------------------------------------
+// Pointer Events rather than HTML5 drag.
+//
+// HTML5 drag has no touch support and never will - it predates the iPhone -
+// so a merchant on a tablet could not move a block at all. Pointer Events
+// unify mouse, touch and pen into one stream, and setPointerCapture keeps
+// the gesture alive when the pointer leaves the element it started on, which
+// is the problem that makes naive implementations feel broken.
+//
+// None of the geometry changed. CmsBlockShell's overlay already reduced the
+// canvas to a flat list of uniform rectangles, so the only thing that moved
+// is where the coordinates come from.
 
 const canvas = ref<HTMLElement | null>(null)
 const dropIndex = ref<number | null>(null)
-const dragging = ref<
-  | { kind: 'new', blockType: string }
-  | { kind: 'move', id: string }
-  | null
->(null)
+
+type DragPayload =
+  | { kind: 'new', blockType: string, label: string }
+  | { kind: 'move', id: string, label: string }
+
+const dragging = ref<DragPayload | null>(null)
+/** Where to paint the floating label that follows the pointer. */
+const dragPoint = ref({ x: 0, y: 0 })
 
 /**
- * Maps a pointer position to an insertion index. Only block bounding boxes are
- * consulted — which is exactly what CmsBlockShell's overlay bought us: the
- * geometry never has to reason about what is inside a block, only where it sits.
+ * A press is not a drag until it travels. Without a threshold every click on
+ * a palette tile would be a one-pixel drag, and the click handlers that make
+ * all of this usable without a pointer would never fire.
+ */
+const DRAG_THRESHOLD = 6
+
+let origin: { x: number, y: number } | null = null
+let pending: DragPayload | null = null
+let captured: { element: Element, pointerId: number } | null = null
+/** Set when a drag actually happened, so the click that follows is ignored. */
+let suppressClick = false
+
+/**
+ * Maps a pointer position to an insertion index. Only block bounding boxes
+ * are consulted - which is exactly what the overlay bought us: the geometry
+ * never has to reason about what is inside a block, only where it sits.
  */
 function dropTargetFromPointer(clientY: number): number {
   const container = canvas.value
@@ -224,22 +247,9 @@ function dropTargetFromPointer(clientY: number): number {
   return shells.length
 }
 
-function onCanvasDragOver(event: DragEvent) {
-  if (!dragging.value) return
-  event.preventDefault()
-  if (event.dataTransfer) {
-    event.dataTransfer.dropEffect = dragging.value.kind === 'new' ? 'copy' : 'move'
-  }
-
-  dropIndex.value = dropTargetFromPointer(event.clientY)
-
-  autoScroll(event.clientY)
-}
-
 /**
- * The canvas is a scroll container and HTML5 drag does not scroll it reliably,
- * so a long page has positions you simply cannot drop at. Nudge it when the
- * pointer is near an edge.
+ * The canvas is a scroll container, so a long page has positions the pointer
+ * cannot otherwise reach. Nudge it near the edges.
  */
 function autoScroll(clientY: number) {
   const container = canvas.value
@@ -248,50 +258,101 @@ function autoScroll(clientY: number) {
   const rect = container.getBoundingClientRect()
   const zone = 80
 
-  if (clientY < rect.top + zone) {
-    container.scrollBy({ top: -18 })
-  }
-  else if (clientY > rect.bottom - zone) {
-    container.scrollBy({ top: 18 })
-  }
+  if (clientY < rect.top + zone) container.scrollBy({ top: -18 })
+  else if (clientY > rect.bottom - zone) container.scrollBy({ top: 18 })
 }
 
-function onCanvasDrop(event: DragEvent) {
-  if (!dragging.value || dropIndex.value === null) return resetDrag()
-  event.preventDefault()
+function beginDrag(event: PointerEvent, payload: DragPayload) {
+  // Secondary buttons and right-clicks are not drags.
+  if (event.button !== 0) return
 
+  origin = { x: event.clientX, y: event.clientY }
+  pending = payload
+  dragPoint.value = { x: event.clientX, y: event.clientY }
+
+  const element = event.currentTarget as Element
+  try {
+    element.setPointerCapture(event.pointerId)
+    captured = { element, pointerId: event.pointerId }
+  }
+  catch {
+    // Capture can be refused; the window listeners below still work.
+    captured = null
+  }
+
+  window.addEventListener('pointermove', onPointerMove)
+  window.addEventListener('pointerup', onPointerUp)
+  window.addEventListener('pointercancel', cancelDrag)
+}
+
+function onPointerMove(event: PointerEvent) {
+  if (!origin) return
+
+  dragPoint.value = { x: event.clientX, y: event.clientY }
+
+  if (!dragging.value) {
+    const travelled = Math.hypot(event.clientX - origin.x, event.clientY - origin.y)
+    if (travelled < DRAG_THRESHOLD) return
+    dragging.value = pending
+    // Stops the browser treating the gesture as a scroll or a text selection
+    // once it is clearly a drag.
+    document.body.style.userSelect = 'none'
+  }
+
+  // Touch would otherwise scroll the page out from under the drag.
+  if (event.cancelable) event.preventDefault()
+
+  dropIndex.value = dropTargetFromPointer(event.clientY)
+  autoScroll(event.clientY)
+}
+
+function onPointerUp() {
+  const payload = dragging.value
   const target = dropIndex.value
 
-  if (dragging.value.kind === 'new') {
-    insertBlock(dragging.value.blockType, target)
-  }
-  else {
-    const from = blocks.value.findIndex(block => block.id === (dragging.value as { id: string }).id)
-    if (from !== -1) moveBlock(from, target)
+  if (payload && target !== null) {
+    if (payload.kind === 'new') {
+      insertBlock(payload.blockType, target)
+    }
+    else {
+      const from = blocks.value.findIndex(block => block.id === payload.id)
+      if (from !== -1) moveBlock(from, target)
+    }
+    // The browser fires click after pointerup; without this, dropping a tile
+    // would also run the tile's click handler and add a second block.
+    suppressClick = true
   }
 
-  resetDrag()
+  cancelDrag()
 }
 
-function resetDrag() {
+function cancelDrag() {
+  if (captured) {
+    try {
+      captured.element.releasePointerCapture(captured.pointerId)
+    }
+    catch { /* already released */ }
+    captured = null
+  }
+
+  window.removeEventListener('pointermove', onPointerMove)
+  window.removeEventListener('pointerup', onPointerUp)
+  window.removeEventListener('pointercancel', cancelDrag)
+
+  document.body.style.userSelect = ''
+  origin = null
+  pending = null
   dragging.value = null
   dropIndex.value = null
 }
 
-/**
- * Firefox will not begin a drag unless dragstart puts something on the
- * dataTransfer, and Safari is inconsistent without it. Chrome is forgiving,
- * which is exactly why this is easy to miss.
- */
-function onPaletteDragStart(event: DragEvent, blockType: string) {
-  dragging.value = { kind: 'new', blockType }
-  event.dataTransfer?.setData('text/plain', `cms-block:${blockType}`)
-  if (event.dataTransfer) event.dataTransfer.effectAllowed = 'copy'
+/** Starts a drag from a palette tile. */
+function onPaletteDragStart(event: PointerEvent, blockType: string, label: string) {
+  beginDrag(event, { kind: 'new', blockType, label })
 }
 
-function onCanvasDragStart(event: DragEvent) {
-  // Only the toolbar handle starts a move; dragging the block body would fight
-  // with text selection and image drag.
+/** Starts a drag from a block's ⋮⋮ handle. */
+function onCanvasDragStart(event: PointerEvent) {
   const handle = (event.target as HTMLElement)?.closest?.('[data-cms-drag-handle]')
   if (!handle) return
 
@@ -299,10 +360,22 @@ function onCanvasDragStart(event: DragEvent) {
   const id = shell?.getAttribute('data-cms-block-id')
   if (!id) return
 
-  dragging.value = { kind: 'move', id }
-  event.dataTransfer?.setData('text/plain', `cms-move:${id}`)
-  if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move'
+  const label = blockLabel(
+    blocks.value.find(block => block.id === id)?.blockType ?? '',
+  )
+  beginDrag(event, { kind: 'move', id, label })
 }
+
+/** Swallows the click that follows a completed drag. */
+function onPaletteClick(blockType: string) {
+  if (suppressClick) {
+    suppressClick = false
+    return
+  }
+  insertFromPalette(blockType)
+}
+
+onBeforeUnmount(cancelDrag)
 
 // --- keyboard ---------------------------------------------------------------
 
@@ -500,10 +573,7 @@ const saveLabel = computed(() => ({
           '--cms-inspector-w': selected ? '20rem' : '0px',
           '--cms-palette-w': paletteOpen ? '14rem' : '0px',
         }"
-        @dragover="onCanvasDragOver"
-        @drop="onCanvasDrop"
-        @dragstart="onCanvasDragStart"
-        @dragend="resetDrag"
+        @pointerdown="onCanvasDragStart"
       >
         <BlockRenderer
           :blocks="blocks"
@@ -529,7 +599,18 @@ const saveLabel = computed(() => ({
           </p>
         </div>
 
-        <!-- While dragging, the insert point at `dropIndex` lights up, so the
+        <!-- Pointer Events provide no drag image, so the thing being dragged
+           needs to be visible somewhere. A small label beats a clone of a
+           full-bleed section following the cursor around. -->
+      <div
+        v-if="dragging"
+        class="pointer-events-none fixed z-[200] px-2.5 py-1.5 rounded-md bg-neutral-900 text-white text-[11px] tracking-[0.1em] uppercase shadow-lg"
+        :style="{ left: `${dragPoint.x + 14}px`, top: `${dragPoint.y + 14}px` }"
+      >
+        {{ dragging.label }}
+      </div>
+
+      <!-- While dragging, the insert point at `dropIndex` lights up, so the
              indicator is the same element the merchant can also just click. -->
       </main>
 
@@ -563,11 +644,9 @@ const saveLabel = computed(() => ({
             v-for="definition in blockRegistry"
             :key="definition.name"
             type="button"
-            draggable="true"
-            class="text-left rounded-md border border-white/15 bg-white/[0.06] p-2.5 cursor-grab hover:border-white/40 hover:bg-white/[0.12] transition-colors"
-            @dragstart="onPaletteDragStart($event, definition.name)"
-            @dragend="resetDrag"
-            @click="insertFromPalette(definition.name)"
+            class="text-left rounded-md border border-white/15 bg-white/[0.06] p-2.5 cursor-grab hover:border-white/40 hover:bg-white/[0.12] transition-colors touch-none"
+            @pointerdown="onPaletteDragStart($event, definition.name, definition.label)"
+            @click="onPaletteClick(definition.name)"
           >
             <span class="block text-[13px] font-medium">{{ definition.label }}</span>
             <span class="block text-[11px] text-white/50 leading-snug mt-0.5">
