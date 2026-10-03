@@ -55,6 +55,14 @@ export async function signIn(page: Page) {
   await page.waitForLoadState('networkidle')
 }
 
+/**
+ * Pages created during a test, so they can be removed when it ends.
+ *
+ * Keyed by Page rather than global, because specs run in parallel and one
+ * worker must not delete another's fixtures.
+ */
+const createdPages = new Map<Page, string[]>()
+
 /** A page nobody else is using, so tests cannot interfere with each other. */
 export async function createPage(page: Page, label: string) {
   const name = `${label} ${Date.now().toString().slice(-6)}`
@@ -65,10 +73,39 @@ export async function createPage(page: Page, label: string) {
   // Wait for the editor itself, not just the url. The palette is open on a
   // fresh page, so its presence is the signal that the editor is ready.
   await expect(page.locator('aside[aria-label="Blocks"]')).toBeVisible()
+
+  const id = /\/studio\/(\d+)/.exec(page.url())?.[1]
+  if (id) createdPages.set(page, [...(createdPages.get(page) ?? []), id])
+
   return name
 }
 
-export const test = base
+/**
+ * Every test cleans up the pages it created.
+ *
+ * Without this the suite leaks a page per test into Odoo, and those pages are
+ * real routes: the routes generator turns each one into an entry that every
+ * later build and dev boot has to carry. Left alone it compounds until the
+ * generated route types get big enough to be a problem of their own.
+ *
+ * Deletion goes through the api with the browser's own session, so it is
+ * subject to the same permission check as the studio. Failures are swallowed
+ * deliberately - a test that proved its point should not then fail in
+ * teardown, and the next run tolerates a leftover page.
+ */
+export const test = base.extend<object>({
+  page: async ({ page }, use) => {
+    await use(page)
+
+    const ids = createdPages.get(page) ?? []
+    createdPages.delete(page)
+
+    for (const id of ids) {
+      await page.request.delete(`/api/cms/pages/${id}`).catch(() => {})
+    }
+  },
+})
+
 export { expect }
 
 /**
