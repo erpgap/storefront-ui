@@ -3,12 +3,12 @@
 Handoff document for building a block-based CMS into the Alokai storefront, using
 Odoo purely as the data layer.
 
-**Status:** a working proof of concept now exists — see
-[CMS_POC.md](./CMS_POC.md) and run `/studio`. It implements the rendering path,
-the field registry, drag-and-drop, media upload, the draft/published split and
-server-side validation, against a local file store instead of Odoo. Section 6
-(the Odoo backend) and §6.4 (auth) are still unimplemented; everything else in
-this document has been built at least once and the design notes below held up.
+**Status: built and backed by Odoo.** See [CMS_POC.md](./CMS_POC.md) to run
+it. The rendering path, field registry, drag-and-drop, media, drafts,
+revisions, validation, auth and the Odoo data layer all exist, as do the
+homepage migration and content regions on category and product pages. The
+design notes below held up; where the implementation diverged, the sections
+say so.
 
 **Superseded in places.** [CMS_ODOO_SPEC.md](./CMS_ODOO_SPEC.md) is the
 authoritative implementation spec for the Odoo layer. Where the two disagree,

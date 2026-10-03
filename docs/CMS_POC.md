@@ -1,146 +1,130 @@
-# Alokai CMS — working proof of concept
+# Alokai CMS — running it
 
-A merchant-facing, drag-and-drop page editor built into the storefront, using
-the storefront's own StorefrontUI/Tailwind components.
+The CMS lets a merchant edit storefront pages, in a visual editor, using the
+storefront's own components. This is the operating guide.
 
-**Status:** runnable end to end. Content persists to a local file, not yet to
-Odoo. See [CMS_ARCHITECTURE.md](./CMS_ARCHITECTURE.md) for the full design and
-the Odoo plan.
+**Design:** [CMS_ARCHITECTURE.md](./CMS_ARCHITECTURE.md) for why Odoo rather
+than a headless CMS. [CMS_ODOO_SPEC.md](./CMS_ODOO_SPEC.md) for how it is
+built, and every decision behind it.
 
 ---
 
 ## Run it
 
 ```bash
-npx nuxt dev          # `yarn dev` also runs codegen, which needs Odoo up
+# Odoo must be reachable: `yarn dev` runs codegen against its schema first.
+yarn dev
 ```
 
-Then open **http://localhost:3000/studio**.
+Then **http://localhost:3000/studio** and sign in with an Odoo account that
+is in the **CMS Editor** group. A fresh install grants it to `admin`.
 
-Odoo should be running for the full experience — the storefront header, footer
-and the Product Grid block all read from it. The studio itself works without
-Odoo; blocks that need the catalogue will simply render empty.
+Without Odoo, `NUXT_CMS_BACKEND=file npx nuxt dev` falls back to a local file
+store: the editor works, there is no login and no version history. Useful for
+front-end work, not for anything real.
 
-On first boot the store seeds one page, **/cms-home**, which is the current
-homepage expressed as blocks. That is the point worth showing: the hand-written
-homepage and the CMS page are the same components with the same content, just
-sourced differently.
+## What a merchant can do
 
-## The demo, in the order that lands
+**Pages.** Create one, give it an address, fill it with blocks, publish. It
+appears at its own url, server-rendered, with no rebuild and no deploy.
 
-1. **/studio** — the page list. Live / Draft / Unpublished-changes states.
-2. **New page** → name it "Summer Sale". The URL fills itself in. It opens
-   straight into the editor with a hero already on the canvas.
-3. **Choose where a block goes.** Three ways, all equivalent — position is
-   never hostage to drag-and-drop working:
-   - **Drag** a block from the palette onto the page; the insert bar you are
-     over lights up.
-   - **Hover between two blocks** → "+ Add block here" → pick from the palette,
-     which now reads "Inserting at 3".
-   - **↑ / ↓** on a block's toolbar to move it, which also works by keyboard and
-     on touch.
-4. **Click any block** → the inspector opens on the right, its fields generated
-   from that block's schema. Type in the headline and watch the real page
-   update as you type.
-5. **Click the image** → media library. Drag a JPG in from the desktop; it
-   uploads and is applied immediately.
-6. **Switch to Português** in the top bar. The page re-renders, the inspector
-   shows Portuguese values with the English text as placeholder, and the header
-   counts what is left to translate. Publish, then open `/cms-home?lang=pt`.
-7. **Cmd+Z** undoes. Drafts autosave (watch the status in the top bar).
-8. **Publish**, then **View live ↗** — the page is at its own URL, server
-   rendered, with no rebuild and no deploy.
+**The homepage.** An ordinary page, except it cannot be deleted and its
+address is fixed. Seeded on install from the storefront's default blocks, so
+it is editable out of the box.
 
-Delete a required headline and try to publish: it refuses and tells you which
-blocks need attention.
+**Content inside pages the storefront owns.** Category and product pages are
+mostly business logic, so the merchant cannot rearrange them. Instead the
+storefront declares slots — currently below the category listing and below
+the product details — and the merchant fills those. Listed in the studio
+under *Content on other pages*.
 
-## What is real
+**Versions.** Every publish keeps a version, with who published it and when.
+Restoring one copies it forward and makes it live, so nothing is lost by
+rolling back. The last ten are kept, configurable via
+`alokai_cms_revision_limit`.
 
-- **One render path.** `layers/cms/components/BlockRenderer.vue` renders both
-  the production page and the editor canvas. The canvas is not a preview of the
-  page — it *is* the page. No second renderer exists.
-- **Real components.** Every block points at a component that already existed:
-  `MainBanner`, `Categories`, `BestSellers`, `BannerRight`, `ValueProps`,
-  `Newsletter`. They were given props; nothing was re-implemented for the CMS.
-  Each still renders unchanged with no props, so the existing homepage was not
-  touched.
-- **Server-side validation.** Every write goes through `validateBlocks` in
-  `shared/cms/blocks.ts`: unknown block types are dropped, unknown keys are
-  stripped, selects are clamped to their options, `javascript:` URLs are
-  rejected, SVG uploads are refused. Draft saves report issues; publish refuses
-  on them.
-- **Draft / published split.** The editor reads and writes `draft`; the
-  storefront reads `publishedBlocks`. Editing never touches the live page.
-- **SSR.** Published pages server-render, so blocks are in the HTML for
-  crawlers. Unknown or unpublished URLs 404 rather than returning an empty 200.
-- **New pages need no rebuild.** `layers/cms/pages/[...cmsSlug].vue` catches
-  URLs the build-time route generator never saw.
-- **Bundle separation.** The editor lives in `layers/cms-studio`, so the
-  palette, inspector, field widgets and media picker are in their own route
-  chunk and never ship to a shopper.
-- **Positioning without drag.** HTML5 drag is unreliable across browsers,
-  impossible on touch and unusable by keyboard, so every drag interaction has a
-  click equivalent: insert points between blocks, and ↑/↓ on each block.
-- **Multi-language content.** A language picker in the top bar; the canvas and
-  inspector switch with it. Untranslated prose is counted and marked,
-  untranslated images and links quietly inherit. Layout and settings are shared
-  across languages. The merchant never sees a locale code or a brace — see
-  [CMS_ODOO_SPEC.md §11](./CMS_ODOO_SPEC.md#11-i18n--settled-and-built).
-- **Content only, never style.** There is no colour picker, no font control, no
-  spacing. Block fields describe content; the design system stays enforced in
-  code, so a merchant cannot break the storefront's look. Expect recurring
-  requests for "just a colour picker here" — each one is a hole in this rule.
+**Languages.** A picker in the top bar, when the website has more than one
+active language in Odoo. Untranslated prose is counted and flagged;
+untranslated images and links quietly inherit. Layout and settings are shared
+across languages.
 
-## What is not real yet
+## How it hangs together
 
-| Gap | Where it goes |
+| | |
 | --- | --- |
-| **No Odoo persistence.** Pages live in `.data/cms` via Nitro storage. | `server/utils/cmsStore.ts` — one interface, one implementation to add. |
-| **No authentication.** `/studio` is wide open. | `CMS Editor` group + `/studio/login`, §6.4 of the architecture doc. **Do not expose this on a public host.** |
-| **No cache invalidation** on publish. | §6.5 — SWR will serve stale content in production without it. |
-| Uploads land in `public/img/cms`, not `ir.attachment`. | `server/api/cms/media.post.ts`. |
-| No rich text (TipTap), no product/category picker fields, no nested blocks. | §5.4, §9.3, §9.4. |
-| Content languages are a hard-coded list (en/pt/es). | Comes from Odoo's `res.lang` in the real build — see spec §11.2. |
-| No responsive preview toggle. | Needs the iframe canvas, §8.4 Option B. |
-| Drag verified in Chromium only — Firefox and Safari were not testable here. | The click paths above work regardless; see the note in `[id].vue` on `dataTransfer.setData`. |
+| **Alokai** | Block definitions, validation, migrations, the editor, rendering |
+| **Odoo** | Rows, files, permissions, and the relational columns |
+
+Odoo never knows what a block *is*. Adding one to the storefront needs no
+Odoo change at all — a schema entry in `shared/cms/blocks.ts` and a component
+mapping in `layers/cms/blocks/index.ts`, and it appears in the palette, gets
+an inspector form, is validated on write and renders in both the canvas and
+production. Only a new *field type* costs editor code, which is why that list
+is deliberately short.
+
+## Properties worth not breaking
+
+- **One render path.** `BlockRenderer` serves both production and the editor
+  canvas. The canvas is not a preview of the page — it *is* the page.
+- **Real components.** Blocks point at `MainBanner`, `Categories`,
+  `BestSellers` and the rest. They were given props; nothing was
+  reimplemented for the CMS, and each still renders unchanged with no props.
+- **Drafts never leak.** The storefront reads published content, the editor
+  writes drafts. They are separate columns.
+- **Validation is server-side**, in Nitro, where a browser cannot skip it.
+  Unknown block types are dropped, unknown keys stripped, `javascript:` urls
+  rejected, SVG uploads refused.
+- **Content only, never style.** No colour picker, no fonts, no spacing. The
+  design system stays enforced in code. Expect recurring requests for "just a
+  colour picker here"; each one is a hole in this.
+- **Nothing depends on drag-and-drop working.** It has no touch support and
+  never will, so every drag interaction has a click equivalent.
+
+## Tests
+
+```bash
+yarn test        # unit — 92
+yarn test:e2e    # browser, needs a running storefront — 19
+yarn test:smoke  # http only, points anywhere — 16
+
+# Odoo addon — 237. --workers 0 is required or HttpCase fails.
+cd /path/to/alokai-odoo
+./venv/bin/python src/19.0/odoo-bin -c confs/19.0.conf \
+  -d <db> -u graphql_alokai --test-enable \
+  --test-tags "/graphql_alokai" --workers 0 --stop-after-init
+```
 
 ## Where the code is
 
 ```
-shared/cms/blocks.ts              block schemas + seed data + validation
-                                  (imported by browser, SSR and Nitro — one
-                                   definition, three surfaces, no drift)
+shared/cms/blocks.ts          block schemas, validation, migrations
+shared/cms/i18n.ts            per-language values and fallback
 
-layers/cms/                       RENDERING — ships to production
-  blocks/index.ts                 schema -> real component binding
-  components/BlockRenderer.vue    the single render path
-  components/CmsBlockShell.vue    the edit-mode overlay (§8.2) + reorder arrows
-  components/CmsInsertPoint.vue   "+ Add block here" between every block
-  components/CmsRichText.vue      the one CMS-specific block
-  custom-pages/cms-page.vue       the page render target
-  pages/[...cmsSlug].vue          catch-all, so new pages resolve
-  composables/useCmsPage.ts
+layers/cms/                   RENDERING — ships to production
+  blocks/index.ts             schema -> real component
+  components/BlockRenderer    the single render path
+  components/CmsBlockShell    the edit-mode overlay
+  components/CmsRegion        a slot inside a storefront-owned page
+  custom-pages/cms-page.vue   the page render target
+  pages/[...cmsSlug].vue      catch-all, so new pages resolve
 
-layers/cms-studio/                THE EDITOR — never reaches a shopper
-  pages/studio/index.vue          page list, create, publish, delete
-  pages/studio/[id].vue           canvas, palette, drag-and-drop, publish
-  components/StudioFieldControl.vue   the field registry — one widget per type
-  components/StudioMediaPicker.vue    upload + pick
-  composables/useStudioDraft.ts   blocks, selection, undo/redo, autosave
+layers/cms-studio/            THE EDITOR — never reaches a shopper
+  pages/studio/*              list, editor, login
+  components/Studio*          field registry, media, versions, pickers
+  composables/useStudioDraft  blocks, selection, undo/redo, autosave
 
-server/api/cms/                   page CRUD, draft, publish, media
-server/utils/cmsStore.ts          THE SWAP POINT for Odoo
-server/plugins/cms-seed.ts        seeds /cms-home on first boot
+server/api/cms/               pages, drafts, publish, regions, media
+server/utils/cmsOdooStore.ts  the Odoo implementation
+server/utils/cmsStore.ts      the interface, and the file fallback
 ```
 
-## Adding a block
+## Known gaps
 
-This is the measure of whether the architecture holds. Two steps, no editor
-code:
-
-1. Add a schema to `blockSchemas` in `shared/cms/blocks.ts`.
-2. Map its name to a component in `layers/cms/blocks/index.ts`.
-
-It now appears in the palette, gets an inspector form, is validated on write,
-and renders in both the canvas and production. Adding a new *field type* is the
-only thing that costs editor UI — which is why that list is kept short.
+| | |
+| --- | --- |
+| Drag-and-drop has no touch support | Needs Pointer Events — spec §13 |
+| No rich text | TipTap, sanitised server-side |
+| Region content is global, not per category or product | A nullable column and an additive migration |
+| `content` and `page_type` on the page model are superseded but still present | Removal is a later, separately versioned migration |
+| Browser tests are Chromium only | No Firefox available; WebKit would not launch |
+| Images break periodically in dev | `sharp@0.32.6` via `ipx@2`; needs `@nuxt/image` 2.x. Restarting `yarn dev` clears it |
