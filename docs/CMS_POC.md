@@ -126,4 +126,31 @@ server/utils/cmsStore.ts      the interface, and the file fallback
 | Region content is global, not per category or product | A nullable column and an additive migration |
 | `content` and `page_type` on the page model are superseded but still present | Removal is a later, separately versioned migration |
 | Browser tests are Chromium only | No Firefox available; WebKit would not launch |
-| Images break periodically in dev | `sharp@0.32.6` via `ipx@2`; needs `@nuxt/image` 2.x. Restarting `yarn dev` clears it |
+| Images break periodically in dev | `sharp@0.32.6` fails to self-register in the Nitro worker. Restarting `yarn dev` clears it. The fix is `@nuxt/image` 2.x, which brings `sharp@0.35` — attempted and reverted, see below |
+
+
+## The image pipeline upgrade, and why it was reverted
+
+`sharp@0.32.6` periodically fails to self-register inside the Nitro dev
+worker, which 500s every `/_ipx/` request and leaves the whole site without
+images until `yarn dev` is restarted. It is not a broken install: sharp loads
+fine in a fresh process, in a worker thread and on re-require. A native addon
+can only self-register once per process, and something in the reload path
+tries again in a new context.
+
+`ipx@2` pins `sharp ^0.32.6`, so the version cannot be raised on its own. The
+upgrade path is `@nuxt/image` 1.11 → 2.x, which brings `ipx@4` and
+`sharp@0.35`.
+
+Attempted. Two things stopped it:
+
+1. **The build fails on `providers/odoo-provider.ts`.** `@nuxt/image` v2
+   changed the provider contract and no longer accepts the current export
+   shape. That file decides the url of every product image on the site, so
+   getting it subtly wrong means a catalogue of broken images.
+2. **`@nuxt/image@2.1.0` depends on `ipx@4.0.0-beta.1`** — a beta, in the
+   image pipeline of a production storefront.
+
+Neither is insurmountable and the first is probably an hour's work, but both
+are decisions rather than maintenance. Reverted to 1.11.0 / ipx 2.1.1 /
+sharp 0.32.6; restarting the dev server remains the workaround.
