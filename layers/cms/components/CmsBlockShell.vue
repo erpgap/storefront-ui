@@ -11,8 +11,8 @@
 // The fix: a transparent overlay absorbs every pointer event and the real
 // component underneath is made inert. The drag layer then only ever deals with
 // a flat list of uniform rectangles — the easy, well-supported case.
-import type { BlockInstance } from '#shared/cms/blocks'
 import { blockLabel } from '../blocks'
+import type { BlockInstance } from '#shared/cms/blocks'
 
 const props = defineProps<{
   block: BlockInstance

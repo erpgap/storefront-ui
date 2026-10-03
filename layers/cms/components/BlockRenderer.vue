@@ -5,10 +5,10 @@
 // feature to build and keep in sync. See docs/CMS_ARCHITECTURE.md §5.1.
 import { defineAsyncComponent, hydrateOnVisible } from 'vue'
 import type { Component } from 'vue'
+import { BLOCKS_NEEDING_ID, getBlockComponent } from '../blocks'
 import type { BlockInstance } from '#shared/cms/blocks'
 import { migrateBlocks, resolveBlockData } from '#shared/cms/blocks'
 import { DEFAULT_LOCALE } from '#shared/cms/i18n'
-import { BLOCKS_NEEDING_ID, getBlockComponent } from '../blocks'
 
 const props = withDefaults(defineProps<{
   blocks: BlockInstance[]

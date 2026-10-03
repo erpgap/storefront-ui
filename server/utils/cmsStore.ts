@@ -10,8 +10,8 @@
 // Nothing else in the codebase needs to know which one is in use.
 
 import type { H3Event } from 'h3'
-import type { BlockInstance, CmsPage } from '#shared/cms/blocks'
 import { createOdooCmsStore } from './cmsOdooStore'
+import type { BlockInstance, CmsPage } from '#shared/cms/blocks'
 
 export interface PageInput {
   title: string

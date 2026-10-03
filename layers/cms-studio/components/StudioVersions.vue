@@ -121,7 +121,9 @@ function when(iso?: string) {
               </p>
               <p class="text-[11px] text-primary-400 truncate">
                 {{ when(revision.createdAt) }}
-                <template v-if="revision.author"> · {{ revision.author }}</template>
+                <template v-if="revision.author">
+                  · {{ revision.author }}
+                </template>
               </p>
             </div>
 

@@ -9,11 +9,11 @@
 // resolves against the WINDOW, so every font size and gutter renders wrong and
 // the editor stops showing the truth. Full-width keeps the canvas honest, and
 // costs roughly two weeks less than the iframe alternative.
+import { useStudioDraft } from '../../composables/useStudioDraft'
 import type { CmsPage } from '#shared/cms/blocks'
 import { CMS_LOCALES, DEFAULT_LOCALE } from '#shared/cms/i18n'
 import type { CmsLocale } from '#shared/cms/i18n'
 import { blockLabel, blockRegistry } from '~~/layers/cms/blocks'
-import { useStudioDraft } from '../../composables/useStudioDraft'
 
 definePageMeta({ layout: false, middleware: 'studio-auth' })
 
@@ -175,8 +175,8 @@ async function publish() {
 async function revertToLive() {
   const message = isPublished.value
     ? 'Throw away all unpublished changes and go back to the version visitors '
-      + 'see right now?\n\nThis includes changes made earlier or by someone '
-      + 'else, not just the ones you have made since opening the editor.'
+    + 'see right now?\n\nThis includes changes made earlier or by someone '
+    + 'else, not just the ones you have made since opening the editor.'
     : 'This page has never been published, so there is no live version to go '
       + 'back to. Continuing removes every block on it.\n\nContinue?'
 
@@ -602,13 +602,13 @@ const saveLabel = computed(() => ({
         <!-- Pointer Events provide no drag image, so the thing being dragged
            needs to be visible somewhere. A small label beats a clone of a
            full-bleed section following the cursor around. -->
-      <div
-        v-if="dragging"
-        class="pointer-events-none fixed z-[200] px-2.5 py-1.5 rounded-md bg-neutral-900 text-white text-[11px] tracking-[0.1em] uppercase shadow-lg"
-        :style="{ left: `${dragPoint.x + 14}px`, top: `${dragPoint.y + 14}px` }"
-      >
-        {{ dragging.label }}
-      </div>
+        <div
+          v-if="dragging"
+          class="pointer-events-none fixed z-[200] px-2.5 py-1.5 rounded-md bg-neutral-900 text-white text-[11px] tracking-[0.1em] uppercase shadow-lg"
+          :style="{ left: `${dragPoint.x + 14}px`, top: `${dragPoint.y + 14}px` }"
+        >
+          {{ dragging.label }}
+        </div>
 
       <!-- While dragging, the insert point at `dropIndex` lights up, so the
              indicator is the same element the merchant can also just click. -->

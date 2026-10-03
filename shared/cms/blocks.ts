@@ -649,7 +649,6 @@ export function validateBlocks(blocks: unknown): {
   return { blocks: cleaned, issues }
 }
 
-
 // ---------------------------------------------------------------------------
 // Rendering
 // ---------------------------------------------------------------------------
@@ -735,7 +734,6 @@ export function untranslatedFields(
 
   return count(schema.fields, data)
 }
-
 
 // ---------------------------------------------------------------------------
 // Schema migrations

@@ -10,8 +10,6 @@
 // Authorisation is never decided here.
 
 import type { H3Event } from 'h3'
-import type { BlockInstance, CmsPage } from '#shared/cms/blocks'
-import type { CmsStore, PageInput } from './cmsStore'
 import {
   GetCmsPageDraftQuery,
   GetCmsPageQuery,
@@ -28,6 +26,8 @@ import {
   UnpublishCmsPageMutation,
   UpdateCmsPageMutation,
 } from '../mutations/CmsMutations'
+import type { CmsStore, PageInput } from './cmsStore'
+import type { BlockInstance, CmsPage } from '#shared/cms/blocks'
 
 interface OdooCmsPage {
   id: number
