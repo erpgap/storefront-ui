@@ -1,3 +1,4 @@
+import { join } from 'node:path'
 import { defineNuxtModule, extendRouteRules } from '@nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
@@ -133,12 +134,23 @@ export default defineNuxtModule({
       `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products and ${websitePagesUrls.length} website pages loaded`,
     )
 
+    /**
+     * Routes are given a real filesystem path rather than the `#layers` alias.
+     *
+     * The alias resolves fine for the bundler, but @nuxtjs/i18n reads each
+     * route's component off disk to look for `defineI18nRoute`, and it does
+     * that with plain `fs`, which knows nothing about Nuxt aliases. Pointing
+     * at the file directly keeps both happy.
+     */
+    const layerPage = (relative: string) =>
+      join(nuxt.options.rootDir, 'layers', relative)
+
     nuxt.hook('pages:extend', (pages: NuxtPage[]) => {
       categorySlugs.forEach((slug) => {
         pages.push({
           name: slug.replace(/^\//, '').replace(/\//g, '-'),
           path: slug,
-          file: '#layers/category/custom-pages/category-page.vue',
+          file: layerPage('category/custom-pages/category-page.vue'),
         })
       })
 
@@ -146,7 +158,7 @@ export default defineNuxtModule({
         pages.push({
           name: slug.replace(/^\//, '').replace(/\//g, '-'),
           path: slug,
-          file: '#layers/product/custom-pages/product-page.vue',
+          file: layerPage('product/custom-pages/product-page.vue'),
         })
       })
 
@@ -158,7 +170,7 @@ export default defineNuxtModule({
           // shadows the CMS catch-all, and renders an empty page wrapped in
           // the site chrome. It stayed invisible for as long as the pages did
           // not exist in Odoo when the dev server booted.
-          file: '#layers/cms/custom-pages/cms-page.vue',
+          file: layerPage('cms/custom-pages/cms-page.vue'),
         })
       })
     })
