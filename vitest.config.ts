@@ -2,22 +2,14 @@ import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  esbuild: {
-    tsconfigRaw: {
-      compilerOptions: {
-        moduleResolution: 'Bundler',
-        paths: {
-          '~/*': ['./app/*'],
-          '@/*': ['./app/*'],
-          '~~/*': ['./*'],
-        },
-      },
-    },
-  },
   test: {
     environment: 'node',
     globals: true,
     setupFiles: ['./test/setup.ts'],
+    // Playwright owns test/e2e. Vitest picking those up means it tries to
+    // run browser specs in node, which fails in a way that looks like the
+    // unit suite is broken.
+    exclude: ['**/node_modules/**', '**/dist/**', 'test/e2e/**'],
   },
   resolve: {
     alias: {
