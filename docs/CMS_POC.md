@@ -126,31 +126,75 @@ server/utils/cmsStore.ts      the interface, and the file fallback
 | Region content is global, not per category or product | A nullable column and an additive migration |
 | `content` and `page_type` on the page model are superseded but still present | Removal is a later, separately versioned migration |
 | Browser tests are Chromium only | No Firefox available; WebKit would not launch |
-| Images break periodically in dev | `sharp@0.32.6` fails to self-register in the Nitro worker. Restarting `yarn dev` clears it. The fix is `@nuxt/image` 2.x, which brings `sharp@0.35` — attempted and reverted, see below |
+| `nuxt dev` can fail to boot on large catalogues | `nuxt-typed-router` + prettier overflow the call stack generating the route-path union. See below |
+| Three advisories have no published fix | `braces`, `http-cache-semantics` and `node-forge`, all reached through build and dev tooling. See below |
 
 
-## The image pipeline upgrade, and why it was reverted
+## The image pipeline, and how sharp was actually raised
 
-`sharp@0.32.6` periodically fails to self-register inside the Nitro dev
-worker, which 500s every `/_ipx/` request and leaves the whole site without
-images until `yarn dev` is restarted. It is not a broken install: sharp loads
-fine in a fresh process, in a worker thread and on re-require. A native addon
-can only self-register once per process, and something in the reload path
-tries again in a new context.
+`sharp@0.32.6` periodically failed to self-register inside the Nitro dev
+worker, which 500d every `/_ipx/` request and left the whole site without
+images until `yarn dev` was restarted. It also carried four libvips CVEs and
+two libheif ones, fixed in 0.35.4.
 
-`ipx@2` pins `sharp ^0.32.6`, so the version cannot be raised on its own. The
-upgrade path is `@nuxt/image` 1.11 → 2.x, which brings `ipx@4` and
-`sharp@0.35`.
+An earlier attempt took the documented route - `@nuxt/image` 1.11 → 2.x, for
+`ipx@4` and `sharp@0.35` - and was reverted, because v2 changed the provider
+contract that `providers/odoo-provider.ts` depends on and because
+`@nuxt/image@2.1.0` wants `ipx@4.0.0-beta.1`, a beta in the image pipeline of
+a production storefront.
 
-Attempted. Two things stopped it:
+That turned out to be the wrong way round. The note it left behind said the
+version "cannot be raised on its own" because `ipx@2` pins `sharp ^0.32.6`.
+That is true of the declared range and false of the installed tree: a single
+yarn `resolutions` entry raises sharp to 0.35.5 under `ipx@2.1.1`, and ipx
+only uses the part of sharp's API that did not change.
 
-1. **The build fails on `providers/odoo-provider.ts`.** `@nuxt/image` v2
-   changed the provider contract and no longer accepts the current export
-   shape. That file decides the url of every product image on the site, so
-   getting it subtly wrong means a catalogue of broken images.
-2. **`@nuxt/image@2.1.0` depends on `ipx@4.0.0-beta.1`** — a beta, in the
-   image pipeline of a production storefront.
+Verified rather than assumed. `/_ipx/f_webp&q_72&s_376x212/img/home/hero.webp`
+and its 1536x864 sibling both return real WebP at the requested dimensions,
+and sharp resizes correctly in isolation. No provider change, no beta, and
+`@nuxt/image` stays on 1.11.0.
 
-Neither is insurmountable and the first is probably an hour's work, but both
-are decisions rather than maintenance. Reverted to 1.11.0 / ipx 2.1.1 /
-sharp 0.32.6; restarting the dev server remains the workaround.
+The cost is deploy size, not speed: sharp 0.35.5 ships more platform binaries
+than 0.32.6, so `.output/server/node_modules/@img` is 37 MB and the server
+bundle grew from 35.8 MB to 57.6 MB. The client bundle is unchanged at 1.58 MB
+of JavaScript. A deploy that wants the old size back can install sharp for one
+platform only.
+
+
+## The route-path union has a ceiling
+
+`nuxt-typed-router` generates a union of every route in the site and formats it
+with prettier. On this catalogue - 432 products, 44 categories, 57 website
+pages, times locales - that file is 1.5 MB and prettier overflows the call
+stack printing it:
+
+```
+ERROR  Maximum call stack size exceeded
+    at ns (node_modules/prettier/plugins/estree.mjs:18:235)
+```
+
+It is intermittent rather than fatal, which is worse: it only runs when
+`.nuxt/typed-router` is generated cold, so the same command fails and then
+succeeds. Products dominate the count, so this is not about CMS pages, but
+every published page adds to it and the browser tests create one per run and
+never remove it. A merchant with a larger catalogue will sit past the ceiling
+rather than at it.
+
+Worth doing before that happens: have the e2e specs delete the pages they
+create, and either raise the stack for the dev command or stop generating the
+exhaustive path union.
+
+
+## Advisories with no published fix
+
+Three remain, all high, none with a patched version released
+(`npm audit` reports `patched: <0.0.0`):
+
+| | |
+| --- | --- |
+| `braces` | via `@graphql-codegen/cli` and `@nuxtjs/seo` → `micromatch` |
+| `http-cache-semantics` | via `@nuxtjs/algolia` → `metadata-scraper` → `got` |
+| `node-forge` | via `nuxt` and `@nuxt/image` → `listhen` |
+
+All three arrive through build and dev tooling rather than the request path.
+They cannot be resolved by pinning, because there is nothing to pin to.
