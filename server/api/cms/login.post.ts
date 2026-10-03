@@ -19,19 +19,34 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)
   const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
 
-  const response = await $fetch.raw<{
-    data?: { login?: { user?: { id: number, name: string } } }
-    errors?: { message: string }[]
-  }>(url, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: {
-      query: `mutation ($email: String!, $password: String!) {
-        login(email: $email, password: $password) { user { id name } }
-      }`,
-      variables: { email: body.email, password: body.password },
-    },
-  })
+  let response
+  try {
+    response = await $fetch.raw<{
+      data?: { login?: { user?: { id: number, name: string } } }
+      errors?: { message: string }[]
+    }>(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: {
+        query: `mutation ($email: String!, $password: String!) {
+          login(email: $email, password: $password) { user { id name } }
+        }`,
+        variables: { email: body.email, password: body.password },
+      },
+    })
+  }
+  catch (error: any) {
+    // An unreachable Odoo surfaced as a bare "Server Error", which tells a
+    // merchant nothing and sends them looking for a typo in their password.
+    if (/ECONNREFUSED|ENOTFOUND|ETIMEDOUT|fetch failed/i.test(String(error?.message ?? ''))) {
+      throw createError({
+        statusCode: 503,
+        statusMessage: 'Cannot reach Odoo. The content system is offline — '
+          + 'this is not a problem with your password.',
+      })
+    }
+    throw error
+  }
 
   if (response._data?.errors?.length) {
     throw createError({ statusCode: 401, statusMessage: 'Those details did not work.' })

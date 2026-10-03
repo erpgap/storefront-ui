@@ -23,7 +23,13 @@ async function submit() {
     await navigateTo(String(route.query.next || '/studio'), { external: true })
   }
   catch (e: any) {
-    error.value = e?.data?.statusMessage || e?.statusMessage || 'Could not sign in.'
+    error.value = e?.data?.statusMessage
+      || e?.statusMessage
+      // A bare status with no message is almost always the backend being
+      // unreachable, which is worth saying rather than "Could not sign in".
+      || (e?.statusCode >= 500
+        ? 'The content system is not responding. Try again shortly.'
+        : 'Could not sign in.')
   }
   finally {
     busy.value = false

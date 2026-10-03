@@ -20,10 +20,10 @@ interface PageRow {
 definePageMeta({ layout: false, middleware: 'studio-auth' })
 useHead({ title: 'Pages — Studio' })
 
-const { data: pages, refresh } = await useFetch<PageRow[]>('/api/cms/pages', {
-  key: 'studio-pages',
-  default: () => [],
-})
+const { data: pages, refresh, error: listError } = await useFetch<PageRow[]>(
+  '/api/cms/pages',
+  { key: 'studio-pages', default: () => [] },
+)
 
 // Which store is behind this. Only used to explain what is unavailable when
 // running without Odoo.
@@ -193,8 +193,31 @@ function formatDate(iso: string) {
       </form>
 
       <!-- List -->
+      <!-- A failed load and an empty list look identical otherwise, and
+           "No pages yet" is a lie that sends people looking in the wrong
+           place. -->
       <div
-        v-if="!realPages.length"
+        v-if="listError"
+        class="bg-white rounded-lg border border-red-200 p-12 text-center"
+      >
+        <p class="text-[13px] text-red-700">
+          Could not load your pages.
+        </p>
+        <p class="text-[12px] text-primary-500 mt-1">
+          The content system is not responding. Your content is safe — this is
+          a connection problem.
+        </p>
+        <button
+          type="button"
+          class="studio-btn mt-4"
+          @click="refresh()"
+        >
+          Try again
+        </button>
+      </div>
+
+      <div
+        v-else-if="!realPages.length"
         class="bg-white rounded-lg border border-primary-200 p-12 text-center"
       >
         <p class="text-[13px] text-primary-500">
