@@ -16,7 +16,8 @@
     "lint:fix": "eslint . --fix",
     "prepare": "npx --yes husky install",
     "commit": "git-cz",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:smoke": "node test/smoke/cms.mjs"
   },
   "dependencies": {
     "@adyen/adyen-web": "^4.7.3",

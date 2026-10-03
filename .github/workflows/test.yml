@@ -1,0 +1,29 @@
+# Unit tests on every push and pull request.
+#
+# The deploy workflows ran no tests at all, so the suite only ran when
+# somebody remembered to run it. This gates merges on it instead.
+name: Test
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+
+      # --frozen-lockfile so a drifting lockfile fails here rather than in a
+      # deploy. --ignore-scripts skips `nuxt prepare`, which would try to
+      # reach Odoo for codegen and is not needed to run unit tests.
+      - run: yarn install --frozen-lockfile --ignore-scripts
+
+      - name: Unit tests
+        run: yarn test

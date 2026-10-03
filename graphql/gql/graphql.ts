@@ -242,10 +242,14 @@ export type CmsPage = {
   hasUnpublishedChanges: Maybe<Scalars['Boolean']['output']>;
   id: Maybe<Scalars['Int']['output']>;
   isPublished: Maybe<Scalars['Boolean']['output']>;
+  /** A page the storefront owns. Editable, but it cannot be deleted and its address is fixed. */
+  isSystem: Maybe<Scalars['Boolean']['output']>;
+  kind: Maybe<Scalars['String']['output']>;
   liveRevision: Maybe<Scalars['Int']['output']>;
   metaDescription: Maybe<Scalars['String']['output']>;
   metaTitle: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
+  regionKey: Maybe<Scalars['String']['output']>;
   revisionCount: Maybe<Scalars['Int']['output']>;
   updatedAt: Maybe<Scalars['String']['output']>;
   url: Maybe<Scalars['String']['output']>;
@@ -1171,6 +1175,8 @@ export type Query = {
   cmsPages: Maybe<CmsPageList>;
   /** Product picker options. This is the capability a separate headless CMS could not provide without an id-sync job. */
   cmsProducts: Maybe<Array<Maybe<CmsRefOption>>>;
+  /** Published blocks for a storefront region. Public and cacheable, like cmsPage. */
+  cmsRegion: Maybe<CmsPage>;
   /** Revision history. Requires the CMS Editor group. */
   cmsRevisions: Maybe<Array<Maybe<PageRevision>>>;
   countries: Maybe<Countries>;
@@ -1262,6 +1268,11 @@ export type QueryCmsProductsArgs = {
   ids: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryCmsRegionArgs = {
+  key: Scalars['String']['input'];
 };
 
 
