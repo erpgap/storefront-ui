@@ -12,6 +12,9 @@ const PAGE_FIELDS = `
   updatedAt
   hasUnpublishedChanges
   draftBlocks
+  kind
+  regionKey
+  isSystem
 `
 
 export const SaveCmsDraftMutation = `

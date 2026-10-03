@@ -29,12 +29,18 @@ const uiBreadcrumbs = computed(() =>
 </script>
 
 <template>
-  <UiProductListing
-    :breadcrumbs="uiBreadcrumbs"
-    :seo-entity="seoEntity"
-    :heading="category?.name || ''"
-    :description="category?.metaDescription || ''"
-    :items-per-page="18"
-    state-key="category"
-  />
+  <div>
+    <UiProductListing
+      :breadcrumbs="uiBreadcrumbs"
+      :seo-entity="seoEntity"
+      :heading="category?.name || ''"
+      :description="category?.metaDescription || ''"
+      :items-per-page="18"
+      state-key="category"
+    />
+
+    <!-- Merchant content, below the listing. Everything above is business
+         logic and stays in code; this is the one place a block can go. -->
+    <CmsRegion name="category-after" />
+  </div>
 </template>

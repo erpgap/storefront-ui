@@ -372,7 +372,9 @@ const saveLabel = computed(() => ({
           {{ page!.title }}
         </p>
         <p class="text-[11px] text-white/45 truncate">
-          {{ page!.slug }}
+          {{ (page as any)!.kind === 'region'
+            ? 'Appears inside storefront pages'
+            : page!.slug }}
         </p>
       </div>
 
@@ -458,7 +460,7 @@ const saveLabel = computed(() => ({
         </button>
 
         <a
-          v-if="isPublished"
+          v-if="isPublished && (page as any)!.kind !== 'region'"
           :href="locale === defaultLocale ? page!.slug : `${page!.slug}?lang=${locale}`"
           target="_blank"
           rel="noopener"

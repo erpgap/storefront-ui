@@ -26,7 +26,17 @@ export default defineEventHandler(async (event) => {
 
   // Purged here, inline, by the side that owns the cache. Without it the
   // merchant publishes, reloads, sees the old page and reports it as a bug.
-  await invalidateCmsPageCache(published.slug)
+  //
+  // A region appears on every category or product page, and those urls cannot
+  // be enumerated from here, so its publish clears the whole route cache. A
+  // blunt instrument, but a region is published rarely and a stale one is
+  // wrong on hundreds of pages at once.
+  if ((published as { kind?: string }).kind === 'region') {
+    await invalidateAllPageCache()
+  }
+  else {
+    await invalidateCmsPageCache(published.slug)
+  }
 
   return published
 })

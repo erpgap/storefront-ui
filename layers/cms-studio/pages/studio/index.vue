@@ -12,6 +12,9 @@ interface PageRow {
   hasUnpublishedChanges: boolean
   updatedAt: string
   publishedAt?: string
+  kind?: 'page' | 'region'
+  regionKey?: string
+  isSystem?: boolean
 }
 
 definePageMeta({ layout: false, middleware: 'studio-auth' })
@@ -92,6 +95,16 @@ async function togglePublished(page: PageRow) {
     alert(e?.data?.statusMessage || 'Could not change the publish state.')
   }
 }
+
+/**
+ * Regions are listed apart from pages because they are a different kind of
+ * thing: a page is somewhere a visitor goes, a region is content that appears
+ * inside pages the storefront owns. Mixing them in one list invites the
+ * question "what is the address of 'Below product pages'?", which has no
+ * answer.
+ */
+const realPages = computed(() => pages.value.filter(p => p.kind !== 'region'))
+const regions = computed(() => pages.value.filter(p => p.kind === 'region'))
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString(undefined, {
@@ -181,7 +194,7 @@ function formatDate(iso: string) {
 
       <!-- List -->
       <div
-        v-if="!pages.length"
+        v-if="!realPages.length"
         class="bg-white rounded-lg border border-primary-200 p-12 text-center"
       >
         <p class="text-[13px] text-primary-500">
@@ -194,7 +207,7 @@ function formatDate(iso: string) {
         class="flex flex-col gap-2"
       >
         <li
-          v-for="page in pages"
+          v-for="page in realPages"
           :key="page.id"
           class="bg-white rounded-lg border border-primary-200 px-5 py-4 flex items-center gap-4"
         >
@@ -254,6 +267,7 @@ function formatDate(iso: string) {
               Edit
             </NuxtLink>
             <button
+              v-if="!page.isSystem"
               type="button"
               class="studio-btn studio-btn--danger"
               :aria-label="`Delete ${page.title}`"
@@ -261,9 +275,65 @@ function formatDate(iso: string) {
             >
               Delete
             </button>
+            <span
+              v-else
+              class="text-[10px] tracking-[0.1em] uppercase text-primary-400 px-2"
+              title="Part of the storefront"
+            >Built in</span>
           </div>
         </li>
       </ul>
+
+      <section
+        v-if="regions.length"
+        class="mt-10"
+      >
+        <h2 class="text-[13px] font-medium">
+          Content on other pages
+        </h2>
+        <p class="text-[12px] text-primary-400 mb-3">
+          Shown inside pages the storefront owns. You choose what goes in them,
+          not where they appear.
+        </p>
+
+        <ul class="flex flex-col gap-2">
+          <li
+            v-for="region in regions"
+            :key="region.id"
+            class="bg-white rounded-lg border border-primary-200 px-5 py-4 flex items-center gap-4"
+          >
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <NuxtLink
+                  :to="`/studio/${region.id}`"
+                  class="text-[14px] font-medium hover:underline"
+                >
+                  {{ region.title }}
+                </NuxtLink>
+                <span
+                  v-if="region.hasUnpublishedChanges"
+                  class="text-[10px] tracking-[0.1em] uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800"
+                >Unpublished changes</span>
+                <span
+                  v-else-if="!region.blockCount"
+                  class="text-[10px] tracking-[0.1em] uppercase px-1.5 py-0.5 rounded bg-primary-100 text-primary-500"
+                >Empty</span>
+              </div>
+              <p class="text-[12px] text-primary-400 mt-0.5 truncate">
+                {{ region.blockCount }} block{{ region.blockCount === 1 ? '' : 's' }}
+                · edited {{ formatDate(region.updatedAt) }}
+              </p>
+            </div>
+
+            <NuxtLink
+              :to="`/studio/${region.id}`"
+              class="studio-btn studio-btn--primary flex-none"
+            >
+              Edit
+            </NuxtLink>
+          </li>
+        </ul>
+      </section>
 
       <p
         v-if="backend === 'file'"

@@ -339,6 +339,11 @@ const categoryEyebrow = computed(() => {
           </ClientOnly>
         </section>
       </div>
+
+      <!-- Merchant content, below everything the product page owns. The
+           gallery, variants, cart and recommendations above are business
+           logic and stay in code. -->
+      <CmsRegion name="product-after" />
     </div>
 
     <template #error>

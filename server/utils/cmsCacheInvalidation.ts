@@ -25,9 +25,13 @@ function cacheKeyFragment(path: string): string {
  */
 export async function invalidateCmsPageCache(slug: string): Promise<string[]> {
   const path = String(slug || '').trim()
-  if (!path || path === '/') return []
+  if (!path) return []
 
-  const fragment = cacheKeyFragment(path)
+  // The homepage is a CMS page too, and its cache key fragment is empty
+  // because every character of "/" is non-word. Nitro names that route
+  // `index`, so match it explicitly rather than skipping it - skipping it
+  // meant publishing the homepage changed nothing a visitor could see.
+  const fragment = path === '/' ? 'index' : cacheKeyFragment(path)
   if (!fragment) return []
 
   const storage = useStorage('cache')
@@ -59,4 +63,37 @@ export async function invalidateCmsPageCache(slug: string): Promise<string[]> {
   }
 
   return deleted
+}
+
+/**
+ * Clears every cached page render.
+ *
+ * For regions, which appear on pages whose urls cannot be listed from here -
+ * every category, every product. Blunt, but regions change rarely and a stale
+ * one is wrong on hundreds of pages at once, which is far worse than a cold
+ * cache for a few minutes.
+ */
+export async function invalidateAllPageCache(): Promise<number> {
+  const storage = useStorage('cache')
+  let removed = 0
+
+  for (const base of ['nitro:routes', '/cache:pages']) {
+    let keys: string[] = []
+    try {
+      keys = await storage.getKeys(base)
+    }
+    catch {
+      continue
+    }
+
+    for (const key of keys) {
+      try {
+        await storage.removeItem(key)
+        removed++
+      }
+      catch { /* best effort */ }
+    }
+  }
+
+  return removed
 }

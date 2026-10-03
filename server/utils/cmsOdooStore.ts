@@ -42,6 +42,9 @@ interface OdooCmsPage {
   updatedAt?: string
   hasUnpublishedChanges?: boolean
   blockCount?: number
+  kind?: 'page' | 'region'
+  regionKey?: string
+  isSystem?: boolean
 }
 
 export interface CmsRevision {
@@ -109,6 +112,9 @@ function toCmsPage(page: OdooCmsPage): CmsPage & {
   return {
     blockCount: page.blockCount,
     hasUnpublishedChanges: page.hasUnpublishedChanges,
+    kind: page.kind ?? 'page',
+    regionKey: page.regionKey ?? undefined,
+    isSystem: Boolean(page.isSystem),
     id: String(page.id),
     title: page.name,
     slug: page.url,

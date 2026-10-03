@@ -15,6 +15,9 @@ const PAGE_FIELDS = `
   updatedAt
   hasUnpublishedChanges
   blockCount
+  kind
+  regionKey
+  isSystem
 `
 
 export const GetCmsPageQuery = `
@@ -91,6 +94,15 @@ export const GetCmsCategoriesQuery = `
     cmsCategories(search: $search) {
       id
       name
+    }
+  }
+`
+
+export const GetCmsRegionQuery = `
+  query ($key: String!) {
+    cmsRegion(key: $key) {
+      id
+      blocks
     }
   }
 `

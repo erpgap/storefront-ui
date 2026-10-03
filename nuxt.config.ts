@@ -78,6 +78,15 @@ export default defineNuxtConfig({
       'GetDeliveryMethodsQuery',
     ],
     public: {
+      // Renders / from the CMS instead of the hand-written homepage. Exists so
+      // the two can be compared on a production build, and so the old path is
+      // one variable away if anything regresses.
+      //
+      // Kept as a STRING, not a boolean. Nuxt lets NUXT_PUBLIC_* override
+      // public config at runtime, but always as a string - so a boolean baked
+      // at build time cannot be turned off again, and '0' or 'false' would
+      // both read as truthy. The page parses it explicitly.
+      cmsHomepage: process.env.NUXT_PUBLIC_CMS_HOMEPAGE ?? '',
       odooBaseImageUrl: process.env.NUXT_PUBLIC_ODOO_BASE_IMAGE_URL,
       odooBaseUrl: process.env.NUXT_PUBLIC_ODOO_BASE_URL,
       middlewareUrl: process.env.NUXT_PUBLIC_MIDDLEWARE_URL,
