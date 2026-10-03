@@ -115,3 +115,9 @@ openspec/
 # CMS proof of concept
 .data
 public/img/cms
+
+# Playwright
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
