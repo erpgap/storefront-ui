@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<{
   image?: string
   imageAlt?: string
   imagePosition?: 'left' | 'right'
+  titleSize?: 'large' | 'regular'
   ctaLabel?: string
   ctaUrl?: string
 }>(), {
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<{
   image: '/img/home/editorial.webp',
   imageAlt: 'Made from honest materials',
   imagePosition: 'left',
+  titleSize: 'large',
   ctaLabel: 'Discover the Story',
   ctaUrl: '/products',
 })
@@ -57,10 +59,16 @@ const textOrder = computed(() => props.imagePosition === 'right' ? 'md:order-1' 
       >
         {{ eyebrow }}
       </p>
-      <h2 class="font-light tracking-[-0.02em] text-[clamp(30px,3.6vw,48px)] my-5">
+      <h2
+        class="font-light tracking-[-0.02em] my-5"
+        :class="titleSize === 'regular' ? 'text-[clamp(28px,3.4vw,44px)]' : 'text-[clamp(30px,3.6vw,48px)]'"
+      >
         {{ title }}
       </h2>
-      <p class="font-light text-primary-500 max-w-[440px] mb-8">
+      <p
+        class="font-light text-primary-500 max-w-[440px] mb-8"
+        :class="titleSize === 'regular' ? 'leading-relaxed' : ''"
+      >
         {{ body }}
       </p>
       <SfButton

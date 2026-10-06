@@ -3,13 +3,16 @@
 // posts to Odoo through the same `contactUs` mutation the old contact page
 // used; only the details beside it are content.
 import { SfInput, SfTextarea, SfButton, SfIconCheckCircle } from '@storefront-ui/vue'
+import { spacingClass, type BlockSpacing } from '../utils/spacing'
 import { isValidEmail } from '~~/app/utils/validation'
 
 withDefaults(defineProps<{
   title?: string
+  spacing?: BlockSpacing
   channels?: { label: string, value: string, link?: string }[]
 }>(), {
   title: 'Talk to us',
+  spacing: 'normal',
   channels: () => [],
 })
 
@@ -43,7 +46,10 @@ const reset = () => {
 </script>
 
 <template>
-  <section class="narrow-container py-[clamp(48px,7vw,96px)]">
+  <section
+    class="narrow-container"
+    :class="spacingClass(spacing)"
+  >
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-12 lg:gap-20">
       <div>
         <h2

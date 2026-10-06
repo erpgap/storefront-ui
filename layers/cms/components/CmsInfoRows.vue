@@ -1,18 +1,25 @@
 <script setup lang="ts">
 // The `infoRows` block: a name and two details per row, such as delivery
 // options with their time and cost.
+import { spacingClass, type BlockSpacing } from '../utils/spacing'
+
 withDefaults(defineProps<{
   title?: string
+  spacing?: BlockSpacing
   items?: { label: string, value?: string, note?: string }[]
 }>(), {
   title: '',
+  spacing: 'compact',
   items: () => [],
 })
 </script>
 
 <template>
-  <section class="narrow-container pb-[clamp(32px,4vw,56px)]">
-    <div class="max-w-[820px]">
+  <section
+    class="narrow-container max-w-[820px]"
+    :class="spacingClass(spacing)"
+  >
+    <div>
       <h2
         v-if="title"
         class="mb-6 text-[24px] font-light tracking-[-0.01em]"

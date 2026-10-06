@@ -2,15 +2,18 @@
 // The `cardGrid` block: image cards with a title and text - stores, journal
 // stories, a team. A card with a link is a link; one without is not, so a
 // list of stores does not pretend to be clickable.
+import { spacingClass, type BlockSpacing } from '../utils/spacing'
 import { imageProvider } from '~~/app/utils/odooImage'
 
 const props = withDefaults(defineProps<{
   title?: string
+  spacing?: BlockSpacing
   columns?: '2' | '3'
   imageShape?: 'classic' | 'wide'
   items?: {
     image: string
     eyebrow?: string
+    date?: string
     title: string
     text?: string
     footnote?: string
@@ -18,6 +21,7 @@ const props = withDefaults(defineProps<{
   }[]
 }>(), {
   title: '',
+  spacing: 'normal',
   columns: '3',
   imageShape: 'classic',
   items: () => [],
@@ -41,7 +45,10 @@ const cardTag = (link?: string) => {
 </script>
 
 <template>
-  <section class="narrow-container py-[clamp(48px,7vw,96px)]">
+  <section
+    class="narrow-container"
+    :class="spacingClass(spacing)"
+  >
     <h2
       v-if="title"
       class="mb-10 text-[24px] font-light tracking-[-0.01em]"
@@ -76,14 +83,20 @@ const cardTag = (link?: string) => {
           />
         </div>
         <p
-          v-if="item.eyebrow"
-          class="text-[12px] tracking-[0.14em] uppercase text-primary-400 mb-3"
+          v-if="item.eyebrow || item.date"
+          class="flex items-center gap-3 text-[12px] tracking-[0.14em] uppercase text-primary-400 mb-3"
         >
-          {{ item.eyebrow }}
+          <span v-if="item.eyebrow">{{ item.eyebrow }}</span>
+          <span
+            v-if="item.eyebrow && item.date"
+            class="w-1 h-1 rounded-full bg-primary-300"
+            aria-hidden="true"
+          />
+          <span v-if="item.date">{{ item.date }}</span>
         </p>
         <h3
-          class="text-[22px] font-light tracking-[-0.01em] mb-2"
-          :class="item.link ? 'group-hover:underline underline-offset-4' : ''"
+          class="font-light tracking-[-0.01em] mb-2"
+          :class="[columns === '2' ? 'text-[24px]' : 'text-[22px]', item.link ? 'group-hover:underline underline-offset-4' : '']"
         >
           {{ item.title }}
         </h3>

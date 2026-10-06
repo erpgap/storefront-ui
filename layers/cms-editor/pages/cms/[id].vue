@@ -39,6 +39,22 @@ const {
 } = draft
 
 const paletteOpen = ref(true)
+
+// Palette search: name and description, so "faq" and "questions" both find
+// the FAQ block.
+const paletteSearch = ref('')
+const paletteBlocks = computed(() => {
+  const term = paletteSearch.value.trim().toLowerCase()
+  if (!term) return blockRegistry
+  return blockRegistry.filter(definition =>
+    `${definition.label} ${definition.description}`.toLowerCase().includes(term))
+})
+
+// Enter adds the first match, so search-then-add needs no mouse.
+function addFirstPaletteMatch() {
+  const first = paletteBlocks.value[0]
+  if (first) onPaletteClick(first.name)
+}
 const versionsOpen = ref(false)
 const seoOpen = ref(false)
 
@@ -634,9 +650,20 @@ const saveLabel = computed(() => ({
       <!-- Palette drawer -->
       <aside
         v-if="paletteOpen"
-        class="editor-chrome absolute top-0 left-0 bottom-0 w-56 border-r border-white/10 p-3 overflow-y-auto z-10 shadow-xl"
+        class="editor-chrome absolute top-0 left-0 bottom-0 w-56 border-r border-white/10 px-3 pb-3 overflow-y-auto z-10 shadow-xl"
         aria-label="Blocks"
       >
+        <div class="editor-chrome sticky top-0 -mx-3 px-3 pt-3 pb-2 z-10">
+          <input
+            v-model="paletteSearch"
+            type="search"
+            placeholder="Search blocks"
+            aria-label="Search blocks"
+            class="w-full rounded-md border border-white/20 bg-white/[0.09] px-2.5 py-1.5 text-[13px] text-white placeholder:text-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
+            @keydown.enter.prevent="addFirstPaletteMatch"
+            @keydown.esc.stop="paletteSearch = ''"
+          >
+        </div>
         <p
           v-if="insertAt !== null"
           class="text-[11px] tracking-[0.14em] uppercase text-blue-200 bg-blue-500/20 rounded px-2 py-1.5 mb-2 flex items-center justify-between gap-2"
@@ -656,20 +683,29 @@ const saveLabel = computed(() => ({
         >
           Drag onto the page
         </p>
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-1.5">
+          <!-- One line of description keeps every block in view; the full
+               text is the tooltip. -->
           <button
-            v-for="definition in blockRegistry"
+            v-for="definition in paletteBlocks"
             :key="definition.name"
             type="button"
-            class="text-left rounded-md border border-white/15 bg-white/[0.06] p-2.5 cursor-grab hover:border-white/40 hover:bg-white/[0.12] transition-colors touch-none"
+            :title="definition.description"
+            class="text-left rounded-md border border-white/15 bg-white/[0.06] px-2.5 py-2 cursor-grab hover:border-white/40 hover:bg-white/[0.12] transition-colors touch-none"
             @pointerdown="onPaletteDragStart($event, definition.name, definition.label)"
             @click="onPaletteClick(definition.name)"
           >
             <span class="block text-[13px] font-medium">{{ definition.label }}</span>
-            <span class="block text-[11px] text-white/50 leading-snug mt-0.5">
+            <span class="block text-[11px] text-white/50 leading-snug mt-0.5 truncate">
               {{ definition.description }}
             </span>
           </button>
+          <p
+            v-if="!paletteBlocks.length"
+            class="text-[12px] text-white/50 py-2"
+          >
+            No blocks match “{{ paletteSearch }}”.
+          </p>
         </div>
         <p class="text-[11px] text-white/40 mt-3 leading-snug">
           {{ insertAt !== null

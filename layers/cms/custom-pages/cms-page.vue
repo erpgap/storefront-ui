@@ -20,7 +20,9 @@ const { data: page, error } = await useCmsPage(slug.value)
 // prefix, and content languages come from Odoo's res.lang rather than from
 // the Nuxt UI locale list — a merchant may sell in more languages than the
 // storefront has UI translations for.
-const requested = computed(() => String(useRoute().query.lang ?? ''))
+// `route` rather than useRoute() here: this computed is also read lazily by
+// useHead, outside setup, where a composable cannot reach the Nuxt instance.
+const requested = computed(() => String(route.query.lang ?? ''))
 const locale = computed(() =>
   isLocaleCode(requested.value) ? requested.value : DEFAULT_LOCALE)
 

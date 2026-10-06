@@ -3,11 +3,15 @@
 // each (block arrays cannot nest, §9.4); consecutive questions sharing a group
 // are shown under one heading. <details> keeps every answer in the HTML, so
 // crawlers and in-page search see them, and it works without JavaScript.
+import { spacingClass, type BlockSpacing } from '../utils/spacing'
+
 const props = withDefaults(defineProps<{
   title?: string
+  spacing?: BlockSpacing
   items?: { group?: string, question: string, answer: string }[]
 }>(), {
   title: '',
+  spacing: 'compact',
   items: () => [],
 })
 
@@ -24,8 +28,11 @@ const groups = computed(() => {
 </script>
 
 <template>
-  <section class="narrow-container pb-[clamp(48px,7vw,96px)]">
-    <div class="max-w-[820px]">
+  <section
+    class="narrow-container max-w-[820px]"
+    :class="spacingClass(spacing)"
+  >
+    <div>
       <h2
         v-if="title"
         class="mb-10 text-[24px] font-light tracking-[-0.01em]"

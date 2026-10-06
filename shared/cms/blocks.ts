@@ -188,6 +188,25 @@ export interface CmsPage {
 // these are CMS-specific re-implementations — that is the guarantee that the
 // editor canvas and the production page are the same pixels.
 
+/**
+ * Vertical spacing for blocks that stack into one flow of content, the way a
+ * page of text does: 'start' opens the flow below a banner, 'compact' follows
+ * the block above it closely, 'end' does too and closes the page with room
+ * before the footer, 'normal' stands alone as its own section.
+ */
+const spacingField = (fallback: 'normal' | 'start' | 'compact' | 'end' = 'normal'): SelectField => ({
+  name: 'spacing',
+  label: 'Spacing',
+  type: 'select',
+  default: fallback,
+  options: [
+    { value: 'normal', label: 'Section (space above and below)' },
+    { value: 'start', label: 'First below a banner' },
+    { value: 'compact', label: 'Follows the block above' },
+    { value: 'end', label: 'Follows the block above, last on the page' },
+  ],
+})
+
 export const blockSchemas: BlockSchema[] = [
   {
     name: 'hero',
@@ -314,6 +333,16 @@ export const blockSchemas: BlockSchema[] = [
           { value: 'right', label: 'Right' },
         ],
       },
+      {
+        name: 'titleSize',
+        label: 'Heading size',
+        type: 'select',
+        default: 'large',
+        options: [
+          { value: 'large', label: 'Large (homepage)' },
+          { value: 'regular', label: 'Regular (content pages)' },
+        ],
+      },
       { name: 'ctaLabel', label: 'Button label', type: 'text' },
       { name: 'ctaUrl', label: 'Button links to', type: 'link', default: '/products' },
     ],
@@ -376,10 +405,20 @@ export const blockSchemas: BlockSchema[] = [
   {
     name: 'richText',
     label: 'Text Section',
-    description: 'A heading, paragraphs, lists and links.',
+    description: 'A heading, paragraphs, lists and links - or a highlighted notice.',
     fields: [
+      {
+        name: 'variant',
+        label: 'Style',
+        type: 'select',
+        default: 'text',
+        options: [
+          { value: 'text', label: 'Text' },
+          { value: 'notice', label: 'Notice (boxed, with an icon)' },
+        ],
+      },
       { name: 'eyebrow', label: 'Eyebrow', type: 'text' },
-      { name: 'title', label: 'Heading', type: 'text' },
+      { name: 'title', label: 'Heading', type: 'text', help: 'In a notice, shown in bold before the text.' },
       {
         name: 'body',
         label: 'Text',
@@ -398,27 +437,40 @@ export const blockSchemas: BlockSchema[] = [
         ],
       },
       {
+        name: 'width',
+        label: 'Width',
+        type: 'select',
+        default: 'column',
+        options: [
+          { value: 'column', label: 'Reading column, centred on the page' },
+          { value: 'wide', label: 'Aligned with the page edge' },
+        ],
+      },
+      {
         name: 'size',
         label: 'Text size',
         type: 'select',
         default: 'body',
         options: [
           { value: 'body', label: 'Regular' },
-          { value: 'lead', label: 'Large (introduction)' },
+          { value: 'intro', label: 'Intro (slightly larger)' },
+          { value: 'lead', label: 'Large statement' },
         ],
       },
-      {
-        name: 'spacing',
-        label: 'Spacing',
-        type: 'select',
-        default: 'normal',
-        options: [
-          { value: 'normal', label: 'Normal' },
-          { value: 'compact', label: 'Compact (follows another text section)' },
-        ],
-      },
+      spacingField(),
+      { name: 'divider', label: 'Line above', type: 'boolean', default: false, help: 'A full-width rule separating this from the block above.' },
       { name: 'ctaLabel', label: 'Button label', type: 'text', help: 'Leave empty for no button.' },
       { name: 'ctaUrl', label: 'Button links to', type: 'link' },
+      {
+        name: 'ctaPosition',
+        label: 'Button position',
+        type: 'select',
+        default: 'below',
+        options: [
+          { value: 'below', label: 'Below the text' },
+          { value: 'beside', label: 'Beside the text' },
+        ],
+      },
     ],
   },
 
@@ -446,6 +498,26 @@ export const blockSchemas: BlockSchema[] = [
     description: 'Short numbered points in columns: principles, steps, commitments.',
     fields: [
       { name: 'title', label: 'Heading', type: 'text' },
+      {
+        name: 'layout',
+        label: 'Layout',
+        type: 'select',
+        default: 'band',
+        options: [
+          { value: 'band', label: 'Full-width band between lines' },
+          { value: 'column', label: 'Compact, in the reading column' },
+        ],
+      },
+      {
+        name: 'numberPosition',
+        label: 'Numbers',
+        type: 'select',
+        default: 'beside',
+        options: [
+          { value: 'beside', label: 'Beside the title' },
+          { value: 'above', label: 'Above the title' },
+        ],
+      },
       {
         name: 'columns',
         label: 'Columns',
@@ -500,6 +572,7 @@ export const blockSchemas: BlockSchema[] = [
     description: 'Rows of a name and two details, such as delivery options.',
     fields: [
       { name: 'title', label: 'Heading', type: 'text' },
+      spacingField('compact'),
       {
         name: 'items',
         label: 'Rows',
@@ -523,6 +596,7 @@ export const blockSchemas: BlockSchema[] = [
     description: 'Questions that open to show their answer, in groups.',
     fields: [
       { name: 'title', label: 'Heading', type: 'text' },
+      spacingField('compact'),
       {
         name: 'items',
         label: 'Questions',
@@ -551,6 +625,7 @@ export const blockSchemas: BlockSchema[] = [
     description: 'Image cards with a title and text: stores, stories, team.',
     fields: [
       { name: 'title', label: 'Heading', type: 'text' },
+      spacingField(),
       {
         name: 'columns',
         label: 'Columns',
@@ -581,7 +656,8 @@ export const blockSchemas: BlockSchema[] = [
         addLabel: 'Add card',
         fields: [
           { name: 'image', label: 'Image', type: 'image', required: true },
-          { name: 'eyebrow', label: 'Small line above the title', type: 'text' },
+          { name: 'eyebrow', label: 'Small line above the title', type: 'text', help: 'A category, for example.' },
+          { name: 'date', label: 'Date', type: 'text', help: 'Shown after the small line, with a dot between them.' },
           { name: 'title', label: 'Title', type: 'text', required: true },
           { name: 'text', label: 'Text', type: 'textarea' },
           { name: 'footnote', label: 'Small line below the text', type: 'text' },
@@ -598,6 +674,7 @@ export const blockSchemas: BlockSchema[] = [
     dynamic: true,
     fields: [
       { name: 'title', label: 'Heading', type: 'text', default: 'Talk to us' },
+      spacingField(),
       {
         name: 'channels',
         label: 'Contact details',
