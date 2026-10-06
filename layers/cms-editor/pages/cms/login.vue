@@ -48,7 +48,7 @@ async function submit() {
           CMS
         </h1>
         <p class="text-[12px] text-primary-400 mt-0.5">
-          Sign in with your Odoo account
+          Pages you can edit without a developer
         </p>
       </div>
 

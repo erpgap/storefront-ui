@@ -120,7 +120,7 @@ function formatDate(iso: string) {
       <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
         <div>
           <h1 class="text-[15px] font-medium">
-            Content
+            CMS
           </h1>
           <p class="text-[12px] text-primary-400">
             Pages you can edit without a developer
