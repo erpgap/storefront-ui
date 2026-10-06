@@ -300,11 +300,6 @@ function formatDate(iso: string) {
             >
               Delete
             </button>
-            <span
-              v-else
-              class="text-[10px] tracking-[0.1em] uppercase text-primary-400 px-2"
-              title="Part of the storefront"
-            >Built in</span>
           </div>
         </li>
       </ul>
