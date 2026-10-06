@@ -40,6 +40,14 @@ const {
 
 const paletteOpen = ref(true)
 const versionsOpen = ref(false)
+const seoOpen = ref(false)
+
+// Only the SEO data is taken from the saved page: the rest of `page` backs a
+// draft that may be mid-edit, and replacing it would reset the canvas.
+function onSeoSaved(updated: CmsPage) {
+  page.value = { ...page.value!, seo: updated.seo, metaTitle: updated.metaTitle, metaDescription: updated.metaDescription }
+  seoOpen.value = false
+}
 
 // Content languages come from the website's active languages in Odoo, not from
 // the Nuxt i18n config: a merchant may sell in more languages than the
@@ -513,6 +521,15 @@ const saveLabel = computed(() => ({
         </button>
 
         <button
+          v-if="(page as any)!.kind !== 'region'"
+          type="button"
+          class="editor-btn"
+          @click="seoOpen = true"
+        >
+          SEO
+        </button>
+
+        <button
           type="button"
           class="editor-btn"
           @click="versionsOpen = true"
@@ -718,6 +735,18 @@ const saveLabel = computed(() => ({
         :has-unpublished-changes="saveState === 'dirty' || saveState === 'saving'"
         @restored="onRestored"
         @close="versionsOpen = false"
+      />
+
+      <CmsEditorSeoDialog
+        v-if="seoOpen"
+        :page-id="pageId"
+        :seo="page!.seo"
+        :locale="locale"
+        :default-locale="defaultLocale"
+        :locales="locales"
+        :page-title="page!.title"
+        @saved="onSeoSaved"
+        @close="seoOpen = false"
       />
 
       <!-- Validation summary: blocks needing attention before publish. -->

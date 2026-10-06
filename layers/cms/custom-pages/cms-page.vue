@@ -4,7 +4,8 @@
 // BlockRenderer the editor canvas uses.
 import { useCmsPage } from '../composables/useCmsPage'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
-import { DEFAULT_LOCALE, isLocaleCode } from '#shared/cms/i18n'
+import { absoluteImageUrl } from '~/utils/odooImage'
+import { DEFAULT_LOCALE, isLocaleCode, resolveValue } from '#shared/cms/i18n'
 
 const route = useRoute()
 
@@ -55,6 +56,17 @@ if (import.meta.client && !page.value) {
 }
 
 const { origin } = useRequestURL()
+const odooImageBase = String(useRuntimeConfig().public.odooBaseImageUrl ?? '')
+
+// With no share image chosen, the first picture on the page is a better
+// preview than none - usually the hero, which is what the page is about.
+const firstBlockImage = computed(() => {
+  for (const block of page.value?.blocks ?? []) {
+    const image = resolveValue(block.data?.image, locale.value)
+    if (image) return image
+  }
+  return ''
+})
 
 // Computed rather than evaluated once: `page` can be null on the client in the
 // case above, and reading `.title` off it would throw where the whole point is
@@ -64,6 +76,8 @@ useHead(() => generateSeo<SeoEntity>(
     name: page.value?.title,
     metaTitle: page.value?.metaTitle || page.value?.title,
     metaDescription: page.value?.metaDescription,
+    metaImage: absoluteImageUrl(
+      page.value?.metaImage || firstBlockImage.value, odooImageBase, origin) || null,
   },
   'Page',
   `${origin}${slug.value}`,

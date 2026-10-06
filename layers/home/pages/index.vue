@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
+import { absoluteImageUrl } from '~/utils/odooImage'
 import { useWebsiteHomePage } from '~~/layers/core/composables/useWebsiteHomePage.ts'
 import { useCmsPage } from '~~/layers/cms/composables/useCmsPage'
 
@@ -17,7 +18,16 @@ const { origin, pathname } = useRequestURL()
  * replace a tuned set of tags with a page title, which is the regression this
  * migration most needs to avoid.
  */
-useHead(generateSeo<SeoEntity>(websiteHomepage.value, 'Home', `${origin}${pathname}`))
+// Odoo hands the share image out as a /web/image path, which neither exists
+// on this domain nor is something share crawlers resolve.
+useHead(generateSeo<SeoEntity>({
+  ...websiteHomepage.value,
+  metaImage: absoluteImageUrl(
+    websiteHomepage.value?.metaImage,
+    String(useRuntimeConfig().public.odooBaseImageUrl ?? ''),
+    origin,
+  ) || null,
+}, 'Home', `${origin}${pathname}`))
 
 /**
  * The homepage renders from the CMS when a published page exists for `/`, and

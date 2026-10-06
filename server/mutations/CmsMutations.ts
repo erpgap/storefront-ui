@@ -8,6 +8,7 @@ const PAGE_FIELDS = `
   isPublished
   metaTitle
   metaDescription
+  metaImage
   liveRevision
   updatedAt
   hasUnpublishedChanges
@@ -71,6 +72,15 @@ export const UpdateCmsPageMutation = `
   mutation ($pageId: Int!, $name: String, $url: String, $metaTitle: String, $metaDescription: String) {
     updateCmsPage(pageId: $pageId, name: $name, url: $url, metaTitle: $metaTitle, metaDescription: $metaDescription) {
       ${PAGE_FIELDS}
+    }
+  }
+`
+
+export const UpdateCmsPageSeoMutation = `
+  mutation ($pageId: Int!, $lang: String!, $metaTitle: String, $metaDescription: String, $metaImage: String) {
+    updateCmsPageSeo(pageId: $pageId, lang: $lang, metaTitle: $metaTitle, metaDescription: $metaDescription, metaImage: $metaImage) {
+      ${PAGE_FIELDS}
+      seo
     }
   }
 `

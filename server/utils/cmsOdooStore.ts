@@ -25,9 +25,10 @@ import {
   SaveCmsDraftMutation,
   UnpublishCmsPageMutation,
   UpdateCmsPageMutation,
+  UpdateCmsPageSeoMutation,
 } from '../mutations/CmsMutations'
-import type { CmsStore, PageInput } from './cmsStore'
-import type { BlockInstance, CmsPage } from '#shared/cms/blocks'
+import type { CmsStore, PageInput, SeoInput } from './cmsStore'
+import type { BlockInstance, CmsPage, CmsSeo } from '#shared/cms/blocks'
 
 interface OdooCmsPage {
   id: number
@@ -36,6 +37,7 @@ interface OdooCmsPage {
   isPublished: boolean
   metaTitle?: string
   metaDescription?: string
+  metaImage?: string
   blocks?: BlockInstance[]
   draftBlocks?: BlockInstance[]
   liveRevision?: number
@@ -45,6 +47,7 @@ interface OdooCmsPage {
   kind?: 'page' | 'region'
   regionKey?: string
   isSystem?: boolean
+  seo?: CmsSeo
 }
 
 export interface CmsRevision {
@@ -97,6 +100,45 @@ async function callOdoo<T>(
   return response.data as T
 }
 
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024
+
+/**
+ * The share image as the base64 Odoo's image field stores.
+ *
+ * The media library hands out URLs - storefront paths today, /web/image ones
+ * once uploads move to Odoo - so the bytes are fetched here and Odoo keeps its
+ * own copy. That copy is what the homepage's website record needs, and it
+ * outlives the image being removed from the library. `''` removes the image,
+ * `undefined` leaves it alone.
+ */
+async function seoImageData(event: H3Event, url: SeoInput['metaImage']) {
+  if (url === undefined) return undefined
+  if (url === null || url === '') return ''
+
+  // A path on one of our own two hosts, never an arbitrary URL: this runs on
+  // the server, so a free-form URL would let a caller make it fetch anything.
+  if (!url.startsWith('/') || url.startsWith('//')) {
+    throw createError({ statusCode: 400, statusMessage: 'Choose an image from the media library.' })
+  }
+
+  const base = url.startsWith('/web/')
+    ? useRuntimeConfig(event).public.odooBaseUrl as string
+    : getRequestURL(event).origin
+  const response = await $fetch.raw<ArrayBuffer>(new URL(url, base).toString(), {
+    responseType: 'arrayBuffer',
+    headers: { Cookie: `session_id=${getCookie(event, 'session_id') ?? ''}` },
+  }).catch(() => null)
+
+  const type = response?.headers.get('content-type') ?? ''
+  if (!response?._data || !type.startsWith('image/')) {
+    throw createError({ statusCode: 400, statusMessage: 'That image could not be read.' })
+  }
+  if (response._data.byteLength > MAX_IMAGE_BYTES) {
+    throw createError({ statusCode: 413, statusMessage: 'Images must be under 8 MB.' })
+  }
+  return Buffer.from(response._data).toString('base64')
+}
+
 /**
  * Odoo's page shape to the storefront's.
  *
@@ -120,6 +162,8 @@ function toCmsPage(page: OdooCmsPage): CmsPage & {
     slug: page.url,
     metaTitle: page.metaTitle ?? undefined,
     metaDescription: page.metaDescription ?? undefined,
+    metaImage: page.metaImage ?? undefined,
+    seo: page.seo ?? undefined,
     published: Boolean(page.isPublished),
     draft: page.draftBlocks ?? [],
     publishedBlocks: page.blocks ?? [],
@@ -225,6 +269,19 @@ export function createOdooCmsStore(event: H3Event): CmsStore & {
         },
       )
       return toCmsPage(data.updateCmsPage)
+    },
+
+    async saveSeo(id, lang, input) {
+      const data = await callOdoo<{ updateCmsPageSeo: OdooCmsPage }>(
+        event, UpdateCmsPageSeoMutation, {
+          pageId: Number(id),
+          lang,
+          metaTitle: input.metaTitle,
+          metaDescription: input.metaDescription,
+          metaImage: await seoImageData(event, input.metaImage),
+        },
+      )
+      return toCmsPage(data.updateCmsPageSeo)
     },
 
     async saveDraft(id, blocks) {

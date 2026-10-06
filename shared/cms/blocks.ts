@@ -147,6 +147,19 @@ export interface BlockInstance {
   data: Record<string, unknown>
 }
 
+/**
+ * Meta title and description per language, as stored - a language with no
+ * text of its own is absent rather than filled with English. `source` is
+ * 'website' for the homepage, whose tags come from the website record.
+ */
+export interface CmsSeo {
+  source: 'page' | 'website'
+  /** Share image (og:image). Not per language. Odoo-relative or a storefront path. */
+  image?: string | null
+  title: Record<string, string>
+  description: Record<string, string>
+}
+
 export interface CmsPage {
   id: string
   title: string
@@ -154,6 +167,10 @@ export interface CmsPage {
   slug: string
   metaTitle?: string
   metaDescription?: string
+  /** Share image (og:image), Odoo-relative or a storefront path. */
+  metaImage?: string
+  /** Editor reads only. */
+  seo?: CmsSeo
   published: boolean
   /** What the editor edits. */
   draft: BlockInstance[]

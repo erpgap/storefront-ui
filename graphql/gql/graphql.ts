@@ -247,10 +247,14 @@ export type CmsPage = {
   kind: Maybe<Scalars['String']['output']>;
   liveRevision: Maybe<Scalars['Int']['output']>;
   metaDescription: Maybe<Scalars['String']['output']>;
+  /** Odoo-relative URL of the share image (og:image), or null. */
+  metaImage: Maybe<Scalars['String']['output']>;
   metaTitle: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   regionKey: Maybe<Scalars['String']['output']>;
   revisionCount: Maybe<Scalars['Int']['output']>;
+  /** Meta title and description per language, as stored, so a language with no text of its own shows as missing. source is "website" for the homepage, whose tags come from the website record. Requires the CMS Editor group. */
+  seo: Maybe<Scalars['GenericScalar']['output']>;
   updatedAt: Maybe<Scalars['String']['output']>;
   url: Maybe<Scalars['String']['output']>;
 };
@@ -601,6 +605,8 @@ export type Mutation = {
   /** Update a billing or shipping address and set it on the shopping cart. */
   updateAddress: Maybe<Partner>;
   updateCmsPage: Maybe<CmsPage>;
+  /** Save meta title and description for one language. */
+  updateCmsPageSeo: Maybe<CmsPage>;
   /** Update MyAccount */
   updateMyAccount: Maybe<Partner>;
   /** Update user password. */
@@ -769,6 +775,15 @@ export type MutationUpdateCmsPageArgs = {
   name: InputMaybe<Scalars['String']['input']>;
   pageId: Scalars['Int']['input'];
   url: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationUpdateCmsPageSeoArgs = {
+  lang: Scalars['String']['input'];
+  metaDescription: InputMaybe<Scalars['String']['input']>;
+  metaImage: InputMaybe<Scalars['String']['input']>;
+  metaTitle: InputMaybe<Scalars['String']['input']>;
+  pageId: Scalars['Int']['input'];
 };
 
 

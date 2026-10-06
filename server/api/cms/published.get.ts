@@ -22,6 +22,7 @@ export default defineEventHandler(async (event) => {
     slug: page.slug,
     metaTitle: page.metaTitle,
     metaDescription: page.metaDescription,
+    metaImage: page.metaImage,
     blocks: page.publishedBlocks,
     publishedAt: page.publishedAt,
   }

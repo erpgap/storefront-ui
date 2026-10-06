@@ -11,6 +11,7 @@ const PAGE_FIELDS = `
   isPublished
   metaTitle
   metaDescription
+  metaImage
   liveRevision
   updatedAt
   hasUnpublishedChanges
@@ -46,6 +47,7 @@ export const GetCmsPageDraftQuery = `
       ${PAGE_FIELDS}
       blocks
       draftBlocks
+      seo
     }
   }
 `

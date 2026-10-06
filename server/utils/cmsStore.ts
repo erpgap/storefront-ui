@@ -11,13 +11,21 @@
 
 import type { H3Event } from 'h3'
 import { createOdooCmsStore } from './cmsOdooStore'
-import type { BlockInstance, CmsPage } from '#shared/cms/blocks'
+import type { BlockInstance, CmsPage, CmsSeo } from '#shared/cms/blocks'
+import { DEFAULT_LOCALE } from '#shared/cms/i18n'
 
 export interface PageInput {
   title: string
   slug: string
   metaTitle?: string
   metaDescription?: string
+}
+
+export interface SeoInput {
+  metaTitle?: string
+  metaDescription?: string
+  /** A media library URL, or null to remove the image. */
+  metaImage?: string | null
 }
 
 export interface CmsStore {
@@ -27,6 +35,8 @@ export interface CmsStore {
   getPublishedBySlug: (slug: string) => Promise<CmsPage | null>
   create: (input: PageInput, blocks?: BlockInstance[]) => Promise<CmsPage>
   updateMeta: (id: string, input: Partial<PageInput>) => Promise<CmsPage>
+  /** Meta title and description for one language. Empty removes that language's text. */
+  saveSeo: (id: string, lang: string, input: SeoInput) => Promise<CmsPage>
   saveDraft: (id: string, blocks: BlockInstance[]) => Promise<CmsPage>
   publish: (id: string) => Promise<CmsPage>
   unpublish: (id: string) => Promise<CmsPage>
@@ -155,6 +165,29 @@ const fileStore: CmsStore = {
     if (input.metaTitle !== undefined) page.metaTitle = input.metaTitle
     if (input.metaDescription !== undefined) page.metaDescription = input.metaDescription
 
+    page.updatedAt = nowIso()
+    return writePage(page)
+  },
+
+  async saveSeo(id, lang, input) {
+    const page = await mustGet(id)
+    const seo: CmsSeo = page.seo ?? { source: 'page', title: {}, description: {} }
+
+    const fields = [['title', input.metaTitle], ['description', input.metaDescription]] as const
+    for (const [key, value] of fields) {
+      if (value === undefined) continue
+      const text = value.trim()
+      const { [lang]: _removed, ...others } = seo[key]
+      seo[key] = text ? { ...others, [lang]: text } : others
+    }
+
+    if (input.metaImage !== undefined) seo.image = input.metaImage
+    page.metaImage = seo.image ?? undefined
+
+    page.seo = seo
+    // The published read renders these, so keep them on the default language.
+    page.metaTitle = seo.title[DEFAULT_LOCALE]
+    page.metaDescription = seo.description[DEFAULT_LOCALE]
     page.updatedAt = nowIso()
     return writePage(page)
   },

@@ -6,6 +6,7 @@ export interface PublishedCmsPage {
   slug: string
   metaTitle?: string
   metaDescription?: string
+  metaImage?: string
   blocks: BlockInstance[]
   publishedAt?: string
 }

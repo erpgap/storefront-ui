@@ -26,3 +26,22 @@ export function buildOdooImageUrl(
 
   return `${baseUrl}${normalizedPath}`
 }
+
+/**
+ * An absolute URL for tags read by other sites - og:image and twitter:image.
+ *
+ * Share crawlers do not resolve relative URLs, and Odoo's /web/image paths do
+ * not exist on the storefront's own domain, so those go to the Odoo image
+ * host. Any other path is a storefront asset and goes to `origin`.
+ */
+export function absoluteImageUrl(
+  imageUrl: string | null | undefined,
+  odooBaseUrl: string,
+  origin: string,
+): string {
+  if (!imageUrl) return ''
+  if (/^https?:\/\//.test(imageUrl)) return imageUrl
+  const path = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`
+  const base = path.startsWith('/web/') ? odooBaseUrl : origin
+  return `${base.replace(/\/$/, '')}${path}`
+}

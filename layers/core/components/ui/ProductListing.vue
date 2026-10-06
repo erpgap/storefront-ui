@@ -4,6 +4,7 @@ import { useProductAttributes } from '~~/layers/product/composables/useProductAt
 import { useProductTemplateList } from '~~/layers/product/composables/useProductTemplateList'
 import { useScrollToTopOnListingChange } from '~~/layers/core/composables/useScrollToTopOnListingChange'
 import generateSeo, { type SeoEntity } from '~~/app/utils/buildSEOHelper'
+import { absoluteImageUrl } from '~~/app/utils/odooImage'
 import type { Product } from '~~/graphql'
 import { LISTING_PAGE_SIZE } from '~~/shared/listing.mjs'
 
@@ -85,7 +86,15 @@ const effectiveMaxPrice = computed(() =>
 
 if (props.seoEntity) {
   const { origin, pathname } = useRequestURL()
-  useHead(generateSeo<SeoEntity>(props.seoEntity, 'Category', `${origin}${pathname}`))
+  // Odoo's /web/image path is neither on this domain nor resolved by crawlers.
+  useHead(generateSeo<SeoEntity>({
+    ...props.seoEntity,
+    metaImage: absoluteImageUrl(
+      props.seoEntity.metaImage,
+      String(useRuntimeConfig().public.odooBaseImageUrl ?? ''),
+      origin,
+    ) || null,
+  }, 'Category', `${origin}${pathname}`))
 }
 
 setMaxVisiblePages(isWideScreen.value)
