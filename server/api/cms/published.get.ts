@@ -1,7 +1,7 @@
 /**
  * The storefront read path. Published blocks only, by URL.
  *
- * Deliberately separate from the studio endpoints: this is the one CMS route a
+ * Deliberately separate from the editor endpoints: this is the one CMS route a
  * visitor's request ever touches, it never exposes draft content, and it is the
  * route that would carry an SWR cache rule in production.
  */

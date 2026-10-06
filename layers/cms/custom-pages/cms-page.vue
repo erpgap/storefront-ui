@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // The render target for CMS pages — the component that was missing entirely
 // (§4.2 gap 1). Fetches published blocks by URL and hands them to the SAME
-// BlockRenderer the studio canvas uses.
+// BlockRenderer the editor canvas uses.
 import { useCmsPage } from '../composables/useCmsPage'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 import { DEFAULT_LOCALE, isLocaleCode } from '#shared/cms/i18n'

@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
 /**
- * Browser tests for the CMS studio.
+ * Browser tests for the CMS editor.
  *
  * These cover the things only a browser can: drag-and-drop, the inspector
  * updating the canvas as you type, publishing and then viewing the result.
@@ -16,7 +16,7 @@ import { defineConfig, devices } from '@playwright/test'
  */
 export default defineConfig({
   testDir: './test/e2e',
-  // The studio writes to shared content, so tests must not race each other.
+  // The editor writes to shared content, so tests must not race each other.
   workers: 1,
   fullyParallel: false,
   // A cold Nuxt dev route can take a while to compile on first hit.

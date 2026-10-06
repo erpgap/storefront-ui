@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// The studio canvas.
+// The editor canvas.
 //
 // Layout is Option A from §8.4: the canvas spans the full viewport and the
 // palette and inspector are overlay drawers. This is not cosmetic. The
@@ -9,28 +9,28 @@
 // resolves against the WINDOW, so every font size and gutter renders wrong and
 // the editor stops showing the truth. Full-width keeps the canvas honest, and
 // costs roughly two weeks less than the iframe alternative.
-import { useStudioDraft } from '../../composables/useStudioDraft'
+import { useCmsEditorDraft } from '../../composables/useCmsEditorDraft'
 import type { CmsPage } from '#shared/cms/blocks'
 import { CMS_LOCALES, DEFAULT_LOCALE } from '#shared/cms/i18n'
 import type { CmsLocale } from '#shared/cms/i18n'
 import { blockLabel, blockRegistry } from '~~/layers/cms/blocks'
 
-definePageMeta({ layout: false, middleware: 'studio-auth' })
+definePageMeta({ layout: false, middleware: 'cms-auth' })
 
 const route = useRoute()
 const pageId = computed(() => String(route.params.id))
 
 const { data: page } = await useFetch<CmsPage>(`/api/cms/pages/${pageId.value}`, {
-  key: `studio-page-${pageId.value}`,
+  key: `cms-editor-page-${pageId.value}`,
 })
 
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-useHead({ title: `${page.value.title} — Studio` })
+useHead({ title: `${page.value.title} — CMS` })
 
-const draft = useStudioDraft(page as Ref<CmsPage>)
+const draft = useCmsEditorDraft(page as Ref<CmsPage>)
 const {
   blocks, selectedId, selected, issues, saveState,
   locale, untranslatedTotal,
@@ -59,7 +59,7 @@ async function onRestored() {
   // Reload rather than patching state: restore changes the live revision, the
   // draft and the history all at once, and guessing at the new state is how
   // editors end up looking at something that is not there.
-  await refreshNuxtData(`studio-page-${pageId.value}`)
+  await refreshNuxtData(`cms-editor-page-${pageId.value}`)
   window.location.reload()
 }
 
@@ -421,9 +421,9 @@ const saveLabel = computed(() => ({
 <template>
   <div class="h-screen flex flex-col bg-white text-black overflow-hidden">
     <!-- Top bar -->
-    <header class="studio-chrome flex-none flex items-center gap-3 px-4 h-14 border-b border-white/10 z-20">
+    <header class="editor-chrome flex-none flex items-center gap-3 px-4 h-14 border-b border-white/10 z-20">
       <NuxtLink
-        to="/studio"
+        to="/cms"
         class="text-[13px] text-white/60 hover:text-white whitespace-nowrap"
       >
         ← Pages
@@ -433,7 +433,7 @@ const saveLabel = computed(() => ({
 
       <button
         type="button"
-        class="studio-btn"
+        class="editor-btn"
         :aria-pressed="paletteOpen"
         @click="paletteOpen = !paletteOpen"
       >
@@ -461,7 +461,7 @@ const saveLabel = computed(() => ({
           <span class="sr-only">Content language</span>
           <select
             v-model="locale"
-            class="studio-btn !normal-case !tracking-normal py-1.5"
+            class="editor-btn !normal-case !tracking-normal py-1.5"
             :class="locale !== defaultLocale ? '!border-amber-500 !text-amber-700' : ''"
           >
             <option
@@ -495,7 +495,7 @@ const saveLabel = computed(() => ({
 
         <button
           type="button"
-          class="studio-btn"
+          class="editor-btn"
           :disabled="!canUndo"
           title="Undo (Cmd+Z)"
           @click="undo"
@@ -504,7 +504,7 @@ const saveLabel = computed(() => ({
         </button>
         <button
           type="button"
-          class="studio-btn"
+          class="editor-btn"
           :disabled="!canRedo"
           title="Redo (Cmd+Shift+Z)"
           @click="redo"
@@ -514,7 +514,7 @@ const saveLabel = computed(() => ({
 
         <button
           type="button"
-          class="studio-btn"
+          class="editor-btn"
           @click="versionsOpen = true"
         >
           History
@@ -522,7 +522,7 @@ const saveLabel = computed(() => ({
 
         <button
           type="button"
-          class="studio-btn studio-btn--danger"
+          class="editor-btn editor-btn--danger"
           :disabled="!hasUnpublishedChanges"
           :title="isPublished
             ? 'Throw away all unpublished changes and go back to the live version'
@@ -537,14 +537,14 @@ const saveLabel = computed(() => ({
           :href="locale === defaultLocale ? page!.slug : `${page!.slug}?lang=${locale}`"
           target="_blank"
           rel="noopener"
-          class="studio-btn"
+          class="editor-btn"
         >
           View live ↗
         </a>
 
         <button
           type="button"
-          class="studio-btn studio-btn--primary"
+          class="editor-btn editor-btn--primary"
           :disabled="publishing"
           @click="publish"
         >
@@ -617,7 +617,7 @@ const saveLabel = computed(() => ({
       <!-- Palette drawer -->
       <aside
         v-if="paletteOpen"
-        class="studio-chrome absolute top-0 left-0 bottom-0 w-56 border-r border-white/10 p-3 overflow-y-auto z-10 shadow-xl"
+        class="editor-chrome absolute top-0 left-0 bottom-0 w-56 border-r border-white/10 p-3 overflow-y-auto z-10 shadow-xl"
         aria-label="Blocks"
       >
         <p
@@ -664,10 +664,10 @@ const saveLabel = computed(() => ({
       <!-- Inspector drawer -->
       <aside
         v-if="selected && selectedSchema"
-        class="studio-chrome absolute top-0 right-0 bottom-0 w-80 border-l border-white/10 overflow-y-auto z-10 shadow-xl"
+        class="editor-chrome absolute top-0 right-0 bottom-0 w-80 border-l border-white/10 overflow-y-auto z-10 shadow-xl"
         aria-label="Block settings"
       >
-        <div class="studio-chrome sticky top-0 flex items-center justify-between px-4 h-12 border-b border-white/10">
+        <div class="editor-chrome sticky top-0 flex items-center justify-between px-4 h-12 border-b border-white/10">
           <p class="text-[11px] tracking-[0.14em] uppercase text-white/60">
             {{ selectedSchema.label }}
           </p>
@@ -700,7 +700,7 @@ const saveLabel = computed(() => ({
             wording and how many are shown — not the products themselves.
           </p>
 
-          <StudioFieldControl
+          <CmsEditorFieldControl
             v-for="field in selectedSchema.fields"
             :key="field.name"
             :field="field"
@@ -712,7 +712,7 @@ const saveLabel = computed(() => ({
         </div>
       </aside>
 
-      <StudioVersions
+      <CmsEditorVersions
         v-if="versionsOpen"
         :page-id="pageId"
         :has-unpublished-changes="saveState === 'dirty' || saveState === 'saving'"
@@ -739,13 +739,13 @@ const saveLabel = computed(() => ({
    When the tools and the page share a colour you lose the boundary between
    editing the page and looking at it, which is the whole problem this solves.
    The canvas stays white and full-bleed so it reads as the page itself. */
-.studio-chrome {
+.editor-chrome {
   color: #fff;
   background: rgb(23 23 23 / 97%);
   backdrop-filter: blur(6px);
 }
 
-.studio-btn {
+.editor-btn {
   padding: 0.35rem 0.7rem;
   font-size: 12px;
   letter-spacing: 0.06em;
@@ -758,17 +758,17 @@ const saveLabel = computed(() => ({
 
 /* A visible fill on hover, not just a darker outline - a border going from
    18% to 45% black is close to invisible against a white row. */
-.studio-btn:hover:not(:disabled) {
+.editor-btn:hover:not(:disabled) {
   background: rgb(255 255 255 / 12%);
   border-color: rgb(255 255 255 / 50%);
 }
 
-.studio-btn:disabled {
+.editor-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.studio-btn--primary {
+.editor-btn--primary {
   color: #000;
   background: #fff;
   border-color: #fff;
@@ -776,26 +776,26 @@ const saveLabel = computed(() => ({
 
 /* Lifts to charcoal rather than turning blue. The blue read as a different
    button appearing under the cursor rather than the same one responding. */
-.studio-btn--primary:hover:not(:disabled) {
+.editor-btn--primary:hover:not(:disabled) {
   background: rgb(255 255 255 / 82%);
   border-color: rgb(255 255 255 / 82%);
 }
 
 /* Destructive actions carry their colour in the border too, so the risk is
    legible before the pointer reaches them. */
-.studio-btn--danger {
+.editor-btn--danger {
   color: rgb(248 113 113);
   border-color: rgb(248 113 113 / 45%);
 }
 
-.studio-btn--danger:hover:not(:disabled) {
+.editor-btn--danger:hover:not(:disabled) {
   color: #fff;
   background: rgb(220 38 38 / 25%);
   border-color: rgb(248 113 113);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .studio-btn {
+  .editor-btn {
     transition: none;
   }
 }

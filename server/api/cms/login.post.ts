@@ -1,5 +1,5 @@
 /**
- * Studio login.
+ * CMS login.
  *
  * Reuses Odoo's existing session login - the same mechanism cart and account
  * already use - so there is no token service, no secret to rotate, and Odoo's

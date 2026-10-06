@@ -3,12 +3,12 @@ import { addBlock, createPage, expect, signIn, test } from './fixtures'
 /**
  * Drag on a touch screen.
  *
- * This is why the studio moved off HTML5 drag: that API predates the iPhone
+ * This is why the editor moved off HTML5 drag: that API predates the iPhone
  * and has no touch support at all, so a merchant on a tablet could not move
  * a block. Pointer Events give the same gesture one stream for mouse, touch
  * and pen.
  *
- * A tablet rather than a phone, because the studio is a two-drawer layout
+ * A tablet rather than a phone, because the editor is a two-drawer layout
  * that does not pretend to work at phone width.
  */
 // Tablet dimensions and touch input, but explicitly on Chromium: the iPad
@@ -21,7 +21,7 @@ test.use({
   defaultBrowserType: 'chromium',
 })
 
-test.describe('the studio on a touch screen', () => {
+test.describe('the editor on a touch screen', () => {
   test.beforeEach(async ({ page }) => {
     await signIn(page)
   })

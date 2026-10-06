@@ -8,7 +8,7 @@ import { validateBlocks } from '#shared/cms/blocks'
  * block types are dropped, unknown keys are stripped, selects are clamped to
  * their options and links are rejected unless they start with / or http. A
  * draft is allowed to save WITH issues — merchants save half-finished work all
- * the time — and the issues are returned so the studio can show them. Publish
+ * the time — and the issues are returned so the editor can show them. Publish
  * is the gate that refuses (see publish.post.ts).
  */
 export default defineEventHandler(async (event) => {

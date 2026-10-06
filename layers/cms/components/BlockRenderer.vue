@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// The single render path. Production pages and the studio canvas both go
+// The single render path. Production pages and the editor canvas both go
 // through this component — there is deliberately no second renderer for the
 // editor. That is what makes "see how it will look" structural rather than a
 // feature to build and keep in sync. See docs/CMS_ARCHITECTURE.md §5.1.

@@ -2,7 +2,7 @@ import { expect, test as base } from '@playwright/test'
 import type { Locator, Page } from '@playwright/test'
 
 /**
- * Signing in is the preamble to every studio test, and creating a page is the
+ * Signing in is the preamble to every editor test, and creating a page is the
  * preamble to most. Both live here so a failure in one of them reads as what
  * it is rather than as a failure of whatever was actually being tested.
  */
@@ -12,9 +12,9 @@ export const EDITOR = {
 }
 
 export async function signIn(page: Page) {
-  await page.goto('/studio')
+  await page.goto('/cms')
 
-  // The guard redirects from the client, so the URL is still /studio for a
+  // The guard redirects from the client, so the URL is still /cms for a
   // moment after navigation. Wait for whichever screen actually arrives
   // rather than reading the URL and racing it.
   const emailField = page.locator('input[autocomplete="username"]')
@@ -69,12 +69,12 @@ export async function createPage(page: Page, label: string) {
   await page.getByRole('button', { name: 'New page' }).click()
   await page.getByPlaceholder('Summer Sale').fill(name)
   await page.getByRole('button', { name: 'Create and edit' }).click()
-  await expect(page).toHaveURL(/\/studio\/\d+/)
+  await expect(page).toHaveURL(/\/cms\/\d+/)
   // Wait for the editor itself, not just the url. The palette is open on a
   // fresh page, so its presence is the signal that the editor is ready.
   await expect(page.locator('aside[aria-label="Blocks"]')).toBeVisible()
 
-  const id = /\/studio\/(\d+)/.exec(page.url())?.[1]
+  const id = /\/cms\/(\d+)/.exec(page.url())?.[1]
   if (id) createdPages.set(page, [...(createdPages.get(page) ?? []), id])
 
   return name
@@ -89,7 +89,7 @@ export async function createPage(page: Page, label: string) {
  * generated route types get big enough to be a problem of their own.
  *
  * Deletion goes through the api with the browser's own session, so it is
- * subject to the same permission check as the studio. Failures are swallowed
+ * subject to the same permission check as the editor. Failures are swallowed
  * deliberately - a test that proved its point should not then fail in
  * teardown, and the next run tolerates a leftover page.
  */
@@ -113,7 +113,7 @@ export { expect }
  *
  * Selecting a block closes the palette - deliberately, so two drawers never
  * cover the thing being edited - so adding a second one means reopening it.
- * That is what a merchant does, and a test that skips it is testing a studio
+ * That is what a merchant does, and a test that skips it is testing an editor
  * nobody uses.
  *
  * Located by attribute rather than by role: an <aside> does not reliably
@@ -174,9 +174,9 @@ export async function waitForDraftSaved(page: Page, act: () => Promise<void>) {
 /**
  * Drags with real pointer movement.
  *
- * The studio uses Pointer Events, not HTML5 drag, so Playwright's dragTo -
+ * The editor uses Pointer Events, not HTML5 drag, so Playwright's dragTo -
  * which drives the HTML5 pipeline - does nothing here. Moving the mouse in
- * steps produces the pointermove stream the studio actually listens to, and
+ * steps produces the pointermove stream the editor actually listens to, and
  * is also what a person does.
  */
 export async function dragOnto(page: Page, source: Locator, target: Locator, offsetY = 20) {

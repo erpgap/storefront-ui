@@ -177,10 +177,10 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    // The studio is a private editing surface: no SWR (it would show stale
+    // The editor is a private editing surface: no SWR (it would show stale
     // drafts and look broken), no prerender, no crawlers.
-    '/studio': { swr: false, prerender: false, robots: false },
-    '/studio/**': { swr: false, prerender: false, robots: false },
+    '/cms': { swr: false, prerender: false, robots: false },
+    '/cms/**': { swr: false, prerender: false, robots: false },
     '/api/cms/**': { swr: false, prerender: false, robots: false },
     '/sitemap_index.xml': { swr: swrCacheTime },
     '/__sitemap__/**': { swr: swrCacheTime },

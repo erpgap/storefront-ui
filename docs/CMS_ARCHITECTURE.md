@@ -194,7 +194,7 @@ There is exactly one component tree that renders blocks.
 
 ```
 production page   →  BlockRenderer(publishedBlocks)
-studio canvas     →  BlockRenderer(draftBlocks, mode: 'edit')
+editor canvas     →  BlockRenderer(draftBlocks, mode: 'edit')
 ```
 
 Same components, same Tailwind, same StorefrontUI. The editor canvas is not a
@@ -295,14 +295,14 @@ layers/cms/                          # rendering — shipped to production
   custom-pages/cms-page.vue          # the missing render target
   composables/useCmsPage.ts
 
-layers/cms-studio/                   # the editor — must not affect prod bundles
-  pages/studio/index.vue             # page list
-  pages/studio/[id].vue              # the editor
-  pages/studio/login.vue
+layers/cms-editor/                   # the editor — must not affect prod bundles
+  pages/cms/index.vue             # page list
+  pages/cms/[id].vue              # the editor
+  pages/cms/login.vue
   components/fields/*.vue            # one per field type (§5.4)
-  components/StudioPalette.vue
-  components/StudioInspector.vue
-  components/StudioMediaLibrary.vue
+  components/CmsEditorPalette.vue
+  components/CmsEditorInspector.vue
+  components/CmsEditorMediaLibrary.vue
   stores/draft.ts                    # Pinia — draft state, undo/redo
 ```
 
@@ -381,8 +381,8 @@ Required additions:
 > must not, and must not trust `cmsCanEdit` from the client.
 
 Editors are internal `res.users`, not portal users, and the existing `Login`
-mutation authenticates any `res.users`. Give the studio its own
-`/studio/login` route hitting the same mutation, so editor and customer sessions
+mutation authenticates any `res.users`. Give the editor its own
+`/cms/login` route hitting the same mutation, so editor and customer sessions
 stay conceptually separate and TOTP can be required on one and not the other.
 
 ### 6.5 Cache invalidation
@@ -419,7 +419,7 @@ it as a bug. Treat it as part of the publish feature, not a follow-up.
 
 ---
 
-## 8. The Studio (editor UI)
+## 8. The editor UI
 
 ### 8.1 Layout
 
@@ -517,8 +517,8 @@ published.
 This is the most commonly underestimated piece of the project. Without it, every
 keystroke in the editor is live to customers.
 
-The studio must also **bypass SWR entirely** — `routeRules` with caching off for
-`/studio/**`, and draft reads must go through
+The editor must also **bypass SWR entirely** — `routeRules` with caching off for
+`/cms/**`, and draft reads must go through
 `server/api/odoo/query-no-cache.post.ts`, not `query.post.ts`. Otherwise the
 editor shows stale content and appears broken.
 
@@ -566,7 +566,7 @@ list; add a `columns` block later if merchants actually ask for it.
 
 ### 9.5 SSR
 
-Production block rendering must server-render for SEO. The studio is
+Production block rendering must server-render for SEO. The editor is
 client-only. Ensure `mode: 'edit'` never leaks into prerendered output.
 
 ### 9.6 Endpoint inconsistency worth checking
@@ -609,7 +609,7 @@ Lighthouse regression against `main`.
 No drag-and-drop. **This is the milestone that answers the actual complaint** —
 copy and images are the bulk of it — and it ships around week 6.
 
-- [ ] `CMS Editor` group, ACL, `cmsCanEdit`, `/studio/login`.
+- [ ] `CMS Editor` group, ACL, `cmsCanEdit`, `/cms/login`.
 - [ ] Page list with publish/unpublish.
 - [ ] Field registry (§5.4) — all widget types except `array` nesting polish.
 - [ ] Inspector editing of existing blocks.
@@ -619,9 +619,9 @@ copy and images are the bulk of it — and it ships around week 6.
 **Exit criteria:** a merchant changes homepage hero copy and image, publishes,
 and sees it live — without a developer.
 
-### Phase C — the drag-and-drop studio (≈5–7 weeks)
+### Phase C — the drag-and-drop editor (≈5–7 weeks)
 
-- [ ] Studio shell, canvas layout per §8.4.
+- [ ] Editor shell, canvas layout per §8.4.
 - [ ] `CmsBlockShell` overlay technique (§8.2).
 - [ ] Palette, Sortable wiring, insert/remove/reorder (§8.3).
 - [ ] Undo/redo (§8.6).
@@ -639,7 +639,7 @@ palette, and publishes it.
 | --- | --- |
 | A — data-driven rendering | ~3 weeks |
 | B — copy/image editing | ~2–3 weeks |
-| C — drag-and-drop studio | ~5–7 weeks |
+| C — drag-and-drop editor | ~5–7 weeks |
 | **Total** | **~10–13 weeks** |
 
 Assumes one experienced Vue/Nuxt developer working full time, with Odoo support

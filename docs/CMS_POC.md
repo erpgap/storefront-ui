@@ -16,7 +16,7 @@ built, and every decision behind it.
 yarn dev
 ```
 
-Then **http://localhost:3000/studio** and sign in with an Odoo account that
+Then **http://localhost:3000/cms** and sign in with an Odoo account that
 is in the **CMS Editor** group. A fresh install grants it to `admin`.
 
 Without Odoo, `NUXT_CMS_BACKEND=file npx nuxt dev` falls back to a local file
@@ -35,7 +35,7 @@ it is editable out of the box.
 **Content inside pages the storefront owns.** Category and product pages are
 mostly business logic, so the merchant cannot rearrange them. Instead the
 storefront declares slots — currently below the category listing and below
-the product details — and the merchant fills those. Listed in the studio
+the product details — and the merchant fills those. Listed in the editor
 under *Content on other pages*.
 
 **Versions.** Every publish keeps a version, with who published it and when.
@@ -108,10 +108,10 @@ layers/cms/                   RENDERING — ships to production
   custom-pages/cms-page.vue   the page render target
   pages/[...cmsSlug].vue      catch-all, so new pages resolve
 
-layers/cms-studio/            THE EDITOR — never reaches a shopper
-  pages/studio/*              list, editor, login
-  components/Studio*          field registry, media, versions, pickers
-  composables/useStudioDraft  blocks, selection, undo/redo, autosave
+layers/cms-editor/            THE EDITOR — never reaches a shopper
+  pages/cms/*              list, editor, login
+  components/CmsEditor*       field registry, media, versions, pickers
+  composables/useCmsEditorDraft  blocks, selection, undo/redo, autosave
 
 server/api/cms/               pages, drafts, publish, regions, media
 server/utils/cmsOdooStore.ts  the Odoo implementation

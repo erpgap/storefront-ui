@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
   if (slug === '/' || slug.length < 2) {
     throw createError({ statusCode: 400, statusMessage: 'That URL is too short.' })
   }
+  assertSlugNotReserved(slug)
 
   return store.create({ title, slug }, [])
 })

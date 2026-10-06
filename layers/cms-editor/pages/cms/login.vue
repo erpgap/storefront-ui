@@ -2,7 +2,7 @@
 // Editors sign in with their Odoo account. Separate from the customer login so
 // the two session types stay conceptually distinct.
 definePageMeta({ layout: false })
-useHead({ title: 'Sign in — Studio' })
+useHead({ title: 'Sign in — CMS' })
 
 const email = ref('')
 const password = ref('')
@@ -20,7 +20,7 @@ async function submit() {
       method: 'POST',
       body: { email: email.value, password: password.value },
     })
-    await navigateTo(String(route.query.next || '/studio'), { external: true })
+    await navigateTo(String(route.query.next || '/cms'), { external: true })
   }
   catch (e: any) {
     error.value = e?.data?.statusMessage
@@ -45,7 +45,7 @@ async function submit() {
     >
       <div>
         <h1 class="text-[15px] font-medium">
-          Content Studio
+          CMS
         </h1>
         <p class="text-[12px] text-primary-400 mt-0.5">
           Sign in with your Odoo account
@@ -59,7 +59,7 @@ async function submit() {
           type="text"
           autocomplete="username"
           required
-          class="studio-input"
+          class="editor-input"
         >
       </label>
 
@@ -70,7 +70,7 @@ async function submit() {
           type="password"
           autocomplete="current-password"
           required
-          class="studio-input"
+          class="editor-input"
         >
       </label>
 
@@ -94,7 +94,7 @@ async function submit() {
 </template>
 
 <style scoped>
-.studio-input {
+.editor-input {
   width: 100%;
   padding: 0.5rem 0.6rem;
   font-size: 14px;
@@ -102,7 +102,7 @@ async function submit() {
   border-radius: 0.25rem;
 }
 
-.studio-input:focus-visible {
+.editor-input:focus-visible {
   outline: 2px solid rgb(37 99 235 / 80%);
   outline-offset: 1px;
 }

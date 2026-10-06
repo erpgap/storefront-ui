@@ -17,7 +17,7 @@ const props = defineProps<{ current?: string }>()
 const emit = defineEmits<{ select: [url: string], close: [] }>()
 
 const { data: items, refresh, pending } = await useFetch<MediaItem[]>('/api/cms/media', {
-  key: 'studio-media',
+  key: 'cms-editor-media',
   default: () => [],
 })
 

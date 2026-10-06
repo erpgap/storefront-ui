@@ -1,6 +1,6 @@
 // The CMS persistence adapter.
 //
-// THIS IS THE SWAP POINT. Everything above it — the API routes, the studio, the
+// THIS IS THE SWAP POINT. Everything above it — the API routes, the editor, the
 // render path — talks only to the `CmsStore` interface below. Today it is
 // backed by Nitro's `cms` storage (an fs driver in dev, see nuxt.config.ts).
 // Moving to Odoo means writing one more implementation of this interface that
@@ -38,12 +38,6 @@ const storage = () => useStorage<CmsPage>('cms')
 
 const INDEX_KEY = 'index'
 const pageKey = (id: string) => `page:${id}`
-
-/** Slugs the storefront already owns. A CMS page may not shadow them. */
-const RESERVED_SLUGS = [
-  '/', '/products', '/cart', '/checkout', '/my-account', '/login',
-  '/register', '/search', '/wishlist', '/studio',
-]
 
 export function normaliseSlug(raw: string): string {
   const trimmed = String(raw ?? '').trim().toLowerCase()
@@ -89,14 +83,9 @@ async function mustGet(id: string): Promise<CmsPage> {
   return page
 }
 
+// Storefront routes are refused before any store is called - see
+// server/utils/cmsReservedSlug.ts.
 async function assertSlugFree(slug: string, exceptId?: string) {
-  if (RESERVED_SLUGS.includes(slug)) {
-    throw createError({
-      statusCode: 409,
-      statusMessage: `"${slug}" is reserved by the storefront.`,
-    })
-  }
-
   const pages = await fileStore.list()
   const clash = pages.find(page => page.slug === slug && page.id !== exceptId)
 
@@ -212,7 +201,7 @@ const fileStore: CmsStore = {
  * Picks the backend.
  *
  * Odoo is the real store. The file store is kept because it is the only way to
- * run the studio without an Odoo instance - useful for front-end work and for
+ * run the editor without an Odoo instance - useful for front-end work and for
  * demoing on a laptop - and because keeping a second implementation honest is
  * what proves the interface is actually an interface.
  *

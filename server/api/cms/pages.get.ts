@@ -1,4 +1,4 @@
-// Page list for the studio.
+// Page list for the editor.
 export default defineEventHandler(async (event) => {
   const store = useCmsStore(event)
   const pages = await store.list()

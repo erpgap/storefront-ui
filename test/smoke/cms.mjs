@@ -88,8 +88,8 @@ await check('the published API rejects a missing slug', async () => {
 })
 
 console.log('\nauthorisation')
-await check('the studio redirects an anonymous visitor to the login', async () => {
-  const { status, headers } = await get('/studio')
+await check('the editor redirects an anonymous visitor to the login', async () => {
+  const { status, headers } = await get('/cms')
   assert([301, 302, 307, 308].includes(status), `expected a redirect, got ${status}`)
   assert(/login/.test(headers.get('location') || ''), 'should redirect to the login')
 })

@@ -1,7 +1,7 @@
 import { addBlock, createPage, expect, signIn, test } from './fixtures'
 
 /**
- * Keyboard and screen-reader access to the studio.
+ * Keyboard and screen-reader access to the editor.
  *
  * Drag-and-drop cannot be made accessible - it is a pointer gesture with no
  * keyboard equivalent - so every drag interaction here has a click
@@ -9,7 +9,7 @@ import { addBlock, createPage, expect, signIn, test } from './fixtures'
  * the kind of thing that works on the day it is built and breaks the next
  * time someone restyles a toolbar.
  */
-test.describe('studio accessibility', () => {
+test.describe('editor accessibility', () => {
   test.beforeEach(async ({ page }) => {
     await signIn(page)
   })
@@ -97,7 +97,7 @@ test.describe('studio accessibility', () => {
   })
 
   test('the page has one first-level heading', async ({ page }) => {
-    await page.goto('/studio')
+    await page.goto('/cms')
     await expect(page.locator('h1')).toHaveCount(1)
   })
 })

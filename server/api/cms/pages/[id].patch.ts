@@ -13,6 +13,13 @@ export default defineEventHandler(async (event) => {
   // before the write and purge both.
   const before = await store.get(id).catch(() => null)
 
+  // Only a changed address is checked: the homepage lives at /, which is a
+  // storefront route, and must still be able to save its title and SEO.
+  if (body?.slug !== undefined) {
+    body.slug = normaliseSlug(body.slug)
+    if (body.slug !== before?.slug) assertSlugNotReserved(body.slug)
+  }
+
   const page = await store.updateMeta(id, body ?? {})
 
   await invalidateCmsPageCache(page.slug)

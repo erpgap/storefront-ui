@@ -5,7 +5,7 @@ import { join } from 'node:path'
 // PoC storage: the app's own public/ directory, so <NuxtImg> serves the file
 // with no extra infrastructure. In the Odoo implementation this handler posts
 // to a multipart controller that creates an `ir.attachment` and returns its
-// image_url — the studio side of the upload does not change.
+// image_url — the editor side of the upload does not change.
 const UPLOAD_DIR = join(process.cwd(), 'public', 'img', 'cms')
 const PUBLIC_PREFIX = '/img/cms'
 

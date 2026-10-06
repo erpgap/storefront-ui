@@ -32,7 +32,7 @@ export interface CmsLocale {
  * sell in five languages while the storefront ships UI translations for three.
  * Content languages and interface languages are different lists.
  *
- * This is what the studio shows before that request returns, and what the
+ * This is what the editor shows before that request returns, and what the
  * file-backed store uses when there is no Odoo.
  */
 export const CMS_LOCALES: CmsLocale[] = [

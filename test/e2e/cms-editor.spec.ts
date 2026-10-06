@@ -1,6 +1,6 @@
 import { addBlock, createPage, dragOnto, expect, publish, signIn, test, waitForDraftSaved } from './fixtures'
 
-test.describe('the studio', () => {
+test.describe('the editor', () => {
   test.beforeEach(async ({ page }) => {
     await signIn(page)
   })
@@ -205,9 +205,9 @@ test.describe('the studio', () => {
   })
 })
 
-test.describe('the studio, unauthenticated', () => {
+test.describe('the editor, unauthenticated', () => {
   test('is not reachable', async ({ page }) => {
-    await page.goto('/studio')
-    await expect(page).toHaveURL(/\/studio\/login/)
+    await page.goto('/cms')
+    await expect(page).toHaveURL(/\/cms\/login/)
   })
 })

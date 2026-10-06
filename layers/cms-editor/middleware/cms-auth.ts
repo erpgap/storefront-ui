@@ -1,5 +1,5 @@
 /**
- * Keeps the studio behind a login.
+ * Keeps the editor behind a login.
  *
  * A UI affordance, not a security boundary: it decides whether to show the
  * editor or the login form. Authorisation happens in Odoo on every single
@@ -7,8 +7,8 @@
  * nothing but a screen full of failing requests.
  */
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (!to.path.startsWith('/studio')) return
-  if (to.path === '/studio/login') return
+  if (!to.path.startsWith('/cms')) return
+  if (to.path === '/cms/login') return
 
   const { data } = await useFetch<{ canEdit: boolean }>('/api/cms/session', {
     key: 'cms-session',
@@ -17,8 +17,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   if (!data.value?.canEdit) {
     return navigateTo({
-      path: '/studio/login',
-      query: to.fullPath === '/studio' ? undefined : { next: to.fullPath },
+      path: '/cms/login',
+      query: to.fullPath === '/cms' ? undefined : { next: to.fullPath },
     })
   }
 })

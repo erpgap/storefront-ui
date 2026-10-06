@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     }
   }
   catch {
-    // A language list that fails to load must not take the studio down with
+    // A language list that fails to load must not take the editor down with
     // it - the merchant can still edit the default language.
     return fallback
   }

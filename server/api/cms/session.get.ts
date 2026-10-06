@@ -4,7 +4,7 @@ import { GetCmsCanEditQuery } from '~~/server/queries/CmsQueries'
  * Whether this session may edit content.
  *
  * Asked of Odoo, never inferred here. It drives UI affordances only - the
- * studio redirecting to login rather than showing an empty page - and grants
+ * editor redirecting to login rather than showing an empty page - and grants
  * nothing. Every write is authorised again in Odoo against the real user, so
  * a client that lies to itself about this achieves nothing.
  */

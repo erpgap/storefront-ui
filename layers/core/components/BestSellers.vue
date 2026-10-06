@@ -54,7 +54,7 @@ function queryArgs() {
     pageSize: count.value,
     sort: SORTS[props.sort] ?? SORTS.popular,
     // useProductTemplateList is built for listing pages: it derives a
-    // categorySlug from the current route. On a CMS page - or in the studio -
+    // categorySlug from the current route. On a CMS page - or in the editor -
     // that means filtering the catalogue by the page's own url, which matches
     // nothing, so the grid renders empty and the block collapses to zero
     // height. This block is a curated grid, not a listing, so it clears it.

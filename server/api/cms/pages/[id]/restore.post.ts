@@ -5,7 +5,7 @@ import { createOdooCmsStore } from '~~/server/utils/cmsOdooStore'
  *
  * Copies it forward into a new revision and makes that live, rather than
  * moving a pointer backwards - so history stays append-only. The draft is
- * reset to match; the studio warns first if it holds unpublished work.
+ * reset to match; the editor warns first if it holds unpublished work.
  */
 export default defineEventHandler(async (event) => {
   if (process.env.NUXT_CMS_BACKEND === 'file') {

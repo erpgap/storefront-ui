@@ -1,6 +1,6 @@
 import type { BlockInstance } from '#shared/cms/blocks'
 
-// Seeds the PoC store on first boot so the studio is never an empty screen.
+// Seeds the PoC store on first boot so the editor is never an empty screen.
 // The seed is the CURRENT homepage, expressed as blocks — which is the point
 // worth demonstrating: the hand-written page and the CMS page are the same
 // components with the same content, just sourced differently.

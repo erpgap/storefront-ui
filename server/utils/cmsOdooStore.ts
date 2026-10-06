@@ -2,7 +2,7 @@
 //
 // This is the implementation the file-backed one in cmsStore.ts was always a
 // placeholder for. Nothing above this file changed to accommodate it: the API
-// routes, the studio and the render path all still talk to the CmsStore
+// routes, the editor and the render path all still talk to the CmsStore
 // interface.
 //
 // Requests carry the editor's own Odoo session cookie, so Odoo's record rules
@@ -60,7 +60,7 @@ export interface CmsRevision {
  * Talks to Odoo directly rather than through /api/odoo/query.
  *
  * That route wraps every call in the shared SWR cache, whose key includes
- * pricelist and ISO code. CMS content varies by neither, and a studio that
+ * pricelist and ISO code. CMS content varies by neither, and an editor that
  * reads a cached draft looks broken to the merchant editing it.
  */
 async function callOdoo<T>(

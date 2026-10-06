@@ -22,7 +22,7 @@ function clone<T>(value: T): T {
  * genuinely expensive to retrofit later (§8.6). Merchants press Cmd+Z; a CMS
  * that does not answer feels broken regardless of what else it does.
  */
-export function useStudioDraft(page: Ref<CmsPage>) {
+export function useCmsEditorDraft(page: Ref<CmsPage>) {
   const blocks = ref<BlockInstance[]>(clone(page.value.draft))
   const selectedId = ref<string | null>(null)
 
@@ -164,13 +164,13 @@ export function useStudioDraft(page: Ref<CmsPage>) {
         { method: 'PUT', body: { blocks: blocks.value } },
       )
       // The server is the authority on what is valid; it returns the issues so
-      // the studio can surface them rather than guessing.
+      // the editor can surface them rather than guessing.
       issues.value = response.issues
       saveState.value = 'saved'
       lastSavedAt.value = new Date().toISOString()
     }
     catch (error) {
-      console.error('[studio] draft save failed', error)
+      console.error('[cms-editor] draft save failed', error)
       saveState.value = 'error'
     }
   }

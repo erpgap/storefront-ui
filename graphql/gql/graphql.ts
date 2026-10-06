@@ -1171,7 +1171,7 @@ export type Query = {
   cmsPage: Maybe<CmsPage>;
   /** A page including its draft. Requires the CMS Editor group. */
   cmsPageDraft: Maybe<CmsPage>;
-  /** Page list for the studio. Requires the CMS Editor group. */
+  /** Page list for the editor. Requires the CMS Editor group. */
   cmsPages: Maybe<CmsPageList>;
   /** Product picker options. This is the capability a separate headless CMS could not provide without an id-sync job. */
   cmsProducts: Maybe<Array<Maybe<CmsRefOption>>>;

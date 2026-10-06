@@ -182,7 +182,7 @@ appended to `query_registry` / `mutation_registry` / `type_registry` per
 | `WebsitePage.blocks` | Extends the existing type in `objects.py`. Resolves `live_revision_id.blocks`. Public. |
 | `cmsPage(slug:)` | Published read for the storefront. Public, cacheable. |
 | `cmsPageDraft(pageId:)` | Draft blocks. **Group-checked**, never cached. |
-| `cmsPages` | Page list for the studio. Group-checked. |
+| `cmsPages` | Page list for the editor. Group-checked. |
 | `cmsRevisions(pageId:)` | Revision list: number, author, date, `restoredFrom`. Group-checked. |
 
 ### Writes — all group-checked, none using `.sudo()`
@@ -219,7 +219,7 @@ exactly as cart and account already do. No service account, no secret to
 rotate, and Odoo's audit trail names the actual person, which matters when
 `create_uid` is what the revision list displays.
 
-Nitro gets `/studio/login` and a route guard so editor and customer sessions
+Nitro gets `/cms/login` and a route guard so editor and customer sessions
 stay conceptually separate.
 
 ---
@@ -414,7 +414,7 @@ already working in the PoC.
 | 3 | GraphQL reads + `WebsitePage.blocks` | done |
 | 4 | GraphQL writes, group checks, `write_date` guard | done |
 | 5 | Odoo-backed `cmsStore` | done |
-| 6 | `/studio/login`, route guard, editor check | done |
+| 6 | `/cms/login`, route guard, editor check | done |
 | 7 | Media on `ir.attachment` | done |
 | 8 | Invalidation both directions | done |
 | 9 | `product-ref` / `category-ref` + mirroring | done |

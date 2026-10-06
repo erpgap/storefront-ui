@@ -1,4 +1,4 @@
-// Full page, draft included. Studio-only — the storefront uses /api/cms/published.
+// Full page, draft included. Editor-only — the storefront uses /api/cms/published.
 export default defineEventHandler(async (event) => {
   const store = useCmsStore(event)
   const id = getRouterParam(event, 'id')!

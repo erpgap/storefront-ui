@@ -212,8 +212,8 @@ function rowThumb(row: Record<string, unknown>) {
       v-model="text"
       rows="4"
       :placeholder="sourceText"
-      class="studio-input resize-y"
-      :class="needsTranslation ? 'studio-input--untranslated' : ''"
+      class="editor-input resize-y"
+      :class="needsTranslation ? 'editor-input--untranslated' : ''"
     />
 
     <!-- select -->
@@ -221,7 +221,7 @@ function rowThumb(row: Record<string, unknown>) {
       v-else-if="field.type === 'select'"
       :id="`f-${fieldPath}`"
       v-model="text"
-      class="studio-input"
+      class="editor-input"
     >
       <option
         v-for="option in selectField.options"
@@ -240,7 +240,7 @@ function rowThumb(row: Record<string, unknown>) {
       type="number"
       :min="(field as any).min"
       :max="(field as any).max"
-      class="studio-input"
+      class="editor-input"
     >
 
     <!-- boolean -->
@@ -284,7 +284,7 @@ function rowThumb(row: Record<string, unknown>) {
         </span>
       </button>
 
-      <StudioMediaPicker
+      <CmsEditorMediaPicker
         v-if="pickerOpen"
         :current="effectiveValue"
         @select="chooseImage"
@@ -293,7 +293,7 @@ function rowThumb(row: Record<string, unknown>) {
     </div>
 
     <!-- product / category reference: real Odoo records, ids only -->
-    <StudioRefPicker
+    <CmsEditorRefPicker
       v-else-if="field.type === 'product-ref' || field.type === 'category-ref'"
       :model-value="modelValue"
       :kind="field.type === 'product-ref' ? 'product' : 'category'"
@@ -308,8 +308,8 @@ function rowThumb(row: Record<string, unknown>) {
       v-model="text"
       type="text"
       :placeholder="sourceText || (field.type === 'link' ? '/products' : undefined)"
-      class="studio-input"
-      :class="needsTranslation ? 'studio-input--untranslated' : ''"
+      class="editor-input"
+      :class="needsTranslation ? 'editor-input--untranslated' : ''"
     >
 
     <!-- array: recurses into this same component for every sub-field. -->
@@ -336,21 +336,21 @@ function rowThumb(row: Record<string, unknown>) {
           >
             <button
               type="button"
-              class="studio-icon-btn"
+              class="editor-icon-btn"
               :disabled="index === 0"
               :aria-label="`Move ${rowTitle(row, index)} up`"
               @click="moveRow(index, -1)"
             >↑</button>
             <button
               type="button"
-              class="studio-icon-btn"
+              class="editor-icon-btn"
               :disabled="index === rows.length - 1"
               :aria-label="`Move ${rowTitle(row, index)} down`"
               @click="moveRow(index, 1)"
             >↓</button>
             <button
               type="button"
-              class="studio-icon-btn"
+              class="editor-icon-btn"
               :disabled="!canRemove"
               :aria-label="`Remove ${rowTitle(row, index)}`"
               @click="removeRow(index)"
@@ -359,7 +359,7 @@ function rowThumb(row: Record<string, unknown>) {
         </div>
 
         <div class="p-2.5 flex flex-col gap-2.5">
-          <StudioFieldControl
+          <CmsEditorFieldControl
             v-for="sub in arrayField.fields"
             :key="sub.name"
             :field="sub"
@@ -399,7 +399,7 @@ function rowThumb(row: Record<string, unknown>) {
 </template>
 
 <style scoped>
-.studio-input {
+.editor-input {
   width: 100%;
   padding: 0.4rem 0.55rem;
   font-size: 13px;
@@ -409,39 +409,39 @@ function rowThumb(row: Record<string, unknown>) {
   border-radius: 0.25rem;
 }
 
-.studio-input::placeholder {
+.editor-input::placeholder {
   color: rgb(255 255 255 / 38%);
 }
 
 /* The native control paints its own menu, so it needs real colours rather
    than a translucent fill - otherwise the options render white on white. */
-select.studio-input,
-select.studio-input option {
+select.editor-input,
+select.editor-input option {
   color: #fff;
   background: rgb(38 38 38);
 }
 
-.studio-input--untranslated {
+.editor-input--untranslated {
   border-color: rgb(252 211 77 / 60%);
   background: rgb(252 211 77 / 10%);
 }
 
-.studio-input:focus-visible {
+.editor-input:focus-visible {
   outline: 2px solid rgb(37 99 235 / 80%);
   outline-offset: 1px;
 }
 
-.studio-icon-btn {
+.editor-icon-btn {
   padding: 0 0.2rem;
   font-size: 12px;
   line-height: 1;
 }
 
-.studio-icon-btn:hover:not(:disabled) {
+.editor-icon-btn:hover:not(:disabled) {
   color: #fff;
 }
 
-.studio-icon-btn:disabled {
+.editor-icon-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }

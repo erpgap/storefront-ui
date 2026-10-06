@@ -17,12 +17,12 @@ interface PageRow {
   isSystem?: boolean
 }
 
-definePageMeta({ layout: false, middleware: 'studio-auth' })
-useHead({ title: 'Pages — Studio' })
+definePageMeta({ layout: false, middleware: 'cms-auth' })
+useHead({ title: 'Pages — CMS' })
 
 const { data: pages, refresh, error: listError } = await useFetch<PageRow[]>(
   '/api/cms/pages',
-  { key: 'studio-pages', default: () => [] },
+  { key: 'cms-editor-pages', default: () => [] },
 )
 
 // Which store is behind this. Only used to explain what is unavailable when
@@ -59,7 +59,7 @@ async function create() {
       method: 'POST',
       body: { title: title.value, slug: slug.value },
     })
-    await navigateTo(`/studio/${page.id}`)
+    await navigateTo(`/cms/${page.id}`)
   }
   catch (e: any) {
     error.value = e?.data?.statusMessage || e?.statusMessage || 'Could not create the page.'
@@ -151,7 +151,7 @@ function formatDate(iso: string) {
               type="text"
               required
               placeholder="Summer Sale"
-              class="studio-input"
+              class="editor-input"
             >
           </label>
           <label class="flex flex-col gap-1.5">
@@ -160,7 +160,7 @@ function formatDate(iso: string) {
               v-model="slug"
               type="text"
               placeholder="/summer-sale"
-              class="studio-input"
+              class="editor-input"
               @input="slugTouched = true"
             >
           </label>
@@ -209,7 +209,7 @@ function formatDate(iso: string) {
         </p>
         <button
           type="button"
-          class="studio-btn mt-4"
+          class="editor-btn mt-4"
           @click="refresh()"
         >
           Try again
@@ -237,7 +237,7 @@ function formatDate(iso: string) {
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2 flex-wrap">
               <NuxtLink
-                :to="`/studio/${page.id}`"
+                :to="`/cms/${page.id}`"
                 class="text-[14px] font-medium hover:underline"
               >
                 {{ page.title }}
@@ -272,27 +272,29 @@ function formatDate(iso: string) {
               :href="page.slug"
               target="_blank"
               rel="noopener"
-              class="studio-btn"
+              class="editor-btn"
             >
               View ↗
             </a>
+            <!-- A built-in page always stays live; Odoo refuses it anyway. -->
             <button
+              v-if="!(page.isSystem && page.published)"
               type="button"
-              class="studio-btn"
+              class="editor-btn"
               @click="togglePublished(page)"
             >
               {{ page.published ? 'Unpublish' : 'Publish' }}
             </button>
             <NuxtLink
-              :to="`/studio/${page.id}`"
-              class="studio-btn studio-btn--primary"
+              :to="`/cms/${page.id}`"
+              class="editor-btn editor-btn--primary"
             >
               Edit
             </NuxtLink>
             <button
               v-if="!page.isSystem"
               type="button"
-              class="studio-btn studio-btn--danger"
+              class="editor-btn editor-btn--danger"
               :aria-label="`Delete ${page.title}`"
               @click="remove(page)"
             >
@@ -328,7 +330,7 @@ function formatDate(iso: string) {
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-2 flex-wrap">
                 <NuxtLink
-                  :to="`/studio/${region.id}`"
+                  :to="`/cms/${region.id}`"
                   class="text-[14px] font-medium hover:underline"
                 >
                   {{ region.title }}
@@ -349,8 +351,8 @@ function formatDate(iso: string) {
             </div>
 
             <NuxtLink
-              :to="`/studio/${region.id}`"
-              class="studio-btn studio-btn--primary flex-none"
+              :to="`/cms/${region.id}`"
+              class="editor-btn editor-btn--primary flex-none"
             >
               Edit
             </NuxtLink>
@@ -371,7 +373,7 @@ function formatDate(iso: string) {
 </template>
 
 <style scoped>
-.studio-input {
+.editor-input {
   width: 100%;
   padding: 0.45rem 0.6rem;
   font-size: 13px;
@@ -379,12 +381,12 @@ function formatDate(iso: string) {
   border-radius: 0.25rem;
 }
 
-.studio-input:focus-visible {
+.editor-input:focus-visible {
   outline: 2px solid rgb(37 99 235 / 80%);
   outline-offset: 1px;
 }
 
-.studio-btn {
+.editor-btn {
   padding: 0.35rem 0.7rem;
   font-size: 12px;
   letter-spacing: 0.06em;
@@ -397,17 +399,17 @@ function formatDate(iso: string) {
 
 /* A visible fill on hover, not just a darker outline - a border going from
    18% to 45% black is close to invisible against a white row. */
-.studio-btn:hover:not(:disabled) {
+.editor-btn:hover:not(:disabled) {
   background: rgb(0 0 0 / 5%);
   border-color: rgb(0 0 0 / 55%);
 }
 
-.studio-btn:disabled {
+.editor-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.studio-btn--primary {
+.editor-btn--primary {
   color: #fff;
   background: #000;
   border-color: #000;
@@ -415,26 +417,26 @@ function formatDate(iso: string) {
 
 /* Lifts to charcoal rather than turning blue. The blue read as a different
    button appearing under the cursor rather than the same one responding. */
-.studio-btn--primary:hover:not(:disabled) {
+.editor-btn--primary:hover:not(:disabled) {
   background: #333;
   border-color: #333;
 }
 
 /* Destructive actions carry their colour in the border too, so the risk is
    legible before the pointer reaches them. */
-.studio-btn--danger {
+.editor-btn--danger {
   color: rgb(220 38 38);
   border-color: rgb(220 38 38 / 45%);
 }
 
-.studio-btn--danger:hover:not(:disabled) {
+.editor-btn--danger:hover:not(:disabled) {
   color: rgb(185 28 28);
   background: rgb(254 242 242);
   border-color: rgb(220 38 38);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .studio-btn {
+  .editor-btn {
     transition: none;
   }
 }
