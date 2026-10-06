@@ -29,6 +29,13 @@ const components: Record<string, Loader> = {
   editorial: () => import('~~/layers/core/components/BannerRight.vue'),
   valueProps: () => import('~~/layers/core/components/ValueProps.vue'),
   richText: () => import('../components/CmsRichText.vue'),
+  pageHeader: () => import('../components/CmsPageHeader.vue'),
+  featureList: () => import('../components/CmsFeatureList.vue'),
+  stats: () => import('../components/CmsStats.vue'),
+  infoRows: () => import('../components/CmsInfoRows.vue'),
+  faq: () => import('../components/CmsFaq.vue'),
+  cardGrid: () => import('../components/CmsCardGrid.vue'),
+  contactForm: () => import('../components/CmsContactForm.vue'),
   newsletter: () => import('~~/layers/core/components/Newsletter.vue'),
 }
 

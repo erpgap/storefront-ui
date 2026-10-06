@@ -240,9 +240,13 @@ const fileStore: CmsStore = {
  *
  * Set NUXT_CMS_BACKEND=file to use it.
  */
+/** Odoo unless NUXT_CMS_BACKEND=file, which runs the CMS without an Odoo. */
+export function cmsUsesOdoo(): boolean {
+  return process.env.NUXT_CMS_BACKEND !== 'file'
+}
+
 export function useCmsStore(event: H3Event): CmsStore {
-  if (process.env.NUXT_CMS_BACKEND === 'file') return fileStore
-  return createOdooCmsStore(event)
+  return cmsUsesOdoo() ? createOdooCmsStore(event) : fileStore
 }
 
 /** The file-backed store, for the seed plugin which has no request context. */

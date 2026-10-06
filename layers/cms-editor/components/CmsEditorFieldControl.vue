@@ -13,6 +13,7 @@
 import type { ArrayField, Field, SelectField } from '#shared/cms/blocks'
 import { defaultsFor, isTranslatable } from '#shared/cms/blocks'
 import { DEFAULT_LOCALE, localeLabel, resolveValue, setValue, toMap } from '#shared/cms/i18n'
+import { absoluteImageUrl } from '~~/app/utils/odooImage'
 
 const props = withDefaults(defineProps<{
   field: Field
@@ -168,10 +169,15 @@ function rowTitle(row: Record<string, unknown>, index: number) {
 
 // The row's own image, used as a thumbnail in the repeater header so a list of
 // four categories does not read as four identical grey boxes.
+// Media library images are Odoo /web/image paths, which this domain does not
+// serve; a plain <img> needs them pointed at Odoo.
+const odooImageBase = String(useRuntimeConfig().public.odooBaseImageUrl ?? '')
+const previewUrl = (url: string) => absoluteImageUrl(url, odooImageBase, '')
+
 function rowThumb(row: Record<string, unknown>) {
   const imageField = arrayField.value.fields.find(f => f.type === 'image')
   const value = imageField ? resolveValue(row[imageField.name], props.locale) : ''
-  return value || null
+  return value ? previewUrl(value) : null
 }
 </script>
 
@@ -266,7 +272,7 @@ function rowThumb(row: Record<string, unknown>) {
       >
         <img
           v-if="effectiveValue"
-          :src="effectiveValue"
+          :src="previewUrl(effectiveValue)"
           alt=""
           class="w-full aspect-[16/9] object-cover bg-primary-100"
           :class="inherited ? 'opacity-70' : ''"

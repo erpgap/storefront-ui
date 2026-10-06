@@ -2,10 +2,10 @@ import { randomUUID } from 'node:crypto'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-// PoC storage: the app's own public/ directory, so <NuxtImg> serves the file
-// with no extra infrastructure. In the Odoo implementation this handler posts
-// to a multipart controller that creates an `ir.attachment` and returns its
-// image_url — the editor side of the upload does not change.
+// With Odoo (the default) the upload is forwarded to Odoo and becomes an
+// `ir.attachment` - see server/utils/cmsOdooMedia.ts. Without Odoo it is
+// written to the app's own public/ directory, so <NuxtImg> serves the file with
+// no extra infrastructure. The editor side of the upload is the same for both.
 const UPLOAD_DIR = join(process.cwd(), 'public', 'img', 'cms')
 const PUBLIC_PREFIX = '/img/cms'
 
@@ -28,6 +28,10 @@ export default defineEventHandler(async (event) => {
   if (!file) {
     throw createError({ statusCode: 400, statusMessage: 'No file was uploaded.' })
   }
+
+  // With Odoo the upload becomes an attachment there. Odoo repeats the type
+  // and size checks below and decides whether this user may upload at all.
+  if (cmsUsesOdoo()) return uploadOdooMedia(event, file)
 
   const extension = ALLOWED[file.type ?? '']
   if (!extension) {

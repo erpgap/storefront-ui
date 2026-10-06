@@ -1,4 +1,8 @@
 <script setup lang="ts">
+// The `pageHeader` block: the banner at the top of content pages. Shorter and
+// quieter than the homepage hero, with the page title as its h1.
+import { imageProvider } from '~~/app/utils/odooImage'
+
 defineProps<{
   eyebrow?: string
   title: string
@@ -15,6 +19,7 @@ defineProps<{
          Content banners are 1344×768; preload WITH fetchpriority. -->
     <NuxtImg
       :src="image"
+      :provider="imageProvider(image)"
       alt=""
       aria-hidden="true"
       width="1344"
@@ -28,13 +33,19 @@ defineProps<{
     />
     <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-black/20" />
     <div class="narrow-container relative w-full py-16">
-      <p v-if="eyebrow" class="text-[12px] tracking-[0.22em] uppercase font-medium text-white/70 mb-4">
+      <p
+        v-if="eyebrow"
+        class="text-[12px] tracking-[0.22em] uppercase font-medium text-white/70 mb-4"
+      >
         {{ eyebrow }}
       </p>
       <h1 class="font-light leading-[1.05] tracking-[-0.02em] text-[clamp(32px,5vw,60px)] max-w-[760px]">
         {{ title }}
       </h1>
-      <p v-if="subtitle" class="mt-5 font-light text-white/80 max-w-[560px] text-[clamp(15px,1.4vw,18px)]">
+      <p
+        v-if="subtitle"
+        class="mt-5 font-light text-white/80 max-w-[560px] text-[clamp(15px,1.4vw,18px)]"
+      >
         {{ subtitle }}
       </p>
     </div>

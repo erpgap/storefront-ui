@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SfButton } from '@storefront-ui/vue'
+import { imageProvider } from '~~/app/utils/odooImage'
 
 // CMS-editable via layers/cms/blocks/hero.ts. Every prop defaults to the copy
 // that used to be hard-coded here, so `<MainBanner />` with no props renders
@@ -52,6 +53,7 @@ const ctaList = computed<Cta[]>(() => props.ctas ?? [
          webp shrinks the 1920×1080 source from ~290 KB to ~124 KB. -->
     <NuxtImg
       :src="image"
+      :provider="imageProvider(image)"
       alt=""
       aria-hidden="true"
       width="1920"

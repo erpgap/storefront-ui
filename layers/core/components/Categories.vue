@@ -2,6 +2,8 @@
 // CMS-editable via the `categories` block. Every prop defaults to the copy that
 // used to be hard-coded here, so `<Categories />` with no props renders exactly
 // as before and the existing homepage needs no change.
+import { imageProvider } from '~~/app/utils/odooImage'
+
 interface CategoryTile {
   name?: string
   image?: string
@@ -94,6 +96,7 @@ const gridClass = computed(() => categories.value.length >= 4
       >
         <NuxtImg
           :src="category.image"
+          :provider="imageProvider(category.image)"
           alt=""
           aria-hidden="true"
           width="896"

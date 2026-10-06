@@ -1,8 +1,9 @@
 import { readdir, stat } from 'node:fs/promises'
 import { join } from 'node:path'
 
-// Lists what the merchant can pick from: images they uploaded, plus the
-// storefront's existing art so an empty library is still usable on day one.
+// Lists what the merchant can pick from. Without Odoo: images they uploaded,
+// plus the storefront's existing art so an empty library is still usable on
+// day one.
 const SOURCES = [
   { dir: join(process.cwd(), 'public', 'img', 'cms'), prefix: '/img/cms' },
   { dir: join(process.cwd(), 'public', 'img', 'home'), prefix: '/img/home' },
@@ -10,7 +11,11 @@ const SOURCES = [
 
 const IMAGE = /\.(jpe?g|png|webp|avif|gif)$/i
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  // With Odoo, the library is Odoo's: images are attachments there, with its
+  // access rules and backups, and the demo content's images live there too.
+  if (cmsUsesOdoo()) return listOdooMedia(event)
+
   const groups = await Promise.all(SOURCES.map(async ({ dir, prefix }) => {
     let names: string[] = []
     try {

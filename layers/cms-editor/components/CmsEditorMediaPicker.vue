@@ -5,6 +5,8 @@
 // It is one component for both halves of the job (pick an existing image,
 // upload a new one) because to a merchant those are the same action: "put a
 // picture here."
+import { absoluteImageUrl } from '~~/app/utils/odooImage'
+
 interface MediaItem {
   url: string
   name: string
@@ -14,6 +16,10 @@ interface MediaItem {
 }
 
 const props = defineProps<{ current?: string }>()
+
+// Odoo-hosted images arrive as /web/image paths, which this domain does not serve.
+const odooImageBase = String(useRuntimeConfig().public.odooBaseImageUrl ?? '')
+const previewUrl = (url: string) => absoluteImageUrl(url, odooImageBase, '')
 const emit = defineEmits<{ select: [url: string], close: [] }>()
 
 const { data: items, refresh, pending } = await useFetch<MediaItem[]>('/api/cms/media', {
@@ -164,7 +170,7 @@ onMounted(() => {
             @click="emit('select', item.url)"
           >
             <img
-              :src="item.url"
+              :src="previewUrl(item.url)"
               :alt="item.name"
               loading="lazy"
               class="w-full aspect-[4/3] object-cover bg-primary-100"

@@ -376,7 +376,7 @@ export const blockSchemas: BlockSchema[] = [
   {
     name: 'richText',
     label: 'Text Section',
-    description: 'A heading and paragraphs, centred in the page.',
+    description: 'A heading, paragraphs, lists and links.',
     fields: [
       { name: 'eyebrow', label: 'Eyebrow', type: 'text' },
       { name: 'title', label: 'Heading', type: 'text' },
@@ -384,7 +384,8 @@ export const blockSchemas: BlockSchema[] = [
         name: 'body',
         label: 'Text',
         type: 'textarea',
-        help: 'Blank lines start a new paragraph.',
+        help: 'Blank lines start a new paragraph. Lines starting with "- " make a list. '
+          + 'Links: [label](/page) or [label](https://…).',
       },
       {
         name: 'align',
@@ -394,6 +395,220 @@ export const blockSchemas: BlockSchema[] = [
         options: [
           { value: 'center', label: 'Centred' },
           { value: 'left', label: 'Left' },
+        ],
+      },
+      {
+        name: 'size',
+        label: 'Text size',
+        type: 'select',
+        default: 'body',
+        options: [
+          { value: 'body', label: 'Regular' },
+          { value: 'lead', label: 'Large (introduction)' },
+        ],
+      },
+      {
+        name: 'spacing',
+        label: 'Spacing',
+        type: 'select',
+        default: 'normal',
+        options: [
+          { value: 'normal', label: 'Normal' },
+          { value: 'compact', label: 'Compact (follows another text section)' },
+        ],
+      },
+      { name: 'ctaLabel', label: 'Button label', type: 'text', help: 'Leave empty for no button.' },
+      { name: 'ctaUrl', label: 'Button links to', type: 'link' },
+    ],
+  },
+
+  {
+    name: 'pageHeader',
+    label: 'Page Banner',
+    description: 'Image banner with the page title. Shorter than the hero.',
+    fields: [
+      { name: 'eyebrow', label: 'Eyebrow', type: 'text' },
+      { name: 'title', label: 'Title', type: 'text', required: true },
+      { name: 'subtitle', label: 'Subtitle', type: 'textarea' },
+      {
+        name: 'image',
+        label: 'Background image',
+        type: 'image',
+        default: '/img/home/hero.webp',
+        required: true,
+      },
+    ],
+  },
+
+  {
+    name: 'featureList',
+    label: 'Feature List',
+    description: 'Short numbered points in columns: principles, steps, commitments.',
+    fields: [
+      { name: 'title', label: 'Heading', type: 'text' },
+      {
+        name: 'columns',
+        label: 'Columns',
+        type: 'select',
+        default: '3',
+        options: [
+          { value: '2', label: 'Two' },
+          { value: '3', label: 'Three' },
+        ],
+      },
+      { name: 'numbered', label: 'Show numbers', type: 'boolean', default: true },
+      {
+        name: 'items',
+        label: 'Points',
+        type: 'array',
+        min: 1,
+        max: 8,
+        titleField: 'title',
+        addLabel: 'Add point',
+        fields: [
+          { name: 'title', label: 'Title', type: 'text', required: true },
+          { name: 'text', label: 'Text', type: 'textarea' },
+        ],
+      },
+    ],
+  },
+
+  {
+    name: 'stats',
+    label: 'Figures',
+    description: 'A row of big numbers with labels.',
+    fields: [
+      {
+        name: 'items',
+        label: 'Figures',
+        type: 'array',
+        min: 1,
+        max: 4,
+        titleField: 'label',
+        addLabel: 'Add figure',
+        fields: [
+          { name: 'value', label: 'Figure', type: 'text', required: true },
+          { name: 'label', label: 'Label', type: 'text' },
+        ],
+      },
+    ],
+  },
+
+  {
+    name: 'infoRows',
+    label: 'Info Table',
+    description: 'Rows of a name and two details, such as delivery options.',
+    fields: [
+      { name: 'title', label: 'Heading', type: 'text' },
+      {
+        name: 'items',
+        label: 'Rows',
+        type: 'array',
+        min: 1,
+        max: 20,
+        titleField: 'label',
+        addLabel: 'Add row',
+        fields: [
+          { name: 'label', label: 'Name', type: 'text', required: true },
+          { name: 'value', label: 'Detail', type: 'text' },
+          { name: 'note', label: 'Second detail', type: 'text', help: 'Shown on the right.' },
+        ],
+      },
+    ],
+  },
+
+  {
+    name: 'faq',
+    label: 'FAQ',
+    description: 'Questions that open to show their answer, in groups.',
+    fields: [
+      { name: 'title', label: 'Heading', type: 'text' },
+      {
+        name: 'items',
+        label: 'Questions',
+        type: 'array',
+        min: 1,
+        max: 60,
+        titleField: 'question',
+        addLabel: 'Add question',
+        fields: [
+          {
+            name: 'group',
+            label: 'Group',
+            type: 'text',
+            help: 'Questions in a row with the same group are shown under one heading.',
+          },
+          { name: 'question', label: 'Question', type: 'text', required: true },
+          { name: 'answer', label: 'Answer', type: 'textarea', required: true },
+        ],
+      },
+    ],
+  },
+
+  {
+    name: 'cardGrid',
+    label: 'Card Grid',
+    description: 'Image cards with a title and text: stores, stories, team.',
+    fields: [
+      { name: 'title', label: 'Heading', type: 'text' },
+      {
+        name: 'columns',
+        label: 'Columns',
+        type: 'select',
+        default: '3',
+        options: [
+          { value: '2', label: 'Two' },
+          { value: '3', label: 'Three' },
+        ],
+      },
+      {
+        name: 'imageShape',
+        label: 'Image shape',
+        type: 'select',
+        default: 'classic',
+        options: [
+          { value: 'classic', label: 'Classic (4:3)' },
+          { value: 'wide', label: 'Wide (16:10)' },
+        ],
+      },
+      {
+        name: 'items',
+        label: 'Cards',
+        type: 'array',
+        min: 1,
+        max: 12,
+        titleField: 'title',
+        addLabel: 'Add card',
+        fields: [
+          { name: 'image', label: 'Image', type: 'image', required: true },
+          { name: 'eyebrow', label: 'Small line above the title', type: 'text' },
+          { name: 'title', label: 'Title', type: 'text', required: true },
+          { name: 'text', label: 'Text', type: 'textarea' },
+          { name: 'footnote', label: 'Small line below the text', type: 'text' },
+          { name: 'link', label: 'Links to', type: 'link', help: 'Leave empty for a card that is not a link.' },
+        ],
+      },
+    ],
+  },
+
+  {
+    name: 'contactForm',
+    label: 'Contact Form',
+    description: 'Your contact details next to a message form. Messages go to Odoo.',
+    dynamic: true,
+    fields: [
+      { name: 'title', label: 'Heading', type: 'text', default: 'Talk to us' },
+      {
+        name: 'channels',
+        label: 'Contact details',
+        type: 'array',
+        max: 6,
+        titleField: 'label',
+        addLabel: 'Add contact detail',
+        fields: [
+          { name: 'label', label: 'Label', type: 'text', required: true },
+          { name: 'value', label: 'Shown as', type: 'text', required: true },
+          { name: 'link', label: 'Links to', type: 'link', help: 'mailto:, tel: or a web address.' },
         ],
       },
     ],

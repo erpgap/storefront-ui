@@ -45,3 +45,14 @@ export function absoluteImageUrl(
   const base = path.startsWith('/web/') ? odooBaseUrl : origin
   return `${base.replace(/\/$/, '')}${path}`
 }
+
+/**
+ * The <NuxtImg> provider for an image a merchant chose in the CMS.
+ *
+ * Media library images live in Odoo and arrive as /web/image paths, which only
+ * the Odoo provider can serve. Anything else is a storefront asset and keeps
+ * the default provider.
+ */
+export function imageProvider(src: string | null | undefined): string | undefined {
+  return src?.startsWith('/web/') ? 'odooProvider' : undefined
+}

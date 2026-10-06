@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SfButton } from '@storefront-ui/vue'
+import { imageProvider } from '~~/app/utils/odooImage'
 
 // CMS-editable via the `editorial` block. Defaults reproduce the previously
 // hard-coded copy, so `<BannerRight />` renders as before.
@@ -36,6 +37,7 @@ const textOrder = computed(() => props.imagePosition === 'right' ? 'md:order-1' 
     <div :class="imageOrder">
       <NuxtImg
         :src="image"
+        :provider="imageProvider(image)"
         :alt="imageAlt"
         width="896"
         height="1152"
