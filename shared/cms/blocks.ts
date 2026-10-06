@@ -181,7 +181,7 @@ export const blockSchemas: BlockSchema[] = [
         name: 'eyebrow',
         label: 'Eyebrow',
         type: 'text',
-        help: 'Small line above the headline. Leave empty for "New Collection — <year>".',
+        help: 'Small line above the headline. Leave empty to hide it.',
       },
       { name: 'title', label: 'Headline', type: 'text', required: true },
       { name: 'body', label: 'Body copy', type: 'textarea' },

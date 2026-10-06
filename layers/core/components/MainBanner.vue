@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<{
   image?: string
   ctas?: Cta[]
 }>(), {
-  eyebrow: '',
+  eyebrow: undefined,
   title: 'Timeless Style, Everyday Ease',
   body: 'Considered essentials in natural fabrics — cotton, linen and leather — designed to move with you and last beyond the season.',
   image: '/img/home/hero.webp',
@@ -27,9 +27,10 @@ const props = withDefaults(defineProps<{
 const NuxtLink = resolveComponent('NuxtLink')
 
 // The year was interpolated in the template, so it cannot live in a static
-// default. Empty string from the CMS falls back to the original copy.
+// default. Only an absent prop gets it: an empty string from the CMS means
+// the merchant cleared the line, so nothing renders.
 const eyebrowText = computed(
-  () => props.eyebrow || `New Collection — ${new Date().getFullYear()}`,
+  () => props.eyebrow ?? `New Collection — ${new Date().getFullYear()}`,
 )
 
 const ctaList = computed<Cta[]>(() => props.ctas ?? [
@@ -70,7 +71,10 @@ const ctaList = computed<Cta[]>(() => props.ctas ?? [
     <!-- Content -->
     <div class="narrow-container relative w-full">
       <div class="max-w-[620px]">
-        <p class="text-[12px] tracking-[0.22em] uppercase font-medium text-white/70 mb-5">
+        <p
+          v-if="eyebrowText"
+          class="text-[12px] tracking-[0.22em] uppercase font-medium text-white/70 mb-5"
+        >
           {{ eyebrowText }}
         </p>
         <h1 class="font-light leading-[1.05] tracking-[-0.02em] text-[clamp(40px,6vw,80px)] mb-5">

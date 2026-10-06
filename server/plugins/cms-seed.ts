@@ -17,7 +17,7 @@ const block = (blockType: string, data: Record<string, unknown>): BlockInstance 
 
 const homepageBlocks = (): BlockInstance[] => [
   block('hero', {
-    eyebrow: '',
+    eyebrow: `New Collection — ${new Date().getFullYear()}`,
     title: 'Timeless Style, Everyday Ease',
     body: 'Considered essentials in natural fabrics — cotton, linen and leather — designed to move with you and last beyond the season.',
     image: '/img/home/hero.webp',
