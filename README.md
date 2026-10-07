@@ -14,6 +14,7 @@ This is a demo project that guides the creation of a Nuxt-based E-commerce proje
   - [Payment Integration](#payment-integration)
   - [Product Features](#product-features)
   - [Category System](#category-system)
+- [Content Management (CMS)](#content-management-cms)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [ODOO Integration](#odoo-integration)
@@ -99,6 +100,59 @@ The project uses an advanced dynamic route generation system that:
 - **Pagination**: Responsive pagination system
 - **Breadcrumbs**: Hierarchical navigation
 - **Responsive View**: Automatic adaptation for mobile and desktop
+
+## Content Management (CMS)
+
+Merchants build and edit storefront pages themselves, without touching code.
+
+**The editor lives at `/cms`** — e.g. `http://localhost:3000/cms`. Sign in with
+an Odoo account that belongs to the **CMS Editor** group (Odoo: *Settings →
+Users*). Everyone else gets redirected to `/cms/login`, and the API refuses
+anonymous writes, so the route is not security by obscurity.
+
+### What a merchant can do
+
+- Create a page, give it a name and a URL, and publish it at that URL.
+- Drag blocks onto the page, reorder them, and edit their text and images in a
+  side panel. The canvas renders the real storefront components, so what they
+  arrange is what visitors get.
+- Change a page's name or URL afterwards, from the page name in the editor
+  header.
+- Edit meta title, description and share image per page, in each language.
+- Roll back: every publish keeps a revision, and an older one can be restored.
+
+Fifteen blocks are available: Card Grid, Category Grid, Contact Form, FAQ,
+Feature List, Featured Products, Figures, Hero Banner, Image + Text, Info
+Table, Newsletter, Page Banner, Product Grid, Text Section, Value Props.
+
+### The pages it covers
+
+| | |
+| --- | --- |
+| Content pages | Any URL the merchant creates, e.g. `/about`. Rendered by `layers/cms/custom-pages/cms-page.vue` |
+| Homepage | Editable like any other page, but cannot be deleted and its URL is fixed. Behind `NUXT_PUBLIC_CMS_HOMEPAGE=1`; with the flag off, `/` renders the hand-written markup instead |
+| Category and product pages | Not editable as a whole — their structure is business logic. Code declares named slots with `<CmsRegion name="..." />` and merchants fill those. Today: `category-after` and `product-after` |
+
+### Where the content lives
+
+In Odoo, on `alokai.website.page` (*Website → Alokai → CMS Pages*), not in this
+repo. Blocks are stored as JSON, and publishing writes an immutable revision.
+SEO, including the generated structured data, is stored per page — the homepage
+included.
+
+Publishing purges the storefront's Redis cache for that URL, so a published
+change is live immediately.
+
+### For developers
+
+- `shared/cms/blocks.ts` — block schemas, the single source of truth. Add a
+  block here and in `layers/cms/blocks/index.ts`, which binds each schema to
+  the storefront component that renders it.
+- `layers/cms/` — rendering. `layers/cms-editor/` — the editor, a separate
+  layer so it stays out of the shopper bundle.
+- `docs/CMS_ODOO_SPEC.md` is the authoritative spec; `docs/CMS_ARCHITECTURE.md`
+  covers the design decisions and `docs/CMS_POC.md` is the operating guide,
+  including known gaps.
 
 ## Tech Stack
 
