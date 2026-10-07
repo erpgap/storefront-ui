@@ -180,6 +180,10 @@ export async function waitForDraftSaved(page: Page, act: () => Promise<void>) {
  * is also what a person does.
  */
 export async function dragOnto(page: Page, source: Locator, target: Locator, offsetY = 20) {
+  // The palette scrolls, so a tile below the fold has a bounding box the mouse
+  // cannot reach and the drag silently does nothing. Scrolling first, then
+  // measuring, because scrolling moves the target too.
+  await source.scrollIntoViewIfNeeded()
   const from = await source.boundingBox()
   const to = await target.boundingBox()
   if (!from || !to) throw new Error('drag source or target is not visible')

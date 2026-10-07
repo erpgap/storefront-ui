@@ -63,6 +63,10 @@ test.describe('the editor', () => {
     await createPage(page, 'E2E Threshold')
     const tile = page.locator('aside[aria-label="Blocks"]')
       .getByRole('button', { name: /^Text Section/ })
+    // The palette scrolls, so a tile far enough down the list has a bounding
+    // box the mouse cannot reach. Driving page.mouse by raw coordinates only
+    // works once the tile is actually on screen.
+    await tile.scrollIntoViewIfNeeded()
     const box = (await tile.boundingBox())!
 
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
