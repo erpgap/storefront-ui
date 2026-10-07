@@ -478,10 +478,18 @@ model is the rule.
 it is not, behind `NUXT_PUBLIC_CMS_HOMEPAGE`. A storefront with no CMS content
 therefore looks exactly as it did.
 
-**Its SEO still comes from Odoo's `websiteHomepage`, not from the CMS page.**
-Those tags are configured on the website record and have nothing to do with
-which blocks sit below them. Letting the CMS supply them would swap a tuned
-set for a page title.
+**Its SEO lives on its own CMS page, like every other page's.** It did not at
+first: the homepage wrote through to the website record, which cost a special
+case in the model (`_seo_record`), a `source` flag on the API, an `isHomepage`
+branch in the dialog and a `sudo()` write for editors who are not website
+admins. The homepage is a CMS page, so its tags belong on it. Migration
+`19.0.1.2.0` copies the existing values across without removing the originals.
+
+`jsonLd` is the exception and stays on the website record, because it is not
+page metadata: it is an `OnlineStore` block describing the business, computed
+in Odoo from the company record and never authored. The storefront also still
+reads the website record as a fallback, so an install that has not migrated,
+or has the CMS homepage switched off, renders what it always did.
 
 Measured on a production build, median of five runs, mobile with 4x CPU
 throttle:

@@ -3,31 +3,12 @@ import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 import { absoluteImageUrl } from '~/utils/odooImage'
 import { useWebsiteHomePage } from '~~/layers/core/composables/useWebsiteHomePage.ts'
 import { useCmsPage } from '~~/layers/cms/composables/useCmsPage'
+import { DEFAULT_LOCALE, resolveValue } from '#shared/cms/i18n'
 
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
 
 await getWebsiteHomepage()
 const { origin, pathname } = useRequestURL()
-
-/**
- * SEO still comes from Odoo's websiteHomepage, NOT from the CMS page.
- *
- * The homepage's metadata - title, description, og and twitter tags, jsonLd -
- * is configured on the website record and is unrelated to which blocks the
- * merchant has arranged below. Letting the CMS page supply it would silently
- * replace a tuned set of tags with a page title, which is the regression this
- * migration most needs to avoid.
- */
-// Odoo hands the share image out as a /web/image path, which neither exists
-// on this domain nor is something share crawlers resolve.
-useHead(generateSeo<SeoEntity>({
-  ...websiteHomepage.value,
-  metaImage: absoluteImageUrl(
-    websiteHomepage.value?.metaImage,
-    String(useRuntimeConfig().public.odooBaseImageUrl ?? ''),
-    origin,
-  ) || null,
-}, 'Home', `${origin}${pathname}`))
 
 /**
  * The homepage renders from the CMS when a published page exists for `/`, and
@@ -48,6 +29,41 @@ const { data: cmsPage } = cmsEnabled
   : { data: ref(null) }
 
 const blocks = computed(() => cmsPage.value?.blocks ?? [])
+
+const odooImageBase = String(useRuntimeConfig().public.odooBaseImageUrl ?? '')
+
+// Same fallback as every other CMS page: with no share image chosen, the first
+// picture on the page previews better than none.
+const firstBlockImage = computed(() => {
+  for (const block of blocks.value) {
+    const image = resolveValue(block.data?.image, DEFAULT_LOCALE)
+    if (image) return image
+  }
+  return ''
+})
+
+/**
+ * Title, description and share image come from the CMS page, like every other
+ * page. jsonLd does not: it is an OnlineStore block describing the business -
+ * computed in Odoo from the company record, never authored - so it belongs to
+ * the website rather than to whatever blocks sit on the homepage today.
+ *
+ * The website record is still read as a fallback, so an install that has not
+ * run the migration, or has the CMS homepage switched off, renders what it
+ * always did instead of nothing.
+ */
+useHead(() => generateSeo<SeoEntity>({
+  ...websiteHomepage.value,
+  metaTitle: cmsPage.value?.metaTitle || websiteHomepage.value?.metaTitle,
+  metaDescription: cmsPage.value?.metaDescription || websiteHomepage.value?.metaDescription,
+  // Odoo hands the share image out as a /web/image path, which neither exists
+  // on this domain nor is something share crawlers resolve.
+  metaImage: absoluteImageUrl(
+    cmsPage.value?.metaImage || websiteHomepage.value?.metaImage || firstBlockImage.value,
+    odooImageBase,
+    origin,
+  ) || null,
+}, 'Home', `${origin}${pathname}`))
 </script>
 
 <template>

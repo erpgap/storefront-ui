@@ -43,7 +43,6 @@ const saving = ref(false)
 const error = ref('')
 
 const isDefault = computed(() => props.locale === props.defaultLocale)
-const isHomepage = computed(() => props.seo?.source === 'website')
 const languageLabel = computed(() =>
   props.locales.find((option: CmsLocale) => option.code === props.locale)?.label ?? props.locale)
 
@@ -57,7 +56,7 @@ const descriptionUntranslated = computed(() =>
 
 const titlePlaceholder = computed(() => {
   if (!isDefault.value && sourceTitle.value) return sourceTitle.value
-  return isHomepage.value ? '' : `Defaults to the page title: ${props.pageTitle}`
+  return `Defaults to the page title: ${props.pageTitle}`
 })
 
 async function save() {
@@ -124,14 +123,6 @@ onMounted(() => {
       </header>
 
       <div class="p-5 flex flex-col gap-4">
-        <p
-          v-if="isHomepage"
-          class="text-[12px] text-primary-500 bg-primary-50 rounded px-3 py-2"
-        >
-          These are your store's homepage tags. They are the same ones as in
-          the website settings in Odoo.
-        </p>
-
         <label class="flex flex-col gap-1.5">
           <span class="flex justify-between text-[11px] tracking-[0.12em] uppercase text-primary-500">
             Meta title
@@ -201,9 +192,8 @@ onMounted(() => {
           </div>
           <span class="text-[11px] text-primary-400">
             Shown when the page is shared in social media and messaging apps.
-            {{ isHomepage
-              ? 'The same for every language.'
-              : 'The same for every language. Without one, the first image on the page is used.' }}
+            The same for every language. Without one, the first image on the
+            page is used.
           </span>
         </div>
 
