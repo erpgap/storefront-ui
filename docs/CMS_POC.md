@@ -126,7 +126,6 @@ server/utils/cmsStore.ts      the interface, and the file fallback
 | Region content is global, not per category or product | A nullable column and an additive migration |
 | `content` and `page_type` on the page model are superseded but still present | Removal is a later, separately versioned migration |
 | Browser tests are Chromium only | No Firefox available; WebKit would not launch |
-| `nuxt dev` can fail to boot on large catalogues | `nuxt-typed-router` + prettier overflow the call stack generating the route-path union. See below |
 | Three advisories have no published fix | `braces`, `http-cache-semantics` and `node-forge`, all reached through build and dev tooling. See below |
 
 
@@ -161,28 +160,37 @@ of JavaScript. A deploy that wants the old size back can install sharp for one
 platform only.
 
 
-## The route-path union has a ceiling
+## The route-path union, and why generated routes are excluded
 
-`nuxt-typed-router` generates a union of every route in the site and formats it
-with prettier. On this catalogue - 432 products, 44 categories, 57 website
-pages, times locales - that file is 1.5 MB and prettier overflows the call
-stack printing it:
+`nuxt-typed-router` builds a TypeScript union of every route in the site and
+formats it with prettier. The catalogue comes from Odoo, so that is not a fixed
+number: at 261 categories, 720 products and 87 published pages the file passed
+a megabyte and prettier overflowed its call stack printing it, taking
+`nuxt dev` down with it.
 
 ```
 ERROR  Maximum call stack size exceeded
     at ns (node_modules/prettier/plugins/estree.mjs:18:235)
 ```
 
-It is intermittent rather than fatal, which is worse: it only runs when
-`.nuxt/typed-router` is generated cold, so the same command fails and then
-succeeds. Products dominate the count, so this is not about CMS pages, but
-every published page adds to it and the browser tests create one per run and
-never remove it. A merchant with a larger catalogue will sit past the ceiling
-rather than at it.
+It arrived as an intermittent failure on cold starts - the same command failing
+and then succeeding - and became permanent as the catalogue grew. That is the
+shape to expect from it: a ceiling you sit under until you do not.
 
-Worth doing before that happens: have the e2e specs delete the pages they
-create, and either raise the stack for the dev command or stop generating the
-exhaustive path union.
+The fix is `nuxtTypedRouter.ignoreRoutes` in `nuxt.config.ts`, which drops the
+three generated route files from the union and takes it from 1.27 MB to 11 KB.
+What it costs is autocomplete on those paths, which were never worth
+completing: they are generated from Odoo data, so nobody types them and no two
+installs have the same set. Routes that exist as files still get it.
+
+Two things that look like the fix and are not:
+
+- **`disablePrettier: true`** is accepted by the module and then never read -
+  its `updateOptions` copies `pathCheck` and `ignoreRoutes` but not this one.
+- **`NODE_OPTIONS=--stack-size=...`** is rejected by Node outright, and passing
+  the flag to `node` directly does not help either: prettier formats that same
+  file without complaint on the main thread, because the overflow happens in a
+  worker with a stack of its own.
 
 
 ## Advisories with no published fix

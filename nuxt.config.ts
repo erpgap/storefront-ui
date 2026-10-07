@@ -33,6 +33,36 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxt/icon',
   ],
+  /**
+   * The Odoo-generated routes are kept out of the typed-router union.
+   *
+   * nuxt-typed-router builds a TypeScript union of every route and formats it
+   * with prettier. The catalogue comes from Odoo - hundreds of categories and
+   * products, plus a CMS page per published url - which put that file past a
+   * megabyte, and prettier overflows its call stack printing an expression
+   * that wide, taking `nuxt dev` down with it. It began as an intermittent
+   * failure on cold starts and became a permanent one as the catalogue grew.
+   *
+   * What it cost was autocomplete on those paths, which were never worth
+   * completing: they are generated from Odoo data, so nobody types them and no
+   * two installs have the same set. Routes that exist as files still get it.
+   *
+   * `ignoreRoutes` is matched against paths relative to the pages directory,
+   * hence the relative() rather than a plain string - and `disablePrettier`,
+   * which looks like the obvious fix, is accepted by the module and then never
+   * read (its updateOptions does not copy it).
+   */
+  nuxtTypedRouter: {
+    ignoreRoutes: [
+      'category/custom-pages/category-page.vue',
+      'product/custom-pages/product-page.vue',
+      'cms/custom-pages/cms-page.vue',
+    ].map(file => path.relative(
+      path.resolve(__dirname, 'app/pages'),
+      path.resolve(__dirname, 'layers', file),
+    )),
+  },
+
   devtools: { enabled: true },
 
   app: {
