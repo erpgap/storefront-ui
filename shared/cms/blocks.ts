@@ -234,7 +234,6 @@ export const blockSchemas: BlockSchema[] = [
         name: 'image',
         label: 'Background image',
         type: 'image',
-        default: '/img/home/hero.webp',
         required: true,
       },
       {
@@ -246,7 +245,7 @@ export const blockSchemas: BlockSchema[] = [
         addLabel: 'Add button',
         fields: [
           { name: 'label', label: 'Label', type: 'text', required: true },
-          { name: 'url', label: 'Links to', type: 'link', default: '/products' },
+          { name: 'url', label: 'Links to', type: 'link' },
           {
             name: 'style',
             label: 'Style',
@@ -267,10 +266,10 @@ export const blockSchemas: BlockSchema[] = [
     label: 'Category Grid',
     description: 'Up to four linked category tiles.',
     fields: [
-      { name: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'Browse' },
-      { name: 'title', label: 'Heading', type: 'text', default: 'Shop by Category' },
-      { name: 'linkLabel', label: 'Corner link label', type: 'text', default: 'All categories' },
-      { name: 'linkUrl', label: 'Corner link target', type: 'link', default: '/products' },
+      { name: 'eyebrow', label: 'Eyebrow', type: 'text' },
+      { name: 'title', label: 'Heading', type: 'text' },
+      { name: 'linkLabel', label: 'Corner link label', type: 'text' },
+      { name: 'linkUrl', label: 'Corner link target', type: 'link' },
       {
         name: 'items',
         label: 'Categories',
@@ -282,7 +281,7 @@ export const blockSchemas: BlockSchema[] = [
         fields: [
           { name: 'name', label: 'Name', type: 'text', required: true },
           { name: 'image', label: 'Image', type: 'image', required: true },
-          { name: 'link', label: 'Links to', type: 'link', default: '/products' },
+          { name: 'link', label: 'Links to', type: 'link' },
         ],
       },
     ],
@@ -295,10 +294,10 @@ export const blockSchemas: BlockSchema[] = [
     // The merchant controls framing and query, never the product data itself.
     dynamic: true,
     fields: [
-      { name: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'Curated' },
-      { name: 'title', label: 'Heading', type: 'text', default: 'Best Sellers' },
-      { name: 'linkLabel', label: 'Corner link label', type: 'text', default: 'View all' },
-      { name: 'linkUrl', label: 'Corner link target', type: 'link', default: '/products' },
+      { name: 'eyebrow', label: 'Eyebrow', type: 'text' },
+      { name: 'title', label: 'Heading', type: 'text' },
+      { name: 'linkLabel', label: 'Corner link label', type: 'text' },
+      { name: 'linkUrl', label: 'Corner link target', type: 'link' },
       {
         name: 'pageSize',
         label: 'How many products',
@@ -327,7 +326,7 @@ export const blockSchemas: BlockSchema[] = [
     label: 'Image + Text',
     description: 'Half-width image beside a block of copy.',
     fields: [
-      { name: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'Our Philosophy' },
+      { name: 'eyebrow', label: 'Eyebrow', type: 'text' },
       { name: 'title', label: 'Heading', type: 'text', required: true },
       { name: 'body', label: 'Body copy', type: 'textarea' },
       { name: 'image', label: 'Image', type: 'image', required: true },
@@ -353,7 +352,7 @@ export const blockSchemas: BlockSchema[] = [
         ],
       },
       { name: 'ctaLabel', label: 'Button label', type: 'text' },
-      { name: 'ctaUrl', label: 'Button links to', type: 'link', default: '/products' },
+      { name: 'ctaUrl', label: 'Button links to', type: 'link' },
     ],
   },
 
@@ -363,8 +362,8 @@ export const blockSchemas: BlockSchema[] = [
     description: 'You choose exactly which products appear, and the order they appear in.',
     dynamic: true,
     fields: [
-      { name: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'Picked for you' },
-      { name: 'title', label: 'Heading', type: 'text', required: true, default: 'Our Favourites' },
+      { name: 'eyebrow', label: 'Eyebrow', type: 'text' },
+      { name: 'title', label: 'Heading', type: 'text', required: true },
       {
         name: 'productIds',
         label: 'Products',
@@ -495,7 +494,6 @@ export const blockSchemas: BlockSchema[] = [
         name: 'image',
         label: 'Background image',
         type: 'image',
-        default: '/img/home/hero.webp',
         required: true,
       },
     ],
@@ -682,7 +680,7 @@ export const blockSchemas: BlockSchema[] = [
     description: 'Your contact details next to a message form. Messages go to Odoo.',
     dynamic: true,
     fields: [
-      { name: 'title', label: 'Heading', type: 'text', default: 'Talk to us' },
+      { name: 'title', label: 'Heading', type: 'text' },
       spacingField(),
       {
         name: 'channels',
@@ -706,12 +704,11 @@ export const blockSchemas: BlockSchema[] = [
     description: 'Email signup band. Submissions go to Odoo.',
     dynamic: true,
     fields: [
-      { name: 'title', label: 'Heading', type: 'text', default: 'Join the list' },
+      { name: 'title', label: 'Heading', type: 'text' },
       {
         name: 'body',
         label: 'Body copy',
         type: 'textarea',
-        default: 'Be first to know about new collections, private sales and design stories.',
       },
     ],
   },
