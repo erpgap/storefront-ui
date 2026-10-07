@@ -253,7 +253,7 @@ export type CmsPage = {
   name: Maybe<Scalars['String']['output']>;
   regionKey: Maybe<Scalars['String']['output']>;
   revisionCount: Maybe<Scalars['Int']['output']>;
-  /** Meta title and description per language, as stored, so a language with no text of its own shows as missing. source is "website" for the homepage, whose tags come from the website record. Requires the CMS Editor group. */
+  /** Meta title and description per language, as stored, so a language with no text of its own shows as missing. Every page stores its own, the homepage included. Requires the CMS Editor group. */
   seo: Maybe<Scalars['GenericScalar']['output']>;
   updatedAt: Maybe<Scalars['String']['output']>;
   url: Maybe<Scalars['String']['output']>;
