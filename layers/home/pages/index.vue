@@ -24,11 +24,16 @@ const { origin, pathname } = useRequestURL()
 const cmsEnabled = ['1', 'true'].includes(
   String(useRuntimeConfig().public.cmsHomepage ?? '').toLowerCase(),
 )
-const { data: cmsPage } = cmsEnabled
-  ? await useCmsPage('/')
-  : { data: ref(null) }
+/**
+ * Fetched whether or not the flag is on, because the flag decides which markup
+ * renders - it does not decide where the page's metadata lives. Gating this
+ * meant a storefront running the old homepage had no title or description of
+ * its own and fell back to the website record, which is exactly the regression
+ * centralising the SEO was supposed to remove.
+ */
+const { data: cmsPage } = await useCmsPage('/')
 
-const blocks = computed(() => cmsPage.value?.blocks ?? [])
+const blocks = computed(() => (cmsEnabled ? cmsPage.value?.blocks ?? [] : []))
 
 const odooImageBase = String(useRuntimeConfig().public.odooBaseImageUrl ?? '')
 
@@ -43,19 +48,22 @@ const firstBlockImage = computed(() => {
 })
 
 /**
- * Every tag now comes from the CMS page, jsonLd included. The homepage's is
- * still the OnlineStore block describing the business rather than a breadcrumb,
- * but Odoo decides that and computes it - the storefront just renders whatever
- * the page carries, exactly as it does for every other page.
+ * Every tag comes from the CMS page, jsonLd included. The homepage's is still
+ * the OnlineStore block describing the business rather than a breadcrumb, but
+ * Odoo decides that and computes it - the storefront renders whatever the page
+ * carries, exactly as it does for every other page.
  *
- * The website record is still read as a fallback, so an install that has not
- * run the migration, or has the CMS homepage switched off, renders what it
- * always did instead of nothing.
+ * Falling back to the page's own name before the website record, so a page
+ * whose meta title was never filled in is still titled after itself rather
+ * than after the site. The website record comes last, for an install that has
+ * not run the migration yet.
  */
 useHead(() => generateSeo<SeoEntity>({
   ...websiteHomepage.value,
   jsonLd: cmsPage.value?.jsonLd || websiteHomepage.value?.jsonLd,
-  metaTitle: cmsPage.value?.metaTitle || websiteHomepage.value?.metaTitle,
+  metaTitle: cmsPage.value?.metaTitle
+    || cmsPage.value?.title
+    || websiteHomepage.value?.metaTitle,
   metaDescription: cmsPage.value?.metaDescription || websiteHomepage.value?.metaDescription,
   // Odoo hands the share image out as a /web/image path, which neither exists
   // on this domain nor is something share crawlers resolve.
