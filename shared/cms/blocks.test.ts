@@ -11,6 +11,7 @@ import {
   seedBlockData,
   untranslatedFields,
   validateBlocks,
+  withFieldPlaceholders,
 } from './blocks'
 import type { BlockInstance, Field } from './blocks'
 import { DEFAULT_LOCALE } from './i18n'
@@ -362,5 +363,44 @@ describe('defaultsFor', () => {
     const fields = getBlockSchema('richText')!.fields
     const defaults = defaultsFor(fields)
     expect(Object.keys(defaults).sort()).toEqual(fields.map(f => f.name).sort())
+  })
+})
+
+describe('withFieldPlaceholders', () => {
+  it('stands in for empty text with the field label', () => {
+    const out = withFieldPlaceholders('categories', { title: '', eyebrow: '' })
+
+    expect(out.title).toBe('Heading')
+    expect(out.eyebrow).toBe('Eyebrow')
+  })
+
+  it('leaves text the merchant actually wrote alone', () => {
+    const out = withFieldPlaceholders('categories', { title: 'Our ranges', eyebrow: '' })
+
+    expect(out.title).toBe('Our ranges')
+  })
+
+  it('treats whitespace as empty, because it renders as nothing', () => {
+    expect(withFieldPlaceholders('categories', { title: '   ' }).title).toBe('Heading')
+  })
+
+  it('does not invent a link, whose value is a destination', () => {
+    const out = withFieldPlaceholders('categories', { linkUrl: '' })
+
+    expect(out.linkUrl).toBe('')
+  })
+
+  it('reaches text inside array rows', () => {
+    const out = withFieldPlaceholders('faq', {
+      items: [{ question: '', answer: 'Yes.' }],
+    })
+
+    const rows = out.items as Record<string, unknown>[]
+    expect(rows[0]!.question).toBe('Question')
+    expect(rows[0]!.answer).toBe('Yes.')
+  })
+
+  it('is a no-op for a block type it does not know', () => {
+    expect(withFieldPlaceholders('nope', { title: '' })).toEqual({ title: '' })
   })
 })

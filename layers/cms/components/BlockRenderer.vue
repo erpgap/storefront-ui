@@ -7,7 +7,7 @@ import { defineAsyncComponent, hydrateOnVisible } from 'vue'
 import type { Component } from 'vue'
 import { BLOCKS_NEEDING_ID, getBlockComponent } from '../blocks'
 import type { BlockInstance } from '#shared/cms/blocks'
-import { migrateBlocks, resolveBlockData } from '#shared/cms/blocks'
+import { migrateBlocks, resolveBlockData, withFieldPlaceholders } from '#shared/cms/blocks'
 import { DEFAULT_LOCALE } from '#shared/cms/i18n'
 
 const props = withDefaults(defineProps<{
@@ -83,7 +83,15 @@ function resolveComponent(blockType: string, index: number): Component | null {
  * spreading it is safe — nothing a client invented arrives here as a prop.
  */
 function propsFor(block: BlockInstance): Record<string, unknown> {
-  const resolved = resolveBlockData(block.blockType, block.data, props.locale)
+  let resolved = resolveBlockData(block.blockType, block.data, props.locale)
+
+  // Field names stand in for empty text, but only on the block being edited:
+  // the merchant is looking at its fields, so labels in the canvas line up
+  // with the panel beside them. Every other block stays as it will publish,
+  // which is what makes the canvas worth trusting.
+  if (props.mode === 'edit' && block.id === props.selectedId) {
+    resolved = withFieldPlaceholders(block.blockType, resolved)
+  }
 
   return BLOCKS_NEEDING_ID.has(block.blockType)
     ? { ...resolved, blockId: block.id }

@@ -1011,6 +1011,57 @@ export function resolveBlockData(
   return resolveFields(schema.fields, data)
 }
 
+/**
+ * Fills empty text with the field's own label, for the editor canvas only.
+ *
+ * An unwritten heading renders as nothing, so a block a merchant has just
+ * added can look broken or simply absent - there is no way to see where the
+ * words will land. Showing "Heading" where the heading goes answers that, the
+ * way the hatched box answers it for a picture.
+ *
+ * Only `text` and `textarea`. A link is skipped because a placeholder url is a
+ * destination, and a wrong one is worse than none; images have their own
+ * stand-in; selects always have a value already.
+ *
+ * This never touches stored data. It runs on resolved props on their way to a
+ * component, so nothing here can be saved or published by accident.
+ */
+export function withFieldPlaceholders(
+  blockType: string,
+  resolved: Record<string, unknown>,
+): Record<string, unknown> {
+  const schema = getBlockSchema(blockType)
+  if (!schema) return resolved
+
+  const fill = (
+    fields: Field[],
+    source: Record<string, unknown>,
+  ): Record<string, unknown> => {
+    const out: Record<string, unknown> = { ...source }
+
+    for (const field of fields) {
+      const value = source?.[field.name]
+
+      if (field.type === 'array') {
+        if (Array.isArray(value)) {
+          out[field.name] = value.map(row =>
+            fill(field.fields, row as Record<string, unknown>))
+        }
+        continue
+      }
+
+      if (field.type !== 'text' && field.type !== 'textarea') continue
+      if (typeof value === 'string' && value.trim()) continue
+
+      out[field.name] = field.label
+    }
+
+    return out
+  }
+
+  return fill(schema.fields, resolved)
+}
+
 /** Fields in this block with no value in `locale`. Drives the "not yet translated" hint. */
 export function untranslatedFields(
   blockType: string,
