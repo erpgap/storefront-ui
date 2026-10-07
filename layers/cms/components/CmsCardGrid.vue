@@ -3,7 +3,6 @@
 // stories, a team. A card with a link is a link; one without is not, so a
 // list of stores does not pretend to be clickable.
 import { spacingClass, type BlockSpacing } from '../utils/spacing'
-import { imageProvider } from '~~/app/utils/odooImage'
 
 const props = withDefaults(defineProps<{
   title?: string
@@ -68,18 +67,16 @@ const cardTag = (link?: string) => {
         class="group block"
       >
         <div class="overflow-hidden rounded-[3px] mb-5">
-          <NuxtImg
+          <CmsImage
             :src="item.image"
-            :provider="imageProvider(item.image)"
-            alt=""
-            aria-hidden="true"
-            width="1344"
-            height="1008"
+            :width="1344"
+            :height="1008"
             :sizes="imageSizes"
-            densities="1x"
-            class="w-full object-cover"
-            :class="[aspectClass, item.link ? 'transition-transform duration-700 ease-out group-hover:scale-105' : '']"
-            loading="lazy"
+            :image-class="[
+              'w-full object-cover',
+              aspectClass,
+              item.link ? 'transition-transform duration-700 ease-out group-hover:scale-105' : '',
+            ].filter(Boolean).join(' ')"
           />
         </div>
         <p

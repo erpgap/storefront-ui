@@ -51,7 +51,12 @@ const ctaList = computed<Cta[]>(() => props.ctas ?? [
          instead of the full 1920 (saves ~56 KB on the LCP). densities="1x" keeps
          it to one candidate per breakpoint (the `w` srcset already handles DPR).
          webp shrinks the 1920×1080 source from ~290 KB to ~124 KB. -->
+    <!-- v-if, because the CMS drives this block and an image field is blank
+         until a merchant picks one. A NuxtImg with an empty src renders a
+         broken-image icon, which looks like a fault rather than an empty
+         field. -->
     <NuxtImg
+      v-if="image"
       :src="image"
       :provider="imageProvider(image)"
       alt=""
@@ -66,6 +71,10 @@ const ctaList = computed<Cta[]>(() => props.ctas ?? [
       loading="eager"
       fetchpriority="high"
       :preload="{ fetchPriority: 'high' }"
+    />
+    <div
+      v-else
+      class="absolute inset-0 bg-primary-100"
     />
     <!-- Scrim -->
     <div class="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />

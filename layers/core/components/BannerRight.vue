@@ -37,7 +37,10 @@ const textOrder = computed(() => props.imagePosition === 'right' ? 'md:order-1' 
 <template>
   <section class="grid grid-cols-1 md:grid-cols-2 items-stretch">
     <div :class="imageOrder">
+      <!-- Same reason as MainBanner: blank while a merchant is still filling
+           the block in, and an empty src draws a broken-image icon. -->
       <NuxtImg
+        v-if="image"
         :src="image"
         :provider="imageProvider(image)"
         :alt="imageAlt"
@@ -47,6 +50,10 @@ const textOrder = computed(() => props.imagePosition === 'right' ? 'md:order-1' 
         densities="1x"
         class="w-full h-full min-h-[380px] md:min-h-[520px] object-cover object-center"
         loading="lazy"
+      />
+      <div
+        v-else
+        class="w-full h-full min-h-[380px] md:min-h-[520px] bg-primary-100"
       />
     </div>
     <div

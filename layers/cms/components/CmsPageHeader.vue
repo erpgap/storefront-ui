@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // The `pageHeader` block: the banner at the top of content pages. Shorter and
 // quieter than the homepage hero, with the page title as its h1.
-import { imageProvider } from '~~/app/utils/odooImage'
 
 defineProps<{
   eyebrow?: string
@@ -17,19 +16,13 @@ defineProps<{
          token breakpoint-prefixed) so mobile doesn't pull the full 1344px file.
          densities="1x" → one candidate per breakpoint; `w` srcset handles DPR.
          Content banners are 1344×768; preload WITH fetchpriority. -->
-    <NuxtImg
+    <CmsImage
       :src="image"
-      :provider="imageProvider(image)"
-      alt=""
-      aria-hidden="true"
-      width="1344"
-      height="768"
+      :width="1344"
+      :height="768"
       sizes="xs:100vw sm:100vw md:100vw lg:100vw xl:100vw xxl:100vw 2xl:100vw"
-      densities="1x"
-      class="absolute inset-0 w-full h-full object-cover object-center"
-      loading="eager"
-      fetchpriority="high"
-      :preload="{ fetchPriority: 'high' }"
+      image-class="absolute inset-0 w-full h-full object-cover object-center"
+      eager
     />
     <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-black/20" />
     <div class="narrow-container relative w-full py-16">
