@@ -157,7 +157,7 @@ change is live immediately.
 
 ## Tech Stack
 
-- **Framework**: Nuxt 3
+- **Framework**: Nuxt 4
 - **UI Components**: Alokai Storefront UI
 - **Backend**: ODOO ERP
 - **Styling**: Tailwind CSS 3
