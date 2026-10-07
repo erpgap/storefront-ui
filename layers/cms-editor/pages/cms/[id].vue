@@ -57,12 +57,20 @@ function addFirstPaletteMatch() {
 }
 const versionsOpen = ref(false)
 const seoOpen = ref(false)
+const settingsOpen = ref(false)
 
 // Only the SEO data is taken from the saved page: the rest of `page` backs a
 // draft that may be mid-edit, and replacing it would reset the canvas.
 function onSeoSaved(updated: CmsPage) {
   page.value = { ...page.value!, seo: updated.seo, metaTitle: updated.metaTitle, metaDescription: updated.metaDescription }
   seoOpen.value = false
+}
+
+// Same reason as above: only the two fields the dialog owns are taken, so a
+// rename cannot reset a canvas that is mid-edit.
+function onSettingsSaved(updated: CmsPage) {
+  page.value = { ...page.value!, title: updated.title, slug: updated.slug }
+  settingsOpen.value = false
 }
 
 // Content languages come from the website's active languages in Odoo, not from
@@ -464,7 +472,18 @@ const saveLabel = computed(() => ({
         {{ paletteOpen ? 'Hide blocks' : 'Add blocks' }}
       </button>
 
-      <div class="min-w-0">
+      <!-- A region has no name or url of its own to edit - it is declared in
+           code and only its content is editable - so it stays plain text. -->
+      <component
+        :is="(page as any)!.kind === 'region' ? 'div' : 'button'"
+        :type="(page as any)!.kind === 'region' ? undefined : 'button'"
+        class="min-w-0 text-left"
+        :class="(page as any)!.kind === 'region'
+          ? ''
+          : 'rounded px-1.5 -mx-1.5 py-0.5 hover:bg-white/10 transition-colors'"
+        :title="(page as any)!.kind === 'region' ? undefined : 'Rename or change the address'"
+        @click="(page as any)!.kind === 'region' ? undefined : (settingsOpen = true)"
+      >
         <p class="text-[13px] font-medium truncate">
           {{ page!.title }}
         </p>
@@ -473,7 +492,7 @@ const saveLabel = computed(() => ({
             ? 'Appears inside storefront pages'
             : page!.slug }}
         </p>
-      </div>
+      </component>
 
       <div class="ml-auto flex items-center gap-2">
         <!-- The whole of multi-language editing, from the merchant's side:
@@ -771,6 +790,16 @@ const saveLabel = computed(() => ({
         :has-unpublished-changes="saveState === 'dirty' || saveState === 'saving'"
         @restored="onRestored"
         @close="versionsOpen = false"
+      />
+
+      <CmsEditorPageSettingsDialog
+        v-if="settingsOpen"
+        :page-id="pageId"
+        :title="page!.title"
+        :slug="page!.slug"
+        :is-system="(page as any)!.isSystem"
+        @saved="onSettingsSaved"
+        @close="settingsOpen = false"
       />
 
       <CmsEditorSeoDialog

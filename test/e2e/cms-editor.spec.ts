@@ -144,7 +144,7 @@ test.describe('the editor', () => {
     await addBlock(page, /^Text Section/)
     await expect(page.locator('.cms-block')).toHaveCount(1)
 
-    await page.getByRole('button', { name: 'Undo' }).click()
+    await page.getByRole('button', { name: 'Undo', exact: true }).click()
 
     await expect(page.locator('.cms-block')).toHaveCount(0)
   })
@@ -198,7 +198,7 @@ test.describe('the editor', () => {
     await heading.fill('Second version')
     await publish(page)
 
-    await page.getByRole('button', { name: 'History' }).click()
+    await page.getByRole('button', { name: 'History', exact: true }).click()
     const dialog = page.getByRole('dialog', { name: 'Version history' })
     await expect(dialog.getByText('Version 2')).toBeVisible()
 
