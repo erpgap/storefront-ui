@@ -244,6 +244,8 @@ export type CmsPage = {
   isPublished: Maybe<Scalars['Boolean']['output']>;
   /** A page the storefront owns. Editable, but it cannot be deleted and its address is fixed. */
   isSystem: Maybe<Scalars['Boolean']['output']>;
+  /** Structured data the storefront emits for this page: the business for the homepage, a breadcrumb for every other. Computed, never authored. */
+  jsonLd: Maybe<Scalars['String']['output']>;
   kind: Maybe<Scalars['String']['output']>;
   liveRevision: Maybe<Scalars['Int']['output']>;
   metaDescription: Maybe<Scalars['String']['output']>;
