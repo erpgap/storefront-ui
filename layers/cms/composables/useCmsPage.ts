@@ -7,6 +7,7 @@ export interface PublishedCmsPage {
   metaTitle?: string
   metaDescription?: string
   metaImage?: string
+  jsonLd?: string
   blocks: BlockInstance[]
   publishedAt?: string
 }

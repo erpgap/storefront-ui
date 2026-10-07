@@ -153,6 +153,11 @@ export interface BlockInstance {
  * stores its own, the homepage included.
  */
 export interface CmsSeo {
+  /**
+   * Structured data for this page, as the storefront will emit it. Computed
+   * in Odoo and shown read-only: it is derived from the page, not written.
+   */
+  jsonLd?: string | null
   /** Share image (og:image). Not per language. Odoo-relative or a storefront path. */
   image?: string | null
   title: Record<string, string>
@@ -168,6 +173,11 @@ export interface CmsPage {
   metaDescription?: string
   /** Share image (og:image), Odoo-relative or a storefront path. */
   metaImage?: string
+  /**
+   * Structured data the storefront emits for this page: the business for the
+   * homepage, a breadcrumb for every other. Computed in Odoo, never authored.
+   */
+  jsonLd?: string
   /** Editor reads only. */
   seo?: CmsSeo
   published: boolean

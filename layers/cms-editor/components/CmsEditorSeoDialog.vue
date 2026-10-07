@@ -42,6 +42,21 @@ function setImage(url: string | null) {
 const saving = ref(false)
 const error = ref('')
 
+// Read-only. Odoo computes this from the page - the business for the homepage,
+// a breadcrumb for every other - so there is nothing here to edit, only to
+// check. Pretty-printed because a single line of JSON tells a merchant
+// nothing.
+const jsonLdPretty = computed(() => {
+  const raw = props.seo?.jsonLd
+  if (!raw) return ''
+  try {
+    return JSON.stringify(JSON.parse(raw), null, 2)
+  }
+  catch {
+    return raw
+  }
+})
+
 const isDefault = computed(() => props.locale === props.defaultLocale)
 const languageLabel = computed(() =>
   props.locales.find((option: CmsLocale) => option.code === props.locale)?.label ?? props.locale)
@@ -194,6 +209,20 @@ onMounted(() => {
             Shown when the page is shared in social media and messaging apps.
             The same for every language. Without one, the first image on the
             page is used.
+          </span>
+        </div>
+
+        <div
+          v-if="jsonLdPretty"
+          class="flex flex-col gap-1.5"
+        >
+          <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Structured data</span>
+          <pre
+            class="text-[11px] leading-snug bg-primary-50 border border-primary-200 rounded px-3 py-2 max-h-48 overflow-auto whitespace-pre-wrap break-all"
+          >{{ jsonLdPretty }}</pre>
+          <span class="text-[11px] text-primary-400">
+            What search engines read about this page. Generated for you, so
+            there is nothing to fill in.
           </span>
         </div>
 

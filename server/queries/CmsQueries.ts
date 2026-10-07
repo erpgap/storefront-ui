@@ -12,6 +12,7 @@ const PAGE_FIELDS = `
   metaTitle
   metaDescription
   metaImage
+  jsonLd
   liveRevision
   updatedAt
   hasUnpublishedChanges

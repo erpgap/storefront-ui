@@ -38,6 +38,7 @@ interface OdooCmsPage {
   metaTitle?: string
   metaDescription?: string
   metaImage?: string
+  jsonLd?: string
   blocks?: BlockInstance[]
   draftBlocks?: BlockInstance[]
   liveRevision?: number
@@ -163,6 +164,7 @@ function toCmsPage(page: OdooCmsPage): CmsPage & {
     metaTitle: page.metaTitle ?? undefined,
     metaDescription: page.metaDescription ?? undefined,
     metaImage: page.metaImage ?? undefined,
+    jsonLd: page.jsonLd ?? undefined,
     seo: page.seo ?? undefined,
     published: Boolean(page.isPublished),
     draft: page.draftBlocks ?? [],

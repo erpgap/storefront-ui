@@ -80,6 +80,9 @@ useHead(() => generateSeo<SeoEntity>(
     metaDescription: page.value?.metaDescription,
     metaImage: absoluteImageUrl(
       page.value?.metaImage || firstBlockImage.value, odooImageBase, origin) || null,
+    // A breadcrumb, computed in Odoo. Content pages emitted no structured data
+    // at all before this, while products and categories always have.
+    jsonLd: page.value?.jsonLd,
   },
   'Page',
   `${origin}${slug.value}`,

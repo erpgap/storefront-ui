@@ -43,10 +43,10 @@ const firstBlockImage = computed(() => {
 })
 
 /**
- * Title, description and share image come from the CMS page, like every other
- * page. jsonLd does not: it is an OnlineStore block describing the business -
- * computed in Odoo from the company record, never authored - so it belongs to
- * the website rather than to whatever blocks sit on the homepage today.
+ * Every tag now comes from the CMS page, jsonLd included. The homepage's is
+ * still the OnlineStore block describing the business rather than a breadcrumb,
+ * but Odoo decides that and computes it - the storefront just renders whatever
+ * the page carries, exactly as it does for every other page.
  *
  * The website record is still read as a fallback, so an install that has not
  * run the migration, or has the CMS homepage switched off, renders what it
@@ -54,6 +54,7 @@ const firstBlockImage = computed(() => {
  */
 useHead(() => generateSeo<SeoEntity>({
   ...websiteHomepage.value,
+  jsonLd: cmsPage.value?.jsonLd || websiteHomepage.value?.jsonLd,
   metaTitle: cmsPage.value?.metaTitle || websiteHomepage.value?.metaTitle,
   metaDescription: cmsPage.value?.metaDescription || websiteHomepage.value?.metaDescription,
   // Odoo hands the share image out as a /web/image path, which neither exists
