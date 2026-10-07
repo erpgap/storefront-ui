@@ -45,3 +45,20 @@ test('a placeholder is never written into the page', async ({ page }) => {
   const heading = page.locator('aside[aria-label="Block settings"]').getByLabel('Heading')
   await expect(heading).toHaveValue('')
 })
+
+test('an empty button label draws no button', async ({ page }) => {
+  await signIn(page)
+  await createPage(page, 'No Fake Button')
+  await addBlock(page, /^Image \+ Text/)
+
+  const canvas = page.locator('.cms-canvas')
+
+  // The copy fields are hinted...
+  await expect(canvas.getByText('Heading', { exact: true }).first()).toBeVisible()
+
+  // ...but the button is absent entirely, rather than rendered with its field
+  // name inside it. An empty label means there is no button, and a styled
+  // stand-in reads as a finished one.
+  await expect(canvas.getByText('Button label', { exact: true })).toHaveCount(0)
+  await expect(canvas.getByRole('link', { name: /button label/i })).toHaveCount(0)
+})

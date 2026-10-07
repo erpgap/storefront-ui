@@ -44,6 +44,15 @@ interface FieldCommon {
   /** Shown under the control in the inspector. */
   help?: string
   required?: boolean
+  /**
+   * Keep the canvas placeholder away from this field.
+   *
+   * For a button or link label, empty does not mean "text missing" - it means
+   * there is no button. Standing the field name in its place conjures a
+   * finished-looking control the merchant never asked for, which is worse
+   * than the blank it replaces.
+   */
+  noPlaceholder?: boolean
 }
 
 export interface TextField extends FieldCommon {
@@ -244,7 +253,7 @@ export const blockSchemas: BlockSchema[] = [
         titleField: 'label',
         addLabel: 'Add button',
         fields: [
-          { name: 'label', label: 'Label', type: 'text', required: true },
+          { name: 'label', label: 'Label', type: 'text', required: true, noPlaceholder: true },
           { name: 'url', label: 'Links to', type: 'link' },
           {
             name: 'style',
@@ -268,7 +277,7 @@ export const blockSchemas: BlockSchema[] = [
     fields: [
       { name: 'eyebrow', label: 'Eyebrow', type: 'text' },
       { name: 'title', label: 'Heading', type: 'text' },
-      { name: 'linkLabel', label: 'Corner link label', type: 'text' },
+      { name: 'linkLabel', label: 'Corner link label', type: 'text', noPlaceholder: true },
       { name: 'linkUrl', label: 'Corner link target', type: 'link' },
       {
         name: 'items',
@@ -296,7 +305,7 @@ export const blockSchemas: BlockSchema[] = [
     fields: [
       { name: 'eyebrow', label: 'Eyebrow', type: 'text' },
       { name: 'title', label: 'Heading', type: 'text' },
-      { name: 'linkLabel', label: 'Corner link label', type: 'text' },
+      { name: 'linkLabel', label: 'Corner link label', type: 'text', noPlaceholder: true },
       { name: 'linkUrl', label: 'Corner link target', type: 'link' },
       {
         name: 'pageSize',
@@ -351,7 +360,7 @@ export const blockSchemas: BlockSchema[] = [
           { value: 'regular', label: 'Regular (content pages)' },
         ],
       },
-      { name: 'ctaLabel', label: 'Button label', type: 'text' },
+      { name: 'ctaLabel', label: 'Button label', type: 'text', noPlaceholder: true },
       { name: 'ctaUrl', label: 'Button links to', type: 'link' },
     ],
   },
@@ -467,7 +476,7 @@ export const blockSchemas: BlockSchema[] = [
       },
       spacingField(),
       { name: 'divider', label: 'Line above', type: 'boolean', default: false, help: 'A full-width rule separating this from the block above.' },
-      { name: 'ctaLabel', label: 'Button label', type: 'text', help: 'Leave empty for no button.' },
+      { name: 'ctaLabel', label: 'Button label', type: 'text', noPlaceholder: true, help: 'Leave empty for no button.' },
       { name: 'ctaUrl', label: 'Button links to', type: 'link' },
       {
         name: 'ctaPosition',
@@ -1051,6 +1060,7 @@ export function withFieldPlaceholders(
       }
 
       if (field.type !== 'text' && field.type !== 'textarea') continue
+      if (field.noPlaceholder) continue
       if (typeof value === 'string' && value.trim()) continue
 
       out[field.name] = field.label
@@ -1076,6 +1086,7 @@ export function placeholderLabels(blockType: string): string[] {
   const collect = (fields: Field[]): string[] =>
     fields.flatMap((field) => {
       if (field.type === 'array') return collect(field.fields)
+      if (field.noPlaceholder) return []
       return field.type === 'text' || field.type === 'textarea' ? [field.label] : []
     })
 

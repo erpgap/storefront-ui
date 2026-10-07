@@ -11,6 +11,7 @@ import {
   seedBlockData,
   untranslatedFields,
   validateBlocks,
+  placeholderLabels,
   withFieldPlaceholders,
 } from './blocks'
 import type { BlockInstance, Field } from './blocks'
@@ -400,7 +401,26 @@ describe('withFieldPlaceholders', () => {
     expect(rows[0]!.answer).toBe('Yes.')
   })
 
+  it('leaves a button label alone, where empty means no button', () => {
+    const out = withFieldPlaceholders('editorial', { ctaLabel: '', title: '' })
+
+    // A heading is text that is missing; a button label is a button that does
+    // not exist. Faking the second one draws a control nobody asked for.
+    expect(out.ctaLabel).toBe('')
+    expect(out.title).toBe('Heading')
+  })
+
   it('is a no-op for a block type it does not know', () => {
     expect(withFieldPlaceholders('nope', { title: '' })).toEqual({ title: '' })
+  })
+})
+
+describe('placeholderLabels', () => {
+  it('lists the text labels the canvas can show', () => {
+    expect(placeholderLabels('categories')).toContain('Heading')
+  })
+
+  it('omits labels that would draw a control', () => {
+    expect(placeholderLabels('editorial')).not.toContain('Button label')
   })
 })
