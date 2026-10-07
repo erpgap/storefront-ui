@@ -12,7 +12,6 @@ describe('generateSeo', () => {
     name: 'Test Product',
     metaTitle: 'Test Meta Title',
     metaDescription: 'Test meta description',
-    metaKeyword: 'test, keyword',
     metaImage: 'https://example.com/image.jpg',
     jsonLd: {
       '@context': 'https://schema.org',
@@ -187,9 +186,6 @@ describe('generateSeo', () => {
     )
     expect(console.warn).toHaveBeenCalledWith(
       '[WARNING DEVELOPER] - The product from slug https://example.com/test-path does not have the jsonLd.',
-    )
-    expect(console.warn).toHaveBeenCalledWith(
-      '[WARNING DEVELOPER] - The product from slug https://example.com/test-path does not have the metaKeyword.',
     )
     expect(console.warn).toHaveBeenCalledWith(
       '[WARNING DEVELOPER] - The product from slug https://example.com/test-path does not have the metaImage.',

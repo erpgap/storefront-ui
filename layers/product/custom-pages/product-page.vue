@@ -97,7 +97,6 @@ const seoData = computed(() => {
       ...product,
       metaTitle: product.metaTitle || product.name || 'Product',
       metaDescription: product.metaDescription || product.description || 'Check out this amazing product!',
-      metaKeyword: product.metaKeyword || product.name,
       // Absolute product image for og:image/twitter:image — also how the
       // Cloudflare AI Search crawler picks up a thumbnail for this page.
       metaImage: buildOdooImageUrl(
@@ -114,7 +113,6 @@ const seoData = computed(() => {
     name: 'Product',
     metaTitle: `Product | ${route.path.split('/').pop() || 'Store'}`,
     metaDescription: 'Check out this amazing product in our store',
-    metaKeyword: 'Product',
   }
   return generateSeo(fallbackEntity, 'Product', canonicalUrl)
 })

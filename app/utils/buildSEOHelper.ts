@@ -4,7 +4,6 @@ export interface SeoEntity {
   metaTitle?: string | null
   metaDescription?: string | null
   jsonLd?: string | object | null
-  metaKeyword?: string | null
   metaImage?: string | null
   name?: string | null
   id?: string | number | null
@@ -26,11 +25,6 @@ const validateSEO = (entity: SeoEntity, fullPath: string, entityType: string) =>
   if (!entity?.jsonLd) {
     warnings.push(
       `[WARNING DEVELOPER] - The ${entityType} from slug ${fullPath} does not have the jsonLd.`,
-    )
-  }
-  if (!entity?.metaKeyword) {
-    warnings.push(
-      `[WARNING DEVELOPER] - The ${entityType} from slug ${fullPath} does not have the metaKeyword.`,
     )
   }
   if (!entity?.metaImage) {
