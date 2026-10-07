@@ -155,7 +155,7 @@ function formatDate(iso: string) {
             >
           </label>
           <label class="flex flex-col gap-1.5">
-            <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Web address</span>
+            <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Page URL</span>
             <input
               v-model="slug"
               type="text"
