@@ -12,6 +12,7 @@
 // component underneath is made inert. The drag layer then only ever deals with
 // a flat list of uniform rectangles — the easy, well-supported case.
 import { blockLabel } from '../blocks'
+import { placeholderLabels } from '#shared/cms/blocks'
 import type { BlockInstance } from '#shared/cms/blocks'
 
 const props = defineProps<{
@@ -40,6 +41,40 @@ const isEmpty = ref(false)
 
 const MIN_VISIBLE_HEIGHT = 24
 
+/**
+ * Marks the stand-in text BlockRenderer put on the canvas.
+ *
+ * By the time a placeholder is rendered it is a plain string inside whatever
+ * element the component chose, styled exactly like real copy - which is the
+ * problem: a merchant cannot tell the hint from their own writing. It needs a
+ * background to read as a slot rather than content.
+ *
+ * Done by adding a class to the element that already holds the text, not by
+ * wrapping it in a new one. Vue owns that subtree, and inserting nodes into it
+ * invites a fight on the next patch; an attribute it does not manage survives,
+ * and the observer below puts it back if a re-render ever drops it.
+ *
+ * Editor-only - this component is never mounted on a published page.
+ */
+const PLACEHOLDER_CLASS = 'cms-text-placeholder'
+
+function markPlaceholders() {
+  const root = body.value
+  if (!root) return
+
+  const labels = new Set(props.selected ? placeholderLabels(props.block.blockType) : [])
+
+  for (const element of root.querySelectorAll<HTMLElement>('*')) {
+    // Leaf elements only: a wrapper whose text happens to equal a label would
+    // otherwise get the background across everything inside it.
+    const isLeaf = element.childElementCount === 0
+    const wanted = isLeaf && labels.has((element.textContent ?? '').trim())
+
+    if (wanted === element.classList.contains(PLACEHOLDER_CLASS)) continue
+    element.classList.toggle(PLACEHOLDER_CLASS, wanted)
+  }
+}
+
 onMounted(() => {
   if (!body.value) return
 
@@ -54,8 +89,23 @@ onMounted(() => {
   // measurement at mount would mark half the canvas empty.
   const observer = new ResizeObserver(measure)
   observer.observe(body.value)
-  onBeforeUnmount(() => observer.disconnect())
+
+  markPlaceholders()
+
+  // Re-applied on re-render: toggling the class is itself a mutation, so the
+  // no-op check in markPlaceholders is what stops this feeding itself.
+  const content = new MutationObserver(() => markPlaceholders())
+  content.observe(body.value, { childList: true, subtree: true, characterData: true })
+
+  onBeforeUnmount(() => {
+    observer.disconnect()
+    content.disconnect()
+  })
 })
+
+// Selecting a block is what turns its placeholders on, and that changes no
+// markup on its own.
+watch(() => props.selected, () => nextTick(markPlaceholders))
 </script>
 
 <template>
@@ -208,6 +258,22 @@ onMounted(() => {
   border: 0;
   /* Above the content, below the toolbar. */
   z-index: 1;
+}
+/* :deep, because the element carrying this class belongs to the block's own
+   component - the shell's scope attribute never reaches it. */
+:deep(.cms-text-placeholder) {
+  color: rgb(0 0 0 / 38%) !important;
+  background-color: rgb(0 0 0 / 4%);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 7px,
+    rgb(0 0 0 / 4%) 7px,
+    rgb(0 0 0 / 4%) 14px
+  );
+  border-radius: 3px;
+  padding: 0 0.3em;
+  box-decoration-break: clone;
 }
 
 .cms-block--selected .cms-block__overlay,

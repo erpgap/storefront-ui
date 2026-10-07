@@ -1062,6 +1062,26 @@ export function withFieldPlaceholders(
   return fill(schema.fields, resolved)
 }
 
+/**
+ * Every label `withFieldPlaceholders` can put on the canvas, for this block.
+ *
+ * The editor shell needs to recognise a placeholder once it is rendered, and
+ * by then it is just a string inside whatever element the component chose. It
+ * matches against this list rather than guessing.
+ */
+export function placeholderLabels(blockType: string): string[] {
+  const schema = getBlockSchema(blockType)
+  if (!schema) return []
+
+  const collect = (fields: Field[]): string[] =>
+    fields.flatMap((field) => {
+      if (field.type === 'array') return collect(field.fields)
+      return field.type === 'text' || field.type === 'textarea' ? [field.label] : []
+    })
+
+  return [...new Set(collect(schema.fields))]
+}
+
 /** Fields in this block with no value in `locale`. Drives the "not yet translated" hint. */
 export function untranslatedFields(
   blockType: string,
