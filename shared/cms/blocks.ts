@@ -290,8 +290,8 @@ export const blockSchemas: BlockSchema[] = [
 
   {
     name: 'bestSellers',
-    label: 'Product Grid',
-    description: 'Products pulled live from the Odoo catalogue.',
+    label: 'Products — Automatic',
+    description: 'Fills itself from your catalogue by a rule: most popular, newest or price.',
     // The merchant controls framing and query, never the product data itself.
     dynamic: true,
     fields: [
@@ -359,8 +359,8 @@ export const blockSchemas: BlockSchema[] = [
 
   {
     name: 'featuredProducts',
-    label: 'Featured Products',
-    description: 'Hand-pick specific products from your catalogue.',
+    label: 'Products — Hand-picked',
+    description: 'You choose exactly which products appear, and the order they appear in.',
     dynamic: true,
     fields: [
       { name: 'eyebrow', label: 'Eyebrow', type: 'text', default: 'Picked for you' },
@@ -378,7 +378,7 @@ export const blockSchemas: BlockSchema[] = [
 
   {
     name: 'valueProps',
-    label: 'Value Props',
+    label: 'Selling Points',
     description: 'Row of short selling points with icons.',
     fields: [
       {
@@ -556,19 +556,19 @@ export const blockSchemas: BlockSchema[] = [
 
   {
     name: 'stats',
-    label: 'Figures',
+    label: 'Key Numbers',
     description: 'A row of big numbers with labels.',
     fields: [
       {
         name: 'items',
-        label: 'Figures',
+        label: 'Numbers',
         type: 'array',
         min: 1,
         max: 4,
         titleField: 'label',
-        addLabel: 'Add figure',
+        addLabel: 'Add number',
         fields: [
-          { name: 'value', label: 'Figure', type: 'text', required: true },
+          { name: 'value', label: 'Number', type: 'text', required: true },
           { name: 'label', label: 'Label', type: 'text' },
         ],
       },

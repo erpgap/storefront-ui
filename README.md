@@ -122,8 +122,9 @@ anonymous writes, so the route is not security by obscurity.
 - Roll back: every publish keeps a revision, and an older one can be restored.
 
 Fifteen blocks are available: Card Grid, Category Grid, Contact Form, FAQ,
-Feature List, Featured Products, Figures, Hero Banner, Image + Text, Info
-Table, Newsletter, Page Banner, Product Grid, Text Section, Value Props.
+Feature List, Hero Banner, Image + Text, Info Table, Key Numbers, Newsletter,
+Page Banner, Products — Automatic, Products — Hand-picked, Selling Points,
+Text Section.
 
 ### The pages it covers
 

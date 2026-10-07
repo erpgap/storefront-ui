@@ -10,7 +10,7 @@ import { addBlock, createPage, expect, signIn, test } from './fixtures'
 test('the product picker lists products as soon as it opens', async ({ page }) => {
   await signIn(page)
   await createPage(page, 'Ref Picker')
-  await addBlock(page, /^Featured Products/)
+  await addBlock(page, /^Products — Hand-picked/)
 
   const inspector = page.locator('aside[aria-label="Block settings"]')
   await expect(inspector).toBeVisible()

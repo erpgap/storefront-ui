@@ -48,7 +48,7 @@ export interface BlockDefinition extends BlockSchema {
  *
  * The schemas are declared in rough page order - hero first, newsletter last -
  * which reads well in the source and poorly in a list of fifteen tiles, where
- * there is no way to guess where "Figures" sits. Alphabetical is the order a
+ * there is no way to guess where "Key Numbers" sits. Alphabetical is the order a
  * merchant can predict without learning it.
  *
  * `localeCompare` rather than `<`, so accented labels sort where a reader

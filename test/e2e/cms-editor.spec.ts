@@ -127,7 +127,7 @@ test.describe('the editor', () => {
   test('a block that renders nothing still shows up and can be removed', async ({ page }) => {
     // Zero-height blocks were invisible, unselectable and undeletable.
     await createPage(page, 'E2E Empty')
-    await addBlock(page, /^Featured Products/)
+    await addBlock(page, /^Products — Hand-picked/)
 
     const block = page.locator('.cms-block').first()
     await expect(block).toContainText(/nothing to show yet/i)
