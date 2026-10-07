@@ -35,11 +35,22 @@ const { data: selected } = await useFetch<RefOption[]>('/api/cms/refs', {
   immediate: true,
 })
 
+/**
+ * Fetched straight away, not only once something is typed.
+ *
+ * With `immediate: false` the request never fired until the merchant typed,
+ * while `pending` stayed true the whole time - so opening the picker showed
+ * "Searching…" forever over an empty list, and a block whose products are
+ * required could not be filled in at all.
+ *
+ * An empty search is a real query here: it returns the first twenty products,
+ * which is the list somebody wants to see when they open the picker and have
+ * nothing particular in mind.
+ */
 const { data: results, pending } = await useFetch<RefOption[]>('/api/cms/refs', {
   query: computed(() => ({ kind: props.kind, search: search.value })),
   key: computed(() => `refs-search-${props.kind}-${search.value}`),
   default: () => [],
-  immediate: false,
   watch: [search],
 })
 
