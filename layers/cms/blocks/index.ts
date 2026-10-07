@@ -43,9 +43,21 @@ export interface BlockDefinition extends BlockSchema {
   component: Loader
 }
 
+/**
+ * Sorted by label, because this is the order the palette shows.
+ *
+ * The schemas are declared in rough page order - hero first, newsletter last -
+ * which reads well in the source and poorly in a list of fifteen tiles, where
+ * there is no way to guess where "Figures" sits. Alphabetical is the order a
+ * merchant can predict without learning it.
+ *
+ * `localeCompare` rather than `<`, so accented labels sort where a reader
+ * expects rather than after Z.
+ */
 export const blockRegistry: BlockDefinition[] = blockSchemas
   .filter(schema => schema.name in components)
   .map(schema => ({ ...schema, component: components[schema.name]! }))
+  .sort((a, b) => a.label.localeCompare(b.label))
 
 export function getBlockComponent(blockType: string): Loader | undefined {
   return components[blockType]
