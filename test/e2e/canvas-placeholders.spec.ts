@@ -62,3 +62,36 @@ test('an empty button label draws no button', async ({ page }) => {
   await expect(canvas.getByText('Button label', { exact: true })).toHaveCount(0)
   await expect(canvas.getByRole('link', { name: /button label/i })).toHaveCount(0)
 })
+
+test('the hint is visible on a dark block, not painted black on black', async ({ page }) => {
+  await signIn(page)
+  await createPage(page, 'Dark Placeholder')
+  await addBlock(page, /^Newsletter/)
+
+  const hint = page.locator('.cms-text-placeholder').first()
+  await expect(hint).toBeVisible()
+
+  // The newsletter band is black and its text is white. Hardcoding a dark
+  // colour here made the hint invisible while every assertion still passed -
+  // it was applied, just unreadable. So this checks it against its own
+  // background rather than checking that a class exists.
+  const seen = await hint.evaluate((el) => {
+    const style = getComputedStyle(el)
+    const luminance = (rgb: string) => {
+      const [r, g, b] = (rgb.match(/\d+/g) ?? ['0', '0', '0']).map(Number)
+      return (0.299 * r! + 0.587 * g! + 0.114 * b!) / 255
+    }
+    let node: HTMLElement | null = el
+    let background = 'rgba(0, 0, 0, 0)'
+    while (node && background === 'rgba(0, 0, 0, 0)') {
+      background = getComputedStyle(node).backgroundColor
+      node = node.parentElement
+    }
+    return { text: luminance(style.color), background: luminance(background) }
+  })
+
+  expect(
+    Math.abs(seen.text - seen.background),
+    'the hint must contrast with whatever it sits on',
+  ).toBeGreaterThan(0.25)
+})

@@ -260,16 +260,22 @@ watch(() => props.selected, () => nextTick(markPlaceholders))
   z-index: 1;
 }
 /* :deep, because the element carrying this class belongs to the block's own
-   component - the shell's scope attribute never reaches it. */
+   component - the shell's scope attribute never reaches it.
+
+   Mid grey rather than black, and the text keeps whatever colour it inherits.
+   A black hatch and black text vanished completely on the dark bands - the
+   newsletter's placeholders were being applied and then painted black on
+   black. Grey at half lightness reads against both ends, and dimming with
+   opacity keeps the hint quieter than real copy without deciding its colour. */
 :deep(.cms-text-placeholder) {
-  color: rgb(0 0 0 / 38%) !important;
-  background-color: rgb(0 0 0 / 4%);
+  opacity: 0.6;
+  background-color: rgb(128 128 128 / 12%);
   background-image: repeating-linear-gradient(
     -45deg,
     transparent,
     transparent 7px,
-    rgb(0 0 0 / 4%) 7px,
-    rgb(0 0 0 / 4%) 14px
+    rgb(128 128 128 / 22%) 7px,
+    rgb(128 128 128 / 22%) 14px
   );
   border-radius: 3px;
   padding: 0 0.3em;

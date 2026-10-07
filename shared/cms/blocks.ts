@@ -687,7 +687,6 @@ export const blockSchemas: BlockSchema[] = [
     name: 'contactForm',
     label: 'Contact Form',
     description: 'Your contact details next to a message form. Messages go to Odoo.',
-    dynamic: true,
     fields: [
       { name: 'title', label: 'Heading', type: 'text' },
       spacingField(),
@@ -711,7 +710,6 @@ export const blockSchemas: BlockSchema[] = [
     name: 'newsletter',
     label: 'Newsletter',
     description: 'Email signup band. Submissions go to Odoo.',
-    dynamic: true,
     fields: [
       { name: 'title', label: 'Heading', type: 'text' },
       {
