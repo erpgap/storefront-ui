@@ -9,10 +9,6 @@ import { GetCmsCanEditQuery } from '~~/server/queries/CmsQueries'
  * a client that lies to itself about this achieves nothing.
  */
 export default defineEventHandler(async (event) => {
-  if (process.env.NUXT_CMS_BACKEND === 'file') {
-    return { canEdit: true, backend: 'file' as const }
-  }
-
   const config = useRuntimeConfig(event)
   const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
 
@@ -25,9 +21,9 @@ export default defineEventHandler(async (event) => {
       },
       body: { query: GetCmsCanEditQuery },
     })
-    return { canEdit: Boolean(response?.data?.cmsCanEdit), backend: 'odoo' as const }
+    return { canEdit: Boolean(response?.data?.cmsCanEdit) }
   }
   catch {
-    return { canEdit: false, backend: 'odoo' as const }
+    return { canEdit: false }
   }
 })

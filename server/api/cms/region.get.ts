@@ -13,8 +13,6 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'key is required' })
   }
 
-  if (process.env.NUXT_CMS_BACKEND === 'file') return null
-
   const config = useRuntimeConfig(event)
   const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
 

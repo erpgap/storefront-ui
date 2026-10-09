@@ -16,8 +16,6 @@ export default defineEventHandler(async (event) => {
     defaultLocale: DEFAULT_LOCALE,
   }
 
-  if (process.env.NUXT_CMS_BACKEND === 'file') return fallback
-
   const config = useRuntimeConfig(event)
   const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
 

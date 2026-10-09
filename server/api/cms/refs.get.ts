@@ -20,8 +20,6 @@ export default defineEventHandler(async (event) => {
     .map(Number)
     .filter(id => Number.isInteger(id) && id > 0)
 
-  if (process.env.NUXT_CMS_BACKEND === 'file') return []
-
   const config = useRuntimeConfig(event)
   const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
 

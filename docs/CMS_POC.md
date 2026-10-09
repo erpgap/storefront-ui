@@ -19,9 +19,8 @@ yarn dev
 Then **http://localhost:3000/cms** and sign in with an Odoo account that
 is in the **CMS Editor** group. A fresh install grants it to `admin`.
 
-Without Odoo, `NUXT_CMS_BACKEND=file npx nuxt dev` falls back to a local file
-store: the editor works, there is no login and no version history. Useful for
-front-end work, not for anything real.
+There is no way to run the editor without Odoo: content, and who may edit
+it, always live there.
 
 ## What a merchant can do
 

@@ -1,10 +1,5 @@
 // The Odoo-backed CmsStore.
 //
-// This is the implementation the file-backed one in cmsStore.ts was always a
-// placeholder for. Nothing above this file changed to accommodate it: the API
-// routes, the editor and the render path all still talk to the CmsStore
-// interface.
-//
 // Requests carry the editor's own Odoo session cookie, so Odoo's record rules
 // and group checks apply to the real user and its audit trail names them.
 // Authorisation is never decided here.

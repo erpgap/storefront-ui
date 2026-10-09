@@ -25,13 +25,6 @@ const { data: pages, refresh, error: listError } = await useFetch<PageRow[]>(
   { key: 'cms-editor-pages', default: () => [] },
 )
 
-// Which store is behind this. Only used to explain what is unavailable when
-// running without Odoo.
-const { data: session } = await useFetch<{ backend: string }>('/api/cms/session', {
-  key: 'cms-session',
-})
-const backend = computed(() => session.value?.backend ?? 'odoo')
-
 // --- create -----------------------------------------------------------------
 
 const creating = ref(false)
@@ -354,15 +347,6 @@ function formatDate(iso: string) {
           </li>
         </ul>
       </section>
-
-      <p
-        v-if="backend === 'file'"
-        class="text-[11px] text-primary-400 mt-6 leading-relaxed"
-      >
-        Running on the local file store, not Odoo. Version history is
-        unavailable in this mode. Unset <code>NUXT_CMS_BACKEND=file</code> to
-        use Odoo.
-      </p>
     </main>
   </div>
 </template>
