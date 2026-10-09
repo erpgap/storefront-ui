@@ -6,12 +6,19 @@ import {
   SfInput,
 } from '@storefront-ui/vue'
 import { isValidEmail } from '~~/app/utils/validation'
+import { safeRedirect } from '~~/app/utils/authRedirect'
 
 definePageMeta({
   layout: false,
 })
 
 const { login, loading, authError } = useAuth()
+const route = useRoute()
+
+// Set by the auth guard when a session the user thought they had is gone.
+const sessionExpired = computed(() => route.query.expired === '1')
+
+const redirectTo = computed(() => safeRedirect(route.query.redirect))
 
 const email = ref('')
 const password = ref('')
@@ -23,7 +30,7 @@ const emailValid = computed(() => isValidEmail(email.value))
 const handleLogin = async () => {
   showErrors.value = true
   if (!emailValid.value || !password.value.trim()) return
-  await login({ email: email.value, password: password.value })
+  await login({ email: email.value, password: password.value }, redirectTo.value)
 }
 
 // Clear any error carried over from another auth page (shared global state).
@@ -36,6 +43,15 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 <template>
   <NuxtLayout name="auth" :heading="$t('auth.login.heading')">
+    <p
+      v-if="sessionExpired && !authError"
+      role="status"
+      data-testid="login-page-session-expired"
+      class="mb-5 border border-amber-200 bg-amber-50 text-amber-800 text-[13px] px-3 py-2.5"
+    >
+      {{ $t("auth.login.sessionExpired") }}
+    </p>
+
     <form novalidate class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8" @submit.prevent="handleLogin">
       <label>
         <UiFormLabel>{{ $t("form.emailLabel") }}</UiFormLabel>

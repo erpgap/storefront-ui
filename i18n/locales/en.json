@@ -402,7 +402,8 @@
       "forgotPasswordLabel": "Forgot your password?",
       "rememberMeLabel": "Remember me",
       "createAccountBanner": "First time here? {0}.",
-      "createAccountLinkLabel": "Create Account"
+      "createAccountLinkLabel": "Create Account",
+      "sessionExpired": "Your session has expired. Please log in again."
     },
     "signup": {
       "heading": "Create Account",

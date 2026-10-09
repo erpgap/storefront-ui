@@ -16,6 +16,7 @@ import type {
   SignUpUserResponse,
   UpdatePasswordResponse,
 } from '~~/graphql'
+import { DEFAULT_AFTER_LOGIN, loginRoute } from '~~/app/utils/authRedirect'
 import { MutationName } from '~~/server/mutations'
 import { QueryName } from '~~/server/queries'
 
@@ -70,6 +71,17 @@ export const useAuth = () => {
     }
   }
 
+  // For a request that failed on a protected page: if the reason is a dead
+  // session (cookie deleted, expired or tampered with), send the user to log
+  // in again and return true so the caller skips its own error message.
+  const redirectIfSessionExpired = async (): Promise<boolean> => {
+    if (await loadUser(true)) {
+      return false
+    }
+    await navigateTo(loginRoute(router.currentRoute.value.fullPath, true))
+    return true
+  }
+
   const updatePartner = async (params: MutationCreateUpdatePartnerArgs) => {
     loading.value = true
     try {
@@ -120,7 +132,7 @@ export const useAuth = () => {
     }
   }
 
-  const login = async (params: MutationLoginArgs) => {
+  const login = async (params: MutationLoginArgs, redirectTo: string = DEFAULT_AFTER_LOGIN) => {
     try {
       loading.value = true
       authError.value = ''
@@ -131,7 +143,7 @@ export const useAuth = () => {
 
       userCookie.value = data?.login?.user?.partner
       user.value = data?.login?.user?.partner as Partner
-      router.push('/my-account')
+      router.push(redirectTo)
     }
     catch (error: any) {
       authError.value = error?.data?.message || 'The email or password you entered is incorrect.'
@@ -220,6 +232,7 @@ export const useAuth = () => {
     successResetEmail,
     updatePassword,
     loadUser,
+    redirectIfSessionExpired,
     updatePartner,
   }
 }

@@ -6,7 +6,7 @@ definePageMeta({
   middleware: ['auth-check'],
 })
 
-const { loadUser, user, updatePartner, updatePassword, loading } = useAuth()
+const { loadUser, user, updatePartner, updatePassword, loading, redirectIfSessionExpired } = useAuth()
 
 type Message = { type: 'success' | 'error', text: string }
 
@@ -69,6 +69,7 @@ const saveContact = async (userData: any) => {
     contactMessage.value = { type: 'success', text: 'Your contact information has been updated.' }
   }
   catch (e) {
+    if (await redirectIfSessionExpired()) return
     contactMessage.value = { type: 'error', text: errorText(e, 'We couldn\'t update your details. Please try again.') }
   }
 }
@@ -88,6 +89,7 @@ const savePassword = async (passwords: any) => {
     passwordMessage.value = { type: 'success', text: 'Your password has been changed.' }
   }
   catch (e) {
+    if (await redirectIfSessionExpired()) return
     passwordMessage.value = { type: 'error', text: errorText(e, 'We couldn\'t change your password. Check your current password and try again.') }
   }
 }
