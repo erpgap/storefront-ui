@@ -1,15 +1,10 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
-/**
- * The guard on the account pages. `isAuthenticated` only reflects the
- * storefront's own `odoo-user` cookie, which outlives a deleted, expired or
- * tampered `session_id`; the guard has to ask Odoo and act on its answer.
- *
- * Nuxt's auto-imports are stubbed as globals, so this runs in plain node.
- */
 const auth = {
   isAuthenticated: { value: false },
-  loadUser: vi.fn<(withoutCache?: boolean) => Promise<boolean>>(),
+  hasValidSession: vi.fn<() => Promise<boolean>>(),
+  clearUser: vi.fn(),
+  loadUser: vi.fn(),
 }
 const navigateTo = vi.fn((to: unknown) => to)
 
@@ -24,6 +19,8 @@ beforeAll(async () => {
 
 beforeEach(() => {
   auth.isAuthenticated.value = false
+  auth.hasValidSession.mockReset()
+  auth.clearUser.mockReset()
   auth.loadUser.mockReset()
   navigateTo.mockClear()
 })
@@ -36,32 +33,32 @@ describe('auth-check middleware', () => {
       path: '/login',
       query: { redirect: '/my-account/personal-data' },
     })
-    // No point asking Odoo when there is nothing to check.
-    expect(auth.loadUser).not.toHaveBeenCalled()
+    expect(auth.hasValidSession).not.toHaveBeenCalled()
   })
 
-  it('sends a user whose session Odoo no longer recognises to log in, saying it expired', async () => {
+  it('sends a user whose session cookie is missing or changed to log in, saying it expired', async () => {
     auth.isAuthenticated.value = true
-    auth.loadUser.mockResolvedValue(false)
+    auth.hasValidSession.mockResolvedValue(false)
 
     expect(await guard(to)).toEqual({
       path: '/login',
       query: { redirect: '/my-account/personal-data', expired: '1' },
     })
+    expect(auth.clearUser).toHaveBeenCalled()
   })
 
-  it('asks Odoo directly rather than trusting a cached answer', async () => {
+  it('does not call Odoo', async () => {
     auth.isAuthenticated.value = true
-    auth.loadUser.mockResolvedValue(true)
+    auth.hasValidSession.mockResolvedValue(true)
 
     await guard(to)
 
-    expect(auth.loadUser).toHaveBeenCalledWith(true)
+    expect(auth.loadUser).not.toHaveBeenCalled()
   })
 
-  it('lets a user with a live session through', async () => {
+  it('lets a user with a valid session through', async () => {
     auth.isAuthenticated.value = true
-    auth.loadUser.mockResolvedValue(true)
+    auth.hasValidSession.mockResolvedValue(true)
 
     expect(await guard(to)).toBeUndefined()
     expect(navigateTo).not.toHaveBeenCalled()
@@ -69,7 +66,7 @@ describe('auth-check middleware', () => {
 
   it('keeps the query string of the page the user asked for', async () => {
     auth.isAuthenticated.value = true
-    auth.loadUser.mockResolvedValue(false)
+    auth.hasValidSession.mockResolvedValue(false)
 
     expect(await guard({ fullPath: '/my-account/my-orders?page=2' })).toEqual({
       path: '/login',

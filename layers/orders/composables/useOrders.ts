@@ -11,6 +11,7 @@ import { QueryName } from '~~/server/queries'
 export const useOrders = () => {
   const { $sdk } = useNuxtApp()
   const toast = useToast()
+  const { redirectIfSessionExpired } = useAuth()
   const loading = ref(false)
   const orders = ref<Orders>()
   const order = ref<Order>()
@@ -26,6 +27,7 @@ export const useOrders = () => {
     }
     catch (error: any) {
       orders.value = {} as Orders
+      if (await redirectIfSessionExpired()) return
       toast.error(error?.data?.message || error?.message)
     }
     finally {
@@ -44,6 +46,7 @@ export const useOrders = () => {
     }
     catch (error: any) {
       order.value = {} as Order
+      if (await redirectIfSessionExpired()) return
       toast.error(error?.data?.message || error?.message)
     }
     finally {

@@ -342,7 +342,12 @@
         "newPasswordAgain": "Repeat new password",
         "changePassword": "Change password",
         "currentPassword": "Current password",
-        "passwordHelp": "Use 8 or more characters with a mix of letters, numbers and symbols."
+        "passwordHelp": "Use 8 or more characters with a mix of letters, numbers and symbols.",
+        "contactUpdated": "Your contact information has been updated.",
+        "contactUpdateError": "We couldn't update your details. Please try again.",
+        "passwordChanged": "Your password has been changed.",
+        "passwordChangeError": "We couldn't change your password. Check your current password and try again.",
+        "passwordsDontMatch": "The new passwords don't match."
       },
       "billingDetails": {
         "billingAddress": "Billing address",
@@ -403,7 +408,8 @@
       "rememberMeLabel": "Remember me",
       "createAccountBanner": "First time here? {0}.",
       "createAccountLinkLabel": "Create Account",
-      "sessionExpired": "Your session has expired. Please log in again."
+      "sessionExpired": "Your session has expired. Please log in again.",
+      "error": "The email or password you entered is incorrect."
     },
     "signup": {
       "heading": "Create Account",
@@ -415,7 +421,8 @@
         "information": "add information",
         "button": "Go Shopping",
         "imageAlt": "Signup successful"
-      }
+      },
+      "error": "We couldn't create your account. Please try again."
     },
     "resetPassword": {
       "heading": "Reset password",
@@ -434,6 +441,9 @@
       "repeatPassword": "Repeat new password",
       "help": "8 or more characters with a mix of letters, numbers and symbols.",
       "description": "Create the new password you want to use to log in to your account."
+    },
+    "toast": {
+      "passwordChanged": "Password changed successfully"
     }
   }
 }

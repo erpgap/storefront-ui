@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SfButton } from '@storefront-ui/vue'
+import { loginRoute } from '~~/app/utils/authRedirect'
 
 definePageMeta({
   layout: 'account',
@@ -7,6 +8,8 @@ definePageMeta({
 })
 
 const { loadUser, user, updatePartner, updatePassword, loading, redirectIfSessionExpired } = useAuth()
+const { t } = useI18n()
+const route = useRoute()
 
 type Message = { type: 'success' | 'error', text: string }
 
@@ -66,18 +69,18 @@ const saveContact = async (userData: any) => {
       subscribeNewsletter: userData?.subscribeNewsletter,
     })
     editing.value = ''
-    contactMessage.value = { type: 'success', text: 'Your contact information has been updated.' }
+    contactMessage.value = { type: 'success', text: t('account.accountSettings.personalData.contactUpdated') }
   }
   catch (e) {
     if (await redirectIfSessionExpired()) return
-    contactMessage.value = { type: 'error', text: errorText(e, 'We couldn\'t update your details. Please try again.') }
+    contactMessage.value = { type: 'error', text: errorText(e, t('account.accountSettings.personalData.contactUpdateError')) }
   }
 }
 
 const savePassword = async (passwords: any) => {
   passwordMessage.value = null
   if (passwords.firstNewPassword !== passwords.secondNewPassword) {
-    passwordMessage.value = { type: 'error', text: 'The new passwords don\'t match.' }
+    passwordMessage.value = { type: 'error', text: t('account.accountSettings.personalData.passwordsDontMatch') }
     return
   }
   try {
@@ -86,16 +89,18 @@ const savePassword = async (passwords: any) => {
       newPassword: passwords.firstNewPassword,
     })
     editing.value = ''
-    passwordMessage.value = { type: 'success', text: 'Your password has been changed.' }
+    passwordMessage.value = { type: 'success', text: t('account.accountSettings.personalData.passwordChanged') }
   }
   catch (e) {
     if (await redirectIfSessionExpired()) return
-    passwordMessage.value = { type: 'error', text: errorText(e, 'We couldn\'t change your password. Check your current password and try again.') }
+    passwordMessage.value = { type: 'error', text: errorText(e, t('account.accountSettings.personalData.passwordChangeError')) }
   }
 }
 
 onMounted(async () => {
-  await loadUser(true)
+  if (!(await loadUser(true))) {
+    await navigateTo(loginRoute(route.fullPath, true))
+  }
 })
 </script>
 

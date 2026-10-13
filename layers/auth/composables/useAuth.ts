@@ -27,18 +27,20 @@ export const useAuth = () => {
   const user = useState<Partner>('user', () => ({}) as Partner)
 
   const toast = useToast()
+  const { t } = useNuxtApp().$i18n
 
   const loading = ref(false)
   const authError = useState<string>('auth-error', () => '')
   const resetEmail = useCookie<string>('reset-email')
 
-  // `LoadUserQuery` is Odoo's "who am I?" probe and the single source of truth
-  // for session validity. We don't parse error strings to detect an expired
-  // session — instead we trust Odoo's own answer:
-  //   • the query fails (dead session → "User does not exist."), or
-  //   • it returns the public/anonymous partner (`isPublic`, or no id).
-  // Either case means "not authenticated", so we clear the stale auth state.
-  // Returns whether a real, authenticated partner was loaded.
+  const clearUser = () => {
+    userCookie.value = null
+    user.value = {} as Partner
+  }
+
+  const isRejectedByOdoo = (error: any) =>
+    Array.isArray(error?.data?.data) && error.data.data.length > 0
+
   const loadUser = async (withoutCache: boolean = false): Promise<boolean> => {
     loading.value = true
 
@@ -51,8 +53,7 @@ export const useAuth = () => {
       const partner = data?.partner
 
       if (!partner?.id || partner.isPublic) {
-        userCookie.value = null
-        user.value = {} as Partner
+        clearUser()
         return false
       }
 
@@ -60,14 +61,25 @@ export const useAuth = () => {
       user.value = partner
       return true
     }
-    catch {
-      // A failed whoami is, by definition, an invalid session.
-      userCookie.value = null
-      user.value = {} as Partner
-      return false
+    catch (error: any) {
+      if (isRejectedByOdoo(error)) {
+        clearUser()
+        return false
+      }
+      return Boolean(userCookie.value || user.value?.id)
     }
     finally {
       loading.value = false
+    }
+  }
+
+  const hasValidSession = async (): Promise<boolean> => {
+    try {
+      const { valid } = await useRequestFetch()<{ valid: boolean }>('/api/auth/session')
+      return valid
+    }
+    catch {
+      return true
     }
   }
 
@@ -124,7 +136,7 @@ export const useAuth = () => {
       router.push('/my-account')
     }
     catch (error: any) {
-      authError.value = error?.data?.message || 'We couldn\'t create your account. Please try again.'
+      authError.value = error?.data?.message || t('auth.signup.error')
       return
     }
     finally {
@@ -146,7 +158,7 @@ export const useAuth = () => {
       router.push(redirectTo)
     }
     catch (error: any) {
-      authError.value = error?.data?.message || 'The email or password you entered is incorrect.'
+      authError.value = error?.data?.message || t('auth.login.error')
     }
     finally {
       loading.value = false
@@ -204,7 +216,7 @@ export const useAuth = () => {
         ChangePasswordResponse
       >({ mutationName: MutationName.ChangePasswordMutation }, params)
 
-      toast.success('Password changed successfully')
+      toast.success(t('auth.toast.passwordChanged'))
       router.push('/')
     }
     catch (error: any) {
@@ -232,6 +244,8 @@ export const useAuth = () => {
     successResetEmail,
     updatePassword,
     loadUser,
+    clearUser,
+    hasValidSession,
     redirectIfSessionExpired,
     updatePartner,
   }

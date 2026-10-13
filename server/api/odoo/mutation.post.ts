@@ -30,6 +30,7 @@ export default defineEventHandler(async (event) => {
 
     if (body?.[0]?.mutationName === 'LogoutMutation') {
       deleteCookie(event, 'session_id')
+      clearLoginSession(event)
     }
 
     if (response?._data?.errors?.length > 0) {
@@ -38,6 +39,11 @@ export default defineEventHandler(async (event) => {
         data: response?._data?.errors,
         message: response?._data?.errors?.[0]?.message,
       })
+    }
+
+    if (['LoginMutation', 'RegisterUserMutation'].includes(body?.[0]?.mutationName)) {
+      const sessionId = sessionIdFromSetCookies(cookies ?? []) || getCookie(event, 'session_id')
+      if (sessionId) setLoginSession(event, sessionId)
     }
 
     return response?._data?.data
