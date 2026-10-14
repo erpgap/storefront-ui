@@ -23,7 +23,11 @@ import { QueryName } from '~~/server/queries'
 export const useAuth = () => {
   const { $sdk } = useNuxtApp()
   const router = useRouter()
-  const userCookie = useCookie<any | null>('odoo-user', { maxAge: 3600 * 30 })
+  const userCookie = useCookie<any | null>('odoo-user', {
+    maxAge: 3600 * 30,
+    sameSite: 'lax',
+    secure: !import.meta.dev,
+  })
   const user = useState<Partner>('user', () => ({}) as Partner)
 
   const toast = useToast()
@@ -103,10 +107,6 @@ export const useAuth = () => {
       >({ mutationName: MutationName.CreateUpdatePartner }, params)
 
       user.value = data?.createUpdatePartner
-
-      if (userCookie.value?.id) {
-        userCookie.value = data?.createUpdatePartner?.id
-      }
     }
     finally {
       loading.value = false
@@ -153,7 +153,7 @@ export const useAuth = () => {
         SignInUserResponse
       >({ mutationName: MutationName.LoginMutation }, { ...params })
 
-      userCookie.value = data?.login?.user?.partner
+      userCookie.value = data?.login?.user?.partner?.id ?? null
       user.value = data?.login?.user?.partner as Partner
       router.push(redirectTo)
     }
