@@ -1,4 +1,4 @@
-import productFragment from '../fragments/productFragment'
+import productCardFragment from '../fragments/productCardFragment'
 
 export default `
 query(
@@ -32,7 +32,7 @@ query(
       }    
     }
     products {
-      ${productFragment}
+      ${productCardFragment}
     }
   }
 }

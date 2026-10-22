@@ -3,7 +3,6 @@ export default `
     id
     name
     displayName
-    price
     description
     imageUrl
     slug

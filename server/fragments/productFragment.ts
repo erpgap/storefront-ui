@@ -2,13 +2,10 @@ export default `
   id
   ratingAvg
   ratingCount
-  breadcrumb
-  jsonLdBreadcrumb
   metaDescription
   metaImage
   metaKeyword
   metaTitle
-  jsonLd
   productVariants {
     id
     imageUrl
@@ -37,7 +34,6 @@ export default `
       htmlColor
       attribute { id name }
     }
-  price
   name
   description
   imageUrl
