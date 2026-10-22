@@ -1,9 +1,10 @@
 import { defineConfig, devices } from '@playwright/test'
 
 /**
- * Browser tests for the CMS editor.
+ * Browser tests: the CMS editor's, which live with it in
+ * layers/cms-editor/test/e2e, and the storefront's own in test/e2e.
  *
- * These cover the things only a browser can: drag-and-drop, the inspector
+ * The editor's cover the things only a browser can: drag-and-drop, the inspector
  * updating the canvas as you type, publishing and then viewing the result.
  * Those are also where the bugs were - a block rendering at zero height, a
  * drag handle hidden under a drawer, a select that never refetched.
@@ -15,7 +16,8 @@ import { defineConfig, devices } from '@playwright/test'
  *   BASE_URL=https://alokai-dev.labs.erpgap.com yarn test:e2e
  */
 export default defineConfig({
-  testDir: './test/e2e',
+  testDir: '.',
+  testMatch: ['test/e2e/**/*.spec.ts', 'layers/*/test/e2e/**/*.spec.ts'],
   // The editor writes to shared content, so tests must not race each other.
   workers: 1,
   fullyParallel: false,

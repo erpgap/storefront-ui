@@ -9,7 +9,7 @@
  * They assert behaviour that must hold on any install, not the contents of
  * any particular page, so they are safe to point at staging or production.
  *
- *   BASE=http://localhost:3000 node test/smoke/cms.mjs
+ *   BASE=http://localhost:3000 node layers/cms/test/smoke/cms.mjs
  *
  * Exits non-zero on the first failure, so CI can gate a deploy on it.
  */

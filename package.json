@@ -17,7 +17,7 @@
     "prepare": "npx --yes husky install",
     "commit": "git-cz",
     "test": "vitest run",
-    "test:smoke": "node test/smoke/cms.mjs",
+    "test:smoke": "node layers/cms/test/smoke/cms.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {

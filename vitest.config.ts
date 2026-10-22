@@ -6,10 +6,10 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     setupFiles: ['./test/setup.ts'],
-    // Playwright owns test/e2e. Vitest picking those up means it tries to
-    // run browser specs in node, which fails in a way that looks like the
-    // unit suite is broken.
-    exclude: ['**/node_modules/**', '**/dist/**', 'test/e2e/**'],
+    // Playwright owns every test/e2e, the root one and the layers'. Vitest
+    // picking those up means it tries to run browser specs in node, which
+    // fails in a way that looks like the unit suite is broken.
+    exclude: ['**/node_modules/**', '**/dist/**', '**/test/e2e/**'],
   },
   resolve: {
     alias: {
