@@ -111,6 +111,7 @@ layers/cms/                   THE ENGINE — knows no block by name
   server/utils/cmsOdooStore.ts  the Odoo implementation
   server/utils/cmsStore.ts    the interface
   modules/cms-reserved-routes  page addresses the storefront already owns
+  modules/cms-page-routes     a cached route per CMS page known at build time
 
 layers/cms-blocks/            THIS STOREFRONT'S BLOCKS — read via #cms-blocks
   schemas.ts                  block schemas and their migrations

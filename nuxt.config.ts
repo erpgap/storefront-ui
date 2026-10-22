@@ -38,7 +38,7 @@ export default defineNuxtConfig({
    *
    * nuxt-typed-router builds a TypeScript union of every route and formats it
    * with prettier. The catalogue comes from Odoo - hundreds of categories and
-   * products, plus a CMS page per published url - which put that file past a
+   * products - and a CMS page per published url, which put that file past a
    * megabyte, and prettier overflows its call stack printing an expression
    * that wide, taking `nuxt dev` down with it. It began as an intermittent
    * failure on cold starts and became a permanent one as the catalogue grew.
@@ -56,7 +56,7 @@ export default defineNuxtConfig({
     ignoreRoutes: [
       'category/custom-pages/category-page.vue',
       'product/custom-pages/product-page.vue',
-      'cms/custom-pages/cms-page.vue',
+      // cms-page.vue is added by the CMS layer's cms-page-routes module.
     ].map(file => path.relative(
       path.resolve(__dirname, 'app/pages'),
       path.resolve(__dirname, 'layers', file),

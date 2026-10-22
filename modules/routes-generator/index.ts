@@ -36,16 +36,6 @@ export default defineNuxtModule({
            }
          `
 
-    const websitePagesQuery = `
-      query {
-        websitePages(pageSize: 10000) {
-          websitePages {
-            websiteUrl
-          }
-        }
-      }
-    `
-
     const fetchCategorySlugs = async (): Promise<string[]> => {
       try {
         const res = await ofetch(odooBaseUrl, {
@@ -94,27 +84,11 @@ export default defineNuxtModule({
       }
     }
 
-    const fetchWebpageSlugs = async (): Promise<string[]> => {
-      try {
-        const res = await ofetch(odooBaseUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: websitePagesQuery }),
-        })
-        return res?.data?.websitePages?.websitePages
-          ?.map((p: any) => p.websiteUrl)
-          .filter((s: string) => !!s) || []
-      }
-      catch (e) {
-        console.error('[routes-generator] Error fetching website pages:', e)
-        return []
-      }
-    }
-
-    const [categorySlugs, productSlugs, websitePagesUrls] = await Promise.all([
+    // CMS pages get their routes from the CMS layer's own module
+    // (layers/cms/modules/cms-page-routes); this one only knows the catalogue.
+    const [categorySlugs, productSlugs] = await Promise.all([
       fetchCategorySlugs(),
       fetchProductSlugs(),
-      fetchWebpageSlugs(),
     ])
 
     categorySlugs.forEach((slug) => {
@@ -125,13 +99,8 @@ export default defineNuxtModule({
       extendRouteRules(slug, { swr: swrValue })
     })
 
-    websitePagesUrls.forEach((url) => {
-      const path = url.startsWith('/') ? url : `/${url}`
-      extendRouteRules(path, { swr: swrValue })
-    })
-
     console.info(
-      `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products and ${websitePagesUrls.length} website pages loaded`,
+      `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products loaded`,
     )
 
     /**
@@ -159,18 +128,6 @@ export default defineNuxtModule({
           name: slug.replace(/^\//, '').replace(/\//g, '-'),
           path: slug,
           file: layerPage('product/custom-pages/product-page.vue'),
-        })
-      })
-
-      websitePagesUrls.forEach((url) => {
-        pages.push({
-          name: url.replace(/^\//, '').replace(/\//g, '-'),
-          path: url,
-          // Without a file this route resolves to nothing: it matches the URL,
-          // shadows the CMS catch-all, and renders an empty page wrapped in
-          // the site chrome. It stayed invisible for as long as the pages did
-          // not exist in Odoo when the dev server booted.
-          file: layerPage('cms/custom-pages/cms-page.vue'),
         })
       })
     })
