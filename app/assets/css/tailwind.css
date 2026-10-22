@@ -8,6 +8,10 @@
 @source '../../../layers';
 @source '../../../server';
 @source '../../../node_modules/@storefront-ui/vue';
+/* Storefront UI loads the typography plugin, and "prose" appears in code
+   comments (layers/cms): Tailwind took it for the class and emitted the
+   whole .prose stylesheet, ~12 kB nothing uses. */
+@source not inline('prose');
 
 @theme {
   --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
