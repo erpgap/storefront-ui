@@ -14,7 +14,7 @@ import { VIEWPORT_DEVICE_HEADER, viewportDevice } from '../utils/viewportDevice'
  * Varying the cache on the full user-agent would store one copy per browser
  * version. This header has three values, so each page is cached at most three
  * times, and the render can tell which layout to produce
- * (app/plugins/0.viewport-device.server.ts). modules/device-aware-cache adds
+ * (app/plugins/0.viewport-device.server.ts). modules/page-cache-rules adds
  * it to the rules' `varies`.
  *
  * Any value the client sent is overwritten: it is derived here, never trusted.
