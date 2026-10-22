@@ -44,6 +44,15 @@ export const useAuth = () => {
     Array.isArray(error?.data?.data) && error.data.data.length > 0
 
   const loadUser = async (withoutCache: boolean = false): Promise<boolean> => {
+    // Without the cookie the storefront does not count the visitor as logged
+    // in (see server/utils/loginSession.ts), and for a guest Odoo answers
+    // "User does not exist" as an error: a failed request on every guest
+    // checkout.
+    if (!userCookie.value) {
+      clearUser()
+      return false
+    }
+
     loading.value = true
 
     const query = withoutCache ? $sdk().odoo.queryNoCache : $sdk().odoo.query
