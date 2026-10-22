@@ -17,7 +17,10 @@ type FacetGroup = { label: string, options: FacetOption[] }
 type Facet = {
   id: string | number | null
   label: string
-  type: 'price' | 'select' | 'radio' | 'color' | 'in-stock' | 'category'
+  // Odoo's attribute displayType, passed through as-is (and absent for some
+  // attributes). Rendered: 'price', 'select', 'radio', 'color', 'in-stock',
+  // 'category'; anything else gets no input.
+  type?: string
   attributeName?: string
   options?: FacetOption[]
   groups?: FacetGroup[]
@@ -267,7 +270,7 @@ const activePills = computed<Pill[]>(() =>
       const fn = String(f.filterName).toLowerCase()
       if (fn === 'price') {
         const [a, b] = String(f.id).split('-')
-        return { key: `price`, type: 'price', display: '', min: Number(a) || 0, max: Number(b) || PRICE_MAX }
+        return { key: `price`, type: 'price', display: '', min: Number(a) || 0, max: Number(b) || bounds.value.max }
       }
       if (f.filterName === 'Availability') {
         return { key: 'availability', type: 'availability', display: 'In stock' }
