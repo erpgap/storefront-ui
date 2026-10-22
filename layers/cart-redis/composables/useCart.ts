@@ -15,6 +15,10 @@ export const useCart = () => {
   const { $sdk } = useNuxtApp()
   const cartCounter = useCookie<number>('cart-counter')
   const toast = useToast()
+  // Taken here, while the composable runs in the component's setup: the
+  // functions below run later, when Nuxt's context may be gone (during SSR
+  // that threw NUXT_E1001 and lost the request's cookies).
+  const requestFetch = useRequestFetch()
   const { openCartSideBar } = useCartUiState()
   const cart = useState<Cart>('cart', () => (({}) as Cart))
   const frequentlyTogetherProducts = useState<Product[]>('frequently-together-products', () => [])
@@ -37,7 +41,7 @@ export const useCart = () => {
     refresh: refreshCart,
   } = useAsyncData<{ cart: Cart }>(
     'cart',
-    () => useRequestFetch()<{ cart: Cart }>(`/api/odoo/cart-load`),
+    () => requestFetch<{ cart: Cart }>(`/api/odoo/cart-load`),
     { immediate: false },
   )
 

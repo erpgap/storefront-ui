@@ -29,6 +29,10 @@ export const useAuth = () => {
   const user = useState<Partner>('user', () => ({}) as Partner)
 
   const toast = useToast()
+  // Taken here, while the composable runs in the component's setup: the
+  // functions below run later, when Nuxt's context may be gone (during SSR
+  // that threw NUXT_E1001 and lost the request's cookies).
+  const requestFetch = useRequestFetch()
   const { t } = useNuxtApp().$i18n
 
   const loading = ref(false)
@@ -86,7 +90,7 @@ export const useAuth = () => {
 
   const hasValidSession = async (): Promise<boolean> => {
     try {
-      const { valid } = await useRequestFetch()<{ valid: boolean }>('/api/auth/session')
+      const { valid } = await requestFetch<{ valid: boolean }>('/api/auth/session')
       return valid
     }
     catch {

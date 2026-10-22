@@ -12,6 +12,10 @@ import { MutationName } from '~~/server/mutations'
 export const useWishlist = () => {
   const { $sdk } = useNuxtApp()
   const toast = useToast()
+  // Taken here, while the composable runs in the component's setup: the
+  // functions below run later, when Nuxt's context may be gone (during SSR
+  // that threw NUXT_E1001 and lost the request's cookies).
+  const requestFetch = useRequestFetch()
   const loading = ref(false)
   const wishlist = useState<WishlistData>('wishlist', () => ({ wishlistItems: [], totalCount: 0 } as unknown as WishlistData))
   const fetchedOnce = useState<boolean>('wishlist-fetched-once', () => false)
@@ -24,7 +28,7 @@ export const useWishlist = () => {
     try {
       loading.value = true
 
-      const data = await useRequestFetch()<{ wishlist?: WishlistData }>(
+      const data = await requestFetch<{ wishlist?: WishlistData }>(
         '/api/odoo/wishlist-load',
       )
 
