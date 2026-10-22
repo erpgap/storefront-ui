@@ -1,14 +1,10 @@
 <script setup lang="ts">
 const { loadCart } = useCart()
-const { loadPaymentMethods, paymentProviders, selectedProvider } = usePayment()
 
+// The payment providers are loaded, and the first one selected, by
+// CheckoutPayment on the same page.
 onMounted(async () => {
   await loadCart()
-  await loadPaymentMethods()
-  const [firstProvider] = paymentProviders.value
-  if (firstProvider) {
-    selectedProvider.value = firstProvider
-  }
 })
 </script>
 
