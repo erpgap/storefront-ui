@@ -36,10 +36,11 @@
   .scrollbar-hidden {
     -ms-overflow-style: none;
     scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      @apply hidden /* for Chrome, Safari, and Opera */;
-    }
+  }
+  /* Chrome, Safari and Opera. Written flat: no CSS nesting, see postcss in
+     nuxt.config. */
+  .scrollbar-hidden::-webkit-scrollbar {
+    @apply hidden;
   }
   .grid-areas-product-page {
     grid-template-areas:

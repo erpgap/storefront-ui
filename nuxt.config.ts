@@ -212,6 +212,16 @@ export default defineNuxtConfig({
     },
   },
 
+  postcss: {
+    plugins: {
+      // @nuxtjs/tailwindcss adds Tailwind 3's nesting plugin, which Nuxt 4.6
+      // can no longer load (it imports PostCSS plugins as ES modules, and
+      // `tailwindcss/nesting` is a CommonJS folder without an exports map):
+      // it warned on every build and did nothing. The stylesheets do not nest.
+      'tailwindcss/nesting': false,
+    },
+  },
+
   delayHydration: {
     mode: 'init',
   },

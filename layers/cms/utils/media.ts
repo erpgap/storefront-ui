@@ -8,6 +8,6 @@
  * `odooProvider` is the storefront's own Nuxt Image provider, registered in its
  * nuxt.config for every Odoo image, not just CMS ones.
  */
-export function imageProvider(src: string | null | undefined): string | undefined {
+export function imageProvider(src: string | null | undefined): 'odooProvider' | undefined {
   return src?.startsWith('/web/') ? 'odooProvider' : undefined
 }
