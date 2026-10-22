@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
         'accept': 'application/json',
         'content-type': 'application/json',
         'REAL-IP': getRequestIP(event) || '',
-        'resquest-host': config.public.middlewareUrl || getRequestHost(event),
+        'request-host': config.public.middlewareUrl || getRequestHost(event),
         'Cookie': `session_id=${getCookie(event, 'session_id')}`,
       },
       body: { query: Mutations[body?.[0]?.mutationName], variables: body?.[1] },

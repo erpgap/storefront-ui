@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
       errors?: { message: string }[]
     }>(url, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', ...odooWebsiteHeaders(event) },
       body: {
         query: `mutation ($email: String!, $password: String!) {
           login(email: $email, password: $password) { user { id name } }

@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
       data?: { cmsLocales?: { code: string, label: string, isDefault: boolean }[] }
     }>(url, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', ...odooWebsiteHeaders(event) },
       body: { query: GetCmsLocalesQuery },
     })
 

@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
       headers: {
         'content-type': 'application/json',
         'Cookie': `session_id=${getCookie(event, 'session_id') ?? ''}`,
+        ...odooWebsiteHeaders(event),
       },
       body: { query: GetCmsCanEditQuery },
     })

@@ -10,7 +10,7 @@ export const bootstrapApolloClient = (event: any) => {
         queries: { ...Queries, ...Mutations },
         headers: {
             'REAL-IP': getRequestIP(event) || '',
-            'resquest-host': getRequestHost(event),
+            'request-host': getRequestHost(event),
         },
     }
 

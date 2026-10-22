@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
       data?: { cmsRegion?: { id: number, blocks?: unknown[] } | null }
     }>(url, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', ...odooWebsiteHeaders(event) },
       body: { query: GetCmsRegionQuery, variables: { key } },
     })
 

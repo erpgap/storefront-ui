@@ -23,6 +23,7 @@ import {
   UpdateCmsPageSeoMutation,
 } from '../mutations/CmsMutations'
 import type { CmsStore, PageInput, SeoInput } from './cmsStore'
+import { odooWebsiteHeaders } from './cmsOdooWebsite'
 import type { BlockInstance, CmsPage, CmsSeo } from '#cms/shared/blocks'
 
 interface OdooCmsPage {
@@ -77,6 +78,7 @@ async function callOdoo<T>(
       'content-type': 'application/json',
       // The editor's own session. Odoo decides what they may do.
       'Cookie': `session_id=${getCookie(event, 'session_id') ?? ''}`,
+      ...odooWebsiteHeaders(event),
     },
     body: { query, variables },
   })
