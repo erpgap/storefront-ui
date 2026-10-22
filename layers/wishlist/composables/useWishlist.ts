@@ -1,3 +1,4 @@
+import type { FetchError } from 'ofetch'
 import { useToast } from 'vue-toastification'
 import type {
   MutationWishlistAddItemArgs,
@@ -5,17 +6,15 @@ import type {
   WishlistAddItemResponse,
   WishlistData,
   WishlistRemoveItemResponse,
-  WishlistItems,
 } from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
 
 export const useWishlist = () => {
-  const { $sdk } = useNuxtApp() as any
+  const { $sdk } = useNuxtApp()
   const toast = useToast()
   const loading = ref(false)
   const wishlist = useState<WishlistData>('wishlist', () => ({ wishlistItems: [], totalCount: 0 } as unknown as WishlistData))
   const fetchedOnce = useState<boolean>('wishlist-fetched-once', () => false)
-
 
   // Load from the Redis-backed endpoint (same pattern as the cart): a refresh
   // reads the persisted wishlist from Redis instead of querying Odoo every time.
@@ -33,7 +32,7 @@ export const useWishlist = () => {
         || ({ wishlistItems: [] } as unknown as WishlistData)
     }
     catch (error) {
-      toast.error(error.data?.message)
+      toast.error((error as FetchError).data?.message)
     }
     finally {
       loading.value = false
@@ -51,7 +50,7 @@ export const useWishlist = () => {
       wishlist.value = data?.wishlistAddItem
     }
     catch (error) {
-      toast.error(error.data?.message)
+      toast.error((error as FetchError).data?.message)
     }
     finally {
       loading.value = false
@@ -60,7 +59,7 @@ export const useWishlist = () => {
 
   const getProductFromProductId = (productId: number) => {
     return wishlist.value?.wishlistItems?.find(
-      (      item: { product: { id: number } }) => item?.product?.id === productId,
+      item => item?.product?.id === productId,
     )
   }
 
@@ -84,13 +83,12 @@ export const useWishlist = () => {
       wishlist.value = data?.wishlistRemoveItem
     }
     catch (error) {
-      toast.error(error.data?.message)
+      toast.error((error as FetchError).data?.message)
     }
     finally {
       loading.value = false
     }
   }
-
 
   const wishlistTotalItems = computed(() => {
     return wishlist.value?.wishlistItems?.length || 0
@@ -99,7 +97,7 @@ export const useWishlist = () => {
   const isInWishlist = (productId: number) => {
     return (
       wishlist.value?.wishlistItems?.some(
-        (        item: { product: { id: number } }) => item?.product?.id === productId,
+        item => item?.product?.id === productId,
       ) || false
     )
   }

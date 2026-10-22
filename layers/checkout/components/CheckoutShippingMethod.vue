@@ -24,9 +24,10 @@ await loadDeliveryMethods()
 // reactively because the methods often load only after the shipping address is
 // entered (the address save triggers a reload).
 watch(deliveryMethods, async (methods) => {
-  if (methods?.length && !radioModel.value) {
-    radioModel.value = String(methods[0]?.id)
-    await setDeliveryMethodImmediate(methods[0]?.id)
+  const firstMethod = methods?.[0]
+  if (firstMethod && !radioModel.value) {
+    radioModel.value = String(firstMethod.id)
+    await setDeliveryMethodImmediate(firstMethod.id)
   }
 }, { immediate: true })
 

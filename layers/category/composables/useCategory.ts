@@ -79,8 +79,9 @@ export const useCategory = (categorySlugIndex: string) => {
       }
     }
 
-    if (categoryPath.length > 0) {
-      categoryPath[categoryPath.length - 1].link = '';
+    const lastCrumb = categoryPath.at(-1)
+    if (lastCrumb) {
+      lastCrumb.link = ''
     }
 
     return [

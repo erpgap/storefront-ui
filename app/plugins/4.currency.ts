@@ -9,7 +9,8 @@ export default defineNuxtPlugin(() => {
           separator: config.public.currencySeparator,
           symbol: config.public.currencySymbol,
           decimal: config.public.currencyDecimal,
-          precision: config.public.currencyPrecision,
+          // Runtime config values from the environment are strings.
+          precision: config.public.currencyPrecision ? Number(config.public.currencyPrecision) : undefined,
         }).format()
       },
     },

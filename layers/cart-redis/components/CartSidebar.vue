@@ -5,7 +5,7 @@ import {
   SfIconClose,
   useTrapFocus,
 } from '@storefront-ui/vue'
-import type { Product } from '~~/graphql'
+import type { CustomOrderLineWithStockFromRedis, Product } from '~~/graphql'
 
 const NuxtLink = resolveComponent('NuxtLink')
 
@@ -15,7 +15,9 @@ const { cartSidebarIsOpen, closeCartSideBar } = useCartUiState()
 const drawerRef = ref()
 useTrapFocus(drawerRef, { activeState: cartSidebarIsOpen })
 
-const lines = computed(() => cart.value?.order?.websiteOrderLine ?? [])
+// cart-load stamps each line's product with its website stock (see
+// server/api/odoo/cart-load.get.ts); the generated OrderLine type lacks it.
+const lines = computed(() => (cart.value?.order?.websiteOrderLine ?? []) as CustomOrderLineWithStockFromRedis[])
 
 const goTo = (to: string) => {
   closeCartSideBar()

@@ -25,8 +25,9 @@ export const useProductTemplate = (slug: string) => {
     const breadcrumbList: BreadcrumbItem[] = [{ label: 'Home', link: '/' }]
     const categoryChain: { name: string; slug: string }[] = []
 
-    if (productTemplate.value?.categories?.length > 0) {
-      let current: Category | null | undefined = productTemplate.value.categories[0]
+    const categories = productTemplate.value?.categories
+    if (categories && categories.length > 0) {
+      let current: Category | null | undefined = categories[0]
 
       while (current) {
         categoryChain.unshift({

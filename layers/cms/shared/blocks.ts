@@ -389,7 +389,8 @@ export function placeholderLabels(blockType: string): string[] {
     fields.flatMap((field) => {
       if (field.type === 'array') return collect(field.fields)
       if (field.noPlaceholder) return []
-      return field.type === 'text' || field.type === 'textarea' ? [field.label] : []
+      // The placeholder shown is the label, so a field without one shows none.
+      return (field.type === 'text' || field.type === 'textarea') && field.label ? [field.label] : []
     })
 
   return [...new Set(collect(schema.fields))]

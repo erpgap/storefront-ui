@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { SfCheckbox, SfInput, SfSelect } from '@storefront-ui/vue'
-import type { PropType } from 'vue'
+import type { PropType, Ref } from 'vue'
 import {
   AddressEnum,
   type AddAddressInput,
@@ -29,6 +29,11 @@ const { city, country, state, street, phone, zip } = toRefs(props.savedAddress)
 
 const countryId = toRef(country.value?.id)
 const stateId = toRef(state.value?.id)
+// SfSelect types its model as a string, but the native <select> inside it hands
+// back the bound option value as is: a country/state id (number), or null for
+// the placeholder. These are the same refs, typed for SfSelect's v-model.
+const countryModel = countryId as Ref<unknown> as Ref<string | undefined>
+const stateModel = stateId as Ref<unknown> as Ref<string | undefined>
 
 const { addAddress, updateAddress } = useAddresses()
 const { countries } = useCountryList()
@@ -77,10 +82,11 @@ const save = async () => {
   if (snap === lastSaved) return
   lastSaved = snap
 
-  const data: UpdateAddressInput = {
+  // The resolvers skip empty fields, so null is the same as leaving one out.
+  const data: Omit<UpdateAddressInput, 'id' | 'email'> = {
     name: effectiveName.value,
-    street: street.value?.split(' ')?.[0],
-    street2: street.value?.split(' ')?.[1],
+    street: street.value?.split(' ')?.[0] ?? null,
+    street2: street.value?.split(' ')?.[1] ?? null,
     city: city.value,
     zip: zip.value,
     phone: phone.value,
@@ -89,8 +95,7 @@ const save = async () => {
   }
 
   if (props.savedAddress?.id && props.savedAddress.id !== 4) {
-    data.id = props.savedAddress.id
-    await updateAddress(data, props.type)
+    await updateAddress({ ...data, id: props.savedAddress.id, email: null }, props.type)
   }
   else {
     await addAddress(data as unknown as AddAddressInput, props.type)
@@ -178,17 +183,30 @@ defineExpose({
       >
         <label class="block sm:col-span-2">
           <UiFormLabel>{{ $t("form.phoneLabel") }}</UiFormLabel>
-          <SfInput v-model="phone" name="phone" type="tel" autocomplete="tel" :invalid="showErrors && required.phone" />
+          <SfInput
+            :model-value="phone ?? undefined"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            :invalid="showErrors && required.phone"
+            @update:model-value="phone = String($event)"
+          />
           <UiFieldError v-if="showErrors && required.phone">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
         <label class="block sm:col-span-2">
           <UiFormLabel>{{ $t("form.streetNameLabel") }}</UiFormLabel>
-          <SfInput v-model="street" name="streetName" autocomplete="street-address" :invalid="showErrors && required.street" />
+          <SfInput
+            :model-value="street ?? undefined"
+            name="streetName"
+            autocomplete="street-address"
+            :invalid="showErrors && required.street"
+            @update:model-value="street = String($event)"
+          />
           <UiFieldError v-if="showErrors && required.street">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("form.countryLabel") }}</UiFormLabel>
-          <SfSelect v-model="countryId" name="country" autocomplete="country-name" :invalid="showErrors && required.country">
+          <SfSelect v-model="countryModel" name="country" autocomplete="country-name" :invalid="showErrors && required.country">
             <option key="placeholder" :value="null">
               {{ $t("form.selectPlaceholder") }}
             </option>
@@ -200,7 +218,7 @@ defineExpose({
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("form.stateLabel") }}</UiFormLabel>
-          <SfSelect v-model="stateId" name="state" autocomplete="address-level1" :disabled="!states.length" :invalid="showErrors && required.state">
+          <SfSelect v-model="stateModel" name="state" autocomplete="address-level1" :disabled="!states.length" :invalid="showErrors && required.state">
             <option key="placeholder" :value="null">
               {{ $t("form.selectPlaceholder") }}
             </option>
@@ -212,12 +230,24 @@ defineExpose({
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("form.cityLabel") }}</UiFormLabel>
-          <SfInput v-model="city" name="city" autocomplete="address-level2" :invalid="showErrors && required.city" />
+          <SfInput
+            :model-value="city ?? undefined"
+            name="city"
+            autocomplete="address-level2"
+            :invalid="showErrors && required.city"
+            @update:model-value="city = String($event)"
+          />
           <UiFieldError v-if="showErrors && required.city">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("form.postalCodeLabel") }}</UiFormLabel>
-          <SfInput v-model="zip" name="postalCode" autocomplete="postal-code" :invalid="showErrors && required.zip" />
+          <SfInput
+            :model-value="zip ?? undefined"
+            name="postalCode"
+            autocomplete="postal-code"
+            :invalid="showErrors && required.zip"
+            @update:model-value="zip = String($event)"
+          />
           <UiFieldError v-if="showErrors && required.zip">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
       </div>

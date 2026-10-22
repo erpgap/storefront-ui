@@ -1,6 +1,6 @@
 import { initSDK, buildModule } from '@vue-storefront/sdk'
-import type { OdooModuleType } from '@erpgap/odoo-sdk'
 import { OdooModule } from '@erpgap/odoo-sdk'
+import type { $Fetch } from 'ofetch'
 import { useToast } from 'vue-toastification'
 import { defineNuxtPlugin } from 'nuxt/app'
 
@@ -55,8 +55,10 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     : undefined
 
   const sdkConfig = {
-    odoo: buildModule<OdooModuleType>(OdooModule, {
+    odoo: buildModule(OdooModule, {
       apiUrl: `${config.public.middlewareUrl}api/odoo/`,
+      // Nuxt's $fetch is an ofetch instance; Nitro's type for it just leaves
+      // out `native`, which the SDK's ofetch type requires.
       ofetch: $fetch.create({
         credentials: 'include',
         onRequest({ options }) {
@@ -78,7 +80,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
             toast.error(response?._data?.message)
           }
         },
-      }),
+      }) as $Fetch,
     }),
   }
 

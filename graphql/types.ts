@@ -1,4 +1,3 @@
-import type { H3Error } from 'h3'
 import type {
   AttributeValue,
   Cart,
@@ -17,12 +16,12 @@ import type {
   ApplyGiftCardList,
   OrderLine,
   Lead,
+  Scalars,
 } from './gql/graphql'
-import type { AsyncData } from '#app'
 
 export interface BreadcrumbItem {
-  label: string;
-  link: string;
+  label: string
+  link: string
 }
 
 export type CategoryListResponse =
@@ -58,68 +57,37 @@ export type ProductVariantResponse = {
   }
 }
 
-export type WishlistLoadResponse = AsyncData<
-  {
-    wishlistItems: WishlistData
-  },
-  H3Error
->
+// What $sdk().odoo.query/mutation resolve to: the GraphQL `data` object itself.
+export type WishlistLoadResponse = { wishlistItems: WishlistData }
+export type WishlistAddItemResponse = { wishlistAddItem: WishlistData }
+export type WishlistRemoveItemResponse = { wishlistRemoveItem: WishlistData }
 
-export type WishlistAddItemResponse = AsyncData<
-  {
-    wishlistAddItem: WishlistData
-  },
-  H3Error
->
-
-export type WishlistRemoveItemResponse = AsyncData<
-  {
-    wishlistRemoveItem: WishlistData
-  },
-  H3Error
->
-
-export type CartResponse = AsyncData<
-  {
-    cart: Cart
-  },
-  H3Error
->
+export type CartResponse = {
+  cart: Cart
+}
 
 export type CartAddItemResponse = { cartAddMultipleItems: Cart }
 
-export type ApplyDiscountsResponse = AsyncData<
-  {
-    applyGiftCard: ApplyGiftCardList
-    applyCoupon: ApplyCouponList
-  },
-  H3Error
->
-export type MakeGiftCardPaymentResponse = AsyncData<
-  {
-    makeGiftCardPayment: { done: boolean }
-  },
-  H3Error
->
+export type ApplyDiscountsResponse = {
+  applyGiftCard: ApplyGiftCardList
+  applyCoupon: ApplyCouponList
+}
+export type MakeGiftCardPaymentResponse = {
+  makeGiftCardPayment: { done: boolean }
+}
 export type CartUpdateItemResponse = { cartUpdateMultipleItems: Cart }
 export type CartRemoveItemResponse = { cartRemoveMultipleItems: Cart }
 
-export type LoadUserQueryResponse = AsyncData<
-  {
-    partner: Partner
-  },
-  H3Error
->
+export type LoadUserQueryResponse = {
+  partner: Partner
+}
 
-export type RegisterUserResponse = AsyncData<
-  {
-    id: number
-    name: string
-    email: string
-    partner: Partner
-  },
-  H3Error
->
+export type RegisterUserResponse = {
+  id: number
+  name: string
+  email: string
+  partner: Partner
+}
 
 export type SignUpUserResponse = {
   register: {
@@ -130,14 +98,11 @@ export type SignUpUserResponse = {
   }
 }
 
-export type LoginUserResponse = AsyncData<
-  {
-    login: {
-      user: User
-    }
-  },
-  H3Error
->
+export type LoginUserResponse = {
+  login: {
+    user: User
+  }
+}
 
 export type SignInUserResponse = {
   login: {
@@ -145,85 +110,55 @@ export type SignInUserResponse = {
   }
 }
 
-export type ResetPasswordResponse = AsyncData<
-  {
-    id: number
-    name: string
-    email: string
-  },
-  H3Error
->
+export type ResetPasswordResponse = {
+  id: number
+  name: string
+  email: string
+}
 
-export type PartnerResponse = AsyncData<Partner, H3Error>
+export type PartnerResponse = Partner
 
-export type AddressesResponse = AsyncData<
-  {
-    addresses: Partner[]
-  },
-  H3Error
->
+export type AddressesResponse = {
+  addresses: Partner[]
+}
 
 export type responseAddresses = {
   addresses: Partner[]
 }
 
-export type AddAddressResponse = AsyncData<
-  {
-    addAddress: Partner
-  },
-  H3Error
->
+export type AddAddressResponse = {
+  addAddress: Partner
+}
 
-export type UpdatePasswordResponse = AsyncData<
-  {
-    updatePassword: {
-      id: number
-    }
-  },
-  H3Error
->
+export type UpdatePasswordResponse = {
+  updatePassword: {
+    id: number
+  }
+}
 
-export type ChangePasswordResponse = AsyncData<
-  {
-    changePassword: User
-  },
-  H3Error
->
+export type ChangePasswordResponse = {
+  changePassword: User
+}
 
-export type UpdateMyAccountResponse = AsyncData<
-  {
-    updateMyAccount: Partner
-  },
-  H3Error
->
+export type UpdateMyAccountResponse = {
+  updateMyAccount: Partner
+}
 
-export type CreateUpdatePartnerResponse = AsyncData<
-  {
-    createUpdatePartner: Partner
-  },
-  H3Error
->
+export type CreateUpdatePartnerResponse = {
+  createUpdatePartner: Partner
+}
 
-export type UpdateAddressResponse = AsyncData<
-  {
-    updateAddress: Partner
-  },
-  H3Error
->
+export type UpdateAddressResponse = {
+  updateAddress: Partner
+}
 
-export type SelectCurrentAddressResponse = AsyncData<
-  {
-    selectAddress: Partner
-  },
-  H3Error
->
+export type SelectCurrentAddressResponse = {
+  selectAddress: Partner
+}
 
-export type DeleteAddressResponse = AsyncData<
-  {
-    result: boolean
-  },
-  H3Error
->
+export type DeleteAddressResponse = {
+  result: boolean
+}
 
 export type AddressFormFieldsInput = {
   street: string
@@ -241,33 +176,21 @@ export type AddressFormFieldsInputExtendedFields = AddressFormFieldsInput & {
   email?: string
 }
 
-export type CountriesResponse = AsyncData<
-  {
-    countries: Countries[]
-  },
-  H3Error
->
+export type CountriesResponse = {
+  countries: Countries
+}
 
-export type StatesResponse = AsyncData<
-  {
-    country: Country
-  },
-  H3Error
->
+export type StatesResponse = {
+  country: Country
+}
 
-export type DeliveryMethodListResponse = AsyncData<
-  {
-    deliveryMethods: ShippingMethod[]
-  },
-  H3Error
->
+export type DeliveryMethodListResponse = {
+  deliveryMethods: ShippingMethod[]
+}
 
-export type DeliveryMethodResponse = AsyncData<
-  {
-    deliveryMethodId: number
-  },
-  H3Error
->
+export type DeliveryMethodResponse = {
+  deliveryMethodId: number
+}
 
 export type WebsiteHomepageResponse =
   {
@@ -279,75 +202,45 @@ export type WebsiteHomepageResponse =
     jsonLd: string
   }
 
-export type PaymentMethodListResponse = AsyncData<
-  {
-    paymentProviders: PaymentProvider[]
-  },
-  H3Error
->
+export type PaymentMethodListResponse = {
+  paymentProviders: PaymentProvider[]
+}
 
-export type AdyenTransactionResponse = AsyncData<
-  {
-    adyenTransaction: AdyenTransactionResult
-  },
-  H3Error
->
+export type AdyenTransactionResponse = {
+  adyenTransaction: AdyenTransactionResult
+}
 
-export type AdyenProviderInfoResponse = AsyncData<
-  {
-    adyenProviderInfo: AdyenProviderInfoResult
-  },
-  H3Error
->
+export type AdyenProviderInfoResponse = {
+  adyenProviderInfo: AdyenProviderInfoResult
+}
 
-export type AdyenPaymentMethodsResponse = AsyncData<
-  {
-    adyenPaymentMethods: AdyenPaymentMethodsResult
-  },
-  H3Error
->
+export type AdyenPaymentMethodsResponse = {
+  adyenPaymentMethods: AdyenPaymentMethodsResult
+}
 
-export type AdyenPaymentDetailsResponse = AsyncData<
-  {
-    adyenPaymentDetails: AdyenPaymentDetailsResult
-  },
-  H3Error
->
+export type AdyenPaymentDetailsResponse = {
+  adyenPaymentDetails: AdyenPaymentDetailsResult
+}
 
-export type AdyenPaymentsResponse = AsyncData<
-  {
-    adyenPayments: AdyenPaymentsResult
-  },
-  H3Error
->
+export type AdyenPaymentsResponse = {
+  adyenPayments: AdyenPaymentsResult
+}
 
-export type GetOrdersResponse = AsyncData<
-  {
-    orders: Orders
-  },
-  H3Error
->
+export type GetOrdersResponse = {
+  orders: Orders
+}
 
-export type GetOrderResponse = AsyncData<
-  {
-    order: Order
-  },
-  H3Error
->
+export type GetOrderResponse = {
+  order: Order
+}
 
-export type NewsletterSubscribeResponse = AsyncData<
-  {
-    newsletterSubscribe: boolean
-  },
-  H3Error
->
+export type NewsletterSubscribeResponse = {
+  newsletterSubscribe: boolean
+}
 
-export type ContactUsResponse = AsyncData<
-  {
-    contactUs: Lead
-  },
-  H3Error
->
+export type ContactUsResponse = {
+  contactUs: Lead
+}
 export interface AttributeFacet {
   id: string
   label: string
@@ -380,4 +273,36 @@ export type ImageGalleryItem = {
   alt: string
   width?: number | string
   height?: number | string
+}
+
+// ---------------------------------------------------------------------------
+// Adyen (payment_adyen_alokai)
+// ---------------------------------------------------------------------------
+// gql/graphql.ts is generated from an Odoo without that addon installed, so
+// its mutations are declared here, from
+// payment_adyen_alokai/graphql/payment_adyen.py. Every result is a
+// GenericScalar: Adyen's own JSON, passed through.
+
+type AdyenJson = Scalars['GenericScalar']['output']
+
+export interface AdyenProviderInfoResult { adyenProviderInfo: AdyenJson | null }
+export interface AdyenPaymentMethodsResult { adyenPaymentMethods: AdyenJson | null }
+export interface AdyenTransactionResult { transaction: AdyenJson | null }
+export interface AdyenPaymentsResult { adyenPayments: AdyenJson | null }
+export interface AdyenPaymentDetailsResult { adyenPaymentDetails: AdyenJson | null }
+
+export interface MutationAdyenProviderInfoArgs { providerId: number }
+export interface MutationAdyenPaymentMethodsArgs { providerId: number }
+export interface MutationAdyenTransactionArgs { providerId: number, tokenizationRequested?: boolean }
+export interface MutationAdyenPaymentsArgs {
+  providerId: number
+  transactionReference: string
+  accessToken: string
+  paymentMethod: AdyenJson
+  browserInfo: AdyenJson
+}
+export interface MutationAdyenPaymentDetailsArgs {
+  providerId: number
+  transactionReference: string
+  paymentDetails: AdyenJson
 }

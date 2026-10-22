@@ -1,8 +1,6 @@
 import { useToast } from 'vue-toastification'
 import type {
   ChangePasswordResponse,
-  CreateUpdatePartnerResponse,
-  LoadUserQueryResponse,
   MutationChangePasswordArgs,
   MutationCreateUpdatePartnerArgs,
   MutationLoginArgs,
@@ -51,7 +49,7 @@ export const useAuth = () => {
     const query = withoutCache ? $sdk().odoo.queryNoCache : $sdk().odoo.query
 
     try {
-      const data = await query<null, LoadUserQueryResponse>({
+      const data = await query<null, { partner: Partner }>({
         queryName: QueryName.LoadUserQuery,
       })
       const partner = data?.partner
@@ -103,7 +101,7 @@ export const useAuth = () => {
     try {
       const data = await $sdk().odoo.mutation<
         MutationCreateUpdatePartnerArgs,
-        CreateUpdatePartnerResponse
+        { createUpdatePartner: Partner }
       >({ mutationName: MutationName.CreateUpdatePartner }, params)
 
       user.value = data?.createUpdatePartner

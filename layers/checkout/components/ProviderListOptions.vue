@@ -2,7 +2,7 @@
 import type { PaymentProvider } from '~~/graphql'
 
 type CheckoutPaymentProps = {
-  activeProvider: PaymentProvider
+  activeProvider?: PaymentProvider
   paymentProviders: PaymentProvider[]
 }
 
@@ -15,8 +15,9 @@ const props = defineProps<CheckoutPaymentProps>()
 const emit = defineEmits<CheckoutPaymentEmits>()
 
 onMounted(() => {
-  if (props.paymentProviders.length > 0) {
-    emit('update:activePayment', props.paymentProviders[0])
+  const [firstProvider] = props.paymentProviders
+  if (firstProvider) {
+    emit('update:activePayment', firstProvider)
   }
 })
 </script>
@@ -34,7 +35,7 @@ onMounted(() => {
       <label
         :class="[
           'flex items-start gap-3 border rounded-[2px] p-4 cursor-pointer transition-colors',
-          provider.id === activeProvider.id ? 'border-black shadow-[inset_0_0_0_1px_black]' : 'border-primary-200 hover:bg-primary-50',
+          provider.id === activeProvider?.id ? 'border-black shadow-[inset_0_0_0_1px_black]' : 'border-primary-200 hover:bg-primary-50',
         ]"
       >
         <input
@@ -42,15 +43,15 @@ onMounted(() => {
           name="payment_method"
           class="sr-only"
           :value="provider.id"
-          :checked="provider.id === activeProvider.id"
+          :checked="provider.id === activeProvider?.id"
           @change="$emit('update:activePayment', provider)"
         >
         <span
           class="mt-0.5 w-[18px] h-[18px] rounded-full border shrink-0 relative"
-          :class="provider.id === activeProvider.id ? 'border-black' : 'border-primary-300'"
+          :class="provider.id === activeProvider?.id ? 'border-black' : 'border-primary-300'"
         >
           <span
-            v-if="provider.id === activeProvider.id"
+            v-if="provider.id === activeProvider?.id"
             class="absolute inset-[4px] rounded-full bg-black"
           />
         </span>

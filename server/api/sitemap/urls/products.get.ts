@@ -1,4 +1,3 @@
-import { defineSitemapEventHandler } from '#imports'
 import type { SitemapUrlInput } from '#sitemap/types'
 import { getSlugsByModel, SlugModels } from '../../../utils/slugStorage'
 

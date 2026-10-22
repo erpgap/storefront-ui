@@ -1,4 +1,4 @@
-import type { Meta } from '#imports'
+import type { Meta } from '@unhead/vue'
 
 export interface SeoEntity {
   metaTitle?: string | null
@@ -102,15 +102,15 @@ const generateSeo = <T extends SeoEntity>(
         content: 'summary_large_image',
       },
     ].filter(Boolean) as Meta[],
-    script: [
-      jsonLdObject && {
-        type: 'application/ld+json',
-        children: JSON.stringify(jsonLdObject),
-      },
-    ].filter(Boolean),
+    // innerHTML rather than `children`, which unhead only maps to it through
+    // its legacy plugin. Its server renderer escapes `</script` (and `<` in
+    // JSON types), so the content cannot close the tag.
+    script: jsonLdObject
+      ? [{ type: 'application/ld+json' as const, innerHTML: JSON.stringify(jsonLdObject) }]
+      : [],
     link: [
       {
-        rel: 'canonical',
+        rel: 'canonical' as const,
         href,
       },
     ],

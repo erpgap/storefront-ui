@@ -19,7 +19,7 @@ const navItems = [
 ]
 
 const menuRef = ref()
-const searchPanelRef = ref<HTMLElement | null>(null)
+const searchPanelRef = ref<HTMLElement>()
 const formSearchTemplateRef = ref<HTMLElement | null>(null)
 
 const {

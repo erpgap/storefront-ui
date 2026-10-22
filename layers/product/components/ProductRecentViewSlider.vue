@@ -29,7 +29,7 @@ await loadProductTemplateList(props.excludeId)
 const filteredList = computed(() => {
   if (!props.excludeId) return productTemplateList.value
   return productTemplateList.value.filter(
-    (p: { firstVariant?: { combinationInfoVariant?: { product_template_id?: number } } }) =>
+    p =>
       p.firstVariant?.combinationInfoVariant?.product_template_id !== props.excludeId,
   )
 })

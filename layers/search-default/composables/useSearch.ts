@@ -41,7 +41,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   // Sincroniza o input com a URL (?search=...)
   watch(
     () => route.query.search,
-    (v: string) => {
+    (v) => {
       searchInputValue.value = (v as string) || ''
     },
     { immediate: true },
@@ -68,20 +68,17 @@ export const useSearch = (formSearchTemplateRef?: any) => {
       return
     }
 
-    try {
-      loading.value = true
-      await loadProductTemplateList({
-        search: query,
-        pageSize: 12,
-      })
+    // `loading` is a computed over the fetch's `pending`, so it already
+    // tracks this request.
+    await loadProductTemplateList({
+      search: query,
+      pageSize: 12,
+    })
 
-      const hasHits = (productTemplateList.value?.length || 0) > 0
-      showResultSearch.value = hasHits
-      searchModalOpen.value = hasHits
-      highlightedIndex.value = hasHits ? 0 : -1
-    } finally {
-      loading.value = false
-    }
+    const hasHits = (productTemplateList.value?.length || 0) > 0
+    showResultSearch.value = hasHits
+    searchModalOpen.value = hasHits
+    highlightedIndex.value = hasHits ? 0 : -1
   }, 300)
 
   // ---------- Derivados ----------

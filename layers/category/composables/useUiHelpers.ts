@@ -66,9 +66,10 @@ export const useUiHelpers = () => {
     const page = query?.page ? parseInt(query.page) : 1
 
     const sortParts = String(query?.sort ?? '').split(',')
+    const [sortField, sortDirection] = sortParts
     const sort =
-      sortParts.length === 2
-        ? ({ [sortParts[0]]: sortParts[1] } as any)
+      sortParts.length === 2 && sortField !== undefined
+        ? ({ [sortField]: sortDirection } as any)
         : undefined
 
     const productFilters: Partial<ProductFilterInput> = {

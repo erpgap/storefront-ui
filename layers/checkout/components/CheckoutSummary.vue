@@ -5,8 +5,9 @@ const { loadPaymentMethods, paymentProviders, selectedProvider } = usePayment()
 onMounted(async () => {
   await loadCart()
   await loadPaymentMethods()
-  if (paymentProviders.value.length > 0) {
-    selectedProvider.value = paymentProviders.value[0]
+  const [firstProvider] = paymentProviders.value
+  if (firstProvider) {
+    selectedProvider.value = firstProvider
   }
 })
 </script>

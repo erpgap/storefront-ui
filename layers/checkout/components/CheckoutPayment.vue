@@ -98,9 +98,10 @@ onMounted(async () => {
 })
 
 watch(() => paymentProviders.value, () => {
-  if (paymentProviders.value.length > 0) {
+  const [firstProvider] = paymentProviders.value
+  if (firstProvider) {
     showPaymentModal.value = true
-    updateSelectedProvider(paymentProviders.value[0])
+    updateSelectedProvider(firstProvider)
   }
 }, {
   deep: true,

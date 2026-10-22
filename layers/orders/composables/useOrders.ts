@@ -1,7 +1,5 @@
 import { useToast } from 'vue-toastification'
 import type {
-  GetOrderResponse,
-  GetOrdersResponse,
   Order,
   Orders,
   QueryOrderArgs,
@@ -19,7 +17,7 @@ export const useOrders = () => {
   const getOrders = async () => {
     try {
       loading.value = true
-      const data = await $sdk().odoo.query<null, GetOrdersResponse>(
+      const data = await $sdk().odoo.query<null, { orders: Orders }>(
         { queryName: QueryName.GetOrdersQuery },
         null,
       )
@@ -38,7 +36,7 @@ export const useOrders = () => {
   const getOrderById = async (params: QueryOrderArgs) => {
     try {
       loading.value = true
-      const data = await $sdk().odoo.query<QueryOrderArgs, GetOrderResponse>(
+      const data = await $sdk().odoo.query<QueryOrderArgs, { order: Order }>(
         { queryName: QueryName.GetOrderQuery },
         params,
       )

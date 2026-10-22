@@ -1,9 +1,9 @@
-import { Queries } from '~~/server/queries'
+import { Queries, type QueryName } from '~~/server/queries'
 
 export default defineEventHandler(async (event: any) => {
   const config = useRuntimeConfig(event)
   try {
-    const body = await readBody(event)
+    const body = await readBody<[{ queryName: QueryName }, Record<string, unknown>?]>(event)
     const response: any = await $fetch.raw(`${config.public.odooBaseUrl}graphql/vsf`, {
       method: 'POST',
       headers: {
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event: any) => {
     if (error.networkError) {
       throw createError({
         statusCode: 500,
-        data: (error.networkError as unknown)?.result?.errors,
+        data: (error.networkError as { result?: { errors?: unknown } })?.result?.errors,
         message: error.message,
       })
     }

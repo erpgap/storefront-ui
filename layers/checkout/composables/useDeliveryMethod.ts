@@ -2,7 +2,6 @@ import { useToast } from 'vue-toastification';
 import { debounce } from 'lodash-es';
 import type {
   ShippingMethod,
-  DeliveryMethodListResponse,
   MutationSetShippingMethodArgs,
   DeliveryMethodResponse,
 } from '~~/graphql';
@@ -29,7 +28,7 @@ export const useDeliveryMethod = () => {
       // list even after the address has been filled in.
       const data = await $sdk().odoo.queryNoCache<
         any,
-        DeliveryMethodListResponse
+        { deliveryMethods: ShippingMethod[] }
       >({
         queryName: QueryName.GetDeliveryMethodsQuery,
       });

@@ -116,7 +116,7 @@ export const useAddresses = () => {
 
     const data = await $sdk().odoo.mutation<
       MutationUpdateAddressArgs,
-      SelectCurrentAddressResponse
+      { updateAddress: Partner }
     >({ mutationName: MutationName.UpdateAddress }, { address })
 
     if (type === AddressEnum.Billing) {

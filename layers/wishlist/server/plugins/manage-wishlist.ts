@@ -1,3 +1,4 @@
+import type { WishlistData } from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
 
 // Keeps the Redis-cached wishlist in sync (same approach as manage-cart): every
@@ -20,7 +21,10 @@ export default defineNitroPlugin((nitro) => {
     const session = await useStorefrontSession(event)
     const keyName = `cache:wishlist:${session?.id}`
 
-    const wishlist = body?.wishlistAddItem ?? body?.wishlistRemoveItem
+    // A wishlist mutation's response body is the GraphQL `data` object
+    // returned by server/api/odoo/mutation.post.ts.
+    const data = body as { wishlistAddItem?: WishlistData, wishlistRemoveItem?: WishlistData } | undefined
+    const wishlist = data?.wishlistAddItem ?? data?.wishlistRemoveItem
     if (wishlist) {
       await useStorage('wishlist').setItem(keyName, { wishlist })
     }

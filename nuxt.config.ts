@@ -245,13 +245,13 @@ export default defineNuxtConfig({
     preconnect: true,
   },
 
+  // `legacy` and `lazy` are gone from @nuxtjs/i18n 10: composition mode and
+  // lazy-loaded locale files are what it always does now.
   i18n: {
-    legacy: false,
     locales: [
-      { code: 'en', file: 'en.json', },
+      { code: 'en', file: 'en.json' },
     ],
     strategy: 'no_prefix',
-    lazy: true,
     defaultLocale: 'en',
   },
 
@@ -302,6 +302,19 @@ export default defineNuxtConfig({
 
   tailwindcss: {
     viewer: false,
+  },
+
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        paths: {
+          // @adyen/adyen-web 4.x ships its types in dist/types, but its
+          // package.json "exports" has no "types" condition, so TypeScript
+          // cannot find them. Types only: the bundler resolves it as before.
+          '@adyen/adyen-web': [path.resolve(__dirname, 'node_modules/@adyen/adyen-web/dist/types/index.d.ts')],
+        },
+      },
+    },
   },
 
   alias: {

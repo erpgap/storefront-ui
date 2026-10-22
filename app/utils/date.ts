@@ -8,6 +8,6 @@ export const formatDate = (value?: string | null): string => {
   const iso = String(value).replace(' ', 'T').replace(/\.\d+$/, '')
   const date = new Date(iso)
   return Number.isNaN(date.getTime())
-    ? String(value).split(' ')[0]
+    ? String(value).split(' ')[0] ?? ''
     : date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
 }

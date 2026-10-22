@@ -164,6 +164,12 @@ export interface CmsSeo {
 export interface CmsPage {
   id: string
   title: string
+  /** A page, or a region: blocks the storefront places inside a page it owns. */
+  kind?: 'page' | 'region'
+  /** For a region, the key the storefront places it by, e.g. `category-after`. */
+  regionKey?: string
+  /** Created by the storefront (the homepage, the regions): cannot be deleted or moved. */
+  isSystem?: boolean
   /** Leading-slash path, e.g. `/summer-sale`. Unique. */
   slug: string
   metaTitle?: string

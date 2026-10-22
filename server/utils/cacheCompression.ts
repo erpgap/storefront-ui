@@ -55,7 +55,7 @@ const hasZstd = typeof zstdCompress === 'function'
 /**
  * Compress a storage value. Non-string or small values pass through untouched.
  */
-export async function compressStorageValue(value: unknown): Promise<unknown> {
+export async function compressStorageValue<T>(value: T): Promise<T | string> {
   if (typeof value !== 'string' || value.length < MIN_COMPRESS_BYTES) {
     return value
   }
@@ -69,7 +69,7 @@ export async function compressStorageValue(value: unknown): Promise<unknown> {
  * Restore the original value, switching on the marker prefix. Unmarked values
  * (pre-compression entries, small values) are returned as stored.
  */
-export async function decompressStorageValue(value: unknown): Promise<unknown> {
+export async function decompressStorageValue<T>(value: T): Promise<T | string> {
   if (typeof value !== 'string') {
     return value
   }

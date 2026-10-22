@@ -35,6 +35,8 @@ const save = async () => {
     await updatePartner({
       email: String(email.value),
       name: String(name.value),
+      // The resolver only writes a phone when one is given; null leaves it as is.
+      phone: null,
       subscribeNewsletter: true,
     })
   }
@@ -86,12 +88,24 @@ defineExpose({
       >
         <label class="block">
           <UiFormLabel>{{ $t("contactInfo.name") }}</UiFormLabel>
-          <SfInput v-model="name" name="name" type="text" :invalid="showErrors && nameInvalid" />
+          <SfInput
+            :model-value="name ?? undefined"
+            name="name"
+            type="text"
+            :invalid="showErrors && nameInvalid"
+            @update:model-value="name = String($event)"
+          />
           <UiFieldError v-if="showErrors && nameInvalid">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("contactInfo.email") }}</UiFormLabel>
-          <SfInput v-model="email" name="email" type="email" :invalid="showErrors && emailInvalid" />
+          <SfInput
+            :model-value="email ?? undefined"
+            name="email"
+            type="email"
+            :invalid="showErrors && emailInvalid"
+            @update:model-value="email = String($event)"
+          />
           <UiFieldError v-if="showErrors && emailInvalid">
             {{ emailEmpty ? $t("form.fieldRequired") : $t("form.invalidEmail") }}
           </UiFieldError>

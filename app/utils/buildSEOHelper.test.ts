@@ -66,7 +66,7 @@ describe('generateSeo', () => {
       script: [
         {
           type: 'application/ld+json',
-          children: JSON.stringify({
+          innerHTML: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Product',
             'name': 'Test Product',
@@ -156,7 +156,7 @@ describe('generateSeo', () => {
     expect(result.script).toEqual([
       {
         type: 'application/ld+json',
-        children: '{"@context":"https://schema.org","@type":"Product"}',
+        innerHTML: '{"@context":"https://schema.org","@type":"Product"}',
       },
     ])
   })

@@ -1,6 +1,7 @@
 import type {
   AttributeFacet,
   AttributeValue,
+  ProductFilterInput,
   ProductTemplateListResponse,
   QueryProductsArgs,
 } from '~~/graphql'
@@ -115,10 +116,12 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = LISTI
       sort: override.sort ?? sort,
       pageSize: override.pageSize ?? fromUrl.pageSize ?? defaultPageSize,
       currentPage: override.currentPage ?? fromUrl.currentPage ?? 1,
+      // Codegen marks every input field as required (InputMaybe, not
+      // optional), but GraphQL lets the client omit them.
       filter: {
         ...fromUrl.filter,
         ...override.filter,
-      },
+      } as ProductFilterInput,
     }
   })
 
@@ -134,7 +137,7 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = LISTI
       : `product-template-list-search-${customIndex}`,
   )
 
-  const { data, error, refresh, pending, status } = useAsyncData<ProductTemplateListResponse>(
+  const { data, error, refresh, pending, status } = useAsyncData<ProductTemplateListResponse | null>(
     asyncDataKey,
     () =>
       $sdk().odoo.query(

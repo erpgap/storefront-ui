@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { SfRating } from '@storefront-ui/vue'
-import type { CustomProductWithStockFromRedis } from '~~/graphql'
+import type { Product } from '~~/graphql'
 
 defineProps({
   imageUrl: {
@@ -37,7 +37,7 @@ defineProps({
     default: null,
   },
   firstVariant: {
-    type: Object as PropType<CustomProductWithStockFromRedis>,
+    type: Object as PropType<Product>,
     required: false,
   },
   loading: {
@@ -59,7 +59,7 @@ defineProps({
 
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
 
-const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
+const toggleWishlist = (variant?: Product) => {
   if (!variant?.id) return
   isInWishlist(variant.id) ? wishlistRemoveItem(variant.id) : wishlistAddItem(variant.id)
 }
@@ -91,7 +91,7 @@ const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
         class="absolute top-3 right-3 z-[2] grid place-items-center w-[44px] h-[44px] rounded-full bg-white/90 text-primary-700 transition-colors duration-200 hover:text-black"
         @click="toggleWishlist(firstVariant)"
       >
-        <UiLineIcon name="heart" :filled="isInWishlist(firstVariant?.id)" :size="24" />
+        <UiLineIcon name="heart" :filled="!!firstVariant?.id && isInWishlist(firstVariant.id)" :size="24" />
       </button>
     </div>
 

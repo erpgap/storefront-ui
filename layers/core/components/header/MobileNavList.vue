@@ -47,8 +47,8 @@ const linkGroups = [
         :key="category.id"
       >
         <HeaderMobileNavLink
-          :to="category.slug"
-          :label="category.name"
+          :to="category.slug ?? ''"
+          :label="category.name ?? ''"
           @navigate="$emit('navigate')"
         />
       </li>

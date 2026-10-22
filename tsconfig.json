@@ -1,19 +1,14 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json",
-  "compilerOptions": {
-    "moduleResolution": "Bundler",
-    "paths": {
-      "~~": ["."],
-      "~~/*": ["./*"],
-      "@@": ["."],
-      "@@/*": ["./*"]
-    }
-  },
-  "include": [
-    "**/*",
-    ".nuxt/types/imports.d.ts",
-    ".nuxt/types/nitro-imports.d.ts",
-    ".nuxt/types/shared-imports.d.ts"
+  // Nuxt generates one config per context (app, server, shared, node) with its
+  // own aliases and auto-imports; this file only points at them. Overriding
+  // `paths` here replaced every alias Nuxt generates (#cms, #imports, ~...),
+  // so nothing resolved and typecheck reported hundreds of false errors.
+  "files": [],
+  "references": [
+    { "path": "./.nuxt/tsconfig.app.json" },
+    { "path": "./.nuxt/tsconfig.server.json" },
+    { "path": "./.nuxt/tsconfig.shared.json" },
+    { "path": "./.nuxt/tsconfig.node.json" }
   ]
 }

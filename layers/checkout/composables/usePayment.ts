@@ -2,7 +2,7 @@ import { useAsyncData } from 'nuxt/app'
 import { useNuxtApp } from 'nuxt/app'
 import { useState } from 'nuxt/app'
 import { useToast } from 'vue-toastification'
-import type { PaymentProvider, PaymentMethodListResponse } from '~~/graphql'
+import type { PaymentProvider } from '~~/graphql'
 import { QueryName } from '~~/server/queries'
 
 export const usePayment = () => {
@@ -26,7 +26,7 @@ export const usePayment = () => {
   const loadPaymentMethods = async () => {
     try {
       loading.value = true
-      const { data } = await useAsyncData('payment-providers', async () => await $sdk().odoo.query<any, PaymentMethodListResponse>({
+      const { data } = await useAsyncData('payment-providers', async () => await $sdk().odoo.query<any, { paymentProviders: PaymentProvider[] }>({
         queryName: QueryName.GetPaymentMethodsQuery,
       }),
       )

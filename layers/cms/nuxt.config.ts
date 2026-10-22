@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url'
+import type { NitroRouteConfig } from 'nitropack/types'
 
 // The CMS ENGINE: block renderer, page and region rendering, the catch-all
 // route, the /api/cms server routes and their Odoo store, and the shared block
@@ -22,7 +23,8 @@ export default defineNuxtConfig({
   },
   routeRules: {
     // Drafts and editor reads: never cached, never crawled.
-    '/api/cms/**': { swr: false, prerender: false, robots: false },
+    // `robots` (@nuxtjs/robots) is outside Nitro's route rule type: see cms-editor's config.
+    '/api/cms/**': { swr: false, prerender: false, robots: false } as NitroRouteConfig,
   },
   // Published CMS pages get a sitemap of their own, merged into the
   // storefront's @nuxtjs/sitemap config. Read live from Odoo, so pages created

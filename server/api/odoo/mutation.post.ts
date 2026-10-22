@@ -1,8 +1,8 @@
-import { Mutations } from '~~/server/mutations'
+import { Mutations, type MutationName } from '~~/server/mutations'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)
-  const body = await readBody(event)
+  const body = await readBody<[{ mutationName: MutationName }, Record<string, unknown>?]>(event)
 
   try {
     const response: any = await $fetch.raw(`${config.public.odooBaseUrl}graphql/vsf`, {

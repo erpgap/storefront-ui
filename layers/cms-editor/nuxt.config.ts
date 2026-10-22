@@ -1,3 +1,5 @@
+import type { NitroRouteConfig } from 'nitropack/types'
+
 // The EDITOR half of the CMS, kept in its own layer so its bundle — palette,
 // inspector, field widgets, media picker, drag-and-drop — never ships to a
 // shopper. Only /cms/** pulls any of it in.
@@ -10,7 +12,11 @@ export default defineNuxtConfig({
   routeRules: {
     // The editor is a private editing surface: no SWR (it would show stale
     // drafts and look broken), no prerender, no crawlers.
-    '/cms': { swr: false, prerender: false, robots: false },
-    '/cms/**': { swr: false, prerender: false, robots: false },
+    //
+    // `robots` is read by @nuxtjs/robots, but its type augmentation does not
+    // reach a nuxt.config's routeRules type (Nitro re-exports NitroRouteConfig
+    // under another name), hence the assertion.
+    '/cms': { swr: false, prerender: false, robots: false } as NitroRouteConfig,
+    '/cms/**': { swr: false, prerender: false, robots: false } as NitroRouteConfig,
   },
 })

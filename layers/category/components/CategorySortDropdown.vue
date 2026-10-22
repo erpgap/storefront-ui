@@ -27,7 +27,7 @@ const isActive = (value: string) => selectedValue.value === value
 const dropdownOpened = ref(false)
 const toggle = () => { dropdownOpened.value = !dropdownOpened.value }
 const close = () => { dropdownOpened.value = false }
-const { referenceRef, floatingRef, style } = useDropdown({ dropdownOpened, onClose: close })
+const { referenceRef, floatingRef, style } = useDropdown({ onClose: close })
 
 function selectSort(value: string) {
   sort.value = value

@@ -33,7 +33,8 @@ const submit = async () => {
   showErrors.value = true
   if (!isComplete()) return
 
-  const ok = await contactUs({ contactus: { ...form } })
+  // This form has no company field and no attachments.
+  const ok = await contactUs({ contactus: { ...form, company: null, attachments: null } })
   if (ok) sent.value = true
 }
 
