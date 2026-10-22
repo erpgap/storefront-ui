@@ -177,6 +177,14 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    build: {
+      rolldownOptions: {
+        // A build-time profile of which plugins took how long, printed as a
+        // warning on every build. Useful when profiling the build, noise
+        // otherwise.
+        checks: { bundlerTimings: false },
+      },
+    },
     optimizeDeps: {
       include: ['lodash-es'],
     },
