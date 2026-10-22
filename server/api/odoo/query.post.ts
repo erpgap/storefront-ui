@@ -2,6 +2,12 @@ import hasher from 'object-hash'
 import type { Partner } from '~~/graphql'
 import { Queries, type QueryName } from '~~/server/queries'
 
+// Part of the cache key: a query whose fields change is a new entry, not the
+// old answer served until it expires (a deploy does not clear this cache).
+const queryVersions: Record<string, string> = Object.fromEntries(
+  Object.entries(Queries).map(([name, query]) => [name, hasher(query).slice(0, 8)]),
+)
+
 const customCache = cachedFunction(
   async (event: any) => {
     const config = useRuntimeConfig(event)
@@ -42,7 +48,8 @@ const customCache = cachedFunction(
 
       const hashedParams = hasher(body?.[1] || {})
 
-      return `${body?.[0].queryName}-${hashedParams}-${isoCode}-${pricelist}`
+      const queryName = body?.[0].queryName
+      return `${queryName}-${queryVersions[queryName] ?? ''}-${hashedParams}-${isoCode}-${pricelist}`
     },
     shouldBypassCache: async (event) => {
       const config = useRuntimeConfig(event)
