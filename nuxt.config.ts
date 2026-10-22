@@ -89,6 +89,8 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    // Seals the storefront session cookie. See server/utils/storefrontSession.ts.
+    sessionPassword: process.env.NUXT_SESSION_PASSWORD ?? '',
     cacheInvalidationKey: process.env.NUXT_CACHE_INVALIDATION_KEY,
     cacheInvalidationSigningSecret: process.env.NUXT_CACHE_INVALIDATION_SIGNING_SECRET,
     cacheInvalidationStorageDriver: storageDriver,

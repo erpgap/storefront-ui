@@ -65,9 +65,7 @@ async function cartUpdateItem(event: any, body: any) {
 async function addAddress(event: any, body: any) {
   const requestBody = await readBody(event)
   if (requestBody[0]?.mutationName === MutationName.AddAddress) {
-    const session = await useSession(event, {
-      password: 'b013b03ac2231e0b448e9a22ba488dcf',
-    })
+    const session = await useStorefrontSession(event)
 
     const keyName = `cache:cart:${session?.id}`
     const currentCart
@@ -89,9 +87,7 @@ async function addAddress(event: any, body: any) {
 async function updateAddress(event: any, body: any) {
   const requestBody = await readBody(event)
   if (requestBody[0]?.mutationName === MutationName.UpdateAddress) {
-    const session = await useSession(event, {
-      password: 'b013b03ac2231e0b448e9a22ba488dcf',
-    })
+    const session = await useStorefrontSession(event)
 
     const keyName = `cache:cart:${session?.id}`
     const currentCart
@@ -114,9 +110,7 @@ async function updateAddress(event: any, body: any) {
 async function createUpdatePartner(event: any, body: any) {
   const requestBody = await readBody(event)
   if (requestBody[0]?.mutationName === MutationName.CreateUpdatePartner) {
-    const session = await useSession(event, {
-      password: 'b013b03ac2231e0b448e9a22ba488dcf',
-    })
+    const session = await useStorefrontSession(event)
 
     const keyName = `cache:cart:${session?.id}`
     const currentCart
@@ -139,9 +133,7 @@ async function clearCartAfterCreditCardPaymentConfirmation(
       || body.paymentConfirmation?.order?.lastTransaction?.state === 'Confirmed'
 
   if (requestBody[0]?.queryName === QueryName.GetPaymentConfirmation) {
-    const session = await useSession(event, {
-      password: 'b013b03ac2231e0b448e9a22ba488dcf',
-    })
+    const session = await useStorefrontSession(event)
 
     const keyName = `cache:cart:${session?.id}`
     if (paymentSuccess) {
@@ -161,9 +153,7 @@ async function clearCartAfterGiftCardPaymentConfirmation(
   if (
     requestBody[0]?.mutationName === MutationName.MakeGiftCardPaymentMutation
   ) {
-    const session = await useSession(event, {
-      password: 'b013b03ac2231e0b448e9a22ba488dcf',
-    })
+    const session = await useStorefrontSession(event)
 
     const keyName = `cache:cart:${session?.id}`
     if (paymentSuccess) {

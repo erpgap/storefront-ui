@@ -4,9 +4,7 @@
 // add/remove mutations via the manage-wishlist plugin — exactly like the cart.
 // An empty Redis entry simply means an empty wishlist (no Odoo round-trip).
 export default defineEventHandler(async (event: any) => {
-  const session = await useSession(event, {
-    password: 'b013b03ac2231e0b448e9a22ba488dcf',
-  })
+  const session = await useStorefrontSession(event)
   const keyName = `cache:wishlist:${session?.id}`
 
   const data = await useStorage('wishlist').getItem(keyName)

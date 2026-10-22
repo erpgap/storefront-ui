@@ -3,9 +3,7 @@ import type { CustomProductWithStockFromRedis } from '~~/graphql'
 
 export default defineEventHandler(async (event: any) => {
   const websiteId = 1 // Example website ID, adjust when defined
-  const session = await useSession(event, {
-    password: 'b013b03ac2231e0b448e9a22ba488dcf',
-  })
+  const session = await useStorefrontSession(event)
   const keyName = `cache:cart:${session?.id}`
   // Cart is persisted under the 'cart' storage mount (see cartHelpers.updateCart),
   // so it must be read from the same mount — not the default root storage.

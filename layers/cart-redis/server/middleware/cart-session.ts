@@ -5,8 +5,6 @@
 // never reaches the browser, so the persisted cart can never be found again.
 export default defineEventHandler(async (event) => {
   if (event.path?.startsWith('/api/odoo/')) {
-    await useSession(event, {
-      password: 'b013b03ac2231e0b448e9a22ba488dcf',
-    })
+    await useStorefrontSession(event)
   }
 })

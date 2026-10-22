@@ -28,9 +28,7 @@ const customCache = cachedFunction(
     staleMaxAge: Number(process.env?.NUXT_SWR_CACHE_TIME || 3600),
     getKey: async (event) => {
       const body = await readBody(event)
-      const session = await useSession(event, {
-        password: 'b013b03ac2231e0b448e9a22ba488dcf',
-      })
+      const session = await useStorefrontSession(event)
       const keyName = `cache:partner:${session?.id}`
 
       const currentPartnerPricelist

@@ -74,9 +74,7 @@ export const reduceCart = (cartData: Cart) => ({
 })
 
 export async function updateCart(event: any, updateData: any) {
-  const session = await useSession(event, {
-    password: 'b013b03ac2231e0b448e9a22ba488dcf',
-  })
+  const session = await useStorefrontSession(event)
 
   const keyName = `cache:cart:${session?.id}`
   const currentCart = (await useStorage('cart').getItem<{ cart: Cart }>(
