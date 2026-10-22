@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  heading: string
+  heading?: string
 }>()
 
 /* const { loadUser } = useAuth()

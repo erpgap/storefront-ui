@@ -7,11 +7,11 @@
         class="w-full min-h-[330px] flex flex-col gap-4 items-center justify-center"
       >
         <Icon
-          name="i-material-symbols-check-circle"
+          name="ion:checkmark-circle"
           class="size-20 text-primary-700"
         />
         <h1 class="text-3xl font-bold">
-          Your request has ben sent!
+          Your request has been sent!
         </h1>
         <p>You just received a reply in your registered email.</p>
         <SfButton
