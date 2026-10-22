@@ -55,7 +55,7 @@ const {
 
 const { addProductToRecentViews } = useRecentViewProducts()
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
-const { cart, cartAdd, loading: cartLoading, cartError } = useCart()
+const { cart, cartAdd, loading: cartLoading, adding: cartAdding, cartError } = useCart()
 
 await loadProductTemplate({ slug: cleanPath.value })
 
@@ -282,13 +282,13 @@ const categoryEyebrow = computed(() => {
             <!-- Actions -->
             <div class="mt-6 flex gap-3">
               <SfButton
-                :disabled="loadingProductTemplate || !productVariant?.id || cartLoading"
+                :disabled="loadingProductTemplate || !productVariant?.id || cartLoading || cartAdding"
                 type="button"
                 size="lg"
                 class="flex-1 min-h-[54px] text-[13px] font-medium"
                 @click="handleCartAdd"
               >
-                {{ cartLoading ? 'Adding…' : $t('addToCart') }}
+                {{ cartAdding ? 'Adding…' : $t('addToCart') }}
               </SfButton>
               <SfButton
                 v-if="productVariant"

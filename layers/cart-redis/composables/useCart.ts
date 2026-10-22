@@ -27,7 +27,7 @@ export const useCart = () => {
 
     cart.value = payload.cart
     cartCounter.value = Number(payload.cart?.order?.websiteOrderLine?.length || 0)
-    frequentlyTogetherProducts.value = (payload.cart.frequentlyBoughtTogether || []).filter((p: null): p is Product => p !== null)
+    frequentlyTogetherProducts.value = (payload.cart.frequentlyBoughtTogether || []).filter((p): p is Product => p !== null)
   }
 
   const {
@@ -42,8 +42,11 @@ export const useCart = () => {
   )
 
   const loading = computed(() => status.value === 'pending')
+  // While this instance is adding a line: `loading` only tracks loading the
+  // cart, so it could not drive an "Adding…" state.
+  const adding = ref(false)
 
-  watch(data, (value: { cart?: Cart } | null) => applyCart(value))
+  watch(data, value => applyCart(value))
 
   // `showError` lets post-order pages (thank-you / payment-fail) load the cart
   // quietly: after an order the draft cart no longer exists and Odoo returns
@@ -63,8 +66,8 @@ export const useCart = () => {
       products: [{ id, quantity }],
     }
 
+    adding.value = true
     try {
-      loading.value = true
       cartError.value = ''
 
       const data = await $sdk().odoo.mutation<MutationCartAddMultipleItemsArgs, CartAddItemResponse>(
@@ -80,13 +83,11 @@ export const useCart = () => {
       cartError.value = error?.data?.message || error?.message || 'Could not add to cart. Please try again.'
     }
     finally {
-      loading.value = false
+      adding.value = false
     }
   }
 
   const updateItemQuantity = async (id: number, quantity: number) => {
-    loading.value = true
-
     const params: MutationCartUpdateMultipleItemsArgs = {
       lines: [{ id, quantity }],
     }
@@ -101,17 +102,12 @@ export const useCart = () => {
     catch (error: any) {
       return toast.error(error.data.message)
     }
-    finally {
-      loading.value = false
-    }
   }
 
   const removeItemFromCart = async (lineId: number) => {
     const params: MutationCartRemoveMultipleItemsArgs = {
       lineIds: [lineId],
     }
-
-    loading.value = true
 
     try {
       const data = await $sdk().odoo.mutation<MutationCartRemoveMultipleItemsArgs, CartRemoveItemResponse>(
@@ -123,9 +119,6 @@ export const useCart = () => {
     }
     catch (error: any) {
       return toast.error(error.data.message)
-    }
-    finally {
-      loading.value = false
     }
   }
 
@@ -134,8 +127,6 @@ export const useCart = () => {
       lineIds,
     }
 
-    loading.value = true
-
     try {
       const data = await $sdk().odoo.mutation<MutationCartRemoveMultipleItemsArgs, CartRemoveItemResponse>(
         { mutationName: MutationName.CartRemoveItem }, params,
@@ -146,9 +137,6 @@ export const useCart = () => {
     }
     catch (error: any) {
       return toast.error(error.data.message)
-    }
-    finally {
-      loading.value = false
     }
   }
 
@@ -169,6 +157,7 @@ export const useCart = () => {
     removeMultipleItemsFromCart,
     frequentlyTogetherProducts,
     loading,
+    adding,
     cartError,
     cart,
     totalItemsInCart,

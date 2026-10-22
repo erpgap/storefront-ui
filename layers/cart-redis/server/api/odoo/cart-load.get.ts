@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import type { CustomProductWithStockFromRedis } from '~~/graphql'
+import { withLineStock } from '../../utils/cartStock'
 
 export default defineEventHandler(async (event: H3Event) => {
   const session = await useStorefrontSession(event)
@@ -8,19 +8,7 @@ export default defineEventHandler(async (event: H3Event) => {
   // so it must be read from the same mount — not the default root storage.
   const data = await useStorage('cart').getItem<any>(keyName)
 
-  // Each line's stock for the website this request belongs to, read at once.
-  const lines = (data?.cart?.order?.websiteOrderLine ?? []) as { product?: CustomProductWithStockFromRedis }[]
-  if (lines.length) {
-    const [website, stocks] = await Promise.all([
-      odooWebsite(event),
-      Promise.all(lines.map(line => line.product?.id
-        ? useStorage('stock').getItem(`stock:product-${line.product.id}`)
-        : null)),
-    ])
-    lines.forEach((line, index) => {
-      if (line.product) line.product.stock = stockForWebsite(stocks[index], website?.id)
-    })
-  }
+  await withLineStock(event, data?.cart)
 
   return data || {}
 })

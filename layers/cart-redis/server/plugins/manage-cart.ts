@@ -1,4 +1,5 @@
 import { updateCart, reduceCart } from '../utils/cartHelpers.js'
+import { withLineStock } from '../utils/cartStock'
 import { AddressType, type Cart } from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
 import { QueryName } from '~~/server/queries'
@@ -28,6 +29,7 @@ async function cartAddItem(event: any, body: any) {
   const requestBody = await readBody(event)
 
   if (requestBody[0]?.mutationName === MutationName.CartAddItem) {
+    await withLineStock(event, body.cartAddMultipleItems)
     updateCart(event, body.cartAddMultipleItems)
   }
 }
@@ -36,6 +38,7 @@ async function applyCoupon(event: any, body: any) {
   const requestBody = await readBody(event)
 
   if (requestBody[0]?.mutationName === MutationName.ApplyCouponMutation) {
+    await withLineStock(event, body.applyCoupon)
     updateCart(event, body.applyCoupon)
   }
 }
@@ -44,6 +47,7 @@ async function applyGiftCard(event: any, body: any) {
   const requestBody = await readBody(event)
 
   if (requestBody[0]?.mutationName === MutationName.ApplyGiftCardMutation) {
+    await withLineStock(event, body.applyGiftCard)
     updateCart(event, body.applyGiftCard)
   }
 }
@@ -51,6 +55,7 @@ async function applyGiftCard(event: any, body: any) {
 async function cartRemoveItem(event: any, body: any) {
   const requestBody = await readBody(event)
   if (requestBody[0]?.mutationName === MutationName.CartRemoveItem) {
+    await withLineStock(event, body.cartRemoveMultipleItems)
     updateCart(event, body.cartRemoveMultipleItems)
   }
 }
@@ -58,6 +63,7 @@ async function cartRemoveItem(event: any, body: any) {
 async function cartUpdateItem(event: any, body: any) {
   const requestBody = await readBody(event)
   if (requestBody[0]?.mutationName === MutationName.CartUpdateQuantity) {
+    await withLineStock(event, body.cartUpdateMultipleItems)
     updateCart(event, body.cartUpdateMultipleItems)
   }
 }
@@ -70,14 +76,17 @@ async function addAddress(event: any, body: any) {
     const keyName = `cache:cart:${session?.id}`
     const currentCart
       = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || { cart: {} as Cart }
+    // Nothing cached to update: the next cart load reads it fresh. This used
+    // to throw here, turning a mutation Odoo had applied into a 500.
+    const order = currentCart.cart.order
+    if (!order) return
     if (requestBody[1].type === 'Shipping') {
-      currentCart.cart.order.partnerShipping = body.addAddress
-      currentCart.cart.order.partner.isPublic = body.addAddress?.isPublic || false
+      order.partnerShipping = body.addAddress
     }
     else {
-      currentCart.cart.order.partnerInvoice = body.addAddress
-      currentCart.cart.order.partner.isPublic = body.addAddress?.isPublic || false
+      order.partnerInvoice = body.addAddress
     }
+    if (order.partner) order.partner.isPublic = body.addAddress?.isPublic || false
 
     const reducedCart = reduceCart(currentCart.cart as Cart)
     await useStorage('cart').setItem(keyName, { cart: reducedCart })
@@ -93,14 +102,16 @@ async function updateAddress(event: any, body: any) {
     const currentCart
       = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || { cart: {} as Cart }
 
+    // See addAddress: no cached cart, nothing to update.
+    const order = currentCart.cart.order
+    if (!order) return
     if (body.updateAddress?.addressType === AddressType.DeliveryAddress) {
-      currentCart.cart.order.partnerShipping = body.updateAddress
-      currentCart.cart.order.partner.isPublic = body.updateAddress?.isPublic || false
+      order.partnerShipping = body.updateAddress
     }
     else {
-      currentCart.cart.order.partnerInvoice = body.updateAddress
-      currentCart.cart.order.partner.isPublic = body.updateAddress?.isPublic || false
+      order.partnerInvoice = body.updateAddress
     }
+    if (order.partner) order.partner.isPublic = body.updateAddress?.isPublic || false
 
     const reducedCart = reduceCart(currentCart.cart as Cart)
     await useStorage('cart').setItem(keyName, { cart: reducedCart })
@@ -115,6 +126,8 @@ async function createUpdatePartner(event: any, body: any) {
     const keyName = `cache:cart:${session?.id}`
     const currentCart
       = (await useStorage('cart').getItem<{ cart: Cart }>(keyName)) || { cart: {} as Cart }
+    // See addAddress: no cached cart, nothing to update.
+    if (!currentCart.cart.order) return
     currentCart.cart.order.partner = body.createUpdatePartner
 
     const reducedCart = reduceCart(currentCart.cart as Cart)
