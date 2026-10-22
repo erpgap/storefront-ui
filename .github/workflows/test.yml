@@ -1,4 +1,4 @@
-# Unit tests on every push and pull request.
+# Lint, typecheck and unit tests on every push and pull request.
 #
 # The deploy workflows ran no tests at all, so the suite only ran when
 # somebody remembered to run it. This gates merges on it instead.
@@ -24,9 +24,19 @@ jobs:
           cache: pnpm
 
       # --frozen-lockfile so a drifting lockfile fails here rather than in a
-      # deploy. --ignore-scripts skips `nuxt prepare`, which would try to
-      # reach Odoo for codegen and is not needed to run unit tests.
+      # deploy. --ignore-scripts skips the postinstall `nuxt prepare` (run as
+      # its own step below) and husky.
       - run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # Generates .nuxt: the types typecheck reads and the ESLint config.
+      # Without NUXT_PUBLIC_ODOO_BASE_URL the route generators skip Odoo.
+      - run: pnpm exec nuxi prepare
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm exec nuxi typecheck
 
       - name: Unit tests
         run: pnpm test

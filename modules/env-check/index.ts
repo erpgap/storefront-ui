@@ -9,6 +9,10 @@ export default defineNuxtModule({
     name: 'env-check',
   },
   setup(_options, nuxt) {
+    // `nuxi prepare` (and typecheck, which runs it) fires build:before too,
+    // but only generates types: it needs no environment, and CI has none.
+    if (nuxt.options._prepare) return
+
     nuxt.hook('build:before', () => {
       const envExamplePath = resolve(nuxt.options.rootDir, ENV_EXAMPLE_FILE)
       const requiredKeys = parseEnvKeys(envExamplePath)
