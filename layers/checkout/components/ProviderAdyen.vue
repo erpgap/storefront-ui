@@ -49,17 +49,26 @@ const {
   getAdyenPaymentDetails,
 } = useAdyenDirectPayment(props.provider.id, props.cart?.order?.id)
 
-function ensureAdyenCssLoaded() {
-  const id = 'adyen-css'
-  if (document.getElementById(id)) return
+/**
+ * Settles a payment once Adyen needs nothing more from the shopper: asks Odoo
+ * whether the transaction went through, then empties the cart and shows the
+ * thank-you page, or the failure page.
+ */
+async function finishPayment() {
+  const data = await getPaymentConfirmation()
+  const paymentSuccess
+    = data?.order?.lastTransaction?.state === 'Authorized'
+      || data?.order?.lastTransaction?.state === 'Confirmed'
 
-  const link = document.createElement('link')
-  link.id = id
-  link.rel = 'stylesheet'
-  // este caminho funciona quando o pacote está instalado; Vite serve em dev e resolve em build
-  link.href = '/_nuxt/node_modules/@adyen/adyen-web/dist/adyen.css'
-  // em prod o path pode mudar; alternativa melhor abaixo
-  document.head.appendChild(link)
+  emit('paymentLoading', false)
+
+  if (paymentSuccess) {
+    const lineIds = props.cart.order.websiteOrderLine.map((line: { id: any }) => line.id)
+    await removeMultipleItemsFromCart(lineIds)
+    return navigateTo('/checkout/thank-you')
+  }
+
+  return router.push('/checkout/payment-fail')
 }
 
 onMounted(async () => {
@@ -74,7 +83,11 @@ onMounted(async () => {
     return
   }
 
-  if (!paymentMethods.value || Object.keys(paymentMethods.value).length === 0) {
+  if (
+    !paymentMethods.value
+    || Array.isArray(paymentMethods.value)
+    || Object.keys(paymentMethods.value).length === 0
+  ) {
     loading.value = false
     return
   }
@@ -89,7 +102,9 @@ onMounted(async () => {
     paymentMethodsResponse: paymentMethods.value,
     analytics: { enabled: false },
 
-    onPaymentCompleted: () => router.push({ name: 'paymentResponse' }),
+    // Pushed to a route named 'paymentResponse', which does not exist: the
+    // navigation threw and the shopper stayed on the checkout.
+    onPaymentCompleted: () => finishPayment(),
 
     onError: (error: any) => {
       if (
@@ -101,12 +116,23 @@ onMounted(async () => {
       emit('paymentLoading', false)
     },
 
+    // After a 3-D Secure or redirect step. The answer was ignored, leaving the
+    // shopper on a spinner: another action is handed back to the drop-in,
+    // anything else settles the payment like onSubmit does.
     onAdditionalDetails: async (state: any) => {
-      await getAdyenPaymentDetails({
+      emit('paymentLoading', true)
+      const details = await getAdyenPaymentDetails({
         providerId: props.provider.id,
         transactionReference: transaction.value.reference,
         paymentDetails: state.data,
-      })
+      }) as { action?: { type?: string } } | null
+
+      if (details?.action?.type) {
+        adyenDropin.value?.handleAction(details.action)
+        emit('paymentLoading', false)
+        return
+      }
+      await finishPayment()
     },
 
     onChange: (_state: any, component: { isValid: boolean }) => {
@@ -131,20 +157,7 @@ onMounted(async () => {
         return
       }
 
-      const data = await getPaymentConfirmation()
-      const paymentSuccess =
-        data?.order?.lastTransaction?.state === 'Authorized' ||
-        data?.order?.lastTransaction?.state === 'Confirmed'
-
-      emit('paymentLoading', false)
-
-      if (paymentSuccess) {
-        const lineIds = props.cart.order.websiteOrderLine.map((line: { id: any }) => line.id)
-        await removeMultipleItemsFromCart(lineIds)
-        return navigateTo('/checkout/thank-you')
-      }
-
-      router.push('/checkout/payment-fail')
+      await finishPayment()
     },
   }
 

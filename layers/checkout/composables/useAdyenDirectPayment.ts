@@ -1,45 +1,64 @@
+import type AdyenCheckout from '@adyen/adyen-web'
 import type {
-  PaymentTransaction,
-  PaymentProvider,
-  AdyenPaymentMethodsResponse,
-  AdyenTransactionResponse,
-  AdyenProviderInfoResponse,
+  AdyenTransactionResult,
+  AdyenProviderInfoResult,
   MutationAdyenPaymentMethodsArgs,
   MutationAdyenPaymentDetailsArgs,
   MutationAdyenProviderInfoArgs,
   MutationAdyenTransactionArgs,
-  AdyenPaymentDetailsResponse,
-  Mutation,
-  AdyenPaymentsResponse,
+  AdyenPaymentMethodsResult,
+  AdyenPaymentDetailsResult,
+  AdyenPaymentsResult,
   MutationAdyenPaymentsArgs,
 } from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
 
+/** Adyen's `/paymentMethods` response, as the drop-in takes it. */
+export type AdyenPaymentMethods = NonNullable<
+  ConstructorParameters<typeof AdyenCheckout>[0]['paymentMethodsResponse']
+>
+
+/** What `adyenProviderInfo` returns (payment_adyen_alokai). */
+export interface AdyenProviderInfo {
+  state?: string
+  client_key?: string | false
+}
+
+/**
+ * What `adyenTransaction` returns: Odoo's processing values for the new
+ * transaction (`_get_processing_values`, plus Adyen's `access_token`).
+ */
+export interface AdyenTransaction {
+  reference: string
+  access_token: string
+  [key: string]: unknown
+}
 
 const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
   const { $sdk } = useNuxtApp()
 
-  const transaction = useState<PaymentTransaction>(
+  const transaction = useState<AdyenTransaction>(
     `transaction-${cartId}`,
-    () => ({}) as PaymentTransaction,
+    () => ({}) as AdyenTransaction,
   )
-  const acquirerInfo = useState<PaymentProvider>(
+  const acquirerInfo = useState<AdyenProviderInfo>(
     `acquirerInfo-${cartId}`,
-    () => ({}) as PaymentProvider,
+    () => ({}),
   )
-  const paymentMethods = useState<Mutation['adyenPaymentMethods'][]>(
+  // `[]` until loaded, which the drop-in setup treats as "no methods".
+  const paymentMethods = useState<AdyenPaymentMethods | never[]>(
     `paymentMethods-${cartId}`,
     () => [],
   )
-  const paymentDetails = useState<Mutation['adyenPaymentDetails']>(
+  const paymentDetails = useState<AdyenPaymentDetailsResult['adyenPaymentDetails']>(
     `paymentDetails-${cartId}`,
-    () => ({}) as Mutation['adyenPaymentDetails'],
+    () => ({}) as AdyenPaymentDetailsResult['adyenPaymentDetails'],
   )
 
   const openAdyenTransaction = async () => {
-    const data: AdyenTransactionResponse | any = await $sdk().odoo.mutation<
+    const data = await $sdk().odoo.mutation<
       MutationAdyenTransactionArgs,
-      AdyenTransactionResponse
+      { adyenTransaction: AdyenTransactionResult }
     >(
       {
         mutationName: MutationName.AdyenTransaction,
@@ -51,9 +70,9 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
   }
 
   const getAdyenAcquirerInfo = async () => {
-    const data: AdyenProviderInfoResponse | any = await $sdk().odoo.mutation<
+    const data = await $sdk().odoo.mutation<
       MutationAdyenProviderInfoArgs,
-      AdyenProviderInfoResponse
+      { adyenProviderInfo: AdyenProviderInfoResult }
     >(
       {
         mutationName: MutationName.AdyenProviderInfo,
@@ -65,10 +84,10 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
   }
 
   const getAdyenPaymentMethods = async () => {
-    const { data } = await useAsyncData<AdyenPaymentMethodsResponse | any>('payment-methods', async () =>
+    const { data } = await useAsyncData('payment-methods', async () =>
       await $sdk().odoo.mutation<
         MutationAdyenPaymentMethodsArgs,
-        AdyenPaymentMethodsResponse
+        { adyenPaymentMethods: AdyenPaymentMethodsResult }
       >({ mutationName: MutationName.AdyenPaymentMethods }, { providerId }))
     paymentMethods.value
       = data?.value?.adyenPaymentMethods?.adyenPaymentMethods || []
@@ -77,32 +96,29 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
   const getAdyenPaymentDetails = async (
     params: MutationAdyenPaymentDetailsArgs,
   ) => {
-    const data: AdyenPaymentDetailsResponse | any = await $sdk().odoo.mutation<
+    const data = await $sdk().odoo.mutation<
       MutationAdyenPaymentDetailsArgs,
-      AdyenPaymentDetailsResponse
+      { adyenPaymentDetails: AdyenPaymentDetailsResult }
     >({ mutationName: MutationName.AdyenPaymentDetails }, { ...params })
 
     paymentDetails.value
       = data?.adyenPaymentDetails?.adyenPaymentDetails || {}
+    return paymentDetails.value
   }
 
+  // Called from the drop-in's onSubmit, after the component is mounted, where
+  // useAsyncData does not belong (Nuxt warns, and it adds nothing to a one-off
+  // mutation): plain call.
   const adyenMakeDirectPayment = async (params: MutationAdyenPaymentsArgs) => {
-    const { data } = await useAsyncData<AdyenPaymentsResponse | any>('make-direct-payment', async () =>
-      await $sdk().odoo.mutation<
-        MutationAdyenPaymentsArgs,
-        AdyenPaymentsResponse
-      >(
-        {
-          mutationName: MutationName.AdyenPayments,
-        },
-        { ...params },
-      ),
-    )
+    const data = await $sdk().odoo.mutation<
+      MutationAdyenPaymentsArgs,
+      { adyenPayments: AdyenPaymentsResult }
+    >({ mutationName: MutationName.AdyenPayments }, { ...params })
 
-    return data?.value?.adyenPayments?.adyenPayments || {}
+    return data?.adyenPayments?.adyenPayments || {}
   }
 
-  const setTransaction = (transactionParam: PaymentTransaction) =>
+  const setTransaction = (transactionParam: AdyenTransaction) =>
     (transaction.value = transactionParam)
 
   return {
