@@ -4,7 +4,7 @@ import { QueryName } from '~~/server/queries'
 import type {
   State,
   CountryFilterInput,
-  StatesResponse,
+  Country,
 } from '~~/graphql'
 import { useAsyncData, useNuxtApp } from 'nuxt/app'
 import { useState } from 'nuxt/app'
@@ -22,7 +22,7 @@ export const useStateList = (countryId: number) => {
       const { data } = await useAsyncData(
        async () => await $sdk().odoo.query<
         CountryFilterInput,
-        StatesResponse
+        { country: Country }
       >({ queryName: QueryName.GetStatesQuery }, param.value), {
         deep: true
       })
@@ -40,7 +40,3 @@ export const useStateList = (countryId: number) => {
     states,
   }
 }
-function ref<T>(arg0: { id: number }) {
-  throw new Error('Function not implemented.')
-}
-
