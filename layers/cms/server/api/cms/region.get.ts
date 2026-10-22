@@ -25,11 +25,13 @@ export default defineEventHandler(async (event) => {
       body: { query: GetCmsRegionQuery, variables: { key } },
     })
 
+    // An empty region is `{ blocks: [] }`, not null: h3 answers null with an
+    // empty 204, which useFetch reads as undefined (and Nuxt warns, E3006).
     const region = response?.data?.cmsRegion
-    return region ? { id: region.id, blocks: region.blocks ?? [] } : null
+    return region ? { id: region.id, blocks: region.blocks ?? [] } : { blocks: [] }
   }
   catch {
     // A region that fails to load is an absent addition, not a broken page.
-    return null
+    return { blocks: [] }
   }
 })
