@@ -9,6 +9,7 @@ import {
   type State,
   type UpdateAddressInput,
 } from '~~/graphql'
+import { QueryName } from '~~/server/queries'
 
 const props = defineProps({
   heading: String,
@@ -29,11 +30,14 @@ const { city, country, state, street, phone, zip } = toRefs(props.savedAddress)
 
 const countryId = toRef(country.value?.id)
 const stateId = toRef(state.value?.id)
-// SfSelect types its model as a string, but the native <select> inside it hands
-// back the bound option value as is: a country/state id (number), or null for
-// the placeholder. These are the same refs, typed for SfSelect's v-model.
-const countryModel = countryId as Ref<unknown> as Ref<string | undefined>
-const stateModel = stateId as Ref<unknown> as Ref<string | undefined>
+// SfSelect's model is a string (Vue warns about anything else), the ids are
+// numbers: these convert between the two. '' is the placeholder.
+const asSelectModel = (id: Ref<number | undefined>) => computed({
+  get: () => (id.value ? String(id.value) : ''),
+  set: (value: string) => { id.value = value ? Number(value) : undefined },
+})
+const countryModel = asSelectModel(countryId)
+const stateModel = asSelectModel(stateId)
 
 const { addAddress, updateAddress } = useAddresses()
 const { countries } = useCountryList()
@@ -113,10 +117,24 @@ watch(contactName, () => {
   if (valid.value) save()
 })
 
-const selectedCountry = computed<Country>(
-  () => countries.value.countries?.find((item: any) => item.id === countryId.value) || ({} as Country),
+// The selected country's states only. The country list used to carry every
+// country's states, ~140 kB of checkout's payload for one dropdown. Keyed by
+// country, so choosing another loads its states, and the saved country's
+// are already there in the server render (useAsyncData holds it; not
+// awaited here, as defineExpose below must not come after an await).
+const { $sdk } = useNuxtApp()
+const { data: states } = useAsyncData(
+  () => `states-${countryId.value ?? 'none'}`,
+  async () => {
+    if (!countryId.value) return [] as State[]
+    const data = await $sdk().odoo.query<{ id: number }, { country: Country }>(
+      { queryName: QueryName.GetStatesQuery },
+      { id: Number(countryId.value) },
+    )
+    return (data?.country?.states ?? []).filter((item): item is State => !!item)
+  },
+  { default: () => [] as State[] },
 )
-const states = computed(() => selectedCountry.value?.states || [])
 
 const showFields = computed(() => !isBilling.value || !sameAsShipping.value)
 const sectionDone = computed(() => (isBilling.value && sameAsShipping.value) || valid.value)
@@ -214,14 +232,14 @@ defineExpose({
           >
             <option
               key="placeholder"
-              :value="null"
+              value=""
             >
               {{ $t("form.selectPlaceholder") }}
             </option>
             <option
               v-for="countryOption in countries.countries"
               :key="countryOption?.id"
-              :value="countryOption?.id"
+              :value="String(countryOption?.id)"
             >
               {{ countryOption?.name }}
             </option>
@@ -239,14 +257,14 @@ defineExpose({
           >
             <option
               key="placeholder"
-              :value="null"
+              value=""
             >
               {{ $t("form.selectPlaceholder") }}
             </option>
             <option
               v-for="stateOption in states"
               :key="stateOption.id"
-              :value="stateOption.id"
+              :value="String(stateOption.id)"
             >
               {{ stateOption.name }}
             </option>

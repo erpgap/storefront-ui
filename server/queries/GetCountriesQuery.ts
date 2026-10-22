@@ -5,11 +5,6 @@ export default `
         id
         name
         code
-        states {
-          id
-          name
-          code
-        }
       }
     }
   }
