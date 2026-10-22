@@ -12,8 +12,9 @@ built, and every decision behind it.
 ## Run it
 
 ```bash
-# Odoo must be reachable: `yarn dev` runs codegen against its schema first.
 yarn dev
+# After a GraphQL schema change in Odoo, regenerate the types:
+yarn codegen
 ```
 
 Then **http://localhost:3000/cms** and sign in with an Odoo account that

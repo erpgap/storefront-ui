@@ -10,7 +10,6 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "codegen": "graphql-codegen",
-    "predev": "yarn codegen",
     "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
