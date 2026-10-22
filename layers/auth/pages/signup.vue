@@ -49,7 +49,7 @@ onMounted(() => {
     :heading="$t('auth.signup.heading')"
   >
     <UiAlert
-      class="w-full p-4 md:p-6 mb-6 !justify-start typography-text-base !bg-[#f7f7f7]"
+      class="w-full p-4 md:p-6 mb-6 justify-start! typography-text-base! bg-[#f7f7f7]!"
       variant="neutral"
     >
       <i18n-t
@@ -61,7 +61,7 @@ onMounted(() => {
           <SfLink
             :tag="NuxtLink"
             to="/login"
-            class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
+            class="text-primary-700 hover:text-primary-800 active:text-primary-900 hover:underline focus:outline-solid focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded-sm"
             data-testid="signup-page-login-button"
           >
             {{ $t("auth.login.heading") }}
@@ -143,7 +143,7 @@ onMounted(() => {
             <template #terms>
               <SfLink
                 href="#"
-                class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
+                class="text-primary-700 hover:text-primary-800 active:text-primary-900 hover:underline focus:outline-solid focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded-sm"
               >
                 {{ $t("termsAndConditions") }}
               </SfLink>
@@ -205,7 +205,7 @@ onMounted(() => {
         </h2>
       </header>
       <UiAlert
-        class="w-full p-4 mb-6 !justify-start typography-text-base"
+        class="w-full p-4 mb-6 justify-start! typography-text-base!"
         variant="neutral"
       >
         <i18n-t
@@ -218,7 +218,7 @@ onMounted(() => {
             <SfLink
               :tag="NuxtLink"
               to="/my-account"
-              class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
+              class="text-primary-700 hover:text-primary-800 active:text-primary-900 hover:underline focus:outline-solid focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded-sm"
             >
               {{ $t("auth.signup.modal.information") }}
             </SfLink>

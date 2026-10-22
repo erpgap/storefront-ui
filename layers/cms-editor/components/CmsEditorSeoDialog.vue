@@ -181,11 +181,11 @@ onMounted(() => {
               v-if="imagePreview"
               :src="imagePreview"
               alt=""
-              class="w-32 aspect-[1200/630] object-cover rounded border border-primary-200 bg-primary-50"
+              class="w-32 aspect-1200/630 object-cover rounded-sm border border-primary-200 bg-primary-50"
             >
             <div
               v-else
-              class="w-32 aspect-[1200/630] rounded border border-dashed border-primary-300 bg-primary-50"
+              class="w-32 aspect-1200/630 rounded-sm border border-dashed border-primary-300 bg-primary-50"
             />
             <div class="flex flex-col items-start gap-1.5">
               <button
@@ -218,7 +218,7 @@ onMounted(() => {
         >
           <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Structured data</span>
           <pre
-            class="text-[11px] leading-snug bg-primary-50 border border-primary-200 rounded px-3 py-2 max-h-48 overflow-auto whitespace-pre-wrap break-all"
+            class="text-[11px] leading-snug bg-primary-50 border border-primary-200 rounded-sm px-3 py-2 max-h-48 overflow-auto whitespace-pre-wrap break-all"
           >{{ jsonLdPretty }}</pre>
           <span class="text-[11px] text-primary-400">
             What search engines read about this page. Generated for you, so
@@ -247,14 +247,14 @@ onMounted(() => {
       <footer class="flex-none flex justify-end gap-2 px-5 py-3 border-t border-primary-200">
         <button
           type="button"
-          class="px-4 py-2 text-[12px] tracking-[0.1em] uppercase border border-primary-300 rounded hover:border-black"
+          class="px-4 py-2 text-[12px] tracking-widest uppercase border border-primary-300 rounded-sm hover:border-black"
           @click="emit('close')"
         >
           Cancel
         </button>
         <button
           type="submit"
-          class="px-4 py-2 text-[12px] tracking-[0.1em] uppercase bg-black text-white rounded disabled:opacity-50"
+          class="px-4 py-2 text-[12px] tracking-widest uppercase bg-black text-white rounded-sm disabled:opacity-50"
           :disabled="saving"
         >
           {{ saving ? 'Saving…' : 'Save' }}

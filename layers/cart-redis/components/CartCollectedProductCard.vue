@@ -32,7 +32,7 @@ const savings = computed(
     <SfLink
       :tag="NuxtLink"
       :to="mountUrlSlugForProductVariant(orderLine.product as Product)"
-      class="shrink-0 w-[84px] sm:w-[96px] aspect-[4/5] overflow-hidden rounded-[2px] bg-primary-50"
+      class="shrink-0 w-[84px] sm:w-[96px] aspect-4/5 overflow-hidden rounded-[2px] bg-primary-50"
     >
       <NuxtImg
         provider="odooProvider"

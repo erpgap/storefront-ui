@@ -84,7 +84,7 @@ async function submit() {
 
       <button
         type="submit"
-        class="px-4 py-2.5 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded disabled:opacity-50"
+        class="px-4 py-2.5 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm disabled:opacity-50"
         :disabled="busy"
       >
         {{ busy ? 'Signing in…' : 'Sign in' }}

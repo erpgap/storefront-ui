@@ -45,7 +45,7 @@ onMounted(async () => {
       key="home"
       variant="tertiary"
       :class="[
-        '!p-1 !pt-3 flex flex-col h-full w-full rounded-none bg-primary-700 text-white hover:text-white hover:bg-primary-800 active:text-white active:bg-primary-900 !text-xs !font-base',
+        'p-1! pt-3! flex flex-col h-full w-full rounded-none bg-primary-700 text-white hover:text-white hover:bg-primary-800 active:text-white active:bg-primary-900 text-xs! !font-base',
         { 'text-white bg-primary-900': $route.path === '/' && !isActive },
       ]"
       size="sm"
@@ -65,7 +65,7 @@ onMounted(async () => {
       key="wishlist"
       variant="tertiary"
       :class="[
-        '!p-1 !pt-3 flex flex-col h-full w-full rounded-none bg-primary-700 text-white hover:text-white hover:bg-primary-800 active:text-white active:bg-primary-900 !text-xs !font-base',
+        'p-1! pt-3! flex flex-col h-full w-full rounded-none bg-primary-700 text-white hover:text-white hover:bg-primary-800 active:text-white active:bg-primary-900 text-xs! !font-base',
         { 'text-white bg-primary-900': isActive },
       ]"
       size="sm"
@@ -80,7 +80,7 @@ onMounted(async () => {
           <SfBadge
             v-if="wishlistTotalItems"
             :content="wishlistTotalItems"
-            class="outline-white bg-white !text-neutral-900 translate-x-[5px] translate-y-[-3px]"
+            class="outline-white bg-white text-neutral-900! translate-x-[5px] translate-y-[-3px]"
           />
         </div>
       </template>
@@ -90,7 +90,7 @@ onMounted(async () => {
       key="cart"
       variant="tertiary"
       :class="[
-        '!p-1 !pt-3 flex flex-col h-full w-full rounded-none bg-primary-700 text-white hover:text-white hover:bg-primary-800 active:text-white active:bg-primary-900 !text-xs !font-base',
+        'p-1! pt-3! flex flex-col h-full w-full rounded-none bg-primary-700 text-white hover:text-white hover:bg-primary-800 active:text-white active:bg-primary-900 text-xs! !font-base',
         { 'text-white bg-primary-900': $route.path === '/cart' && !isActive },
       ]"
       size="sm"
@@ -103,7 +103,7 @@ onMounted(async () => {
           <SfIconShoppingCart />
           <SfBadge
             :content="totalItemsInCart"
-            class="outline-white bg-white !text-neutral-900 translate-x-[5px] translate-y-[-3px]"
+            class="outline-white bg-white text-neutral-900! translate-x-[5px] translate-y-[-3px]"
           />
         </div>
       </template>
@@ -113,7 +113,7 @@ onMounted(async () => {
       key="account"
       variant="tertiary"
       :class="[
-        '!p-1 !pt-3 flex flex-col h-full w-full rounded-none bg-primary-700 text-white hover:text-white hover:bg-primary-800 active:text-white active:bg-primary-900 !text-xs !font-base',
+        'p-1! pt-3! flex flex-col h-full w-full rounded-none bg-primary-700 text-white hover:text-white hover:bg-primary-800 active:text-white active:bg-primary-900 text-xs! !font-base',
         {
           'text-white bg-primary-900':
             $route.path === '/my-account' && !isActive,

@@ -18,7 +18,7 @@ const { isAuthenticated } = useAuth()
     <template #prefix>
       <UiLineIcon
         name="account"
-        class="!text-black"
+        class="text-black!"
       />
     </template>
   </SfButton>

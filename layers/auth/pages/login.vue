@@ -104,6 +104,7 @@ const NuxtLink = resolveComponent('NuxtLink')
         :tag="NuxtLink"
         to="/reset-password"
         variant="tertiary"
+        class="rounded-md"
         data-testid="login-page-reset-button"
       >
         {{ $t("auth.login.forgotPasswordLabel") }}
@@ -111,7 +112,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     </form>
 
     <UiAlert
-      class="mt-6 w-full p-4 md:p-6 !justify-start typography-text-base !bg-[#f7f7f7]"
+      class="mt-6 w-full p-4 md:p-6 justify-start! typography-text-base! bg-[#f7f7f7]!"
       variant="neutral"
     >
       <i18n-t
@@ -123,6 +124,7 @@ const NuxtLink = resolveComponent('NuxtLink')
           :tag="NuxtLink"
           to="signup"
           variant="primary"
+          class="text-primary-700 hover:text-primary-800 active:text-primary-900 hover:underline"
           data-testid="login-page-signup-button"
         >
           {{ $t("auth.login.createAccountLinkLabel") }}

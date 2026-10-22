@@ -419,9 +419,9 @@ const hasActive = computed(() => activePills.value.length > 0)
         <div v-else-if="facet.type === 'price'">
           <template v-if="hasPriceRange">
             <div class="price-range relative h-[30px] mx-0.5">
-              <div class="absolute top-[13px] inset-x-0 h-[3px] bg-primary-100 rounded-sm" />
+              <div class="absolute top-[13px] inset-x-0 h-[3px] bg-primary-100 rounded-xs" />
               <div
-                class="absolute top-[13px] h-[3px] bg-primary-900 rounded-sm"
+                class="absolute top-[13px] h-[3px] bg-primary-900 rounded-xs"
                 :style="priceFill"
               />
               <input
@@ -455,7 +455,7 @@ const hasActive = computed(() => activePills.value.length > 0)
                 <input
                   v-model.number="priceMin"
                   inputmode="numeric"
-                  class="w-full min-w-0 pl-1 text-[13px] outline-none tabular-nums"
+                  class="w-full min-w-0 pl-1 text-[13px] outline-hidden tabular-nums"
                   aria-label="Minimum price value"
                   @change="commitPriceFromText"
                 >
@@ -466,7 +466,7 @@ const hasActive = computed(() => activePills.value.length > 0)
                 <input
                   v-model.number="priceMax"
                   inputmode="numeric"
-                  class="w-full min-w-0 pl-1 text-[13px] outline-none tabular-nums"
+                  class="w-full min-w-0 pl-1 text-[13px] outline-hidden tabular-nums"
                   aria-label="Maximum price value"
                   @change="commitPriceFromText"
                 >
@@ -542,7 +542,7 @@ const hasActive = computed(() => activePills.value.length > 0)
               v-model="searchTerms[facetKey(facet, index)]"
               type="text"
               :placeholder="`Search ${facet.label.toLowerCase()}`"
-              class="w-full border border-neutral-200 rounded-md py-2.5 pl-8 pr-3 text-[13px] outline-none focus:border-primary-900"
+              class="w-full border border-neutral-200 rounded-md py-2.5 pl-8 pr-3 text-[13px] outline-hidden focus:border-primary-900"
             >
             <svg
               class="absolute left-2.5 top-1/2 -translate-y-1/2"
@@ -612,7 +612,7 @@ const hasActive = computed(() => activePills.value.length > 0)
             @click="selectStockFilter()"
           >
             <span
-              class="absolute top-[3px] w-[18px] h-[18px] bg-white rounded-sm shadow transition-all"
+              class="absolute top-[3px] w-[18px] h-[18px] bg-white rounded-xs shadow transition-all"
               :class="isStockSelected() ? 'left-[21px]' : 'left-[3px]'"
             />
           </button>

@@ -53,7 +53,7 @@ const activeImage = computed(() => allImages.value[activeIndex.value] ?? allImag
         type="button"
         :aria-label="alt"
         :aria-current="activeIndex === index"
-        class="w-[60px] md:w-[72px] aspect-[4/5] overflow-hidden rounded-[2px] border transition-all duration-200 cursor-pointer focus-visible:outline focus-visible:outline-offset"
+        class="w-[60px] md:w-[72px] aspect-4/5 overflow-hidden rounded-[2px] border transition-all duration-200 cursor-pointer focus-visible:outline-solid focus-visible:outline-offset"
         :class="activeIndex === index
           ? 'border-black opacity-100'
           : 'border-primary-200 opacity-60 hover:opacity-100 hover:border-primary-300'"

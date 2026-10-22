@@ -174,7 +174,7 @@ const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.p
           <slot />
         </div>
 
-        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-6 text-[11px] tracking-[0.1em] uppercase text-primary-400">
+        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-6 text-[11px] tracking-widest uppercase text-primary-400">
           <span class="inline-flex items-center gap-1.5">
             <UiLineIcon
               name="lock"

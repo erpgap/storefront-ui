@@ -328,7 +328,7 @@ const categoryEyebrow = computed(() => {
                 variant="tertiary"
                 square
                 :aria-label="isInWishlist(productVariant.id as number) ? $t('wishlist.removeFromWishlist') : $t('wishlist.addToWishlist')"
-                class="min-h-[54px] w-[54px] shrink-0 !border !border-primary-200 !text-black hover:!border-black hover:!bg-transparent"
+                class="min-h-[54px] w-[54px] shrink-0 border! border-primary-200! text-black! hover:border-black! hover:bg-transparent!"
                 @click="handleWishlistToggle"
               >
                 <UiLineIcon

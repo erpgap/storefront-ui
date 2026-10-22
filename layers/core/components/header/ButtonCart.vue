@@ -23,7 +23,7 @@ onMounted(() => {
         <span class="relative inline-flex">
           <UiLineIcon
             name="cart"
-            class="!text-black"
+            class="text-black!"
           />
           <span
             v-if="totalItemsInCart > 0"
@@ -45,7 +45,7 @@ onMounted(() => {
         <template #prefix>
           <UiLineIcon
             name="cart"
-            class="!text-black"
+            class="text-black!"
           />
         </template>
       </SfButton>

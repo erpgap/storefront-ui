@@ -95,7 +95,7 @@ onClickOutside(searchPanelRef, () => {
           >
             <UiLineIcon
               name="search"
-              class="!text-black"
+              class="text-black!"
             />
           </SfButton>
           <HeaderButtonLogin />
@@ -129,7 +129,7 @@ onClickOutside(searchPanelRef, () => {
                 placeholder="Search"
                 autofocus
                 class="[&::-webkit-search-cancel-button]:appearance-none"
-                wrapper-class="h-11 pr-0 active:!ring-black focus-within:!ring-black hover:!ring-black active:!ring-1 focus-within:!ring-1"
+                wrapper-class="h-11 pr-0 active:ring-black! focus-within:ring-black! hover:ring-black! active:ring-1! focus-within:ring-1!"
                 size="base"
                 @keydown.enter.prevent="handleSearchEnter"
               >

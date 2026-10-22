@@ -13,7 +13,7 @@ defineEmits<{
 
 <template>
   <SfButton
-    class="block font-body bg-transparent hover:bg-white active:bg-white self-end !pl-0 mr-[4px]"
+    class="block font-body bg-transparent hover:bg-white active:bg-white self-end pl-0! mr-[4px]"
     type="button"
     variant="tertiary"
     square

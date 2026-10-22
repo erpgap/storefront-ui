@@ -70,7 +70,7 @@ const toggleWishlist = (variant?: Product) => {
     <!-- Square via the percentage-padding ratio technique (pt-[100%] = width),
          not `aspect-ratio` — iOS WebKit mis-sizes aspect-ratio in flex/grid, which
          collapsed these images. The image is absolutely positioned to fill. -->
-    <div class="relative pt-[100%] overflow-hidden rounded-[3px] bg-gradient-to-br from-[#efefef] to-[#e2e2e2]">
+    <div class="relative pt-[100%] overflow-hidden rounded-[3px] bg-linear-to-br from-[#efefef] to-[#e2e2e2]">
       <NuxtLink
         :to="slug"
         prefetch
@@ -92,7 +92,7 @@ const toggleWishlist = (variant?: Product) => {
       <button
         type="button"
         aria-label="Add to wishlist"
-        class="absolute top-3 right-3 z-[2] grid place-items-center w-[44px] h-[44px] rounded-full bg-white/90 text-primary-700 transition-colors duration-200 hover:text-black"
+        class="absolute top-3 right-3 z-2 grid place-items-center w-[44px] h-[44px] rounded-full bg-white/90 text-primary-700 transition-colors duration-200 hover:text-black"
         @click="toggleWishlist(firstVariant)"
       >
         <UiLineIcon

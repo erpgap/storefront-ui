@@ -43,7 +43,7 @@ const message = computed(() =>
               :tag="NuxtLink"
               to="/products"
               variant="tertiary"
-              class="min-h-[52px] px-7 text-[13px] tracking-[0.1em] uppercase font-medium !border !border-primary-200 !text-black hover:!bg-transparent hover:!border-black"
+              class="min-h-[52px] px-7 text-[13px] tracking-widest uppercase font-medium border! border-primary-200! text-black! hover:bg-transparent! hover:border-black!"
             >
               Browse products
             </SfButton>

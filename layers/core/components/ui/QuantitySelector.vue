@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { SfButton, SfIconAdd, SfIconRemove, useId } from '@storefront-ui/vue'
+import { useId } from 'vue'
+import { SfButton, SfIconAdd, SfIconRemove } from '@storefront-ui/vue'
 
 const props = defineProps({
   modelValue: {
@@ -37,7 +38,7 @@ const decrement = () => {
         type="button"
         variant="tertiary"
         square
-        class="rounded-r-none"
+        class="rounded-md rounded-r-none"
         aria-label="Decrease value"
         :disabled="props.modelValue <= 1"
         data-testid="quantity-selector-decrease-button"
@@ -46,7 +47,7 @@ const decrement = () => {
         <SfIconRemove />
       </SfButton>
       <input
-        class="appearance-none flex-1 mx-2 w-8 text-center bg-transparent font-medium [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-inner-spin-button]:display-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:display-none [&::-webkit-outer-spin-button]:m-0 [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none disabled:placeholder-disabled-900 focus-visible:outline focus-visible:outline-offset focus-visible:rounded-sm"
+        class="appearance-none flex-1 mx-2 w-8 text-center bg-transparent font-medium [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-inner-spin-button]:display-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:display-none [&::-webkit-outer-spin-button]:m-0 [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none disabled:placeholder-disabled-900 focus-visible:outline-solid focus-visible:outline-offset focus-visible:rounded-xs"
         :max="props.maxQty"
         :value="props.modelValue"
         type="number"
@@ -59,7 +60,7 @@ const decrement = () => {
         type="button"
         variant="tertiary"
         square
-        class="rounded-l-none"
+        class="rounded-md rounded-l-none"
         aria-label="Increase value"
         data-testid="quantity-selector-increase-button"
         :disabled="props.modelValue >= props.maxQty"

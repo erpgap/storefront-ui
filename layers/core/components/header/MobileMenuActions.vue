@@ -18,7 +18,7 @@ const { isAuthenticated } = useAuth()
           <Icon
             :name="isAuthenticated ? 'ion:person' : 'ion:person-outline'"
             size="22px"
-            class="!text-black"
+            class="text-black!"
             aria-hidden="true"
           />
           {{ $t('account.navBarBottomHeading') }}
@@ -33,7 +33,7 @@ const { isAuthenticated } = useAuth()
           <UiLineIcon
             name="heart"
             :size="22"
-            class="!text-black"
+            class="text-black!"
           />
           {{ $t('wishlist.wishlist') }}
         </NuxtLink>

@@ -24,7 +24,7 @@ defineProps<{
       image-class="absolute inset-0 w-full h-full object-cover object-center"
       eager
     />
-    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-black/20" />
+    <div class="absolute inset-0 bg-linear-to-r from-black/70 via-black/45 to-black/20" />
     <div class="narrow-container relative w-full py-16">
       <p
         v-if="eyebrow"

@@ -173,7 +173,7 @@ onMounted(() => {
               :src="previewUrl(item.url)"
               :alt="item.name"
               loading="lazy"
-              class="w-full aspect-[4/3] object-cover bg-primary-100"
+              class="w-full aspect-4/3 object-cover bg-primary-100"
             >
             <span class="block px-2 py-1.5">
               <span class="block text-[11px] truncate">{{ item.name }}</span>

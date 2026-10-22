@@ -59,7 +59,7 @@ const computedBreadcrumbs = computed(() => {
           class="w-max z-100"
         >
           <SfButton
-            class="relative w-5 h-5 !p-0 rounded-sm outline-secondary-600 hover:bg-transparent active:bg-transparent"
+            class="relative w-5 h-5 p-0! rounded-xs outline-secondary-600 hover:bg-transparent active:bg-transparent"
             aria-label="Show more breadcrumbs"
             type="button"
             variant="tertiary"
@@ -99,7 +99,7 @@ const computedBreadcrumbs = computed(() => {
       <li
         v-for="(item, index) in computedBreadcrumbs"
         :key="item.name"
-        class="peer hidden sm:flex items-center peer-[:nth-of-type(even)]:before:content-['/'] peer-[:nth-of-type(even)]:before:px-1.5 peer-[:nth-of-type(even)]:before:leading-5 peer-[:nth-of-type(even)]:before:text-primary-200 last-of-type:flex last-of-type:before:font-normal last-of-type:before:text-primary-200 text-primary-400 last-of-type:text-black"
+        class="peer hidden sm:flex items-center peer-nth-of-type-[even]:before:content-['/'] peer-nth-of-type-[even]:before:px-1.5 peer-nth-of-type-[even]:before:leading-5 peer-nth-of-type-[even]:before:text-primary-200 last-of-type:flex last-of-type:before:font-normal last-of-type:before:text-primary-200 text-primary-400 last-of-type:text-black"
       >
         <SfLink
           v-if="index < computedBreadcrumbs.length - 1"

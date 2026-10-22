@@ -3,6 +3,7 @@
 // nuxt.config.ts
 import path from 'path'
 import { defineNuxtConfig } from 'nuxt/config'
+import tailwindcss from '@tailwindcss/vite'
 
 const swrCacheTime = Number(process.env?.NUXT_SWR_CACHE_TIME || 3600)
 const storageDriver = process.env.NUXT_STORAGE_DRIVER || 'memory'
@@ -19,7 +20,6 @@ export default defineNuxtConfig({
   modules: [
     './modules/env-check',
     '@pinia/nuxt',
-    '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
     '@nuxt/image',
@@ -177,6 +177,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    plugins: [tailwindcss()],
     build: {
       rolldownOptions: {
         // A build-time profile of which plugins took how long, printed as a
@@ -209,16 +210,6 @@ export default defineNuxtConfig({
           '@adyen/adyen-web': [path.resolve(__dirname, 'node_modules/@adyen/adyen-web/dist/types/index.d.ts')],
         },
       },
-    },
-  },
-
-  postcss: {
-    plugins: {
-      // @nuxtjs/tailwindcss adds Tailwind 3's nesting plugin, which Nuxt 4.6
-      // can no longer load (it imports PostCSS plugins as ES modules, and
-      // `tailwindcss/nesting` is a CommonJS folder without an exports map):
-      // it warned on every build and did nothing. The stylesheets do not nest.
-      'tailwindcss/nesting': false,
     },
   },
 
@@ -255,6 +246,9 @@ export default defineNuxtConfig({
   // UiLineIcon). Scan templates and bundle just those into the client so the
   // Icon component doesn't fetch icon data from the Iconify API at runtime.
   icon: {
+    // Icons' default 1em size in Tailwind's base layer, so that size
+    // utilities (`size-20`) win. Outside any layer it would beat them all.
+    cssLayer: 'base',
     clientBundle: {
       scan: true,
       sizeLimitKb: 256,
@@ -333,10 +327,6 @@ export default defineNuxtConfig({
         defaults: { changefreq: 'weekly', priority: 0.9 },
       },
     },
-  },
-
-  tailwindcss: {
-    viewer: false,
   },
 
   viewport: {

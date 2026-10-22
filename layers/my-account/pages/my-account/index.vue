@@ -142,7 +142,7 @@ onMounted(async () => {
         </p>
         <NuxtLink
           to="/products"
-          class="inline-flex items-center gap-2 text-[13px] tracking-[0.1em] uppercase font-medium border-b border-black pb-1 hover:text-primary-600 transition-colors"
+          class="inline-flex items-center gap-2 text-[13px] tracking-widest uppercase font-medium border-b border-black pb-1 hover:text-primary-600 transition-colors"
         >
           Start shopping
         </NuxtLink>

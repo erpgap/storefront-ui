@@ -32,7 +32,7 @@ watch(model, () => {
         v-model="model"
         type="text"
         placeholder="Enter your email here"
-        class="w-full text-base outline-none appearance-none text-neutral-900 disabled:cursor-not-allowed disabled:bg-transparent read-only:bg-transparent"
+        class="w-full text-base outline-hidden appearance-none text-neutral-900 disabled:cursor-not-allowed disabled:bg-transparent read-only:bg-transparent"
         @input="clearError"
       >
     </span>

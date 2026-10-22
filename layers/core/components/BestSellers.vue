@@ -97,7 +97,7 @@ watch(
       <NuxtLink
         v-if="linkLabel"
         :to="linkUrl || '/products'"
-        class="group hidden sm:inline-flex items-center gap-2 pb-2 text-[13px] tracking-[0.1em] uppercase text-primary-600 whitespace-nowrap border-b border-transparent transition-colors hover:text-black hover:border-black"
+        class="group hidden sm:inline-flex items-center gap-2 pb-2 text-[13px] tracking-widest uppercase text-primary-600 whitespace-nowrap border-b border-transparent transition-colors hover:text-black hover:border-black"
       >
         {{ linkLabel }}
         <svg

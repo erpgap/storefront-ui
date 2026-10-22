@@ -480,7 +480,7 @@ const saveLabel = computed(() => ({
         class="min-w-0 text-left"
         :class="(page as any)!.kind === 'region'
           ? ''
-          : 'rounded px-1.5 -mx-1.5 py-0.5 hover:bg-white/10 transition-colors'"
+          : 'rounded-sm px-1.5 -mx-1.5 py-0.5 hover:bg-white/10 transition-colors'"
         :title="(page as any)!.kind === 'region' ? undefined : 'Rename or change the address'"
         @click="(page as any)!.kind === 'region' ? undefined : (settingsOpen = true)"
       >
@@ -504,8 +504,8 @@ const saveLabel = computed(() => ({
           <span class="sr-only">Content language</span>
           <select
             v-model="locale"
-            class="editor-btn !normal-case !tracking-normal py-1.5"
-            :class="locale !== defaultLocale ? '!border-amber-500 !text-amber-700' : ''"
+            class="editor-btn normal-case! tracking-normal! py-1.5"
+            :class="locale !== defaultLocale ? 'border-amber-500! text-amber-700!' : ''"
           >
             <option
               v-for="option in locales"
@@ -656,7 +656,7 @@ const saveLabel = computed(() => ({
            full-bleed section following the cursor around. -->
         <div
           v-if="dragging"
-          class="pointer-events-none fixed z-[200] px-2.5 py-1.5 rounded-md bg-neutral-900 text-white text-[11px] tracking-[0.1em] uppercase shadow-lg"
+          class="pointer-events-none fixed z-200 px-2.5 py-1.5 rounded-md bg-neutral-900 text-white text-[11px] tracking-widest uppercase shadow-lg"
           :style="{ left: `${dragPoint.x + 14}px`, top: `${dragPoint.y + 14}px` }"
         >
           {{ dragging.label }}
@@ -678,14 +678,14 @@ const saveLabel = computed(() => ({
             type="search"
             placeholder="Search blocks"
             aria-label="Search blocks"
-            class="w-full rounded-md border border-white/20 bg-white/[0.09] px-2.5 py-1.5 text-[13px] text-white placeholder:text-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
+            class="w-full rounded-md border border-white/20 bg-white/9 px-2.5 py-1.5 text-[13px] text-white placeholder:text-white/40 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-blue-500"
             @keydown.enter.prevent="addFirstPaletteMatch"
             @keydown.esc.stop="paletteSearch = ''"
           >
         </div>
         <p
           v-if="insertAt !== null"
-          class="text-[11px] tracking-[0.14em] uppercase text-blue-200 bg-blue-500/20 rounded px-2 py-1.5 mb-2 flex items-center justify-between gap-2"
+          class="text-[11px] tracking-[0.14em] uppercase text-blue-200 bg-blue-500/20 rounded-sm px-2 py-1.5 mb-2 flex items-center justify-between gap-2"
         >
           Inserting at {{ insertAt + 1 }}
           <button
@@ -710,7 +710,7 @@ const saveLabel = computed(() => ({
             :key="definition.name"
             type="button"
             :title="definition.description"
-            class="text-left rounded-md border border-white/15 bg-white/[0.06] px-2.5 py-2 cursor-grab hover:border-white/40 hover:bg-white/[0.12] transition-colors touch-none"
+            class="text-left rounded-md border border-white/15 bg-white/6 px-2.5 py-2 cursor-grab hover:border-white/40 hover:bg-white/12 transition-colors touch-none"
             @pointerdown="onPaletteDragStart($event, definition.name, definition.label)"
             @click="onPaletteClick(definition.name)"
           >
@@ -757,7 +757,7 @@ const saveLabel = computed(() => ({
           <!-- Said once, here, instead of a lock message on every hidden field. -->
           <p
             v-if="locale !== defaultLocale"
-            class="text-[11px] text-amber-200 bg-amber-400/15 rounded p-2.5 leading-snug"
+            class="text-[11px] text-amber-200 bg-amber-400/15 rounded-sm p-2.5 leading-snug"
           >
             Translating {{ locales.find(l => l.code === locale)?.label }}.
             Only text and images appear here — layout and settings are shared
@@ -766,7 +766,7 @@ const saveLabel = computed(() => ({
 
           <p
             v-if="selectedSchema.dynamic"
-            class="text-[11px] text-white/60 bg-white/[0.06] rounded p-2.5 leading-snug"
+            class="text-[11px] text-white/60 bg-white/6 rounded-sm p-2.5 leading-snug"
           >
             Products come live from your catalogue in Odoo. You control the
             wording and how many are shown — not the products themselves.

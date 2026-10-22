@@ -77,7 +77,7 @@ const ctaList = computed<Cta[]>(() => props.ctas ?? [
       class="absolute inset-0 bg-primary-100"
     />
     <!-- Scrim -->
-    <div class="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />
+    <div class="absolute inset-0 bg-linear-to-r from-black/55 via-black/25 to-transparent" />
 
     <!-- Content -->
     <div class="narrow-container relative w-full">
@@ -103,7 +103,7 @@ const ctaList = computed<Cta[]>(() => props.ctas ?? [
             :variant="cta.style === 'secondary' ? undefined : 'tertiary'"
             :class="cta.style === 'secondary'
               ? 'min-h-[52px] px-7 text-[13px] font-medium'
-              : '!bg-white !text-black hover:!bg-primary-50 !border-none !ring-0 !shadow-none min-h-[52px] px-7 gap-3 text-[13px] tracking-[0.12em] uppercase font-medium'"
+              : 'bg-white! text-black! hover:bg-primary-50! border-none! ring-0! shadow-none! min-h-[52px] px-7 gap-3 text-[13px] tracking-[0.12em] uppercase font-medium'"
           >
             {{ cta.label }}
             <svg

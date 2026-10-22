@@ -29,7 +29,7 @@ const goTo = (to: string) => {
   <div class="w-full">
     <div
       v-if="cartSidebarIsOpen"
-      class="fixed inset-0 !w-screen !h-screen bg-neutral-500 bg-opacity-50 transition-opacity duration-500 top-index"
+      class="fixed inset-0 w-screen! h-screen! bg-neutral-500/50 transition-opacity duration-500 top-index"
       @click="closeCartSideBar()"
     />
     <transition
@@ -57,7 +57,7 @@ const goTo = (to: string) => {
             variant="tertiary"
             square
             aria-label="Close cart"
-            class="!text-black"
+            class="text-black!"
             @click="closeCartSideBar()"
           >
             <SfIconClose />
@@ -170,7 +170,7 @@ const goTo = (to: string) => {
             </SfButton>
             <SfButton
               variant="tertiary"
-              class="w-full min-h-[48px] text-[13px] tracking-[0.1em] uppercase font-medium !border !border-primary-200 !text-black hover:!bg-transparent hover:!border-black"
+              class="w-full min-h-[48px] text-[13px] tracking-widest uppercase font-medium border! border-primary-200! text-black! hover:bg-transparent! hover:border-black!"
               @click="goTo('/cart')"
             >
               View cart

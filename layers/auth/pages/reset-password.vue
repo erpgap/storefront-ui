@@ -34,7 +34,7 @@
           <SfButton
             :tag="NuxtLink"
             to="/login"
-            class="!text-base"
+            class="text-base!"
             variant="tertiary"
             :disabled="isSubmitting"
           >

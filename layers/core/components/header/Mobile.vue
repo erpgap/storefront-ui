@@ -67,7 +67,7 @@ watch(isOpen, (open: boolean) => {
             role="dialog"
             aria-modal="true"
             :aria-label="$t('navigationMenu')"
-            class="!fixed !inset-y-0 !left-0 bg-white w-full h-dvh z-[200] flex flex-col"
+            class="fixed! inset-y-0! left-0! bg-white w-full h-dvh z-200 flex flex-col"
           >
             <div class="flex items-center justify-between shrink-0 px-4 py-3 border-b border-primary-100">
               <NuxtLink
@@ -82,7 +82,7 @@ watch(isOpen, (open: boolean) => {
                 variant="tertiary"
                 square
                 :aria-label="$t('closeMenu')"
-                class="!text-black"
+                class="text-black!"
                 @click="close()"
               >
                 <SfIconClose />

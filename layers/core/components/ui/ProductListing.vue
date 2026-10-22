@@ -184,7 +184,7 @@ if (currentPage.value > totalPages.value) {
             <CategorySortDropdown class="flex-1" />
             <button
               type="button"
-              class="flex-1 flex items-center justify-center gap-2 border border-primary-900 rounded-md px-4 py-2.5 text-xs uppercase tracking-[0.1em] font-medium whitespace-nowrap"
+              class="flex-1 flex items-center justify-center gap-2 border border-primary-900 rounded-md px-4 py-2.5 text-xs uppercase tracking-widest font-medium whitespace-nowrap"
               @click="open"
             >
               {{ $t('refineBy') }}

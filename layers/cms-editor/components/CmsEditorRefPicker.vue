@@ -94,7 +94,7 @@ const ordered = computed(() =>
         v-if="option.imageUrl"
         :src="option.imageUrl"
         alt=""
-        class="w-8 h-8 rounded object-cover flex-none bg-primary-100"
+        class="w-8 h-8 rounded-sm object-cover flex-none bg-primary-100"
       >
       <span class="text-[12px] truncate flex-1">{{ option.name }}</span>
       <span class="flex items-center gap-0.5 text-primary-400 flex-none">
@@ -126,7 +126,7 @@ const ordered = computed(() =>
         v-model="search"
         type="text"
         :placeholder="kind === 'product' ? 'Search products…' : 'Search categories…'"
-        class="w-full px-2 py-1.5 text-[13px] border border-black/15 rounded"
+        class="w-full px-2 py-1.5 text-[13px] border border-black/15 rounded-sm"
         @focus="open = true"
       >
 
@@ -154,7 +154,7 @@ const ordered = computed(() =>
               v-if="option.imageUrl"
               :src="option.imageUrl"
               alt=""
-              class="w-6 h-6 rounded object-cover flex-none bg-primary-100"
+              class="w-6 h-6 rounded-sm object-cover flex-none bg-primary-100"
             >
             <span class="text-[12px] truncate">{{ option.name }}</span>
           </button>

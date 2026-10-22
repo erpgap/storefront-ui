@@ -58,7 +58,7 @@ const subscribeNewsletter = async () => {
           :disabled="!emailValidation || loading"
           type="submit"
           variant="tertiary"
-          class="!bg-white !text-black hover:!bg-primary-50 !border-none !ring-0 !shadow-none h-[48px] sm:h-auto px-7 text-[13px] tracking-[0.12em] uppercase font-medium disabled:!opacity-60"
+          class="bg-white! text-black! hover:bg-primary-50! border-none! ring-0! shadow-none! h-[48px] sm:h-auto px-7 text-[13px] tracking-[0.12em] uppercase font-medium disabled:opacity-60!"
         >
           {{ loading ? 'Subscribing…' : 'Subscribe' }}
         </SfButton>

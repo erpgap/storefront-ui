@@ -31,7 +31,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 const gridClass = computed(() =>
   props.columns === '2' ? 'md:grid-cols-2 gap-x-8 gap-y-14' : 'md:grid-cols-3 gap-x-6 gap-y-12')
 const aspectClass = computed(() =>
-  props.imageShape === 'wide' ? 'aspect-[16/10]' : 'aspect-[4/3]')
+  props.imageShape === 'wide' ? 'aspect-16/10' : 'aspect-4/3')
 const imageSizes = computed(() =>
   props.columns === '2'
     ? 'xs:100vw sm:100vw md:50vw lg:50vw xl:50vw xxl:50vw 2xl:50vw'

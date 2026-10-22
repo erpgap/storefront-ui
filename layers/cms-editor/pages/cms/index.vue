@@ -121,7 +121,7 @@ function formatDate(iso: string) {
         </div>
         <button
           type="button"
-          class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded hover:bg-blue-600 transition-colors"
+          class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm hover:bg-blue-600 transition-colors"
           @click="startCreating"
         >
           New page
@@ -170,14 +170,14 @@ function formatDate(iso: string) {
         <div class="flex items-center gap-2">
           <button
             type="submit"
-            class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded disabled:opacity-50"
+            class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm disabled:opacity-50"
             :disabled="busy || !title.trim()"
           >
             {{ busy ? 'Creating…' : 'Create and edit' }}
           </button>
           <button
             type="button"
-            class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase border border-primary-300 rounded"
+            class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase border border-primary-300 rounded-sm"
             @click="creating = false"
           >
             Cancel
@@ -237,7 +237,7 @@ function formatDate(iso: string) {
               </NuxtLink>
 
               <span
-                class="text-[10px] tracking-[0.1em] uppercase px-1.5 py-0.5 rounded"
+                class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm"
                 :class="page.published
                   ? 'bg-green-100 text-green-800'
                   : 'bg-primary-100 text-primary-500'"
@@ -247,7 +247,7 @@ function formatDate(iso: string) {
 
               <span
                 v-if="page.hasUnpublishedChanges"
-                class="text-[10px] tracking-[0.1em] uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800"
+                class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-amber-100 text-amber-800"
               >
                 Unpublished changes
               </span>
@@ -325,11 +325,11 @@ function formatDate(iso: string) {
                 </NuxtLink>
                 <span
                   v-if="region.hasUnpublishedChanges"
-                  class="text-[10px] tracking-[0.1em] uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800"
+                  class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-amber-100 text-amber-800"
                 >Unpublished changes</span>
                 <span
                   v-else-if="!region.blockCount"
-                  class="text-[10px] tracking-[0.1em] uppercase px-1.5 py-0.5 rounded bg-primary-100 text-primary-500"
+                  class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-primary-100 text-primary-500"
                 >Empty</span>
               </div>
               <p class="text-[12px] text-primary-400 mt-0.5 truncate">

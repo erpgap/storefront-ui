@@ -112,11 +112,11 @@ function when(iso?: string) {
                 Version {{ revision.number }}
                 <span
                   v-if="revision.isLive"
-                  class="text-[10px] tracking-[0.1em] uppercase px-1.5 py-0.5 rounded bg-green-100 text-green-800"
+                  class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-green-100 text-green-800"
                 >Live</span>
                 <span
                   v-if="revision.restoredFrom"
-                  class="text-[10px] tracking-[0.1em] uppercase px-1.5 py-0.5 rounded bg-primary-100 text-primary-600"
+                  class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-primary-100 text-primary-600"
                 >From {{ revision.restoredFrom }}</span>
               </p>
               <p class="text-[11px] text-primary-400 truncate">
@@ -130,7 +130,7 @@ function when(iso?: string) {
             <button
               v-if="!revision.isLive"
               type="button"
-              class="flex-none px-3 py-1.5 text-[11px] tracking-[0.08em] uppercase border border-primary-300 rounded hover:border-black disabled:opacity-40"
+              class="flex-none px-3 py-1.5 text-[11px] tracking-[0.08em] uppercase border border-primary-300 rounded-sm hover:border-black disabled:opacity-40"
               :disabled="busy !== null"
               @click="restore(revision)"
             >

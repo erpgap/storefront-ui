@@ -1,63 +1,143 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+/* Storefront UI's theme: its colours, breakpoints, outline and variants. */
+@import '@storefront-ui/vue/tailwind-config';
+@plugin '@storefront-ui/typography';
+/* Tailwind finds classes on its own only under Vite's root, which is app/.
+   The layers and server code are outside it, and node_modules is always
+   left out, so Storefront UI's components need naming too. */
+@source '../../../layers';
+@source '../../../server';
+@source '../../../node_modules/@storefront-ui/vue';
 
-@layer components {
-  .narrow-container {
-    @apply px-4 md:px-6 xl:px-8 xxl:px-0 max-w-[1336px] mx-auto;
+@theme {
+  --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-body: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Sharp 2px corners app-wide (matches the redesign's buttons). `rounded-md`
+     is the default radius used across buttons, inputs, and cards. */
+  --radius-md: 2px;
+  --radius-lg: 2px;
+
+  /* In rem like Tailwind's and Storefront UI's own, or the variants would
+     not sort by size. */
+  --breakpoint-xxl: 90rem; /* 1440px */
+
+  /* The brand is black and greys, not Storefront UI's green. */
+  --color-primary-50: #f5f5f5;
+  --color-primary-100: #e5e5e5;
+  --color-primary-200: #d4d4d4;
+  --color-primary-300: #a3a3a3;
+  --color-primary-400: #737373;
+  --color-primary-500: #525252;
+  --color-primary-600: #404040;
+  --color-primary-700: #262626;
+  --color-primary-800: #171717;
+  --color-primary-900: #0a0a0a;
+  --color-primary: #000000;
+
+  /* Storefront UI 2's secondary (purple): keyboard focus outlines and
+     secondary alerts. 3 made it green, its old primary. */
+  --color-secondary-50: #f7f5fd;
+  --color-secondary-100: #efecfb;
+  --color-secondary-200: #e1daf6;
+  --color-secondary-300: #d8cbf5;
+  --color-secondary-400: #c6b1f6;
+  --color-secondary-500: #b497f9;
+  --color-secondary-600: #976fee;
+  --color-secondary-700: #774fd1;
+  --color-secondary-800: #523499;
+  --color-secondary-900: #302056;
+}
+
+/*
+  Tailwind 4 borders default to `currentcolor`; Tailwind 3's were gray-200,
+  and the templates rely on it wherever they write a bare `border`.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
   }
+}
 
+@utility narrow-container {
+  @apply px-4 md:px-6 xl:px-8 xxl:px-0 max-w-[1336px] mx-auto;
+}
+
+@utility scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  /* Chrome, Safari and Opera. */
+  &::-webkit-scrollbar {
+    @apply hidden;
+  }
+}
+
+@utility grid-areas-product-page {
+  grid-template-areas:
+    'left-top right'
+    'left-bottom right';
+}
+
+@utility grid-cols-product-page {
+  grid-template-columns: minmax(56%, 500px) auto;
+}
+
+@utility grid-in-right {
+  grid-area: right;
+}
+
+@utility grid-in-left-bottom {
+  grid-area: left-bottom;
+}
+
+@utility top-index {
+  z-index: 10 !important;
+}
+
+/*
+  App-wide overrides of Storefront UI's components.
+
+  In the utilities layer, after Tailwind's own, so that specificity and order
+  decide as they did in Tailwind 3. In the components layer their `!`
+  declarations would beat every `!` utility: with cascade layers, an earlier
+  layer wins among !important. The single-attribute selectors are wrapped in
+  :where() so that a component's own `!` utility still wins over them, as it
+  did when it came later in the file.
+*/
+@layer utilities {
   /* ============================================================
      GLOBAL BUTTON — the redesign's button is the app-wide standard:
      sharp 2px corners, and the primary (filled) button is solid black
      with white text + uppercase tracking, on every page.
      ============================================================ */
-  [data-testid="button"] {
-    @apply !rounded-[2px] !text-[13px];
+  :where([data-testid="button"]) {
+    @apply rounded-[2px]! text-[13px]!;
   }
   /* SfButton's "primary" variant ships with `bg-primary-700`; retarget it
      to the redesign's solid black CTA. Tertiary/icon buttons (which have no
      `bg-primary-700` class) are intentionally left untouched. */
   [data-testid="button"][class*="bg-primary-700"] {
-    @apply !bg-primary-900 hover:!bg-primary-700 active:!bg-primary-700 !text-white !shadow-none uppercase tracking-[0.1em] !text-[13px];
+    @apply bg-primary-900! hover:bg-primary-700! active:bg-primary-700! text-white! shadow-none! uppercase tracking-widest text-[13px]!;
   }
   /* SfButton's "secondary" (outlined) variant ships with `ring-primary-700`.
      Match the primary CTA's uppercase tracking so both variants read
      consistently across the app. Tertiary/icon buttons (no ring) stay as-is. */
   [data-testid="button"][class*="ring-primary-700"] {
-    @apply uppercase tracking-[0.1em];
+    @apply uppercase tracking-widest;
+  }
+
+  /* Form fields: Storefront UI 3 rounds them with `rounded-xl` (12px), where
+     2 used `rounded-md`. Keep them on the app's sharp corners. */
+  :where([data-testid="input"], [data-testid="select"], [data-testid="select-input"], [data-testid="textarea"]) {
+    @apply rounded-md!;
   }
 
   /* Rating: filled stars in brand black (empty stars stay grey) */
   [data-testid="rating"] [data-testid="star-filled"] {
     color: #0a0a0a;
   }
-
-  .scrollbar-hidden {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  /* Chrome, Safari and Opera. Written flat: no CSS nesting, see postcss in
-     nuxt.config. */
-  .scrollbar-hidden::-webkit-scrollbar {
-    @apply hidden;
-  }
-  .grid-areas-product-page {
-    grid-template-areas:
-      "left-top right"
-      "left-bottom right";
-  }
-  .grid-cols-product-page {
-    grid-template-columns: minmax(56%, 500px) auto;
-  }
-  .grid-in-right {
-    grid-area: right;
-  }
-  .grid-in-left-bottom {
-    grid-area: left-bottom;
-  }
-  .top-index {
-    z-index: 10 !important;
-  }
 }
-

@@ -64,7 +64,7 @@ else {
         v-if="orderName"
         class="mt-8 border-y border-primary-100 py-4 flex items-center justify-center gap-3"
       >
-        <span class="text-[12px] tracking-[0.1em] uppercase text-primary-500">
+        <span class="text-[12px] tracking-widest uppercase text-primary-500">
           {{ $t('thankYou.orderReference') }}
         </span>
         <span class="text-[15px] font-semibold">#{{ orderName }}</span>

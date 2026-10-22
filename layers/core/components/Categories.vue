@@ -64,7 +64,7 @@ const gridClass = computed(() => categories.value.length >= 4
       <NuxtLink
         v-if="linkLabel"
         :to="linkUrl || '/products'"
-        class="group hidden sm:inline-flex items-center gap-2 pb-2 text-[13px] tracking-[0.1em] uppercase text-primary-600 whitespace-nowrap border-b border-transparent transition-colors hover:text-black hover:border-black"
+        class="group hidden sm:inline-flex items-center gap-2 pb-2 text-[13px] tracking-widest uppercase text-primary-600 whitespace-nowrap border-b border-transparent transition-colors hover:text-black hover:border-black"
       >
         {{ linkLabel }}
         <svg
@@ -103,10 +103,10 @@ const gridClass = computed(() => categories.value.length >= 4
           height="1088"
           :sizes="imageSizes"
           densities="1x"
-          class="w-full aspect-[4/5] object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          class="w-full aspect-4/5 object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           loading="lazy"
         />
-        <div class="absolute inset-x-0 bottom-0 flex items-center justify-between p-6 text-white bg-gradient-to-t from-black/55 to-transparent">
+        <div class="absolute inset-x-0 bottom-0 flex items-center justify-between p-6 text-white bg-linear-to-t from-black/55 to-transparent">
           <span class="text-[19px] font-medium">{{ category.name }}</span>
           <span class="grid place-items-center w-[38px] h-[38px] rounded-full border border-white/50 transition-colors duration-300 group-hover:bg-white group-hover:text-black">
             <svg

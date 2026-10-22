@@ -45,7 +45,7 @@ watch(
       ref="searchMenuRef"
       :model-value="isOpen"
       placement="top"
-      class="p-0 h-dvh w-full fixed top-0 bottom-0 left-0 right-auto z-80 bg-white py-5 px-6 overflow-y-auto no-scrollbar"
+      class="p-0 h-dvh w-full fixed top-0 bottom-0 left-0 right-auto z-60 bg-white py-5 px-6 overflow-y-auto no-scrollbar"
     >
       <SfButton
         square

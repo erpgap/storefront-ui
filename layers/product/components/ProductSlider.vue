@@ -34,7 +34,7 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
     <SfScrollable
       v-if="props.productTemplateList?.length > 0"
       buttons-placement="block"
-      class="items-center pb-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+      class="items-center pb-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] scrollbar-none"
       data-testid="product-slider"
       :drag="true"
     >

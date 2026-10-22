@@ -274,12 +274,12 @@ function rowThumb(row: Record<string, unknown>) {
           v-if="effectiveValue"
           :src="previewUrl(effectiveValue)"
           alt=""
-          class="w-full aspect-[16/9] object-cover bg-primary-100"
+          class="w-full aspect-video object-cover bg-primary-100"
           :class="inherited ? 'opacity-70' : ''"
         >
         <span
           v-else
-          class="flex items-center justify-center aspect-[16/9] bg-white/[0.06] text-[12px] text-white/50"
+          class="flex items-center justify-center aspect-video bg-white/6 text-[12px] text-white/50"
         >
           Choose an image
         </span>
@@ -333,7 +333,7 @@ function rowThumb(row: Record<string, unknown>) {
             v-if="rowThumb(row)"
             :src="rowThumb(row)!"
             alt=""
-            class="w-7 h-7 rounded object-cover flex-none"
+            class="w-7 h-7 rounded-sm object-cover flex-none"
           >
           <span class="text-[12px] font-medium truncate flex-1">{{ rowTitle(row, index) }}</span>
           <span

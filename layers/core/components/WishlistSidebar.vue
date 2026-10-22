@@ -32,7 +32,7 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
   <div class="w-full">
     <div
       v-if="wishlistSidebarIsOpen"
-      class="fixed inset-0 !w-screen !h-screen bg-neutral-500 bg-opacity-50 transition-opacity duration-500 top-index"
+      class="fixed inset-0 w-screen! h-screen! bg-neutral-500/50 transition-opacity duration-500 top-index"
       @click="closeWishlistSideBar()"
     />
     <transition
@@ -59,7 +59,7 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
             variant="tertiary"
             square
             aria-label="Close wishlist"
-            class="!text-black"
+            class="text-black!"
             @click="closeWishlistSideBar()"
           >
             <SfIconClose />
@@ -158,7 +158,7 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
         >
           <SfButton
             variant="tertiary"
-            class="w-full min-h-[52px] text-[13px] tracking-[0.1em] uppercase font-medium !border !border-primary-200 !text-black hover:!bg-transparent hover:!border-black"
+            class="w-full min-h-[52px] text-[13px] tracking-widest uppercase font-medium border! border-primary-200! text-black! hover:bg-transparent! hover:border-black!"
             @click="goTo('/wishlist')"
           >
             View wishlist

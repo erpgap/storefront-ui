@@ -57,7 +57,7 @@ const modelProxy = computed({
 <template>
   <span
     :class="['relative flex flex-col rounded-md', {
-               'focus-within:outline focus-within:outline-offset': isFocusVisible,
+               'focus-within:outline-solid focus-within:outline-offset': isFocusVisible,
              },
              wrapperClassName,
     ]"
@@ -68,12 +68,12 @@ const modelProxy = computed({
       :required="required"
       :disabled="disabled"
       :class="[
-        'appearance-none disabled:cursor-not-allowed cursor-pointer pl-4 pr-3.5 text-neutral-900 ring-inset focus:ring-primary-700 focus:ring-2 outline-none bg-transparent rounded-md ring-1 ring-neutral-300 hover:ring-primary-700 active:ring-2 active:ring-primary-700 disabled:bg-disabled-100 disabled:text-disabled-900 disabled:ring-disabled-200',
+        'appearance-none disabled:cursor-not-allowed cursor-pointer pl-4 pr-3.5 text-neutral-900 ring-inset focus:ring-primary-700 focus:ring-2 outline-hidden bg-transparent rounded-md ring-1 ring-neutral-300 hover:ring-primary-700 active:ring-2 active:ring-primary-700 disabled:bg-disabled-100 disabled:text-disabled-900 disabled:ring-disabled-200',
         {
           'py-1.5': size === SfSelectSize.sm,
           'py-2': size === SfSelectSize.base,
           'py-3 text-base': size === SfSelectSize.lg,
-          '!ring-negative-700 ring-2': invalid && !disabled,
+          'ring-negative-700! ring-2': invalid && !disabled,
         },
       ]"
       data-testid="select-input"

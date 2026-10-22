@@ -27,7 +27,7 @@ onMounted(async () => {
         <span class="relative inline-flex">
           <UiLineIcon
             name="heart"
-            class="!text-black"
+            class="text-black!"
           />
           <span
             v-if="wishlistTotalItems > 0"
@@ -48,7 +48,7 @@ onMounted(async () => {
         <template #prefix>
           <UiLineIcon
             name="heart"
-            class="!text-black"
+            class="text-black!"
           />
         </template>
       </SfButton>

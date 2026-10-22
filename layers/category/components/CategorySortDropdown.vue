@@ -48,7 +48,7 @@ function selectSort(value: string) {
   >
     <SfButton
       variant="tertiary"
-      class="w-full !justify-between whitespace-nowrap !border !border-neutral-200 hover:!border-primary-900 !rounded-md !px-4 !py-2.5 !text-xs !uppercase !tracking-[0.1em] !font-medium !text-primary-900 hover:!bg-transparent active:!bg-transparent"
+      class="w-full justify-between! whitespace-nowrap border! border-neutral-200! hover:border-primary-900! rounded-md! px-4! py-2.5! text-xs! leading-4! uppercase! tracking-widest! font-medium! text-primary-900! hover:bg-transparent! active:bg-transparent!"
       type="button"
       :aria-label="$t('sortBy')"
       :aria-expanded="dropdownOpened"

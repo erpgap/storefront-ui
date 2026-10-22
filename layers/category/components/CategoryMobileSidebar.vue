@@ -24,7 +24,7 @@ defineEmits<CategorySidebarEmits>()
       :model-value="true"
       :disable-click-away="true"
       :disable-esc="true"
-      class="w-full shadow-none lg:translate-x-0 z-[100] lg:z-0 lg:static lg:!block -translate-x-full shrink-0 lg:w-[303px] bg-white"
+      class="w-full shadow-none lg:translate-x-0 z-[100] lg:z-0 lg:static lg:block! -translate-x-full shrink-0 lg:w-[303px] bg-white"
       data-testid="category-sidebar"
     >
       <div class="grid grid-rows-category-sidebar h-full">

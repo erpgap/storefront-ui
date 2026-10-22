@@ -163,7 +163,7 @@ onMounted(() => {
         </button>
         <button
           type="submit"
-          class="text-[13px] bg-black text-white rounded px-3 py-1.5 disabled:opacity-40"
+          class="text-[13px] bg-black text-white rounded-sm px-3 py-1.5 disabled:opacity-40"
           :disabled="saving || !changed"
         >
           {{ saving ? 'Saving…' : 'Save' }}
