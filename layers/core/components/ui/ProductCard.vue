@@ -45,6 +45,16 @@ defineProps({
     required: false,
     default: 'lazy',
   },
+  /**
+   * `high` for the cards that open a grid. One of them is usually the page's
+   * largest paint, and without a hint the browser queues its image behind
+   * scripts and stylesheets.
+   */
+  fetchPriority: {
+    type: String as PropType<'high' | 'low' | 'auto'>,
+    required: false,
+    default: 'auto',
+  },
 })
 
 const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
@@ -71,6 +81,7 @@ const toggleWishlist = (variant?: CustomProductWithStockFromRedis) => {
           densities="1x"
           class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           :loading="loading"
+          :fetchpriority="fetchPriority"
         />
       </NuxtLink>
 

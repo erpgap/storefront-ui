@@ -218,6 +218,7 @@ defineExpose({ totalItems, loading, loadProductTemplateList })
               :image-url="product.imageUrl ?? ''"
               :image-alt="product.name ?? ''"
               :loading="i < 6 ? 'eager' : 'lazy'"
+              :fetch-priority="i < 2 ? 'high' : 'auto'"
               :regular-price="getRegularPrice(product.firstVariant as Product)"
               :special-price="getSpecialPrice(product.firstVariant as Product)"
               :rating-count="(product as any)?.ratingCount ?? 0"
