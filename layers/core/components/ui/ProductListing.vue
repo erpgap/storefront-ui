@@ -17,7 +17,6 @@ const props = withDefaults(
     description?: string
     seoEntity?: SeoEntity | null
     itemsPerPage?: number
-    stateKey?: string
     defaultSort?: string
   }>(),
   {
@@ -26,7 +25,6 @@ const props = withDefaults(
     description: '',
     seoEntity: null,
     itemsPerPage: LISTING_PAGE_SIZE,
-    stateKey: 'product-listing',
     defaultSort: '',
   },
 )
@@ -51,10 +49,14 @@ useScrollToTopOnListingChange(loading)
 
 provide('stockCount', stockCount)
 
-const maxVisiblePages = useState(`${props.stateKey}-max-visible-pages`, () => 1)
-const setMaxVisiblePages = (wide: boolean) => { maxVisiblePages.value = wide ? 5 : 1 }
+// From nuxt-viewport, not a media query: the server knows the device (it is
+// what picks the header and sidebar too), so it renders the same number of
+// page buttons the browser will. A media query is false on the server, so
+// desktop visitors got one button from the server and five from the client:
+// a hydration mismatch on every listing.
+const viewport = useViewport()
+const maxVisiblePages = computed(() => (viewport.isGreaterOrEquals('desktopSmall') ? 5 : 1))
 
-watch(isWideScreen, setMaxVisiblePages)
 watch(isTabletScreen, (isTablet: boolean) => { if (isTablet && isOpen.value) close() })
 
 const attributes = computed(() =>
@@ -96,8 +98,6 @@ if (props.seoEntity) {
     ) || null,
   }, 'Category', `${origin}${pathname}`))
 }
-
-setMaxVisiblePages(isWideScreen.value)
 
 // On the client's first render the listing is already in the SSR payload, so
 // only fetch when we don't have it yet (server render, or client-side

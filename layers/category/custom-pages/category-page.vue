@@ -36,7 +36,6 @@ const uiBreadcrumbs = computed(() =>
       :heading="category?.name || ''"
       :description="category?.metaDescription || ''"
       :items-per-page="18"
-      state-key="category"
     />
 
     <!-- Merchant content, below the listing. Everything above is business

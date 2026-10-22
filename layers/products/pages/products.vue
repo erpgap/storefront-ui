@@ -38,7 +38,6 @@ useHead({
     :heading="HEADING"
     :description="DESCRIPTION"
     :items-per-page="18"
-    state-key="products-page"
     default-sort="popular,DESC"
   />
 </template>

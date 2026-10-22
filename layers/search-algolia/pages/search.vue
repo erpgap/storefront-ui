@@ -40,11 +40,11 @@ const breadcrumbs = [
   { name: 'Search', link: '/' },
 ]
 
-const maxVisiblePages = useState('search-page-max-visible', () => 1)
-const setMaxVisiblePages = (isWide: boolean) =>
-  (maxVisiblePages.value = isWide ? 5 : 1)
+// nuxt-viewport rather than a media query, so the server renders the same
+// number of page buttons as the browser (see UiProductListing).
+const viewport = useViewport()
+const maxVisiblePages = computed(() => (viewport.isGreaterOrEquals('desktopSmall') ? 5 : 1))
 
-watch(isWideScreen, value => setMaxVisiblePages(value))
 watch(isTabletScreen, (value) => {
   if (value && isOpen.value) {
     close()
@@ -64,10 +64,6 @@ const pagination = computed(() => ({
   itemsPerPage: 12,
   pageOptions: [5, 12, 15, 20],
 }))
-
-onMounted(() => {
-  setMaxVisiblePages(isWideScreen.value)
-})
 </script>
 
 <template>
