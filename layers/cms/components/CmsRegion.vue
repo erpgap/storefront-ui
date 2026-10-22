@@ -32,8 +32,11 @@ const blocks = computed(() => data.value?.blocks ?? [])
 
 <template>
   <!-- An empty region renders nothing at all, so a storefront with no CMS
-       content looks exactly as it did before any of this existed. -->
-  <BlockRenderer
+       content looks exactly as it did before any of this existed. Lazy, so
+       the renderer and its stylesheet load only when there are blocks:
+       imported statically, every category and product page carried a
+       render-blocking CSS request for a region that is usually empty. -->
+  <LazyBlockRenderer
     v-if="blocks.length"
     :blocks="blocks"
   />
