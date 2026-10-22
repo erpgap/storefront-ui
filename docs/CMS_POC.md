@@ -101,6 +101,7 @@ layers/cms/                   THE ENGINE — knows no block by name
   shared/i18n.ts              per-language values and fallback
   shared/types.ts             field, block and page types
   blocks/index.ts             joins catalogue schemas to their components
+  utils/media.ts              which image provider serves a media-library image
   components/BlockRenderer    the single render path
   components/CmsBlockShell    the edit-mode overlay
   components/CmsRegion        a slot inside a storefront-owned page

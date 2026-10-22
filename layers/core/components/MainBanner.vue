@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SfButton } from '@storefront-ui/vue'
-import { imageProvider } from '~~/app/utils/odooImage'
+import { imageProvider } from '#cms/utils/media'
 
 // CMS-editable via the `hero` block (layers/cms-blocks/schemas.ts). Every
 // prop defaults to the copy that used to be hard-coded here, so

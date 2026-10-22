@@ -2,7 +2,7 @@
 // CMS-editable via the `categories` block. Every prop defaults to the copy that
 // used to be hard-coded here, so `<Categories />` with no props renders exactly
 // as before and the existing homepage needs no change.
-import { imageProvider } from '~~/app/utils/odooImage'
+import { imageProvider } from '#cms/utils/media'
 
 interface CategoryTile {
   name?: string

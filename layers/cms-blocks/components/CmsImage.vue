@@ -11,7 +11,7 @@
 // So: the image when there is one, and a quiet placeholder holding the same
 // space when there is not. The placeholder keeps the card's geometry, so the
 // layout does not jump once a picture is chosen.
-import { imageProvider } from '~~/app/utils/odooImage'
+import { imageProvider } from '#cms/utils/media'
 
 withDefaults(defineProps<{
   src?: string

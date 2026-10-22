@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SfButton } from '@storefront-ui/vue'
-import { imageProvider } from '~~/app/utils/odooImage'
+import { imageProvider } from '#cms/utils/media'
 
 // CMS-editable via the `editorial` block. Defaults reproduce the previously
 // hard-coded copy, so `<BannerRight />` renders as before.
