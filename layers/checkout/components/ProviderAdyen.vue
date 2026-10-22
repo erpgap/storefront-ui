@@ -9,14 +9,8 @@
 </template>
 
 <script setup lang="ts">
+import type { CheckoutAdvancedFlowResponse, CoreConfiguration, Dropin } from '@adyen/adyen-web'
 import type { PaymentProvider } from '~~/graphql'
-
-interface AdyenDropinType {
-  handleAction: (action: any) => void
-  unmount: () => void
-  mount: (selector: string) => void
-  submit: () => void
-}
 
 const props = defineProps({
   provider: {
@@ -35,7 +29,7 @@ const emit = defineEmits([
   'paymentLoading',
 ])
 
-const adyenDropin = ref<AdyenDropinType | null>(null)
+const adyenDropin = shallowRef<Dropin | null>(null)
 const router = useRouter()
 const loading = ref(false)
 
@@ -82,107 +76,114 @@ onMounted(async () => {
   await getAdyenAcquirerInfo()
   await getAdyenPaymentMethods()
 
-  if (!acquirerInfo.value?.client_key) {
+  const clientKey = acquirerInfo.value?.client_key
+  const methods = paymentMethods.value
+  if (!clientKey || !methods || Array.isArray(methods) || Object.keys(methods).length === 0) {
     loading.value = false
     return
   }
 
-  if (
-    !paymentMethods.value
-    || Array.isArray(paymentMethods.value)
-    || Object.keys(paymentMethods.value).length === 0
-  ) {
-    loading.value = false
-    return
+  await import('@adyen/adyen-web/styles/adyen.css')
+  // The auto build registers every payment method, so the drop-in shows
+  // whatever Adyen returns for the shop, as 4.x did. Loaded only here.
+  const { AdyenCheckout, Dropin } = await import('@adyen/adyen-web/auto')
+
+  /**
+   * Hands Odoo's answer (Adyen's own `/payments` or `/payments/details`
+   * response) back to the drop-in. With an `action` (3-D Secure, a redirect)
+   * the drop-in runs it and calls onAdditionalDetails; otherwise it settles
+   * through onPaymentCompleted or onPaymentFailed. No answer at all (the
+   * request failed) is a rejection, which also ends in onPaymentFailed.
+   */
+  const settle = (
+    response: Partial<CheckoutAdvancedFlowResponse> | null | undefined,
+    actions: { resolve: (r: CheckoutAdvancedFlowResponse) => void, reject: () => void },
+  ) => {
+    if (!response?.resultCode) {
+      actions.reject()
+      return
+    }
+    // The shopper has a step to complete: no spinner over it.
+    if (response.action) {
+      emit('paymentLoading', false)
+    }
+    // Only what the drop-in reads: it warns about anything else, such as
+    // the pspReference Adyen includes.
+    const { resultCode, action, order, donationToken } = response
+    actions.resolve({ resultCode, action, order, donationToken })
   }
 
-  await import('@adyen/adyen-web/dist/adyen.css')
-  const { default: AdyenCheckout } = await import('@adyen/adyen-web')
-
-  const configuration = {
-    locale: 'en-EN',
+  const configuration: CoreConfiguration = {
+    locale: 'en-US',
     environment: acquirerInfo.value.state === 'test' ? 'test' : 'live',
-    clientKey: acquirerInfo.value.client_key,
-    paymentMethodsResponse: paymentMethods.value,
+    clientKey,
+    countryCode: methods.country_code,
+    paymentMethodsResponse: methods,
     analytics: { enabled: false },
 
-    // Pushed to a route named 'paymentResponse', which does not exist: the
-    // navigation threw and the shopper stayed on the checkout.
-    onPaymentCompleted: () => finishPayment(),
-
-    onError: (error: any) => {
-      if (
-        error?.errorText !== 'error was cleared'
-        && error?.errorText !== 'incomplete field'
-      ) {
-        // log / toast se quiser
+    onSubmit: async (state, _component, actions) => {
+      emit('isPaymentReady', false)
+      emit('paymentLoading', true)
+      try {
+        settle(await adyenMakeDirectPayment({
+          providerId: props.provider.id,
+          transactionReference: transaction.value.reference,
+          paymentMethod: state.data.paymentMethod,
+          accessToken: transaction.value.access_token,
+          browserInfo: state.data.browserInfo || {},
+        }), actions)
       }
+      catch {
+        settle(null, actions)
+      }
+    },
+
+    // After a 3-D Secure or redirect step.
+    onAdditionalDetails: async (state, _component, actions) => {
+      emit('paymentLoading', true)
+      try {
+        settle(await getAdyenPaymentDetails({
+          providerId: props.provider.id,
+          transactionReference: transaction.value.reference,
+          paymentDetails: state.data,
+        }), actions)
+      }
+      catch {
+        settle(null, actions)
+      }
+    },
+
+    // Either way Odoo has the last word on the transaction: finishPayment
+    // asks it, as Odoo's own checkout does.
+    onPaymentCompleted: () => finishPayment(),
+    onPaymentFailed: () => finishPayment(),
+
+    onError: () => {
       emit('paymentLoading', false)
     },
 
-    // After a 3-D Secure or redirect step. The answer was ignored, leaving the
-    // shopper on a spinner: another action is handed back to the drop-in,
-    // anything else settles the payment like onSubmit does.
-    onAdditionalDetails: async (state: any) => {
-      emit('paymentLoading', true)
-      const details = await getAdyenPaymentDetails({
-        providerId: props.provider.id,
-        transactionReference: transaction.value.reference,
-        paymentDetails: state.data,
-      }) as { action?: { type?: string } } | null
-
-      if (details?.action?.type) {
-        adyenDropin.value?.handleAction(details.action)
-        emit('paymentLoading', false)
-        return
-      }
-      await finishPayment()
-    },
-
-    onChange: (_state: any, component: { isValid: boolean }) => {
+    onChange: (_state, component) => {
       emit('isPaymentReady', !!component.isValid)
-    },
-
-    onSubmit: async (state: any) => {
-      emit('isPaymentReady', false)
-      emit('paymentLoading', true)
-
-      const response = await adyenMakeDirectPayment({
-        providerId: props.provider.id,
-        transactionReference: transaction.value.reference,
-        paymentMethod: state.data.paymentMethod,
-        accessToken: transaction.value.access_token,
-        browserInfo: state.data?.browserInfo || {},
-      })
-
-      if (response?.action?.type) {
-        adyenDropin.value?.handleAction(response.action)
-        emit('paymentLoading', false)
-        return
-      }
-
-      await finishPayment()
     },
   }
 
-  const checkout = new AdyenCheckout(configuration)
+  const checkout = await AdyenCheckout(configuration)
 
-  adyenDropin.value = checkout
-    .create('dropin', {
-      openFirstPaymentMethod: true,
-      openFirstStoredPaymentMethod: false,
-      showStoredPaymentMethods: false,
-      showPaymentMethods: true,
-      showPayButton: false,
-      setStatusAutomatically: true,
-      onSelect: (component: { isValid: boolean }) => {
-        emit('isPaymentReady', !!component.isValid)
-      },
-    })
-    .mount('#dropin-container')
+  const dropin = new Dropin(checkout, {
+    openFirstPaymentMethod: true,
+    openFirstStoredPaymentMethod: false,
+    showStoredPaymentMethods: false,
+    showPaymentMethods: true,
+    showPayButton: false,
+    onSelect: (component) => {
+      emit('isPaymentReady', !!component.isValid)
+    },
+  }).mount('#dropin-container')
+  adyenDropin.value = dropin
 
   loading.value = false
-  emit('providerPaymentHandler', adyenDropin.value.submit)
+  // A method: called on its own by the summary's Place Order button.
+  emit('providerPaymentHandler', () => dropin.submit())
 })
 
 onBeforeUnmount(() => {

@@ -23,8 +23,8 @@ importers:
   .:
     dependencies:
       '@adyen/adyen-web':
-        specifier: ^4.7.3
-        version: 4.9.0
+        specifier: ^6.47.0
+        version: 6.47.0
       '@erpgap/odoo-sdk':
         specifier: ^2.2.2
         version: 2.2.2(graphql-ws@6.3.0(crossws@0.4.12(srvx@0.11.22))(graphql@16.12.0)(ws@8.22.0))(graphql@16.12.0)(react@19.3.0)
@@ -185,9 +185,8 @@ importers:
 
 packages:
 
-  '@adyen/adyen-web@4.9.0':
-    resolution: {integrity: sha512-qLRMt7JaA2SCoOtT2oipdrGU+CUuVqF35JQHYrc13buuWQmMHRTQSVrgdK60AoA/KkfekFmVyf1UNMcHnuyQbQ==}
-    deprecated: 'Deprecation Notice: Version 4.x of @adyen/adyen-web will no longer be supported after August 1, 2026. Please migrate to the latest version by following the migration guide: https://docs.adyen.com/online-payments/upgrade-your-integration/migrate-to-web-v6/from-v4/'
+  '@adyen/adyen-web@6.47.0':
+    resolution: {integrity: sha512-GK4bH0CZA7NMRW3G71U5jT6IhWxdlgxsYnfc2660kD044s7RiykztfzJyU7MAPuHA5GKAJp3dfWoNgcefrGYhw==}
 
   '@antfu/install-pkg@2.1.0':
     resolution: {integrity: sha512-sdg9NxU3zR4Mnawfbc/x6GB5Wf17WYud5qOuEuxXjaKpYpMkISSJEjItGebXJ2bQ4DIcly4NYH23mtkGJjvKUw==}
@@ -1959,6 +1958,9 @@ packages:
     bundledDependencies:
       - napi-wasm
 
+  '@paypal/paypal-js@11.1.0':
+    resolution: {integrity: sha512-Nq8i7p/aIVmwBb9h00YFvbvrZOcQUs37FKlhx6gDiV6O/h0K5Zto2qRtZBLdfD1o7pK9CVlbPqb2iApS0O4aiA==}
+
   '@pinia/nuxt@0.5.5':
     resolution: {integrity: sha512-wjxS7YqIesh4OLK+qE3ZjhdOJ5pYZQ+VlEmZNtTwzQn1Kavei/khovx7mzXVXNA/mvSPXVhb9xBzhyS3XMURtw==}
 
@@ -2443,8 +2445,8 @@ packages:
   '@tybys/wasm-util@0.10.4':
     resolution: {integrity: sha512-W3c4gRigFS0T/Ma4qIYF3GDAc5AQdHb1yL5znJT1Zv1YaD9Kitx656wBjvr19qbiosmZT8lWDM5BEMynUqX65A==}
 
-  '@types/applepayjs@3.0.4':
-    resolution: {integrity: sha512-RqaVZWy1Kj4e1PoUoOI8uA+4UuuLpicQFxfU9Y/xWJFZFT6mFB4PiiY911iDxFk7pdvaj5HKH7VsWRisRca1Rg==}
+  '@types/applepayjs@14.0.9':
+    resolution: {integrity: sha512-xEprYbb0TEP/XIiDPbVnTYpDai8fTFpsQfVSfTd81Is2GOMUy7ie019eyX6Mz2ECxfjoUVKaiGSL577roIeHCg==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -2464,8 +2466,8 @@ packages:
   '@types/google.maps@3.66.5':
     resolution: {integrity: sha512-z7wMLjozUDNC6SYoxvnsh4RvbFQoiqgjHmfcOWKCjKiLklAKV32jvywuBvJRfpThJZn4TonyoeJc/3t9RlVnWQ==}
 
-  '@types/googlepay@0.6.4':
-    resolution: {integrity: sha512-PTt/UCllzl8z5HmhymPpSj6uENZvVKZvCBYdDVmbBVJnLStitxtWrterAOQZkKGlqVdzxNXYeif5hOAMNMS5mw==}
+  '@types/googlepay@0.7.13':
+    resolution: {integrity: sha512-Tj9Y/UfYxUHepJe84AXeLLeBaNHySq9NorRTQ0M2uzqEBS+mmzdJYJeK2Z4XhO58gtkndC0915DM7eIn90DCPA==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -3355,9 +3357,6 @@ packages:
   core-js-compat@3.50.0:
     resolution: {integrity: sha512-XGpFGbMLHwSt74YLTKho7Ib242qi6O8MSX+sRokV4oz7iKXvQWGYZthjIhjRGMxjzVkAubBO512dKGYcefmX3Q==}
     engines: {node: '>=6.4.0'}
-
-  core-js@3.50.0:
-    resolution: {integrity: sha512-BRWgOLKkFeCgRudR6zrs8p9XJZcE14grzKMMssoYrk6krtuEZ7MTKPIY5RzOnqsEKIR9kst7wNzphttraT+Yqw==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -5347,6 +5346,9 @@ packages:
     resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
     engines: {node: '>= 0.6.0'}
 
+  promise-polyfill@8.3.0:
+    resolution: {integrity: sha512-H5oELycFml5yto/atYqmjyigJoAo3+OXwolYiH7OfQuYlAqhxNvTfiNMbV9hsC6Yp83yE5r2KTVmtrG6R9i6Pg==}
+
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
@@ -6640,12 +6642,12 @@ packages:
 
 snapshots:
 
-  '@adyen/adyen-web@4.9.0':
+  '@adyen/adyen-web@6.47.0':
     dependencies:
-      '@types/applepayjs': 3.0.4
-      '@types/googlepay': 0.6.4
+      '@paypal/paypal-js': 11.1.0
+      '@types/applepayjs': 14.0.9
+      '@types/googlepay': 0.7.13
       classnames: 2.5.1
-      core-js: 3.50.0
       preact: 10.29.8
     transitivePeerDependencies:
       - preact-render-to-string
@@ -9198,6 +9200,10 @@ snapshots:
       is-glob: 4.0.3
       picomatch: 4.0.7
 
+  '@paypal/paypal-js@11.1.0':
+    dependencies:
+      promise-polyfill: 8.3.0
+
   '@pinia/nuxt@0.5.5(magicast@0.5.5)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))':
     dependencies:
       '@nuxt/kit': 3.21.11(magicast@0.5.5)
@@ -9565,7 +9571,7 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@types/applepayjs@3.0.4': {}
+  '@types/applepayjs@14.0.9': {}
 
   '@types/chai@5.2.3':
     dependencies:
@@ -9585,7 +9591,7 @@ snapshots:
   '@types/google.maps@3.66.5':
     optional: true
 
-  '@types/googlepay@0.6.4': {}
+  '@types/googlepay@0.7.13': {}
 
   '@types/json-schema@7.0.15': {}
 
@@ -10553,8 +10559,6 @@ snapshots:
   core-js-compat@3.50.0:
     dependencies:
       browserslist: 4.29.3
-
-  core-js@3.50.0: {}
 
   core-util-is@1.0.3: {}
 
@@ -12762,6 +12766,8 @@ snapshots:
   process-nextick-args@2.0.1: {}
 
   process@0.11.10: {}
+
+  promise-polyfill@8.3.0: {}
 
   prop-types@15.8.1:
     dependencies:

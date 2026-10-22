@@ -1,4 +1,4 @@
-import type AdyenCheckout from '@adyen/adyen-web'
+import type { PaymentMethodsResponse } from '@adyen/adyen-web'
 import type {
   AdyenTransactionResult,
   AdyenProviderInfoResult,
@@ -13,10 +13,11 @@ import type {
 } from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
 
-/** Adyen's `/paymentMethods` response, as the drop-in takes it. */
-export type AdyenPaymentMethods = NonNullable<
-  ConstructorParameters<typeof AdyenCheckout>[0]['paymentMethodsResponse']
->
+/**
+ * Adyen's `/paymentMethods` response, as the drop-in takes it, plus the
+ * `country_code` Odoo adds: the shopper's country it asked Adyen for.
+ */
+export type AdyenPaymentMethods = PaymentMethodsResponse & { country_code?: string }
 
 /** What `adyenProviderInfo` returns (payment_adyen_alokai). */
 export interface AdyenProviderInfo {
@@ -83,14 +84,14 @@ const useAdyenDirectPayment = (providerId: number, cartId?: number) => {
       = data?.adyenProviderInfo?.adyenProviderInfo || {}
   }
 
+  // Called from the drop-in's onMounted, where useAsyncData does not belong
+  // (NUXT_E3003): plain call.
   const getAdyenPaymentMethods = async () => {
-    const { data } = await useAsyncData('payment-methods', async () =>
-      await $sdk().odoo.mutation<
-        MutationAdyenPaymentMethodsArgs,
-        { adyenPaymentMethods: AdyenPaymentMethodsResult }
-      >({ mutationName: MutationName.AdyenPaymentMethods }, { providerId }))
-    paymentMethods.value
-      = data?.value?.adyenPaymentMethods?.adyenPaymentMethods || []
+    const data = await $sdk().odoo.mutation<
+      MutationAdyenPaymentMethodsArgs,
+      { adyenPaymentMethods: AdyenPaymentMethodsResult }
+    >({ mutationName: MutationName.AdyenPaymentMethods }, { providerId })
+    paymentMethods.value = data?.adyenPaymentMethods?.adyenPaymentMethods || []
   }
 
   const getAdyenPaymentDetails = async (

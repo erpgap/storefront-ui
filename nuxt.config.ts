@@ -179,6 +179,10 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
     build: {
+      // Adyen's drop-in with every payment method (@adyen/adyen-web/auto) is
+      // about 750 kB: the one chunk over Vite's 500 kB default. It is loaded
+      // only at Adyen's payment step (layers/checkout/components/ProviderAdyen.vue).
+      chunkSizeWarningLimit: 800,
       rolldownOptions: {
         // A build-time profile of which plugins took how long, printed as a
         // warning on every build. Useful when profiling the build, noise
@@ -187,7 +191,10 @@ export default defineNuxtConfig({
       },
     },
     optimizeDeps: {
-      include: ['lodash-es'],
+      // The payment SDKs are imported only once the checkout's payment step
+      // mounts. Found that late, the dev server re-optimizes and reloads the
+      // page (504 "Outdated Optimize Dep"); listed, they are ready from the start.
+      include: ['lodash-es', '@adyen/adyen-web/auto', '@stripe/stripe-js'],
     },
     resolve: {
       alias: {
@@ -196,19 +203,6 @@ export default defineNuxtConfig({
         // The Odoo SDK pulls in axios (~35 KB) but only ever uses the ofetch
         // transport we give it, so stub axios out of the client bundle.
         'axios': path.resolve(__dirname, './stubs/axios.mjs'),
-      },
-    },
-  },
-
-  typescript: {
-    tsConfig: {
-      compilerOptions: {
-        paths: {
-          // @adyen/adyen-web 4.x ships its types in dist/types, but its
-          // package.json "exports" has no "types" condition, so TypeScript
-          // cannot find them. Types only: the bundler resolves it as before.
-          '@adyen/adyen-web': [path.resolve(__dirname, 'node_modules/@adyen/adyen-web/dist/types/index.d.ts')],
-        },
       },
     },
   },

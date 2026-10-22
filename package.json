@@ -20,7 +20,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@adyen/adyen-web": "^4.7.3",
+    "@adyen/adyen-web": "^6.47.0",
     "@erpgap/odoo-sdk": "^2.2.2",
     "@nuxt/icon": "^2.2.1",
     "@nuxt/image": "^2.2.0",
