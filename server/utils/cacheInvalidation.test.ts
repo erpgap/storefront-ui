@@ -1,13 +1,13 @@
 import hasher from 'object-hash'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { QueryName } from '../queries'
 import {
   buildDataCacheKeyPrefixes,
-  buildPageCacheKeySuffixes,
   getNormalizedPath,
   getPageType,
   invalidatePageAndRelatedCache,
+  pageCacheKeyFragment,
 } from './cacheInvalidation'
-import { QueryName } from '../queries'
 
 const storage = {
   keys: [] as string[],
@@ -40,11 +40,11 @@ describe('cache invalidation', () => {
     expect(getPageType('/blog/post')).toBe('unknown')
   })
 
-  it('builds Nitro page cache suffixes with the same escape behavior as cachedEventHandler', () => {
-    expect(buildPageCacheKeySuffixes('/product/the-zen-platform-bed-47')).toEqual([
-      'desktopproductthezenplatformbed47.json',
-      'mobileproductthezenplatformbed47.json',
-    ])
+  it('names page cache entries the way Nitro does', () => {
+    // Pathname stripped of non-word characters, cut to 16; the homepage is "index".
+    expect(pageCacheKeyFragment('/product/the-zen-platform-bed-47')).toBe('productthezenpla')
+    expect(pageCacheKeyFragment('/women')).toBe('women')
+    expect(pageCacheKeyFragment('/')).toBe('index')
   })
 
   it('builds Storefront UI data key prefixes from the queries this project caches', () => {
@@ -60,10 +60,11 @@ describe('cache invalidation', () => {
     const unrelatedHash = hasher({ slug: '/product/other-product' })
 
     storage.keys = [
-      '/cache:pages:/product/the-zen-platform-bed-47:desktopproductthezenplatformbed47.json',
-      '/cache:pages:/product/the-zen-platform-bed-47:mobileproductthezenplatformbed47.json',
-      'nitro:routes:_:productthezenpla.abc123.json',
-      '/cache:pages:/product/other-product:desktopproductotherproduct.json',
+      // The page, once per device class, and its payload.
+      'nitro:routes:_:productthezenpla.abc123:xviewportdevice.D1.json',
+      'nitro:routes:_:productthezenpla.abc123:xviewportdevice.M2.json',
+      'nitro:routes:_:productthezenpla.def456:xviewportdevice.D1.json',
+      'nitro:routes:_:productotherprod.ghi789:xviewportdevice.D1.json',
       `/cache:nitro/functions:_:${QueryName.GetProductTemplateQuery}-${productHash}-us-.json`,
       `nitro:functions:_:${QueryName.GetProductTemplateQuery}-${productHash}-us-.json`,
       `/cache:nitro/functions:_:${QueryName.GetProductTemplateQuery}-${productHash}-us--pricelist42.json`,
@@ -74,11 +75,11 @@ describe('cache invalidation', () => {
     const result = await invalidatePageAndRelatedCache({ path: '/product/the-zen-platform-bed-47' })
 
     expect(result.pageType).toBe('product')
-    expect(result.pageKeys).toEqual(expect.arrayContaining([
-      '/cache:pages:/product/the-zen-platform-bed-47:desktopproductthezenplatformbed47.json',
-      '/cache:pages:/product/the-zen-platform-bed-47:mobileproductthezenplatformbed47.json',
-      'nitro:routes:_:productthezenpla.abc123.json',
-    ]))
+    expect(result.pageKeys.sort()).toEqual([
+      'nitro:routes:_:productthezenpla.abc123:xviewportdevice.D1.json',
+      'nitro:routes:_:productthezenpla.abc123:xviewportdevice.M2.json',
+      'nitro:routes:_:productthezenpla.def456:xviewportdevice.D1.json',
+    ])
     expect(result.dataKeys).toEqual(expect.arrayContaining([
       `/cache:nitro/functions:_:${QueryName.GetProductTemplateQuery}-${productHash}-us-.json`,
       `nitro:functions:_:${QueryName.GetProductTemplateQuery}-${productHash}-us-.json`,
@@ -86,14 +87,13 @@ describe('cache invalidation', () => {
       `/cache:nitro/functions:_:${QueryName.GetProductVariantQuery}-variant-hash-us-.json`,
     ]))
     expect(storage.removed).toEqual(expect.arrayContaining([
-      '/cache:pages:/product/the-zen-platform-bed-47:desktopproductthezenplatformbed47.json',
-      '/cache:pages:/product/the-zen-platform-bed-47:mobileproductthezenplatformbed47.json',
-      'nitro:routes:_:productthezenpla.abc123.json',
+      'nitro:routes:_:productthezenpla.abc123:xviewportdevice.D1.json',
+      'nitro:routes:_:productthezenpla.abc123:xviewportdevice.M2.json',
       `/cache:nitro/functions:_:${QueryName.GetProductTemplateQuery}-${productHash}-us-.json`,
       `nitro:functions:_:${QueryName.GetProductTemplateQuery}-${productHash}-us-.json`,
       `/cache:nitro/functions:_:${QueryName.GetProductTemplateQuery}-${productHash}-us--pricelist42.json`,
     ]))
-    expect(storage.removed).not.toContain('/cache:pages:/product/other-product:desktopproductotherproduct.json')
+    expect(storage.removed).not.toContain('nitro:routes:_:productotherprod.ghi789:xviewportdevice.D1.json')
     expect(storage.removed).not.toContain(`/cache:nitro/functions:_:${QueryName.GetProductTemplateQuery}-${unrelatedHash}-us-.json`)
   })
 
@@ -101,7 +101,7 @@ describe('cache invalidation', () => {
     const productHash = hasher({ slug: '/the-zen-platform-bed-47' })
 
     const keys = [
-      'nitro:routes:_:thezenplatformb.abc123.json',
+      'nitro:routes:_:thezenplatformbe.abc123:xviewportdevice.D1.json',
       `nitro:functions:_:${QueryName.GetProductTemplateQuery}-${productHash}-us-.json`,
     ]
     storage.keys = [...keys]
@@ -115,10 +115,26 @@ describe('cache invalidation', () => {
     expect(storage.removed).toEqual(expect.arrayContaining(keys))
   })
 
+  it('purges the homepage alone, not every page', async () => {
+    storage.keys = [
+      'nitro:routes:_:index.AAA:xviewportdevice.D1.json',
+      'nitro:routes:_:index_payloadjso.BBB:xviewportdevice.D1.json',
+      'nitro:routes:_:indexpage.CCC:xviewportdevice.D1.json',
+      'nitro:routes:_:women.DDD:xviewportdevice.D1.json',
+    ]
+
+    const result = await invalidatePageAndRelatedCache({ path: '/' })
+
+    expect(result.pageKeys.sort()).toEqual([
+      'nitro:routes:_:index.AAA:xviewportdevice.D1.json',
+      'nitro:routes:_:index_payloadjso.BBB:xviewportdevice.D1.json',
+    ])
+  })
+
   it('computes keys without removing storage entries during dry-run', async () => {
     storage.keys = [
-      '/cache:pages:/:desktop.json',
-      '/cache:pages:/:mobile.json',
+      'nitro:routes:_:index.AAA:xviewportdevice.D1.json',
+      'nitro:routes:_:index.AAA:xviewportdevice.M2.json',
     ]
 
     const result = await invalidatePageAndRelatedCache({ path: '/', dryRun: true })

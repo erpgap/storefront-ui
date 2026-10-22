@@ -17,8 +17,8 @@ function cacheKeyFragment(path: string): string {
 /**
  * Deletes every cached render of a CMS page.
  *
- * Nitro keys a route cache entry by path, and this app's `route-cache` plugin
- * varies it by device, so one URL has several entries. Rather than reproduce
+ * Nitro keys a route cache entry by path, and the route rules vary it by
+ * device class, so one URL has several entries. Rather than reproduce
  * that key-building here - which would rot the moment the variance rules
  * change - this scans the route-cache namespace for keys derived from the
  * path, which stays correct however many variants exist.
@@ -37,7 +37,7 @@ export async function invalidateCmsPageCache(slug: string): Promise<string[]> {
   const storage = useStorage('cache')
   const deleted: string[] = []
 
-  for (const base of ['nitro:routes', '/cache:pages']) {
+  for (const base of ['nitro:routes']) {
     let keys: string[] = []
     try {
       keys = await storage.getKeys(base)
@@ -77,7 +77,7 @@ export async function invalidateAllPageCache(): Promise<number> {
   const storage = useStorage('cache')
   let removed = 0
 
-  for (const base of ['nitro:routes', '/cache:pages']) {
+  for (const base of ['nitro:routes']) {
     let keys: string[] = []
     try {
       keys = await storage.getKeys(base)

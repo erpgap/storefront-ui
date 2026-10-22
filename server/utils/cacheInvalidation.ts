@@ -20,7 +20,9 @@ export type InvalidateCacheResult = {
 }
 
 const ISO_CODES = ['', 'us', 'eu'] as const
-const PAGE_CACHE_PREFIXES = ['/cache:pages:', 'nitro:routes:_:'] as const
+// Where Nitro keeps pages cached by route rules (swr/isr). The only page cache:
+// a second one, server/plugins/route-cache.ts, cached nothing and is gone.
+const PAGE_CACHE_PREFIX = 'nitro:routes:_:'
 const DATA_CACHE_PREFIXES = ['/cache:nitro/functions:_:', 'nitro:functions:_:'] as const
 
 function escapeNitroCacheKey(value: string): string {
@@ -68,19 +70,18 @@ export function getPageType(path: string): CachePageType {
   return 'unknown'
 }
 
-export function buildPageCacheKeySuffixes(normalizedPath: string): string[] {
-  return ['desktop', 'mobile'].map(device => `${escapeNitroCacheKey(`${device}-${normalizedPath}`)}.json`)
-}
-
-export function buildKnownPageKeys(normalizedPath: string): string[] {
-  const suffixes = buildPageCacheKeySuffixes(normalizedPath)
-  const routeCandidates = normalizedPath === '/' ? ['/'] : [normalizedPath, '/**', '/:slug(.*)*']
-
-  return routeCandidates.flatMap(route =>
-    suffixes.flatMap(suffix =>
-      PAGE_CACHE_PREFIXES.map(prefix => `${prefix}${route}:${suffix}`),
-    ),
-  )
+/**
+ * The fragment Nitro names a page's route-cache entries by: the pathname with
+ * every non-word character stripped, cut to 16 characters ("index" for the
+ * homepage). The page is `<prefix><fragment>.<hash>…`, its payload
+ * `<prefix><fragment>_…` (or the same 16 characters, for a long path).
+ *
+ * Paths sharing their first 16 characters share it, so a purge can take a
+ * neighbour's entry too. That errs the safe way: a page re-rendered for
+ * nothing, never a stale one left behind.
+ */
+export function pageCacheKeyFragment(normalizedPath: string): string {
+  return normalizedPath === '/' ? 'index' : escapeNitroCacheKey(normalizedPath).slice(0, 16)
 }
 
 function productSlugCandidates(normalizedPath: string): string[] {
@@ -246,57 +247,16 @@ async function removeRedisKeys(keys: string[]): Promise<void> {
   })
 }
 
-async function keyContainsPath(storage: any, key: string, normalizedPath: string): Promise<boolean> {
-  if (typeof storage.getItem !== 'function') {
-    return false
-  }
+async function findExistingPageKeys(storage: any, normalizedPath: string): Promise<string[]> {
+  const fragment = pageCacheKeyFragment(normalizedPath)
+  if (!fragment) return []
 
-  try {
-    const value = await storage.getItem(key)
-    return JSON.stringify(value).includes(normalizedPath)
-  }
-  catch {
-    return false
-  }
-}
-
-async function findExistingPageKeys(storage: any, normalizedPath: string, pageSuffixes: string[]): Promise<string[]> {
-  const escapedPath = escapeNitroCacheKey(normalizedPath)
-  const shortenedPathPrefix = escapedPath.slice(0, 15)
-  const keysByPrefix = await Promise.all(
-    PAGE_CACHE_PREFIXES.map(prefix => getExistingKeys(storage, prefix)),
-  )
-  const redisPageKeys = await scanRedisKeys(
-    PAGE_CACHE_PREFIXES.flatMap(prefix => [
-      `${prefix}*${escapedPath}*`,
-      `${prefix}*${shortenedPathPrefix}*`,
-    ]),
-  )
-  const allPageKeys = [...keysByPrefix.flat(), ...redisPageKeys]
-  const matchingKeys: string[] = []
-
-  for (const key of allPageKeys) {
-    if (pageSuffixes.some(suffix => key.endsWith(`:${suffix}`))) {
-      matchingKeys.push(key)
-      continue
-    }
-
-    if (escapedPath && key.includes(escapedPath)) {
-      matchingKeys.push(key)
-      continue
-    }
-
-    if (shortenedPathPrefix.length >= 8 && key.includes(shortenedPathPrefix)) {
-      matchingKeys.push(key)
-      continue
-    }
-
-    if (await keyContainsPath(storage, key, normalizedPath)) {
-      matchingKeys.push(key)
-    }
-  }
-
-  return matchingKeys
+  const [storedKeys, redisKeys] = await Promise.all([
+    getExistingKeys(storage, PAGE_CACHE_PREFIX),
+    scanRedisKeys([`${PAGE_CACHE_PREFIX}${fragment}*`]),
+  ])
+  const pattern = new RegExp(`^${PAGE_CACHE_PREFIX}${fragment}[._]`)
+  return [...storedKeys, ...redisKeys].filter(key => pattern.test(key))
 }
 
 async function findExistingDataKeys(storage: any, dataPrefixes: string[]): Promise<string[]> {
@@ -319,15 +279,13 @@ export async function invalidatePageAndRelatedCache(
     : getPageType(normalizedPath)
   const storage = useStorage()
 
-  const pageSuffixes = buildPageCacheKeySuffixes(normalizedPath)
-  const knownPageKeys = buildKnownPageKeys(normalizedPath)
-  const existingPageKeys = await findExistingPageKeys(storage, normalizedPath, pageSuffixes)
+  const existingPageKeys = await findExistingPageKeys(storage, normalizedPath)
 
   const dataPrefixes = buildDataCacheKeyPrefixes(normalizedPath, pageType)
   const exactDataKeys = buildExactDataKeys(dataPrefixes)
   const existingDataKeys = await findExistingDataKeys(storage, dataPrefixes)
 
-  const pageKeys = unique([...knownPageKeys, ...existingPageKeys])
+  const pageKeys = unique(existingPageKeys)
   const dataKeys = unique([...exactDataKeys, ...existingDataKeys])
   const deletedKeys = unique([...pageKeys, ...dataKeys])
 
