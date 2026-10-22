@@ -11,20 +11,20 @@
 // costs zero editor code; adding a *field type* costs one widget. That
 // asymmetry is the leverage — keep this list short.
 
-export type FieldType =
-  | 'text'
-  | 'textarea'
-  | 'image'
-  | 'link'
-  | 'number'
-  | 'boolean'
-  | 'select'
-  | 'array'
+export type FieldType
+  = | 'text'
+    | 'textarea'
+    | 'image'
+    | 'link'
+    | 'number'
+    | 'boolean'
+    | 'select'
+    | 'array'
   // Real relational references into Odoo. These are the capability a separate
   // headless CMS could not provide without an id-sync job, and the reason the
   // content lives in Odoo at all.
-  | 'product-ref'
-  | 'category-ref'
+    | 'product-ref'
+    | 'category-ref'
 
 interface FieldCommon {
   name: string
@@ -85,13 +85,13 @@ export interface ArrayField extends FieldCommon {
   addLabel?: string
 }
 
-export type Field =
-  | TextField
-  | NumberField
-  | BooleanField
-  | SelectField
-  | ArrayField
-  | RefField
+export type Field
+  = | TextField
+    | NumberField
+    | BooleanField
+    | SelectField
+    | ArrayField
+    | RefField
 
 /**
  * Which field types hold language-specific content.

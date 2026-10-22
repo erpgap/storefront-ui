@@ -6,9 +6,9 @@ export interface Inline {
   href?: string
 }
 
-export type RichParagraph =
-  | { kind: 'p', parts: Inline[] }
-  | { kind: 'ul', items: Inline[][] }
+export type RichParagraph
+  = | { kind: 'p', parts: Inline[] }
+    | { kind: 'ul', items: Inline[][] }
 
 // What an <a href> may point at. Anything else - javascript: above all -
 // keeps its label as text and loses the link.

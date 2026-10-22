@@ -38,7 +38,7 @@ export async function invalidateCmsPageCache(slug: string): Promise<string[]> {
   const deleted: string[] = []
 
   for (const base of ['nitro:routes']) {
-    let keys: string[] = []
+    let keys: string[]
     try {
       keys = await storage.getKeys(base)
     }
@@ -78,7 +78,7 @@ export async function invalidateAllPageCache(): Promise<number> {
   let removed = 0
 
   for (const base of ['nitro:routes']) {
-    let keys: string[] = []
+    let keys: string[]
     try {
       keys = await storage.getKeys(base)
     }

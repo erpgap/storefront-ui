@@ -67,13 +67,11 @@ export const useCategory = (categorySlugIndex: string) => {
       currentCategory = currentCategory.parent
     }
 
-    let currentLink = ''
     for (const cat of categoriesInPath) {
       if (cat.slug) {
-        currentLink = cat.slug
         categoryPath.push({
           label: cat.name || '',
-          link: currentLink,
+          link: cat.slug,
         })
       }
     }

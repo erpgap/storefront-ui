@@ -238,9 +238,9 @@ async function revertToLive() {
 const canvas = ref<HTMLElement | null>(null)
 const dropIndex = ref<number | null>(null)
 
-type DragPayload =
-  | { kind: 'new', blockType: string, label: string }
-  | { kind: 'move', id: string, label: string }
+type DragPayload
+  = | { kind: 'new', blockType: string, label: string }
+    | { kind: 'move', id: string, label: string }
 
 const dragging = ref<DragPayload | null>(null)
 /** Where to paint the floating label that follows the pointer. */

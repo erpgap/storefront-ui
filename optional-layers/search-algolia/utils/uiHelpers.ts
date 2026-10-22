@@ -101,7 +101,7 @@ export const useUiHelpers = () => {
         : value
     })
 
-    let allQuery: any = {}
+    let allQuery: any
     if (filters.length > 0) {
       allQuery = { ...formattedFilters }
     }

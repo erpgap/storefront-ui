@@ -24,8 +24,8 @@ export interface BreadcrumbItem {
   link: string
 }
 
-export type CategoryListResponse =
-  {
+export type CategoryListResponse
+  = {
     categories: {
       categories: Category[]
       totalCount: number
@@ -192,8 +192,8 @@ export type DeliveryMethodResponse = {
   deliveryMethodId: number
 }
 
-export type WebsiteHomepageResponse =
-  {
+export type WebsiteHomepageResponse
+  = {
     metaTitle: string
     metaImage: string
     metaImageFilename: string

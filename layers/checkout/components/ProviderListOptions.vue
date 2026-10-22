@@ -8,7 +8,7 @@ type CheckoutPaymentProps = {
 
 type CheckoutPaymentEmits = (
   event: 'update:activePayment',
-  parameter: PaymentProvider
+  parameter: PaymentProvider,
 ) => void
 
 const props = defineProps<CheckoutPaymentProps>()

@@ -9,8 +9,8 @@ await loadUser(true) */
 </script>
 
 <template>
-  <!-- One root, as Nuxt needs for layout transitions. -->
   <div>
+    <!-- One root, as Nuxt needs for layout transitions. -->
     <TheHeader />
     <main
       :class="[

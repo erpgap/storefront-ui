@@ -57,27 +57,23 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@eslint/js": "^9.17.0",
-    "@graphql-codegen/cli": "^6.1.0",
-    "@graphql-codegen/client-preset": "^4.0.1",
-    "@graphql-codegen/typescript": "^4.0.1",
-    "@graphql-typed-document-node/core": "^3.2.0",
+    "@graphql-codegen/add": "^7.1.1",
+    "@graphql-codegen/cli": "^7.4.6",
+    "@graphql-codegen/typescript": "^6.1.2",
     "@iconify-json/ion": "^1.2.6",
     "@nuxt/devtools": "^3.0.1",
-    "@nuxt/eslint": "^0.7.4",
-    "@playwright/test": "^1.63.0",
+    "@nuxt/eslint": "^1.17.0",
+    "@playwright/test": "^1.64.1",
     "@types/object-hash": "^3.0.6",
     "dotenv": "^17.4.2",
-    "eslint": "^9.17.0",
-    "eslint-plugin-vue": "^9.32.0",
+    "eslint": "^10.13.0",
     "git-cz": "^4.9.0",
     "husky": "^9.0.11",
     "tailwindcss": "~3.4.19",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.18.1",
-    "vitest": "^5.0.3",
+    "vitest": "^5.0.5",
     "vue": "^3.5.44",
-    "vue-tsc": "^3.2.5"
+    "vue-tsc": "^3.3.13"
   },
   "engines": {
     "node": "^22.19.0 || ^24.11.0 || >=26.0.0"
@@ -109,7 +105,8 @@
       "esbuild": "^0.28.1",
       "axios": "^0.34.0",
       "nuxt": "4.6.2",
-      "sharp": "^0.35.5"
+      "sharp": "^0.35.5",
+      "launch-editor": "^2.14.2"
     }
   }
 }

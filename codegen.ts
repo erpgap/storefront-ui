@@ -20,12 +20,16 @@ const config: CodegenConfig = {
     preResolveTypes: true,
     avoidOptionals: true,
   },
-  ignoreNoDocuments: true,
+  // Only the schema's types: queries here are plain strings (server/queries),
+  // so the client preset's typed-document helpers were never used, and from
+  // v6 it only emits types for documents it finds - none.
   generates: {
-    './graphql/gql/': {
-      documents: ['graphql/**/*.tsx'],
-      preset: 'client',
+    './graphql/gql/graphql.ts': {
+      plugins: [{ add: { content: '/* eslint-disable */' } }, 'typescript'],
       config: {
+        // Odoo's free-form JSON fields. Typed `any`, as before codegen 7
+        // changed its default for custom scalars to `unknown`.
+        scalars: { GenericScalar: 'any' },
         preResolveTypes: true,
         avoidOptionals: true,
         useTypeImports: true,
