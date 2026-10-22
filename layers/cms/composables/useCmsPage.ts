@@ -1,4 +1,4 @@
-import type { BlockInstance } from '#shared/cms/blocks'
+import type { BlockInstance } from '#cms/shared/blocks'
 
 export interface PublishedCmsPage {
   id: string

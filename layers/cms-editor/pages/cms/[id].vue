@@ -10,10 +10,10 @@
 // the editor stops showing the truth. Full-width keeps the canvas honest, and
 // costs roughly two weeks less than the iframe alternative.
 import { useCmsEditorDraft } from '../../composables/useCmsEditorDraft'
-import type { CmsPage } from '#shared/cms/blocks'
-import { CMS_LOCALES, DEFAULT_LOCALE } from '#shared/cms/i18n'
-import type { CmsLocale } from '#shared/cms/i18n'
-import { blockLabel, blockRegistry } from '~~/layers/cms/blocks'
+import type { CmsPage } from '#cms/shared/blocks'
+import { CMS_LOCALES, DEFAULT_LOCALE } from '#cms/shared/i18n'
+import type { CmsLocale } from '#cms/shared/i18n'
+import { blockLabel, blockRegistry } from '#cms/blocks'
 
 definePageMeta({ layout: false, middleware: 'cms-auth' })
 

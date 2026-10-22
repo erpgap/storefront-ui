@@ -1,4 +1,4 @@
-import { validateBlocks } from '#shared/cms/blocks'
+import { validateBlocks } from '#cms/shared/blocks'
 
 /**
  * Copy draft over published. Refuses if the draft has validation issues —

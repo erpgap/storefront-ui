@@ -2,8 +2,8 @@
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 import { absoluteImageUrl } from '~/utils/odooImage'
 import { useWebsiteHomePage } from '~~/layers/core/composables/useWebsiteHomePage.ts'
-import { useCmsPage } from '~~/layers/cms/composables/useCmsPage'
-import { DEFAULT_LOCALE, resolveValue } from '#shared/cms/i18n'
+import { useCmsPage } from '#cms/composables/useCmsPage'
+import { DEFAULT_LOCALE, resolveValue } from '#cms/shared/i18n'
 
 const { getWebsiteHomepage, websiteHomepage } = useWebsiteHomePage()
 

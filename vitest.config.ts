@@ -16,6 +16,9 @@ export default defineConfig({
       '~': fileURLToPath(new URL('./app', import.meta.url)),
       '@': fileURLToPath(new URL('./app', import.meta.url)),
       '~~': fileURLToPath(new URL('./', import.meta.url)),
+      // Layer aliases, set by each layer's nuxt.config, which vitest does not load.
+      '#cms-blocks': fileURLToPath(new URL('./layers/cms-blocks', import.meta.url)),
+      '#cms': fileURLToPath(new URL('./layers/cms', import.meta.url)),
     },
   },
 })

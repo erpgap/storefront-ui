@@ -2,9 +2,9 @@
 import { SfButton } from '@storefront-ui/vue'
 import { imageProvider } from '~~/app/utils/odooImage'
 
-// CMS-editable via layers/cms/blocks/hero.ts. Every prop defaults to the copy
-// that used to be hard-coded here, so `<MainBanner />` with no props renders
-// exactly as before — the existing homepage needs no change.
+// CMS-editable via the `hero` block (layers/cms-blocks/schemas.ts). Every
+// prop defaults to the copy that used to be hard-coded here, so
+// `<MainBanner />` with no props renders exactly as before — the existing homepage needs no change.
 interface Cta {
   label?: string
   url?: string

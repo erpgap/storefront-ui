@@ -1,4 +1,4 @@
-import { createOdooCmsStore } from '~~/server/utils/cmsOdooStore'
+import { createOdooCmsStore } from '#cms/server/utils/cmsOdooStore'
 
 /**
  * Bring an older version back.

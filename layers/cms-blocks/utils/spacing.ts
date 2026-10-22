@@ -1,5 +1,5 @@
 // The `spacing` option shared by blocks that stack into one flow of content
-// (see spacingField in shared/cms/blocks.ts). The values reproduce the rhythm
+// (see spacingField in ../schemas.ts). The values reproduce the rhythm
 // the hand-built content pages had: ~96px below a banner, ~56px between parts.
 
 export type BlockSpacing = 'normal' | 'start' | 'compact' | 'end'

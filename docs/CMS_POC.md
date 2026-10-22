@@ -55,8 +55,8 @@ across languages.
 | **Odoo** | Rows, files, permissions, and the relational columns |
 
 Odoo never knows what a block *is*. Adding one to the storefront needs no
-Odoo change at all — a schema entry in `shared/cms/blocks.ts` and a component
-mapping in `layers/cms/blocks/index.ts`, and it appears in the palette, gets
+Odoo change at all — a schema entry in `layers/cms-blocks/schemas.ts` and a
+component mapping in `layers/cms-blocks/registry.ts`, and it appears in the palette, gets
 an inspector form, is validated on write and renders in both the canvas and
 production. Only a new *field type* costs editor code, which is why that list
 is deliberately short.
@@ -96,25 +96,30 @@ cd /path/to/alokai-odoo
 ## Where the code is
 
 ```
-shared/cms/blocks.ts          block schemas, validation, migrations
-shared/cms/i18n.ts            per-language values and fallback
-
-layers/cms/                   RENDERING — ships to production
-  blocks/index.ts             schema -> real component
+layers/cms/                   THE ENGINE — knows no block by name
+  shared/blocks.ts            validation, seeding, migrations (Nitro + browser)
+  shared/i18n.ts              per-language values and fallback
+  shared/types.ts             field, block and page types
+  blocks/index.ts             joins catalogue schemas to their components
   components/BlockRenderer    the single render path
   components/CmsBlockShell    the edit-mode overlay
   components/CmsRegion        a slot inside a storefront-owned page
   custom-pages/cms-page.vue   the page render target
   pages/[...cmsSlug].vue      catch-all, so new pages resolve
+  server/api/cms/             pages, drafts, publish, regions, media
+  server/utils/cmsOdooStore.ts  the Odoo implementation
+  server/utils/cmsStore.ts    the interface
+  modules/cms-reserved-routes  page addresses the storefront already owns
+
+layers/cms-blocks/            THIS STOREFRONT'S BLOCKS — read via #cms-blocks
+  schemas.ts                  block schemas and their migrations
+  registry.ts                 block name -> real component
+  components/Cms*             blocks that exist only for the CMS
 
 layers/cms-editor/            THE EDITOR — never reaches a shopper
   pages/cms/*              list, editor, login
   components/CmsEditor*       field registry, media, versions, pickers
   composables/useCmsEditorDraft  blocks, selection, undo/redo, autosave
-
-server/api/cms/               pages, drafts, publish, regions, media
-server/utils/cmsOdooStore.ts  the Odoo implementation
-server/utils/cmsStore.ts      the interface, and the file fallback
 ```
 
 ## Known gaps

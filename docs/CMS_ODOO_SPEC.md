@@ -27,7 +27,7 @@ scoping, and it is why §10 is additive rather than a destructive migration.
 
 **In scope:** the `alokai.page.block` storage model, revisions with rollback,
 GraphQL read/write, the `CMS Editor` group, media on `ir.attachment`, cache
-invalidation, and swapping `server/utils/cmsStore.ts` over.
+invalidation, and swapping `layers/cms/server/utils/cmsStore.ts` over.
 
 **Not in scope:** changing the editor UX, the block set, or the rendering path.
 Those already work and are not affected by where the data lives.
@@ -57,7 +57,7 @@ customised their storefront's blocks.
 
 ### 2.2 Where validation lives instead
 
-`validateBlocks` in `shared/cms/blocks.ts`, called from Nitro on every write.
+`validateBlocks` in `layers/cms/shared/blocks.ts`, called from Nitro on every write.
 This is server-side code a browser cannot skip: the browser talks to Nitro,
 Nitro talks to Odoo.
 
@@ -382,7 +382,7 @@ it helps as a reference without pretending to be a translation.
 
 ### 11.2 Content languages come from Odoo, not from Nuxt
 
-`CMS_LOCALES` in `shared/cms/i18n.ts` is a PoC stand-in. The real list is
+`CMS_LOCALES` in `layers/cms/shared/i18n.ts` is a PoC stand-in. The real list is
 Odoo's active `res.lang` — **not** the Nuxt i18n config. A merchant may sell in
 five languages while the storefront ships UI translations for three. Content
 languages and interface languages are different lists and must not be

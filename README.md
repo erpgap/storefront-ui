@@ -146,11 +146,14 @@ change is live immediately.
 
 ### For developers
 
-- `shared/cms/blocks.ts` — block schemas, the single source of truth. Add a
-  block here and in `layers/cms/blocks/index.ts`, which binds each schema to
-  the storefront component that renders it.
-- `layers/cms/` — rendering. `layers/cms-editor/` — the editor, a separate
-  layer so it stays out of the shopper bundle.
+- `layers/cms-blocks/` — this storefront's block catalogue. A block is a
+  schema in `schemas.ts` plus a line in `registry.ts` naming the component
+  that renders it; nothing else in the CMS changes.
+- `layers/cms/` — the engine: rendering, the `/api/cms` routes and the Odoo
+  store, and the shared block machinery (validation, seeding, migrations). It
+  knows no block by name; it reads the catalogue through the `#cms-blocks`
+  alias. `layers/cms-editor/` — the editor, a separate layer so it stays out
+  of the shopper bundle.
 - `docs/CMS_ODOO_SPEC.md` is the authoritative spec; `docs/CMS_ARCHITECTURE.md`
   covers the design decisions and `docs/CMS_POC.md` is the operating guide,
   including known gaps.

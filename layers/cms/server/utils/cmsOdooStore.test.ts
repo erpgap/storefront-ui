@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { collectReferences } from './cmsOdooStore'
-import type { BlockInstance } from '#shared/cms/blocks'
+import type { BlockInstance } from '#cms/shared/blocks'
 
 const block = (data: Record<string, unknown>): BlockInstance =>
   ({ id: 'b1', blockType: 'featuredProducts', data })

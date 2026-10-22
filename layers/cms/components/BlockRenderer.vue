@@ -6,9 +6,9 @@
 import { defineAsyncComponent, hydrateOnVisible } from 'vue'
 import type { Component } from 'vue'
 import { BLOCKS_NEEDING_ID, getBlockComponent } from '../blocks'
-import type { BlockInstance } from '#shared/cms/blocks'
-import { migrateBlocks, resolveBlockData, withFieldPlaceholders } from '#shared/cms/blocks'
-import { DEFAULT_LOCALE } from '#shared/cms/i18n'
+import type { BlockInstance } from '#cms/shared/blocks'
+import { migrateBlocks, resolveBlockData, withFieldPlaceholders } from '#cms/shared/blocks'
+import { DEFAULT_LOCALE } from '#cms/shared/i18n'
 
 const props = withDefaults(defineProps<{
   blocks: BlockInstance[]

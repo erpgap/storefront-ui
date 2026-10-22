@@ -4,8 +4,8 @@
 // Values are the stored ones for that language - no fallback - for the same
 // reason the inspector does it: English in a Portuguese box looks translated.
 // The default language's text goes in the placeholder instead.
-import type { CmsPage, CmsSeo } from '#shared/cms/blocks'
-import type { CmsLocale } from '#shared/cms/i18n'
+import type { CmsPage, CmsSeo } from '#cms/shared/blocks'
+import type { CmsLocale } from '#cms/shared/i18n'
 import { absoluteImageUrl } from '~/utils/odooImage'
 
 const props = defineProps<{

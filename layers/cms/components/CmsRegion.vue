@@ -9,7 +9,7 @@
 // somebody has to remember.
 //
 // Adding another slot is one line in a template.
-import type { BlockInstance } from '#shared/cms/blocks'
+import type { BlockInstance } from '#cms/shared/blocks'
 
 const props = defineProps<{
   /** Matches the region declared in Odoo, e.g. `category-after`. */

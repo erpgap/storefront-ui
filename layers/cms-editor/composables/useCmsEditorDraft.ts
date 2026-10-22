@@ -1,6 +1,6 @@
-import type { BlockInstance, CmsPage } from '#shared/cms/blocks'
-import { seedBlockData, untranslatedFields } from '#shared/cms/blocks'
-import { DEFAULT_LOCALE } from '#shared/cms/i18n'
+import type { BlockInstance, CmsPage } from '#cms/shared/blocks'
+import { seedBlockData, untranslatedFields } from '#cms/shared/blocks'
+import { DEFAULT_LOCALE } from '#cms/shared/i18n'
 
 type SaveState = 'idle' | 'dirty' | 'saving' | 'saved' | 'error'
 

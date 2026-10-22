@@ -1,13 +1,13 @@
 // The CMS persistence interface.
 //
 // The API routes, the editor and the render path talk only to `CmsStore`; the
-// one implementation issues GraphQL against Odoo (server/utils/cmsOdooStore.ts).
+// one implementation issues GraphQL against Odoo (cmsOdooStore.ts, next door).
 // There is deliberately no local fallback: content, and the decision about who
 // may edit it, always live in Odoo.
 
 import type { H3Event } from 'h3'
 import { createOdooCmsStore } from './cmsOdooStore'
-import type { BlockInstance, CmsPage } from '#shared/cms/blocks'
+import type { BlockInstance, CmsPage } from '#cms/shared/blocks'
 
 export interface PageInput {
   title: string

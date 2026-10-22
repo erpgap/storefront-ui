@@ -1,5 +1,5 @@
-import { CMS_LOCALES, DEFAULT_LOCALE } from '#shared/cms/i18n'
-import { GetCmsLocalesQuery } from '~~/server/queries/CmsQueries'
+import { CMS_LOCALES, DEFAULT_LOCALE } from '#cms/shared/i18n'
+import { GetCmsLocalesQuery } from '#cms/server/queries/CmsQueries'
 
 /**
  * The languages a merchant can write content in.

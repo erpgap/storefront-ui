@@ -1,4 +1,4 @@
-import { isLocaleCode } from '#shared/cms/i18n'
+import { isLocaleCode } from '#cms/shared/i18n'
 
 /**
  * Save a page's meta title and description for one language.

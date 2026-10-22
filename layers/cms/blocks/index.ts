@@ -1,46 +1,23 @@
-// Binds each block schema to the REAL storefront component that renders it.
+// Joins the catalogue's block schemas to the components that render them.
 //
-// The split matters: schemas live in `shared/cms/blocks.ts` (no Vue, so the
-// Nitro validator can import them), and this file — the only place that knows
-// about components — is client/SSR only.
-//
-// Every entry below points at a component that already existed before the CMS.
-// None of them are CMS-specific re-implementations. That is what guarantees the
-// editor canvas and the production page are the same pixels (§5.1).
+// The split matters: schemas live in `#cms-blocks/schemas` (no Vue, so the
+// Nitro validator can import them), the component bindings in
+// `#cms-blocks/registry`, and this file — the only place in the engine that
+// touches components — is client/SSR only. Which blocks exist, and which
+// components draw them, is the storefront's call (layers/cms-blocks here).
 
 import type { Component } from 'vue'
-import { blockSchemas, getBlockSchema } from '#shared/cms/blocks'
-import type { BlockSchema } from '#shared/cms/blocks'
+import { blockComponents, blocksNeedingId } from '#cms-blocks/registry'
+import { blockSchemas, getBlockSchema } from '#cms/shared/blocks'
+import type { BlockSchema } from '#cms/shared/blocks'
 
-type Loader = () => Promise<Component | { default: Component }>
+export type BlockLoader = () => Promise<Component | { default: Component }>
 
-/**
- * Blocks that fetch their own data and therefore need a per-instance cache key
- * (§9.1). BlockRenderer passes `blockId` only to these, so every other
- * component stays free of an attribute it never asked for.
- */
-export const BLOCKS_NEEDING_ID = new Set(['bestSellers', 'featuredProducts'])
-
-const components: Record<string, Loader> = {
-  hero: () => import('~~/layers/core/components/MainBanner.vue'),
-  categories: () => import('~~/layers/core/components/Categories.vue'),
-  bestSellers: () => import('~~/layers/core/components/BestSellers.vue'),
-  featuredProducts: () => import('../components/CmsFeaturedProducts.vue'),
-  editorial: () => import('~~/layers/core/components/BannerRight.vue'),
-  valueProps: () => import('~~/layers/core/components/ValueProps.vue'),
-  richText: () => import('../components/CmsRichText.vue'),
-  pageHeader: () => import('../components/CmsPageHeader.vue'),
-  featureList: () => import('../components/CmsFeatureList.vue'),
-  stats: () => import('../components/CmsStats.vue'),
-  infoRows: () => import('../components/CmsInfoRows.vue'),
-  faq: () => import('../components/CmsFaq.vue'),
-  cardGrid: () => import('../components/CmsCardGrid.vue'),
-  contactForm: () => import('../components/CmsContactForm.vue'),
-  newsletter: () => import('~~/layers/core/components/Newsletter.vue'),
-}
+/** See `blocksNeedingId` in the catalogue's registry. */
+export const BLOCKS_NEEDING_ID: ReadonlySet<string> = blocksNeedingId
 
 export interface BlockDefinition extends BlockSchema {
-  component: Loader
+  component: BlockLoader
 }
 
 /**
@@ -55,17 +32,17 @@ export interface BlockDefinition extends BlockSchema {
  * expects rather than after Z.
  */
 export const blockRegistry: BlockDefinition[] = blockSchemas
-  .filter(schema => schema.name in components)
-  .map(schema => ({ ...schema, component: components[schema.name]! }))
+  .filter(schema => schema.name in blockComponents)
+  .map(schema => ({ ...schema, component: blockComponents[schema.name]! }))
   .sort((a, b) => a.label.localeCompare(b.label))
 
-export function getBlockComponent(blockType: string): Loader | undefined {
-  return components[blockType]
+export function getBlockComponent(blockType: string): BlockLoader | undefined {
+  return blockComponents[blockType]
 }
 
 export function getBlockDefinition(blockType: string): BlockDefinition | undefined {
   const schema = getBlockSchema(blockType)
-  const component = components[blockType]
+  const component = blockComponents[blockType]
   return schema && component ? { ...schema, component } : undefined
 }
 

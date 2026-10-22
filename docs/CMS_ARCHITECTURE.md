@@ -288,8 +288,13 @@ capability a separate headless CMS could not provide without an ID-sync job.
 ### 5.5 Layer layout
 
 ```
-layers/cms/                          # rendering — shipped to production
-  blocks/*.ts                        # block definitions (the registry)
+layers/cms-blocks/                   # this storefront's blocks, read via #cms-blocks
+  schemas.ts                         # block definitions and migrations
+  registry.ts                        # block name -> real component
+
+layers/cms/                          # the engine — rendering, shipped to production
+  shared/                            # validation, seeding, migrations
+  server/                            # /api/cms and the Odoo store
   components/BlockRenderer.vue       # the single render path
   components/CmsBlockShell.vue       # edit-mode wrapper (§8.2)
   custom-pages/cms-page.vue          # the missing render target

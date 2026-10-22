@@ -5,7 +5,7 @@
 import { useCmsPage } from '../composables/useCmsPage'
 import generateSeo, { type SeoEntity } from '~/utils/buildSEOHelper'
 import { absoluteImageUrl } from '~/utils/odooImage'
-import { DEFAULT_LOCALE, isLocaleCode, resolveValue } from '#shared/cms/i18n'
+import { DEFAULT_LOCALE, isLocaleCode, resolveValue } from '#cms/shared/i18n'
 
 const route = useRoute()
 

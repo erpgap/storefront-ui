@@ -1,5 +1,5 @@
 import { storefrontRouteFor } from './cmsReservedRoutes'
-// Virtual module provided by modules/cms-reserved-routes, populated at build time.
+// Virtual module provided by ../../modules/cms-reserved-routes, populated at build time.
 // @ts-expect-error - resolved by Nitro at build time
 import { reservedRoutes } from '#cms-reserved-routes'
 

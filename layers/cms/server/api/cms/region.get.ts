@@ -1,4 +1,4 @@
-import { GetCmsRegionQuery } from '~~/server/queries/CmsQueries'
+import { GetCmsRegionQuery } from '#cms/server/queries/CmsQueries'
 
 /**
  * Published blocks for a storefront region.

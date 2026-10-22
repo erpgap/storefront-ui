@@ -1,5 +1,5 @@
 // The upload is forwarded to Odoo and becomes an `ir.attachment` - see
-// server/utils/cmsOdooMedia.ts. Odoo checks the type and size and decides
+// ../../utils/cmsOdooMedia.ts. Odoo checks the type and size and decides
 // whether this user may upload at all.
 export default defineEventHandler(async (event) => {
   const form = await readMultipartFormData(event)

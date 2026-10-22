@@ -12,8 +12,8 @@
 // component underneath is made inert. The drag layer then only ever deals with
 // a flat list of uniform rectangles — the easy, well-supported case.
 import { blockLabel } from '../blocks'
-import { placeholderLabels } from '#shared/cms/blocks'
-import type { BlockInstance } from '#shared/cms/blocks'
+import { placeholderLabels } from '#cms/shared/blocks'
+import type { BlockInstance } from '#cms/shared/blocks'
 
 const props = defineProps<{
   block: BlockInstance

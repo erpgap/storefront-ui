@@ -23,7 +23,7 @@ import {
   UpdateCmsPageSeoMutation,
 } from '../mutations/CmsMutations'
 import type { CmsStore, PageInput, SeoInput } from './cmsStore'
-import type { BlockInstance, CmsPage, CmsSeo } from '#shared/cms/blocks'
+import type { BlockInstance, CmsPage, CmsSeo } from '#cms/shared/blocks'
 
 interface OdooCmsPage {
   id: number

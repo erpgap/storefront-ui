@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-// CMS-editable via layers/cms/blocks/valueProps.ts. Defaults reproduce the
-// previously hard-coded list, so `<ValueProps />` renders as before.
+// CMS-editable via the `valueProps` block (layers/cms-blocks/schemas.ts).
+// Defaults reproduce the previously hard-coded list, so `<ValueProps />`
+// renders as before.
 //
 // `icon` is a named choice rather than raw SVG path data: merchants pick from a
 // curated set, and the markup stays under our control instead of becoming an

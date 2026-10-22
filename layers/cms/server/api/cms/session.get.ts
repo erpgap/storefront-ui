@@ -1,4 +1,4 @@
-import { GetCmsCanEditQuery } from '~~/server/queries/CmsQueries'
+import { GetCmsCanEditQuery } from '#cms/server/queries/CmsQueries'
 
 /**
  * Whether this session may edit content.

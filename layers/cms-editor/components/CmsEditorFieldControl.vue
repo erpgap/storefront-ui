@@ -10,9 +10,9 @@
 // alignment beyond what a block explicitly offers. Block fields describe
 // content, never presentation (§2). The design system stays enforced in code,
 // so a merchant cannot break the storefront's look.
-import type { ArrayField, Field, SelectField } from '#shared/cms/blocks'
-import { defaultsFor, isTranslatable } from '#shared/cms/blocks'
-import { DEFAULT_LOCALE, localeLabel, resolveValue, setValue, toMap } from '#shared/cms/i18n'
+import type { ArrayField, Field, SelectField } from '#cms/shared/blocks'
+import { defaultsFor, isTranslatable } from '#cms/shared/blocks'
+import { DEFAULT_LOCALE, localeLabel, resolveValue, setValue, toMap } from '#cms/shared/i18n'
 import { absoluteImageUrl } from '~~/app/utils/odooImage'
 
 const props = withDefaults(defineProps<{
@@ -78,7 +78,7 @@ const sourceText = computed(() =>
 const effectiveValue = computed(() => resolveValue(props.modelValue, props.locale))
 const inherited = computed(() => !isDefaultLocale.value && !text.value && Boolean(effectiveValue.value))
 
-// Mirrors `untranslatedFields` in shared/cms/blocks.ts: only prose is flagged.
+// Mirrors `untranslatedFields` in layers/cms/shared/blocks.ts: only prose is flagged.
 // An inherited link or image is the normal, correct outcome, not a gap.
 const needsTranslation = computed(() =>
   (props.field.type === 'text' || props.field.type === 'textarea')

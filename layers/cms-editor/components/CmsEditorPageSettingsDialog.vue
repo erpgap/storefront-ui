@@ -5,7 +5,7 @@
 // which made a typo in either permanent. The api already supported changing
 // them - PATCH checks the new url is free and purges the cache for the old one
 // as well as the new - so this is the editor catching up with it.
-import type { CmsPage } from '#shared/cms/blocks'
+import type { CmsPage } from '#cms/shared/blocks'
 
 const props = defineProps<{
   pageId: string

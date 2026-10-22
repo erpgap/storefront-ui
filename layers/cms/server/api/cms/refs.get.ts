@@ -1,4 +1,4 @@
-import { GetCmsCategoriesQuery, GetCmsProductsQuery } from '~~/server/queries/CmsQueries'
+import { GetCmsCategoriesQuery, GetCmsProductsQuery } from '#cms/server/queries/CmsQueries'
 
 /**
  * Options for the product and category pickers.

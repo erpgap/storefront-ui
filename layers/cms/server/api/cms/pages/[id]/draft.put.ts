@@ -1,4 +1,4 @@
-import { validateBlocks } from '#shared/cms/blocks'
+import { validateBlocks } from '#cms/shared/blocks'
 
 /**
  * Save the draft. Replace-whole-list semantics, which is how the editor holds
