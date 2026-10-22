@@ -22,19 +22,18 @@ const EXCLUDED_PATHS = new Set([
   '/forgot-password/new-password',
 ])
 
-// Pages injected at build time by the routes-generator module for dynamic
-// Odoo content. Products and categories already have their own sitemaps, so
-// they must not be duplicated here.
+// Pages injected at build time for dynamic Odoo content: products and
+// categories by the routes-generator module, CMS pages by the CMS layer's
+// cms-page-routes. Each has a sitemap of its own, so they must not be
+// duplicated here.
 const DYNAMIC_PAGE_FILES = [
   'custom-pages/product-page.vue',
   'custom-pages/category-page.vue',
+  'custom-pages/cms-page.vue',
 ]
 
 function isStaticPublicPage(page: NuxtPage): boolean {
-  // Only real file-based pages defined in the repo. This excludes the concrete
-  // routes injected by routes-generator: product/category pages (their own
-  // sitemaps) and Odoo website pages (emitted by the blogs sitemap), both of
-  // which would otherwise create duplicate sitemap entries.
+  // Only real file-based pages defined in the repo.
   if (!page.file) {
     return false
   }

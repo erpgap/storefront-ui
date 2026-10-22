@@ -291,10 +291,6 @@ export default defineNuxtConfig({
       sources: ['/api/sitemap/urls/categories'],
       defaults: { changefreq: 'weekly', priority: 1.0 },
     },
-    blogs: {
-      sources: ['/api/sitemap/urls/blogs'],
-      defaults: { changefreq: 'weekly', priority: 0.6 },
-    },
     pages: {
       sources: ['/api/sitemap/urls/pages'],
       defaults: { changefreq: 'weekly', priority: 0.9 },

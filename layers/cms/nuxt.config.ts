@@ -24,4 +24,15 @@ export default defineNuxtConfig({
     // Drafts and editor reads: never cached, never crawled.
     '/api/cms/**': { swr: false, prerender: false, robots: false },
   },
+  // Published CMS pages get a sitemap of their own, merged into the
+  // storefront's @nuxtjs/sitemap config. Read live from Odoo, so pages created
+  // after a deploy are listed too.
+  sitemap: {
+    sitemaps: {
+      'cms-pages': {
+        sources: ['/api/cms/sitemap'],
+        defaults: { changefreq: 'weekly', priority: 0.6 },
+      },
+    },
+  },
 })
