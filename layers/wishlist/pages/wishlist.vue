@@ -25,7 +25,12 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
       <h1 class="font-bold typography-headline-3 md:typography-headline-2">
         Wishlist
       </h1>
-      <SfButton :tag="NuxtLink" to="/products" variant="tertiary" class="hidden md:flex">
+      <SfButton
+        :tag="NuxtLink"
+        to="/products"
+        variant="tertiary"
+        class="hidden md:flex"
+      >
         <template #prefix>
           <SfIconArrowBack />
         </template>
@@ -33,7 +38,10 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
       </SfButton>
     </div>
 
-    <div v-if="!ready || loading" class="min-h-[40vh] grid place-items-center">
+    <div
+      v-if="!ready || loading"
+      class="min-h-[40vh] grid place-items-center"
+    >
       <SfLoaderCircular size="xl" />
     </div>
 
@@ -85,7 +93,11 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
             Tap the heart on any product to save your favourites here for later.
           </p>
           <div class="mt-9 flex flex-wrap justify-center md:justify-start gap-3">
-            <SfButton :tag="NuxtLink" to="/products" class="min-h-[52px] px-7 text-[13px] font-medium">
+            <SfButton
+              :tag="NuxtLink"
+              to="/products"
+              class="min-h-[52px] px-7 text-[13px] font-medium"
+            >
               Browse products
             </SfButton>
             <SfButton

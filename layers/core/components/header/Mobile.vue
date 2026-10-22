@@ -58,9 +58,9 @@ watch(isOpen, (open: boolean) => {
           leave-to-class="-translate-x-full"
         >
           <SfDrawer
+            v-show="isOpen"
             :id="DRAWER_ID"
             ref="drawerRef"
-            v-show="isOpen"
             :model-value="true"
             disable-click-away
             placement="left"

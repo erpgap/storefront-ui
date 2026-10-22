@@ -40,26 +40,26 @@ export const useAddresses = () => {
       filter: { addressType: [addressType] },
     }
     try {
-      loading.value = true;
+      loading.value = true
 
       const { data } = await useAsyncData(
         `user-${user.value?.id}-addresses-${addressType}`,
         async () => {
           return await $sdk().odoo.query<QueryAddressesArgs, responseAddresses>(
             { queryName: QueryName.GetAddressesQuery },
-            params
-          );
-        }
-      );
+            params,
+          )
+        },
+      )
 
-      if (!data.value?.addresses) return;
-      
+      if (!data.value?.addresses) return
+
       if (addressType === AddressEnum.Billing) {
-        billingAddresses.value = data.value.addresses;
-        return;
+        billingAddresses.value = data.value.addresses
+        return
       }
 
-      shippingAddresses.value = data.value.addresses;
+      shippingAddresses.value = data.value.addresses
     }
     catch (error: any) {
       toast.error(error?.data?.message)
@@ -72,7 +72,7 @@ export const useAddresses = () => {
   const addAddress = async (address: AddAddressInput, type: AddressEnum) => {
     try {
       loading.value = true
-       await $sdk().odoo.mutation<
+      await $sdk().odoo.mutation<
         MutationAddAddressArgs,
         AddAddressResponse
       >(
@@ -92,12 +92,11 @@ export const useAddresses = () => {
 
   const deleteAddress = async (address: DeleteAddressInput) => {
     try {
-    loading.value = true
-     await $sdk().odoo.mutation<
-      MutationDeleteAddressArgs,
-      DeleteAddressResponse
-    >({ mutationName: MutationName.DeleteAddress }, { address })
-
+      loading.value = true
+      await $sdk().odoo.mutation<
+        MutationDeleteAddressArgs,
+        DeleteAddressResponse
+      >({ mutationName: MutationName.DeleteAddress }, { address })
     }
     catch (error: any) {
       toast.error(error?.data?.message)
@@ -112,28 +111,27 @@ export const useAddresses = () => {
     type: AddressEnum,
   ) => {
     try {
-    loading.value = true
+      loading.value = true
 
-    const data = await $sdk().odoo.mutation<
-      MutationUpdateAddressArgs,
-      { updateAddress: Partner }
-    >({ mutationName: MutationName.UpdateAddress }, { address })
+      const data = await $sdk().odoo.mutation<
+        MutationUpdateAddressArgs,
+        { updateAddress: Partner }
+      >({ mutationName: MutationName.UpdateAddress }, { address })
 
-    if (type === AddressEnum.Billing) {
-      const address = data?.updateAddress
-      const index = billingAddresses.value.findIndex(
-        (        addr: { id: any }) => addr.id === address.id,
-      )
-      billingAddresses.value[index] = address
-    }
-    else {
-      const address = data?.updateAddress
-      const index = shippingAddresses.value.findIndex(
-        (        addr: { id: any }) => addr.id === address.id,
-      )
-      shippingAddresses.value[index] = address
-    }
-
+      if (type === AddressEnum.Billing) {
+        const address = data?.updateAddress
+        const index = billingAddresses.value.findIndex(
+          (addr: { id: any }) => addr.id === address.id,
+        )
+        billingAddresses.value[index] = address
+      }
+      else {
+        const address = data?.updateAddress
+        const index = shippingAddresses.value.findIndex(
+          (addr: { id: any }) => addr.id === address.id,
+        )
+        shippingAddresses.value[index] = address
+      }
     }
     catch (error: any) {
       toast.error(error?.data?.message)
@@ -148,14 +146,14 @@ export const useAddresses = () => {
     type: AddressEnum,
   ) => {
     try {
-    loading.value = true
+      loading.value = true
 
-    await $sdk().odoo.mutation<
-      MutationSelectAddressArgs,
-      SelectCurrentAddressResponse
-    >({ mutationName: MutationName.SelectCurrentAddress }, { address, type })
+      await $sdk().odoo.mutation<
+        MutationSelectAddressArgs,
+        SelectCurrentAddressResponse
+      >({ mutationName: MutationName.SelectCurrentAddress }, { address, type })
 
-    await loadAddresses(type)
+      await loadAddresses(type)
     }
     catch (error: any) {
       toast.error(error?.data?.message)

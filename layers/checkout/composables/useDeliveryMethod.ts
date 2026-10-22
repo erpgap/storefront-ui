@@ -1,27 +1,27 @@
-import { useToast } from 'vue-toastification';
-import { debounce } from 'lodash-es';
+import { useToast } from 'vue-toastification'
+import { debounce } from 'lodash-es'
+import { useCheckout } from './useCheckout'
 import type {
   ShippingMethod,
   MutationSetShippingMethodArgs,
   DeliveryMethodResponse,
-} from '~~/graphql';
-import { MutationName } from '~~/server/mutations';
-import { QueryName } from '~~/server/queries';
-import { useCheckout } from './useCheckout';
+} from '~~/graphql'
+import { MutationName } from '~~/server/mutations'
+import { QueryName } from '~~/server/queries'
 
 export const useDeliveryMethod = () => {
-  const { $sdk } = useNuxtApp();
-  const { loading, setLoading } = useCheckout();
-  const toast = useToast();
-  const { loadCart } = useCart();
+  const { $sdk } = useNuxtApp()
+  const { loading, setLoading } = useCheckout()
+  const toast = useToast()
+  const { loadCart } = useCart()
   const deliveryMethods = useState<ShippingMethod[]>(
     'delivery-method',
     () => [],
-  );
+  )
 
   const loadDeliveryMethods = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       // Always fetch fresh: the available delivery methods depend on the order's
       // shipping address, which is set partway through checkout. A cached
       // (useAsyncData) result would keep returning the empty "no address yet"
@@ -31,31 +31,35 @@ export const useDeliveryMethod = () => {
         { deliveryMethods: ShippingMethod[] }
       >({
         queryName: QueryName.GetDeliveryMethodsQuery,
-      });
+      })
 
-      deliveryMethods.value = data?.deliveryMethods || [];
-    } catch (error: any) {
-      toast.error(error?.data?.message);
-    } finally {
-      setLoading(false);
+      deliveryMethods.value = data?.deliveryMethods || []
     }
-  };
+    catch (error: any) {
+      toast.error(error?.data?.message)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
 
   const _setDeliveryMethod = async (shippingMethodId: number) => {
     try {
-      setLoading(true);
+      setLoading(true)
       await $sdk().odoo.mutation<
         MutationSetShippingMethodArgs,
         DeliveryMethodResponse
-      >({ mutationName: MutationName.ShippingMethod }, { shippingMethodId });
-      await loadCart();
-    } catch (error: any) {
-      toast.error(error?.data?.message);
-    } finally {
-      setLoading(false);
+      >({ mutationName: MutationName.ShippingMethod }, { shippingMethodId })
+      await loadCart()
     }
-  };
-  const setDeliveryMethod = debounce(_setDeliveryMethod, 500);
+    catch (error: any) {
+      toast.error(error?.data?.message)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+  const setDeliveryMethod = debounce(_setDeliveryMethod, 500)
 
   return {
     loadDeliveryMethods,
@@ -63,5 +67,5 @@ export const useDeliveryMethod = () => {
     setDeliveryMethodImmediate: _setDeliveryMethod,
     deliveryMethods,
     loading,
-  };
-};
+  }
+}

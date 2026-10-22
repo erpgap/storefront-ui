@@ -20,7 +20,11 @@ const NuxtLink = resolveComponent('NuxtLink')
             stroke="currentColor"
             stroke-width="1.6"
           >
-            <path d="M17 7H2M7 1 2 7l5 6" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M17 7H2M7 1 2 7l5 6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
           <span class="sm:hidden">{{ $t('back') }}</span>
           <span class="hidden sm:inline">{{ $t('backToCart') }}</span>
@@ -33,7 +37,10 @@ const NuxtLink = resolveComponent('NuxtLink')
         </div>
 
         <span class="justify-self-end hidden sm:inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] uppercase text-primary-400">
-          <UiLineIcon name="lock" :size="14" />
+          <UiLineIcon
+            name="lock"
+            :size="14"
+          />
           {{ $t('trust.secure') }}
         </span>
       </div>

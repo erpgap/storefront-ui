@@ -20,7 +20,10 @@ await loadCart(false)
           stroke-width="1.5"
           aria-hidden="true"
         >
-          <path d="M8 8l8 8M16 8l-8 8" stroke-linecap="round" />
+          <path
+            d="M8 8l8 8M16 8l-8 8"
+            stroke-linecap="round"
+          />
         </svg>
       </span>
 

@@ -8,7 +8,7 @@ import { absoluteImageUrl } from '~~/app/utils/odooImage'
 import type { Product } from '~~/graphql'
 import { LISTING_PAGE_SIZE } from '~~/shared/listing.mjs'
 
-type Breadcrumb = { label: string; link: string }
+type Breadcrumb = { label: string, link: string }
 
 const props = withDefaults(
   defineProps<{

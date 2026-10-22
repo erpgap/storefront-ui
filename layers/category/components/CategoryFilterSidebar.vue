@@ -375,7 +375,10 @@ const hasActive = computed(() => activePills.value.length > 0)
         class="pb-6"
       >
         <!-- CATEGORY (grouped by parent) -->
-        <div v-if="facet.type === 'category'" class="space-y-4">
+        <div
+          v-if="facet.type === 'category'"
+          class="space-y-4"
+        >
           <div
             v-for="group in facet.groups"
             :key="group.label"
@@ -549,7 +552,11 @@ const hasActive = computed(() => activePills.value.length > 0)
               fill="none"
               stroke="#a3a3a3"
               stroke-width="2"
-            ><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+            ><circle
+              cx="11"
+              cy="11"
+              r="7"
+            /><path d="m21 21-4.3-4.3" /></svg>
           </div>
 
           <label

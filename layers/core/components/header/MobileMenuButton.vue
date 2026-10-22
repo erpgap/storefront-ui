@@ -31,9 +31,24 @@ defineEmits<{
       fill="none"
       aria-hidden="true"
     >
-      <rect width="22" height="1.76" transform="matrix(-1 0 0 1 22 0)" fill="black" />
-      <rect width="22" height="1.76" transform="matrix(-1 0 0 1 22 7.04016)" fill="black" />
-      <rect width="22" height="1.76" transform="matrix(-1 0 0 1 22 14.08)" fill="black" />
+      <rect
+        width="22"
+        height="1.76"
+        transform="matrix(-1 0 0 1 22 0)"
+        fill="black"
+      />
+      <rect
+        width="22"
+        height="1.76"
+        transform="matrix(-1 0 0 1 22 7.04016)"
+        fill="black"
+      />
+      <rect
+        width="22"
+        height="1.76"
+        transform="matrix(-1 0 0 1 22 14.08)"
+        fill="black"
+      />
     </svg>
   </SfButton>
 </template>

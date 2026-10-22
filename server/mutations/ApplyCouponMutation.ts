@@ -1,4 +1,3 @@
-
 import orderFragment from '../fragments/orderFragment'
 
 export default `

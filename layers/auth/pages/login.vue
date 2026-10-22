@@ -42,7 +42,10 @@ const NuxtLink = resolveComponent('NuxtLink')
 </script>
 
 <template>
-  <NuxtLayout name="auth" :heading="$t('auth.login.heading')">
+  <NuxtLayout
+    name="auth"
+    :heading="$t('auth.login.heading')"
+  >
     <p
       v-if="sessionExpired && !authError"
       role="status"
@@ -52,19 +55,37 @@ const NuxtLink = resolveComponent('NuxtLink')
       {{ $t("auth.login.sessionExpired") }}
     </p>
 
-    <form novalidate class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8" @submit.prevent="handleLogin">
+    <form
+      novalidate
+      class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8"
+      @submit.prevent="handleLogin"
+    >
       <label>
         <UiFormLabel>{{ $t("form.emailLabel") }}</UiFormLabel>
-        <SfInput v-model="email" name="email" type="email" autocomplete="email" :invalid="showErrors && !emailValid" />
+        <SfInput
+          v-model="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          :invalid="showErrors && !emailValid"
+        />
       </label>
 
       <label>
         <UiFormLabel>{{ $t("form.passwordLabel") }}</UiFormLabel>
-        <UiFormPasswordInput v-model="password" name="password" autocomplete="current-password" :invalid="showErrors && !password.trim()" />
+        <UiFormPasswordInput
+          v-model="password"
+          name="password"
+          autocomplete="current-password"
+          :invalid="showErrors && !password.trim()"
+        />
       </label>
 
       <label class="mt-2 flex items-center gap-2">
-        <SfCheckbox v-model="rememberMe" name="rememberMe" />
+        <SfCheckbox
+          v-model="rememberMe"
+          name="rememberMe"
+        />
         {{ $t("auth.login.rememberMeLabel") }}
       </label>
 
@@ -72,21 +93,41 @@ const NuxtLink = resolveComponent('NuxtLink')
         {{ authError }}
       </UiFormError>
 
-      <SfButton type="submit" class="mt-2" :disabled="loading">
+      <SfButton
+        type="submit"
+        class="mt-2"
+        :disabled="loading"
+      >
         {{ loading ? 'Signing in…' : $t("auth.login.submitLabel") }}
       </SfButton>
-      <SfButton :tag="NuxtLink" to="/reset-password" variant="tertiary" data-testid="login-page-reset-button">
+      <SfButton
+        :tag="NuxtLink"
+        to="/reset-password"
+        variant="tertiary"
+        data-testid="login-page-reset-button"
+      >
         {{ $t("auth.login.forgotPasswordLabel") }}
       </SfButton>
     </form>
 
-    <UiAlert class="mt-6 w-full p-4 md:p-6 !justify-start typography-text-base !bg-[#f7f7f7]" variant="neutral">
-      <i18n-t scope="global" tag="span" keypath="auth.login.createAccountBanner">
-        <SfLink :tag="NuxtLink" to="signup" variant="primary" data-testid="login-page-signup-button">
+    <UiAlert
+      class="mt-6 w-full p-4 md:p-6 !justify-start typography-text-base !bg-[#f7f7f7]"
+      variant="neutral"
+    >
+      <i18n-t
+        scope="global"
+        tag="span"
+        keypath="auth.login.createAccountBanner"
+      >
+        <SfLink
+          :tag="NuxtLink"
+          to="signup"
+          variant="primary"
+          data-testid="login-page-signup-button"
+        >
           {{ $t("auth.login.createAccountLinkLabel") }}
         </SfLink>
       </i18n-t>
     </UiAlert>
-
   </NuxtLayout>
 </template>

@@ -11,7 +11,7 @@ import { useProductAttributes } from '../../product/composables/useProductAttrib
 import { useUiHelpers } from '../../category/composables/useUiHelpers'
 import { useScrollToTopOnListingChange } from '../../core/composables/useScrollToTopOnListingChange'
 
-type Product = { slug?: string; stock?: number; qty?: number;[k: string]: any }
+type Product = { slug?: string, stock?: number, qty?: number, [k: string]: any }
 
 const route = useRoute()
 
@@ -53,23 +53,21 @@ async function fetchList(q: Record<string, any>) {
   await loadProductTemplateList(facets)
 }
 
-
 onServerPrefetch(() => fetchList(route.query))
 
 if (import.meta.client) {
   watch(
     () => route.query,
     (q: Record<string, any>) => { fetchList(q) },
-    { immediate: true, deep: true }
+    { immediate: true, deep: true },
   )
 }
 
 const safeAttributes = computed(() =>
   Array.isArray((organizedAttributes as any)?.value)
     ? (organizedAttributes as any).value
-    : []
+    : [],
 )
-
 
 const breadcrumbs = [
   { name: 'Home', link: '/' },
@@ -79,36 +77,60 @@ const breadcrumbs = [
 
 <template>
   <div class="narrow-container pb-20">
-    <UiBreadcrumb :breadcrumbs="breadcrumbs" class="self-start mt-5 mb-5" />
+    <UiBreadcrumb
+      :breadcrumbs="breadcrumbs"
+      class="self-start mt-5 mb-5"
+    />
 
-    <h1 v-if="route.query?.search" class="font-bold typography-headline-3 md:typography-headline-2 mb-10">
+    <h1
+      v-if="route.query?.search"
+      class="font-bold typography-headline-3 md:typography-headline-2 mb-10"
+    >
       Results for "{{ route.query.search }}"
     </h1>
 
     <div class="grid grid-cols-12 lg:gap-x-6">
-
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">
         <ClientOnly>
           <template #fallback>
-            <div class="p-4 text-sm text-neutral-500">Loading filters...</div>
+            <div class="p-4 text-sm text-neutral-500">
+              Loading filters...
+            </div>
           </template>
-          <CategoryFilterSidebar v-if="$viewport.isGreaterOrEquals('desktopSmall')" class="block"
-            :attributes="safeAttributes" :categories="[]" />
+          <CategoryFilterSidebar
+            v-if="$viewport.isGreaterOrEquals('desktopSmall')"
+            class="block"
+            :attributes="safeAttributes"
+            :categories="[]"
+          />
         </ClientOnly>
 
         <ClientOnly>
-          <LazyCategoryMobileSidebar :is-open="isOpen" @close="close">
+          <LazyCategoryMobileSidebar
+            :is-open="isOpen"
+            @close="close"
+          >
             <template #default>
-              <CategoryFilterSidebar class="block lg:hidden" :attributes="safeAttributes" :categories="[]"
-                @close="close" />
+              <CategoryFilterSidebar
+                class="block lg:hidden"
+                :attributes="safeAttributes"
+                :categories="[]"
+                @close="close"
+              />
             </template>
           </LazyCategoryMobileSidebar>
         </ClientOnly>
       </div>
 
       <div class="col-span-12 lg:col-span-8 xl:col-span-9">
-        <div v-if="loading" class="w-full text-center">
-          <SfLoaderCircular size="xl" class="mt-[160px]" />
+        <div
+          v-if="loading"
+          class="w-full text-center"
+        >
+          <SfLoaderCircular
+            size="xl"
+            class="mt-[160px]"
+          />
         </div>
 
         <div v-else-if="Array.isArray(productTemplateList) && productTemplateList.length > 0">
@@ -139,20 +161,36 @@ const breadcrumbs = [
           </div>
 
           <section class="grid grid-cols-2 md:grid-cols-3 gap-5 mt-8">
-            <LazyUiProductCard v-for="pt in productTemplateList" :key="pt.id" :name="pt?.name || ''" loading="eager"
-              :slug="slugFor(pt)" :image-url="pt.imageUrl ?? ''"
-              :image-alt="pt?.name || ''" :regular-price="getRegularPrice(pt.firstVariant as any)"
+            <LazyUiProductCard
+              v-for="pt in productTemplateList"
+              :key="pt.id"
+              :name="pt?.name || ''"
+              loading="eager"
+              :slug="slugFor(pt)"
+              :image-url="pt.imageUrl ?? ''"
+              :image-alt="pt?.name || ''"
+              :regular-price="getRegularPrice(pt.firstVariant as any)"
               :special-price="getSpecialPrice(pt.firstVariant as any)"
-              :rating-count="(pt as any)?.ratingCount ?? 0" :rating="(pt as any)?.ratingAvg ?? 0"
-              :first-variant="normalizeVariant(pt.firstVariant as any)" />
+              :rating-count="(pt as any)?.ratingCount ?? 0"
+              :rating="(pt as any)?.ratingAvg ?? 0"
+              :first-variant="normalizeVariant(pt.firstVariant as any)"
+            />
           </section>
 
-          <LazyUiPagination v-if="(Number(totalItems) || 0) > 12" class="mt-5"
-            :current-page="Number(route?.query?.page || 1)" :total-items="Number(totalItems) || 0" :page-size="12"
-            :max-visible-pages="5" />
+          <LazyUiPagination
+            v-if="(Number(totalItems) || 0) > 12"
+            class="mt-5"
+            :current-page="Number(route?.query?.page || 1)"
+            :total-items="Number(totalItems) || 0"
+            :page-size="12"
+            :max-visible-pages="5"
+          />
         </div>
 
-        <CategoryEmptyState v-else :page="Number(route?.query?.page || 1)" />
+        <CategoryEmptyState
+          v-else
+          :page="Number(route?.query?.page || 1)"
+        />
       </div>
     </div>
   </div>

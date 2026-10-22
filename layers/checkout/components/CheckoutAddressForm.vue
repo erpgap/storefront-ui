@@ -154,7 +154,7 @@ defineExpose({
           'w-[26px] h-[26px] rounded-full grid place-items-center text-[12px] shrink-0',
           sectionDone ? 'bg-black text-white'
           : showErrors ? 'border border-red-300 text-red-600'
-          : 'border border-primary-200 text-primary-500',
+            : 'border border-primary-200 text-primary-500',
         ]"
       >
         <template v-if="sectionDone">✓</template>
@@ -206,11 +206,23 @@ defineExpose({
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("form.countryLabel") }}</UiFormLabel>
-          <SfSelect v-model="countryModel" name="country" autocomplete="country-name" :invalid="showErrors && required.country">
-            <option key="placeholder" :value="null">
+          <SfSelect
+            v-model="countryModel"
+            name="country"
+            autocomplete="country-name"
+            :invalid="showErrors && required.country"
+          >
+            <option
+              key="placeholder"
+              :value="null"
+            >
               {{ $t("form.selectPlaceholder") }}
             </option>
-            <option v-for="countryOption in countries.countries" :key="countryOption?.id" :value="countryOption?.id">
+            <option
+              v-for="countryOption in countries.countries"
+              :key="countryOption?.id"
+              :value="countryOption?.id"
+            >
               {{ countryOption?.name }}
             </option>
           </SfSelect>
@@ -218,11 +230,24 @@ defineExpose({
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("form.stateLabel") }}</UiFormLabel>
-          <SfSelect v-model="stateModel" name="state" autocomplete="address-level1" :disabled="!states.length" :invalid="showErrors && required.state">
-            <option key="placeholder" :value="null">
+          <SfSelect
+            v-model="stateModel"
+            name="state"
+            autocomplete="address-level1"
+            :disabled="!states.length"
+            :invalid="showErrors && required.state"
+          >
+            <option
+              key="placeholder"
+              :value="null"
+            >
               {{ $t("form.selectPlaceholder") }}
             </option>
-            <option v-for="stateOption in states" :key="stateOption.id" :value="stateOption.id">
+            <option
+              v-for="stateOption in states"
+              :key="stateOption.id"
+              :value="stateOption.id"
+            >
               {{ stateOption.name }}
             </option>
           </SfSelect>

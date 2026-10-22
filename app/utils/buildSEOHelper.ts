@@ -48,18 +48,20 @@ const generateSeo = <T extends SeoEntity>(
   const defaultTitle
     = entity.metaTitle || entity.name || `${entityType} page`
 
-  let jsonLdObject: object | null = null;
+  let jsonLdObject: object | null = null
   if (entity?.jsonLd) {
-      if (typeof entity.jsonLd === 'string') {
-          try {
-              jsonLdObject = JSON.parse(entity.jsonLd);
-          } catch (e) {
-              console.error("Failed to parse jsonLd string:", e);
-              jsonLdObject = null;
-          }
-      } else if (typeof entity.jsonLd === 'object') {
-          jsonLdObject = entity.jsonLd;
+    if (typeof entity.jsonLd === 'string') {
+      try {
+        jsonLdObject = JSON.parse(entity.jsonLd)
       }
+      catch (e) {
+        console.error('Failed to parse jsonLd string:', e)
+        jsonLdObject = null
+      }
+    }
+    else if (typeof entity.jsonLd === 'object') {
+      jsonLdObject = entity.jsonLd
+    }
   }
 
   return {

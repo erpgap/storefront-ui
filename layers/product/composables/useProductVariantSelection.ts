@@ -8,7 +8,7 @@ import {
   resolveCombinationIds,
 } from '~~/layers/product/utils'
 
-type ColorOption = { id: number; label: string }
+type ColorOption = { id: number, label: string }
 
 /**
  * Manages variant selection state for a product detail page.

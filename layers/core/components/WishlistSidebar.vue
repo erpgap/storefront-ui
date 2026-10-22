@@ -55,18 +55,34 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
           <span class="text-[13px] tracking-[0.16em] uppercase font-medium text-black">
             Wishlist <span class="text-primary-400">({{ wishlistTotalItems }})</span>
           </span>
-          <SfButton variant="tertiary" square aria-label="Close wishlist" class="!text-black" @click="closeWishlistSideBar()">
+          <SfButton
+            variant="tertiary"
+            square
+            aria-label="Close wishlist"
+            class="!text-black"
+            @click="closeWishlistSideBar()"
+          >
             <SfIconClose />
           </SfButton>
         </div>
 
-        <div v-if="loading" class="flex-1 grid place-items-center">
+        <div
+          v-if="loading"
+          class="flex-1 grid place-items-center"
+        >
           <SfLoaderCircular size="lg" />
         </div>
 
         <!-- Items -->
-        <div v-else-if="items.length" class="flex-1 overflow-y-auto px-5 divide-y divide-primary-100">
-          <div v-for="item in items" :key="item?.id" class="flex gap-4 py-5">
+        <div
+          v-else-if="items.length"
+          class="flex-1 overflow-y-auto px-5 divide-y divide-primary-100"
+        >
+          <div
+            v-for="item in items"
+            :key="item?.id"
+            class="flex gap-4 py-5"
+          >
             <NuxtLink
               :to="mountUrlSlugForProductVariant(item?.product as Product) || ''"
               class="shrink-0 w-[72px] h-[88px] overflow-hidden rounded-[2px] bg-primary-50"
@@ -102,7 +118,10 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
               </div>
               <p class="mt-1.5 flex items-baseline gap-2">
                 <span class="text-[16px] font-medium text-black">{{ $currency(price(item?.product)) }}</span>
-                <span v-if="hasDiscount(item?.product)" class="text-[14px] text-primary-300 line-through">
+                <span
+                  v-if="hasDiscount(item?.product)"
+                  class="text-[14px] text-primary-300 line-through"
+                >
                   {{ $currency(listPrice(item?.product)) }}
                 </span>
               </p>
@@ -111,16 +130,32 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
         </div>
 
         <!-- Empty -->
-        <div v-else class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-5">
-          <NuxtImg src="/img/content/empty-wishlist.webp" alt="" aria-hidden="true" class="w-[150px] h-[150px] object-contain drop-shadow-[0_16px_20px_rgba(0,0,0,0.14)]" />
-          <p class="font-light text-[20px] tracking-[-0.01em]">Your wishlist is empty</p>
-          <SfButton class="min-h-[48px] px-7 text-[13px] font-medium" @click="goTo('/products')">
+        <div
+          v-else
+          class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-5"
+        >
+          <NuxtImg
+            src="/img/content/empty-wishlist.webp"
+            alt=""
+            aria-hidden="true"
+            class="w-[150px] h-[150px] object-contain drop-shadow-[0_16px_20px_rgba(0,0,0,0.14)]"
+          />
+          <p class="font-light text-[20px] tracking-[-0.01em]">
+            Your wishlist is empty
+          </p>
+          <SfButton
+            class="min-h-[48px] px-7 text-[13px] font-medium"
+            @click="goTo('/products')"
+          >
             Browse products
           </SfButton>
         </div>
 
         <!-- Footer -->
-        <div v-if="items.length" class="border-t border-primary-100 p-5 shrink-0">
+        <div
+          v-if="items.length"
+          class="border-t border-primary-100 p-5 shrink-0"
+        >
           <SfButton
             variant="tertiary"
             class="w-full min-h-[52px] text-[13px] tracking-[0.1em] uppercase font-medium !border !border-primary-200 !text-black hover:!bg-transparent hover:!border-black"

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { SfButton } from "@storefront-ui/vue";
+import { SfButton } from '@storefront-ui/vue'
 
-const { loadCart, totalItemsInCart } = useCart();
-const { toggleCartSideBar } = useCartUiState();
+const { loadCart, totalItemsInCart } = useCart()
+const { toggleCartSideBar } = useCartUiState()
 
 onMounted(() => {
-  loadCart();
-});
+  loadCart()
+})
 </script>
 
 <template>
@@ -21,13 +21,15 @@ onMounted(() => {
     >
       <template #prefix>
         <span class="relative inline-flex">
-          <UiLineIcon name="cart" class="!text-black" />
+          <UiLineIcon
+            name="cart"
+            class="!text-black"
+          />
           <span
             v-if="totalItemsInCart > 0"
             class="absolute -top-1.5 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-black text-white text-[10px] leading-none font-medium flex items-center justify-center"
             data-testid="cart-badge"
-            >{{ totalItemsInCart }}</span
-          >
+          >{{ totalItemsInCart }}</span>
         </span>
       </template>
     </SfButton>
@@ -41,7 +43,10 @@ onMounted(() => {
         aria-label="Open cart"
       >
         <template #prefix>
-          <UiLineIcon name="cart" class="!text-black" />
+          <UiLineIcon
+            name="cart"
+            class="!text-black"
+          />
         </template>
       </SfButton>
     </template>

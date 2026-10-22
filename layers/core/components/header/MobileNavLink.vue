@@ -33,7 +33,11 @@ defineEmits<{
       </g>
       <defs>
         <clipPath id="clip0_77_682">
-          <rect width="17" height="17" fill="white" />
+          <rect
+            width="17"
+            height="17"
+            fill="white"
+          />
         </clipPath>
       </defs>
     </svg>

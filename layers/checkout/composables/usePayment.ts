@@ -1,6 +1,4 @@
-import { useAsyncData } from 'nuxt/app'
-import { useNuxtApp } from 'nuxt/app'
-import { useState } from 'nuxt/app'
+import { useAsyncData, useNuxtApp, useState } from 'nuxt/app'
 import { useToast } from 'vue-toastification'
 import type { PaymentProvider } from '~~/graphql'
 import { QueryName } from '~~/server/queries'

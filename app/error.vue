@@ -11,7 +11,7 @@ const code = computed(() => (is404.value ? '404' : String(error.value?.statusCod
 const title = computed(() => (is404.value ? 'Page not found' : 'Something went wrong'))
 const message = computed(() =>
   is404.value
-    ? "The page you're looking for doesn't exist or may have moved. Let's get you back on track."
+    ? 'The page you\'re looking for doesn\'t exist or may have moved. Let\'s get you back on track.'
     : 'An unexpected error occurred. Please try again, or head back to the homepage.',
 )
 </script>

@@ -16,7 +16,10 @@ const { isAuthenticated } = useAuth()
     square
   >
     <template #prefix>
-      <UiLineIcon name="account" class="!text-black" />
+      <UiLineIcon
+        name="account"
+        class="!text-black"
+      />
     </template>
   </SfButton>
   <!--

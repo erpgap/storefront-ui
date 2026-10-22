@@ -38,7 +38,7 @@ export const useProductTemplateListForRecentViews = () => {
         params,
         { headers: useRequestHeaders() },
       ), {
-      deep: true
+      deep: true,
     })
 
     loading.value = false

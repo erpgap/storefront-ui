@@ -25,7 +25,10 @@ const savings = computed(
 </script>
 
 <template>
-  <div class="flex gap-4 sm:gap-5 py-5" data-testid="cart-product-card">
+  <div
+    class="flex gap-4 sm:gap-5 py-5"
+    data-testid="cart-product-card"
+  >
     <SfLink
       :tag="NuxtLink"
       :to="mountUrlSlugForProductVariant(orderLine.product as Product)"
@@ -86,11 +89,17 @@ const savings = computed(
         <div class="text-right whitespace-nowrap ml-auto">
           <p class="flex items-baseline justify-end gap-2">
             <span class="text-[16px] font-medium text-black">{{ $currency(orderLine.priceSubtotal || 0) }}</span>
-            <span v-if="hasDiscount" class="text-[14px] text-primary-300 line-through">
+            <span
+              v-if="hasDiscount"
+              class="text-[14px] text-primary-300 line-through"
+            >
               {{ $currency(oldPrice) }}
             </span>
           </p>
-          <p v-if="savings > 0" class="mt-0.5 text-[13px] text-primary-500">
+          <p
+            v-if="savings > 0"
+            class="mt-0.5 text-[13px] text-primary-500"
+          >
             You save {{ $currency(savings) }}
           </p>
         </div>

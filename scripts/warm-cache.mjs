@@ -31,7 +31,7 @@ if (!BASE) {
   console.error('✗ NUXT_PUBLIC_MIDDLEWARE_URL is not set — set it (the storefront site URL) and re-run, e.g.:\n    source .env && node scripts/warm-cache.mjs')
   process.exit(1)
 }
-const CONCURRENCY = 8                  // parallel requests (edit here if needed)
+const CONCURRENCY = 8 // parallel requests (edit here if needed)
 const DEVICES = ['desktop', 'mobile'] // always both (page cache keys on the user-agent)
 
 const UA = {
@@ -39,8 +39,11 @@ const UA = {
   mobile: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
 }
 
-const locs = (xml) => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim())
-async function getText(url) { try { const r = await fetch(url); return r.ok ? await r.text() : '' } catch { return '' } }
+const locs = xml => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim())
+async function getText(url) {
+  try { const r = await fetch(url); return r.ok ? await r.text() : '' }
+  catch { return '' }
+}
 
 // Normalize any sitemap URL to the warm target (BASE), regardless of the host
 // the sitemap embeds.
@@ -82,12 +85,13 @@ const sitemapPages = () => subSitemapLocs(sm => !/product|categor/i.test(sm))
 let done = 0, failed = 0
 async function fetchPage(url, device) {
   try {
-    const r = await fetch(url, { headers: { 'user-agent': UA[device], accept: 'text/html' } })
+    const r = await fetch(url, { headers: { 'user-agent': UA[device], 'accept': 'text/html' } })
     const body = await r.text() // drain so SSR fully executes (and caches)
     done++
     if (!r.ok) failed++
     return { ok: r.ok, body }
-  } catch { done++; failed++; return { ok: false, body: '' } }
+  }
+  catch { done++; failed++; return { ok: false, body: '' } }
 }
 const warm = async (url, device) => (await fetchPage(url, device)).ok
 
@@ -124,8 +128,8 @@ async function main() {
   for (const device of DEVICES) {
     done = 0; failed = 0
     const td = Date.now()
-    await pool(listings, CONCURRENCY, l => warmListing(l, device))       // listings: every page
-    await pool(flat, CONCURRENCY, async (u) => {                          // products + static pages
+    await pool(listings, CONCURRENCY, l => warmListing(l, device)) // listings: every page
+    await pool(flat, CONCURRENCY, async (u) => { // products + static pages
       await warm(u, device)
       if (done % 25 === 0) process.stdout.write(`\r  [${device}] ${done} requests`)
     })

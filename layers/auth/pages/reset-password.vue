@@ -1,6 +1,9 @@
 <template>
   <div>
-    <NuxtLayout name="auth" :heading="$t('auth.resetPassword.heading')">
+    <NuxtLayout
+      name="auth"
+      :heading="$t('auth.resetPassword.heading')"
+    >
       <form
         class="mt-10 border border-primary-100 p-6 md:p-8"
         @submit.prevent="resetPasswordHandler"
@@ -61,14 +64,15 @@ async function resetPasswordWithRetry(email: string, max = 3) {
     try {
       await resetPassword({ email })
       return
-    } catch (e: any) {
+    }
+    catch (e: any) {
       const msg: string = resetPassword
-        e?.response?._data?.message || e?.message || ''
+      e?.response?._data?.message || e?.message || ''
 
       // erro de concorrência do Postgres (serialize)
       if (
-        msg.toLowerCase().includes('could not serialize access due to concurrent update') &&
-        i < max - 1
+        msg.toLowerCase().includes('could not serialize access due to concurrent update')
+        && i < max - 1
       ) {
         // pequeno backoff e tenta de novo
         await new Promise(r => setTimeout(r, 300 + i * 200))
@@ -88,7 +92,8 @@ async function resetPasswordHandler() {
 
     // sucesso
     if (toast) toast.success('We sent you a reset link (check your inbox).')
-  } catch (e: any) {
+  }
+  catch (e: any) {
     const raw = e?.response?._data?.message || e?.message || 'Server error'
 
     // mensagem amigável para limite do SMTP (Mailtrap Testing)
@@ -96,12 +101,15 @@ async function resetPasswordHandler() {
       if (toast) {
         toast.error('Email server rate-limited. Try again in a moment or use MailHog locally.')
       }
-    } else if (raw.toLowerCase().includes('invalid email')) {
+    }
+    else if (raw.toLowerCase().includes('invalid email')) {
       if (toast) toast.error('Invalid email.')
-    } else {
+    }
+    else {
       if (toast) toast.error(raw)
     }
-  } finally {
+  }
+  finally {
     isSubmitting.value = false
   }
 }

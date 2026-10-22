@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 // nuxt.config.ts
-import { defineNuxtConfig } from 'nuxt/config'
 import path from 'path'
+import { defineNuxtConfig } from 'nuxt/config'
 
 const swrCacheTime = Number(process.env?.NUXT_SWR_CACHE_TIME || 3600)
 const storageDriver = process.env.NUXT_STORAGE_DRIVER || 'memory'
@@ -13,9 +13,9 @@ const storageConfig = {
 }
 
 export default defineNuxtConfig({
- /*  extends: [                                                          
-    '@erpgap/recent-view-products',                                      
-   ], */ 
+  /*  extends: [
+    '@erpgap/recent-view-products',
+   ], */
   modules: [
     './modules/env-check',
     '@pinia/nuxt',
@@ -33,34 +33,13 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxt/icon',
   ],
-  /**
-   * The Odoo-generated routes are kept out of the typed-router union.
-   *
-   * nuxt-typed-router builds a TypeScript union of every route and formats it
-   * with prettier. The catalogue comes from Odoo - hundreds of categories and
-   * products - and a CMS page per published url, which put that file past a
-   * megabyte, and prettier overflows its call stack printing an expression
-   * that wide, taking `nuxt dev` down with it. It began as an intermittent
-   * failure on cold starts and became a permanent one as the catalogue grew.
-   *
-   * What it cost was autocomplete on those paths, which were never worth
-   * completing: they are generated from Odoo data, so nobody types them and no
-   * two installs have the same set. Routes that exist as files still get it.
-   *
-   * `ignoreRoutes` is matched against paths relative to the pages directory,
-   * hence the relative() rather than a plain string - and `disablePrettier`,
-   * which looks like the obvious fix, is accepted by the module and then never
-   * read (its updateOptions does not copy it).
-   */
-  nuxtTypedRouter: {
-    ignoreRoutes: [
-      'category/custom-pages/category-page.vue',
-      'product/custom-pages/product-page.vue',
-      // cms-page.vue is added by the CMS layer's cms-page-routes module.
-    ].map(file => path.relative(
-      path.resolve(__dirname, 'app/pages'),
-      path.resolve(__dirname, 'layers', file),
-    )),
+
+  $production: {
+    routeRules: {
+      '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+      '/products': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
+    },
+
   },
 
   devtools: { enabled: true },
@@ -77,9 +56,7 @@ export default defineNuxtConfig({
     },
   },
 
-   future: {
-    compatibilityVersion: 4,
-  },
+  css: ['~/assets/css/tailwind.css'],
 
   site: {
     url: process.env.NUXT_PUBLIC_MIDDLEWARE_URL,
@@ -126,20 +103,25 @@ export default defineNuxtConfig({
       currencySeparator: process.env.NUXT_PUBLIC_CURRENCY_SEPARATOR,
       currencyDecimal: process.env.NUXT_PUBLIC_CURRENCY_DECIMAL,
       currencyPrecision: process.env.NUXT_PUBLIC_CURRENCY_PRECISION,
-      siteURL: process.env.NUXT_PUBLIC_MIDDLEWARE_URL, 
+      siteURL: process.env.NUXT_PUBLIC_MIDDLEWARE_URL,
     },
+  },
+
+  alias: {
+    '#layers': path.resolve(__dirname, './layers'),
   },
 
   build: {
     transpile: ['vue-toastification'],
   },
 
- $production: {
-    routeRules: {
-      '/': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
-      '/products': { swr: Number(process.env?.NUXT_SWR_CACHE_TIME) },
-    },
+  routeRules: {
+    '/sitemap_index.xml': { swr: swrCacheTime },
+    '/__sitemap__/**': { swr: swrCacheTime },
+  },
 
+  future: {
+    compatibilityVersion: 4,
   },
 
   experimental: {
@@ -194,11 +176,6 @@ export default defineNuxtConfig({
     },
   },
 
-  routeRules: {
-    '/sitemap_index.xml': { swr: swrCacheTime },
-    '/__sitemap__/**': { swr: swrCacheTime },
-  },
-
   vite: {
     optimizeDeps: {
       include: ['lodash-es'],
@@ -209,25 +186,26 @@ export default defineNuxtConfig({
         '/layers': path.resolve(__dirname, './layers'),
         // The Odoo SDK pulls in axios (~35 KB) but only ever uses the ofetch
         // transport we give it, so stub axios out of the client bundle.
-        axios: path.resolve(__dirname, './stubs/axios.mjs'),
+        'axios': path.resolve(__dirname, './stubs/axios.mjs'),
       },
     },
   },
 
-  css: ['~/assets/css/tailwind.css'],
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        paths: {
+          // @adyen/adyen-web 4.x ships its types in dist/types, but its
+          // package.json "exports" has no "types" condition, so TypeScript
+          // cannot find them. Types only: the bundler resolves it as before.
+          '@adyen/adyen-web': [path.resolve(__dirname, 'node_modules/@adyen/adyen-web/dist/types/index.d.ts')],
+        },
+      },
+    },
+  },
 
   delayHydration: {
     mode: 'init',
-  },
-
-  // The app only uses a handful of `ion:` icons (the rest are inline SVG /
-  // UiLineIcon). Scan templates and bundle just those into the client so the
-  // Icon component doesn't fetch icon data from the Iconify API at runtime.
-  icon: {
-    clientBundle: {
-      scan: true,
-      sizeLimitKb: 256,
-    },
   },
 
   eslint: {
@@ -255,6 +233,16 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
   },
 
+  // The app only uses a handful of `ion:` icons (the rest are inline SVG /
+  // UiLineIcon). Scan templates and bundle just those into the client so the
+  // Icon component doesn't fetch icon data from the Iconify API at runtime.
+  icon: {
+    clientBundle: {
+      scan: true,
+      sizeLimitKb: 256,
+    },
+  },
+
   image: {
     providers: {
       odooProvider: {
@@ -272,6 +260,35 @@ export default defineNuxtConfig({
       'xs': 376,
     },
   },
+  /**
+   * The Odoo-generated routes are kept out of the typed-router union.
+   *
+   * nuxt-typed-router builds a TypeScript union of every route and formats it
+   * with prettier. The catalogue comes from Odoo - hundreds of categories and
+   * products - and a CMS page per published url, which put that file past a
+   * megabyte, and prettier overflows its call stack printing an expression
+   * that wide, taking `nuxt dev` down with it. It began as an intermittent
+   * failure on cold starts and became a permanent one as the catalogue grew.
+   *
+   * What it cost was autocomplete on those paths, which were never worth
+   * completing: they are generated from Odoo data, so nobody types them and no
+   * two installs have the same set. Routes that exist as files still get it.
+   *
+   * `ignoreRoutes` is matched against paths relative to the pages directory,
+   * hence the relative() rather than a plain string - and `disablePrettier`,
+   * which looks like the obvious fix, is accepted by the module and then never
+   * read (its updateOptions does not copy it).
+   */
+  nuxtTypedRouter: {
+    ignoreRoutes: [
+      'category/custom-pages/category-page.vue',
+      'product/custom-pages/product-page.vue',
+      // cms-page.vue is added by the CMS layer's cms-page-routes module.
+    ].map(file => path.relative(
+      path.resolve(__dirname, 'app/pages'),
+      path.resolve(__dirname, 'layers', file),
+    )),
+  },
 
   robots: {
     allow: ['/category/*', '/product/*'],
@@ -285,40 +302,23 @@ export default defineNuxtConfig({
       ...(storageUrl ? { url: storageUrl } : {}),
     },
     sitemaps: {
-    products: {
-      sources: ['/api/sitemap/urls/products'],
-      defaults: { changefreq: 'daily', priority: 0.8 },
-    },
-    categories: {
-      sources: ['/api/sitemap/urls/categories'],
-      defaults: { changefreq: 'weekly', priority: 1.0 },
-    },
-    pages: {
-      sources: ['/api/sitemap/urls/pages'],
-      defaults: { changefreq: 'weekly', priority: 0.9 },
-    },
-  },
-  },
-
-  tailwindcss: {
-    viewer: false,
-  },
-
-  typescript: {
-    tsConfig: {
-      compilerOptions: {
-        paths: {
-          // @adyen/adyen-web 4.x ships its types in dist/types, but its
-          // package.json "exports" has no "types" condition, so TypeScript
-          // cannot find them. Types only: the bundler resolves it as before.
-          '@adyen/adyen-web': [path.resolve(__dirname, 'node_modules/@adyen/adyen-web/dist/types/index.d.ts')],
-        },
+      products: {
+        sources: ['/api/sitemap/urls/products'],
+        defaults: { changefreq: 'daily', priority: 0.8 },
+      },
+      categories: {
+        sources: ['/api/sitemap/urls/categories'],
+        defaults: { changefreq: 'weekly', priority: 1.0 },
+      },
+      pages: {
+        sources: ['/api/sitemap/urls/pages'],
+        defaults: { changefreq: 'weekly', priority: 0.9 },
       },
     },
   },
 
-  alias: {
-    '#layers': path.resolve(__dirname, './layers')
+  tailwindcss: {
+    viewer: false,
   },
 
   viewport: {

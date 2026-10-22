@@ -71,7 +71,11 @@ const toggleWishlist = (variant?: Product) => {
          not `aspect-ratio` — iOS WebKit mis-sizes aspect-ratio in flex/grid, which
          collapsed these images. The image is absolutely positioned to fill. -->
     <div class="relative pt-[100%] overflow-hidden rounded-[3px] bg-gradient-to-br from-[#efefef] to-[#e2e2e2]">
-      <NuxtLink :to="slug" prefetch class="absolute inset-0 block">
+      <NuxtLink
+        :to="slug"
+        prefetch
+        class="absolute inset-0 block"
+      >
         <NuxtImg
           provider="odooProvider"
           :src="imageUrl"
@@ -91,7 +95,11 @@ const toggleWishlist = (variant?: Product) => {
         class="absolute top-3 right-3 z-[2] grid place-items-center w-[44px] h-[44px] rounded-full bg-white/90 text-primary-700 transition-colors duration-200 hover:text-black"
         @click="toggleWishlist(firstVariant)"
       >
-        <UiLineIcon name="heart" :filled="!!firstVariant?.id && isInWishlist(firstVariant.id)" :size="24" />
+        <UiLineIcon
+          name="heart"
+          :filled="!!firstVariant?.id && isInWishlist(firstVariant.id)"
+          :size="24"
+        />
       </button>
     </div>
 
@@ -117,7 +125,11 @@ const toggleWishlist = (variant?: Product) => {
         v-if="(ratingCount ?? 0) > 0"
         class="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[13px] text-primary-500"
       >
-        <SfRating size="xs" :value="Math.round(rating ?? 0)" :max="5" />
+        <SfRating
+          size="xs"
+          :value="Math.round(rating ?? 0)"
+          :max="5"
+        />
         <span class="whitespace-nowrap">({{ (rating ?? 0).toFixed(1) }})</span>
         <span class="whitespace-nowrap">{{ ratingCount }} reviews</span>
       </div>

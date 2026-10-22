@@ -42,13 +42,27 @@ onUnmounted(() => { orderCrumb.value = '' })
       to="/my-account/my-orders"
       class="inline-flex items-center gap-1.5 text-[13px] text-primary-500 hover:text-black transition-colors mb-6"
     >
-      <svg width="16" height="12" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.6">
-        <path d="M17 7H2M7 1 2 7l5 6" stroke-linecap="round" stroke-linejoin="round" />
+      <svg
+        width="16"
+        height="12"
+        viewBox="0 0 18 14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+      >
+        <path
+          d="M17 7H2M7 1 2 7l5 6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
       </svg>
       Back to orders
     </NuxtLink>
 
-    <div v-if="!loaded" class="flex justify-center py-24">
+    <div
+      v-if="!loaded"
+      class="flex justify-center py-24"
+    >
       <SfLoaderCircular size="xl" />
     </div>
 
@@ -60,16 +74,28 @@ onUnmounted(() => { orderCrumb.value = '' })
       <!-- Meta strip -->
       <div class="grid grid-cols-3 border border-primary-100 rounded-[3px] divide-x divide-primary-100 mb-10">
         <div class="p-4">
-          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">Date</p>
-          <p class="text-[14px]">{{ formatDate(order.dateOrder) }}</p>
+          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">
+            Date
+          </p>
+          <p class="text-[14px]">
+            {{ formatDate(order.dateOrder) }}
+          </p>
         </div>
         <div class="p-4">
-          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">Items</p>
-          <p class="text-[14px]">{{ totalItems }}</p>
+          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">
+            Items
+          </p>
+          <p class="text-[14px]">
+            {{ totalItems }}
+          </p>
         </div>
         <div class="p-4">
-          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">Total</p>
-          <p class="text-[14px] font-medium">{{ $currency(Number(order.amountTotal) || 0) }}</p>
+          <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">
+            Total
+          </p>
+          <p class="text-[14px] font-medium">
+            {{ $currency(Number(order.amountTotal) || 0) }}
+          </p>
         </div>
       </div>
 
@@ -95,7 +121,9 @@ onUnmounted(() => { orderCrumb.value = '' })
             />
           </span>
           <div class="flex-1 min-w-0">
-            <p class="font-medium leading-snug">{{ line.product?.name }}</p>
+            <p class="font-medium leading-snug">
+              {{ line.product?.name }}
+            </p>
             <ul
               v-if="line.product?.variantAttributeValues?.length"
               class="mt-2 text-[12px] tracking-[0.14em] uppercase font-medium space-y-1"
@@ -139,7 +167,10 @@ onUnmounted(() => { orderCrumb.value = '' })
       </div>
     </template>
 
-    <p v-else class="py-16 text-center text-primary-500 font-light">
+    <p
+      v-else
+      class="py-16 text-center text-primary-500 font-light"
+    >
       We couldn't load this order.
     </p>
   </div>

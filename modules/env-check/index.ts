@@ -1,6 +1,6 @@
-import { defineNuxtModule } from '@nuxt/kit'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { defineNuxtModule } from '@nuxt/kit'
 
 const ENV_EXAMPLE_FILE = '.env.example'
 
@@ -12,13 +12,13 @@ export default defineNuxtModule({
     nuxt.hook('build:before', () => {
       const envExamplePath = resolve(nuxt.options.rootDir, ENV_EXAMPLE_FILE)
       const requiredKeys = parseEnvKeys(envExamplePath)
-      const missing = requiredKeys.filter((key) => !(key in process.env))
+      const missing = requiredKeys.filter(key => !(key in process.env))
 
       if (missing.length > 0) {
         throw new Error(
           [
             'Missing required environment variables:',
-            ...missing.map((key) => `  - ${key}`),
+            ...missing.map(key => `  - ${key}`),
             '',
             'Add them to your .env file (see .env.example).',
           ].join('\n'),

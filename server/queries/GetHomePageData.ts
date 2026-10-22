@@ -1,4 +1,4 @@
-export default  
+export default
 `query GetHomePageData(
     $currentPage: Int = 1
     $pageSize: Int = 6

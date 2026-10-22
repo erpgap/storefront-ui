@@ -1,6 +1,6 @@
 import { useDebounceFn, useToggle } from '@vueuse/core'
-import type { Product } from '~~/graphql'
 import { useProductTemplateList } from '../../product/composables/useProductTemplateList'
+import type { Product } from '~~/graphql'
 
 /**
  * @Responsibilities
@@ -99,7 +99,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     searchModalOpen.value = false
     if (selected?.firstVariant) {
       router.push(
-        `${mountUrlSlugForProductVariant(selected.firstVariant as Product)}`
+        `${mountUrlSlugForProductVariant(selected.firstVariant as Product)}`,
       )
     }
   }
@@ -154,5 +154,3 @@ function watch(arg0: () => any, arg1: (v: any) => void, arg2: { immediate: boole
   throw new Error('Function not implemented.')
 } */
 }
-
-

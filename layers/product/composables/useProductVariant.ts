@@ -48,8 +48,8 @@ export const useProductVariant = (slug: string) => {
   const categoriesForBreadcrumb = computed(() =>
     productVariant.value?.categories
       ?.filter(category => category.name !== 'All')
-      ?.map((item: { name: any; slug: any }) => ({ name: item.name, link: item.slug }))
-    ?? [],
+      ?.map((item: { name: any, slug: any }) => ({ name: item.name, link: item.slug }))
+      ?? [],
   )
 
   const breadcrumbs = computed(() => [

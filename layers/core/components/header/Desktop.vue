@@ -59,7 +59,10 @@ onClickOutside(searchPanelRef, () => {
     <header class="text-black w-full">
       <div class="narrow-container h-[76px] grid grid-cols-[1fr_auto_1fr] items-center gap-4">
         <!-- Left: category navigation -->
-        <nav class="hidden lg:flex gap-8" aria-label="SF Navigation">
+        <nav
+          class="hidden lg:flex gap-8"
+          aria-label="SF Navigation"
+        >
           <NuxtLink
             v-for="item in navItems"
             :key="item.label"
@@ -72,7 +75,11 @@ onClickOutside(searchPanelRef, () => {
         </nav>
 
         <!-- Center: brand -->
-        <NuxtLink to="/" aria-label="Alokai, home" class="justify-self-center text-[26px] md:text-[28px] text-black">
+        <NuxtLink
+          to="/"
+          aria-label="Alokai, home"
+          class="justify-self-center text-[26px] md:text-[28px] text-black"
+        >
           <AlokaiLogo />
         </NuxtLink>
 
@@ -86,7 +93,10 @@ onClickOutside(searchPanelRef, () => {
             class="text-black hover:bg-white active:bg-white rounded-md"
             @click="toggleSearch()"
           >
-            <UiLineIcon name="search" class="!text-black" />
+            <UiLineIcon
+              name="search"
+              class="!text-black"
+            />
           </SfButton>
           <HeaderButtonLogin />
           <HeaderButtonWishlist />
@@ -101,7 +111,11 @@ onClickOutside(searchPanelRef, () => {
         enter-from-class="opacity-0 -translate-y-2"
         leave-to-class="opacity-0 -translate-y-2"
       >
-        <div v-if="isSearchOpen" ref="searchPanelRef" class="border-t border-primary-100 bg-white">
+        <div
+          v-if="isSearchOpen"
+          ref="searchPanelRef"
+          class="border-t border-primary-100 bg-white"
+        >
           <div class="narrow-container py-4">
             <form
               ref="formSearchTemplateRef"
@@ -128,7 +142,11 @@ onClickOutside(searchPanelRef, () => {
                       class="rounded-l-none hover:bg-transparent active:bg-transparent"
                       @click="handleSearchEnter"
                     >
-                      <Icon name="ion:search" size="20px" class="text-black" />
+                      <Icon
+                        name="ion:search"
+                        size="20px"
+                        class="text-black"
+                      />
                     </SfButton>
                   </span>
                 </template>

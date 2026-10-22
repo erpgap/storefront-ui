@@ -69,7 +69,7 @@ defineExpose({
           'w-[26px] h-[26px] rounded-full grid place-items-center text-[12px] shrink-0',
           valid ? 'bg-black text-white'
           : showErrors ? 'border border-red-300 text-red-600'
-          : 'border border-primary-200 text-primary-500',
+            : 'border border-primary-200 text-primary-500',
         ]"
       >
         <template v-if="valid">✓</template>

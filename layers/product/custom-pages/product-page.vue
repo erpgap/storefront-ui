@@ -187,7 +187,10 @@ const categoryEyebrow = computed(() => {
 <template>
   <NuxtErrorBoundary>
     <div class="narrow-container">
-      <UiBreadcrumb :breadcrumbs="breadcrumbs" class="mt-6 mb-8" />
+      <UiBreadcrumb
+        :breadcrumbs="breadcrumbs"
+        class="mt-6 mb-8"
+      />
 
       <div v-if="productTemplate?.id">
         <!-- Gallery + purchase -->
@@ -195,11 +198,17 @@ const categoryEyebrow = computed(() => {
           <!-- Gallery + details -->
           <section class="lg:self-start">
             <div class="max-w-[560px] mx-auto lg:mx-0">
-              <UiGallery :main-image="mainImage" :thumbs="thumbs" />
+              <UiGallery
+                :main-image="mainImage"
+                :thumbs="thumbs"
+              />
             </div>
 
             <!-- Details (under the gallery so the purchase card can stay sticky longer) -->
-            <div v-if="productTemplate?.description" class="mt-12 lg:mt-16 max-w-[560px] mx-auto lg:mx-0">
+            <div
+              v-if="productTemplate?.description"
+              class="mt-12 lg:mt-16 max-w-[560px] mx-auto lg:mx-0"
+            >
               <h2 class="font-light tracking-[-0.01em] text-[clamp(22px,2.4vw,30px)] mb-4">
                 {{ $t('productDetails') }}
               </h2>
@@ -214,7 +223,10 @@ const categoryEyebrow = computed(() => {
             class="mt-10 lg:mt-0 lg:sticky lg:top-32 lg:self-start h-fit"
             data-testid="purchase-card"
           >
-            <p v-if="categoryEyebrow" class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-400 mb-3">
+            <p
+              v-if="categoryEyebrow"
+              class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-400 mb-3"
+            >
               {{ categoryEyebrow }}
             </p>
             <h1
@@ -225,8 +237,15 @@ const categoryEyebrow = computed(() => {
             </h1>
 
             <!-- Rating -->
-            <div v-if="ratingCount > 0" class="inline-flex items-center gap-2 mt-3 text-[13px] text-primary-500">
-              <SfRating size="xs" :value="Math.round(ratingAvg)" :max="5" />
+            <div
+              v-if="ratingCount > 0"
+              class="inline-flex items-center gap-2 mt-3 text-[13px] text-primary-500"
+            >
+              <SfRating
+                size="xs"
+                :value="Math.round(ratingAvg)"
+                :max="5"
+              />
               <span>({{ ratingAvg.toFixed(1) }})</span>
               <span class="text-primary-200">·</span>
               <span>{{ ratingCount }} reviews</span>
@@ -240,15 +259,28 @@ const categoryEyebrow = computed(() => {
                   <span class="text-[16px] text-primary-300 line-through">{{ $currency(getRegularPrice) }}</span>
                   <span class="text-[13px] text-primary-500">You save {{ $currency(savings) }}</span>
                 </template>
-                <span v-else class="text-[24px] font-medium">{{ $currency(getRegularPrice) }}</span>
+                <span
+                  v-else
+                  class="text-[24px] font-medium"
+                >{{ $currency(getRegularPrice) }}</span>
               </template>
-              <div v-else class="w-32 h-8 bg-primary-50 animate-pulse rounded-[2px]" />
+              <div
+                v-else
+                class="w-32 h-8 bg-primary-50 animate-pulse rounded-[2px]"
+              />
             </div>
 
             <!-- Color variants -->
-            <div v-if="colorOptions.length" class="mt-8" data-testid="product-properties">
+            <div
+              v-if="colorOptions.length"
+              class="mt-8"
+              data-testid="product-properties"
+            >
               <p class="text-[12px] tracking-[0.16em] uppercase font-medium text-primary-400 mb-3">
-                Color<span v-if="selectedColorLabel" class="text-black"> — {{ selectedColorLabel }}</span>
+                Color<span
+                  v-if="selectedColorLabel"
+                  class="text-black"
+                > — {{ selectedColorLabel }}</span>
               </p>
               <fieldset class="flex flex-wrap gap-2.5">
                 <button
@@ -299,11 +331,18 @@ const categoryEyebrow = computed(() => {
                 class="min-h-[54px] w-[54px] shrink-0 !border !border-primary-200 !text-black hover:!border-black hover:!bg-transparent"
                 @click="handleWishlistToggle"
               >
-                <UiLineIcon name="heart" :filled="isInWishlist(productVariant.id as number)" :size="20" />
+                <UiLineIcon
+                  name="heart"
+                  :filled="isInWishlist(productVariant.id as number)"
+                  :size="20"
+                />
               </SfButton>
             </div>
 
-            <UiFormError v-if="cartError" class="mt-3">
+            <UiFormError
+              v-if="cartError"
+              class="mt-3"
+            >
               {{ cartError }}
             </UiFormError>
 
@@ -311,7 +350,10 @@ const categoryEyebrow = computed(() => {
               v-show="productsInCart"
               class="mt-3 flex items-center gap-1.5 text-[13px] text-primary-500"
             >
-              <UiLineIcon name="cart" :size="16" />
+              <UiLineIcon
+                name="cart"
+                :size="16"
+              />
               {{ productsInCart }} in your cart
             </p>
 
@@ -326,14 +368,23 @@ const categoryEyebrow = computed(() => {
       <!-- Recommendations (separated from the product details area above) -->
       <div class="mt-20 md:mt-32">
         <section v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether">
-          <LazyProductSlider text="Frequently Bought Together" :product-template-list="productTemplate.frequentlyBoughtTogether" />
+          <LazyProductSlider
+            text="Frequently Bought Together"
+            :product-template-list="productTemplate.frequentlyBoughtTogether"
+          />
         </section>
         <section v-if="!loadingProductTemplate && productTemplate?.alternativeProducts">
-          <LazyProductSlider text="Similar Products" :product-template-list="productTemplate.alternativeProducts" />
+          <LazyProductSlider
+            text="Similar Products"
+            :product-template-list="productTemplate.alternativeProducts"
+          />
         </section>
         <section class="mb-16">
           <ClientOnly>
-            <LazyProductRecentViewSlider text="Your Recent Views" :exclude-id="Number(productTemplate?.id)" />
+            <LazyProductRecentViewSlider
+              text="Your Recent Views"
+              :exclude-id="Number(productTemplate?.id)"
+            />
           </ClientOnly>
         </section>
       </div>

@@ -52,7 +52,11 @@ onMounted(() => {
       class="w-full p-4 md:p-6 mb-6 !justify-start typography-text-base !bg-[#f7f7f7]"
       variant="neutral"
     >
-      <i18n-t scope="global" tag="span" keypath="auth.signup.bannerText">
+      <i18n-t
+        scope="global"
+        tag="span"
+        keypath="auth.signup.bannerText"
+      >
         <template #login>
           <SfLink
             :tag="NuxtLink"
@@ -132,7 +136,10 @@ onMounted(() => {
           for="terms"
         >
           *
-          <i18n-t scope="global" keypath="form.termsAndConditionsLabel">
+          <i18n-t
+            scope="global"
+            keypath="form.termsAndConditionsLabel"
+          >
             <template #terms>
               <SfLink
                 href="#"
@@ -202,8 +209,8 @@ onMounted(() => {
         variant="neutral"
       >
         <i18n-t
-          scope="global"
           id="signUpModalDesc"
+          scope="global"
           keypath="auth.signup.modal.description"
           tag="p"
         >

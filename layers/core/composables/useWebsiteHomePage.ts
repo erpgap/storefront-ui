@@ -14,7 +14,7 @@ export const useWebsiteHomePage = () => {
           {},
           { headers: useRequestHeaders() },
         ), {
-        deep: true
+        deep: true,
       })
 
       if (data.value) {

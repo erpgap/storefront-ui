@@ -1,4 +1,3 @@
-
 declare module '#app' {
   interface NuxtApp {
     $getImage: (src: string, w?: number, h?: number, filename?: string) => string

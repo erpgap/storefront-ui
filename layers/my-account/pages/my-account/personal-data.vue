@@ -141,13 +141,17 @@ onMounted(async () => {
           <dt class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-0.5">
             {{ $t('contactInfo.name') }}
           </dt>
-          <dd class="text-primary-800">{{ user?.name || '—' }}</dd>
+          <dd class="text-primary-800">
+            {{ user?.name || '—' }}
+          </dd>
         </div>
         <div>
           <dt class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-0.5">
             {{ $t('contactInfo.email') }}
           </dt>
-          <dd class="text-primary-800">{{ user?.email || '—' }}</dd>
+          <dd class="text-primary-800">
+            {{ user?.email || '—' }}
+          </dd>
         </div>
       </dl>
       <AccountContactInformation

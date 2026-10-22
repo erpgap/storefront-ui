@@ -48,9 +48,9 @@
 </template>
 
 <script setup lang="ts">
+import type { Component, Ref } from 'vue'
 import ProviderStripe from './ProviderStripe.vue'
 import ProviderAdyen from './ProviderAdyen.vue'
-import type { Component, Ref } from 'vue'
 
 defineProps({
   step: { type: [String, Number], default: '' },

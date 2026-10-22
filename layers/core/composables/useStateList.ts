@@ -1,4 +1,5 @@
 import { useToast } from 'vue-toastification'
+import { useAsyncData, useNuxtApp, useState } from 'nuxt/app'
 import { QueryName } from '~~/server/queries'
 
 import type {
@@ -6,8 +7,6 @@ import type {
   CountryFilterInput,
   Country,
 } from '~~/graphql'
-import { useAsyncData, useNuxtApp } from 'nuxt/app'
-import { useState } from 'nuxt/app'
 
 export const useStateList = (countryId: number) => {
   const { $sdk } = useNuxtApp()
@@ -20,12 +19,12 @@ export const useStateList = (countryId: number) => {
     }
     try {
       const { data } = await useAsyncData(
-       async () => await $sdk().odoo.query<
-        CountryFilterInput,
-        { country: Country }
-      >({ queryName: QueryName.GetStatesQuery }, param.value), {
-        deep: true
-      })
+        async () => await $sdk().odoo.query<
+          CountryFilterInput,
+          { country: Country }
+        >({ queryName: QueryName.GetStatesQuery }, param.value), {
+          deep: true,
+        })
       states.value = data.value?.country.states || []
     }
     catch (error: any) {

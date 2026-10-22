@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div id="dropin-container" ref="dropinDivElement" class="mt-4" />
+    <div
+      id="dropin-container"
+      ref="dropinDivElement"
+      class="mt-4"
+    />
   </div>
 </template>
 
@@ -108,8 +112,8 @@ onMounted(async () => {
 
     onError: (error: any) => {
       if (
-        error?.errorText !== 'error was cleared' &&
-        error?.errorText !== 'incomplete field'
+        error?.errorText !== 'error was cleared'
+        && error?.errorText !== 'incomplete field'
       ) {
         // log / toast se quiser
       }

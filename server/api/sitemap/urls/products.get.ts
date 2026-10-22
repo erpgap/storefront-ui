@@ -1,5 +1,5 @@
-import type { SitemapUrlInput } from '#sitemap/types'
 import { getSlugsByModel, SlugModels } from '../../../utils/slugStorage'
+import type { SitemapUrlInput } from '#sitemap/types'
 
 export default defineSitemapEventHandler(async () => {
   const slugs = await getSlugsByModel(SlugModels.product)

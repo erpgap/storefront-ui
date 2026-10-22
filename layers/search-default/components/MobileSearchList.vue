@@ -19,11 +19,27 @@ const makeSearchBold = (text: string) => {
 </script>
 
 <template>
-  <ul v-if="(hits?.length ?? 0) > 0" tabindex="-1" role="listbox" class="space-y-2 bg-white rounded-md w-full overflow-hidden">
-    <li v-for="(hit, index) in hits" :key="hit.objectID" class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-      role="option" @click="$emit('select', hit)">
-      <span class="text-black text-sm font-medium capitalize" v-html="makeSearchBold(hit.name)" />
+  <ul
+    v-if="(hits?.length ?? 0) > 0"
+    tabindex="-1"
+    role="listbox"
+    class="space-y-2 bg-white rounded-md w-full overflow-hidden"
+  >
+    <li
+      v-for="(hit, index) in hits"
+      :key="hit.objectID"
+      class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+      role="option"
+      @click="$emit('select', hit)"
+    >
+      <span
+        class="text-black text-sm font-medium capitalize"
+        v-html="makeSearchBold(hit.name)"
+      />
     </li>
   </ul>
-  <LazySearchNoResult v-else :search-text="searchText" />
+  <LazySearchNoResult
+    v-else
+    :search-text="searchText"
+  />
 </template>

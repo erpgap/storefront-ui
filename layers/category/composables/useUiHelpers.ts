@@ -26,8 +26,7 @@ export const useUiHelpers = () => {
     getUniqueUrlFromRouteFilteringByAttributes(route.path, route),
   )
 
-  
- const getFacetsFromURL = (
+  const getFacetsFromURL = (
     query: Record<string, any>,
     ids: number[] = [],
     defaultPageSize = LISTING_PAGE_SIZE,
@@ -56,9 +55,9 @@ export const useUiHelpers = () => {
     const minPrice = minS && !isNaN(Number(minS)) ? Number(minS) : undefined
     const maxPrice = maxS && !isNaN(Number(maxS)) ? Number(maxS) : undefined
 
-    const availabilityRaw = query?.Availability || query?.in_stock;
-    const availabilityStr =
-      String(availabilityRaw).toLowerCase() === 'true'
+    const availabilityRaw = query?.Availability || query?.in_stock
+    const availabilityStr
+      = String(availabilityRaw).toLowerCase() === 'true'
         ? 'true'
         : undefined
 
@@ -67,8 +66,8 @@ export const useUiHelpers = () => {
 
     const sortParts = String(query?.sort ?? '').split(',')
     const [sortField, sortDirection] = sortParts
-    const sort =
-      sortParts.length === 2 && sortField !== undefined
+    const sort
+      = sortParts.length === 2 && sortField !== undefined
         ? ({ [sortField]: sortDirection } as any)
         : undefined
 
@@ -91,7 +90,6 @@ export const useUiHelpers = () => {
     }
   }
 
-
   const facetsFromUrlToFilter = () => {
     const q = route.query as Record<string, any>
     const out: any[] = []
@@ -101,14 +99,15 @@ export const useUiHelpers = () => {
       const raw = String(q[label] ?? '')
       if (!raw) return
 
-
       const parts = raw.split(',').filter(Boolean)
       for (const value of parts) {
         if (label === 'price' || label === 'Price') {
           out.push({ filterName: 'price', label: value, id: value })
-        } else if (label === 'availability' || label === 'Availability' || label === 'in_stock') {
+        }
+        else if (label === 'availability' || label === 'Availability' || label === 'in_stock') {
           out.push({ filterName: 'Availability', label: 'true', id: 'true' })
-        } else {
+        }
+        else {
           out.push({ filterName: label, label: value, id: value })
         }
       }
@@ -134,20 +133,19 @@ export const useUiHelpers = () => {
 
   const isStockSelected = () =>
     selectedFilters.value.some(
-      (f: { filterName: string; id: any }) => f.filterName === 'Availability' && String(f.id) === 'true',
+      (f: { filterName: string, id: any }) => f.filterName === 'Availability' && String(f.id) === 'true',
     )
-
 
   const changeFilters = (filters: any[], sort: string) => {
     const q: Record<string, string> = {}
 
     for (const el of filters) {
       if (String(el.filterName).toLowerCase() === 'price') {
-        q.price = String(el.id) 
+        q.price = String(el.id)
         continue
       }
       if (el.filterName === 'Availability') {
-        q.Availability = 'true' 
+        q.Availability = 'true'
         continue
       }
       const key = String(el.filterName)

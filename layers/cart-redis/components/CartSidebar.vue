@@ -53,14 +53,27 @@ const goTo = (to: string) => {
           <span class="text-[13px] tracking-[0.16em] uppercase font-medium text-black">
             Cart <span class="text-primary-400">({{ totalItemsInCart }})</span>
           </span>
-          <SfButton variant="tertiary" square aria-label="Close cart" class="!text-black" @click="closeCartSideBar()">
+          <SfButton
+            variant="tertiary"
+            square
+            aria-label="Close cart"
+            class="!text-black"
+            @click="closeCartSideBar()"
+          >
             <SfIconClose />
           </SfButton>
         </div>
 
         <!-- Items -->
-        <div v-if="lines.length" class="flex-1 overflow-y-auto px-5 divide-y divide-primary-100">
-          <div v-for="line in lines" :key="line?.id" class="flex gap-4 py-5">
+        <div
+          v-if="lines.length"
+          class="flex-1 overflow-y-auto px-5 divide-y divide-primary-100"
+        >
+          <div
+            v-for="line in lines"
+            :key="line?.id"
+            class="flex gap-4 py-5"
+          >
             <NuxtLink
               :to="mountUrlSlugForProductVariant(line?.product as Product) || ''"
               class="shrink-0 w-[72px] h-[88px] overflow-hidden rounded-[2px] bg-primary-50"
@@ -115,23 +128,44 @@ const goTo = (to: string) => {
         </div>
 
         <!-- Empty -->
-        <div v-else class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-5">
-          <NuxtImg src="/img/content/empty-cart.webp" alt="" aria-hidden="true" class="w-[150px] h-[150px] object-contain drop-shadow-[0_16px_20px_rgba(0,0,0,0.14)]" />
-          <p class="font-light text-[20px] tracking-[-0.01em]">Your cart is empty</p>
-          <SfButton class="min-h-[48px] px-7 text-[13px] font-medium" @click="goTo('/products')">
+        <div
+          v-else
+          class="flex-1 flex flex-col items-center justify-center text-center px-6 gap-5"
+        >
+          <NuxtImg
+            src="/img/content/empty-cart.webp"
+            alt=""
+            aria-hidden="true"
+            class="w-[150px] h-[150px] object-contain drop-shadow-[0_16px_20px_rgba(0,0,0,0.14)]"
+          />
+          <p class="font-light text-[20px] tracking-[-0.01em]">
+            Your cart is empty
+          </p>
+          <SfButton
+            class="min-h-[48px] px-7 text-[13px] font-medium"
+            @click="goTo('/products')"
+          >
             Browse products
           </SfButton>
         </div>
 
         <!-- Footer -->
-        <div v-if="lines.length" class="border-t border-primary-100 p-5 shrink-0 space-y-4">
+        <div
+          v-if="lines.length"
+          class="border-t border-primary-100 p-5 shrink-0 space-y-4"
+        >
           <div class="flex items-center justify-between">
             <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">Subtotal</span>
             <span class="text-[16px] font-medium">{{ $currency(cart?.order?.amountTotal || 0) }}</span>
           </div>
-          <p class="text-[12px] text-primary-400">Shipping &amp; taxes calculated at checkout.</p>
+          <p class="text-[12px] text-primary-400">
+            Shipping &amp; taxes calculated at checkout.
+          </p>
           <div class="flex flex-col gap-2.5">
-            <SfButton class="w-full min-h-[52px] text-[13px] font-medium" @click="goTo('/checkout')">
+            <SfButton
+              class="w-full min-h-[52px] text-[13px] font-medium"
+              @click="goTo('/checkout')"
+            >
               Checkout
             </SfButton>
             <SfButton

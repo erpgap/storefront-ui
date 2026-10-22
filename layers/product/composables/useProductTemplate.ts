@@ -23,7 +23,7 @@ export const useProductTemplate = (slug: string) => {
 
   const breadcrumbs = computed(() => {
     const breadcrumbList: BreadcrumbItem[] = [{ label: 'Home', link: '/' }]
-    const categoryChain: { name: string; slug: string }[] = []
+    const categoryChain: { name: string, slug: string }[] = []
 
     const categories = productTemplate.value?.categories
     if (categories && categories.length > 0) {

@@ -3,7 +3,7 @@ import { SfButton, SfIconSort, SfIconExpandMore, SfIconCheck, useDropdown } from
 import { useRoute } from 'vue-router'
 import { useUiHelpers } from '~~/layers/category/composables/useUiHelpers'
 
-type SortOption = { id: string; value: string; attrName: string }
+type SortOption = { id: string, value: string, attrName: string }
 
 const sortOptions: SortOption[] = [
   { id: 'popular-desc', value: 'popular,DESC', attrName: 'Top Sellers' },

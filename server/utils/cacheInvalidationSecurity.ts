@@ -4,7 +4,7 @@ import type { H3Event } from 'h3'
 const INVALIDATION_WINDOW_MS = 5 * 60 * 1000
 
 declare global {
-  // eslint-disable-next-line no-var
+
   var __storefrontCacheInvalidationReplayStore: Map<string, number> | undefined
 }
 

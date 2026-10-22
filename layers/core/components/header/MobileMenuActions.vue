@@ -30,7 +30,11 @@ const { isAuthenticated } = useAuth()
           class="bg-primary-50 h-full w-full py-4 text-center flex items-center justify-center gap-3"
           @click="$emit('navigate')"
         >
-          <UiLineIcon name="heart" :size="22" class="!text-black" />
+          <UiLineIcon
+            name="heart"
+            :size="22"
+            class="!text-black"
+          />
           {{ $t('wishlist.wishlist') }}
         </NuxtLink>
       </li>

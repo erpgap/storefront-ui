@@ -31,7 +31,6 @@ const thumbs = computed(() =>
   lines.value.map(l => l?.product?.imageUrl).filter(Boolean).slice(0, 4),
 )
 
-
 // Don't decide card-vs-empty until the first fetch resolves, so the empty
 // state never flashes before orders load.
 const loaded = ref(false)
@@ -44,9 +43,14 @@ onMounted(async () => {
 <template>
   <div class="w-full max-w-[640px]">
     <p class="text-primary-500 font-light">
-      Welcome back<template v-if="firstName">, {{ firstName }}</template>.
+      Welcome back<template v-if="firstName">
+        , {{ firstName }}
+      </template>.
     </p>
-    <p v-if="email" class="mt-1 text-[13px] text-primary-400">
+    <p
+      v-if="email"
+      class="mt-1 text-[13px] text-primary-400"
+    >
       Signed in as <span class="text-primary-700">{{ email }}</span>
     </p>
 
@@ -64,7 +68,10 @@ onMounted(async () => {
         </NuxtLink>
       </div>
 
-      <div v-if="!loaded" class="flex justify-center py-10">
+      <div
+        v-if="!loaded"
+        class="flex justify-center py-10"
+      >
         <SfLoaderCircular size="lg" />
       </div>
 
@@ -75,7 +82,10 @@ onMounted(async () => {
       >
         <span class="block text-[15px] font-medium">#{{ latestOrder.name }}</span>
 
-        <div v-if="thumbs.length" class="flex gap-2 mt-4">
+        <div
+          v-if="thumbs.length"
+          class="flex gap-2 mt-4"
+        >
           <span
             v-for="(src, i) in thumbs"
             :key="i"
@@ -105,14 +115,28 @@ onMounted(async () => {
           </span>
           <span class="inline-flex items-center gap-1.5 text-[13px] text-primary-500 group-hover:text-black transition-colors whitespace-nowrap">
             View order
-            <svg width="16" height="12" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M1 7h15M11 1l5 6-5 6" stroke-linecap="round" stroke-linejoin="round" />
+            <svg
+              width="16"
+              height="12"
+              viewBox="0 0 18 14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+            >
+              <path
+                d="M1 7h15M11 1l5 6-5 6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </span>
         </div>
       </NuxtLink>
 
-      <div v-else class="border border-primary-100 rounded-[3px] p-6 text-center">
+      <div
+        v-else
+        class="border border-primary-100 rounded-[3px] p-6 text-center"
+      >
         <p class="text-primary-500 font-light mb-4">
           You haven't placed any orders yet.
         </p>

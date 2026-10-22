@@ -1,14 +1,14 @@
-import { readonly, ref } from 'vue';
+import { readonly, ref } from 'vue'
 
-const loading = ref(false);
+const loading = ref(false)
 
 export const useCheckout = () => {
   const setLoading = (isLoading: boolean) => {
-    loading.value = isLoading;
-  };
+    loading.value = isLoading
+  }
 
   return {
     loading: readonly(loading),
     setLoading,
-  };
-};
+  }
+}

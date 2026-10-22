@@ -71,7 +71,8 @@ export const useProductGetters = (
     if (variantCount > 1 && variantSource) {
       addFromEntity(variantSource)
       if (!images.length && pt) addFromEntity(pt)
-    } else if (pt) {
+    }
+    else if (pt) {
       addFromEntity(pt)
       if (!images.length && variantSource) addFromEntity(variantSource)
     }

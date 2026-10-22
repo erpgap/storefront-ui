@@ -42,7 +42,11 @@ else {
           stroke-width="1.5"
           aria-hidden="true"
         >
-          <path d="m5 12.5 4.5 4.5L19 7" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="m5 12.5 4.5 4.5L19 7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </span>
 

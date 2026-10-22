@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SfButton, SfLoaderCircular } from '@storefront-ui/vue'
 
-import { type Order } from '~~/graphql'
+import type { Order } from '~~/graphql'
 import { formatDate } from '~~/app/utils/date'
 
 definePageMeta({
@@ -30,7 +30,10 @@ const NuxtLink = resolveComponent('NuxtLink')
 </script>
 
 <template>
-  <div v-if="loaded && orders?.orders?.length" class="col-span-3">
+  <div
+    v-if="loaded && orders?.orders?.length"
+    class="col-span-3"
+  >
     <ul class="border-t border-primary-100 divide-y divide-primary-100">
       <li
         v-for="order in orders.orders"
@@ -81,8 +84,19 @@ const NuxtLink = resolveComponent('NuxtLink')
             <span class="font-medium">{{ $currency(order?.amountTotal || 0) }}</span>
             <span class="inline-flex items-center gap-1.5 text-[13px] text-primary-500 group-hover:text-black transition-colors whitespace-nowrap">
               {{ $t("account.myOrders.details") }}
-              <svg width="16" height="12" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M1 7h15M11 1l5 6-5 6" stroke-linecap="round" stroke-linejoin="round" />
+              <svg
+                width="16"
+                height="12"
+                viewBox="0 0 18 14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              >
+                <path
+                  d="M1 7h15M11 1l5 6-5 6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
             </span>
           </div>
@@ -91,7 +105,10 @@ const NuxtLink = resolveComponent('NuxtLink')
     </ul>
   </div>
 
-  <div v-else-if="!loaded" class="col-span-3 flex justify-center py-24">
+  <div
+    v-else-if="!loaded"
+    class="col-span-3 flex justify-center py-24"
+  >
     <SfLoaderCircular size="xl" />
   </div>
 

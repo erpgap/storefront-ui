@@ -1,6 +1,6 @@
 import { onClickOutside, useToggle } from '@vueuse/core'
 import { debounce } from 'lodash-es'
-import type { QueryProductsArgs } from '~~/graphql';
+import type { QueryProductsArgs } from '~~/graphql'
 
 /**
  * @Responsabilities
@@ -41,17 +41,17 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   )
 
   const search = async () => {
-    console.log('Search function called with searchInputValue:', searchInputValue.value);
+    console.log('Search function called with searchInputValue:', searchInputValue.value)
     loading.value = true
 
     const params: QueryProductsArgs = {
       ...getFacetsFromURL(route.query),
       search: searchInputValue.value,
-    };
-    
+    }
+
     await loadProductTemplateList(params)
     showResultSearch.value = true
-    console.log('showResultSearch after loadProductTemplateList:', showResultSearch.value);
+    console.log('showResultSearch after loadProductTemplateList:', showResultSearch.value)
 
     loading.value = false
   }
@@ -59,19 +59,20 @@ export const useSearch = (formSearchTemplateRef?: any) => {
 
   // Watch searchInputValue to trigger search-as-you-type
   watch(searchInputValue, (newValue) => {
-    console.log('searchInputValue changed:', newValue);
+    console.log('searchInputValue changed:', newValue)
     if (newValue) {
       debouncedSearch()
-    } else {
+    }
+    else {
       showResultSearch.value = false
-      console.log('showResultSearch (cleared):', showResultSearch.value);
+      console.log('showResultSearch (cleared):', showResultSearch.value)
       // Optionally clear productTemplateList if desired when input is empty
       // productTemplateList.value = []
     }
   })
 
   const searchHits = computed(() => {
-    console.log('searchHits computed:', productTemplateList.value);
+    console.log('searchHits computed:', productTemplateList.value)
     return productTemplateList.value || []
   })
 
@@ -102,7 +103,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
 
   onClickOutside(formSearchTemplateRef, () => {
     showResultSearch.value = false
-    console.log('onClickOutside: showResultSearch set to false');
+    console.log('onClickOutside: showResultSearch set to false')
   })
 
   return {

@@ -62,7 +62,7 @@ const goToPage = (page: number) => {
       v-if="!pagination.pages.includes(1)"
       type="button"
       class="pg"
-      :class="{ 'cur': currentPage === 1 }"
+      :class="{ cur: currentPage === 1 }"
       @click="goToPage(1)"
     >
       1
@@ -79,7 +79,7 @@ const goToPage = (page: number) => {
       :key="page"
       type="button"
       class="pg"
-      :class="{ 'cur': currentPage === page }"
+      :class="{ cur: currentPage === page }"
       :aria-current="currentPage === page || undefined"
       @click="goToPage(page)"
     >
@@ -96,7 +96,7 @@ const goToPage = (page: number) => {
       v-if="!pagination.pages.includes(pagination.totalPages)"
       type="button"
       class="pg"
-      :class="{ 'cur': currentPage === pagination.totalPages }"
+      :class="{ cur: currentPage === pagination.totalPages }"
       @click="goToPage(pagination.totalPages)"
     >
       {{ pagination.totalPages }}
