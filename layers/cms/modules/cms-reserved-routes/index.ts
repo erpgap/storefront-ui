@@ -1,4 +1,4 @@
-import { defineNuxtModule } from '@nuxt/kit'
+import { defineNuxtModule } from 'nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 
 // Routes injected by routes-generator for Odoo records. Those addresses are

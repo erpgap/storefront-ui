@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { defineNuxtModule } from '@nuxt/kit'
+import { defineNuxtModule } from 'nuxt/kit'
 
 const ENV_EXAMPLE_FILE = '.env.example'
 

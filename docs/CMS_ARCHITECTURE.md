@@ -416,7 +416,7 @@ it as a bug. Treat it as part of the publish feature, not a follow-up.
    dispatches to `cms-page.vue`, so pages created after the last build resolve.
 5. **New queries** in `server/queries/` (`GetCmsPageQuery`,
    `GetCmsPageDraftQuery`, `GetCmsPagesQuery`), registered in the `QueryName`
-   enum in `server/queries/index.ts`. Run `yarn codegen` after schema changes.
+   enum in `server/queries/index.ts`. Run `pnpm codegen` after schema changes.
 6. **Migrate the eight hardcoded content pages** by seeding block data. Keep
    `contact.vue`'s form as a dedicated `contact_form` block.
 7. **Homepage as a CMS page** — make `/` an `alokai.website.page`, so the

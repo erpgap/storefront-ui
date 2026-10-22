@@ -405,17 +405,17 @@ const filters = [
 ## Setup and Installation
 
 ```bash
-# Install dependencies
-yarn
+# Install dependencies (pnpm, via corepack: `corepack enable`)
+pnpm install
 
 # Configure environment variables
 cp .env.example .env
 
 # Run in development mode
-yarn dev
+pnpm dev
 
 # Build for production
-yarn build
+pnpm build
 ```
 
 ## Cache Warming

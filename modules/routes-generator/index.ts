@@ -1,5 +1,5 @@
 import { join } from 'node:path'
-import { defineNuxtModule, extendRouteRules } from '@nuxt/kit'
+import { defineNuxtModule, extendRouteRules } from 'nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
 

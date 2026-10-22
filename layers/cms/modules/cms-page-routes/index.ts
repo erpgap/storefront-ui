@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url'
 import { join, relative } from 'node:path'
-import { defineNuxtModule, extendRouteRules } from '@nuxt/kit'
+import { defineNuxtModule, extendRouteRules } from 'nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
 

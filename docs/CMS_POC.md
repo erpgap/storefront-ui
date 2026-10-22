@@ -12,9 +12,9 @@ built, and every decision behind it.
 ## Run it
 
 ```bash
-yarn dev
+pnpm dev
 # After a GraphQL schema change in Odoo, regenerate the types:
-yarn codegen
+pnpm codegen
 ```
 
 Then **http://localhost:3000/cms** and sign in with an Odoo account that
@@ -83,9 +83,9 @@ is deliberately short.
 ## Tests
 
 ```bash
-yarn test        # unit — 92
-yarn test:e2e    # browser, needs a running storefront — 19
-yarn test:smoke  # http only, points anywhere — 16
+pnpm test        # unit — 92
+pnpm test:e2e    # browser, needs a running storefront — 19
+pnpm test:smoke  # http only, points anywhere — 16
 
 # Odoo addon — 237. --workers 0 is required or HttpCase fails.
 cd /path/to/alokai-odoo
@@ -140,7 +140,7 @@ layers/cms-editor/            THE EDITOR — never reaches a shopper
 
 `sharp@0.32.6` periodically failed to self-register inside the Nitro dev
 worker, which 500d every `/_ipx/` request and left the whole site without
-images until `yarn dev` was restarted. It also carried four libvips CVEs and
+images until `pnpm dev` was restarted. It also carried four libvips CVEs and
 two libheif ones, fixed in 0.35.4.
 
 An earlier attempt took the documented route - `@nuxt/image` 1.11 → 2.x, for
@@ -152,7 +152,7 @@ a production storefront.
 That turned out to be the wrong way round. The note it left behind said the
 version "cannot be raised on its own" because `ipx@2` pins `sharp ^0.32.6`.
 That is true of the declared range and false of the installed tree: a single
-yarn `resolutions` entry raises sharp to 0.35.5 under `ipx@2.1.1`, and ipx
+`pnpm.overrides` entry raises sharp to 0.35.5 under `ipx@2.1.1`, and ipx
 only uses the part of sharp's API that did not change.
 
 Verified rather than assumed. `/_ipx/f_webp&q_72&s_376x212/img/home/hero.webp`

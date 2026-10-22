@@ -1,4 +1,4 @@
-import { defineNuxtModule } from '@nuxt/kit'
+import { defineNuxtModule } from 'nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 
 // Layer page directories whose routes must never appear in the sitemap:

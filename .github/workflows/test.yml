@@ -15,15 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Version from package.json's packageManager field.
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-          cache: yarn
+          cache: pnpm
 
       # --frozen-lockfile so a drifting lockfile fails here rather than in a
       # deploy. --ignore-scripts skips `nuxt prepare`, which would try to
       # reach Odoo for codegen and is not needed to run unit tests.
-      - run: yarn install --frozen-lockfile --ignore-scripts
+      - run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Unit tests
-        run: yarn test
+        run: pnpm test

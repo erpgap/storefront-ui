@@ -1,4 +1,4 @@
-import { defineNuxtModule } from '@nuxt/kit'
+import { defineNuxtModule } from 'nuxt/kit'
 
 const VIEWPORT_DEVICE_HEADER = 'x-viewport-device'
 
