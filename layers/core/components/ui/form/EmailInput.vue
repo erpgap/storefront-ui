@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isValidEmail } from '~~/app/utils/validation'
 
-const model = defineModel()
+const model = defineModel<string>()
 
 const emit = defineEmits(['is-field-valid'])
 

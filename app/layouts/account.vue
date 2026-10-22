@@ -1,97 +1,100 @@
 <template>
-  <TheHeader />
+  <!-- One root, as Nuxt needs for layout transitions. -->
+  <div>
+    <TheHeader />
 
-  <main class="narrow-container">
-    <UiBreadcrumb
-      :breadcrumbs="breadcrumbs"
-      class="mt-5 mb-10"
-    />
-    <div ata-testid="account-layout">
-      <h1
-        v-if="isRoot"
-        class="mb-10 md:mb-10 md:mx-0 font-bold typography-headline-3 md:typography-headline-2"
-      >
-        {{ $t("account.heading") }}
-      </h1>
-      <div
-        v-else
-        class="flex items-center gap-3 mb-10 mt-4"
-      >
-        <SfButton
-          :tag="NuxtLink"
-          to="/my-account"
-          class="flex md:hidden whitespace-nowrap"
-          size="sm"
-          variant="tertiary"
+    <main class="narrow-container">
+      <UiBreadcrumb
+        :breadcrumbs="breadcrumbs"
+        class="mt-5 mb-10"
+      />
+      <div ata-testid="account-layout">
+        <h1
+          v-if="isRoot"
+          class="mb-10 md:mb-10 md:mx-0 font-bold typography-headline-3 md:typography-headline-2"
         >
-          <template #prefix>
-            <SfIconArrowBack />
-          </template>
-          {{ $t("account.back") }}
-        </SfButton>
-        <h1 class="font-bold typography-headline-3">
-          {{ findCurrentPage?.label }}
+          {{ $t("account.heading") }}
         </h1>
-      </div>
-      <div
-        class="flex flex-col md:flex-row gap-10 pb-20"
-        data-testid="account-page-sidebar"
-      >
-        <nav
-          :class="[
-            'order-2 md:order-1 md:self-start border-t md:border border-primary-100 md:rounded-md min-w-[280px] md:p-2 max-h-[500px] overflow-y-auto md:block',
-            { hidden: !isRoot },
-          ]"
+        <div
+          v-else
+          class="flex items-center gap-3 mb-10 mt-4"
         >
-          <ul class="py-2 md:py-0">
-            <li
-              v-for="item in navItems"
-              :key="item.link"
-            >
-              <NuxtLink
-                :to="item.link"
-                :class="[
-                  'flex items-center justify-between gap-3 px-4 py-3 md:py-2.5 rounded-md text-[14px] transition-colors',
-                  isActive(item)
-                    ? 'bg-primary-50 text-black font-medium'
-                    : 'text-primary-600 hover:text-black hover:bg-primary-50',
-                ]"
+          <SfButton
+            :tag="NuxtLink"
+            to="/my-account"
+            class="flex md:hidden whitespace-nowrap"
+            size="sm"
+            variant="tertiary"
+          >
+            <template #prefix>
+              <SfIconArrowBack />
+            </template>
+            {{ $t("account.back") }}
+          </SfButton>
+          <h1 class="font-bold typography-headline-3">
+            {{ findCurrentPage?.label }}
+          </h1>
+        </div>
+        <div
+          class="flex flex-col md:flex-row gap-10 pb-20"
+          data-testid="account-page-sidebar"
+        >
+          <nav
+            :class="[
+              'order-2 md:order-1 md:self-start border-t md:border border-primary-100 md:rounded-md min-w-[280px] md:p-2 max-h-[500px] overflow-y-auto md:block',
+              { hidden: !isRoot },
+            ]"
+          >
+            <ul class="py-2 md:py-0">
+              <li
+                v-for="item in navItems"
+                :key="item.link"
               >
-                {{ item.label }}
-                <SfIconChevronRight
-                  size="sm"
-                  class="md:hidden text-primary-300"
-                />
-              </NuxtLink>
-            </li>
-          </ul>
+                <NuxtLink
+                  :to="item.link"
+                  :class="[
+                    'flex items-center justify-between gap-3 px-4 py-3 md:py-2.5 rounded-md text-[14px] transition-colors',
+                    isActive(item)
+                      ? 'bg-primary-50 text-black font-medium'
+                      : 'text-primary-600 hover:text-black hover:bg-primary-50',
+                  ]"
+                >
+                  {{ item.label }}
+                  <SfIconChevronRight
+                    size="sm"
+                    class="md:hidden text-primary-300"
+                  />
+                </NuxtLink>
+              </li>
+            </ul>
 
-          <div class="my-2 border-t border-primary-100" />
+            <div class="my-2 border-t border-primary-100" />
 
-          <button
-            type="button"
-            class="w-full flex items-center px-4 py-3 md:py-2.5 rounded-md text-[14px] text-primary-600 hover:text-black hover:bg-primary-50 transition-colors"
-            @click="handleLogout"
-          >
-            {{ $t("account.logout") }}
-          </button>
-        </nav>
-        <div class="flex-1 order-1 md:order-2">
-          <section
-            class="grid grid-cols-1 2xs:grid-cols-2 gap-4 md:gap-y-6 md:gap-x-2 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 md:mb-5"
-            data-testid="category-grid"
-          >
-            <slot />
-          </section>
+            <button
+              type="button"
+              class="w-full flex items-center px-4 py-3 md:py-2.5 rounded-md text-[14px] text-primary-600 hover:text-black hover:bg-primary-50 transition-colors"
+              @click="handleLogout"
+            >
+              {{ $t("account.logout") }}
+            </button>
+          </nav>
+          <div class="flex-1 order-1 md:order-2">
+            <section
+              class="grid grid-cols-1 2xs:grid-cols-2 gap-4 md:gap-y-6 md:gap-x-2 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 md:mb-5"
+              data-testid="category-grid"
+            >
+              <slot />
+            </section>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
-  <LazyTheFooter hydrate-on-visible />
-  <LazyBottomNavbar v-if="$viewport.isLessThan('desktopSmall')" />
+    </main>
+    <LazyTheFooter hydrate-on-visible />
+    <LazyBottomNavbar v-if="$viewport.isLessThan('desktopSmall')" />
 
-  <WishlistSidebar />
-  <CartSidebar />
+    <WishlistSidebar />
+    <CartSidebar />
+  </div>
 </template>
 
 <script setup>

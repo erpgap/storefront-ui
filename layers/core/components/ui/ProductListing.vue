@@ -57,7 +57,9 @@ provide('stockCount', stockCount)
 const viewport = useViewport()
 const maxVisiblePages = computed(() => (viewport.isGreaterOrEquals('desktopSmall') ? 5 : 1))
 
-watch(isTabletScreen, (isTablet: boolean) => { if (isTablet && isOpen.value) close() })
+watch(isTabletScreen, (isTablet: boolean) => {
+  if (isTablet && isOpen.value) close()
+})
 
 const attributes = computed(() =>
   Array.isArray(organizedAttributes.value) ? organizedAttributes.value : [],
@@ -99,6 +101,10 @@ if (props.seoEntity) {
   }, 'Category', `${origin}${pathname}`))
 }
 
+// Before the first await: in <script setup> what follows an await is no
+// longer guaranteed to run with the component instance.
+defineExpose({ totalItems, loading, loadProductTemplateList })
+
 // On the client's first render the listing is already in the SSR payload, so
 // only fetch when we don't have it yet (server render, or client-side
 // navigation to a different listing). This avoids a duplicate Odoo query on
@@ -115,8 +121,6 @@ if (status.value !== 'success') {
 if (currentPage.value > totalPages.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
-
-defineExpose({ totalItems, loading, loadProductTemplateList })
 </script>
 
 <template>

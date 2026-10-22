@@ -32,8 +32,12 @@ const totalItems = computed(() =>
 )
 // Publish the order reference so the account layout can show it in the breadcrumb.
 const orderCrumb = useState<string>('account-order-crumb', () => '')
-watch(() => order.value?.name, (n) => { orderCrumb.value = n ? `#${n}` : '' }, { immediate: true })
-onUnmounted(() => { orderCrumb.value = '' })
+watch(() => order.value?.name, (n) => {
+  orderCrumb.value = n ? `#${n}` : ''
+}, { immediate: true })
+onUnmounted(() => {
+  orderCrumb.value = ''
+})
 </script>
 
 <template>

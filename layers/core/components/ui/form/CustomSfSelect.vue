@@ -31,8 +31,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // An id once chosen, '' (or null, from the placeholder option) before.
   modelValue: {
-    type: Number,
+    type: [Number, String],
     default: '',
   },
   wrapperClassName: {

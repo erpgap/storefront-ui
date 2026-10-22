@@ -18,6 +18,16 @@ defineProps({
   },
 })
 
+// Before the first await: in <script setup> what follows an await is no
+// longer guaranteed to run with the component instance.
+const sectionEl = ref<HTMLElement>()
+const valid = computed(() => !!radioModel.value)
+defineExpose({
+  validate(): HTMLElement | null {
+    return valid.value ? null : sectionEl.value ?? null
+  },
+})
+
 await loadDeliveryMethods()
 
 // Auto-select the first method whenever the list becomes available. This runs
@@ -35,14 +45,6 @@ const handleSelectShippingMethod = async (shippingMethodId: number) => {
   radioModel.value = String(shippingMethodId)
   await setDeliveryMethod(shippingMethodId)
 }
-
-const sectionEl = ref<HTMLElement>()
-const valid = computed(() => !!radioModel.value)
-defineExpose({
-  validate(): HTMLElement | null {
-    return valid.value ? null : sectionEl.value ?? null
-  },
-})
 </script>
 
 <template>

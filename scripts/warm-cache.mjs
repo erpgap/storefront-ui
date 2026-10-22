@@ -41,15 +41,25 @@ const UA = {
 
 const locs = xml => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim())
 async function getText(url) {
-  try { const r = await fetch(url); return r.ok ? await r.text() : '' }
-  catch { return '' }
+  try {
+    const r = await fetch(url)
+    return r.ok ? await r.text() : ''
+  }
+  catch {
+    return ''
+  }
 }
 
 // Normalize any sitemap URL to the warm target (BASE), regardless of the host
 // the sitemap embeds.
 const toBase = (loc) => {
-  try { const u = new URL(loc); return `${BASE}${u.pathname}${u.search}` }
-  catch { return loc }
+  try {
+    const u = new URL(loc)
+    return `${BASE}${u.pathname}${u.search}`
+  }
+  catch {
+    return loc
+  }
 }
 
 // The sitemap is the single source of truth for every URL (built from the
@@ -91,7 +101,11 @@ async function fetchPage(url, device) {
     if (!r.ok) failed++
     return { ok: r.ok, body }
   }
-  catch { done++; failed++; return { ok: false, body: '' } }
+  catch {
+    done++
+    failed++
+    return { ok: false, body: '' }
+  }
 }
 const warm = async (url, device) => (await fetchPage(url, device)).ok
 
@@ -126,7 +140,8 @@ async function main() {
 
   const flat = [...products, ...pages]
   for (const device of DEVICES) {
-    done = 0; failed = 0
+    done = 0
+    failed = 0
     const td = Date.now()
     await pool(listings, CONCURRENCY, l => warmListing(l, device)) // listings: every page
     await pool(flat, CONCURRENCY, async (u) => { // products + static pages
@@ -135,7 +150,7 @@ async function main() {
     })
     process.stdout.write(`\r  [${device}] ${done} requests done, ${failed} non-200, ${((Date.now() - td) / 1000).toFixed(0)}s\n`)
   }
-  console.log(`\n✓ done in ${((Date.now() - t0) / 1000).toFixed(0)}s`)
+  console.log(`\n✓ done in ${((Date.now() - t0) / 1000).toFixed(0)}s, ${listingPages} listing pages`)
 }
 
 main()

@@ -6,7 +6,7 @@ const props = defineProps({
   },
 })
 
-const model = defineModel({ default: 0 })
+const model = defineModel<number>({ default: 0 })
 
 const { loadStates, states } = useStateList(props.countryId)
 
@@ -38,6 +38,7 @@ watch(
       </option>
       <option
         v-for="state in states"
+        :key="state?.id"
         :value="state?.id"
       >
         {{ state.name }}

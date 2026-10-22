@@ -40,14 +40,10 @@ export const getUniqueUrlFromRouteFilteringByAttributes = (
 ): string => {
   cleanPath = cleanPath?.endsWith('/') ? cleanPath?.slice(0, -1) : cleanPath
 
-  const newQuery = { ...route?.query }
   const attributesToExclude = ['list-view']
-
-  Object.keys(newQuery).forEach((key) => {
-    if (attributesToExclude.includes(key)) {
-      delete newQuery[key]
-    }
-  })
+  const newQuery = Object.fromEntries(
+    Object.entries(route?.query ?? {}).filter(([key]) => !attributesToExclude.includes(key)),
+  )
 
   const hashQueryParams = hash(newQuery, { algorithm: 'md5' })
 

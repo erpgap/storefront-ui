@@ -2,7 +2,7 @@
 const { loadCountries, countries } = useCountryList()
 await loadCountries()
 
-const model = defineModel({ default: 0 })
+const model = defineModel<number>({ default: 0 })
 </script>
 
 <template>
