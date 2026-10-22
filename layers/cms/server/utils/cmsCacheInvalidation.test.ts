@@ -42,6 +42,20 @@ describe('CMS cache invalidation', () => {
       })
     })
 
+    it('removes the copy cached for every device class', async () => {
+      // Cached routes vary by x-viewport-device, so one page is stored once
+      // per layout, each key carrying the header after the path.
+      storage.keys = [
+        'nitro:routes:_:women.FFFF6666:xviewportdevice.MOB1.json',
+        'nitro:routes:_:women.FFFF6666:xviewportdevice.TAB2.json',
+        'nitro:routes:_:women.FFFF6666:xviewportdevice.DSK3.json',
+        'nitro:routes:_:womenshoes.HHHH8888:xviewportdevice.MOB1.json',
+      ]
+      const deleted = await invalidateCmsPageCache('/women')
+      expect(deleted).toHaveLength(3)
+      expect(storage.keys).toEqual(['nitro:routes:_:womenshoes.HHHH8888:xviewportdevice.MOB1.json'])
+    })
+
     it('does not purge a page whose path merely starts the same', async () => {
       // /autumn-drop-43106 must not evict /autumn-drop-431062.
       const deleted = await invalidateCmsPageCache('/autumn-drop-43106')
