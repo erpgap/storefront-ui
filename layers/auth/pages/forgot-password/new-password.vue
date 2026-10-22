@@ -42,85 +42,83 @@ const handleSubmit = async () => {
         <h1 class="text-3xl font-bold mb-4">
           Change your password
         </h1>
-        <template>
-          <form
-            data-testid="account-forms-password"
-            @submit.prevent="handleSubmit"
-          >
-            <label class="block my-4">
-              <UiFormLabel>{{
-                $t("account.accountSettings.personalData.newPassword")
-              }}</UiFormLabel>
-              <SfInput
-                v-model="changePasswordArgs.newPassword"
-                name="password"
-                :type="firstNewPasswordVisible ? 'text' : 'password'"
-                :class="{ 'text-red-600': passwordsDoesntMatch }"
-                required
-                @change="passwordsDoesntMatch = false"
-              >
-                <template #suffix>
-                  <button
-                    type="button"
-                    @click="firstNewPasswordVisible = !firstNewPasswordVisible"
-                  >
-                    <SfIconVisibility />
-                  </button>
-                </template>
-              </SfInput>
-              <UiFormHelperText class="block">
-                {{
-                  $t("account.accountSettings.personalData.passwordHelp")
-                }}</UiFormHelperText>
-            </label>
-            <label class="block">
-              <UiFormLabel>{{
-                $t("account.accountSettings.personalData.newPasswordAgain")
-              }}</UiFormLabel>
-              <SfInput
-                v-model="repeatPassword"
-                name="password"
-                :type="secondNewPasswordVisible ? 'text' : 'password'"
-                :class="{ 'text-red-600': passwordsDoesntMatch }"
-                required
-                @change="passwordsDoesntMatch = false"
-              >
-                <template #suffix>
-                  <button
-                    type="button"
-                    @click="
-                      secondNewPasswordVisible = !secondNewPasswordVisible
-                    "
-                  >
-                    <SfIconVisibility />
-                  </button>
-                </template>
-              </SfInput>
-            </label>
-            <p
-              v-if="passwordsDoesntMatch"
-              class="mt-3 text-[13px] text-red-700"
-              role="alert"
+        <form
+          data-testid="account-forms-password"
+          @submit.prevent="handleSubmit"
+        >
+          <label class="block my-4">
+            <UiFormLabel>{{
+              $t("account.accountSettings.personalData.newPassword")
+            }}</UiFormLabel>
+            <SfInput
+              v-model="changePasswordArgs.newPassword"
+              name="password"
+              :type="firstNewPasswordVisible ? 'text' : 'password'"
+              :class="{ 'text-red-600': passwordsDoesntMatch }"
+              required
+              @change="passwordsDoesntMatch = false"
             >
-              Passwords don't match.
-            </p>
-            <div class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4">
-              <SfButton
-                type="reset"
-                variant="secondary"
-                @click="$emit('on-cancel')"
-              >
-                {{ $t("contactInfo.cancel") }}
-              </SfButton>
-              <SfButton
-                type="submit"
-                class="min-w-[120px]"
-              >
-                {{ $t("account.accountSettings.personalData.changePassword") }}
-              </SfButton>
-            </div>
-          </form>
-        </template>
+              <template #suffix>
+                <button
+                  type="button"
+                  @click="firstNewPasswordVisible = !firstNewPasswordVisible"
+                >
+                  <SfIconVisibility />
+                </button>
+              </template>
+            </SfInput>
+            <UiFormHelperText class="block">
+              {{
+                $t("account.accountSettings.personalData.passwordHelp")
+              }}</UiFormHelperText>
+          </label>
+          <label class="block">
+            <UiFormLabel>{{
+              $t("account.accountSettings.personalData.newPasswordAgain")
+            }}</UiFormLabel>
+            <SfInput
+              v-model="repeatPassword"
+              name="password"
+              :type="secondNewPasswordVisible ? 'text' : 'password'"
+              :class="{ 'text-red-600': passwordsDoesntMatch }"
+              required
+              @change="passwordsDoesntMatch = false"
+            >
+              <template #suffix>
+                <button
+                  type="button"
+                  @click="
+                    secondNewPasswordVisible = !secondNewPasswordVisible
+                  "
+                >
+                  <SfIconVisibility />
+                </button>
+              </template>
+            </SfInput>
+          </label>
+          <p
+            v-if="passwordsDoesntMatch"
+            class="mt-3 text-[13px] text-red-700"
+            role="alert"
+          >
+            Passwords don't match.
+          </p>
+          <div class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4">
+            <SfButton
+              type="reset"
+              variant="secondary"
+              @click="$emit('on-cancel')"
+            >
+              {{ $t("contactInfo.cancel") }}
+            </SfButton>
+            <SfButton
+              type="submit"
+              class="min-w-[120px]"
+            >
+              {{ $t("account.accountSettings.personalData.changePassword") }}
+            </SfButton>
+          </div>
+        </form>
       </div>
     </div>
   </div>
