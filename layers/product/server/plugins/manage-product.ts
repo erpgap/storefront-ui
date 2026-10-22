@@ -1,20 +1,23 @@
 import { QueryName } from '~~/server/queries/'
 
 /**
- * This plugin is responsible for managing the product response.
- * It listens to the POST requests and updates the product appending the STOCK from redis.
+ * Adds the product's stock, from Redis, to a product variant response, for
+ * the website this request belongs to.
  */
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hook('beforeResponse', async (event, { body }) => {
-    const websiteId = 1 // Example website ID, adjust when defined
+    if (event.method !== 'POST' || !event.path.startsWith('/api/odoo/query')) return
+
     const requestBody = await readBody(event)
+    if (requestBody?.[0]?.queryName !== QueryName.GetProductVariantQuery) return
 
-    if (event.method == 'POST' && requestBody[0]?.queryName === QueryName.GetProductVariantQuery) {
-      const id = (body as any).productVariant?.product?.id
+    const product = (body as any)?.productVariant?.product
+    if (!product?.id) return
 
-      const stock = await useStorage('stock').getItem(`stock:product-${id}`);
-
-      (body as any).productVariant.product.stock = stock?.[websiteId] || 0
-    }
+    const [website, stock] = await Promise.all([
+      odooWebsite(event),
+      useStorage('stock').getItem(`stock:product-${product.id}`),
+    ])
+    product.stock = stockForWebsite(stock, website?.id)
   })
 })
