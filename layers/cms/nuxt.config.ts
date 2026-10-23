@@ -26,14 +26,16 @@ export default defineNuxtConfig({
     // `robots` (@nuxtjs/robots) is outside Nitro's route rule type: see cms-editor's config.
     '/api/cms/**': { swr: false, prerender: false, robots: false } as NitroRouteConfig,
   },
-  // Published CMS pages get a sitemap of their own, merged into the
-  // storefront's @nuxtjs/sitemap config. Read live from Odoo, so pages created
-  // after a deploy are listed too.
+  // Published CMS pages are listed in the `pages` sitemap, with the
+  // storefront's other pages: a crawler has no use for a sitemap of "pages
+  // made in the CMS". Layer configs are merged with defu, which appends this
+  // source to the storefront's own `pages` sources (and creates the sitemap in
+  // a storefront that has none). Read live from Odoo, so pages created after a
+  // deploy are listed too.
   sitemap: {
     sitemaps: {
-      'cms-pages': {
+      pages: {
         sources: ['/api/cms/sitemap'],
-        defaults: { changefreq: 'weekly', priority: 0.6 },
       },
     },
   },

@@ -1,5 +1,5 @@
 /**
- * Published CMS pages, for the `cms-pages` sitemap (see this layer's
+ * Published CMS pages, for the `pages` sitemap (see this layer's
  * nuxt.config).
  *
  * Read from Odoo on each (cached) sitemap render rather than from the routes
@@ -29,6 +29,6 @@ export default defineEventHandler(async (event) => {
     .map(page => ({
       loc: page.websiteUrl!.startsWith('/') ? page.websiteUrl! : `/${page.websiteUrl}`,
       ...(page.publishingDate ? { lastmod: page.publishingDate } : {}),
-      _sitemap: 'cms-pages',
+      _sitemap: 'pages',
     }))
 })

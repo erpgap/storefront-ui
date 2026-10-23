@@ -24,8 +24,9 @@ const EXCLUDED_PATHS = new Set([
 
 // Pages injected at build time for dynamic Odoo content: products and
 // categories by the routes-generator module, CMS pages by the CMS layer's
-// cms-page-routes. Each has a sitemap of its own, so they must not be
-// duplicated here.
+// cms-page-routes. Products and categories have sitemaps of their own; CMS
+// pages are added to `pages` by the CMS layer, read live from Odoo. Listed
+// here too, they would be in the sitemap twice.
 const DYNAMIC_PAGE_FILES = [
   'custom-pages/product-page.vue',
   'custom-pages/category-page.vue',
