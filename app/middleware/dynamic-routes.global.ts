@@ -1,52 +1,68 @@
 import { useRouter } from 'nuxt/app'
 
+/**
+ * Routes every URL the build did not know, through the slug keys Odoo keeps
+ * in Redis (`slug:<url>` -> model), without asking Odoo whether it exists.
+ *
+ * A URL with no key is a 404. Products and categories get a route of their
+ * own on the fly; a CMS page is left to the catch-all that renders it.
+ */
 export default defineNuxtRouteMiddleware(async (to) => {
-  // Skip middleware if route exists in the static route tree
-  if (to.matched.length > 0 || to.path.startsWith('/api/')) {
+  // A real route claimed it. The CMS catch-all matches everything, so it
+  // flags itself rather than counting as a claim.
+  const unclaimed = to.matched.length === 0 || to.meta.catchAll === true
+  if (!unclaimed || to.path.startsWith('/api/')) {
     return
   }
 
   const router = useRouter()
-  const slug = to.path
+  // Odoo stores addresses without a trailing slash.
+  const slug = to.path.replace(/(.)\/$/, '$1')
 
+  const notFound = () => abortNavigation(createError({
+    statusCode: 404,
+    statusMessage: 'Page not found',
+    fatal: true,
+  }))
+
+  let routeType: string | null | undefined
   try {
     const { data: routeData } = await useFetch(`/api/route-resolver`, {
       params: {
         slug,
       },
     })
-
-    if (!routeData?.value?.data) {
-      if (slug.startsWith('/.well-known/')) {
-        return
-      }
-      console.warn('[dynamic-routes] Route does not exist or invalid:', slug)
-      return
-    }
-
-    const routeComponents = {
-      category: () => import('#layers/category/custom-pages/category-page.vue'),
-      product: () => import('#layers/product/custom-pages/product-page.vue'),
-    }
-
-    const routeType = routeData.value.data as keyof typeof routeComponents
-    const component = routeComponents[routeType]
-
-    if (!component) {
-      console.warn('[dynamic-routes] Invalid route type:', routeType)
-      return
-    }
-
-    router.addRoute({
-      path: to.path,
-      name: slug.replace(/^\//, '').replace(/\//g, '-'),
-      component: component,
-    })
-
-    return to.fullPath
+    routeType = routeData.value?.data
   }
   catch (error) {
     console.error('[dynamic-routes] Error in dynamic route middleware:', error)
-    return
   }
+
+  if (!routeType) {
+    return notFound()
+  }
+
+  if (routeType === 'websitePage') {
+    // Rendered by the catch-all, when the CMS layer is there to provide one.
+    return to.meta.catchAll ? undefined : notFound()
+  }
+
+  const routeComponents = {
+    category: () => import('#layers/category/custom-pages/category-page.vue'),
+    product: () => import('#layers/product/custom-pages/product-page.vue'),
+  }
+
+  const component = routeComponents[routeType as keyof typeof routeComponents]
+  if (!component) {
+    console.warn('[dynamic-routes] Invalid route type:', routeType)
+    return notFound()
+  }
+
+  router.addRoute({
+    path: to.path,
+    name: slug.replace(/^\//, '').replace(/\//g, '-'),
+    component: component,
+  })
+
+  return to.fullPath
 })
