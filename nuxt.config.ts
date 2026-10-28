@@ -72,8 +72,7 @@ export default defineNuxtConfig({
     cacheInvalidationSigningSecret: process.env.NUXT_CACHE_INVALIDATION_SIGNING_SECRET,
     cacheInvalidationStorageDriver: storageDriver,
     cacheInvalidationStorageUrl: storageUrl,
-    // Zeppln: see server/plugins/zeppln-init.ts. Strings, as cmsHomepage below.
-    zepplnInit: process.env.NUXT_ZEPPLN_INIT ?? 'false',
+    // Zeppln: see server/utils/zepplnSecurity.ts.
     zepplnToken: process.env.NUXT_ZEPPLN_TOKEN ?? '',
     // Per-user / order-specific data must never be served from the shared SWR
     // cache — on /checkout and /my-account that would show a stale snapshot
