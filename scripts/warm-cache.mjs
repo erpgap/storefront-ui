@@ -25,8 +25,9 @@
  */
 
 import { LISTING_PAGE_SIZE } from '../shared/listing.mjs'
+import { withoutTrailingSlash } from '../shared/url.mjs'
 
-const BASE = (process.env.NUXT_PUBLIC_MIDDLEWARE_URL || '').replace(/\/+$/, '')
+const BASE = withoutTrailingSlash(process.env.NUXT_PUBLIC_MIDDLEWARE_URL || '')
 if (!BASE) {
   console.error('✗ NUXT_PUBLIC_MIDDLEWARE_URL is not set — set it (the storefront site URL) and re-run, e.g.:\n    source .env && node scripts/warm-cache.mjs')
   process.exit(1)

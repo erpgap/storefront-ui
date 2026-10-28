@@ -50,8 +50,9 @@ export default defineNuxtModule({
           // Which website's pages: see server/utils/cmsOdooWebsite.ts. At
           // build time there is no request, so only the configured URL can
           // say.
+          // Without a trailing slash, as the runtime config has it.
           ...(process.env.NUXT_PUBLIC_MIDDLEWARE_URL
-            ? { 'request-host': process.env.NUXT_PUBLIC_MIDDLEWARE_URL }
+            ? { 'request-host': process.env.NUXT_PUBLIC_MIDDLEWARE_URL.replace(/\/+$/, '') }
             : {}),
         },
         body: JSON.stringify({

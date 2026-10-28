@@ -1,5 +1,6 @@
 import type { CodegenConfig } from '@graphql-codegen/cli'
 import 'dotenv/config'
+import { withoutTrailingSlash } from './shared/url.mjs'
 
 const baseUrl = process.env.NUXT_PUBLIC_ODOO_BASE_URL
 
@@ -7,7 +8,7 @@ if (!baseUrl) {
   throw new Error('NUXT_PUBLIC_ODOO_BASE_URL is not defined. Set it in your .env file.')
 }
 
-const schemaUrl = `${baseUrl.replace(/\/$/, '')}/graphql/vsf`
+const schemaUrl = `${withoutTrailingSlash(baseUrl)}/graphql/vsf`
 
 const config: CodegenConfig = {
   overwrite: true,

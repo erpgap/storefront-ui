@@ -22,12 +22,12 @@ export default defineProvider({
         ? resolvedPath.slice(1)
         : resolvedPath
 
-      return { url: `${baseURL}${normalizedPath}` }
+      return { url: `${baseURL}/${normalizedPath}` }
     }
 
     const resolution = `${width}x${height}`
     const hash = objectHash({ text: src + resolution })
 
-    return { url: `${baseURL}${src?.replace('/', '')}/${resolution}/${hash}` }
+    return { url: `${baseURL}/${src?.replace('/', '')}/${resolution}/${hash}` }
   },
 })

@@ -56,7 +56,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
   const sdkConfig = {
     odoo: buildModule(OdooModule, {
-      apiUrl: `${config.public.middlewareUrl}api/odoo/`,
+      apiUrl: `${config.public.middlewareUrl}/api/odoo/`,
       // Nuxt's $fetch is an ofetch instance; Nitro's type for it just leaves
       // out `native`, which the SDK's ofetch type requires.
       ofetch: $fetch.create({

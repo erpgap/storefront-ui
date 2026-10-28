@@ -4,7 +4,7 @@ export default defineEventHandler(async (event: any) => {
   const config = useRuntimeConfig(event)
   try {
     const body = await readBody<[{ queryName: QueryName }, Record<string, unknown>?]>(event)
-    const response: any = await $fetch.raw(`${config.public.odooBaseUrl}graphql/vsf`, {
+    const response: any = await $fetch.raw(`${config.public.odooBaseUrl}/graphql/vsf`, {
       method: 'POST',
       headers: {
         'accept': 'application/json',

@@ -2,13 +2,14 @@ import { join } from 'node:path'
 import { defineNuxtModule, extendRouteRules } from 'nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
+import { withoutTrailingSlash } from '../../shared/url.mjs'
 
 export default defineNuxtModule({
   meta: {
     name: 'routes-generator',
   },
   async setup(_, nuxt) {
-    const odooBaseUrl: string = process.env?.NUXT_PUBLIC_ODOO_BASE_URL ? `${process.env.NUXT_PUBLIC_ODOO_BASE_URL}/graphql/vsf` : ''
+    const odooBaseUrl: string = process.env?.NUXT_PUBLIC_ODOO_BASE_URL ? `${withoutTrailingSlash(process.env.NUXT_PUBLIC_ODOO_BASE_URL)}/graphql/vsf` : ''
     const swrValue = Number(process.env.NUXT_SWR_CACHE_TIME || 300)
 
     if (!odooBaseUrl) {

@@ -4,10 +4,15 @@
 import path from 'path'
 import { defineNuxtConfig } from 'nuxt/config'
 import tailwindcss from '@tailwindcss/vite'
+import { withoutTrailingSlash } from './shared/url.mjs'
 
 const swrCacheTime = Number(process.env?.NUXT_SWR_CACHE_TIME || 3600)
 const storageDriver = process.env.NUXT_STORAGE_DRIVER || 'memory'
 const storageUrl = process.env.NUXT_STORAGE_URL
+// Base URLs without a trailing slash: see shared/url.mjs.
+const odooBaseUrl = withoutTrailingSlash(process.env.NUXT_PUBLIC_ODOO_BASE_URL)
+const odooBaseImageUrl = withoutTrailingSlash(process.env.NUXT_PUBLIC_ODOO_BASE_IMAGE_URL)
+const middlewareUrl = withoutTrailingSlash(process.env.NUXT_PUBLIC_MIDDLEWARE_URL)
 const storageConfig = {
   driver: storageDriver,
   ...(storageUrl ? { url: storageUrl } : {}),
@@ -59,7 +64,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/tailwind.css'],
 
   site: {
-    url: process.env.NUXT_PUBLIC_MIDDLEWARE_URL,
+    url: middlewareUrl,
     name: 'ERPGAP VSF',
     description: 'Welcome to an awesome ecommerce site!',
     defaultLocale: 'en',
@@ -98,14 +103,14 @@ export default defineNuxtConfig({
       // at build time cannot be turned off again, and '0' or 'false' would
       // both read as truthy. The page parses it explicitly.
       cmsHomepage: process.env.NUXT_PUBLIC_CMS_HOMEPAGE ?? '',
-      odooBaseImageUrl: process.env.NUXT_PUBLIC_ODOO_BASE_IMAGE_URL,
-      odooBaseUrl: process.env.NUXT_PUBLIC_ODOO_BASE_URL,
-      middlewareUrl: process.env.NUXT_PUBLIC_MIDDLEWARE_URL,
+      odooBaseImageUrl,
+      odooBaseUrl,
+      middlewareUrl,
       currencySymbol: process.env.NUXT_PUBLIC_CURRENCY_SYMBOL || '$',
       currencySeparator: process.env.NUXT_PUBLIC_CURRENCY_SEPARATOR,
       currencyDecimal: process.env.NUXT_PUBLIC_CURRENCY_DECIMAL,
       currencyPrecision: process.env.NUXT_PUBLIC_CURRENCY_PRECISION,
-      siteURL: process.env.NUXT_PUBLIC_MIDDLEWARE_URL,
+      siteURL: middlewareUrl,
     },
   },
 

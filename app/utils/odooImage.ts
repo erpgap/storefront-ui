@@ -24,7 +24,7 @@ export function buildOdooImageUrl(
     ? resolvedPath.slice(1)
     : resolvedPath
 
-  return `${baseUrl}${normalizedPath}`
+  return baseUrl ? `${baseUrl.replace(/\/$/, '')}/${normalizedPath}` : normalizedPath
 }
 
 /**
