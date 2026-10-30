@@ -63,12 +63,12 @@ const {
 // component objects are required: a string name passed to `<component :is>`
 // does not resolve in a production build (Nuxt only auto-imports components
 // used statically), so it would silently render an empty element.
-const PAYMENT_PROVIDER_COMPONENTS: Record<string, Component> = {
+const PAYMENT_PROVIDER_COMPONENTS: Record<typeof SUPPORTED_PAYMENT_PROVIDERS[number], Component> = {
   stripe: ProviderStripe,
   adyen: ProviderAdyen,
 }
 const activePaymentComponent = computed(
-  () => PAYMENT_PROVIDER_COMPONENTS[selectedProvider.value?.code ?? ''] ?? null,
+  () => PAYMENT_PROVIDER_COMPONENTS[selectedProvider.value?.code as typeof SUPPORTED_PAYMENT_PROVIDERS[number]] ?? null,
 )
 
 // Hand the provider's submit handler + loading state up to the Place Order

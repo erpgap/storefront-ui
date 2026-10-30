@@ -3,6 +3,13 @@ import { useToast } from 'vue-toastification'
 import type { PaymentProvider } from '~~/graphql'
 import { QueryName } from '~~/server/queries'
 
+/**
+ * Odoo provider codes CheckoutPayment has a payment form for. Its component
+ * map is typed by this list, so adding a provider here without a form fails
+ * the type check.
+ */
+export const SUPPORTED_PAYMENT_PROVIDERS = ['stripe', 'adyen'] as const
+
 export const usePayment = () => {
   const { $sdk } = useNuxtApp()
   const toast = useToast()
@@ -30,7 +37,12 @@ export const usePayment = () => {
         queryName: QueryName.GetPaymentMethodsQuery,
       })
 
-      paymentProviders.value = data?.paymentProviders || []
+      // Only the providers checkout has a payment form for. Odoo can offer
+      // others (wire transfer, cash on delivery...), and one of those showed
+      // up as a choice with nothing under it and a Place order button that did
+      // nothing. With none left, the payment step says no method is available.
+      paymentProviders.value = (data?.paymentProviders || [])
+        .filter(provider => (SUPPORTED_PAYMENT_PROVIDERS as readonly string[]).includes(provider.code ?? ''))
     }
     catch (error: any) {
       toast.error(error?.data?.message)
