@@ -91,7 +91,7 @@ const toggleWishlist = (variant?: Product) => {
 
       <button
         type="button"
-        aria-label="Add to wishlist"
+        :aria-label="$t('wishlist.addToWishlist')"
         class="absolute top-3 right-3 z-2 grid place-items-center w-[44px] h-[44px] rounded-full bg-white/90 text-primary-700 transition-colors duration-200 hover:text-black"
         @click="toggleWishlist(firstVariant)"
       >
@@ -131,7 +131,7 @@ const toggleWishlist = (variant?: Product) => {
           :max="5"
         />
         <span class="whitespace-nowrap">({{ (rating ?? 0).toFixed(1) }})</span>
-        <span class="whitespace-nowrap">{{ ratingCount }} reviews</span>
+        <span class="whitespace-nowrap">{{ $t('reviewsCount', { count: ratingCount }) }}</span>
       </div>
     </div>
   </div>

@@ -2,15 +2,15 @@
 import { useRequestURL } from 'nuxt/app'
 
 const PAGE_PATH = '/products'
-const TITLE = 'All Products | Browse our full catalog'
+const { t } = useI18n()
+const TITLE = t('shop.products.title')
 // Visible on-page heading (the SEO TITLE above keeps its "| Browse…" suffix).
-const HEADING = 'All Products'
-const DESCRIPTION
-  = 'Browse the full product catalog. Filter by attributes and price, sort, and explore everything we have to offer.'
+const HEADING = t('shop.products.heading')
+const DESCRIPTION = t('shop.products.description')
 
 const breadcrumbs = [
-  { label: 'Home', link: '/' },
-  { label: 'Products', link: '' },
+  { label: t('home'), link: '/' },
+  { label: t('products'), link: '' },
 ]
 
 // Canonical always points to the clean base /products to consolidate

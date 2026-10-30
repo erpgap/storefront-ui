@@ -21,6 +21,7 @@ const props = defineProps<{ current?: string }>()
 const odooImageBase = String(useRuntimeConfig().public.odooBaseImageUrl ?? '')
 const previewUrl = (url: string) => absoluteImageUrl(url, odooImageBase, '')
 const emit = defineEmits<{ select: [url: string], close: [] }>()
+const { t } = useI18n()
 
 const { data: items, refresh, pending } = await useFetch<MediaItem[]>('/api/cms/media', {
   key: 'cms-editor-media',
@@ -55,7 +56,7 @@ async function upload(files: FileList | File[] | null) {
     if (lastUrl) emit('select', lastUrl)
   }
   catch (e: any) {
-    error.value = e?.statusMessage || e?.data?.statusMessage || 'Upload failed.'
+    error.value = e?.statusMessage || e?.data?.statusMessage || t('cmsEditor.media.uploadFailed')
   }
   finally {
     uploading.value = false
@@ -69,8 +70,8 @@ function onDrop(event: DragEvent) {
 
 function formatSize(bytes: number) {
   return bytes > 1024 * 1024
-    ? `${(bytes / 1024 / 1024).toFixed(1)} MB`
-    : `${Math.round(bytes / 1024)} KB`
+    ? t('cmsEditor.media.sizeMb', { size: (bytes / 1024 / 1024).toFixed(1) })
+    : t('cmsEditor.media.sizeKb', { size: Math.round(bytes / 1024) })
 }
 
 // Escape closes, which is what every other modal on the planet does.
@@ -88,18 +89,18 @@ onMounted(() => {
     class="fixed inset-0 z-[100] flex items-center justify-center bg-black/55 p-4"
     role="dialog"
     aria-modal="true"
-    aria-label="Choose an image"
+    :aria-label="$t('cmsEditor.media.title')"
     @click.self="emit('close')"
   >
     <div class="bg-white rounded-lg w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl">
       <header class="flex-none flex items-center justify-between px-5 h-14 border-b border-primary-200">
         <h2 class="text-[13px] tracking-[0.14em] uppercase font-medium">
-          Choose an image
+          {{ $t('cmsEditor.media.title') }}
         </h2>
         <button
           type="button"
           class="text-primary-400 hover:text-black text-lg leading-none"
-          aria-label="Close"
+          :aria-label="$t('common.close')"
           @click="emit('close')"
         >
           ✕
@@ -115,18 +116,24 @@ onMounted(() => {
           @dragleave="dragOver = false"
           @drop.prevent="onDrop"
         >
-          <p class="text-[13px] text-primary-500">
-            Drag an image here, or
-            <button
-              type="button"
-              class="underline text-black"
-              @click="fileInput?.click()"
-            >
-              choose a file
-            </button>
-          </p>
+          <i18n-t
+            scope="global"
+            keypath="cmsEditor.media.dropzone"
+            tag="p"
+            class="text-[13px] text-primary-500"
+          >
+            <template #chooseFile>
+              <button
+                type="button"
+                class="underline text-black"
+                @click="fileInput?.click()"
+              >
+                {{ $t('cmsEditor.media.chooseFile') }}
+              </button>
+            </template>
+          </i18n-t>
           <p class="text-[11px] text-primary-400 mt-1.5">
-            JPG, PNG, WebP, AVIF or GIF · up to 8 MB
+            {{ $t('cmsEditor.media.formats') }}
           </p>
           <input
             ref="fileInput"
@@ -140,7 +147,7 @@ onMounted(() => {
             v-if="uploading"
             class="text-[12px] text-blue-600 mt-2"
           >
-            Uploading…
+            {{ $t('cmsEditor.media.uploading') }}
           </p>
           <CmsEditorError
             v-if="error"
@@ -154,7 +161,7 @@ onMounted(() => {
           v-if="pending && !items.length"
           class="text-[13px] text-primary-400"
         >
-          Loading…
+          {{ $t('common.loading') }}
         </p>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">

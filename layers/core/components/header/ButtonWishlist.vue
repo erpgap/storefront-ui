@@ -21,6 +21,7 @@ onMounted(async () => {
       type="button"
       variant="tertiary"
       square
+      :aria-label="$t('core.header.openWishlist')"
       @click="handleOpenWishListSidebar"
     >
       <template #prefix>
@@ -44,6 +45,7 @@ onMounted(async () => {
         type="button"
         variant="tertiary"
         square
+        :aria-label="$t('core.header.openWishlist')"
       >
         <template #prefix>
           <UiLineIcon

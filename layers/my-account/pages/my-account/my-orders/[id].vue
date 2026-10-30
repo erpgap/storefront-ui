@@ -60,7 +60,7 @@ onUnmounted(() => {
           stroke-linejoin="round"
         />
       </svg>
-      Back to orders
+      {{ $t('account.myOrders.orderDetails.backToOrders') }}
     </NuxtLink>
 
     <div
@@ -79,7 +79,7 @@ onUnmounted(() => {
       <div class="grid grid-cols-3 border border-primary-100 rounded-[3px] divide-x divide-primary-100 mb-10">
         <div class="p-4">
           <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">
-            Date
+            {{ $t('account.myOrders.orderDetails.date') }}
           </p>
           <p class="text-[14px]">
             {{ formatDate(order.dateOrder) }}
@@ -87,7 +87,7 @@ onUnmounted(() => {
         </div>
         <div class="p-4">
           <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">
-            Items
+            {{ $t('account.myOrders.orderDetails.items') }}
           </p>
           <p class="text-[14px]">
             {{ totalItems }}
@@ -95,7 +95,7 @@ onUnmounted(() => {
         </div>
         <div class="p-4">
           <p class="text-[11px] tracking-[0.14em] uppercase text-primary-400 mb-1.5">
-            Total
+            {{ $t('account.myOrders.orderDetails.total') }}
           </p>
           <p class="text-[14px] font-medium">
             {{ $currency(Number(order.amountTotal) || 0) }}
@@ -105,7 +105,7 @@ onUnmounted(() => {
 
       <!-- Items -->
       <h3 class="text-[12px] tracking-[0.16em] uppercase font-medium text-primary-400 mb-1">
-        Items
+        {{ $t('account.myOrders.orderDetails.items') }}
       </h3>
       <ul class="border-t border-primary-100 divide-y divide-primary-100">
         <li
@@ -141,7 +141,7 @@ onUnmounted(() => {
               </li>
             </ul>
             <p class="mt-1 text-[13px] text-primary-500">
-              Qty {{ line.quantity }} <span class="text-primary-300">·</span> {{ $currency(Number(line.priceUnit) || 0) }}
+              {{ $t('account.myOrders.orderDetails.qty', { quantity: line.quantity }) }} <span class="text-primary-300">·</span> {{ $currency(Number(line.priceUnit) || 0) }}
             </p>
           </div>
           <span class="font-medium whitespace-nowrap">{{ $currency(Number(line.priceSubtotal) || 0) }}</span>
@@ -152,19 +152,19 @@ onUnmounted(() => {
       <div class="mt-10 w-full sm:max-w-[360px] sm:ml-auto border border-primary-100 rounded-[2px]">
         <div class="px-5 md:px-6 py-6 text-[14px]">
           <div class="flex justify-between py-1.5">
-            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">Subtotal</span>
+            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t('account.myOrders.orderDetails.subtotal') }}</span>
             <span>{{ $currency(Number(order.amountSubtotal) || 0) }}</span>
           </div>
           <div class="flex justify-between py-1.5">
-            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">Delivery</span>
+            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t('account.myOrders.orderDetails.delivery') }}</span>
             <span>{{ $currency(Number(order.amountDelivery) || 0) }}</span>
           </div>
           <div class="flex justify-between py-1.5">
-            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">Tax</span>
+            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t('account.myOrders.orderDetails.tax') }}</span>
             <span>{{ $currency(Number(order.amountTax) || 0) }}</span>
           </div>
           <div class="flex justify-between items-baseline mt-4 pt-4 border-t border-primary-100">
-            <span class="text-[16px] font-medium uppercase tracking-[0.08em]">Total</span>
+            <span class="text-[16px] font-medium uppercase tracking-[0.08em]">{{ $t('account.myOrders.orderDetails.total') }}</span>
             <span class="text-[18px] font-medium">{{ $currency(Number(order.amountTotal) || 0) }}</span>
           </div>
         </div>
@@ -175,7 +175,7 @@ onUnmounted(() => {
       v-else
       class="py-16 text-center text-primary-500 font-light"
     >
-      We couldn't load this order.
+      {{ $t('account.myOrders.orderDetails.loadError') }}
     </p>
   </div>
 </template>

@@ -30,6 +30,7 @@ import {
 definePageMeta({ key: route => route.fullPath })
 
 const route = useRoute()
+const { t } = useI18n()
 const cleanPath = computed(() => route.path.replace(/\/$/, ''))
 
 // Resolve the canonical URL here in setup (valid Nuxt context). The canonical
@@ -95,8 +96,8 @@ const seoData = computed(() => {
     const product = productVariant.value
     const seoEntity: SeoEntity = {
       ...product,
-      metaTitle: product.metaTitle || product.name || 'Product',
-      metaDescription: product.metaDescription || product.description || 'Check out this amazing product!',
+      metaTitle: product.metaTitle || product.name || t('shop.product.metaTitleFallback'),
+      metaDescription: product.metaDescription || product.description || t('shop.product.metaDescriptionFallback'),
       // Absolute product image for og:image/twitter:image — also how the
       // Cloudflare AI Search crawler picks up a thumbnail for this page.
       metaImage: buildOdooImageUrl(
@@ -111,8 +112,8 @@ const seoData = computed(() => {
 
   const fallbackEntity: SeoEntity = {
     name: 'Product',
-    metaTitle: `Product | ${route.path.split('/').pop() || 'Store'}`,
-    metaDescription: 'Check out this amazing product in our store',
+    metaTitle: t('shop.product.metaTitleWithSlug', { slug: route.path.split('/').pop() || t('shop.product.storeFallback') }),
+    metaDescription: t('shop.product.metaDescriptionGeneric'),
   }
   return generateSeo(fallbackEntity, 'Product', canonicalUrl)
 })
@@ -248,7 +249,7 @@ const categoryEyebrow = computed(() => {
               />
               <span>({{ ratingAvg.toFixed(1) }})</span>
               <span class="text-primary-200">·</span>
-              <span>{{ ratingCount }} reviews</span>
+              <span>{{ $t('reviewsCount', { count: ratingCount }) }}</span>
             </div>
 
             <!-- Price -->
@@ -257,7 +258,7 @@ const categoryEyebrow = computed(() => {
                 <template v-if="productVariant?.combinationInfoVariant?.has_discounted_price">
                   <span class="text-[24px] font-medium">{{ $currency(getSpecialPrice) }}</span>
                   <span class="text-[16px] text-primary-300 line-through">{{ $currency(getRegularPrice) }}</span>
-                  <span class="text-[13px] text-primary-500">You save {{ $currency(savings) }}</span>
+                  <span class="text-[13px] text-primary-500">{{ $t('common.youSaveAmount', { amount: $currency(savings) }) }}</span>
                 </template>
                 <span
                   v-else
@@ -277,7 +278,7 @@ const categoryEyebrow = computed(() => {
               data-testid="product-properties"
             >
               <p class="text-[12px] tracking-[0.16em] uppercase font-medium text-primary-400 mb-3">
-                Color<span
+                {{ $t('color') }}<span
                   v-if="selectedColorLabel"
                   class="text-black"
                 > — {{ selectedColorLabel }}</span>
@@ -302,7 +303,7 @@ const categoryEyebrow = computed(() => {
             <!-- Quantity -->
             <div class="mt-8">
               <p class="text-[12px] tracking-[0.16em] uppercase font-medium text-primary-400 mb-3">
-                Quantity
+                {{ $t('account.myOrders.orderDetails.quantity') }}
               </p>
               <UiQuantitySelector
                 v-model="quantitySelectorValue"
@@ -320,7 +321,7 @@ const categoryEyebrow = computed(() => {
                 class="flex-1 min-h-[54px] text-[13px] font-medium"
                 @click="handleCartAdd"
               >
-                {{ cartAdding ? 'Adding…' : $t('addToCart') }}
+                {{ cartAdding ? $t('shop.product.adding') : $t('addToCart') }}
               </SfButton>
               <SfButton
                 v-if="productVariant"
@@ -354,12 +355,12 @@ const categoryEyebrow = computed(() => {
                 name="cart"
                 :size="16"
               />
-              {{ productsInCart }} in your cart
+              {{ $t('shop.product.inYourCart', { count: productsInCart }) }}
             </p>
 
             <!-- Reassurance -->
             <p class="mt-7 pt-6 border-t border-primary-100 text-[13px] text-primary-500">
-              Complimentary shipping over $150 · 30-day returns
+              {{ $t('shop.product.reassurance') }}
             </p>
           </section>
         </div>
@@ -369,20 +370,20 @@ const categoryEyebrow = computed(() => {
       <div class="mt-20 md:mt-32">
         <section v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether">
           <LazyProductSlider
-            text="Frequently Bought Together"
+            :text="$t('shop.product.frequentlyBoughtTogether')"
             :product-template-list="productTemplate.frequentlyBoughtTogether"
           />
         </section>
         <section v-if="!loadingProductTemplate && productTemplate?.alternativeProducts">
           <LazyProductSlider
-            text="Similar Products"
+            :text="$t('shop.product.similarProducts')"
             :product-template-list="productTemplate.alternativeProducts"
           />
         </section>
         <section class="mb-16">
           <ClientOnly>
             <LazyProductRecentViewSlider
-              text="Your Recent Views"
+              :text="$t('shop.product.yourRecentViews')"
               :exclude-id="Number(productTemplate?.id)"
             />
           </ClientOnly>

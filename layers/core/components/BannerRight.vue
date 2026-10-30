@@ -15,18 +15,27 @@ const props = withDefaults(defineProps<{
   ctaLabel?: string
   ctaUrl?: string
 }>(), {
-  eyebrow: 'Our Philosophy',
-  title: 'Made from honest materials',
-  body: 'Every piece is cut from natural fabrics — organic cotton, pure linen, full-grain leather — chosen to wear in beautifully and feel better with every year.',
+  eyebrow: undefined,
+  title: undefined,
+  body: undefined,
   image: '/img/home/editorial.webp',
-  imageAlt: 'Made from honest materials',
+  imageAlt: undefined,
   imagePosition: 'left',
   titleSize: 'large',
-  ctaLabel: 'Discover the Story',
+  ctaLabel: undefined,
   ctaUrl: '/products',
 })
 
 const NuxtLink = resolveComponent('NuxtLink')
+const { t } = useI18n()
+
+// A prop left out falls back to the default copy (translated, so it cannot be a
+// withDefaults value); an empty string from the CMS still renders nothing.
+const eyebrowText = computed(() => props.eyebrow !== undefined ? props.eyebrow : t('core.home.editorial.eyebrow'))
+const titleText = computed(() => props.title !== undefined ? props.title : t('core.home.editorial.title'))
+const bodyText = computed(() => props.body !== undefined ? props.body : t('core.home.editorial.body'))
+const imageAltText = computed(() => props.imageAlt !== undefined ? props.imageAlt : t('core.home.editorial.title'))
+const ctaLabelText = computed(() => props.ctaLabel !== undefined ? props.ctaLabel : t('core.home.editorial.ctaLabel'))
 
 // Which half the image sits in. Ordering rather than DOM order keeps the image
 // first in the markup, so it is still the LCP candidate the browser preloads.
@@ -43,7 +52,7 @@ const textOrder = computed(() => props.imagePosition === 'right' ? 'md:order-1' 
         v-if="image"
         :src="image"
         :provider="imageProvider(image)"
-        :alt="imageAlt"
+        :alt="imageAltText"
         width="896"
         height="1152"
         sizes="xs:100vw sm:100vw md:50vw lg:50vw xl:50vw xxl:50vw 2xl:50vw"
@@ -61,30 +70,30 @@ const textOrder = computed(() => props.imagePosition === 'right' ? 'md:order-1' 
       :class="textOrder"
     >
       <p
-        v-if="eyebrow"
+        v-if="eyebrowText"
         class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-500"
       >
-        {{ eyebrow }}
+        {{ eyebrowText }}
       </p>
       <h2
         class="font-light tracking-[-0.02em] my-5"
         :class="titleSize === 'regular' ? 'text-[clamp(28px,3.4vw,44px)]' : 'text-[clamp(30px,3.6vw,48px)]'"
       >
-        {{ title }}
+        {{ titleText }}
       </h2>
       <p
         class="font-light text-primary-500 max-w-[440px] mb-8"
         :class="titleSize === 'regular' ? 'leading-relaxed' : ''"
       >
-        {{ body }}
+        {{ bodyText }}
       </p>
       <SfButton
-        v-if="ctaLabel"
+        v-if="ctaLabelText"
         :tag="NuxtLink"
         :to="ctaUrl || '/products'"
         class="self-start min-h-[52px] px-7 gap-3 text-[13px] font-medium"
       >
-        {{ ctaLabel }}
+        {{ ctaLabelText }}
         <UiIconArrowRight />
       </SfButton>
     </div>

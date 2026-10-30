@@ -72,7 +72,7 @@ const savings = computed(
         </div>
         <button
           type="button"
-          aria-label="Remove item"
+          :aria-label="$t('common.removeItem')"
           class="shrink-0 text-primary-400 hover:text-black transition-colors"
           @click="removeItemFromCart(orderLine.id)"
         >
@@ -100,7 +100,7 @@ const savings = computed(
             v-if="savings > 0"
             class="mt-0.5 text-[13px] text-primary-500"
           >
-            You save {{ $currency(savings) }}
+            {{ $t('common.youSaveAmount', { amount: $currency(savings) }) }}
           </p>
         </div>
       </div>

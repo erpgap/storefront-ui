@@ -39,7 +39,7 @@ const decrement = () => {
         variant="tertiary"
         square
         class="rounded-md rounded-r-none"
-        aria-label="Decrease value"
+        :aria-label="$t('quantitySelectorDecrease')"
         :disabled="props.modelValue <= 1"
         data-testid="quantity-selector-decrease-button"
         @click="decrement"
@@ -53,7 +53,7 @@ const decrement = () => {
         type="number"
         role="spinbutton"
         data-testid="quantity-selector-input"
-        aria-label="Quantity Selector"
+        :aria-label="$t('quantitySelector')"
         readonly
       >
       <SfButton
@@ -61,7 +61,7 @@ const decrement = () => {
         variant="tertiary"
         square
         class="rounded-md rounded-l-none"
-        aria-label="Increase value"
+        :aria-label="$t('quantitySelectorIncrease')"
         data-testid="quantity-selector-increase-button"
         :disabled="props.modelValue >= props.maxQty"
         @click="increment"

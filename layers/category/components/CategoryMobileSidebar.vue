@@ -29,7 +29,7 @@ defineEmits<CategorySidebarEmits>()
     >
       <div class="grid grid-rows-category-sidebar h-full">
         <div class="p-4 flex justify-between items-center lg:hidden">
-          <span class="font-bold text-lg">Filter</span>
+          <span class="font-bold text-lg">{{ $t('shop.category.filter') }}</span>
           <SfButton
             variant="tertiary"
             :aria-label="$t('closeListSettings')"

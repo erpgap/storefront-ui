@@ -43,14 +43,14 @@ const goToPage = (page: number) => {
   <nav
     class="pager"
     role="navigation"
-    aria-label="pagination"
+    :aria-label="$t('core.ui.pagination')"
     data-testid="pagination"
   >
     <!-- Previous -->
     <button
       type="button"
       class="pg"
-      aria-label="Go to previous page"
+      :aria-label="$t('prevAriaLabel')"
       :disabled="currentPage <= 1"
       @click="goToPage(currentPage - 1)"
     >
@@ -106,7 +106,7 @@ const goToPage = (page: number) => {
     <button
       type="button"
       class="pg"
-      aria-label="Go to next page"
+      :aria-label="$t('nextAriaLabel')"
       :disabled="currentPage >= pagination.totalPages"
       @click="goToPage(currentPage + 1)"
     >

@@ -15,6 +15,7 @@ const props = defineProps<{
   isSystem?: boolean
 }>()
 const emit = defineEmits<{ saved: [page: CmsPage], close: [] }>()
+const { t } = useI18n()
 
 const title = ref(props.title)
 const slug = ref(props.slug)
@@ -36,7 +37,7 @@ const changed = computed(() =>
 
 async function save() {
   if (!title.value.trim()) {
-    error.value = 'A page needs a name.'
+    error.value = t('cmsEditor.settings.nameRequired')
     return
   }
 
@@ -57,7 +58,7 @@ async function save() {
   catch (e: any) {
     // The clash message names the page already using that url, which is the
     // one piece of information that makes it fixable.
-    error.value = e?.statusMessage || e?.data?.statusMessage || 'Could not save.'
+    error.value = e?.statusMessage || e?.data?.statusMessage || t('cmsEditor.saveFailed')
   }
   finally {
     saving.value = false
@@ -78,7 +79,7 @@ onMounted(() => {
     class="fixed inset-0 z-[100] flex items-center justify-center bg-black/55 p-4"
     role="dialog"
     aria-modal="true"
-    aria-label="Page settings"
+    :aria-label="$t('cmsEditor.settings.title')"
     @click.self="emit('close')"
   >
     <form
@@ -87,12 +88,12 @@ onMounted(() => {
     >
       <header class="flex-none flex items-center justify-between px-5 h-14 border-b border-primary-200">
         <h2 class="text-[13px] tracking-[0.14em] uppercase font-medium">
-          Page settings
+          {{ $t('cmsEditor.settings.title') }}
         </h2>
         <button
           type="button"
           class="text-primary-400 hover:text-black text-lg leading-none"
-          aria-label="Close"
+          :aria-label="$t('common.close')"
           @click="emit('close')"
         >
           &times;
@@ -101,7 +102,7 @@ onMounted(() => {
 
       <div class="px-5 py-4 flex flex-col gap-4">
         <label class="flex flex-col gap-1.5">
-          <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Page name</span>
+          <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">{{ $t('cmsEditor.pages.pageName') }}</span>
           <input
             v-model="title"
             type="text"
@@ -110,24 +111,24 @@ onMounted(() => {
             class="settings-input"
           >
           <span class="text-[11px] text-primary-400">
-            What the merchant sees in the page list. Not shown to shoppers.
+            {{ $t('cmsEditor.settings.nameHint') }}
           </span>
         </label>
 
         <label class="flex flex-col gap-1.5">
-          <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Page URL</span>
+          <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">{{ $t('cmsEditor.pages.pageUrl') }}</span>
           <input
             v-model="slug"
             type="text"
             :disabled="isSystem"
-            placeholder="/summer-sale"
+            :placeholder="$t('cmsEditor.pages.pageUrlPlaceholder')"
             class="settings-input"
           >
           <span
             v-if="isSystem"
             class="text-[11px] text-primary-400"
           >
-            This page is part of the storefront, so its address is fixed.
+            {{ $t('cmsEditor.settings.systemUrlFixed') }}
           </span>
           <span
             v-else-if="preview"
@@ -141,7 +142,7 @@ onMounted(() => {
           v-if="!isSystem"
           class="text-[11px] text-primary-400 leading-snug"
         >
-          Changing the address breaks existing links to this page.
+          {{ $t('cmsEditor.settings.urlChangeWarning') }}
         </p>
 
         <CmsEditorError v-if="error">
@@ -155,14 +156,14 @@ onMounted(() => {
           class="text-[13px] text-primary-500 hover:text-black px-3 py-1.5"
           @click="emit('close')"
         >
-          Cancel
+          {{ $t('cmsEditor.cancel') }}
         </button>
         <button
           type="submit"
           class="text-[13px] bg-black text-white rounded-sm px-3 py-1.5 disabled:opacity-40"
           :disabled="saving || !changed"
         >
-          {{ saving ? 'Saving…' : 'Save' }}
+          {{ saving ? $t('cmsEditor.saving') : $t('cmsEditor.save') }}
         </button>
       </footer>
     </form>

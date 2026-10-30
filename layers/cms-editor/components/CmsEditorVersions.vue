@@ -19,6 +19,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{ restored: [], close: [] }>()
+const { t } = useI18n()
 
 const { data: revisions, pending } = await useFetch<Revision[]>(
   `/api/cms/pages/${props.pageId}/revisions`,
@@ -32,11 +33,11 @@ async function restore(revision: Revision) {
   // The draft usually holds what is being rolled back FROM, so resetting it is
   // almost always right - but never at the cost of silently binning work in
   // progress.
-  const warning = props.hasUnpublishedChanges
-    ? 'You have unpublished changes that will be replaced. '
-    : ''
+  const message = props.hasUnpublishedChanges
+    ? t('cmsEditor.versions.confirmRestoreOverDraft', { number: revision.number })
+    : t('cmsEditor.versions.confirmRestore', { number: revision.number })
 
-  if (!confirm(`${warning}Make version ${revision.number} live again?`)) return
+  if (!confirm(message)) return
 
   busy.value = revision.id
   error.value = ''
@@ -49,7 +50,7 @@ async function restore(revision: Revision) {
     emit('restored')
   }
   catch (e: any) {
-    error.value = e?.data?.statusMessage || 'Could not restore that version.'
+    error.value = e?.data?.statusMessage || t('cmsEditor.versions.restoreFailed')
   }
   finally {
     busy.value = null
@@ -69,18 +70,18 @@ function when(iso?: string) {
     class="fixed inset-0 z-[100] flex items-start justify-center bg-black/50 p-4 pt-20"
     role="dialog"
     aria-modal="true"
-    aria-label="Version history"
+    :aria-label="$t('cmsEditor.versions.title')"
     @click.self="emit('close')"
   >
     <div class="bg-white rounded-lg w-full max-w-lg max-h-[70vh] flex flex-col shadow-2xl">
       <header class="flex-none flex items-center justify-between px-5 h-14 border-b border-primary-200">
         <h2 class="text-[13px] tracking-[0.14em] uppercase font-medium">
-          Version history
+          {{ $t('cmsEditor.versions.title') }}
         </h2>
         <button
           type="button"
           class="text-primary-400 hover:text-black text-lg leading-none"
-          aria-label="Close"
+          :aria-label="$t('common.close')"
           @click="emit('close')"
         >
           ✕
@@ -92,13 +93,13 @@ function when(iso?: string) {
           v-if="pending && !revisions.length"
           class="p-5 text-[13px] text-primary-400"
         >
-          Loading…
+          {{ $t('common.loading') }}
         </p>
         <p
           v-else-if="!revisions.length"
           class="p-5 text-[13px] text-primary-400"
         >
-          This page has not been published yet, so there are no versions.
+          {{ $t('cmsEditor.versions.empty') }}
         </p>
 
         <ul v-else>
@@ -109,15 +110,15 @@ function when(iso?: string) {
           >
             <div class="min-w-0 flex-1">
               <p class="text-[13px] font-medium flex items-center gap-2">
-                Version {{ revision.number }}
+                {{ $t('cmsEditor.versions.version', { number: revision.number }) }}
                 <span
                   v-if="revision.isLive"
                   class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-green-100 text-green-800"
-                >Live</span>
+                >{{ $t('cmsEditor.versions.live') }}</span>
                 <span
                   v-if="revision.restoredFrom"
                   class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-primary-100 text-primary-600"
-                >From {{ revision.restoredFrom }}</span>
+                >{{ $t('cmsEditor.versions.restoredFrom', { number: revision.restoredFrom }) }}</span>
               </p>
               <p class="text-[11px] text-primary-400 truncate">
                 {{ when(revision.createdAt) }}
@@ -134,7 +135,7 @@ function when(iso?: string) {
               :disabled="busy !== null"
               @click="restore(revision)"
             >
-              {{ busy === revision.id ? 'Restoring…' : 'Restore' }}
+              {{ busy === revision.id ? $t('cmsEditor.versions.restoring') : $t('cmsEditor.versions.restore') }}
             </button>
           </li>
         </ul>
@@ -149,8 +150,7 @@ function when(iso?: string) {
 
       <footer class="flex-none px-5 py-3 border-t border-primary-200">
         <p class="text-[11px] text-primary-400 leading-snug">
-          Restoring makes that version live again and resets the editor to
-          match. It is kept as a new version, so nothing is lost.
+          {{ $t('cmsEditor.versions.restoreHint') }}
         </p>
       </footer>
     </div>

@@ -49,7 +49,7 @@ const NuxtLink = resolveComponent('NuxtLink')
             <span class="block mt-1 text-[13px] text-primary-500 font-light">
               {{ formatDate(order?.dateOrder) }}
               <span class="text-primary-300">·</span>
-              {{ itemCount(order as Order) }} {{ itemCount(order as Order) === 1 ? 'item' : 'items' }}
+              {{ itemCount(order as Order) }} {{ itemCount(order as Order) === 1 ? $t('item') : $t('items') }}
             </span>
           </div>
 
@@ -114,7 +114,7 @@ const NuxtLink = resolveComponent('NuxtLink')
       {{ $t("account.myOrders.noOrders") }}
     </h3>
     <p class="mt-3 text-primary-500 font-light max-w-[380px]">
-      Once you place an order, it'll show up here so you can track and revisit it.
+      {{ $t('account.myOrders.noOrdersText') }}
     </p>
     <SfButton
       :tag="NuxtLink"

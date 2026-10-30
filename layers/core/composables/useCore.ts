@@ -7,7 +7,8 @@ import type {
 import { MutationName } from '~~/server/mutations'
 
 export const useCore = () => {
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
+  const { t } = $i18n
   const loading = ref(false)
   const apiError = ref('')
 
@@ -26,7 +27,7 @@ export const useCore = () => {
       return true
     }
     catch (error: any) {
-      apiError.value = errorMessage(error, 'Something went wrong. Please try again.')
+      apiError.value = errorMessage(error, t('core.genericError'))
       return false
     }
     finally {
@@ -49,7 +50,7 @@ export const useCore = () => {
       return true
     }
     catch (error: any) {
-      apiError.value = error?.message || 'Something went wrong. Please try again.'
+      apiError.value = error?.message || t('core.genericError')
       return false
     }
     finally {

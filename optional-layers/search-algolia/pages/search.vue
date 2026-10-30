@@ -8,6 +8,7 @@ import {
 import type { Product } from '~~/graphql'
 
 const route = useRoute()
+const { t } = useI18n()
 
 // A bare /search with no query term has nothing to show — send users to the
 // full catalog instead.
@@ -36,8 +37,8 @@ provide('stockCount', stockCount)
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
 const breadcrumbs = [
-  { name: 'Home', link: '/' },
-  { name: 'Search', link: '/' },
+  { name: t('home'), link: '/' },
+  { name: t('search'), link: '/' },
 ]
 
 // nuxt-viewport rather than a media query, so the server renders the same
@@ -76,7 +77,7 @@ const pagination = computed(() => ({
       v-if="route.query.search"
       class="font-bold typography-headline-3 md:typography-headline-2 mb-10"
     >
-      Results for "{{ route.query.search }}"
+      {{ $t('resultsFor', { phrase: route.query.search }) }}
     </h1>
     <div class="grid grid-cols-12 lg:gap-x-6">
       <div class="col-span-12 lg:col-span-4 xl:col-span-3">

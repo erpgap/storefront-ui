@@ -17,21 +17,28 @@ const props = withDefaults(defineProps<{
   linkUrl?: string
   items?: CategoryTile[]
 }>(), {
-  eyebrow: 'Browse',
-  title: 'Shop by Category',
-  linkLabel: 'All categories',
+  eyebrow: undefined,
+  title: undefined,
+  linkLabel: undefined,
   linkUrl: '/products',
   items: undefined,
 })
 
 const NuxtLink = resolveComponent('NuxtLink')
+const { t } = useI18n()
+
+// A prop left out falls back to the default copy (translated, so it cannot be a
+// withDefaults value); an empty string from the CMS still renders nothing.
+const eyebrowText = computed(() => props.eyebrow !== undefined ? props.eyebrow : t('core.home.categories.eyebrow'))
+const titleText = computed(() => props.title !== undefined ? props.title : t('core.home.categories.title'))
+const linkLabelText = computed(() => props.linkLabel !== undefined ? props.linkLabel : t('core.home.categories.linkLabel'))
 
 const categories = computed<CategoryTile[]>(() => props.items?.length
   ? props.items
   : [
-      { name: 'Women', image: '/img/home/cat_women_sand.webp', link: '/women' },
-      { name: 'Men', image: '/img/home/cat_men_sand.webp', link: '/men' },
-      { name: 'Accessories', image: '/img/home/cat_accessories_sand.webp', link: '/women/accessories' },
+      { name: t('core.siteLinks.women'), image: '/img/home/cat_women_sand.webp', link: '/women' },
+      { name: t('core.siteLinks.men'), image: '/img/home/cat_men_sand.webp', link: '/men' },
+      { name: t('core.home.categories.accessories'), image: '/img/home/cat_accessories_sand.webp', link: '/women/accessories' },
     ])
 
 // Tiles are 1/3 width at three-up but half at four-up, so the responsive hint
@@ -50,9 +57,9 @@ const gridClass = computed(() => categories.value.length >= 4
 <template>
   <section class="narrow-container py-[clamp(64px,9vw,132px)]">
     <UiSectionHeading
-      :eyebrow="eyebrow"
-      :title="title"
-      :link-label="linkLabel"
+      :eyebrow="eyebrowText"
+      :title="titleText"
+      :link-label="linkLabelText"
       :link-url="linkUrl"
     />
 

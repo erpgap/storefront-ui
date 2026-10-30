@@ -27,6 +27,8 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{ 'update:modelValue': [unknown] }>()
 
+const { t } = useI18n()
+
 const label = computed(() => props.field.label ?? props.field.name)
 const fieldPath = computed(() => props.path ?? props.field.name)
 const issue = computed(() => props.issues?.[fieldPath.value])
@@ -164,7 +166,7 @@ function rowTitle(row: Record<string, unknown>, index: number) {
   const raw = key ? row[key] : undefined
   const value = field && isTranslatable(field) ? resolveValue(raw, props.locale) : raw
 
-  return (typeof value === 'string' && value.trim()) || `Item ${index + 1}`
+  return (typeof value === 'string' && value.trim()) || t('cmsEditor.fields.itemFallback', { number: index + 1 })
 }
 
 // The row's own image, used as a thumbnail in the repeater header so a list of
@@ -208,7 +210,7 @@ function rowThumb(row: Record<string, unknown>) {
       <span
         v-if="needsTranslation"
         class="ml-1.5 normal-case tracking-normal text-amber-300"
-      >· not translated</span>
+      >{{ $t('cmsEditor.fields.notTranslated') }}</span>
     </label>
 
     <!-- textarea -->
@@ -281,12 +283,12 @@ function rowThumb(row: Record<string, unknown>) {
           v-else
           class="flex items-center justify-center aspect-video bg-white/6 text-[12px] text-white/50"
         >
-          Choose an image
+          {{ $t('cmsEditor.fields.chooseImage') }}
         </span>
         <span class="block px-2.5 py-2 text-[11px] text-white/55">
           {{ inherited
-            ? `Using the ${localeLabel(DEFAULT_LOCALE)} image · tap to use a different one here`
-            : effectiveValue ? 'Replace image' : 'Upload or pick an image' }}
+            ? $t('cmsEditor.fields.inheritedImage', { language: localeLabel(DEFAULT_LOCALE) })
+            : effectiveValue ? $t('cmsEditor.fields.replaceImage') : $t('cmsEditor.fields.uploadImage') }}
         </span>
       </button>
 
@@ -313,7 +315,7 @@ function rowThumb(row: Record<string, unknown>) {
       :id="`f-${fieldPath}`"
       v-model="text"
       type="text"
-      :placeholder="sourceText || (field.type === 'link' ? '/products' : undefined)"
+      :placeholder="sourceText || (field.type === 'link' ? $t('cmsEditor.fields.linkPlaceholder') : undefined)"
       class="editor-input"
       :class="needsTranslation ? 'editor-input--untranslated' : ''"
     >
@@ -344,21 +346,21 @@ function rowThumb(row: Record<string, unknown>) {
               type="button"
               class="editor-icon-btn"
               :disabled="index === 0"
-              :aria-label="`Move ${rowTitle(row, index)} up`"
+              :aria-label="$t('cmsEditor.fields.moveRowUp', { item: rowTitle(row, index) })"
               @click="moveRow(index, -1)"
             >↑</button>
             <button
               type="button"
               class="editor-icon-btn"
               :disabled="index === rows.length - 1"
-              :aria-label="`Move ${rowTitle(row, index)} down`"
+              :aria-label="$t('cmsEditor.fields.moveRowDown', { item: rowTitle(row, index) })"
               @click="moveRow(index, 1)"
             >↓</button>
             <button
               type="button"
               class="editor-icon-btn"
               :disabled="!canRemove"
-              :aria-label="`Remove ${rowTitle(row, index)}`"
+              :aria-label="$t('cmsEditor.fields.removeRow', { item: rowTitle(row, index) })"
               @click="removeRow(index)"
             >✕</button>
           </span>
@@ -384,7 +386,7 @@ function rowThumb(row: Record<string, unknown>) {
         class="text-[12px] tracking-[0.08em] uppercase text-white/70 hover:text-white self-start"
         @click="addRow"
       >
-        + {{ arrayField.addLabel ?? `Add ${label}` }}
+        + {{ arrayField.addLabel ?? $t('cmsEditor.fields.addRow', { label }) }}
       </button>
     </div>
 

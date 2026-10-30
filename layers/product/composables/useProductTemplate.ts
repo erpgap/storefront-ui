@@ -11,7 +11,7 @@ import { QueryName } from '~~/server/queries'
 
 export const useProductTemplate = (slug: string) => {
   const cleanSlug = slug?.endsWith('/') ? slug.slice(0, -1) : slug
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
   const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
   const loadingProductTemplate = useState('loading-product-template', () => false)
@@ -22,7 +22,7 @@ export const useProductTemplate = (slug: string) => {
   )
 
   const breadcrumbs = computed(() => {
-    const breadcrumbList: BreadcrumbItem[] = [{ label: 'Home', link: '/' }]
+    const breadcrumbList: BreadcrumbItem[] = [{ label: $i18n.t('home'), link: '/' }]
     const categoryChain: { name: string, slug: string }[] = []
 
     const categories = productTemplate.value?.categories

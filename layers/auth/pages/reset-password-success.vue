@@ -11,15 +11,15 @@
           class="size-20 text-primary-700"
         />
         <h1 class="text-3xl font-bold">
-          Your request has been sent!
+          {{ $t("auth.resetPasswordSuccess.heading") }}
         </h1>
-        <p>You just received a reply in your registered email.</p>
+        <p>{{ $t("auth.resetPasswordSuccess.info") }}</p>
         <SfButton
           size="lg"
           variant="secondary"
           @click="navigateTo('/')"
         >
-          Continue shopping
+          {{ $t("continueShopping") }}
         </SfButton>
       </div>
     </div>

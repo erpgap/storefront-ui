@@ -18,6 +18,7 @@ const props = defineProps<{
   pageTitle: string
 }>()
 const emit = defineEmits<{ saved: [page: CmsPage], close: [] }>()
+const { t } = useI18n()
 
 // Search engines truncate past roughly these lengths. A guide, not a limit.
 const TITLE_GUIDE = 60
@@ -71,7 +72,7 @@ const descriptionUntranslated = computed(() =>
 
 const titlePlaceholder = computed(() => {
   if (!isDefault.value && sourceTitle.value) return sourceTitle.value
-  return `Defaults to the page title: ${props.pageTitle}`
+  return t('cmsEditor.seo.titlePlaceholder', { title: props.pageTitle })
 })
 
 async function save() {
@@ -90,7 +91,7 @@ async function save() {
     emit('saved', page)
   }
   catch (e: any) {
-    error.value = e?.statusMessage || e?.data?.statusMessage || 'Could not save.'
+    error.value = e?.statusMessage || e?.data?.statusMessage || t('cmsEditor.saveFailed')
   }
   finally {
     saving.value = false
@@ -112,7 +113,7 @@ onMounted(() => {
     class="fixed inset-0 z-[100] flex items-center justify-center bg-black/55 p-4"
     role="dialog"
     aria-modal="true"
-    aria-label="SEO"
+    :aria-label="$t('cmsEditor.seo.title')"
     @click.self="emit('close')"
   >
     <form
@@ -121,7 +122,7 @@ onMounted(() => {
     >
       <header class="flex-none flex items-center justify-between px-5 h-14 border-b border-primary-200">
         <h2 class="text-[13px] tracking-[0.14em] uppercase font-medium">
-          SEO
+          {{ $t('cmsEditor.seo.title') }}
           <span
             v-if="locales.length > 1"
             class="normal-case tracking-normal text-primary-400 font-normal"
@@ -130,7 +131,7 @@ onMounted(() => {
         <button
           type="button"
           class="text-primary-400 hover:text-black text-lg leading-none"
-          aria-label="Close"
+          :aria-label="$t('common.close')"
           @click="emit('close')"
         >
           ✕
@@ -140,7 +141,7 @@ onMounted(() => {
       <div class="p-5 flex flex-col gap-4">
         <label class="flex flex-col gap-1.5">
           <span class="flex justify-between text-[11px] tracking-[0.12em] uppercase text-primary-500">
-            Meta title
+            {{ $t('cmsEditor.seo.metaTitle') }}
             <span
               class="normal-case tracking-normal"
               :class="title.length > TITLE_GUIDE ? 'text-amber-700' : 'text-primary-400'"
@@ -157,7 +158,7 @@ onMounted(() => {
 
         <label class="flex flex-col gap-1.5">
           <span class="flex justify-between text-[11px] tracking-[0.12em] uppercase text-primary-500">
-            Meta description
+            {{ $t('cmsEditor.seo.metaDescription') }}
             <span
               class="normal-case tracking-normal"
               :class="description.length > DESCRIPTION_GUIDE ? 'text-amber-700' : 'text-primary-400'"
@@ -174,7 +175,7 @@ onMounted(() => {
 
         <div class="flex flex-col gap-1.5">
           <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">
-            Share image
+            {{ $t('cmsEditor.seo.shareImage') }}
           </span>
           <div class="flex items-start gap-3">
             <img
@@ -193,7 +194,7 @@ onMounted(() => {
                 class="text-[12px] underline"
                 @click="pickerOpen = true"
               >
-                {{ image ? 'Replace image' : 'Choose image' }}
+                {{ image ? $t('cmsEditor.seo.replaceImage') : $t('cmsEditor.seo.chooseImage') }}
               </button>
               <button
                 v-if="image"
@@ -201,14 +202,12 @@ onMounted(() => {
                 class="text-[12px] underline text-red-600"
                 @click="setImage(null)"
               >
-                Remove
+                {{ $t('cmsEditor.seo.removeImage') }}
               </button>
             </div>
           </div>
           <span class="text-[11px] text-primary-400">
-            Shown when the page is shared in social media and messaging apps.
-            The same for every language. Without one, the first image on the
-            page is used.
+            {{ $t('cmsEditor.seo.shareImageHint') }}
           </span>
         </div>
 
@@ -216,13 +215,12 @@ onMounted(() => {
           v-if="jsonLdPretty"
           class="flex flex-col gap-1.5"
         >
-          <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Structured data</span>
+          <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">{{ $t('cmsEditor.seo.structuredData') }}</span>
           <pre
             class="text-[11px] leading-snug bg-primary-50 border border-primary-200 rounded-sm px-3 py-2 max-h-48 overflow-auto whitespace-pre-wrap break-all"
           >{{ jsonLdPretty }}</pre>
           <span class="text-[11px] text-primary-400">
-            What search engines read about this page. Generated for you, so
-            there is nothing to fill in.
+            {{ $t('cmsEditor.seo.structuredDataHint') }}
           </span>
         </div>
 
@@ -230,9 +228,10 @@ onMounted(() => {
           v-if="!isDefault"
           class="text-[11px] text-primary-400"
         >
-          Left empty, {{ languageLabel }} visitors see the
-          {{ locales.find((option: CmsLocale) => option.code === defaultLocale)?.label ?? defaultLocale }}
-          text shown in grey.
+          {{ $t('cmsEditor.seo.fallbackHint', {
+            language: languageLabel,
+            defaultLanguage: locales.find((option: CmsLocale) => option.code === defaultLocale)?.label ?? defaultLocale,
+          }) }}
         </p>
 
         <CmsEditorError v-if="error">
@@ -246,14 +245,14 @@ onMounted(() => {
           class="px-4 py-2 text-[12px] tracking-widest uppercase border border-primary-300 rounded-sm hover:border-black"
           @click="emit('close')"
         >
-          Cancel
+          {{ $t('cmsEditor.cancel') }}
         </button>
         <button
           type="submit"
           class="px-4 py-2 text-[12px] tracking-widest uppercase bg-black text-white rounded-sm disabled:opacity-50"
           :disabled="saving"
         >
-          {{ saving ? 'Saving…' : 'Save' }}
+          {{ saving ? $t('cmsEditor.saving') : $t('cmsEditor.save') }}
         </button>
       </footer>
     </form>

@@ -147,7 +147,7 @@ function propsFor(block: BlockInstance): Record<string, unknown> {
           />
           <template #fallback>
             <p class="py-16 text-center text-[12px] tracking-[0.12em] uppercase text-primary-400">
-              Loading…
+              {{ $t('common.loading') }}
             </p>
           </template>
         </Suspense>

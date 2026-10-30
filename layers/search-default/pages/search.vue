@@ -14,6 +14,7 @@ import { useScrollToTopOnListingChange } from '../../core/composables/useScrollT
 type Product = { slug?: string, stock?: number, qty?: number, [k: string]: any }
 
 const route = useRoute()
+const { t } = useI18n()
 
 // A bare /search with no query term has nothing to show — send users to the
 // full catalog instead.
@@ -70,8 +71,8 @@ const safeAttributes = computed(() =>
 )
 
 const breadcrumbs = [
-  { name: 'Home', link: '/' },
-  { name: 'Search', link: '/search' },
+  { name: t('home'), link: '/' },
+  { name: t('search'), link: '/search' },
 ]
 </script>
 
@@ -86,7 +87,7 @@ const breadcrumbs = [
       v-if="route.query?.search"
       class="font-bold typography-headline-3 md:typography-headline-2 mb-10"
     >
-      Results for "{{ route.query.search }}"
+      {{ $t('resultsFor', { phrase: route.query.search }) }}
     </h1>
 
     <div class="grid grid-cols-12 lg:gap-x-6">
@@ -94,7 +95,7 @@ const breadcrumbs = [
         <ClientOnly>
           <template #fallback>
             <div class="p-4 text-sm text-neutral-500">
-              Loading filters...
+              {{ $t('core.search.loadingFilters') }}
             </div>
           </template>
           <CategoryFilterSidebar

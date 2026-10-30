@@ -4,13 +4,15 @@ import { ref } from 'vue'
 
 // CMS-editable via the `newsletter` block: the merchant owns the wording, the
 // form and where submissions go stay in code.
-withDefaults(defineProps<{
+// An absent prop falls back to the default copy; an empty string stays empty.
+const props = defineProps<{
   title?: string
   body?: string
-}>(), {
-  title: 'Join the list',
-  body: 'Be first to know about new collections, private sales and design stories.',
-})
+}>()
+
+const { t } = useI18n()
+const titleText = computed(() => props.title !== undefined ? props.title : t('core.newsletter.title'))
+const bodyText = computed(() => props.body !== undefined ? props.body : t('core.newsletter.body'))
 
 const { newsletterSubscribe, loading, apiError } = useCore()
 
@@ -31,17 +33,17 @@ const subscribeNewsletter = async () => {
   <section class="bg-black text-white py-[clamp(64px,9vw,132px)]">
     <div class="narrow-container max-w-[720px] text-center">
       <h2 class="font-light tracking-[-0.02em] text-[clamp(28px,3.4vw,44px)] mb-4">
-        {{ title }}
+        {{ titleText }}
       </h2>
       <p class="text-white/60 mb-9">
-        {{ body }}
+        {{ bodyText }}
       </p>
       <p
         v-if="subscribed"
         class="max-w-[480px] mx-auto border border-white/25 text-white text-[14px] py-3.5 px-5"
         role="status"
       >
-        Thanks — you're on the list. Look out for our next drop.
+        {{ $t('core.newsletter.subscribed') }}
       </p>
       <form
         v-else
@@ -50,7 +52,7 @@ const subscribeNewsletter = async () => {
       >
         <UiFormEmailInput
           v-model="inputValue"
-          placeholder="Enter your email address"
+          :placeholder="$t('core.newsletter.emailPlaceholder')"
           class="flex-1"
           @is-field-valid="(n: any) => (emailValidation = n)"
         />
@@ -60,7 +62,7 @@ const subscribeNewsletter = async () => {
           variant="tertiary"
           class="bg-white! text-black! hover:bg-primary-50! border-none! ring-0! shadow-none! h-[48px] sm:h-auto px-7 text-[13px] tracking-[0.12em] uppercase font-medium disabled:opacity-60!"
         >
-          {{ loading ? 'Subscribing…' : 'Subscribe' }}
+          {{ loading ? $t('core.newsletter.subscribing') : $t('core.newsletter.subscribe') }}
         </SfButton>
       </form>
 

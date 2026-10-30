@@ -98,7 +98,7 @@ const NuxtLink = resolveComponent('NuxtLink')
         class="mt-2"
         :disabled="loading"
       >
-        {{ loading ? 'Signing in…' : $t("auth.login.submitLabel") }}
+        {{ loading ? $t("auth.login.signingIn") : $t("auth.login.submitLabel") }}
       </SfButton>
       <SfButton
         :tag="NuxtLink"

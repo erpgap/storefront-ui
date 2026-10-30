@@ -25,10 +25,10 @@ defineEmits<{ insert: [] }>()
     <button
       type="button"
       class="cms-insert__button"
-      :aria-label="`Add a block at position ${index + 1}`"
+      :aria-label="$t('cmsEditor.canvas.addBlockAt', { position: index + 1 })"
       @click="$emit('insert')"
     >
-      + Add block here
+      {{ $t('cmsEditor.canvas.addBlockHere') }}
     </button>
     <span class="cms-insert__line" />
   </div>

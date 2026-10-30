@@ -131,14 +131,14 @@ watch(() => props.selected, () => nextTick(markPlaceholders))
       class="cms-block__empty"
     >
       <span>{{ label }}</span>
-      <span class="cms-block__empty-hint">nothing to show yet — select it to add content</span>
+      <span class="cms-block__empty-hint">{{ $t('cmsEditor.canvas.emptyHint') }}</span>
     </div>
 
     <!-- Everything interactive lives above the content. -->
     <button
       type="button"
       class="cms-block__overlay"
-      :aria-label="`Select ${label} block`"
+      :aria-label="$t('cmsEditor.canvas.selectBlock', { label })"
       @click="$emit('select')"
     />
 
@@ -150,7 +150,7 @@ watch(() => props.selected, () => nextTick(markPlaceholders))
            drag rather than a page scroll. -->
       <span
         class="cms-block__handle"
-        :title="`Drag to move ${label}`"
+        :title="$t('cmsEditor.canvas.dragToMove', { label })"
         data-cms-drag-handle
         aria-hidden="true"
       >⋮⋮</span>
@@ -165,8 +165,8 @@ watch(() => props.selected, () => nextTick(markPlaceholders))
         type="button"
         class="cms-block__action"
         :disabled="index === 0"
-        :aria-label="`Move ${label} up`"
-        title="Move up"
+        :aria-label="$t('cmsEditor.canvas.moveBlockUp', { label })"
+        :title="$t('cmsEditor.canvas.moveUp')"
         @click.stop="$emit('moveUp')"
       >
         ↑
@@ -175,8 +175,8 @@ watch(() => props.selected, () => nextTick(markPlaceholders))
         type="button"
         class="cms-block__action"
         :disabled="index === total - 1"
-        :aria-label="`Move ${label} down`"
-        title="Move down"
+        :aria-label="$t('cmsEditor.canvas.moveBlockDown', { label })"
+        :title="$t('cmsEditor.canvas.moveDown')"
         @click.stop="$emit('moveDown')"
       >
         ↓
@@ -187,8 +187,8 @@ watch(() => props.selected, () => nextTick(markPlaceholders))
       <button
         type="button"
         class="cms-block__action"
-        :aria-label="`Duplicate ${label} block`"
-        title="Duplicate"
+        :aria-label="$t('cmsEditor.canvas.duplicateBlock', { label })"
+        :title="$t('cmsEditor.canvas.duplicate')"
         @click.stop="$emit('duplicate')"
       >
         ⧉
@@ -196,8 +196,8 @@ watch(() => props.selected, () => nextTick(markPlaceholders))
       <button
         type="button"
         class="cms-block__action"
-        :aria-label="`Delete ${label} block`"
-        title="Delete"
+        :aria-label="$t('cmsEditor.canvas.deleteBlock', { label })"
+        :title="$t('cmsEditor.canvas.delete')"
         @click.stop="$emit('remove')"
       >
         ✕

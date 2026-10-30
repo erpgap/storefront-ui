@@ -2,7 +2,8 @@
 // Editors sign in with their Odoo account. Separate from the customer login so
 // the two session types stay conceptually distinct.
 definePageMeta({ layout: false })
-useHead({ title: 'Sign in — CMS' })
+const { t } = useI18n()
+useHead({ title: () => t('cmsEditor.login.pageTitle') })
 
 const email = ref('')
 const password = ref('')
@@ -28,8 +29,8 @@ async function submit() {
       // A bare status with no message is almost always the backend being
       // unreachable, which is worth saying rather than "Could not sign in".
       || (e?.statusCode >= 500
-        ? 'The content system is not responding. Try again shortly.'
-        : 'Could not sign in.')
+        ? t('cmsEditor.login.notResponding')
+        : t('cmsEditor.login.failed'))
   }
   finally {
     busy.value = false
@@ -45,15 +46,15 @@ async function submit() {
     >
       <div>
         <h1 class="text-[15px] font-medium">
-          CMS
+          {{ $t('cmsEditor.brand') }}
         </h1>
         <p class="text-[12px] text-primary-400 mt-0.5">
-          Pages you can edit without a developer
+          {{ $t('cmsEditor.tagline') }}
         </p>
       </div>
 
       <label class="flex flex-col gap-1.5">
-        <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Email</span>
+        <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">{{ $t('cmsEditor.login.email') }}</span>
         <input
           v-model="email"
           type="text"
@@ -64,7 +65,7 @@ async function submit() {
       </label>
 
       <label class="flex flex-col gap-1.5">
-        <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Password</span>
+        <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">{{ $t('cmsEditor.login.password') }}</span>
         <input
           v-model="password"
           type="password"
@@ -83,7 +84,7 @@ async function submit() {
         class="px-4 py-2.5 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm disabled:opacity-50"
         :disabled="busy"
       >
-        {{ busy ? 'Signing in…' : 'Sign in' }}
+        {{ busy ? $t('cmsEditor.login.submitting') : $t('cmsEditor.login.submit') }}
       </button>
     </form>
   </div>

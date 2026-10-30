@@ -91,7 +91,7 @@ const submit = () => {
         class="min-w-[120px]"
         :disabled="loading"
       >
-        {{ loading ? 'Changing…' : $t('account.accountSettings.personalData.changePassword') }}
+        {{ loading ? $t('account.accountSettings.personalData.changing') : $t('account.accountSettings.personalData.changePassword') }}
       </SfButton>
     </div>
   </form>

@@ -3,6 +3,7 @@ import { useCategory } from '../composables/useCategory'
 import type { SeoEntity } from '~/utils/buildSEOHelper'
 
 const route = useRoute()
+const { t } = useI18n()
 const cleanFullPath = computed(() => route?.fullPath?.replace(/\/$/, ''))
 const { category, loadCategory, breadcrumbs } = useCategory(String(cleanFullPath.value))
 
@@ -13,8 +14,8 @@ const seoEntity = computed<SeoEntity>(() => {
 
   return {
     name: 'Category',
-    metaTitle: `Category | ${route.path.split('/').pop() || 'Products'}`,
-    metaDescription: 'Browse our product categories',
+    metaTitle: t('shop.category.metaTitleWithSlug', { slug: route.path.split('/').pop() || t('products') }),
+    metaDescription: t('shop.category.metaDescriptionFallback'),
   }
 })
 

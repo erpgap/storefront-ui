@@ -3,25 +3,28 @@ import { SfButton, SfIconSort, SfIconExpandMore, SfIconCheck, useDropdown } from
 import { useRoute } from 'vue-router'
 import { useUiHelpers } from '~~/layers/category/composables/useUiHelpers'
 
-type SortOption = { id: string, value: string, attrName: string }
+type SortOption = { id: string, value: string, labelKey: string }
 
 const sortOptions: SortOption[] = [
-  { id: 'popular-desc', value: 'popular,DESC', attrName: 'Top Sellers' },
-  { id: 'newest-desc', value: 'newest,DESC', attrName: 'New Arrivals' },
-  { id: 'name-asc', value: 'name,ASC', attrName: 'Name: A to Z' },
-  { id: 'name-desc', value: 'name,DESC', attrName: 'Name: Z to A' },
-  { id: 'price-asc', value: 'price,ASC', attrName: 'Price: Low to High' },
-  { id: 'price-desc', value: 'price,DESC', attrName: 'Price: High to Low' },
+  { id: 'popular-desc', value: 'popular,DESC', labelKey: 'shop.category.sort.topSellers' },
+  { id: 'newest-desc', value: 'newest,DESC', labelKey: 'shop.category.sort.newArrivals' },
+  { id: 'name-asc', value: 'name,ASC', labelKey: 'shop.category.sort.nameAsc' },
+  { id: 'name-desc', value: 'name,DESC', labelKey: 'shop.category.sort.nameDesc' },
+  { id: 'price-asc', value: 'price,ASC', labelKey: 'shop.category.sort.priceAsc' },
+  { id: 'price-desc', value: 'price,DESC', labelKey: 'shop.category.sort.priceDesc' },
 ]
+
+const { t } = useI18n()
 
 const route = useRoute()
 const { changeFilters, selectedFilters } = useUiHelpers()
 
 const sort = useState('sort', () => (route.query?.sort ? String(route.query.sort) : ''))
 const selectedValue = computed(() => sort.value || sortOptions[0]!.value)
-const selectedLabel = computed(
-  () => sortOptions.find(option => option.value === selectedValue.value)?.attrName ?? '',
-)
+const selectedLabel = computed(() => {
+  const option = sortOptions.find(option => option.value === selectedValue.value)
+  return option ? t(option.labelKey) : ''
+})
 const isActive = (value: string) => selectedValue.value === value
 
 const dropdownOpened = ref(false)
@@ -80,7 +83,7 @@ function selectSort(value: string) {
           :class="{ 'font-medium text-primary-700 underline': isActive(option.value) }"
           @click="selectSort(option.value)"
         >
-          {{ option.attrName }}
+          {{ $t(option.labelKey) }}
           <SfIconCheck
             v-if="isActive(option.value)"
             size="sm"

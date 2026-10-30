@@ -17,6 +17,7 @@ import { blockLabel, blockRegistry } from '#cms/blocks'
 
 definePageMeta({ layout: false, middleware: 'cms-auth' })
 
+const { t } = useI18n()
 const route = useRoute()
 const pageId = computed(() => String(route.params.id))
 
@@ -28,7 +29,7 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-useHead({ title: `${page.value.title} — CMS` })
+useHead({ title: t('cmsEditor.editor.pageTitle', { title: page.value.title }) })
 
 const draft = useCmsEditorDraft(page as Ref<CmsPage>)
 const {
@@ -188,7 +189,7 @@ async function publish() {
   catch (error: any) {
     publishError.value = error?.data?.statusMessage
       || error?.statusMessage
-      || 'Could not publish this page.'
+      || t('cmsEditor.editor.publishFailed')
   }
   finally {
     publishing.value = false
@@ -206,11 +207,8 @@ async function publish() {
  */
 async function revertToLive() {
   const message = isPublished.value
-    ? 'Throw away all unpublished changes and go back to the version visitors '
-    + 'see right now?\n\nThis includes changes made earlier or by someone '
-    + 'else, not just the ones you have made since opening the editor.'
-    : 'This page has never been published, so there is no live version to go '
-      + 'back to. Continuing removes every block on it.\n\nContinue?'
+    ? t('cmsEditor.editor.confirmRevert')
+    : t('cmsEditor.editor.confirmClear')
 
   if (!confirm(message)) return
 
@@ -442,11 +440,11 @@ onMounted(() => window.addEventListener('keydown', onKeydown))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 
 const saveLabel = computed(() => ({
-  idle: 'All changes saved',
-  dirty: 'Unsaved changes',
-  saving: 'Saving…',
-  saved: 'Draft saved',
-  error: 'Could not save',
+  idle: t('cmsEditor.editor.saveState.idle'),
+  dirty: t('cmsEditor.editor.saveState.dirty'),
+  saving: t('cmsEditor.editor.saveState.saving'),
+  saved: t('cmsEditor.editor.saveState.saved'),
+  error: t('cmsEditor.editor.saveState.error'),
 }[saveState.value]))
 </script>
 
@@ -458,7 +456,7 @@ const saveLabel = computed(() => ({
         to="/cms"
         class="text-[13px] text-white/60 hover:text-white whitespace-nowrap"
       >
-        ← Pages
+        {{ $t('cmsEditor.editor.backToPages') }}
       </NuxtLink>
 
       <span class="w-px h-5 bg-white/15" />
@@ -469,7 +467,7 @@ const saveLabel = computed(() => ({
         :aria-pressed="paletteOpen"
         @click="paletteOpen = !paletteOpen"
       >
-        {{ paletteOpen ? 'Hide blocks' : 'Add blocks' }}
+        {{ paletteOpen ? $t('cmsEditor.editor.hideBlocks') : $t('cmsEditor.editor.addBlocks') }}
       </button>
 
       <!-- A region has no name or url of its own to edit - it is declared in
@@ -481,7 +479,7 @@ const saveLabel = computed(() => ({
         :class="(page as any)!.kind === 'region'
           ? ''
           : 'rounded-sm px-1.5 -mx-1.5 py-0.5 hover:bg-white/10 transition-colors'"
-        :title="(page as any)!.kind === 'region' ? undefined : 'Rename or change the address'"
+        :title="(page as any)!.kind === 'region' ? undefined : $t('cmsEditor.editor.renameTitle')"
         @click="(page as any)!.kind === 'region' ? undefined : (settingsOpen = true)"
       >
         <p class="text-[13px] font-medium truncate">
@@ -489,7 +487,7 @@ const saveLabel = computed(() => ({
         </p>
         <p class="text-[11px] text-white/45 truncate">
           {{ (page as any)!.kind === 'region'
-            ? 'Appears inside storefront pages'
+            ? $t('cmsEditor.editor.regionSubtitle')
             : page!.slug }}
         </p>
       </component>
@@ -501,7 +499,7 @@ const saveLabel = computed(() => ({
           v-if="locales.length > 1"
           class="flex items-center gap-1.5"
         >
-          <span class="sr-only">Content language</span>
+          <span class="sr-only">{{ $t('cmsEditor.editor.contentLanguage') }}</span>
           <select
             v-model="locale"
             class="editor-btn normal-case! tracking-normal! py-1.5"
@@ -524,8 +522,8 @@ const saveLabel = computed(() => ({
           role="status"
         >
           {{ untranslatedTotal
-            ? `${untranslatedTotal} field${untranslatedTotal === 1 ? '' : 's'} to translate`
-            : 'Fully translated' }}
+            ? $t('cmsEditor.editor.fieldsToTranslate', untranslatedTotal)
+            : $t('cmsEditor.editor.fullyTranslated') }}
         </span>
 
         <span
@@ -540,19 +538,19 @@ const saveLabel = computed(() => ({
           type="button"
           class="editor-btn"
           :disabled="!canUndo"
-          title="Undo (Cmd+Z)"
+          :title="$t('cmsEditor.editor.undoTitle')"
           @click="undo"
         >
-          Undo
+          {{ $t('cmsEditor.editor.undo') }}
         </button>
         <button
           type="button"
           class="editor-btn"
           :disabled="!canRedo"
-          title="Redo (Cmd+Shift+Z)"
+          :title="$t('cmsEditor.editor.redoTitle')"
           @click="redo"
         >
-          Redo
+          {{ $t('cmsEditor.editor.redo') }}
         </button>
 
         <button
@@ -561,7 +559,7 @@ const saveLabel = computed(() => ({
           class="editor-btn"
           @click="seoOpen = true"
         >
-          SEO
+          {{ $t('cmsEditor.editor.seo') }}
         </button>
 
         <button
@@ -569,7 +567,7 @@ const saveLabel = computed(() => ({
           class="editor-btn"
           @click="versionsOpen = true"
         >
-          History
+          {{ $t('cmsEditor.editor.history') }}
         </button>
 
         <button
@@ -577,11 +575,11 @@ const saveLabel = computed(() => ({
           class="editor-btn editor-btn--danger"
           :disabled="!hasUnpublishedChanges"
           :title="isPublished
-            ? 'Throw away all unpublished changes and go back to the live version'
-            : 'Remove every block on this page'"
+            ? $t('cmsEditor.editor.revertTitle')
+            : $t('cmsEditor.editor.clearTitle')"
           @click="revertToLive"
         >
-          {{ isPublished ? 'Revert to live' : 'Clear page' }}
+          {{ isPublished ? $t('cmsEditor.editor.revert') : $t('cmsEditor.editor.clear') }}
         </button>
 
         <a
@@ -591,7 +589,7 @@ const saveLabel = computed(() => ({
           rel="noopener"
           class="editor-btn"
         >
-          View live ↗
+          {{ $t('cmsEditor.editor.viewLive') }}
         </a>
 
         <button
@@ -600,7 +598,7 @@ const saveLabel = computed(() => ({
           :disabled="publishing"
           @click="publish"
         >
-          {{ publishing ? 'Publishing…' : isPublished ? 'Publish changes' : 'Publish' }}
+          {{ publishing ? $t('cmsEditor.editor.publishing') : isPublished ? $t('cmsEditor.editor.publishChanges') : $t('cmsEditor.editor.publish') }}
         </button>
       </div>
     </header>
@@ -647,7 +645,7 @@ const saveLabel = computed(() => ({
           :class="dropIndex !== null ? 'bg-blue-50' : ''"
         >
           <p class="text-[13px] tracking-[0.12em] uppercase text-primary-400">
-            Drag a block here — or just click one in the list
+            {{ $t('cmsEditor.editor.emptyCanvas') }}
           </p>
         </div>
 
@@ -670,14 +668,14 @@ const saveLabel = computed(() => ({
       <aside
         v-if="paletteOpen"
         class="editor-chrome absolute top-0 left-0 bottom-0 w-56 border-r border-white/10 px-3 pb-3 overflow-y-auto z-10 shadow-xl"
-        aria-label="Blocks"
+        :aria-label="$t('cmsEditor.editor.paletteLabel')"
       >
         <div class="editor-chrome sticky top-0 -mx-3 px-3 pt-3 pb-2 z-10">
           <input
             v-model="paletteSearch"
             type="search"
-            placeholder="Search blocks"
-            aria-label="Search blocks"
+            :placeholder="$t('cmsEditor.editor.searchBlocks')"
+            :aria-label="$t('cmsEditor.editor.searchBlocks')"
             class="w-full rounded-md border border-white/20 bg-white/9 px-2.5 py-1.5 text-[13px] text-white placeholder:text-white/40 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-blue-500"
             @keydown.enter.prevent="addFirstPaletteMatch"
             @keydown.esc.stop="paletteSearch = ''"
@@ -687,20 +685,20 @@ const saveLabel = computed(() => ({
           v-if="insertAt !== null"
           class="text-[11px] tracking-[0.14em] uppercase text-blue-200 bg-blue-500/20 rounded-sm px-2 py-1.5 mb-2 flex items-center justify-between gap-2"
         >
-          Inserting at {{ insertAt + 1 }}
+          {{ $t('cmsEditor.editor.insertingAt', { position: insertAt + 1 }) }}
           <button
             type="button"
             class="text-blue-200/75 hover:text-white normal-case tracking-normal"
             @click="insertAt = null"
           >
-            cancel
+            {{ $t('cmsEditor.editor.cancelInsert') }}
           </button>
         </p>
         <p
           v-else
           class="text-[11px] tracking-[0.14em] uppercase text-white/40 mb-2"
         >
-          Drag onto the page
+          {{ $t('cmsEditor.editor.dragHint') }}
         </p>
         <div class="flex flex-col gap-1.5">
           <!-- One line of description keeps every block in view; the full
@@ -723,13 +721,13 @@ const saveLabel = computed(() => ({
             v-if="!paletteBlocks.length"
             class="text-[12px] text-white/50 py-2"
           >
-            No blocks match “{{ paletteSearch }}”.
+            {{ $t('cmsEditor.editor.noBlocksMatch', { term: paletteSearch }) }}
           </p>
         </div>
         <p class="text-[11px] text-white/40 mt-3 leading-snug">
           {{ insertAt !== null
-            ? `Click a block to insert it at position ${insertAt + 1}.`
-            : 'Or click a block to add it at the end. To choose the exact position without dragging, hover between two blocks on the page and click “Add block here”.' }}
+            ? $t('cmsEditor.editor.clickToInsertAt', { position: insertAt + 1 })
+            : $t('cmsEditor.editor.clickToAppend') }}
         </p>
       </aside>
 
@@ -737,7 +735,7 @@ const saveLabel = computed(() => ({
       <aside
         v-if="selected && selectedSchema"
         class="editor-chrome absolute top-0 right-0 bottom-0 w-80 border-l border-white/10 overflow-y-auto z-10 shadow-xl"
-        aria-label="Block settings"
+        :aria-label="$t('cmsEditor.editor.blockSettings')"
       >
         <div class="editor-chrome sticky top-0 flex items-center justify-between px-4 h-12 border-b border-white/10">
           <p class="text-[11px] tracking-[0.14em] uppercase text-white/60">
@@ -746,7 +744,7 @@ const saveLabel = computed(() => ({
           <button
             type="button"
             class="text-white/50 hover:text-white"
-            aria-label="Close settings"
+            :aria-label="$t('cmsEditor.editor.closeSettings')"
             @click="selectedId = null"
           >
             ✕
@@ -759,17 +757,14 @@ const saveLabel = computed(() => ({
             v-if="locale !== defaultLocale"
             class="text-[11px] text-amber-200 bg-amber-400/15 rounded-sm p-2.5 leading-snug"
           >
-            Translating {{ locales.find(l => l.code === locale)?.label }}.
-            Only text and images appear here — layout and settings are shared
-            across languages and are edited in English.
+            {{ $t('cmsEditor.editor.translatingNotice', { language: locales.find(l => l.code === locale)?.label ?? '' }) }}
           </p>
 
           <p
             v-if="selectedSchema.dynamic"
             class="text-[11px] text-white/60 bg-white/6 rounded-sm p-2.5 leading-snug"
           >
-            Products come live from your catalogue in Odoo. You control the
-            wording and how many are shown — not the products themselves.
+            {{ $t('cmsEditor.editor.dynamicNotice') }}
           </p>
 
           <CmsEditorFieldControl
@@ -820,9 +815,7 @@ const saveLabel = computed(() => ({
         class="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 rounded-full bg-amber-500 text-white text-[12px] px-4 py-2 shadow-lg"
         role="status"
       >
-        {{ blocksWithIssues.size }}
-        {{ blocksWithIssues.size === 1 ? 'block needs' : 'blocks need' }}
-        attention before publishing
+        {{ $t('cmsEditor.editor.issuesSummary', blocksWithIssues.size) }}
       </div>
     </div>
   </div>

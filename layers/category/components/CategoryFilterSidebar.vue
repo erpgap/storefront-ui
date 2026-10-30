@@ -35,6 +35,7 @@ const props = defineProps<{
 }>()
 
 const stockCount = inject('stockCount') as number | undefined
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const {
@@ -222,6 +223,13 @@ function clearFilters() {
 /* ---------------- accordion ---------------- */
 const collapsed = reactive<Record<string, boolean>>({})
 const facetKey = (facet: Facet, index: number) => `${facet.label}-${index}`
+// The category and price facets carry fixed English labels that double as
+// filter names in the URL, so only their displayed text is translated.
+const facetDisplayLabel = (facet: Facet) => {
+  if (facet.id === 'category' && facet.type === 'category') return t('shop.category.facetCategory')
+  if (facet.id === null && facet.type === 'price') return t('shop.category.facetPrice')
+  return facet.label
+}
 const isOpen = (facet: Facet, index: number) => !collapsed[facetKey(facet, index)]
 const toggleFacet = (facet: Facet, index: number) => {
   const k = facetKey(facet, index)
@@ -273,7 +281,7 @@ const activePills = computed<Pill[]>(() =>
         return { key: `price`, type: 'price', display: '', min: Number(a) || 0, max: Number(b) || bounds.value.max }
       }
       if (f.filterName === 'Availability') {
-        return { key: 'availability', type: 'availability', display: 'In stock' }
+        return { key: 'availability', type: 'availability', display: t('shop.category.inStock') }
       }
       return {
         key: `${f.filterName}:${f.id}`,
@@ -336,7 +344,7 @@ const hasActive = computed(() => activePills.value.length > 0)
         <button
           type="button"
           class="opacity-70 hover:opacity-100 flex"
-          :aria-label="`Remove ${pill.display || 'price'} filter`"
+          :aria-label="$t('shop.category.removeFilter', { name: pill.display || $t('shop.category.facetPrice') })"
           @click="removePill(pill)"
         >
           <SfIconClose size="xs" />
@@ -357,7 +365,7 @@ const hasActive = computed(() => activePills.value.length > 0)
         @click="toggleFacet(facet, index)"
       >
         <span class="flex items-center">
-          <span class="text-xs tracking-[0.14em] uppercase font-semibold">{{ facet.label }}</span>
+          <span class="text-xs tracking-[0.14em] uppercase font-semibold">{{ facetDisplayLabel(facet) }}</span>
           <span
             v-if="selectedCount(facet)"
             class="ml-2.5 inline-grid place-items-center min-w-[18px] h-[18px] px-1.5 rounded-md bg-primary-900 text-white text-[11px] font-semibold"
@@ -430,7 +438,7 @@ const hasActive = computed(() => activePills.value.length > 0)
                 :min="bounds.min"
                 :max="bounds.max"
                 :step="bounds.step"
-                aria-label="Minimum price"
+                :aria-label="$t('shop.category.minPrice')"
                 @input="onMinInput"
                 @change="commitPrice"
               >
@@ -440,7 +448,7 @@ const hasActive = computed(() => activePills.value.length > 0)
                 :min="bounds.min"
                 :max="bounds.max"
                 :step="bounds.step"
-                aria-label="Maximum price"
+                :aria-label="$t('shop.category.maxPrice')"
                 @input="onMaxInput"
                 @change="commitPrice"
               >
@@ -456,7 +464,7 @@ const hasActive = computed(() => activePills.value.length > 0)
                   v-model.number="priceMin"
                   inputmode="numeric"
                   class="w-full min-w-0 pl-1 text-[13px] outline-hidden tabular-nums"
-                  aria-label="Minimum price value"
+                  :aria-label="$t('shop.category.minPriceValue')"
                   @change="commitPriceFromText"
                 >
               </label>
@@ -467,7 +475,7 @@ const hasActive = computed(() => activePills.value.length > 0)
                   v-model.number="priceMax"
                   inputmode="numeric"
                   class="w-full min-w-0 pl-1 text-[13px] outline-hidden tabular-nums"
-                  aria-label="Maximum price value"
+                  :aria-label="$t('shop.category.maxPriceValue')"
                   @change="commitPriceFromText"
                 >
               </label>
@@ -477,7 +485,7 @@ const hasActive = computed(() => activePills.value.length > 0)
             v-else
             class="text-[13px] text-primary-400"
           >
-            No price range available
+            {{ $t('shop.category.noPriceRange') }}
           </p>
         </div>
 
@@ -541,7 +549,7 @@ const hasActive = computed(() => activePills.value.length > 0)
             <input
               v-model="searchTerms[facetKey(facet, index)]"
               type="text"
-              :placeholder="`Search ${facet.label.toLowerCase()}`"
+              :placeholder="$t('shop.category.searchFacet', { name: facet.label.toLowerCase() })"
               class="w-full border border-neutral-200 rounded-md py-2.5 pl-8 pr-3 text-[13px] outline-hidden focus:border-primary-900"
             >
             <svg
@@ -596,17 +604,17 @@ const hasActive = computed(() => activePills.value.length > 0)
         >
           <div>
             <div class="text-sm">
-              In stock only
+              {{ $t('shop.category.inStockOnly') }}
             </div>
             <div class="text-xs text-primary-400 mt-0.5">
-              {{ stockCount ?? 0 }} available
+              {{ $t('shop.category.availableCount', { count: stockCount ?? 0 }) }}
             </div>
           </div>
           <button
             type="button"
             role="switch"
             :aria-checked="isStockSelected()"
-            aria-label="In stock only"
+            :aria-label="$t('shop.category.inStockOnly')"
             class="relative w-[42px] h-6 rounded-md transition-colors flex-none"
             :class="isStockSelected() ? 'bg-primary-900' : 'bg-primary-200'"
             @click="selectStockFilter()"
@@ -625,7 +633,7 @@ const hasActive = computed(() => activePills.value.length > 0)
       class="w-full mt-6 bg-primary-900 hover:bg-primary-700 text-white border-none lg:hidden"
       @click="emit('close')"
     >
-      {{ $t('showProducts') || 'View results' }}
+      {{ $t('showProducts') }}
     </SfButton>
   </aside>
 </template>

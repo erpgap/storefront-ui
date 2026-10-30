@@ -51,12 +51,12 @@ const goTo = (to: string) => {
         <!-- Header -->
         <div class="flex items-center justify-between px-5 h-[64px] border-b border-primary-100 shrink-0">
           <span class="text-[13px] tracking-[0.16em] uppercase font-medium text-black">
-            Cart <span class="text-primary-400">({{ totalItemsInCart }})</span>
+            {{ $t('cart') }} <span class="text-primary-400">({{ totalItemsInCart }})</span>
           </span>
           <SfButton
             variant="tertiary"
             square
-            aria-label="Close cart"
+            :aria-label="$t('shop.cart.closeCart')"
             class="text-black!"
             @click="closeCartSideBar()"
           >
@@ -100,7 +100,7 @@ const goTo = (to: string) => {
                 </NuxtLink>
                 <button
                   type="button"
-                  aria-label="Remove item"
+                  :aria-label="$t('common.removeItem')"
                   class="shrink-0 text-primary-400 hover:text-black transition-colors"
                   @click="removeItemFromCart(line!.id)"
                 >
@@ -139,13 +139,13 @@ const goTo = (to: string) => {
             class="w-[150px] h-[150px] object-contain drop-shadow-[0_16px_20px_rgba(0,0,0,0.14)]"
           />
           <p class="font-light text-[20px] tracking-[-0.01em]">
-            Your cart is empty
+            {{ $t('emptyCart') }}
           </p>
           <SfButton
             class="min-h-[48px] px-7 text-[13px] font-medium"
             @click="goTo('/products')"
           >
-            Browse products
+            {{ $t('allProductsLinkText') }}
           </SfButton>
         </div>
 
@@ -155,25 +155,25 @@ const goTo = (to: string) => {
           class="border-t border-primary-100 p-5 shrink-0 space-y-4"
         >
           <div class="flex items-center justify-between">
-            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">Subtotal</span>
+            <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t('itemsSubtotal') }}</span>
             <span class="text-[16px] font-medium">{{ $currency(cart?.order?.amountTotal || 0) }}</span>
           </div>
           <p class="text-[12px] text-primary-400">
-            Shipping &amp; taxes calculated at checkout.
+            {{ $t('shop.cart.shippingTaxesNote') }}
           </p>
           <div class="flex flex-col gap-2.5">
             <SfButton
               class="w-full min-h-[52px] text-[13px] font-medium"
               @click="goTo('/checkout')"
             >
-              Checkout
+              {{ $t('checkout') }}
             </SfButton>
             <SfButton
               variant="tertiary"
               class="w-full min-h-[48px] text-[13px] tracking-widest uppercase font-medium border! border-primary-200! text-black! hover:bg-transparent! hover:border-black!"
               @click="goTo('/cart')"
             >
-              View cart
+              {{ $t('shop.cart.viewCart') }}
             </SfButton>
           </div>
         </div>

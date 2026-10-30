@@ -31,6 +31,8 @@ const emit = defineEmits([
   'paymentError',
 ])
 
+const { t } = useI18n()
+
 const {
   getStripeInlineFormValues,
   openStripeTransaction,
@@ -46,7 +48,7 @@ onMounted(async () => {
 
   const values = await getStripeInlineFormValues()
   if (!values?.publishable_key) {
-    emit('paymentError', 'Unable to load the payment form.')
+    emit('paymentError', t('shop.checkout.paymentFormLoadError'))
     emit('paymentLoading', false)
     return
   }
@@ -55,7 +57,7 @@ onMounted(async () => {
   // ("Can not provide apiVersion to Stripe()"). Stripe.js pins its own version.
   stripe.value = await loadStripe(values.publishable_key)
   if (!stripe.value) {
-    emit('paymentError', 'Unable to load the payment form.')
+    emit('paymentError', t('shop.checkout.paymentFormLoadError'))
     emit('paymentLoading', false)
     return
   }
@@ -93,7 +95,7 @@ onMounted(async () => {
     wallets: { link: 'never' },
   })
   paymentElement.on('loaderror', (event: any) => {
-    emit('paymentError', event?.error?.message || 'Cannot display the payment form.')
+    emit('paymentError', event?.error?.message || t('shop.checkout.paymentFormDisplayError'))
   })
   paymentElement.on('change', (event: { complete: boolean }) => {
     emit('isPaymentReady', !!event.complete)
@@ -126,7 +128,7 @@ const handlePayment = async () => {
   //    returns its one-time client secret and the Odoo return URL.
   const transaction = await openStripeTransaction()
   if (!transaction?.client_secret || !transaction?.return_url) {
-    emit('paymentError', 'Could not initialize the payment. Please try again.')
+    emit('paymentError', t('shop.checkout.paymentInitError'))
     focusPaymentForm()
     emit('paymentLoading', false)
     return
@@ -142,7 +144,7 @@ const handlePayment = async () => {
     confirmParams: { return_url: transaction.return_url },
   })
 
-  emit('paymentError', error?.message || 'Payment failed. Please try again.')
+  emit('paymentError', error?.message || t('shop.checkout.paymentFailed'))
   focusPaymentForm()
   emit('paymentLoading', false)
 }

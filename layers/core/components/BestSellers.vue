@@ -21,9 +21,9 @@ const props = withDefaults(defineProps<{
    */
   blockId?: string
 }>(), {
-  eyebrow: 'Curated',
-  title: 'Best Sellers',
-  linkLabel: 'View all',
+  eyebrow: undefined,
+  title: undefined,
+  linkLabel: undefined,
   linkUrl: '/products',
   pageSize: 4,
   sort: 'popular',
@@ -31,6 +31,13 @@ const props = withDefaults(defineProps<{
 })
 
 const NuxtLink = resolveComponent('NuxtLink')
+const { t } = useI18n()
+
+// A prop left out falls back to the default copy (translated, so it cannot be a
+// withDefaults value); an empty string from the CMS still renders nothing.
+const eyebrowText = computed(() => props.eyebrow !== undefined ? props.eyebrow : t('core.home.bestSellers.eyebrow'))
+const titleText = computed(() => props.title !== undefined ? props.title : t('core.home.bestSellers.title'))
+const linkLabelText = computed(() => props.linkLabel !== undefined ? props.linkLabel : t('core.home.bestSellers.linkLabel'))
 
 const SORTS: Record<string, QueryProductsArgs['sort']> = {
   popular: { popular: 'DESC' } as QueryProductsArgs['sort'],
@@ -82,9 +89,9 @@ watch(
     class="narrow-container pb-[clamp(64px,9vw,132px)]"
   >
     <UiSectionHeading
-      :eyebrow="eyebrow"
-      :title="title"
-      :link-label="linkLabel"
+      :eyebrow="eyebrowText"
+      :title="titleText"
+      :link-label="linkLabelText"
       :link-url="linkUrl"
     />
 

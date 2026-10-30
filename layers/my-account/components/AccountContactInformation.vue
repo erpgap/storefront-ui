@@ -75,7 +75,7 @@ const submit = () => {
         class="min-w-[120px]"
         :disabled="loading"
       >
-        {{ loading ? 'Saving…' : $t('contactInfo.save') }}
+        {{ loading ? $t('account.accountSettings.personalData.saving') : $t('contactInfo.save') }}
       </SfButton>
     </div>
   </form>

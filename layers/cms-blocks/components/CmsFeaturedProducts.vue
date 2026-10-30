@@ -8,17 +8,23 @@ import { QueryName } from '~~/server/queries'
 // comes live from Odoo on render. That is the point: a featured block never
 // shows last month's price, and no id-sync job exists because the reference
 // never left the database it belongs to.
+
+// No defaults for eyebrow/title in withDefaults: they are translated, so they
+// are filled in below. Only a missing prop gets the default; an empty string
+// stays empty, as it did when the defaults lived here.
 const props = withDefaults(defineProps<{
   eyebrow?: string
   title?: string
   productIds?: number[]
   blockId?: string
 }>(), {
-  eyebrow: 'Picked for you',
-  title: 'Our Favourites',
   productIds: () => [],
   blockId: '',
 })
+
+const { t } = useI18n()
+const eyebrowText = computed(() => props.eyebrow ?? t('cms.featuredProducts.defaultEyebrow'))
+const titleText = computed(() => props.title ?? t('cms.featuredProducts.defaultTitle'))
 
 const NuxtLink = resolveComponent('NuxtLink')
 const { $sdk } = useNuxtApp() as any
@@ -65,8 +71,8 @@ const products = computed<Product[]>(() => {
     class="narrow-container py-[clamp(64px,9vw,132px)]"
   >
     <UiSectionHeading
-      :eyebrow="eyebrow"
-      :title="title"
+      :eyebrow="eyebrowText"
+      :title="titleText"
     />
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-7 gap-y-10">

@@ -102,20 +102,20 @@ const ordered = computed(() =>
           type="button"
           class="px-1 text-[12px] disabled:opacity-30"
           :disabled="index === 0"
-          :aria-label="`Move ${option.name} up`"
+          :aria-label="$t('cmsEditor.fields.moveRowUp', { item: option.name })"
           @click="move(index, -1)"
         >↑</button>
         <button
           type="button"
           class="px-1 text-[12px] disabled:opacity-30"
           :disabled="index === ordered.length - 1"
-          :aria-label="`Move ${option.name} down`"
+          :aria-label="$t('cmsEditor.fields.moveRowDown', { item: option.name })"
           @click="move(index, 1)"
         >↓</button>
         <button
           type="button"
           class="px-1 text-[12px]"
-          :aria-label="`Remove ${option.name}`"
+          :aria-label="$t('cmsEditor.fields.removeRow', { item: option.name })"
           @click="remove(option.id)"
         >✕</button>
       </span>
@@ -125,7 +125,7 @@ const ordered = computed(() =>
       <input
         v-model="search"
         type="text"
-        :placeholder="kind === 'product' ? 'Search products…' : 'Search categories…'"
+        :placeholder="kind === 'product' ? $t('cmsEditor.refs.searchProducts') : $t('cmsEditor.refs.searchCategories')"
         class="w-full px-2 py-1.5 text-[13px] border border-black/15 rounded-sm"
         @focus="open = true"
       >
@@ -138,7 +138,7 @@ const ordered = computed(() =>
           v-if="pending && !results.length"
           class="px-2 py-1.5 text-[12px] text-primary-400"
         >
-          Searching…
+          {{ $t('cmsEditor.refs.searching') }}
         </li>
         <li
           v-for="option in results"
@@ -166,7 +166,7 @@ const ordered = computed(() =>
       v-else
       class="text-[11px] text-primary-400"
     >
-      Maximum of {{ max }} reached.
+      {{ $t('cmsEditor.refs.maxReached', { max }) }}
     </p>
   </div>
 </template>

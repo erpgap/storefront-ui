@@ -347,7 +347,9 @@
         "contactUpdateError": "We couldn't update your details. Please try again.",
         "passwordChanged": "Your password has been changed.",
         "passwordChangeError": "We couldn't change your password. Check your current password and try again.",
-        "passwordsDontMatch": "The new passwords don't match."
+        "passwordsDontMatch": "The new passwords don't match.",
+        "saving": "Saving…",
+        "changing": "Changing…"
       },
       "billingDetails": {
         "billingAddress": "Billing address",
@@ -396,8 +398,25 @@
         "total": "Total",
         "billingAddress": "Billing address",
         "paymentMethod": "Payment method",
-        "shippingAddress": "Shipping address"
-      }
+        "shippingAddress": "Shipping address",
+        "backToOrders": "Back to orders",
+        "date": "Date",
+        "items": "Items",
+        "qty": "Qty {quantity}",
+        "tax": "Tax",
+        "loadError": "We couldn't load this order."
+      },
+      "noOrdersText": "Once you place an order, it'll show up here so you can track and revisit it."
+    },
+    "home": {
+      "welcomeBack": "Welcome back.",
+      "welcomeBackName": "Welcome back, {name}.",
+      "signedInAs": "Signed in as {email}",
+      "latestOrder": "Latest order",
+      "viewAllOrders": "View all orders",
+      "viewOrder": "View order",
+      "noOrders": "You haven't placed any orders yet.",
+      "startShopping": "Start shopping"
     }
   },
   "auth": {
@@ -409,7 +428,8 @@
       "createAccountBanner": "First time here? {0}.",
       "createAccountLinkLabel": "Create Account",
       "sessionExpired": "Your session has expired. Please log in again.",
-      "error": "The email or password you entered is incorrect."
+      "error": "The email or password you entered is incorrect.",
+      "signingIn": "Signing in…"
     },
     "signup": {
       "heading": "Create Account",
@@ -432,7 +452,12 @@
       "backToLogin": "Back to Login",
       "thankYou": "Thank you, if there is an account registered with {0}, you should receive the password reset link in your inbox right away.",
       "anotherEmail": "I need to try another email address",
-      "emailSent": "Email sent"
+      "emailSent": "Email sent",
+      "sending": "Sending…",
+      "linkSent": "We sent you a reset link (check your inbox).",
+      "serverError": "Server error",
+      "rateLimited": "Email server rate-limited. Try again in a moment or use MailHog locally.",
+      "invalidEmail": "Invalid email."
     },
     "setNewPassword": {
       "heading": "Set new password",
@@ -440,10 +465,379 @@
       "password": "New password",
       "repeatPassword": "Repeat new password",
       "help": "8 or more characters with a mix of letters, numbers and symbols.",
-      "description": "Create the new password you want to use to log in to your account."
+      "description": "Create the new password you want to use to log in to your account.",
+      "pageHeading": "Change your password"
     },
     "toast": {
       "passwordChanged": "Password changed successfully"
+    },
+    "resetPasswordSuccess": {
+      "heading": "Your request has been sent!",
+      "info": "You just received a reply in your registered email."
+    }
+  },
+  "common": {
+    "backToHome": "Back to home",
+    "removeItem": "Remove item",
+    "reviews": "reviews",
+    "loading": "Loading…",
+    "viewWishlist": "View wishlist",
+    "close": "Close",
+    "youSaveAmount": "You save {amount}"
+  },
+  "core": {
+    "error": {
+      "notFoundTitle": "Page not found",
+      "notFoundMessage": "The page you're looking for doesn't exist or may have moved. Let's get you back on track.",
+      "genericTitle": "Something went wrong",
+      "genericMessage": "An unexpected error occurred. Please try again, or head back to the homepage."
+    },
+    "genericError": "Something went wrong. Please try again.",
+    "siteLinks": {
+      "shop": "Shop",
+      "company": "Company",
+      "support": "Support",
+      "topSellers": "Top Sellers",
+      "newArrivals": "New Arrivals",
+      "women": "Women",
+      "men": "Men",
+      "sustainability": "Sustainability",
+      "stores": "Stores",
+      "journal": "Journal",
+      "shipping": "Shipping",
+      "faq": "FAQ",
+      "about": "About",
+      "returns": "Returns",
+      "contact": "Contact"
+    },
+    "header": {
+      "announcement": "Complimentary shipping on orders over $150 — 30-day returns",
+      "homeLink": "Alokai, home",
+      "navigation": "SF Navigation",
+      "openCart": "Open cart",
+      "clearSearch": "clear",
+      "submitSearch": "search",
+      "account": "My account",
+      "openWishlist": "Open wishlist",
+      "closeSearch": "Close search"
+    },
+    "footer": {
+      "tagline": "Considered, timeless fashion in natural fabrics — made to wear well and last.",
+      "copyright": "© {year} Alokai by {company}. All rights reserved."
+    },
+    "bottomNav": {
+      "account": "account"
+    },
+    "wishlistSidebar": {
+      "close": "Close wishlist"
+    },
+    "newsletter": {
+      "title": "Join the list",
+      "body": "Be first to know about new collections, private sales and design stories.",
+      "subscribed": "Thanks — you're on the list. Look out for our next drop.",
+      "emailPlaceholder": "Enter your email address",
+      "subscribe": "Subscribe",
+      "subscribing": "Subscribing…"
+    },
+    "ui": {
+      "pagination": "pagination",
+      "emailPlaceholder": "Enter your email here",
+      "applying": "Applying…"
+    },
+    "home": {
+      "hero": {
+        "eyebrow": "New Collection — {year}",
+        "title": "Timeless Style, Everyday Ease",
+        "body": "Considered essentials in natural fabrics — cotton, linen and leather — designed to move with you and last beyond the season.",
+        "primaryCta": "Shop Top Sellers",
+        "secondaryCta": "View All Products"
+      },
+      "categories": {
+        "eyebrow": "Browse",
+        "title": "Shop by Category",
+        "linkLabel": "All categories",
+        "accessories": "Accessories"
+      },
+      "bestSellers": {
+        "eyebrow": "Curated",
+        "title": "Best Sellers",
+        "linkLabel": "View all"
+      },
+      "editorial": {
+        "eyebrow": "Our Philosophy",
+        "title": "Made from honest materials",
+        "body": "Every piece is cut from natural fabrics — organic cotton, pure linen, full-grain leather — chosen to wear in beautifully and feel better with every year.",
+        "ctaLabel": "Discover the Story"
+      },
+      "valueProps": {
+        "shippingTitle": "Free Shipping",
+        "shippingText": "On all orders over $150",
+        "returnsTitle": "30-Day Returns",
+        "returnsText": "Shop with confidence",
+        "warrantyTitle": "2-Year Warranty",
+        "warrantyText": "Crafted to last",
+        "supportTitle": "Expert Support",
+        "supportText": "Here to help, always"
+      }
+    },
+    "search": {
+      "loadingFilters": "Loading filters..."
+    }
+  },
+  "shop": {
+    "cart": {
+      "closeCart": "Close cart",
+      "shippingTaxesNote": "Shipping & taxes calculated at checkout.",
+      "viewCart": "View cart",
+      "yourBag": "Your bag",
+      "emptyMessage": "Looks like you haven't added anything yet — let's find something you'll love.",
+      "addToCartError": "Could not add to cart. Please try again."
+    },
+    "wishlist": {
+      "savedForLater": "Saved for later",
+      "emptyMessage": "Tap the heart on any product to save your favourites here for later."
+    },
+    "product": {
+      "adding": "Adding…",
+      "inYourCart": "{count} in your cart",
+      "reassurance": "Complimentary shipping over $150 · 30-day returns",
+      "frequentlyBoughtTogether": "Frequently Bought Together",
+      "similarProducts": "Similar Products",
+      "yourRecentViews": "Your Recent Views",
+      "metaTitleFallback": "Product",
+      "metaTitleWithSlug": "Product {'|'} {slug}",
+      "storeFallback": "Store",
+      "metaDescriptionFallback": "Check out this amazing product!",
+      "metaDescriptionGeneric": "Check out this amazing product in our store"
+    },
+    "products": {
+      "title": "All Products {'|'} Browse our full catalog",
+      "heading": "All Products",
+      "description": "Browse the full product catalog. Filter by attributes and price, sort, and explore everything we have to offer."
+    },
+    "category": {
+      "filter": "Filter",
+      "facetCategory": "category",
+      "facetPrice": "price",
+      "inStock": "In stock",
+      "inStockOnly": "In stock only",
+      "availableCount": "{count} available",
+      "removeFilter": "Remove {name} filter",
+      "searchFacet": "Search {name}",
+      "minPrice": "Minimum price",
+      "maxPrice": "Maximum price",
+      "minPriceValue": "Minimum price value",
+      "maxPriceValue": "Maximum price value",
+      "noPriceRange": "No price range available",
+      "metaTitleWithSlug": "Category {'|'} {slug}",
+      "metaDescriptionFallback": "Browse our product categories",
+      "sort": {
+        "topSellers": "Top Sellers",
+        "newArrivals": "New Arrivals",
+        "nameAsc": "Name: A to Z",
+        "nameDesc": "Name: Z to A",
+        "priceAsc": "Price: Low to High",
+        "priceDesc": "Price: High to Low"
+      }
+    },
+    "checkout": {
+      "backToCart": "Back to Cart",
+      "paymentFormLoadError": "Unable to load the payment form.",
+      "paymentFormDisplayError": "Cannot display the payment form.",
+      "paymentInitError": "Could not initialize the payment. Please try again.",
+      "paymentFailed": "Payment failed. Please try again."
+    }
+  },
+  "cms": {
+    "contactForm": {
+      "defaultTitle": "Talk to us",
+      "sentHeading": "Message sent",
+      "sentMessage": "Thanks for reaching out. We've received your message and will get back to you shortly.",
+      "sentMessageName": "Thanks for reaching out, {name}. We've received your message and will get back to you shortly.",
+      "sendAnother": "Send another message",
+      "subjectLabel": "Subject",
+      "messageLabel": "Message",
+      "sending": "Sending…",
+      "submit": "Send message"
+    },
+    "featuredProducts": {
+      "defaultEyebrow": "Picked for you",
+      "defaultTitle": "Our Favourites"
+    }
+  },
+  "cmsEditor": {
+    "canvas": {
+      "emptyHint": "nothing to show yet — select it to add content",
+      "selectBlock": "Select {label} block",
+      "dragToMove": "Drag to move {label}",
+      "moveUp": "Move up",
+      "moveBlockUp": "Move {label} up",
+      "moveDown": "Move down",
+      "moveBlockDown": "Move {label} down",
+      "duplicate": "Duplicate",
+      "duplicateBlock": "Duplicate {label} block",
+      "delete": "Delete",
+      "deleteBlock": "Delete {label} block",
+      "addBlockHere": "+ Add block here",
+      "addBlockAt": "Add a block at position {position}"
+    },
+    "brand": "CMS",
+    "tagline": "Pages you can edit without a developer",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "saveFailed": "Could not save.",
+    "login": {
+      "pageTitle": "Sign in — CMS",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "notResponding": "The content system is not responding. Try again shortly.",
+      "failed": "Could not sign in."
+    },
+    "pages": {
+      "pageTitle": "Pages — CMS",
+      "newPage": "New page",
+      "pageName": "Page name",
+      "pageNamePlaceholder": "Summer Sale",
+      "pageUrl": "Page URL",
+      "pageUrlPlaceholder": "/summer-sale",
+      "createAndEdit": "Create and edit",
+      "creating": "Creating…",
+      "createFailed": "Could not create the page.",
+      "loadFailed": "Could not load your pages.",
+      "loadFailedHint": "The content system is not responding. Your content is safe — this is a connection problem.",
+      "tryAgain": "Try again",
+      "empty": "No pages yet. Create one to get started.",
+      "live": "Live",
+      "draft": "Draft",
+      "unpublishedChanges": "Unpublished changes",
+      "blockCount": "{n} block | {n} blocks",
+      "edited": "edited {date}",
+      "view": "View ↗",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteNamed": "Delete {title}",
+      "confirmDelete": "Delete \"{title}\"? This cannot be undone.",
+      "publishStateFailed": "Could not change the publish state.",
+      "regionsHeading": "Content on other pages",
+      "regionsHint": "Shown inside pages the storefront owns. You choose what goes in them, not where they appear.",
+      "regionEmpty": "Empty"
+    },
+    "editor": {
+      "pageTitle": "{title} — CMS",
+      "publishFailed": "Could not publish this page.",
+      "confirmRevert": "Throw away all unpublished changes and go back to the version visitors see right now?\n\nThis includes changes made earlier or by someone else, not just the ones you have made since opening the editor.",
+      "confirmClear": "This page has never been published, so there is no live version to go back to. Continuing removes every block on it.\n\nContinue?",
+      "saveState": {
+        "idle": "All changes saved",
+        "dirty": "Unsaved changes",
+        "saving": "Saving…",
+        "saved": "Draft saved",
+        "error": "Could not save"
+      },
+      "backToPages": "← Pages",
+      "hideBlocks": "Hide blocks",
+      "addBlocks": "Add blocks",
+      "renameTitle": "Rename or change the address",
+      "regionSubtitle": "Appears inside storefront pages",
+      "contentLanguage": "Content language",
+      "fieldsToTranslate": "{n} field to translate | {n} fields to translate",
+      "fullyTranslated": "Fully translated",
+      "undo": "Undo",
+      "undoTitle": "Undo (Cmd+Z)",
+      "redo": "Redo",
+      "redoTitle": "Redo (Cmd+Shift+Z)",
+      "seo": "SEO",
+      "history": "History",
+      "revert": "Revert to live",
+      "revertTitle": "Throw away all unpublished changes and go back to the live version",
+      "clear": "Clear page",
+      "clearTitle": "Remove every block on this page",
+      "viewLive": "View live ↗",
+      "publish": "Publish",
+      "publishChanges": "Publish changes",
+      "publishing": "Publishing…",
+      "emptyCanvas": "Drag a block here — or just click one in the list",
+      "paletteLabel": "Blocks",
+      "searchBlocks": "Search blocks",
+      "insertingAt": "Inserting at {position}",
+      "cancelInsert": "cancel",
+      "dragHint": "Drag onto the page",
+      "noBlocksMatch": "No blocks match “{term}”.",
+      "clickToInsertAt": "Click a block to insert it at position {position}.",
+      "clickToAppend": "Or click a block to add it at the end. To choose the exact position without dragging, hover between two blocks on the page and click “Add block here”.",
+      "blockSettings": "Block settings",
+      "closeSettings": "Close settings",
+      "translatingNotice": "Translating {language}. Only text and images appear here — layout and settings are shared across languages and are edited in English.",
+      "dynamicNotice": "Products come live from your catalogue in Odoo. You control the wording and how many are shown — not the products themselves.",
+      "issuesSummary": "{n} block needs attention before publishing | {n} blocks need attention before publishing"
+    },
+    "fields": {
+      "notTranslated": "· not translated",
+      "chooseImage": "Choose an image",
+      "inheritedImage": "Using the {language} image · tap to use a different one here",
+      "replaceImage": "Replace image",
+      "uploadImage": "Upload or pick an image",
+      "linkPlaceholder": "/products",
+      "itemFallback": "Item {number}",
+      "moveRowUp": "Move {item} up",
+      "moveRowDown": "Move {item} down",
+      "removeRow": "Remove {item}",
+      "addRow": "Add {label}"
+    },
+    "media": {
+      "title": "Choose an image",
+      "dropzone": "Drag an image here, or {chooseFile}",
+      "chooseFile": "choose a file",
+      "formats": "JPG, PNG, WebP, AVIF or GIF · up to 8 MB",
+      "uploading": "Uploading…",
+      "uploadFailed": "Upload failed.",
+      "sizeMb": "{size} MB",
+      "sizeKb": "{size} KB"
+    },
+    "settings": {
+      "title": "Page settings",
+      "nameHint": "What the merchant sees in the page list. Not shown to shoppers.",
+      "systemUrlFixed": "This page is part of the storefront, so its address is fixed.",
+      "urlChangeWarning": "Changing the address breaks existing links to this page.",
+      "nameRequired": "A page needs a name."
+    },
+    "refs": {
+      "searchProducts": "Search products…",
+      "searchCategories": "Search categories…",
+      "searching": "Searching…",
+      "maxReached": "Maximum of {max} reached."
+    },
+    "seo": {
+      "title": "SEO",
+      "titlePlaceholder": "Defaults to the page title: {title}",
+      "metaTitle": "Meta title",
+      "metaDescription": "Meta description",
+      "shareImage": "Share image",
+      "replaceImage": "Replace image",
+      "chooseImage": "Choose image",
+      "removeImage": "Remove",
+      "shareImageHint": "Shown when the page is shared in social media and messaging apps. The same for every language. Without one, the first image on the page is used.",
+      "structuredData": "Structured data",
+      "structuredDataHint": "What search engines read about this page. Generated for you, so there is nothing to fill in.",
+      "fallbackHint": "Left empty, {language} visitors see the {defaultLanguage} text shown in grey."
+    },
+    "versions": {
+      "title": "Version history",
+      "empty": "This page has not been published yet, so there are no versions.",
+      "version": "Version {number}",
+      "live": "Live",
+      "restoredFrom": "From {number}",
+      "restore": "Restore",
+      "restoring": "Restoring…",
+      "restoreFailed": "Could not restore that version.",
+      "confirmRestore": "Make version {number} live again?",
+      "confirmRestoreOverDraft": "You have unpublished changes that will be replaced. Make version {number} live again?",
+      "restoreHint": "Restoring makes that version live again and resets the editor to match. It is kept as a new version, so nothing is lost."
     }
   }
 }

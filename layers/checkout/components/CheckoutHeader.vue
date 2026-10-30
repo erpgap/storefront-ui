@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between mt-8 mb-10">
     <h1 class="font-bold typography-headline-3 md:typography-headline-2">
-      {{ title }}
+      {{ title ?? $t('checkout') }}
     </h1>
 
     <SfButton
@@ -14,7 +14,7 @@
       <template #prefix>
         <SfIconArrowBack />
       </template>
-      {{ backTextMobile }}
+      {{ backTextMobile ?? $t('back') }}
     </SfButton>
 
     <SfButton
@@ -26,7 +26,7 @@
       <template #prefix>
         <SfIconArrowBack />
       </template>
-      {{ backTextDesktop }}
+      {{ backTextDesktop ?? $t('shop.checkout.backToCart') }}
     </SfButton>
   </div>
 </template>
@@ -37,9 +37,10 @@ import { SfButton, SfIconArrowBack } from '@storefront-ui/vue'
 const NuxtLink = resolveComponent('NuxtLink')
 
 defineProps({
+  // Copy defaults to translations when left out (undefined).
   title: {
     type: String,
-    default: 'Checkout',
+    default: undefined,
   },
   backLink: {
     type: String,
@@ -47,11 +48,11 @@ defineProps({
   },
   backTextMobile: {
     type: String,
-    default: 'Back',
+    default: undefined,
   },
   backTextDesktop: {
     type: String,
-    default: 'Back to Cart',
+    default: undefined,
   },
 })
 </script>

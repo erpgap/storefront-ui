@@ -8,9 +8,9 @@ defineEmits<{
 const categories = inject<Category[]>('categoriesForMegaMenu')
 
 const linkGroups = [
-  { title: 'Shop', links: shopLinks },
-  { title: 'Company', links: companyLinks },
-  { title: 'Support', links: supportLinks },
+  { titleKey: 'core.siteLinks.shop', links: shopLinks },
+  { titleKey: 'core.siteLinks.company', links: companyLinks },
+  { titleKey: 'core.siteLinks.support', links: supportLinks },
 ]
 </script>
 
@@ -34,22 +34,22 @@ const linkGroups = [
     <div class="px-4 pt-7 pb-4 grid grid-cols-2 gap-x-6 gap-y-7">
       <div
         v-for="group in linkGroups"
-        :key="group.title"
+        :key="group.titleKey"
       >
         <h2 class="text-[12px] font-bold tracking-[0.16em] uppercase text-primary-400 mb-3">
-          {{ group.title }}
+          {{ $t(group.titleKey) }}
         </h2>
         <ul>
           <li
             v-for="link in group.links"
-            :key="link.label"
+            :key="link.labelKey"
           >
             <NuxtLink
               :to="link.link"
               class="block py-2 text-[15px] text-primary-600 transition-colors hover:text-black"
               @click="$emit('navigate')"
             >
-              {{ link.label }}
+              {{ $t(link.labelKey) }}
             </NuxtLink>
           </li>
         </ul>

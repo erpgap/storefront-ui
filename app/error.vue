@@ -2,17 +2,18 @@
 import { SfButton } from '@storefront-ui/vue'
 
 const NuxtLink = resolveComponent('NuxtLink')
+const { t } = useI18n()
 const error = useError()
 
 const is404 = computed(
   () => error.value?.statusCode === 404 || error.value?.message === 'Product not found',
 )
 const code = computed(() => (is404.value ? '404' : String(error.value?.statusCode || '500')))
-const title = computed(() => (is404.value ? 'Page not found' : 'Something went wrong'))
+const title = computed(() => (is404.value ? t('core.error.notFoundTitle') : t('core.error.genericTitle')))
 const message = computed(() =>
   is404.value
-    ? 'The page you\'re looking for doesn\'t exist or may have moved. Let\'s get you back on track.'
-    : 'An unexpected error occurred. Please try again, or head back to the homepage.',
+    ? t('core.error.notFoundMessage')
+    : t('core.error.genericMessage'),
 )
 </script>
 
@@ -37,7 +38,7 @@ const message = computed(() =>
               to="/"
               class="min-h-[52px] px-7 text-[13px] font-medium"
             >
-              Back to home
+              {{ $t('common.backToHome') }}
             </SfButton>
             <SfButton
               :tag="NuxtLink"
@@ -45,7 +46,7 @@ const message = computed(() =>
               variant="tertiary"
               class="min-h-[52px] px-7 text-[13px] tracking-widest uppercase font-medium border! border-primary-200! text-black! hover:bg-transparent! hover:border-black!"
             >
-              Browse products
+              {{ $t('allProductsLinkText') }}
             </SfButton>
           </div>
         </div>

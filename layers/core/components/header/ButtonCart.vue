@@ -16,7 +16,7 @@ onMounted(() => {
       type="button"
       variant="tertiary"
       square
-      aria-label="Open cart"
+      :aria-label="$t('core.header.openCart')"
       @click="toggleCartSideBar()"
     >
       <template #prefix>
@@ -40,7 +40,7 @@ onMounted(() => {
         type="button"
         variant="tertiary"
         square
-        aria-label="Open cart"
+        :aria-label="$t('core.header.openCart')"
       >
         <template #prefix>
           <UiLineIcon

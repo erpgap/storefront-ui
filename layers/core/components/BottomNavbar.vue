@@ -129,7 +129,7 @@ onMounted(async () => {
           <SfIconPerson />
         </div>
       </template>
-      account
+      {{ $t('core.bottomNav.account') }}
     </SfButton>
   </nav>
 </template>

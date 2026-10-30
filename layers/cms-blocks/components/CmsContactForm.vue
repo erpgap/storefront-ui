@@ -6,15 +6,19 @@ import { SfInput, SfTextarea, SfButton, SfIconCheckCircle } from '@storefront-ui
 import { spacingClass, type BlockSpacing } from '../utils/spacing'
 import { isValidEmail } from '~~/app/utils/validation'
 
-withDefaults(defineProps<{
+// No default for title in withDefaults: it is translated, so it is filled in
+// below. Only a missing prop gets the default; an empty string stays empty.
+const props = withDefaults(defineProps<{
   title?: string
   spacing?: BlockSpacing
   channels?: { label: string, value: string, link?: string }[]
 }>(), {
-  title: 'Talk to us',
   spacing: 'normal',
   channels: () => [],
 })
+
+const { t } = useI18n()
+const titleText = computed(() => props.title ?? t('cms.contactForm.defaultTitle'))
 
 const { contactUs, loading, apiError } = useCore()
 
@@ -54,10 +58,10 @@ const reset = () => {
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-12 lg:gap-20">
       <div>
         <h2
-          v-if="title"
+          v-if="titleText"
           class="text-[24px] font-light tracking-[-0.01em] mb-8"
         >
-          {{ title }}
+          {{ titleText }}
         </h2>
         <dl class="space-y-6">
           <div
@@ -92,19 +96,18 @@ const reset = () => {
           <div class="flex items-center gap-2.5">
             <SfIconCheckCircle class="text-black" />
             <h3 class="text-[22px] font-light tracking-[-0.01em]">
-              Message sent
+              {{ $t('cms.contactForm.sentHeading') }}
             </h3>
           </div>
           <p class="text-primary-500 font-light max-w-[420px]">
-            Thanks for reaching out{{ form.name ? `, ${form.name}` : '' }}. We've received your
-            message and will get back to you shortly.
+            {{ form.name ? $t('cms.contactForm.sentMessageName', { name: form.name }) : $t('cms.contactForm.sentMessage') }}
           </p>
           <button
             type="button"
             class="text-[13px] font-medium underline underline-offset-4 decoration-primary-300 hover:decoration-black transition-colors"
             @click="reset"
           >
-            Send another message
+            {{ $t('cms.contactForm.sendAnother') }}
           </button>
         </div>
         <form
@@ -115,7 +118,7 @@ const reset = () => {
         >
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <label>
-              <UiFormLabel>Name</UiFormLabel>
+              <UiFormLabel>{{ $t('contactInfo.name') }}</UiFormLabel>
               <SfInput
                 v-model="form.name"
                 name="name"
@@ -123,7 +126,7 @@ const reset = () => {
               />
             </label>
             <label>
-              <UiFormLabel>Email</UiFormLabel>
+              <UiFormLabel>{{ $t('contactInfo.email') }}</UiFormLabel>
               <SfInput
                 v-model="form.email"
                 name="email"
@@ -134,7 +137,7 @@ const reset = () => {
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <label>
-              <UiFormLabel>Phone</UiFormLabel>
+              <UiFormLabel>{{ $t('form.phoneLabel') }}</UiFormLabel>
               <SfInput
                 v-model="form.phone"
                 name="phone"
@@ -143,7 +146,7 @@ const reset = () => {
               />
             </label>
             <label>
-              <UiFormLabel>Subject</UiFormLabel>
+              <UiFormLabel>{{ $t('cms.contactForm.subjectLabel') }}</UiFormLabel>
               <SfInput
                 v-model="form.subject"
                 name="subject"
@@ -152,7 +155,7 @@ const reset = () => {
             </label>
           </div>
           <label>
-            <UiFormLabel>Message</UiFormLabel>
+            <UiFormLabel>{{ $t('cms.contactForm.messageLabel') }}</UiFormLabel>
             <SfTextarea
               v-model="form.message"
               name="message"
@@ -169,7 +172,7 @@ const reset = () => {
             :disabled="loading"
             class="self-start min-h-[52px] px-8 text-[13px] font-medium"
           >
-            {{ loading ? 'Sending…' : 'Send message' }}
+            {{ loading ? $t('cms.contactForm.sending') : $t('cms.contactForm.submit') }}
           </SfButton>
         </form>
       </div>

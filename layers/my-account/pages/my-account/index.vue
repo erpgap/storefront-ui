@@ -43,28 +43,31 @@ onMounted(async () => {
 <template>
   <div class="w-full max-w-[640px]">
     <p class="text-primary-500 font-light">
-      Welcome back<template v-if="firstName">
-        , {{ firstName }}
-      </template>.
+      {{ firstName ? $t('account.home.welcomeBackName', { name: firstName }) : $t('account.home.welcomeBack') }}
     </p>
-    <p
+    <i18n-t
       v-if="email"
+      scope="global"
+      keypath="account.home.signedInAs"
+      tag="p"
       class="mt-1 text-[13px] text-primary-400"
     >
-      Signed in as <span class="text-primary-700">{{ email }}</span>
-    </p>
+      <template #email>
+        <span class="text-primary-700">{{ email }}</span>
+      </template>
+    </i18n-t>
 
     <!-- Latest order -->
     <div class="mt-8">
       <div class="flex items-baseline justify-between mb-3">
         <h2 class="text-[12px] tracking-[0.16em] uppercase font-medium text-primary-400">
-          Latest order
+          {{ $t('account.home.latestOrder') }}
         </h2>
         <NuxtLink
           to="/my-account/my-orders"
           class="text-[13px] underline underline-offset-4 decoration-primary-300 hover:decoration-black transition-colors"
         >
-          View all orders
+          {{ $t('account.home.viewAllOrders') }}
         </NuxtLink>
       </div>
 
@@ -110,11 +113,11 @@ onMounted(async () => {
         <div class="flex items-center justify-between gap-3 mt-4">
           <span class="text-[13px] text-primary-500 font-light">
             {{ formatDate(latestOrder.dateOrder) }}
-            <span class="text-primary-300">·</span> {{ itemCount }} {{ itemCount === 1 ? 'item' : 'items' }}
+            <span class="text-primary-300">·</span> {{ itemCount }} {{ itemCount === 1 ? $t('item') : $t('items') }}
             <span class="text-primary-300">·</span> <span class="text-primary-700 font-medium">{{ $currency(latestOrder.amountTotal || 0) }}</span>
           </span>
           <span class="inline-flex items-center gap-1.5 text-[13px] text-primary-500 group-hover:text-black transition-colors whitespace-nowrap">
-            View order
+            {{ $t('account.home.viewOrder') }}
             <UiIconArrowRight :width="16" />
           </span>
         </div>
@@ -125,13 +128,13 @@ onMounted(async () => {
         class="border border-primary-100 rounded-[3px] p-6 text-center"
       >
         <p class="text-primary-500 font-light mb-4">
-          You haven't placed any orders yet.
+          {{ $t('account.home.noOrders') }}
         </p>
         <NuxtLink
           to="/products"
           class="inline-flex items-center gap-2 text-[13px] tracking-widest uppercase font-medium border-b border-black pb-1 hover:text-primary-600 transition-colors"
         >
-          Start shopping
+          {{ $t('account.home.startShopping') }}
         </NuxtLink>
       </div>
     </div>

@@ -3,11 +3,15 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 const linkColumns = [
   {
-    title: 'Shop',
-    links: [...shopLinks, { label: 'Women', link: '/women' }, { label: 'Men', link: '/men' }],
+    titleKey: 'core.siteLinks.shop',
+    links: [
+      ...shopLinks,
+      { labelKey: 'core.siteLinks.women', link: '/women' },
+      { labelKey: 'core.siteLinks.men', link: '/men' },
+    ],
   },
-  { title: 'Company', links: companyLinks },
-  { title: 'Support', links: supportLinks },
+  { titleKey: 'core.siteLinks.company', links: companyLinks },
+  { titleKey: 'core.siteLinks.support', links: supportLinks },
 ]
 
 const socials = [
@@ -26,33 +30,33 @@ const socials = [
           <div>
             <NuxtLink
               to="/"
-              aria-label="Alokai, home"
+              :aria-label="$t('core.header.homeLink')"
               class="inline-block mb-5"
             >
               <AlokaiLogo class="text-[22px]" />
             </NuxtLink>
             <p class="font-light text-[14px] text-primary-400 max-w-[280px]">
-              Considered, timeless fashion in natural fabrics — made to wear well and last.
+              {{ $t('core.footer.tagline') }}
             </p>
           </div>
 
           <div
             v-for="column in linkColumns"
-            :key="column.title"
+            :key="column.titleKey"
           >
             <h3 class="text-[12px] font-bold tracking-[0.16em] uppercase mb-5">
-              {{ column.title }}
+              {{ $t(column.titleKey) }}
             </h3>
             <ul>
               <li
                 v-for="item in column.links"
-                :key="item.label"
+                :key="item.labelKey"
               >
                 <NuxtLink
                   :to="item.link"
                   class="block py-2.5 text-[16px] md:py-[7px] md:text-[14px] text-primary-500 transition-colors hover:text-black"
                 >
-                  {{ item.label }}
+                  {{ $t(item.labelKey) }}
                 </NuxtLink>
               </li>
             </ul>
@@ -60,15 +64,23 @@ const socials = [
         </div>
 
         <div class="border-t border-primary-100 py-7 flex flex-col sm:flex-row items-center justify-between gap-4 text-[13px] text-primary-400">
-          <span>
-            © {{ new Date().getFullYear() }} Alokai by
-            <a
-              href="https://www.erpgap.com/alokai/"
-              target="_blank"
-              rel="noopener"
-              class="underline"
-            >ERPGAP</a>. All rights reserved.
-          </span>
+          <i18n-t
+            scope="global"
+            keypath="core.footer.copyright"
+            tag="span"
+          >
+            <template #year>
+              {{ new Date().getFullYear() }}
+            </template>
+            <template #company>
+              <a
+                href="https://www.erpgap.com/alokai/"
+                target="_blank"
+                rel="noopener"
+                class="underline"
+              >ERPGAP</a>
+            </template>
+          </i18n-t>
           <div class="flex items-center gap-3">
             <a
               v-for="social in socials"

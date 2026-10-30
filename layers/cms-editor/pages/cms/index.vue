@@ -18,7 +18,8 @@ interface PageRow {
 }
 
 definePageMeta({ layout: false, middleware: 'cms-auth' })
-useHead({ title: 'Pages — CMS' })
+const { t } = useI18n()
+useHead({ title: () => t('cmsEditor.pages.pageTitle') })
 
 const { data: pages, refresh, error: listError } = await useFetch<PageRow[]>(
   '/api/cms/pages',
@@ -55,7 +56,7 @@ async function create() {
     await navigateTo(`/cms/${page.id}`)
   }
   catch (e: any) {
-    error.value = e?.data?.statusMessage || e?.statusMessage || 'Could not create the page.'
+    error.value = e?.data?.statusMessage || e?.statusMessage || t('cmsEditor.pages.createFailed')
   }
   finally {
     busy.value = false
@@ -73,7 +74,7 @@ function startCreating() {
 // --- row actions ------------------------------------------------------------
 
 async function remove(page: PageRow) {
-  if (!confirm(`Delete "${page.title}"? This cannot be undone.`)) return
+  if (!confirm(t('cmsEditor.pages.confirmDelete', { title: page.title }))) return
   await $fetch(`/api/cms/pages/${page.id}`, { method: 'DELETE' })
   await refresh()
 }
@@ -85,7 +86,7 @@ async function togglePublished(page: PageRow) {
     await refresh()
   }
   catch (e: any) {
-    alert(e?.data?.statusMessage || 'Could not change the publish state.')
+    alert(e?.data?.statusMessage || t('cmsEditor.pages.publishStateFailed'))
   }
 }
 
@@ -113,10 +114,10 @@ function formatDate(iso: string) {
       <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
         <div>
           <h1 class="text-[15px] font-medium">
-            CMS
+            {{ $t('cmsEditor.brand') }}
           </h1>
           <p class="text-[12px] text-primary-400">
-            Pages you can edit without a developer
+            {{ $t('cmsEditor.tagline') }}
           </p>
         </div>
         <button
@@ -124,7 +125,7 @@ function formatDate(iso: string) {
           class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm hover:bg-blue-600 transition-colors"
           @click="startCreating"
         >
-          New page
+          {{ $t('cmsEditor.pages.newPage') }}
         </button>
       </div>
     </header>
@@ -138,21 +139,21 @@ function formatDate(iso: string) {
       >
         <div class="grid sm:grid-cols-2 gap-4">
           <label class="flex flex-col gap-1.5">
-            <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Page name</span>
+            <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">{{ $t('cmsEditor.pages.pageName') }}</span>
             <input
               v-model="title"
               type="text"
               required
-              placeholder="Summer Sale"
+              :placeholder="$t('cmsEditor.pages.pageNamePlaceholder')"
               class="editor-input"
             >
           </label>
           <label class="flex flex-col gap-1.5">
-            <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">Page URL</span>
+            <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">{{ $t('cmsEditor.pages.pageUrl') }}</span>
             <input
               v-model="slug"
               type="text"
-              placeholder="/summer-sale"
+              :placeholder="$t('cmsEditor.pages.pageUrlPlaceholder')"
               class="editor-input"
               @input="slugTouched = true"
             >
@@ -169,14 +170,14 @@ function formatDate(iso: string) {
             class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm disabled:opacity-50"
             :disabled="busy || !title.trim()"
           >
-            {{ busy ? 'Creating…' : 'Create and edit' }}
+            {{ busy ? $t('cmsEditor.pages.creating') : $t('cmsEditor.pages.createAndEdit') }}
           </button>
           <button
             type="button"
             class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase border border-primary-300 rounded-sm"
             @click="creating = false"
           >
-            Cancel
+            {{ $t('cmsEditor.cancel') }}
           </button>
         </div>
       </form>
@@ -190,18 +191,17 @@ function formatDate(iso: string) {
         class="bg-white rounded-lg border border-red-200 p-12 text-center"
       >
         <p class="text-[13px] text-red-700">
-          Could not load your pages.
+          {{ $t('cmsEditor.pages.loadFailed') }}
         </p>
         <p class="text-[12px] text-primary-500 mt-1">
-          The content system is not responding. Your content is safe — this is
-          a connection problem.
+          {{ $t('cmsEditor.pages.loadFailedHint') }}
         </p>
         <button
           type="button"
           class="editor-btn mt-4"
           @click="refresh()"
         >
-          Try again
+          {{ $t('cmsEditor.pages.tryAgain') }}
         </button>
       </div>
 
@@ -210,7 +210,7 @@ function formatDate(iso: string) {
         class="bg-white rounded-lg border border-primary-200 p-12 text-center"
       >
         <p class="text-[13px] text-primary-500">
-          No pages yet. Create one to get started.
+          {{ $t('cmsEditor.pages.empty') }}
         </p>
       </div>
 
@@ -238,20 +238,20 @@ function formatDate(iso: string) {
                   ? 'bg-green-100 text-green-800'
                   : 'bg-primary-100 text-primary-500'"
               >
-                {{ page.published ? 'Live' : 'Draft' }}
+                {{ page.published ? $t('cmsEditor.pages.live') : $t('cmsEditor.pages.draft') }}
               </span>
 
               <span
                 v-if="page.hasUnpublishedChanges"
                 class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-amber-100 text-amber-800"
               >
-                Unpublished changes
+                {{ $t('cmsEditor.pages.unpublishedChanges') }}
               </span>
             </div>
 
             <p class="text-[12px] text-primary-400 mt-0.5 truncate">
-              {{ page.slug }} · {{ page.blockCount }} block{{ page.blockCount === 1 ? '' : 's' }}
-              · edited {{ formatDate(page.updatedAt) }}
+              {{ page.slug }} · {{ $t('cmsEditor.pages.blockCount', page.blockCount) }}
+              · {{ $t('cmsEditor.pages.edited', { date: formatDate(page.updatedAt) }) }}
             </p>
           </div>
 
@@ -263,7 +263,7 @@ function formatDate(iso: string) {
               rel="noopener"
               class="editor-btn"
             >
-              View ↗
+              {{ $t('cmsEditor.pages.view') }}
             </a>
             <!-- A built-in page always stays live; Odoo refuses it anyway. -->
             <button
@@ -272,22 +272,22 @@ function formatDate(iso: string) {
               class="editor-btn"
               @click="togglePublished(page)"
             >
-              {{ page.published ? 'Unpublish' : 'Publish' }}
+              {{ page.published ? $t('cmsEditor.pages.unpublish') : $t('cmsEditor.pages.publish') }}
             </button>
             <NuxtLink
               :to="`/cms/${page.id}`"
               class="editor-btn editor-btn--primary"
             >
-              Edit
+              {{ $t('cmsEditor.pages.edit') }}
             </NuxtLink>
             <button
               v-if="!page.isSystem"
               type="button"
               class="editor-btn editor-btn--danger"
-              :aria-label="`Delete ${page.title}`"
+              :aria-label="$t('cmsEditor.pages.deleteNamed', { title: page.title })"
               @click="remove(page)"
             >
-              Delete
+              {{ $t('cmsEditor.pages.delete') }}
             </button>
           </div>
         </li>
@@ -298,11 +298,10 @@ function formatDate(iso: string) {
         class="mt-10"
       >
         <h2 class="text-[13px] font-medium">
-          Content on other pages
+          {{ $t('cmsEditor.pages.regionsHeading') }}
         </h2>
         <p class="text-[12px] text-primary-400 mb-3">
-          Shown inside pages the storefront owns. You choose what goes in them,
-          not where they appear.
+          {{ $t('cmsEditor.pages.regionsHint') }}
         </p>
 
         <ul class="flex flex-col gap-2">
@@ -322,15 +321,15 @@ function formatDate(iso: string) {
                 <span
                   v-if="region.hasUnpublishedChanges"
                   class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-amber-100 text-amber-800"
-                >Unpublished changes</span>
+                >{{ $t('cmsEditor.pages.unpublishedChanges') }}</span>
                 <span
                   v-else-if="!region.blockCount"
                   class="text-[10px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm bg-primary-100 text-primary-500"
-                >Empty</span>
+                >{{ $t('cmsEditor.pages.regionEmpty') }}</span>
               </div>
               <p class="text-[12px] text-primary-400 mt-0.5 truncate">
-                {{ region.blockCount }} block{{ region.blockCount === 1 ? '' : 's' }}
-                · edited {{ formatDate(region.updatedAt) }}
+                {{ $t('cmsEditor.pages.blockCount', region.blockCount) }}
+                · {{ $t('cmsEditor.pages.edited', { date: formatDate(region.updatedAt) }) }}
               </p>
             </div>
 
@@ -338,7 +337,7 @@ function formatDate(iso: string) {
               :to="`/cms/${region.id}`"
               class="editor-btn editor-btn--primary flex-none"
             >
-              Edit
+              {{ $t('cmsEditor.pages.edit') }}
             </NuxtLink>
           </li>
         </ul>

@@ -52,6 +52,7 @@ watch(
           square
           variant="tertiary"
           class="absolute right-[16px] top-[16px] hover:bg-current"
+          :aria-label="$t('core.header.closeSearch')"
           @click="$emit('close')"
         >
           <SfIconClose class="text-neutral-500" />
@@ -69,7 +70,7 @@ watch(
                 v-model="searchInputValue"
                 type="text"
                 class="[&::-webkit-search-cancel-button]:appearance-none"
-                placeholder="Search"
+                :placeholder="$t('search')"
                 wrapper-class="flex-1 h-10 pr-0"
                 size="base"
                 @input="search()"
@@ -81,7 +82,7 @@ watch(
                       v-if="searchInputValue"
                       variant="tertiary"
                       square
-                      aria-label="clear"
+                      :aria-label="$t('core.header.clearSearch')"
                       class="rounded-l-none hover:bg-transparent active:bg-transparent"
                       @click="searchInputValue = ''"
                     >
@@ -94,7 +95,7 @@ watch(
                     <SfButton
                       variant="tertiary"
                       square
-                      aria-label="search"
+                      :aria-label="$t('core.header.submitSearch')"
                       type="submit"
                       class="rounded-l-none hover:bg-transparent active:bg-transparent"
                       @click="enterPress"

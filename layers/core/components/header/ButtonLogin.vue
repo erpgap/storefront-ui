@@ -14,6 +14,7 @@ const { isAuthenticated } = useAuth()
     :to="isAuthenticated ? '/my-account/my-orders' : '/login'"
     :tag="NuxtLink"
     square
+    :aria-label="$t('core.header.account')"
   >
     <template #prefix>
       <UiLineIcon

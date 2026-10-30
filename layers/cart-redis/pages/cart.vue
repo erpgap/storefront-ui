@@ -24,7 +24,7 @@ await loadCart()
   >
     <div class="flex justify-between mt-8 mb-10">
       <h1 class="font-bold typography-headline-3 md:typography-headline-2">
-        Cart
+        {{ $t('cart') }}
       </h1>
       <SfButton
         to="/cart"
@@ -80,7 +80,7 @@ await loadCart()
       class="lg:mx-4 mt-12"
     >
       <LazyProductSlider
-        heading="Frequently Bought Together"
+        :heading="$t('shop.product.frequentlyBoughtTogether')"
         :product-template-list="frequentlyTogetherProducts"
       />
     </section>
@@ -89,7 +89,7 @@ await loadCart()
     >
       <ClientOnly>
         <LazyProductRecentViewSlider
-          text="Your Recent Views"
+          :text="$t('shop.product.yourRecentViews')"
         />
       </ClientOnly>
     </section>
@@ -114,13 +114,13 @@ await loadCart()
       <!-- Text -->
       <div class="order-2 md:order-1 text-center md:text-left">
         <p class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-400 mb-4">
-          Your bag
+          {{ $t('shop.cart.yourBag') }}
         </p>
         <h1 class="font-light tracking-[-0.02em] text-[clamp(30px,3.6vw,48px)]">
-          Your cart is empty
+          {{ $t('emptyCart') }}
         </h1>
         <p class="mt-5 text-primary-500 font-light leading-relaxed max-w-[380px] mx-auto md:mx-0">
-          Looks like you haven't added anything yet — let's find something you'll love.
+          {{ $t('shop.cart.emptyMessage') }}
         </p>
         <div class="mt-9 flex flex-wrap justify-center md:justify-start gap-3">
           <SfButton
@@ -128,7 +128,7 @@ await loadCart()
             to="/products"
             class="min-h-[52px] px-7 text-[13px] font-medium"
           >
-            Browse products
+            {{ $t('allProductsLinkText') }}
           </SfButton>
           <SfButton
             :tag="NuxtLink"
@@ -136,7 +136,7 @@ await loadCart()
             variant="tertiary"
             class="min-h-[52px] px-7 text-[13px] tracking-widest uppercase font-medium border! border-primary-200! text-black! hover:bg-transparent! hover:border-black!"
           >
-            Back to home
+            {{ $t('common.backToHome') }}
           </SfButton>
         </div>
       </div>

@@ -11,10 +11,10 @@ const { isOpen: isSearchOpen, toggle: toggleSearch, close: closeSearch } = useDi
 
 // TODO: point each nav item to a real category slug (links handled later)
 const navItems = [
-  { label: 'Top Sellers', link: '/products' },
-  { label: 'New Arrivals', link: '/products?sort=newest,DESC' },
-  { label: 'Women', link: '/women' },
-  { label: 'Men', link: '/men' },
+  { labelKey: 'core.siteLinks.topSellers', link: '/products' },
+  { labelKey: 'core.siteLinks.newArrivals', link: '/products?sort=newest,DESC' },
+  { labelKey: 'core.siteLinks.women', link: '/women' },
+  { labelKey: 'core.siteLinks.men', link: '/men' },
 ]
 
 const menuRef = ref()
@@ -60,15 +60,15 @@ onClickOutside(searchPanelRef, () => {
         <!-- Left: category navigation -->
         <nav
           class="hidden lg:flex gap-8"
-          aria-label="SF Navigation"
+          :aria-label="$t('core.header.navigation')"
         >
           <NuxtLink
             v-for="item in navItems"
-            :key="item.label"
+            :key="item.labelKey"
             :to="item.link"
             class="group relative py-1.5 text-[13px] tracking-[0.08em] uppercase text-primary-600 whitespace-nowrap transition-colors hover:text-black"
           >
-            {{ item.label }}
+            {{ $t(item.labelKey) }}
             <span class="absolute left-0 bottom-0 h-px w-0 bg-black transition-all duration-300 group-hover:w-full" />
           </NuxtLink>
         </nav>
@@ -76,7 +76,7 @@ onClickOutside(searchPanelRef, () => {
         <!-- Center: brand -->
         <NuxtLink
           to="/"
-          aria-label="Alokai, home"
+          :aria-label="$t('core.header.homeLink')"
           class="justify-self-center text-[26px] md:text-[28px] text-black"
         >
           <AlokaiLogo />
@@ -87,7 +87,7 @@ onClickOutside(searchPanelRef, () => {
           <SfButton
             variant="tertiary"
             square
-            aria-label="Search"
+            :aria-label="$t('search')"
             :aria-expanded="isSearchOpen"
             class="text-black hover:bg-white active:bg-white rounded-md"
             @click="toggleSearch()"
@@ -125,7 +125,7 @@ onClickOutside(searchPanelRef, () => {
               <SfInput
                 v-model="searchInputValue"
                 type="text"
-                placeholder="Search"
+                :placeholder="$t('search')"
                 autofocus
                 class="[&::-webkit-search-cancel-button]:appearance-none"
                 wrapper-class="h-11 pr-0 active:ring-black! focus-within:ring-black! hover:ring-black! active:ring-1! focus-within:ring-1!"

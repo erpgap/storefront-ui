@@ -8,7 +8,7 @@ import type {
 import { QueryName } from '~~/server/queries/index'
 
 export const useCategory = (categorySlugIndex: string) => {
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
 
   const loading = useState('category-loading', () => false)
 
@@ -49,7 +49,7 @@ export const useCategory = (categorySlugIndex: string) => {
   const breadcrumbs = computed((): BreadcrumbItem[] => {
     const defaultBreadcrumb = [
       {
-        label: 'Home',
+        label: $i18n.t('home'),
         link: '/',
       },
     ]

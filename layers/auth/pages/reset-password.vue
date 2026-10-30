@@ -28,7 +28,7 @@
             type="submit"
             :disabled="isSubmitting || !customerEmail"
           >
-            {{ isSubmitting ? 'Sending…' : $t("auth.resetPassword.continue") }}
+            {{ isSubmitting ? $t("auth.resetPassword.sending") : $t("auth.resetPassword.continue") }}
           </SfButton>
 
           <SfButton
@@ -57,6 +57,7 @@ const customerEmail = ref('')
 const isSubmitting = ref(false)
 
 const { resetPassword } = useAuth()
+const { t } = useI18n()
 const toast = useToast?.() // se tiver um plugin de toast; senão troque por sua UI
 
 async function resetPasswordWithRetry(email: string, max = 3) {
@@ -91,19 +92,19 @@ async function resetPasswordHandler() {
     await resetPasswordWithRetry(customerEmail.value)
 
     // sucesso
-    if (toast) toast.success('We sent you a reset link (check your inbox).')
+    if (toast) toast.success(t('auth.resetPassword.linkSent'))
   }
   catch (e: any) {
-    const raw = e?.response?._data?.message || e?.message || 'Server error'
+    const raw = e?.response?._data?.message || e?.message || t('auth.resetPassword.serverError')
 
     // mensagem amigável para limite do SMTP (Mailtrap Testing)
     if (raw.includes('Too many emails per second')) {
       if (toast) {
-        toast.error('Email server rate-limited. Try again in a moment or use MailHog locally.')
+        toast.error(t('auth.resetPassword.rateLimited'))
       }
     }
     else if (raw.toLowerCase().includes('invalid email')) {
-      if (toast) toast.error('Invalid email.')
+      if (toast) toast.error(t('auth.resetPassword.invalidEmail'))
     }
     else {
       if (toast) toast.error(raw)

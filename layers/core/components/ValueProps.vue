@@ -18,6 +18,8 @@ const props = withDefaults(defineProps<{
   items?: ValueItem[]
 }>(), { items: undefined })
 
+const { t } = useI18n()
+
 const ICONS: Record<IconName, { path: string, extra?: 'circles-truck' | 'return' }> = {
   truck: { path: 'M3 7h11v8H3zM14 10h4l3 3v2h-7z', extra: 'circles-truck' },
   return: { path: 'M3 12a9 9 0 1 1 3 6.7', extra: 'return' },
@@ -26,10 +28,10 @@ const ICONS: Record<IconName, { path: string, extra?: 'circles-truck' | 'return'
 }
 
 const values = computed(() => (props.items ?? [
-  { title: 'Free Shipping', text: 'On all orders over $150', icon: 'truck' as IconName },
-  { title: '30-Day Returns', text: 'Shop with confidence', icon: 'return' as IconName },
-  { title: '2-Year Warranty', text: 'Crafted to last', icon: 'shield' as IconName },
-  { title: 'Expert Support', text: 'Here to help, always', icon: 'support' as IconName },
+  { title: t('core.home.valueProps.shippingTitle'), text: t('core.home.valueProps.shippingText'), icon: 'truck' as IconName },
+  { title: t('core.home.valueProps.returnsTitle'), text: t('core.home.valueProps.returnsText'), icon: 'return' as IconName },
+  { title: t('core.home.valueProps.warrantyTitle'), text: t('core.home.valueProps.warrantyText'), icon: 'shield' as IconName },
+  { title: t('core.home.valueProps.supportTitle'), text: t('core.home.valueProps.supportText'), icon: 'support' as IconName },
 ]).map((item, index) => {
   const icon = ICONS[item.icon as IconName] ?? ICONS.shield
   return { ...item, key: `${item.title ?? 'item'}-${index}`, icon: icon.path, extra: icon.extra }

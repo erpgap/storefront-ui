@@ -29,7 +29,7 @@ const handleApplyPromo = async () => {
       class="shrink-0"
       @click="handleApplyPromo"
     >
-      {{ loading ? 'Applying…' : $t('apply') }}
+      {{ loading ? $t('core.ui.applying') : $t('apply') }}
     </SfButton>
   </div>
 </template>

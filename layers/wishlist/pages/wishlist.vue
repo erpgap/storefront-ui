@@ -8,7 +8,9 @@ const NuxtLink = resolveComponent('NuxtLink')
 const { wishlist, loadWishlist, loading } = useWishlist()
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
-useHead({ title: 'Wishlist — Alokai' })
+const { t } = useI18n()
+
+useHead({ title: () => `${t('wishlist.wishlist')} — Alokai` })
 
 const ready = ref(false)
 onMounted(async () => {
@@ -23,7 +25,7 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
   <div class="narrow-container pb-20">
     <div class="flex items-center justify-between mt-8 mb-10">
       <h1 class="font-bold typography-headline-3 md:typography-headline-2">
-        Wishlist
+        {{ $t('wishlist.wishlist') }}
       </h1>
       <SfButton
         :tag="NuxtLink"
@@ -34,7 +36,7 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
         <template #prefix>
           <SfIconArrowBack />
         </template>
-        Back to shopping
+        {{ $t('wishlist.backToShopping') }}
       </SfButton>
     </div>
 
@@ -84,13 +86,13 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
         </div>
         <div class="order-2 md:order-1 text-center md:text-left">
           <p class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-400 mb-4">
-            Saved for later
+            {{ $t('shop.wishlist.savedForLater') }}
           </p>
           <h2 class="font-light tracking-[-0.02em] text-[clamp(30px,3.6vw,48px)]">
-            Your wishlist is empty
+            {{ $t('wishlist.emptyWishlist') }}
           </h2>
           <p class="mt-5 text-primary-500 font-light leading-relaxed max-w-[380px] mx-auto md:mx-0">
-            Tap the heart on any product to save your favourites here for later.
+            {{ $t('shop.wishlist.emptyMessage') }}
           </p>
           <div class="mt-9 flex flex-wrap justify-center md:justify-start gap-3">
             <SfButton
@@ -98,7 +100,7 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
               to="/products"
               class="min-h-[52px] px-7 text-[13px] font-medium"
             >
-              Browse products
+              {{ $t('allProductsLinkText') }}
             </SfButton>
             <SfButton
               :tag="NuxtLink"
@@ -106,7 +108,7 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
               variant="tertiary"
               class="min-h-[52px] px-7 text-[13px] tracking-widest uppercase font-medium border! border-primary-200! text-black! hover:bg-transparent! hover:border-black!"
             >
-              Back to home
+              {{ $t('common.backToHome') }}
             </SfButton>
           </div>
         </div>

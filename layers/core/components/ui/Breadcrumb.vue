@@ -15,6 +15,7 @@ const toggle = () => {
 }
 const { referenceRef, floatingRef } = useDropdown({ dropdownOpened, onClose: () => dropdownOpened.value = false })
 const NuxtLink = resolveComponent('NuxtLink')
+const { t } = useI18n()
 
 const normalizedBreadcrumbs = computed(() => {
   if (Array.isArray(props.breadcrumbs)) return props.breadcrumbs
@@ -40,10 +41,12 @@ const computedBreadcrumbs = computed(() => {
       link: typeof rawLink === 'string' ? rawLink.replace(/\/{2,}/g, '/') : rawLink,
     }
   })
-  if (!arr.length) return [{ name: 'Home', link: '/' }]
+  const home = { name: t('home'), link: '/' }
+  if (!arr.length) return [home]
   const first = arr[0]
-  if (first.name?.toLowerCase() === 'home' && first.link === '/') return arr
-  return [{ name: 'Home', link: '/' }, ...arr]
+  const firstName = first.name?.toLowerCase()
+  if ((firstName === 'home' || firstName === home.name.toLowerCase()) && first.link === '/') return arr
+  return [home, ...arr]
 })
 </script>
 
@@ -60,7 +63,7 @@ const computedBreadcrumbs = computed(() => {
         >
           <SfButton
             class="relative w-5 h-5 p-0! rounded-xs outline-secondary-600 hover:bg-transparent active:bg-transparent"
-            aria-label="Show more breadcrumbs"
+            :aria-label="$t('breadcrumbsDropdownText')"
             type="button"
             variant="tertiary"
             square

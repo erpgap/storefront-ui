@@ -19,24 +19,30 @@ const props = withDefaults(defineProps<{
   ctas?: Cta[]
 }>(), {
   eyebrow: undefined,
-  title: 'Timeless Style, Everyday Ease',
-  body: 'Considered essentials in natural fabrics — cotton, linen and leather — designed to move with you and last beyond the season.',
+  title: undefined,
+  body: undefined,
   image: '/img/home/hero.webp',
   ctas: undefined,
 })
 
 const NuxtLink = resolveComponent('NuxtLink')
+const { t } = useI18n()
+
+// A prop left out falls back to the default copy (translated, so it cannot be a
+// withDefaults value); an empty string from the CMS still renders nothing.
+const titleText = computed(() => props.title !== undefined ? props.title : t('core.home.hero.title'))
+const bodyText = computed(() => props.body !== undefined ? props.body : t('core.home.hero.body'))
 
 // The year was interpolated in the template, so it cannot live in a static
 // default. Only an absent prop gets it: an empty string from the CMS means
 // the merchant cleared the line, so nothing renders.
 const eyebrowText = computed(
-  () => props.eyebrow ?? `New Collection — ${new Date().getFullYear()}`,
+  () => props.eyebrow ?? t('core.home.hero.eyebrow', { year: new Date().getFullYear() }),
 )
 
 const ctaList = computed<Cta[]>(() => props.ctas ?? [
-  { label: 'Shop Top Sellers', url: '/products', style: 'primary' },
-  { label: 'View All Products', url: '/products', style: 'secondary' },
+  { label: t('core.home.hero.primaryCta'), url: '/products', style: 'primary' },
+  { label: t('core.home.hero.secondaryCta'), url: '/products', style: 'secondary' },
 ])
 </script>
 
@@ -89,10 +95,10 @@ const ctaList = computed<Cta[]>(() => props.ctas ?? [
           {{ eyebrowText }}
         </p>
         <h1 class="font-light leading-[1.05] tracking-[-0.02em] text-[clamp(40px,6vw,80px)] mb-5">
-          {{ title }}
+          {{ titleText }}
         </h1>
         <p class="font-light text-[clamp(16px,1.4vw,19px)] text-white/80 max-w-[460px] mb-9">
-          {{ body }}
+          {{ bodyText }}
         </p>
         <div class="flex flex-wrap gap-3.5">
           <SfButton

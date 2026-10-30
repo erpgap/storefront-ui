@@ -53,12 +53,12 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
         <!-- Header -->
         <div class="flex items-center justify-between px-5 h-[64px] border-b border-primary-100 shrink-0">
           <span class="text-[13px] tracking-[0.16em] uppercase font-medium text-black">
-            Wishlist <span class="text-primary-400">({{ wishlistTotalItems }})</span>
+            {{ $t('wishlist.wishlist') }} <span class="text-primary-400">({{ wishlistTotalItems }})</span>
           </span>
           <SfButton
             variant="tertiary"
             square
-            aria-label="Close wishlist"
+            :aria-label="$t('core.wishlistSidebar.close')"
             class="text-black!"
             @click="closeWishlistSideBar()"
           >
@@ -109,7 +109,7 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
                 </NuxtLink>
                 <button
                   type="button"
-                  aria-label="Remove from wishlist"
+                  :aria-label="$t('wishlist.removeFromWishlist')"
                   class="shrink-0 text-primary-400 hover:text-black transition-colors"
                   @click="wishlistRemoveItem((item?.product as any)?.id)"
                 >
@@ -141,13 +141,13 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
             class="w-[150px] h-[150px] object-contain drop-shadow-[0_16px_20px_rgba(0,0,0,0.14)]"
           />
           <p class="font-light text-[20px] tracking-[-0.01em]">
-            Your wishlist is empty
+            {{ $t('wishlist.emptyWishlist') }}
           </p>
           <SfButton
             class="min-h-[48px] px-7 text-[13px] font-medium"
             @click="goTo('/products')"
           >
-            Browse products
+            {{ $t('allProductsLinkText') }}
           </SfButton>
         </div>
 
@@ -161,7 +161,7 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
             class="w-full min-h-[52px] text-[13px] tracking-widest uppercase font-medium border! border-primary-200! text-black! hover:bg-transparent! hover:border-black!"
             @click="goTo('/wishlist')"
           >
-            View wishlist
+            {{ $t('common.viewWishlist') }}
           </SfButton>
         </div>
       </SfDrawer>

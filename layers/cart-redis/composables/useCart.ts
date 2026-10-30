@@ -12,7 +12,7 @@ import type {
 import { MutationName } from '~~/server/mutations'
 
 export const useCart = () => {
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
   const cartCounter = useCookie<number>('cart-counter')
   const toast = useToast()
   // Taken here, while the composable runs in the component's setup: the
@@ -84,7 +84,7 @@ export const useCart = () => {
       openCartSideBar()
     }
     catch (error: any) {
-      cartError.value = errorMessage(error, 'Could not add to cart. Please try again.')
+      cartError.value = errorMessage(error, $i18n.t('shop.cart.addToCartError'))
     }
     finally {
       adding.value = false

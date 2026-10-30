@@ -31,7 +31,7 @@ watch(model, () => {
         v-bind="$attrs"
         v-model="model"
         type="text"
-        placeholder="Enter your email here"
+        :placeholder="$t('core.ui.emailPlaceholder')"
         class="w-full text-base outline-hidden appearance-none text-neutral-900 disabled:cursor-not-allowed disabled:bg-transparent read-only:bg-transparent"
         @input="clearError"
       >
