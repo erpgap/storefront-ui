@@ -227,7 +227,7 @@ export const useAuth = () => {
   ) => {
     try {
       loading.value = true
-      const data = await $sdk().odoo.mutation<
+      await $sdk().odoo.mutation<
         MutationChangePasswordArgs,
         ChangePasswordResponse
       >({ mutationName: MutationName.ChangePasswordMutation }, params)
@@ -236,7 +236,7 @@ export const useAuth = () => {
       router.push('/')
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, t('auth.setNewPassword.error')))
     }
     finally {
       loading.value = false

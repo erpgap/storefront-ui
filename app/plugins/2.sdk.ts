@@ -19,6 +19,7 @@ const SHOULD_BYPASS_ERROR_MUTATIONS = [
   'UpdatePasswordMutation',
   'CreateUpdatePartner',
   'SendResetPasswordMutation',
+  'ChangePasswordMutation',
 ]
 
 const avoidErrorThrowForSomeRequests = (options: any) => {

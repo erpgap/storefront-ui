@@ -469,7 +469,8 @@
       "repeatPassword": "Repeat new password",
       "help": "8 or more characters with a mix of letters, numbers and symbols.",
       "description": "Create the new password you want to use to log in to your account.",
-      "pageHeading": "Change your password"
+      "pageHeading": "Change your password",
+      "error": "We couldn't change your password. The link may have expired; please request a new one."
     },
     "toast": {
       "passwordChanged": "Password changed successfully"
