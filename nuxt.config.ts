@@ -111,6 +111,18 @@ export default defineNuxtConfig({
       currencyDecimal: process.env.NUXT_PUBLIC_CURRENCY_DECIMAL,
       currencyPrecision: process.env.NUXT_PUBLIC_CURRENCY_PRECISION,
       siteURL: middlewareUrl,
+      // Search runs on Algolia when `enabled` is 1 and the application,
+      // key and index are all set, and on Odoo otherwise. Runtime variables,
+      // so switching needs no rebuild. See layers/search/composables/useAlgolia.ts.
+      algolia: {
+        enabled: process.env.NUXT_PUBLIC_ALGOLIA_ENABLED ?? '',
+        applicationId: process.env.NUXT_PUBLIC_ALGOLIA_APPLICATION_ID ?? '',
+        // A search-only key: it is sent to every browser.
+        searchApiKey: process.env.NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY ?? '',
+        indexName: process.env.NUXT_PUBLIC_ALGOLIA_INDEX_NAME ?? '',
+        // Only to go through a proxy; Algolia's own host by default.
+        host: process.env.NUXT_PUBLIC_ALGOLIA_HOST ?? '',
+      },
     },
   },
 

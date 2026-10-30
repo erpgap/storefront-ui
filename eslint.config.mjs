@@ -13,11 +13,6 @@ export default withNuxt(
       'vue/multi-word-component-names': ['error', { ignores: ['Categories', 'Newsletter'] }],
     },
   })
-  // Pages and layouts are named by their route, as Nuxt does for layers/.
-  .append({
-    files: ['optional-layers/*/pages/**/*.vue', 'optional-layers/*/layouts/**/*.vue'],
-    rules: { 'vue/multi-word-component-names': 'off' },
-  })
   .override('nuxt/typescript/rules', {
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',

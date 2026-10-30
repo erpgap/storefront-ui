@@ -1,6 +1,7 @@
 import { useDebounceFn, useToggle } from '@vueuse/core'
 import { useProductTemplateList } from '../../product/composables/useProductTemplateList'
-import type { Product } from '~~/graphql'
+import { sortByIds, useAlgolia } from './useAlgolia'
+import type { Product, ProductFilterInput } from '~~/graphql'
 
 /**
  * @Responsibilities
@@ -32,6 +33,10 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     // so it must NOT refetch on route changes — it queries only when the user
     // types (see search() below).
   } = useProductTemplateList(route.fullPath, 12, '', false)
+
+  const { productIds } = useAlgolia()
+  // The ids behind the current suggestions when Algolia chose them.
+  const algoliaIds = ref<number[] | null>(null)
 
   // ---------- Estado local da busca ----------
   const searchInputValue = ref('') // texto digitado
@@ -68,12 +73,22 @@ export const useSearch = (formSearchTemplateRef?: any) => {
       return
     }
 
+    // With Algolia, it picks the products and Odoo loads them; without it, or
+    // when it does not answer, Odoo searches by itself.
+    const ids = await productIds(query, 12)
+    algoliaIds.value = ids
+    if (ids && !ids.length) {
+      showResultSearch.value = false
+      searchModalOpen.value = false
+      highlightedIndex.value = -1
+      return
+    }
+
     // `loading` is a computed over the fetch's `pending`, so it already
     // tracks this request.
-    await loadProductTemplateList({
-      search: query,
-      pageSize: 12,
-    })
+    await loadProductTemplateList(ids
+      ? { filter: { ids } as ProductFilterInput, pageSize: 12 }
+      : { search: query, pageSize: 12 })
 
     const hasHits = (productTemplateList.value?.length || 0) > 0
     showResultSearch.value = hasHits
@@ -82,7 +97,11 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   }, 300)
 
   // ---------- Derivados ----------
-  const searchHits = computed(() => productTemplateList.value || [])
+  // Odoo returns them in its own order; Algolia's ranking is the one to keep.
+  const searchHits = computed(() => {
+    const hits = productTemplateList.value || []
+    return algoliaIds.value ? sortByIds(hits, algoliaIds.value) : hits
+  })
 
   // ---------- Navegação ----------
   const enterPress = () => {

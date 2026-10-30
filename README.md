@@ -65,9 +65,22 @@ The project uses an advanced dynamic route generation system that:
 
 ### 1. Product Search
 
-- **ODOO Default**: Native ODOO search accessible via the header search bar
-- **Algolia**: Integration with Algolia for advanced search and suggestions
-- **Luigi**: Alternative search system using Luigi
+Header suggestions and the `/search` page (`layers/search`) search Odoo by
+default. To search with Algolia instead, set:
+
+```bash
+NUXT_PUBLIC_ALGOLIA_ENABLED=1
+NUXT_PUBLIC_ALGOLIA_APPLICATION_ID=...
+NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY=...   # a search-only key: browsers see it
+NUXT_PUBLIC_ALGOLIA_INDEX_NAME=...
+```
+
+Algolia then decides which products match and in what order; Odoo still
+loads them, so prices, stock, filters, sorting and pagination are Odoo's.
+The index needs one record per product template with its Odoo id in `id`
+(or as the `objectID`). If any of the four is missing, or Algolia does not
+answer, search falls back to Odoo. These are runtime variables: no rebuild
+is needed to switch.
 
 ### 2. Advanced Caching System
 
@@ -187,8 +200,7 @@ change is live immediately.
 │   ├── product/                 # Product pages and functionality
 │   │   ├── composables/         # Product-related composables
 │   │   └── custom-pages/        # Product page templates (dynamic page routing by products slug)
-│   └── search-default/          # Search functionality
-│       ├── components/          # Search components
+│   └── search/                  # Search: Odoo, or Algolia when configured
 │       ├── composables/         # Search composables
 │       └── pages/               # Search page
 ├── modules/                     # Custom Nuxt modules
@@ -392,7 +404,7 @@ const filters = [
 - **Product Templates**: `/product-slug` (base product page)
 - **Product Variants**: `/product-slug?Color=1&Size=2` (specific variant)
 - **Categories**: `/category-slug` (category listing)
-- **Search**: Integrated with ODOO native search, Algolia, or Luigi
+- **Search**: Integrated with ODOO native search, or Algolia
 
 ### Performance Optimizations
 

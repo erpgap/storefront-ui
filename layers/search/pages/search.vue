@@ -10,6 +10,7 @@ import { useProductTemplateList } from '../../product/composables/useProductTemp
 import { useProductAttributes } from '../../product/composables/useProductAttributes'
 import { useUiHelpers } from '../../category/composables/useUiHelpers'
 import { useScrollToTopOnListingChange } from '../../core/composables/useScrollToTopOnListingChange'
+import { sortByIds, useAlgolia } from '../composables/useAlgolia'
 
 type Product = { slug?: string, stock?: number, qty?: number, [k: string]: any }
 
@@ -48,11 +49,38 @@ function normalizeVariant(p?: Product): ProductWithStock | undefined {
   return { ...p, stock: Number((p as any)?.stock ?? (p as any)?.qty ?? 0) }
 }
 
+const nuxtApp = useNuxtApp()
+const { productIds } = useAlgolia()
+// The products Algolia matched, best first, when it chose them.
+const algoliaIds = ref<number[] | null>(null)
+
 async function fetchList(q: Record<string, any>) {
   const facets: Record<string, any> = getFacetsFromURL(q) || {}
-  if (q?.search) facets.search = String(q.search)
-  await loadProductTemplateList(facets)
+  const term = String(q?.search ?? '')
+
+  // Algolia decides what matches; Odoo then filters, sorts and pages those
+  // products like any other listing. 1000 is as many hits as Algolia returns.
+  const ids = term ? await productIds(term, 1000) : null
+  algoliaIds.value = ids
+  if (ids) {
+    // No match must show nothing, and an empty list would mean "no filter".
+    facets.filter = { ...facets.filter, ids: ids.length ? ids : [0] }
+    facets.search = undefined
+  }
+  else if (term) {
+    facets.search = term
+  }
+  // After awaiting Algolia, setup's Nuxt context is gone on the server, and
+  // the product query needs it.
+  await nuxtApp.runWithContext(() => loadProductTemplateList(facets))
 }
+
+// Odoo pages through Algolia's matches in its own order. Unless the shopper
+// chose a sort, show each page best match first.
+const results = computed(() => {
+  const list = Array.isArray(productTemplateList.value) ? productTemplateList.value : []
+  return algoliaIds.value && !route.query.sort ? sortByIds(list, algoliaIds.value) : list
+})
 
 onServerPrefetch(() => fetchList(route.query))
 
@@ -134,7 +162,7 @@ const breadcrumbs = [
           />
         </div>
 
-        <div v-else-if="Array.isArray(productTemplateList) && productTemplateList.length > 0">
+        <div v-else-if="results.length > 0">
           <div class="lg:hidden mb-6">
             <div class="flex gap-3">
               <CategorySortDropdown class="flex-1" />
@@ -163,7 +191,7 @@ const breadcrumbs = [
 
           <section class="grid grid-cols-2 md:grid-cols-3 gap-5 mt-8">
             <LazyUiProductCard
-              v-for="pt in productTemplateList"
+              v-for="pt in results"
               :key="pt.id"
               :name="pt?.name || ''"
               loading="eager"
