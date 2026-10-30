@@ -1,4 +1,4 @@
-import type { BlockInstance, CmsPage } from '#cms/shared/blocks'
+import type { BlockInstance, CmsPage, ValidationIssue } from '#cms/shared/blocks'
 import { seedBlockData, untranslatedFields } from '#cms/shared/blocks'
 import { DEFAULT_LOCALE } from '#cms/shared/i18n'
 
@@ -34,7 +34,7 @@ export function useCmsEditorDraft(page: Ref<CmsPage>) {
   const MAX_HISTORY = 60
 
   const saveState = ref<SaveState>('idle')
-  const issues = ref<{ path: string, message: string }[]>([])
+  const issues = ref<ValidationIssue[]>([])
   const lastSavedAt = ref<string | null>(null)
 
   const selected = computed(() =>

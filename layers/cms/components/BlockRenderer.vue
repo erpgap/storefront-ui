@@ -29,6 +29,8 @@ const props = withDefaults(defineProps<{
   locale: DEFAULT_LOCALE,
 })
 
+const cmsText = useCmsText()
+
 // Old content is upgraded on read, so a page published before a block changed
 // shape keeps rendering without anything being rewritten in the database.
 const blocks = computed(() => migrateBlocks(props.blocks))
@@ -87,10 +89,10 @@ function propsFor(block: BlockInstance): Record<string, unknown> {
 
   // Field names stand in for empty text, but only on the block being edited:
   // the merchant is looking at its fields, so labels in the canvas line up
-  // with the panel beside them. Every other block stays as it will publish,
-  // which is what makes the canvas worth trusting.
+  // with the panel beside them, in the editor's language. Every other block
+  // stays as it will publish, which is what makes the canvas worth trusting.
   if (props.mode === 'edit' && block.id === props.selectedId) {
-    resolved = withFieldPlaceholders(block.blockType, resolved)
+    resolved = withFieldPlaceholders(block.blockType, resolved, cmsText.canvasLabel(block.blockType))
   }
 
   return BLOCKS_NEEDING_ID.has(block.blockType)

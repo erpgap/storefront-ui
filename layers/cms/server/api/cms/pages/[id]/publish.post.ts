@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   const page = await store.get(id)
 
   if (!page) {
-    throw createError({ statusCode: 404, statusMessage: 'Page not found.' })
+    throw createError({ statusCode: 404, statusMessage: 'Page not found.', data: { messageKey: 'cmsEditor.errors.pageNotFound' } })
   }
 
   const { issues } = validateBlocks(page.draft)
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 422,
       statusMessage: 'This page has problems that must be fixed before publishing.',
-      data: { issues },
+      data: { messageKey: 'cmsEditor.errors.pageHasIssues', issues },
     })
   }
 

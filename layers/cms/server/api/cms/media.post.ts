@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const file = form?.find(part => part.name === 'file' && part.filename)
 
   if (!file) {
-    throw createError({ statusCode: 400, statusMessage: 'No file was uploaded.' })
+    throw createError({ statusCode: 400, statusMessage: 'No file was uploaded.', data: { messageKey: 'cmsEditor.errors.noFile' } })
   }
 
   return uploadOdooMedia(event, file)

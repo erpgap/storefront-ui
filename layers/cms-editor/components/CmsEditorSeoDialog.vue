@@ -19,6 +19,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ saved: [page: CmsPage], close: [] }>()
 const { t } = useI18n()
+const cmsText = useCmsText()
 
 // Search engines truncate past roughly these lengths. A guide, not a limit.
 const TITLE_GUIDE = 60
@@ -91,7 +92,7 @@ async function save() {
     emit('saved', page)
   }
   catch (e: any) {
-    error.value = e?.statusMessage || e?.data?.statusMessage || t('cmsEditor.saveFailed')
+    error.value = cmsText.errorMessage(e, t('cmsEditor.saveFailed'))
   }
   finally {
     saving.value = false

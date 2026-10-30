@@ -11,7 +11,6 @@
 // The fix: a transparent overlay absorbs every pointer event and the real
 // component underneath is made inert. The drag layer then only ever deals with
 // a flat list of uniform rectangles — the easy, well-supported case.
-import { blockLabel } from '../blocks'
 import { placeholderLabels } from '#cms/shared/blocks'
 import type { BlockInstance } from '#cms/shared/blocks'
 
@@ -24,7 +23,8 @@ const props = defineProps<{
 
 defineEmits<{ select: [], remove: [], duplicate: [], moveUp: [], moveDown: [] }>()
 
-const label = computed(() => blockLabel(props.block.blockType))
+const cmsText = useCmsText()
+const label = computed(() => cmsText.blockLabel(props.block.blockType))
 
 /**
  * A block whose component renders nothing collapses to zero height, and then
@@ -62,7 +62,10 @@ function markPlaceholders() {
   const root = body.value
   if (!root) return
 
-  const labels = new Set(props.selected ? placeholderLabels(props.block.blockType) : [])
+  // The same labels BlockRenderer put there, in the same language.
+  const labels = new Set(props.selected
+    ? placeholderLabels(props.block.blockType, cmsText.canvasLabel(props.block.blockType))
+    : [])
 
   for (const element of root.querySelectorAll<HTMLElement>('*')) {
     // Leaf elements only: a wrapper whose text happens to equal a label would

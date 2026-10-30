@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
   const lang = String(body?.lang ?? '')
   if (!isLocaleCode(lang)) {
-    throw createError({ statusCode: 400, statusMessage: 'Unknown language.' })
+    throw createError({ statusCode: 400, statusMessage: 'Unknown language.', data: { messageKey: 'cmsEditor.errors.unknownLanguage' } })
   }
 
   const text = (value: unknown) =>

@@ -88,9 +88,62 @@ export function seedBlockData(blockType: string): Record<string, unknown> {
 // reject what is malformed, and STRIP anything not in the schema, so unknown
 // keys can never reach a component as props.
 
+/**
+ * What went wrong, as a code the editor can translate. `message` stays the
+ * English sentence, for the API and anything else that reads it as text.
+ */
+export type ValidationIssueCode
+  = | 'required'
+    | 'notNumber'
+    | 'notOption'
+    | 'tooManyRefs'
+    | 'notList'
+    | 'tooManyItems'
+    | 'badLink'
+    | 'blocksNotList'
+    | 'unknownBlockType'
+
 export interface ValidationIssue {
   path: string
   message: string
+  code: ValidationIssueCode
+  /** The values `message` was built from: the field's English label, a limit, a type. */
+  params?: Record<string, string | number>
+}
+
+// The English for each code, with the same {placeholders} as the editor's
+// `cmsEditor.issues.*` messages in en.json. A test renders both and compares.
+const ISSUE_MESSAGES: Record<ValidationIssueCode, string> = {
+  required: '{label} is required.',
+  notNumber: '{label} must be a number.',
+  notOption: '{label} must be one of: {options}.',
+  tooManyRefs: '{label} allows at most {max}.',
+  notList: '{label} must be a list.',
+  tooManyItems: '{label} allows at most {max} items.',
+  badLink: '{label} must start with / or http.',
+  blocksNotList: 'Blocks must be a list.',
+  unknownBlockType: 'Unknown block type "{blockType}".',
+}
+
+function issue(
+  path: string,
+  code: ValidationIssueCode,
+  params: Record<string, string | number> = {},
+): ValidationIssue {
+  const message = ISSUE_MESSAGES[code]
+    .replace(/\{(\w+)\}/g, (_, name: string) => String(params[name]))
+  return Object.keys(params).length
+    ? { path, message, code, params }
+    : { path, message, code }
+}
+
+function fieldIssue(
+  path: string,
+  field: Field,
+  code: ValidationIssueCode,
+  params: Record<string, string | number> = {},
+): ValidationIssue {
+  return issue(path, code, { label: field.label ?? field.name, ...params })
 }
 
 function coerce(
@@ -103,7 +156,7 @@ function coerce(
     case 'number': {
       const n = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(n)) {
-        issues.push({ path, message: `${field.label ?? field.name} must be a number.` })
+        issues.push(fieldIssue(path, field, 'notNumber'))
         return field.default ?? field.min ?? 0
       }
       if (field.min !== undefined && n < field.min) return field.min
@@ -117,10 +170,7 @@ function coerce(
     case 'select': {
       const allowed = field.options.map(option => option.value)
       if (typeof value !== 'string' || !allowed.includes(value)) {
-        issues.push({
-          path,
-          message: `${field.label ?? field.name} must be one of: ${allowed.join(', ')}.`,
-        })
+        issues.push(fieldIssue(path, field, 'notOption', { options: allowed.join(', ') }))
         return field.default ?? allowed[0]
       }
       return value
@@ -138,14 +188,11 @@ function coerce(
         .filter(id => Number.isInteger(id) && id > 0)
 
       if (field.max !== undefined && ids.length > field.max) {
-        issues.push({
-          path,
-          message: `${field.label ?? field.name} allows at most ${field.max}.`,
-        })
+        issues.push(fieldIssue(path, field, 'tooManyRefs', { max: field.max }))
       }
 
       if (field.required && !ids.length) {
-        issues.push({ path, message: `${field.label ?? field.name} is required.` })
+        issues.push(fieldIssue(path, field, 'required'))
       }
 
       return field.max !== undefined ? ids.slice(0, field.max) : ids
@@ -153,14 +200,11 @@ function coerce(
 
     case 'array': {
       if (!Array.isArray(value)) {
-        issues.push({ path, message: `${field.label ?? field.name} must be a list.` })
+        issues.push(fieldIssue(path, field, 'notList'))
         return []
       }
       if (field.max !== undefined && value.length > field.max) {
-        issues.push({
-          path,
-          message: `${field.label ?? field.name} allows at most ${field.max} items.`,
-        })
+        issues.push(fieldIssue(path, field, 'tooManyItems', { max: field.max }))
       }
       return value
         .slice(0, field.max ?? value.length)
@@ -186,10 +230,7 @@ function coerce(
         if (field.type === 'link' && text && !/^(\/|https?:\/\/|mailto:|tel:)/.test(text)) {
           // Blocks a `javascript:` URL reaching an <a href>. Checked per
           // language, because each one is a separate URL.
-          issues.push({
-            path: `${path}.${locale}`,
-            message: `${field.label ?? field.name} must start with / or http.`,
-          })
+          issues.push(fieldIssue(`${path}.${locale}`, field, 'badLink'))
           text = ''
         }
 
@@ -205,7 +246,7 @@ function coerce(
       // regional language in Odoo would make every existing page fail to
       // publish.
       if (field.required && !hasValueFor(out, DEFAULT_LOCALE)) {
-        issues.push({ path, message: `${field.label ?? field.name} is required.` })
+        issues.push(fieldIssue(path, field, 'required'))
       }
 
       return out
@@ -245,7 +286,7 @@ export function validateBlocks(blocks: unknown): {
   const issues: ValidationIssue[] = []
 
   if (!Array.isArray(blocks)) {
-    return { blocks: [], issues: [{ path: '', message: 'Blocks must be a list.' }] }
+    return { blocks: [], issues: [issue('', 'blocksNotList')] }
   }
 
   const cleaned: BlockInstance[] = []
@@ -255,10 +296,9 @@ export function validateBlocks(blocks: unknown): {
     const schema = block?.blockType ? getBlockSchema(block.blockType) : undefined
 
     if (!schema) {
-      issues.push({
-        path: `blocks[${index}]`,
-        message: `Unknown block type "${String(block?.blockType)}".`,
-      })
+      issues.push(issue(`blocks[${index}]`, 'unknownBlockType', {
+        blockType: String(block?.blockType),
+      }))
       return
     }
 
@@ -322,6 +362,11 @@ export function resolveBlockData(
   return resolveFields(schema.fields, data)
 }
 
+/** A field's label as the editor shows it; `path` is its schema path, e.g. ['ctas', 'label']. */
+export type FieldLabel = (field: Field, path: string[]) => string
+
+const englishLabel: FieldLabel = field => field.label ?? field.name
+
 /**
  * Fills empty text with the field's own label, for the editor canvas only.
  *
@@ -336,10 +381,15 @@ export function resolveBlockData(
  *
  * This never touches stored data. It runs on resolved props on their way to a
  * component, so nothing here can be saved or published by accident.
+ *
+ * `labelOf` lets the editor put its translated label there instead. This file
+ * runs on the server too, so it is handed the translation rather than looking
+ * it up.
  */
 export function withFieldPlaceholders(
   blockType: string,
   resolved: Record<string, unknown>,
+  labelOf: FieldLabel = englishLabel,
 ): Record<string, unknown> {
   const schema = getBlockSchema(blockType)
   if (!schema) return resolved
@@ -347,6 +397,7 @@ export function withFieldPlaceholders(
   const fill = (
     fields: Field[],
     source: Record<string, unknown>,
+    parent: string[] = [],
   ): Record<string, unknown> => {
     const out: Record<string, unknown> = { ...source }
 
@@ -356,7 +407,7 @@ export function withFieldPlaceholders(
       if (field.type === 'array') {
         if (Array.isArray(value)) {
           out[field.name] = value.map(row =>
-            fill(field.fields, row as Record<string, unknown>))
+            fill(field.fields, row as Record<string, unknown>, [...parent, field.name]))
         }
         continue
       }
@@ -365,7 +416,7 @@ export function withFieldPlaceholders(
       if (field.noPlaceholder) continue
       if (typeof value === 'string' && value.trim()) continue
 
-      out[field.name] = field.label
+      out[field.name] = field.label && labelOf(field, [...parent, field.name])
     }
 
     return out
@@ -379,18 +430,21 @@ export function withFieldPlaceholders(
  *
  * The editor shell needs to recognise a placeholder once it is rendered, and
  * by then it is just a string inside whatever element the component chose. It
- * matches against this list rather than guessing.
+ * matches against this list rather than guessing. `labelOf` must be the one
+ * the canvas was filled with.
  */
-export function placeholderLabels(blockType: string): string[] {
+export function placeholderLabels(blockType: string, labelOf: FieldLabel = englishLabel): string[] {
   const schema = getBlockSchema(blockType)
   if (!schema) return []
 
-  const collect = (fields: Field[]): string[] =>
+  const collect = (fields: Field[], parent: string[] = []): string[] =>
     fields.flatMap((field) => {
-      if (field.type === 'array') return collect(field.fields)
+      if (field.type === 'array') return collect(field.fields, [...parent, field.name])
       if (field.noPlaceholder) return []
       // The placeholder shown is the label, so a field without one shows none.
-      return (field.type === 'text' || field.type === 'textarea') && field.label ? [field.label] : []
+      return (field.type === 'text' || field.type === 'textarea') && field.label
+        ? [labelOf(field, [...parent, field.name])]
+        : []
     })
 
   return [...new Set(collect(schema.fields))]

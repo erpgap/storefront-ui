@@ -12,12 +12,12 @@ export default defineEventHandler(async (event) => {
 
   const title = String(body?.title ?? '').trim()
   if (!title) {
-    throw createError({ statusCode: 400, statusMessage: 'A page title is required.' })
+    throw createError({ statusCode: 400, statusMessage: 'A page title is required.', data: { messageKey: 'cmsEditor.errors.titleRequired' } })
   }
 
   const slug = normaliseSlug(body?.slug || title)
   if (slug === '/' || slug.length < 2) {
-    throw createError({ statusCode: 400, statusMessage: 'That URL is too short.' })
+    throw createError({ statusCode: 400, statusMessage: 'That URL is too short.', data: { messageKey: 'cmsEditor.errors.urlTooShort' } })
   }
   assertSlugNotReserved(slug)
 

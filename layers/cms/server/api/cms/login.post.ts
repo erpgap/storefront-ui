@@ -13,7 +13,13 @@ export default defineEventHandler(async (event) => {
   const body = await readBody<{ email?: string, password?: string }>(event)
 
   if (!body?.email || !body?.password) {
-    throw createError({ statusCode: 400, statusMessage: 'Email and password are required.' })
+    // statusMessage stays English for whatever else reads the API; the editor
+    // shows its own translation of `messageKey` (see layers/cms/utils/cmsText.ts).
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Email and password are required.',
+      data: { messageKey: 'cmsEditor.errors.credentialsRequired' },
+    })
   }
 
   let response
@@ -34,13 +40,18 @@ export default defineEventHandler(async (event) => {
         statusCode: 503,
         statusMessage: 'Cannot reach Odoo. The content system is offline — '
           + 'this is not a problem with your password.',
+        data: { messageKey: 'cmsEditor.errors.odooUnreachable' },
       })
     }
     throw error
   }
 
   if (response._data?.errors?.length) {
-    throw createError({ statusCode: 401, statusMessage: 'Those details did not work.' })
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Those details did not work.',
+      data: { messageKey: 'cmsEditor.errors.loginFailed' },
+    })
   }
 
   // Hand Odoo's session cookie to the browser so subsequent CMS calls carry it.
@@ -63,6 +74,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 403,
       statusMessage: 'That account does not have permission to edit content.',
+      data: { messageKey: 'cmsEditor.errors.notAnEditor' },
     })
   }
 

@@ -103,7 +103,11 @@ async function seoImageData(event: H3Event, url: SeoInput['metaImage']) {
   // A path on one of our own two hosts, never an arbitrary URL: this runs on
   // the server, so a free-form URL would let a caller make it fetch anything.
   if (!url.startsWith('/') || url.startsWith('//')) {
-    throw createError({ statusCode: 400, statusMessage: 'Choose an image from the media library.' })
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Choose an image from the media library.',
+      data: { messageKey: 'cmsEditor.errors.imageNotFromLibrary' },
+    })
   }
 
   const base = url.startsWith('/web/')
@@ -116,10 +120,18 @@ async function seoImageData(event: H3Event, url: SeoInput['metaImage']) {
 
   const type = response?.headers.get('content-type') ?? ''
   if (!response?._data || !type.startsWith('image/')) {
-    throw createError({ statusCode: 400, statusMessage: 'That image could not be read.' })
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'That image could not be read.',
+      data: { messageKey: 'cmsEditor.errors.imageUnreadable' },
+    })
   }
   if (response._data.byteLength > MAX_IMAGE_BYTES) {
-    throw createError({ statusCode: 413, statusMessage: 'Images must be under 8 MB.' })
+    throw createError({
+      statusCode: 413,
+      statusMessage: 'Images must be under 8 MB.',
+      data: { messageKey: 'cmsEditor.errors.imageTooLarge' },
+    })
   }
   return Buffer.from(response._data).toString('base64')
 }

@@ -18,9 +18,12 @@ import type { BlockMigration, BlockSchema, SelectField } from '#cms/shared/types
  * page of text does: 'start' opens the flow below a banner, 'compact' follows
  * the block above it closely, 'end' does too and closes the page with room
  * before the footer, 'normal' stands alone as its own section.
+ *
+ * One field in several blocks, so its editor text is translated once.
  */
 const spacingField = (fallback: 'normal' | 'start' | 'compact' | 'end' = 'normal'): SelectField => ({
   name: 'spacing',
+  textKey: 'spacing',
   label: 'Spacing',
   type: 'select',
   default: fallback,

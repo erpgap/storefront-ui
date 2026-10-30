@@ -17,6 +17,8 @@ import { absoluteImageUrl } from '~~/app/utils/odooImage'
 
 const props = withDefaults(defineProps<{
   field: Field
+  /** The block this field belongs to, which is where its translated text is found. */
+  blockType: string
   modelValue: unknown
   /** Validation messages from the server, keyed by field path. */
   issues?: Record<string, string>
@@ -28,9 +30,12 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{ 'update:modelValue': [unknown] }>()
 
 const { t } = useI18n()
+const cmsText = useCmsText()
 
-const label = computed(() => props.field.label ?? props.field.name)
 const fieldPath = computed(() => props.path ?? props.field.name)
+const label = computed(() => cmsText.fieldText(props.blockType, props.field, fieldPath.value, 'label'))
+const help = computed(() => cmsText.fieldText(props.blockType, props.field, fieldPath.value, 'help'))
+const addLabel = computed(() => cmsText.fieldText(props.blockType, props.field, fieldPath.value, 'addLabel'))
 const issue = computed(() => props.issues?.[fieldPath.value])
 
 // --- scalar bindings --------------------------------------------------------
@@ -236,7 +241,7 @@ function rowThumb(row: Record<string, unknown>) {
         :key="option.value"
         :value="option.value"
       >
-        {{ option.label }}
+        {{ cmsText.optionLabel(blockType, field, fieldPath, option) }}
       </option>
     </select>
 
@@ -371,6 +376,7 @@ function rowThumb(row: Record<string, unknown>) {
             v-for="sub in arrayField.fields"
             :key="sub.name"
             :field="sub"
+            :block-type="blockType"
             :model-value="row[sub.name]"
             :issues="issues"
             :locale="locale"
@@ -386,7 +392,7 @@ function rowThumb(row: Record<string, unknown>) {
         class="text-[12px] tracking-[0.08em] uppercase text-white/70 hover:text-white self-start"
         @click="addRow"
       >
-        + {{ arrayField.addLabel ?? $t('cmsEditor.fields.addRow', { label }) }}
+        + {{ addLabel ?? $t('cmsEditor.fields.addRow', { label }) }}
       </button>
     </div>
 
@@ -398,10 +404,10 @@ function rowThumb(row: Record<string, unknown>) {
       {{ issue }}
     </p>
     <p
-      v-else-if="field.help"
+      v-else-if="help"
       class="text-[11px] text-white/45 leading-snug"
     >
-      {{ field.help }}
+      {{ help }}
     </p>
   </div>
 </template>

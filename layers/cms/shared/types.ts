@@ -41,6 +41,12 @@ interface FieldCommon {
    * than the blank it replaces.
    */
   noPlaceholder?: boolean
+  /**
+   * For a field several blocks share, the name its editor text is translated
+   * under, once, instead of once per block. Without it a field's text belongs
+   * to its block. The English above stays the source and the fallback.
+   */
+  textKey?: string
 }
 
 export interface TextField extends FieldCommon {

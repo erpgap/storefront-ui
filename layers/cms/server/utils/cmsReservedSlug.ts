@@ -16,6 +16,7 @@ export function assertSlugNotReserved(slug: string) {
     throw createError({
       statusCode: 409,
       statusMessage: `"${slug}" is used by the storefront and cannot be a content page.`,
+      data: { messageKey: 'cmsEditor.errors.reservedSlug', params: { slug } },
     })
   }
 }

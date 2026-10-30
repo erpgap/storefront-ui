@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const page = await store.get(id)
 
   if (!page) {
-    throw createError({ statusCode: 404, statusMessage: 'Page not found.' })
+    throw createError({ statusCode: 404, statusMessage: 'Page not found.', data: { messageKey: 'cmsEditor.errors.pageNotFound' } })
   }
 
   return page

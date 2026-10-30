@@ -45,9 +45,16 @@ function sessionHeaders(event: H3Event) {
  */
 function forwardError(error: any): never {
   const status = error?.response?.status ?? error?.statusCode ?? 502
-  const message = error?.data?.error
-    ?? (status === 403 ? 'You do not have permission to upload images.' : 'The media library is not responding.')
-  throw createError({ statusCode: status, statusMessage: message })
+  const odooMessage: string | undefined = error?.data?.error ?? undefined
+  // Odoo's own message has no key, so it reaches the editor as Odoo wrote it.
+  const ours = status === 403
+    ? { message: 'You do not have permission to upload images.', key: 'cmsEditor.errors.cannotUpload' }
+    : { message: 'The media library is not responding.', key: 'cmsEditor.errors.mediaUnavailable' }
+  throw createError({
+    statusCode: status,
+    statusMessage: odooMessage ?? ours.message,
+    data: odooMessage === undefined ? { messageKey: ours.key } : undefined,
+  })
 }
 
 export async function listOdooMedia(event: H3Event): Promise<MediaItem[]> {

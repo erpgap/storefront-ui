@@ -19,6 +19,7 @@ interface PageRow {
 
 definePageMeta({ layout: false, middleware: 'cms-auth' })
 const { t } = useI18n()
+const cmsText = useCmsText()
 useHead({ title: () => t('cmsEditor.pages.pageTitle') })
 
 const { data: pages, refresh, error: listError } = await useFetch<PageRow[]>(
@@ -56,7 +57,7 @@ async function create() {
     await navigateTo(`/cms/${page.id}`)
   }
   catch (e: any) {
-    error.value = e?.data?.statusMessage || e?.statusMessage || t('cmsEditor.pages.createFailed')
+    error.value = cmsText.errorMessage(e, t('cmsEditor.pages.createFailed'))
   }
   finally {
     busy.value = false
@@ -86,7 +87,7 @@ async function togglePublished(page: PageRow) {
     await refresh()
   }
   catch (e: any) {
-    alert(e?.data?.statusMessage || t('cmsEditor.pages.publishStateFailed'))
+    alert(cmsText.errorMessage(e, t('cmsEditor.pages.publishStateFailed')))
   }
 }
 

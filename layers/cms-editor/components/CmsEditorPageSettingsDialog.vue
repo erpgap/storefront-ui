@@ -16,6 +16,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ saved: [page: CmsPage], close: [] }>()
 const { t } = useI18n()
+const cmsText = useCmsText()
 
 const title = ref(props.title)
 const slug = ref(props.slug)
@@ -58,7 +59,7 @@ async function save() {
   catch (e: any) {
     // The clash message names the page already using that url, which is the
     // one piece of information that makes it fixable.
-    error.value = e?.statusMessage || e?.data?.statusMessage || t('cmsEditor.saveFailed')
+    error.value = cmsText.errorMessage(e, t('cmsEditor.saveFailed'))
   }
   finally {
     saving.value = false

@@ -3,6 +3,7 @@
 // the two session types stay conceptually distinct.
 definePageMeta({ layout: false })
 const { t } = useI18n()
+const cmsText = useCmsText()
 useHead({ title: () => t('cmsEditor.login.pageTitle') })
 
 const email = ref('')
@@ -24,13 +25,11 @@ async function submit() {
     await navigateTo(String(route.query.next || '/cms'), { external: true })
   }
   catch (e: any) {
-    error.value = e?.data?.statusMessage
-      || e?.statusMessage
-      // A bare status with no message is almost always the backend being
-      // unreachable, which is worth saying rather than "Could not sign in".
-      || (e?.statusCode >= 500
-        ? t('cmsEditor.login.notResponding')
-        : t('cmsEditor.login.failed'))
+    // A bare status with no message is almost always the backend being
+    // unreachable, which is worth saying rather than "Could not sign in".
+    error.value = cmsText.errorMessage(e, e?.statusCode >= 500
+      ? t('cmsEditor.login.notResponding')
+      : t('cmsEditor.login.failed'))
   }
   finally {
     busy.value = false

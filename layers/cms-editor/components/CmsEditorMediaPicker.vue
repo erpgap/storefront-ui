@@ -22,6 +22,7 @@ const odooImageBase = String(useRuntimeConfig().public.odooBaseImageUrl ?? '')
 const previewUrl = (url: string) => absoluteImageUrl(url, odooImageBase, '')
 const emit = defineEmits<{ select: [url: string], close: [] }>()
 const { t } = useI18n()
+const cmsText = useCmsText()
 
 const { data: items, refresh, pending } = await useFetch<MediaItem[]>('/api/cms/media', {
   key: 'cms-editor-media',
@@ -56,7 +57,7 @@ async function upload(files: FileList | File[] | null) {
     if (lastUrl) emit('select', lastUrl)
   }
   catch (e: any) {
-    error.value = e?.statusMessage || e?.data?.statusMessage || t('cmsEditor.media.uploadFailed')
+    error.value = cmsText.errorMessage(e, t('cmsEditor.media.uploadFailed'))
   }
   finally {
     uploading.value = false

@@ -20,6 +20,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{ restored: [], close: [] }>()
 const { t } = useI18n()
+const cmsText = useCmsText()
 
 const { data: revisions, pending } = await useFetch<Revision[]>(
   `/api/cms/pages/${props.pageId}/revisions`,
@@ -50,7 +51,7 @@ async function restore(revision: Revision) {
     emit('restored')
   }
   catch (e: any) {
-    error.value = e?.data?.statusMessage || t('cmsEditor.versions.restoreFailed')
+    error.value = cmsText.errorMessage(e, t('cmsEditor.versions.restoreFailed'))
   }
   finally {
     busy.value = null

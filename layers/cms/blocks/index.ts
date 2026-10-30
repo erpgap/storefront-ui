@@ -45,7 +45,3 @@ export function getBlockDefinition(blockType: string): BlockDefinition | undefin
   const component = blockComponents[blockType]
   return schema && component ? { ...schema, component } : undefined
 }
-
-export function blockLabel(blockType: string): string {
-  return getBlockSchema(blockType)?.label ?? blockType
-}

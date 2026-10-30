@@ -13,11 +13,12 @@ import { useCmsEditorDraft } from '../../composables/useCmsEditorDraft'
 import type { CmsPage } from '#cms/shared/blocks'
 import { CMS_LOCALES, DEFAULT_LOCALE } from '#cms/shared/i18n'
 import type { CmsLocale } from '#cms/shared/i18n'
-import { blockLabel, blockRegistry } from '#cms/blocks'
+import { blockRegistry } from '#cms/blocks'
 
 definePageMeta({ layout: false, middleware: 'cms-auth' })
 
 const { t } = useI18n()
+const cmsText = useCmsText()
 const route = useRoute()
 const pageId = computed(() => String(route.params.id))
 
@@ -42,13 +43,22 @@ const {
 const paletteOpen = ref(true)
 
 // Palette search: name and description, so "faq" and "questions" both find
-// the FAQ block.
+// the FAQ block. Both in the editor's language, and sorted by it as the
+// registry is sorted by the English: a merchant predicts the order of the
+// words they read.
 const paletteSearch = ref('')
 const paletteBlocks = computed(() => {
   const term = paletteSearch.value.trim().toLowerCase()
-  if (!term) return blockRegistry
-  return blockRegistry.filter(definition =>
-    `${definition.label} ${definition.description}`.toLowerCase().includes(term))
+  const tiles = blockRegistry
+    .map(definition => ({
+      name: definition.name,
+      label: cmsText.blockLabel(definition.name),
+      description: cmsText.blockDescription(definition.name),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label))
+  if (!term) return tiles
+  return tiles.filter(tile =>
+    `${tile.label} ${tile.description}`.toLowerCase().includes(term))
 })
 
 // Enter adds the first match, so search-then-add needs no mouse.
@@ -134,16 +144,18 @@ const selectedSchema = computed(() =>
 
 // Server issues arrive as a flat list of paths like `blocks[2].ctas[0].label`.
 // The inspector addresses fields by their path WITHIN the selected block, so
-// rebase them onto the selected block's index.
+// rebase them onto the selected block's index. The message is rebuilt from the
+// issue's code in the editor's language; the server's English is the fallback.
 const selectedIssues = computed<Record<string, string>>(() => {
   const index = blocks.value.findIndex(block => block.id === selectedId.value)
   if (index === -1) return {}
 
   const prefix = `blocks[${index}].`
+  const blockType = blocks.value[index]!.blockType
   return Object.fromEntries(
     issues.value
       .filter(item => item.path.startsWith(prefix))
-      .map(item => [item.path.slice(prefix.length), item.message]),
+      .map(item => [item.path.slice(prefix.length), cmsText.issueMessage(item, blockType)]),
   )
 })
 
@@ -187,9 +199,7 @@ async function publish() {
     page.value = updated
   }
   catch (error: any) {
-    publishError.value = error?.data?.statusMessage
-      || error?.statusMessage
-      || t('cmsEditor.editor.publishFailed')
+    publishError.value = cmsText.errorMessage(error, t('cmsEditor.editor.publishFailed'))
   }
   finally {
     publishing.value = false
@@ -390,7 +400,7 @@ function onCanvasDragStart(event: PointerEvent) {
   const id = shell?.getAttribute('data-cms-block-id')
   if (!id) return
 
-  const label = blockLabel(
+  const label = cmsText.blockLabel(
     blocks.value.find(block => block.id === id)?.blockType ?? '',
   )
   beginDrag(event, { kind: 'move', id, label })
@@ -739,7 +749,7 @@ const saveLabel = computed(() => ({
       >
         <div class="editor-chrome sticky top-0 flex items-center justify-between px-4 h-12 border-b border-white/10">
           <p class="text-[11px] tracking-[0.14em] uppercase text-white/60">
-            {{ selectedSchema.label }}
+            {{ cmsText.blockLabel(selectedSchema.name) }}
           </p>
           <button
             type="button"
@@ -773,6 +783,7 @@ const saveLabel = computed(() => ({
             :field="field"
             :model-value="selected.data[field.name]"
             :issues="selectedIssues"
+            :block-type="selectedSchema.name"
             :locale="locale"
             @update:model-value="value => updateField(field.name, value)"
           />
