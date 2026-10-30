@@ -459,7 +459,7 @@ const hasActive = computed(() => activePills.value.length > 0)
             </div>
             <div class="flex items-center gap-2.5 mt-3">
               <label class="flex-1 flex items-center h-[38px] px-2.5 border border-neutral-200 rounded-md focus-within:border-primary-900">
-                <span class="text-primary-300 text-[13px]">$</span>
+                <span class="text-primary-300 text-[13px]">{{ $config.public.currencySymbol }}</span>
                 <input
                   v-model.number="priceMin"
                   inputmode="numeric"
@@ -470,7 +470,7 @@ const hasActive = computed(() => activePills.value.length > 0)
               </label>
               <span class="text-primary-300">–</span>
               <label class="flex-1 flex items-center h-[38px] px-2.5 border border-neutral-200 rounded-md focus-within:border-primary-900">
-                <span class="text-primary-300 text-[13px]">$</span>
+                <span class="text-primary-300 text-[13px]">{{ $config.public.currencySymbol }}</span>
                 <input
                   v-model.number="priceMax"
                   inputmode="numeric"
