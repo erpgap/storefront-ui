@@ -85,6 +85,15 @@ test.describe('search', () => {
     await expect(page.getByText(/clutch/i).first()).toBeVisible()
   })
 
+  test('searches the whole catalogue from any page', async ({ page }) => {
+    // It used to take the current page's path as a category: on a product
+    // page that matched no category, and nothing was ever suggested.
+    await open(page, PRODUCT)
+    await page.getByRole('button', { name: 'Search' }).click()
+    await page.getByRole('search').getByRole('textbox').fill('jeans')
+    await expect(page.getByRole('search').getByRole('link').or(page.getByRole('option')).first()).toBeVisible()
+  })
+
   test.describe('on mobile', () => {
     test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })
 

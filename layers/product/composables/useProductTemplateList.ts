@@ -97,7 +97,13 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = LISTI
   )
 
   const queryArgs = computed<QueryProductsArgs>(() => {
-    const fromUrl = getFacetsFromURL(listingQuery.value as Record<string, any>, [], defaultPageSize)
+    // A caller that does not follow the route is not a listing, and must not
+    // take its scope from the URL either. The header search read the current
+    // page's path as a category: typed on /women it searched women's products
+    // only, and on a product page or the cart it found nothing at all.
+    const fromUrl: QueryProductsArgs = watchRoute
+      ? getFacetsFromURL(listingQuery.value as Record<string, any>, [], defaultPageSize)
+      : { pageSize: defaultPageSize, currentPage: 1, filter: {} as ProductFilterInput } as QueryProductsArgs
     const override = paramOverride.value ?? {}
 
     // Apply a default sort only when the URL doesn't specify one, so a bare
