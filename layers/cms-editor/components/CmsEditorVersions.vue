@@ -139,13 +139,12 @@ function when(iso?: string) {
           </li>
         </ul>
 
-        <p
+        <CmsEditorError
           v-if="error"
-          class="px-5 py-3 text-[12px] text-red-600"
-          role="alert"
+          class="px-5 py-3"
         >
           {{ error }}
-        </p>
+        </CmsEditorError>
       </div>
 
       <footer class="flex-none px-5 py-3 border-t border-primary-200">

@@ -1,14 +1,11 @@
 <script lang="ts" setup>
-import { SfButton, SfInput, SfIconVisibility } from '@storefront-ui/vue'
+import { SfButton } from '@storefront-ui/vue'
 import type { MutationChangePasswordArgs } from '~~/graphql'
 
 const { changeForgottenPassword } = useAuth()
 const route = useRoute()
 
 defineEmits(['on-cancel'])
-
-const firstNewPasswordVisible = ref(false)
-const secondNewPasswordVisible = ref(false)
 
 const repeatPassword = ref('')
 const token = ref(route.query.token)
@@ -50,23 +47,13 @@ const handleSubmit = async () => {
             <UiFormLabel>{{
               $t("account.accountSettings.personalData.newPassword")
             }}</UiFormLabel>
-            <SfInput
+            <UiFormPasswordInput
               v-model="changePasswordArgs.newPassword"
               name="password"
-              :type="firstNewPasswordVisible ? 'text' : 'password'"
-              :class="{ 'text-red-600': passwordsDoesntMatch }"
+              :invalid="passwordsDoesntMatch"
               required
               @change="passwordsDoesntMatch = false"
-            >
-              <template #suffix>
-                <button
-                  type="button"
-                  @click="firstNewPasswordVisible = !firstNewPasswordVisible"
-                >
-                  <SfIconVisibility />
-                </button>
-              </template>
-            </SfInput>
+            />
             <UiFormHelperText class="block">
               {{
                 $t("account.accountSettings.personalData.passwordHelp")
@@ -76,33 +63,20 @@ const handleSubmit = async () => {
             <UiFormLabel>{{
               $t("account.accountSettings.personalData.newPasswordAgain")
             }}</UiFormLabel>
-            <SfInput
+            <UiFormPasswordInput
               v-model="repeatPassword"
               name="password"
-              :type="secondNewPasswordVisible ? 'text' : 'password'"
-              :class="{ 'text-red-600': passwordsDoesntMatch }"
+              :invalid="passwordsDoesntMatch"
               required
               @change="passwordsDoesntMatch = false"
-            >
-              <template #suffix>
-                <button
-                  type="button"
-                  @click="
-                    secondNewPasswordVisible = !secondNewPasswordVisible
-                  "
-                >
-                  <SfIconVisibility />
-                </button>
-              </template>
-            </SfInput>
+            />
           </label>
-          <p
+          <UiFormMessage
             v-if="passwordsDoesntMatch"
-            class="mt-3 text-[13px] text-red-700"
-            role="alert"
+            class="mt-3"
           >
-            Passwords don't match.
-          </p>
+            {{ $t("account.accountSettings.personalData.passwordsDontMatch") }}
+          </UiFormMessage>
           <div class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4">
             <SfButton
               type="reset"

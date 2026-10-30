@@ -339,12 +339,12 @@ const categoryEyebrow = computed(() => {
               </SfButton>
             </div>
 
-            <UiFormError
+            <UiFormMessage
               v-if="cartError"
               class="mt-3"
             >
               {{ cartError }}
-            </UiFormError>
+            </UiFormMessage>
 
             <p
               v-show="productsInCart"

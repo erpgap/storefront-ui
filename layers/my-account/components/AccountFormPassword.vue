@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { SfButton, SfInput, SfIconVisibility } from '@storefront-ui/vue'
+import { SfButton } from '@storefront-ui/vue'
 
 type AccountFormPasswordProps = {
   oldPassword?: string
@@ -17,10 +17,6 @@ const userPasswords = ref({
   firstNewPassword: firstNewPassword?.value ?? '',
   secondNewPassword: secondNewPassword?.value ?? '',
 })
-
-const passwordVisible = ref(false)
-const firstNewPasswordVisible = ref(false)
-const secondNewPasswordVisible = ref(false)
 
 // Turns on once the user attempts to submit, so empty required fields go red.
 const showErrors = ref(false)
@@ -45,75 +41,42 @@ const submit = () => {
       <UiFormLabel>{{
         $t('account.accountSettings.personalData.currentPassword')
       }}</UiFormLabel>
-      <SfInput
+      <UiFormPasswordInput
         v-model="userPasswords.oldPassword"
         name="password"
-        :type="passwordVisible ? 'text' : 'password'"
         required
         :invalid="showErrors && !userPasswords.oldPassword.trim()"
-      >
-        <template #suffix>
-          <button
-            type="button"
-            @click="passwordVisible = !passwordVisible"
-          >
-            <SfIconVisibility />
-          </button>
-        </template>
-      </SfInput>
+      />
     </label>
     <label class="block my-4">
       <UiFormLabel>{{
         $t('account.accountSettings.personalData.newPassword')
       }}</UiFormLabel>
-      <SfInput
+      <UiFormPasswordInput
         v-model="userPasswords.firstNewPassword"
         name="password"
-        :type="firstNewPasswordVisible ? 'text' : 'password'"
         required
         :invalid="showErrors && !userPasswords.firstNewPassword.trim()"
-      >
-        <template #suffix>
-          <button
-            type="button"
-            @click="firstNewPasswordVisible = !firstNewPasswordVisible"
-          >
-            <SfIconVisibility />
-          </button>
-        </template>
-      </SfInput>
+      />
     </label>
     <label class="block">
       <UiFormLabel>{{
         $t('account.accountSettings.personalData.newPasswordAgain')
       }}</UiFormLabel>
-      <SfInput
+      <UiFormPasswordInput
         v-model="userPasswords.secondNewPassword"
         name="password"
-        :type="secondNewPasswordVisible ? 'text' : 'password'"
         required
         :invalid="showErrors && !userPasswords.secondNewPassword.trim()"
-      >
-        <template #suffix>
-          <button
-            type="button"
-            @click="secondNewPasswordVisible = !secondNewPasswordVisible"
-          >
-            <SfIconVisibility />
-          </button>
-        </template>
-      </SfInput>
+      />
     </label>
-    <p
+    <UiFormMessage
       v-if="message"
-      role="alert"
-      class="mt-6 border text-[13px] px-3 py-2.5"
-      :class="message.type === 'success'
-        ? 'border-green-200 bg-green-50 text-green-700'
-        : 'border-red-200 bg-red-50 text-red-700'"
+      :type="message.type"
+      class="mt-6"
     >
       {{ message.text }}
-    </p>
+    </UiFormMessage>
     <div class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4">
       <SfButton
         type="reset"

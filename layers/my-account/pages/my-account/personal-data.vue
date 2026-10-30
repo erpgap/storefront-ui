@@ -122,16 +122,13 @@ onMounted(async () => {
         </SfButton>
       </div>
 
-      <p
+      <UiFormMessage
         v-if="contactMessage && editing !== 'contact'"
-        role="alert"
-        class="mt-3 border text-[13px] px-3 py-2.5"
-        :class="contactMessage.type === 'success'
-          ? 'border-green-200 bg-green-50 text-green-700'
-          : 'border-red-200 bg-red-50 text-red-700'"
+        :type="contactMessage.type"
+        class="mt-3"
       >
         {{ contactMessage.text }}
-      </p>
+      </UiFormMessage>
 
       <dl
         v-if="editing !== 'contact'"
@@ -184,16 +181,13 @@ onMounted(async () => {
         </SfButton>
       </div>
 
-      <p
+      <UiFormMessage
         v-if="passwordMessage && editing !== 'password'"
-        role="alert"
-        class="mt-3 border text-[13px] px-3 py-2.5"
-        :class="passwordMessage.type === 'success'
-          ? 'border-green-200 bg-green-50 text-green-700'
-          : 'border-red-200 bg-red-50 text-red-700'"
+        :type="passwordMessage.type"
+        class="mt-3"
       >
         {{ passwordMessage.text }}
-      </p>
+      </UiFormMessage>
 
       <p
         v-if="editing !== 'password'"

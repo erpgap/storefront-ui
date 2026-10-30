@@ -89,9 +89,9 @@ const NuxtLink = resolveComponent('NuxtLink')
         {{ $t("auth.login.rememberMeLabel") }}
       </label>
 
-      <UiFormError v-if="authError">
+      <UiFormMessage v-if="authError">
         {{ authError }}
-      </UiFormError>
+      </UiFormMessage>
 
       <SfButton
         type="submit"

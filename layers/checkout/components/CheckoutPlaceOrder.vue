@@ -66,11 +66,11 @@ const handleGiftCardPayment = async () => {
       {{ processing ? $t('placingOrder') : $t('placeOrder') }}
     </SfButton>
 
-    <UiFormError
+    <UiFormMessage
       v-if="paymentError"
       class="mt-4"
     >
       {{ paymentError }}
-    </UiFormError>
+    </UiFormMessage>
   </div>
 </template>

@@ -62,23 +62,12 @@ defineExpose({
     class="py-7"
     data-testid="checkout-contact"
   >
-    <div class="flex items-center gap-3 mb-5">
-      <span
-        v-if="step"
-        :class="[
-          'w-[26px] h-[26px] rounded-full grid place-items-center text-[12px] shrink-0',
-          valid ? 'bg-black text-white'
-          : showErrors ? 'border border-red-300 text-red-600'
-            : 'border border-primary-200 text-primary-500',
-        ]"
-      >
-        <template v-if="valid">✓</template>
-        <template v-else>{{ step }}</template>
-      </span>
-      <h2 class="text-[13px] tracking-[0.14em] uppercase font-semibold">
-        {{ heading }}
-      </h2>
-    </div>
+    <CheckoutStepHeading
+      :step="step"
+      :heading="heading"
+      :done="valid"
+      :invalid="showErrors"
+    />
 
     <div class="md:pl-[38px]">
       <div

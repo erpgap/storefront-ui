@@ -144,13 +144,9 @@ onMounted(() => {
           Changing the address breaks existing links to this page.
         </p>
 
-        <p
-          v-if="error"
-          class="text-[12px] text-red-600"
-          role="alert"
-        >
+        <CmsEditorError v-if="error">
           {{ error }}
-        </p>
+        </CmsEditorError>
       </div>
 
       <footer class="flex-none flex items-center justify-end gap-2 px-5 h-14 border-t border-primary-200">

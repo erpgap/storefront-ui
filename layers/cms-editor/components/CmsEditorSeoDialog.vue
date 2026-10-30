@@ -235,13 +235,9 @@ onMounted(() => {
           text shown in grey.
         </p>
 
-        <p
-          v-if="error"
-          class="text-[12px] text-red-600"
-          role="alert"
-        >
+        <CmsEditorError v-if="error">
           {{ error }}
-        </p>
+        </CmsEditorError>
       </div>
 
       <footer class="flex-none flex justify-end gap-2 px-5 py-3 border-t border-primary-200">

@@ -142,13 +142,12 @@ onMounted(() => {
           >
             Uploading…
           </p>
-          <p
+          <CmsEditorError
             v-if="error"
-            class="text-[12px] text-red-600 mt-2"
-            role="alert"
+            class="mt-2"
           >
             {{ error }}
-          </p>
+          </CmsEditorError>
         </div>
 
         <p

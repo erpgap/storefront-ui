@@ -161,9 +161,9 @@ const reset = () => {
               class="w-full"
             />
           </label>
-          <UiFormError v-if="apiError">
+          <UiFormMessage v-if="apiError">
             {{ apiError }}
-          </UiFormError>
+          </UiFormMessage>
           <SfButton
             type="submit"
             :disabled="loading"

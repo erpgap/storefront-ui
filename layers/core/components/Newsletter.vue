@@ -64,12 +64,12 @@ const subscribeNewsletter = async () => {
         </SfButton>
       </form>
 
-      <UiFormError
+      <UiFormMessage
         v-if="apiError && !subscribed"
         class="max-w-[480px] mx-auto mt-4"
       >
         {{ apiError }}
-      </UiFormError>
+      </UiFormMessage>
     </div>
   </section>
 </template>

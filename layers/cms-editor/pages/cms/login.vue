@@ -74,13 +74,9 @@ async function submit() {
         >
       </label>
 
-      <p
-        v-if="error"
-        class="text-[12px] text-red-600"
-        role="alert"
-      >
+      <CmsEditorError v-if="error">
         {{ error }}
-      </p>
+      </CmsEditorError>
 
       <button
         type="submit"

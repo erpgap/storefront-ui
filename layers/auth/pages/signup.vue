@@ -75,13 +75,9 @@ onMounted(() => {
       class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8"
       @submit.prevent="handleSignup"
     >
-      <p
-        v-if="authError"
-        class="border border-red-200 bg-red-50 text-red-700 text-[13px] px-3 py-2.5"
-        role="alert"
-      >
+      <UiFormMessage v-if="authError">
         {{ authError }}
-      </p>
+      </UiFormMessage>
 
       <label>
         <UiFormLabel>{{ $t("form.firstNameLabel") }} *</UiFormLabel>
