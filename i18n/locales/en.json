@@ -443,7 +443,8 @@
         "button": "Go Shopping",
         "imageAlt": "Signup successful"
       },
-      "error": "We couldn't create your account. Please try again."
+      "error": "We couldn't create your account. Please try again.",
+      "createdButNotSignedIn": "Your account was created, but we couldn't sign you in. Please log in."
     },
     "resetPassword": {
       "heading": "Reset password",

@@ -136,15 +136,18 @@ export const useAuth = () => {
     try {
       loading.value = true
       authError.value = ''
-      const data = await $sdk().odoo.mutation<MutationRegisterArgs, SignUpUserResponse>(
+      await $sdk().odoo.mutation<MutationRegisterArgs, SignUpUserResponse>(
         {
           mutationName: MutationName.RegisterUserMutation,
         },
         { ...params },
       )
-      user.value = data?.register?.partner
-      await login({ email: params.email, password: params.password })
-      router.push('/my-account')
+      // login() goes to the account page itself. When it fails the account
+      // exists all the same, so say so here: the shopper stays on this page
+      // and signing up again would only answer that the email is taken.
+      if (!await login({ email: params.email, password: params.password })) {
+        authError.value = t('auth.signup.createdButNotSignedIn')
+      }
     }
     catch (error: any) {
       authError.value = errorMessage(error, t('auth.signup.error'))
@@ -155,7 +158,8 @@ export const useAuth = () => {
     }
   }
 
-  const login = async (params: MutationLoginArgs, redirectTo: string = DEFAULT_AFTER_LOGIN) => {
+  // Resolves to whether the shopper is now logged in.
+  const login = async (params: MutationLoginArgs, redirectTo: string = DEFAULT_AFTER_LOGIN): Promise<boolean> => {
     try {
       loading.value = true
       authError.value = ''
@@ -167,9 +171,11 @@ export const useAuth = () => {
       userCookie.value = data?.login?.user?.partner?.id ?? null
       user.value = data?.login?.user?.partner as Partner
       router.push(redirectTo)
+      return true
     }
     catch (error: any) {
       authError.value = errorMessage(error, t('auth.login.error'))
+      return false
     }
     finally {
       loading.value = false
