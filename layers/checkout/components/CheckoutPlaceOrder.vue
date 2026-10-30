@@ -22,10 +22,20 @@ const paymentError = inject<Ref<string>>('paymentError')
 // click), kept separate from `paymentLoading` (which is also true while the
 // Stripe form first loads) so the button doesn't read "Placing order…" before
 // the shopper has even clicked. Convention: disable + swap the label, no spinner.
+const { paymentProviders } = usePayment()
+const { t } = useI18n()
+
 const processing = ref(false)
 const placeOrder = async () => {
   if (!validateCheckout()) return
-  if (!paymentHandler?.value) return
+  if (!paymentHandler?.value) {
+    // Otherwise a valid form and no payment provider in Odoo means a click
+    // that does nothing at all.
+    if (!paymentProviders.value.length && paymentError) {
+      paymentError.value = t('checkoutPayment.unavailable')
+    }
+    return
+  }
   processing.value = true
   try {
     await paymentHandler.value()

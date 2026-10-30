@@ -37,7 +37,7 @@
       v-else
       class="md:pl-[38px] text-[14px] text-primary-400"
     >
-      {{ $t("checkoutPayment.loadingPayment") }}
+      {{ providersLoaded ? $t("checkoutPayment.unavailable") : $t("checkoutPayment.loadingPayment") }}
     </p>
   </section>
 </template>
@@ -87,9 +87,13 @@ const onPaymentError = (message: string) => {
 }
 
 const showPaymentModal = ref<boolean>(false)
+// With no provider set up in Odoo the list stays empty, and "loading" would
+// then be on screen for good.
+const providersLoaded = ref(false)
 
 onMounted(async () => {
   await loadPaymentMethods()
+  providersLoaded.value = true
 })
 
 watch(() => paymentProviders.value, () => {

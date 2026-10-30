@@ -147,7 +147,8 @@
     "applePayIconAlt": "Apple Pay Icon",
     "googlePayIconAlt": "Google Pay icon",
     "promoOrGiftcard": "Promo code or gift card",
-    "loadingPayment": "Loading Payment...."
+    "loadingPayment": "Loading payment methods…",
+    "unavailable": "No payment method is available right now, so the order can't be placed. Please contact us to complete your purchase."
   },
   "shippingMethod": {
     "heading": "Shipping details",
