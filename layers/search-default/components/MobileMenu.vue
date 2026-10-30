@@ -112,7 +112,7 @@ watch(
           v-if="showResultSearch"
           class="grid gap-[5px] text-black"
         >
-          <LazyMobileSearchList
+          <LazySearchHitList
             :hits="searchHits"
             :search-text="searchInputValue"
             @select="selectHit"

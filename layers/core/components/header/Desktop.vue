@@ -6,7 +6,6 @@ import {
   useTrapFocus,
 } from '@storefront-ui/vue'
 import { onClickOutside } from '@vueuse/core'
-import DesktopSearchList from '../../../search-default/components/DesktopSearchList.vue'
 
 const { isOpen: isSearchOpen, toggle: toggleSearch, close: closeSearch } = useDisclosure()
 
@@ -151,8 +150,9 @@ onClickOutside(searchPanelRef, () => {
                   </span>
                 </template>
               </SfInput>
-              <DesktopSearchList
+              <SearchHitList
                 v-if="showResultSearch"
+                dropdown
                 :hits="searchHits"
                 :search-text="searchInputValue"
                 @select="selectHit"
