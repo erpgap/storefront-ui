@@ -1,4 +1,4 @@
-import { createPage, expect, publish, signIn, test, waitUntilLive } from './fixtures'
+import { createPage, expect, publish, signIn, test } from './fixtures'
 
 /**
  * A page with no meta title is titled after itself.
@@ -24,7 +24,6 @@ test('a published page with no meta title falls back to its name', async ({ page
 
   expect(slug, 'the header should show the page address').toBeTruthy()
 
-  await waitUntilLive(page, slug!)
   const response = await page.request.get(slug!)
   expect(response.status()).toBe(200)
 

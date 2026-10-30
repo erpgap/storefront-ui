@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
   }
   else {
     await invalidateCmsPageCache(published.slug)
+    await markCmsPageLive(published.slug)
   }
 
   return published

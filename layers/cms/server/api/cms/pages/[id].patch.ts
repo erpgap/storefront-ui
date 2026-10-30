@@ -25,6 +25,8 @@ export default defineEventHandler(async (event) => {
   await invalidateCmsPageCache(page.slug)
   if (before?.slug && before.slug !== page.slug) {
     await invalidateCmsPageCache(before.slug)
+    // A live page answers at its new address straight away.
+    if (page.published && page.kind !== 'region') await markCmsPageLive(page.slug)
   }
 
   return page
