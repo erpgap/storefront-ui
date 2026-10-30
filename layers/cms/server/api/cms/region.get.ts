@@ -13,17 +13,10 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'key is required' })
   }
 
-  const config = useRuntimeConfig(event)
-  const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
-
   try {
-    const response = await $fetch<{
-      data?: { cmsRegion?: { id: number, blocks?: unknown[] } | null }
-    }>(url, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', ...odooWebsiteHeaders(event) },
-      body: { query: GetCmsRegionQuery, variables: { key } },
-    })
+    const response = await odooGraphql<{ cmsRegion?: { id: number, blocks?: unknown[] } | null }>(
+      event, GetCmsRegionQuery, { key },
+    )
 
     // An empty region is `{ blocks: [] }`, not null: h3 answers null with an
     // empty 204, which useFetch reads as undefined (and Nuxt warns, E3006).

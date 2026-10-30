@@ -9,19 +9,10 @@ import { GetCmsCanEditQuery } from '#cms/server/queries/CmsQueries'
  * a client that lies to itself about this achieves nothing.
  */
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
-  const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
-
   try {
-    const response = await $fetch<{ data?: { cmsCanEdit?: boolean } }>(url, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'Cookie': `session_id=${getCookie(event, 'session_id') ?? ''}`,
-        ...odooWebsiteHeaders(event),
-      },
-      body: { query: GetCmsCanEditQuery },
-    })
+    const response = await odooGraphql<{ cmsCanEdit?: boolean }>(
+      event, GetCmsCanEditQuery, undefined, { session: true },
+    )
     return { canEdit: Boolean(response?.data?.cmsCanEdit) }
   }
   catch {

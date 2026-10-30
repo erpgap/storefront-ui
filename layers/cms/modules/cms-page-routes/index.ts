@@ -3,6 +3,7 @@ import { join, relative } from 'node:path'
 import { defineNuxtModule, extendRouteRules } from 'nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
+import { withoutTrailingSlash } from '../../../../shared/url.mjs'
 
 /**
  * A route, with SWR caching, for every CMS page that exists at build time.
@@ -43,7 +44,7 @@ export default defineNuxtModule({
 
     let urls: string[] = []
     try {
-      const response = await ofetch(new URL('/graphql/vsf', odooBaseUrl).toString(), {
+      const response = await ofetch(`${withoutTrailingSlash(odooBaseUrl)}/graphql/vsf`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

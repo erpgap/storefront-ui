@@ -10,22 +10,11 @@ const queryVersions: Record<string, string> = Object.fromEntries(
 
 const customCache = cachedFunction(
   async (event: any) => {
-    const config = useRuntimeConfig(event)
     const body = await readBody<[{ queryName: QueryName }, Record<string, unknown>?]>(event)
 
-    const odooGraphQLUrl = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
-
-    const response: any = await $fetch.raw(odooGraphQLUrl, {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'content-type': 'application/json',
-        'REAL-IP': getRequestIP(event) || '',
-        'request-host': config.public.middlewareUrl || getRequestHost(event),
-        'Cookie': `session_id=${getCookie(event, 'session_id')}`,
-      },
-      body: JSON.stringify({ query: Queries[body?.[0]?.queryName], variables: body?.[1] }),
-    })
+    const response: any = await odooGraphqlRaw(
+      event, Queries[body?.[0]?.queryName], body?.[1], { session: true },
+    )
 
     return response
   },
@@ -70,59 +59,10 @@ const customCache = cachedFunction(
 export default defineEventHandler(async (event) => {
   try {
     const response: any = await customCache(event)
-
-    if (response?._data?.errors?.length > 0) {
-      throw createError({
-        statusCode: 500,
-        data: response?._data?.errors,
-        message: response?._data?.errors?.[0]?.message,
-      })
-    }
-
+    if (response?._data?.errors?.length) throw odooProxyError(response)
     return response?._data?.data
   }
   catch (error: any) {
-    if (error?.response?._data?.errors?.length > 0) {
-      throw createError({
-        statusCode: 500,
-        data: error.response?._data?.errors,
-        message: error.response?._data?.errors?.[0]?.message,
-      })
-    }
-    if (error.graphQLErrors?.length > 0) {
-      throw createError({
-        statusCode: 500,
-        data: error.graphQLErrors,
-        message: error.message,
-      })
-    }
-    if (error.protocolErrors?.length > 0) {
-      throw createError({
-        statusCode: 400,
-        data: error.protocolErrors,
-        message: error.message,
-      })
-    }
-    if (error.clientErrors?.length > 0) {
-      throw createError({
-        statusCode: 400,
-        data: error.clientErrors,
-        message: error.message,
-      })
-    }
-    if (error.networkError) {
-      throw createError({
-        statusCode: 500,
-        data: (error.networkError as { result?: { errors?: unknown } })?.result?.errors,
-        message: error.message,
-      })
-    }
-
-    console.error('Unhandled error in /api/odoo/query.post.ts:', error)
-    throw createError({
-      statusCode: 500,
-      data: error?.data,
-      message: error.data?.[0]?.message,
-    })
+    throw odooProxyError(error)
   }
 })

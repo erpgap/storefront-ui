@@ -16,17 +16,10 @@ export default defineEventHandler(async (event) => {
     defaultLocale: DEFAULT_LOCALE,
   }
 
-  const config = useRuntimeConfig(event)
-  const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
-
   try {
-    const response = await $fetch<{
-      data?: { cmsLocales?: { code: string, label: string, isDefault: boolean }[] }
-    }>(url, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', ...odooWebsiteHeaders(event) },
-      body: { query: GetCmsLocalesQuery },
-    })
+    const response = await odooGraphql<{
+      cmsLocales?: { code: string, label: string, isDefault: boolean }[]
+    }>(event, GetCmsLocalesQuery)
 
     const locales = response?.data?.cmsLocales ?? []
     if (!locales.length) return fallback

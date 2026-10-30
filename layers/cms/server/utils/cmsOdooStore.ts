@@ -23,7 +23,6 @@ import {
   UpdateCmsPageSeoMutation,
 } from '../mutations/CmsMutations'
 import type { CmsStore, PageInput, SeoInput } from './cmsStore'
-import { odooWebsiteHeaders } from './cmsOdooWebsite'
 import type { BlockInstance, CmsPage, CmsSeo } from '#cms/shared/blocks'
 
 interface OdooCmsPage {
@@ -68,20 +67,8 @@ async function callOdoo<T>(
   query: string,
   variables: Record<string, unknown> = {},
 ): Promise<T> {
-  const config = useRuntimeConfig(event)
-  const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
-
-  const response = await $fetch<{ data?: T, errors?: { message: string }[] }>(url, {
-    method: 'POST',
-    headers: {
-      'accept': 'application/json',
-      'content-type': 'application/json',
-      // The editor's own session. Odoo decides what they may do.
-      'Cookie': `session_id=${getCookie(event, 'session_id') ?? ''}`,
-      ...odooWebsiteHeaders(event),
-    },
-    body: { query, variables },
-  })
+  // The editor's own session. Odoo decides what they may do.
+  const response = await odooGraphql<T>(event, query, variables, { session: true })
 
   if (response?.errors?.length) {
     const message = response.errors[0]!.message

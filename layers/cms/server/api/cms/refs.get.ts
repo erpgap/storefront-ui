@@ -20,26 +20,12 @@ export default defineEventHandler(async (event) => {
     .map(Number)
     .filter(id => Number.isInteger(id) && id > 0)
 
-  const config = useRuntimeConfig(event)
-  const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
-
-  const response = await $fetch<{
-    data?: { cmsProducts?: unknown[], cmsCategories?: unknown[] }
-    errors?: { message: string }[]
-  }>(url, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'Cookie': `session_id=${getCookie(event, 'session_id') ?? ''}`,
-      ...odooWebsiteHeaders(event),
-    },
-    body: {
-      query: kind === 'category' ? GetCmsCategoriesQuery : GetCmsProductsQuery,
-      variables: kind === 'category'
-        ? { search }
-        : { search, ids: ids.length ? ids : null },
-    },
-  })
+  const response = await odooGraphql<{ cmsProducts?: unknown[], cmsCategories?: unknown[] }>(
+    event,
+    kind === 'category' ? GetCmsCategoriesQuery : GetCmsProductsQuery,
+    kind === 'category' ? { search } : { search, ids: ids.length ? ids : null },
+    { session: true },
+  )
 
   if (response?.errors?.length) {
     throw createError({ statusCode: 403, statusMessage: response.errors[0]!.message })
@@ -51,6 +37,7 @@ export default defineEventHandler(async (event) => {
   // Odoo returns a path relative to itself. The storefront is a different
   // origin, so it has to be made absolute or every thumbnail in the picker
   // renders broken.
+  const config = useRuntimeConfig(event)
   const base = String(config.public.odooBaseImageUrl || config.public.odooBaseUrl || '')
     .replace(/\/$/, '')
 

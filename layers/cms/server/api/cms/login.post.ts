@@ -16,24 +16,15 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Email and password are required.' })
   }
 
-  const config = useRuntimeConfig(event)
-  const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
-
   let response
   try {
-    response = await $fetch.raw<{
-      data?: { login?: { user?: { id: number, name: string } } }
-      errors?: { message: string }[]
-    }>(url, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', ...odooWebsiteHeaders(event) },
-      body: {
-        query: `mutation ($email: String!, $password: String!) {
-          login(email: $email, password: $password) { user { id name } }
-        }`,
-        variables: { email: body.email, password: body.password },
-      },
-    })
+    response = await odooGraphqlRaw<{ login?: { user?: { id: number, name: string } } }>(
+      event,
+      `mutation ($email: String!, $password: String!) {
+        login(email: $email, password: $password) { user { id name } }
+      }`,
+      { email: body.email, password: body.password },
+    )
   }
   catch (error: any) {
     // An unreachable Odoo surfaced as a bare "Server Error", which tells a

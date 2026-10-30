@@ -15,17 +15,8 @@ export interface OdooWebsite {
  * query); callers keep their single-website behaviour then.
  */
 export const odooWebsite = cachedFunction(async (event: H3Event): Promise<OdooWebsite | null> => {
-  const config = useRuntimeConfig(event)
-  const response = await $fetch<{ data?: { website?: OdooWebsite | null } }>(
-    new URL('/graphql/vsf', config.public.odooBaseUrl).toString(),
-    {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'request-host': config.public.middlewareUrl || getRequestHost(event),
-      },
-      body: { query: 'query { website { id name } }' },
-    },
+  const response = await odooGraphql<{ website?: OdooWebsite | null }>(
+    event, 'query { website { id name } }',
   ).catch(() => null)
 
   const website = response?.data?.website

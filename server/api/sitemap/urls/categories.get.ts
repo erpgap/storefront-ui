@@ -10,10 +10,7 @@ import type { SitemapUrlInput } from '#sitemap/types'
 const CATEGORIES_QUERY = `query { categories(pageSize: 10000) { categories { slug } } }`
 
 export default defineSitemapEventHandler(async () => {
-  const config = useRuntimeConfig()
-  const odooUrl = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
-
-  const res: any = await $fetch(odooUrl, {
+  const res: any = await $fetch(odooGraphqlUrl(), {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: { query: CATEGORIES_QUERY },

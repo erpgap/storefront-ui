@@ -11,18 +11,9 @@
  * listed with the other static pages.
  */
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
-  const url = new URL('/graphql/vsf', config.public.odooBaseUrl).toString()
-
-  const response = await $fetch<{
-    data?: { websitePages?: { websitePages?: { websiteUrl?: string | null, publishingDate?: string | null }[] } }
-  }>(url, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', ...odooWebsiteHeaders(event) },
-    body: {
-      query: 'query { websitePages(pageSize: 10000) { websitePages { websiteUrl publishingDate } } }',
-    },
-  })
+  const response = await odooGraphql<{
+    websitePages?: { websitePages?: { websiteUrl?: string | null, publishingDate?: string | null }[] }
+  }>(event, 'query { websitePages(pageSize: 10000) { websitePages { websiteUrl publishingDate } } }')
 
   return (response?.data?.websitePages?.websitePages ?? [])
     .filter(page => page.websiteUrl && page.websiteUrl !== '/')
