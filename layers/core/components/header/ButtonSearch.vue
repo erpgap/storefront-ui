@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import {
-  SfButton,
-  useDisclosure,
-  SfIconSearch,
-} from '@storefront-ui/vue'
+import { SfButton, useDisclosure } from '@storefront-ui/vue'
 
-const { isOpen, close, open, toggle } = useDisclosure()
+// The mobile header's search: opens the search layer's full-screen drawer.
+const { isOpen, close, toggle } = useDisclosure()
 </script>
 
 <template>
   <SfButton
     variant="tertiary"
-    class="relative text-white hover:text-white active:text-white hover:bg-primary-800 active:bg-primary-900 rounded-md"
     square
-    @click="toggle"
+    :aria-label="$t('search')"
+    :aria-expanded="isOpen"
+    class="text-black hover:bg-white active:bg-white rounded-md"
+    @click="toggle()"
   >
-    <SfIconSearch />
+    <UiLineIcon
+      name="search"
+      class="text-black!"
+    />
   </SfButton>
-  <LazyMobileMenu
+  <LazyHeaderSearchDrawer
     :is-open="isOpen"
     @close="close"
   />
 </template>
-
-<style scoped></style>

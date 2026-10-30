@@ -83,6 +83,14 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     searchInputValue.value = hit || searchInputValue.value
   }
 
+  // Enter in the search box: the results page for what was typed.
+  const enterPress = () => {
+    const query = searchInputValue.value?.trim()
+    if (!query) return
+    showResultSearch.value = false
+    router.push({ path: '/search', query: { search: query } })
+  }
+
   const highlightPrevious = () => {
     if (highlightedIndex.value === 0) {
       highlightedIndex.value = productTemplateList.value?.length - 1
@@ -121,6 +129,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     highlightedIndex,
     search,
     selectHit,
+    enterPress,
     showResultSearch,
     searchHits,
   }

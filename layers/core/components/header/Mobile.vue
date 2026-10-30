@@ -32,7 +32,7 @@ watch(isOpen, (open: boolean) => {
 <template>
   <header class="text-black flex w-full py-3.5">
     <div class="flex items-center justify-between h-full w-full narrow-container">
-      <div>
+      <div class="flex-1">
         <HeaderMobileMenuButton
           :is-open="isOpen"
           :controls="DRAWER_ID"
@@ -100,7 +100,8 @@ watch(isOpen, (open: boolean) => {
         </Transition>
       </Teleport>
 
-      <div>
+      <div class="flex-1 flex items-center justify-end gap-1">
+        <HeaderButtonSearch />
         <HeaderButtonCart />
       </div>
     </div>
