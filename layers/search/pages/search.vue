@@ -6,13 +6,12 @@ import {
   SfLoaderCircular,
 } from '@storefront-ui/vue'
 
+import type { LocationQuery } from 'vue-router'
 import { useProductTemplateList } from '../../product/composables/useProductTemplateList'
-import { useProductAttributes } from '../../product/composables/useProductAttributes'
 import { useUiHelpers } from '../../category/composables/useUiHelpers'
 import { useScrollToTopOnListingChange } from '../../core/composables/useScrollToTopOnListingChange'
 import { sortByIds, useAlgolia } from '../composables/useAlgolia'
-
-type Product = { slug?: string, stock?: number, qty?: number, [k: string]: any }
+import type { ProductFilterInput, QueryProductsArgs } from '~~/graphql'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -39,24 +38,15 @@ useScrollToTopOnListingChange(loading)
 provide('stockCount', stockCount)
 
 const { getFacetsFromURL } = useUiHelpers()
-const { getRegularPrice, getSpecialPrice } = useProductAttributes()
-
-const slugFor = (pt: any) => pt?.firstVariant?.slug || pt?.slug || ''
-
-type ProductWithStock = Product & { stock: number }
-function normalizeVariant(p?: Product): ProductWithStock | undefined {
-  if (!p) return undefined
-  return { ...p, stock: Number((p as any)?.stock ?? (p as any)?.qty ?? 0) }
-}
 
 const nuxtApp = useNuxtApp()
 const { productIds } = useAlgolia()
 // The products Algolia matched, best first, when it chose them.
 const algoliaIds = ref<number[] | null>(null)
 
-async function fetchList(q: Record<string, any>) {
-  const facets: Record<string, any> = getFacetsFromURL(q) || {}
-  const term = String(q?.search ?? '')
+async function fetchList(q: LocationQuery) {
+  const facets: QueryProductsArgs = getFacetsFromURL(q)
+  const term = String(q.search ?? '')
 
   // Algolia decides what matches; Odoo then filters, sorts and pages those
   // products like any other listing. 1000 is as many hits as Algolia returns.
@@ -64,7 +54,7 @@ async function fetchList(q: Record<string, any>) {
   algoliaIds.value = ids
   if (ids) {
     // No match must show nothing, and an empty list would mean "no filter".
-    facets.filter = { ...facets.filter, ids: ids.length ? ids : [0] }
+    facets.filter = { ...facets.filter, ids: ids.length ? ids : [0] } as ProductFilterInput
     facets.search = undefined
   }
   else if (term) {
@@ -78,7 +68,7 @@ async function fetchList(q: Record<string, any>) {
 // Odoo pages through Algolia's matches in its own order. Unless the shopper
 // chose a sort, show each page best match first.
 const results = computed(() => {
-  const list = Array.isArray(productTemplateList.value) ? productTemplateList.value : []
+  const list = productTemplateList.value ?? []
   return algoliaIds.value && !route.query.sort ? sortByIds(list, algoliaIds.value) : list
 })
 
@@ -87,16 +77,10 @@ onServerPrefetch(() => fetchList(route.query))
 if (import.meta.client) {
   watch(
     () => route.query,
-    (q: Record<string, any>) => { fetchList(q) },
+    (q) => { fetchList(q) },
     { immediate: true, deep: true },
   )
 }
-
-const safeAttributes = computed(() =>
-  Array.isArray((organizedAttributes as any)?.value)
-    ? (organizedAttributes as any).value
-    : [],
-)
 
 const breadcrumbs = [
   { name: t('home'), link: '/' },
@@ -129,7 +113,7 @@ const breadcrumbs = [
           <CategoryFilterSidebar
             v-if="$viewport.isGreaterOrEquals('desktopSmall')"
             class="block"
-            :attributes="safeAttributes"
+            :attributes="organizedAttributes"
             :categories="[]"
           />
         </ClientOnly>
@@ -142,7 +126,7 @@ const breadcrumbs = [
             <template #default>
               <CategoryFilterSidebar
                 class="block lg:hidden"
-                :attributes="safeAttributes"
+                :attributes="organizedAttributes"
                 :categories="[]"
                 @close="close"
               />
@@ -191,18 +175,10 @@ const breadcrumbs = [
 
           <section class="grid grid-cols-2 md:grid-cols-3 gap-5 mt-8">
             <LazyUiProductCard
-              v-for="pt in results"
-              :key="pt.id"
-              :name="pt?.name || ''"
+              v-for="product in results"
+              :key="product.id"
+              v-bind="productCardProps(product)"
               loading="eager"
-              :slug="slugFor(pt)"
-              :image-url="pt.imageUrl ?? ''"
-              :image-alt="pt?.name || ''"
-              :regular-price="getRegularPrice(pt.firstVariant as any)"
-              :special-price="getSpecialPrice(pt.firstVariant as any)"
-              :rating-count="(pt as any)?.ratingCount ?? 0"
-              :rating="(pt as any)?.ratingAvg ?? 0"
-              :first-variant="normalizeVariant(pt.firstVariant as any)"
             />
           </section>
 

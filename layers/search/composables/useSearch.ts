@@ -4,16 +4,15 @@ import { sortByIds, useAlgolia } from './useAlgolia'
 import type { Product, ProductFilterInput } from '~~/graphql'
 
 /**
- * @Responsibilities
- *  1) Buscar sugestões no Odoo
- *  2) Destacar resultados (feito no componente de lista)
- *  3) Controlar estado do modal/lista de resultados
+ * The header's search box: suggestions as the shopper types, the results page
+ * on Enter, and the open/closed state of the suggestion list. Highlighting the
+ * typed text in each suggestion is SearchHitList's job.
  */
 export const useSearch = (formSearchTemplateRef?: any) => {
   const route = useRoute()
   const router = useRouter()
 
-  // ---------- Modal / dropdown ----------
+  // ---------- Suggestion list ----------
   const searchModalOpen = useState(
     `search-ref-${formSearchTemplateRef ?? 'default'}`,
     () => false,
@@ -22,13 +21,13 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   const searchModalClose = () => searchModalToggle(false)
   const isSearchModalOpen = computed(() => searchModalOpen.value)
 
-  // ---------- Fonte de dados (Odoo) ----------
+  // ---------- Products ----------
   const {
     loadProductTemplateList,
     productTemplateList,
     totalItems,
     organizedAttributes,
-    loading, // loading do composable de produtos
+    loading,
     // watchRoute=false: this lives in the header and persists across navigation,
     // so it must NOT refetch on route changes — it queries only when the user
     // types (see search() below).
@@ -38,12 +37,12 @@ export const useSearch = (formSearchTemplateRef?: any) => {
   // The ids behind the current suggestions when Algolia chose them.
   const algoliaIds = ref<number[] | null>(null)
 
-  // ---------- Estado local da busca ----------
-  const searchInputValue = ref('') // texto digitado
+  // ---------- Search state ----------
+  const searchInputValue = ref('')
   const highlightedIndex = ref(-1)
   const showResultSearch = ref(false)
 
-  // Sincroniza o input com a URL (?search=...)
+  // On the results page the box shows what was searched for (?search=...).
   watch(
     () => route.query.search,
     (v) => {
@@ -52,7 +51,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     { immediate: true },
   )
 
-  // Esconde dropdown quando o input é apagado
+  // Clearing the box closes the suggestions.
   watch(searchInputValue, (v: any) => {
     if (!v) {
       showResultSearch.value = false
@@ -61,11 +60,11 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     }
   })
 
-  // ---------- Buscar sugestões (com debounce) ----------
+  // ---------- Suggestions, debounced ----------
   const search = useDebounceFn(async () => {
     const query = searchInputValue.value?.trim() || ''
 
-    // Se termo curto, fecha e sai
+    // Too short to suggest anything useful: close the list.
     if (query.length < 3) {
       showResultSearch.value = false
       searchModalOpen.value = false
@@ -96,24 +95,24 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     highlightedIndex.value = hasHits ? 0 : -1
   }, 300)
 
-  // ---------- Derivados ----------
   // Odoo returns them in its own order; Algolia's ranking is the one to keep.
   const searchHits = computed(() => {
     const hits = productTemplateList.value || []
     return algoliaIds.value ? sortByIds(hits, algoliaIds.value) : hits
   })
 
-  // ---------- Navegação ----------
+  // ---------- Navigation ----------
   const enterPress = () => {
     const q = searchInputValue.value?.trim()
     if (!q) return
     showResultSearch.value = false
     searchModalOpen.value = false
-    router.push({ path: '/search', query: { search: q } }) // sem 'page' => reseta paginação
+    // No `page`, so a new search starts on the first page.
+    router.push({ path: '/search', query: { search: q } })
   }
 
   const selectHit = (selected: Product) => {
-    // A) Ir para a PDP do item selecionado
+    // A suggestion opens its product page.
     showResultSearch.value = false
     searchModalOpen.value = false
     if (selected?.firstVariant) {
@@ -123,7 +122,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     }
   }
 
-  // ---------- Teclado (setas) ----------
+  // ---------- Keyboard (arrow keys) ----------
   const highlightPrevious = () => {
     const len = searchHits.value.length || 0
     if (!len) return
@@ -143,7 +142,7 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     searchModalToggle,
     searchModalClose,
 
-    // busca
+    // search
     searchInputValue,
     search,
     searchHits,
@@ -154,22 +153,10 @@ export const useSearch = (formSearchTemplateRef?: any) => {
     selectHit,
     enterPress,
 
-    // dados auxiliares
+    // product data
     totalItems,
     organizedAttributes,
     productTemplateList,
     loading,
   }
-
-/*   function computed(arg0: () => any) {
-  throw new Error('Function not implemented.')
-}
-
-function ref(arg0: string) {
-  throw new Error('Function not implemented.')
-}
-
-function watch(arg0: () => any, arg1: (v: any) => void, arg2: { immediate: boolean }) {
-  throw new Error('Function not implemented.')
-} */
 }
