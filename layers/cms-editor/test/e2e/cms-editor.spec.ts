@@ -1,4 +1,4 @@
-import { addBlock, createPage, dragOnto, expect, publish, signIn, test, waitForDraftSaved } from './fixtures'
+import { addBlock, createPage, dragOnto, expect, publish, signIn, test, waitForDraftSaved, waitUntilLive } from './fixtures'
 
 test.describe('the editor', () => {
   test.beforeEach(async ({ page }) => {
@@ -163,6 +163,7 @@ test.describe('the editor', () => {
     await publish(page)
     await expect(page.getByRole('link', { name: /view live/i })).toBeVisible()
 
+    await waitUntilLive(page, slug)
     await page.goto(slug)
     await expect(page.locator('body')).toContainText(marker)
   })
@@ -180,6 +181,7 @@ test.describe('the editor', () => {
     await waitForDraftSaved(page, () =>
       inspector.getByLabel('Heading').fill('SECRET UNPUBLISHED EDIT'))
 
+    await waitUntilLive(page, slug)
     await page.goto(slug)
     await expect(page.locator('body')).toContainText('Published copy')
     await expect(page.locator('body')).not.toContainText('SECRET UNPUBLISHED EDIT')

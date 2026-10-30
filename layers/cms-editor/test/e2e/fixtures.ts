@@ -156,6 +156,22 @@ export async function publish(page: Page) {
 }
 
 /**
+ * Waits until a just-published page answers at its address.
+ *
+ * The storefront only serves addresses that have a `slug:` key in Redis, and
+ * Odoo writes that key from a cron it triggers after the publish commits -
+ * up to a second or so after the publish request has returned. Opening the
+ * page straight away can land in that gap and get a 404 that is not the bug
+ * being tested.
+ */
+export async function waitUntilLive(page: Page, slug: string) {
+  await expect.poll(
+    async () => (await page.request.get(slug)).status(),
+    { message: `${slug} should go live after publishing`, timeout: 15_000 },
+  ).toBe(200)
+}
+
+/**
  * Waits for the autosave to reach the server.
  *
  * The save is debounced, so the moment after typing the draft exists only in
