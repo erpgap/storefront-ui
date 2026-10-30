@@ -10,8 +10,6 @@ const props = defineProps({
     default: () => [],
   },
 })
-
-const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 </script>
 
 <template>
@@ -42,16 +40,8 @@ const { getRegularPrice, getSpecialPrice } = useProductAttributes()
         v-for="(productTemplate, index) in props.productTemplateList"
         :key="productTemplate?.id || index"
         class="min-w-[300px] max-w-[300px] sm:min-w-[322px] sm:max-w-[322px]"
-        :slug=" mountUrlSlugForProductVariant(productTemplate.firstVariant as Product) || '' "
-        :name="productTemplate?.name || ''"
-        :image-url="productTemplate.imageUrl ?? ''"
-        :image-alt="productTemplate?.name || ''"
-        :regular-price="getRegularPrice(productTemplate.firstVariant as Product)"
-        :special-price="getSpecialPrice(productTemplate.firstVariant as Product)"
+        v-bind="productCardProps(productTemplate)"
         :is-in-wishlist="productTemplate?.isInWishlist || false"
-        :rating-count="(productTemplate as any)?.ratingCount ?? 0"
-        :rating="(productTemplate as any)?.ratingAvg ?? 0"
-        :first-variant="productTemplate.firstVariant as Product"
       />
     </SfScrollable>
   </div>

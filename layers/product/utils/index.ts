@@ -140,3 +140,27 @@ export const mountUrlSlugForProductVariant = (product: Product): string => {
 
   return `${slug}?${params.toString()}`
 }
+
+/**
+ * UiProductCard's props for a product template, as the listings pass them:
+ * `v-bind="productCardProps(template)"`.
+ */
+export const productCardProps = (template: {
+  name?: string | null
+  imageUrl?: string | null
+  firstVariant?: unknown
+}) => {
+  const variant = template.firstVariant as Product
+  const { getRegularPrice, getSpecialPrice } = useProductAttributes()
+  return {
+    slug: mountUrlSlugForProductVariant(variant ?? template as Product) || '',
+    name: template.name || '',
+    imageUrl: template.imageUrl ?? '',
+    imageAlt: template.name || '',
+    regularPrice: getRegularPrice(variant),
+    specialPrice: getSpecialPrice(variant),
+    ratingCount: (template as any).ratingCount ?? 0,
+    rating: (template as any).ratingAvg ?? 0,
+    firstVariant: variant,
+  }
+}

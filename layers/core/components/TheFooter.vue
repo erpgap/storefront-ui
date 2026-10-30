@@ -4,31 +4,10 @@ const NuxtLink = resolveComponent('NuxtLink')
 const linkColumns = [
   {
     title: 'Shop',
-    links: [
-      { label: 'Top Sellers', link: '/products' },
-      { label: 'New Arrivals', link: '/products?sort=newest,DESC' },
-      { label: 'Women', link: '/women' },
-      { label: 'Men', link: '/men' },
-    ],
+    links: [...shopLinks, { label: 'Women', link: '/women' }, { label: 'Men', link: '/men' }],
   },
-  {
-    title: 'Company',
-    links: [
-      { label: 'About', link: '/about' },
-      { label: 'Sustainability', link: '/sustainability' },
-      { label: 'Stores', link: '/stores' },
-      { label: 'Journal', link: '/journal' },
-    ],
-  },
-  {
-    title: 'Support',
-    links: [
-      { label: 'Shipping', link: '/shipping' },
-      { label: 'Returns', link: '/returns' },
-      { label: 'Contact', link: '/contact' },
-      { label: 'FAQ', link: '/faq' },
-    ],
-  },
+  { title: 'Company', links: companyLinks },
+  { title: 'Support', links: supportLinks },
 ]
 
 const socials = [

@@ -115,20 +115,7 @@ onMounted(async () => {
           </span>
           <span class="inline-flex items-center gap-1.5 text-[13px] text-primary-500 group-hover:text-black transition-colors whitespace-nowrap">
             View order
-            <svg
-              width="16"
-              height="12"
-              viewBox="0 0 18 14"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-            >
-              <path
-                d="M1 7h15M11 1l5 6-5 6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <UiIconArrowRight :width="16" />
           </span>
         </div>
       </NuxtLink>

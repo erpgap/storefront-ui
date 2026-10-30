@@ -155,21 +155,7 @@ const isInternal = (href: string) => href.startsWith('/')
           :class="beside ? 'mt-8 md:mt-0' : 'mt-8'"
         >
           {{ ctaLabel }}
-          <svg
-            width="18"
-            height="14"
-            viewBox="0 0 18 14"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            aria-hidden="true"
-          >
-            <path
-              d="M1 7h15M11 1l5 6-5 6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          <UiIconArrowRight />
         </SfButton>
       </div>
     </section>

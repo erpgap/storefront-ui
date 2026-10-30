@@ -85,20 +85,7 @@ const textOrder = computed(() => props.imagePosition === 'right' ? 'md:order-1' 
         class="self-start min-h-[52px] px-7 gap-3 text-[13px] font-medium"
       >
         {{ ctaLabel }}
-        <svg
-          width="18"
-          height="14"
-          viewBox="0 0 18 14"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-        >
-          <path
-            d="M1 7h15M11 1l5 6-5 6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <UiIconArrowRight />
       </SfButton>
     </div>
   </section>

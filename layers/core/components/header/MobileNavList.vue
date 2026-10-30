@@ -7,34 +7,10 @@ defineEmits<{
 
 const categories = inject<Category[]>('categoriesForMegaMenu')
 
-// Secondary links mirror the footer so the mobile menu is a complete site map,
-// not just the product categories.
 const linkGroups = [
-  {
-    title: 'Shop',
-    links: [
-      { label: 'Top Sellers', link: '/products' },
-      { label: 'New Arrivals', link: '/products?sort=newest,DESC' },
-    ],
-  },
-  {
-    title: 'Company',
-    links: [
-      { label: 'About', link: '/about' },
-      { label: 'Sustainability', link: '/sustainability' },
-      { label: 'Stores', link: '/stores' },
-      { label: 'Journal', link: '/journal' },
-    ],
-  },
-  {
-    title: 'Support',
-    links: [
-      { label: 'Shipping', link: '/shipping' },
-      { label: 'Returns', link: '/returns' },
-      { label: 'Contact', link: '/contact' },
-      { label: 'FAQ', link: '/faq' },
-    ],
-  },
+  { title: 'Shop', links: shopLinks },
+  { title: 'Company', links: companyLinks },
+  { title: 'Support', links: supportLinks },
 ]
 </script>
 

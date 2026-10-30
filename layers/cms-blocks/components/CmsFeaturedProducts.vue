@@ -22,7 +22,6 @@ const props = withDefaults(defineProps<{
 
 const NuxtLink = resolveComponent('NuxtLink')
 const { $sdk } = useNuxtApp() as any
-const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
 const ids = computed(() => (props.productIds ?? []).map(Number).filter(Boolean))
 
@@ -65,31 +64,16 @@ const products = computed<Product[]>(() => {
     v-if="products.length"
     class="narrow-container py-[clamp(64px,9vw,132px)]"
   >
-    <div class="mb-12">
-      <p
-        v-if="eyebrow"
-        class="text-[12px] tracking-[0.22em] uppercase font-medium text-primary-400 mb-3.5"
-      >
-        {{ eyebrow }}
-      </p>
-      <h2 class="font-light tracking-[-0.02em] text-[clamp(28px,3.4vw,44px)]">
-        {{ title }}
-      </h2>
-    </div>
+    <UiSectionHeading
+      :eyebrow="eyebrow"
+      :title="title"
+    />
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-7 gap-y-10">
       <UiProductCard
         v-for="product in products"
         :key="product.id"
-        :slug="mountUrlSlugForProductVariant(product.firstVariant as Product) || ''"
-        :name="product.name || ''"
-        :image-url="product.imageUrl ?? ''"
-        :image-alt="product.name || ''"
-        :regular-price="getRegularPrice(product.firstVariant as Product)"
-        :special-price="getSpecialPrice(product.firstVariant as Product)"
-        :rating-count="(product as any)?.ratingCount ?? 0"
-        :rating="(product as any)?.ratingAvg ?? 0"
-        :first-variant="product.firstVariant as Product"
+        v-bind="productCardProps(product)"
       />
     </div>
   </section>

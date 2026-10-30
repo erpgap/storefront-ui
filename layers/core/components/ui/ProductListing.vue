@@ -31,7 +31,7 @@ const props = withDefaults(
 
 const route = useRoute()
 const { isOpen, open, close } = useDisclosure()
-const { getRegularPrice, getSpecialPrice } = useProductAttributes()
+const { getSpecialPrice } = useProductAttributes()
 
 const {
   loadProductTemplateList,
@@ -217,17 +217,9 @@ if (currentPage.value > totalPages.value) {
             <LazyUiProductCard
               v-for="(product, i) in productTemplateList"
               :key="product.id"
-              :name="product.name ?? ''"
-              :slug="mountUrlSlugForProductVariant((product.firstVariant ?? product) as Product)"
-              :image-url="product.imageUrl ?? ''"
-              :image-alt="product.name ?? ''"
+              v-bind="productCardProps(product)"
               :loading="i < 6 ? 'eager' : 'lazy'"
               :fetch-priority="i < 2 ? 'high' : 'auto'"
-              :regular-price="getRegularPrice(product.firstVariant as Product)"
-              :special-price="getSpecialPrice(product.firstVariant as Product)"
-              :rating-count="(product as any)?.ratingCount ?? 0"
-              :rating="(product as any)?.ratingAvg ?? 0"
-              :first-variant="product.firstVariant as Product"
             />
           </section>
 

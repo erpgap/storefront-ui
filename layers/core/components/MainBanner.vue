@@ -106,21 +106,7 @@ const ctaList = computed<Cta[]>(() => props.ctas ?? [
               : 'bg-white! text-black! hover:bg-primary-50! border-none! ring-0! shadow-none! min-h-[52px] px-7 gap-3 text-[13px] tracking-[0.12em] uppercase font-medium'"
           >
             {{ cta.label }}
-            <svg
-              v-if="cta.style !== 'secondary'"
-              width="18"
-              height="14"
-              viewBox="0 0 18 14"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-            >
-              <path
-                d="M1 7h15M11 1l5 6-5 6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <UiIconArrowRight v-if="cta.style !== 'secondary'" />
           </SfButton>
         </div>
       </div>
