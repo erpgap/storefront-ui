@@ -7,10 +7,16 @@ import type { Page } from '@playwright/test'
  * account. Placing an order is not covered: that needs a payment provider in
  * test mode behind the storefront.
  *
- * Needs a storefront with Odoo and its demo data behind it. Every account it
+ * Needs a storefront with Odoo and its demo data behind it. The account it
  * uses is created here through the signup page, so nothing has to be set up:
  *
  *   yarn test:e2e storefront
+ *
+ * Each run signs up one new account. To have it archived afterwards, give
+ * Odoo's database and an admin login (ODOO_URL defaults to
+ * http://localhost:8069):
+ *
+ *   ODOO_DB=mydb ODOO_ADMIN_LOGIN=admin ODOO_ADMIN_PASSWORD=admin yarn test:e2e storefront
  */
 
 // A product from Odoo's demo data, with a discount and a colour variant.
@@ -191,6 +197,39 @@ test.describe('accounts', () => {
     firstName: 'Ada',
     lastName: 'Tester',
   }
+
+  // The storefront cannot delete an account, so every run would leave one
+  // behind in Odoo. Given an Odoo admin login, it is archived afterwards.
+  test.afterAll(async ({ request }) => {
+    const { ODOO_DB, ODOO_ADMIN_LOGIN, ODOO_ADMIN_PASSWORD } = process.env
+    if (!ODOO_DB || !ODOO_ADMIN_LOGIN || !ODOO_ADMIN_PASSWORD) return
+
+    const odoo = (process.env.ODOO_URL || 'http://localhost:8069').replace(/\/+$/, '')
+    const rpc = (path: string, params: Record<string, unknown>) =>
+      request.post(`${odoo}${path}`, { data: { jsonrpc: '2.0', params } })
+
+    // The session cookie it returns stays on `request` for the calls below.
+    await rpc('/web/session/authenticate', {
+      db: ODOO_DB,
+      login: ODOO_ADMIN_LOGIN,
+      password: ODOO_ADMIN_PASSWORD,
+    })
+    const found = await rpc('/web/dataset/call_kw', {
+      model: 'res.users',
+      method: 'search',
+      args: [[['login', '=', shopper.email]]],
+      kwargs: {},
+    })
+    const ids: number[] = (await found.json()).result ?? []
+    if (ids.length) {
+      await rpc('/web/dataset/call_kw', {
+        model: 'res.users',
+        method: 'write',
+        args: [ids, { active: false }],
+        kwargs: {},
+      })
+    }
+  })
 
   async function logIn(page: Page, email: string, password: string) {
     await open(page, '/login')
