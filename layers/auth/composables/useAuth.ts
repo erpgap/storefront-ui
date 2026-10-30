@@ -147,7 +147,7 @@ export const useAuth = () => {
       router.push('/my-account')
     }
     catch (error: any) {
-      authError.value = error?.data?.message || t('auth.signup.error')
+      authError.value = errorMessage(error, t('auth.signup.error'))
       return
     }
     finally {
@@ -169,7 +169,7 @@ export const useAuth = () => {
       router.push(redirectTo)
     }
     catch (error: any) {
-      authError.value = error?.data?.message || t('auth.login.error')
+      authError.value = errorMessage(error, t('auth.login.error'))
     }
     finally {
       loading.value = false

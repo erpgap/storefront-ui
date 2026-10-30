@@ -84,7 +84,7 @@ export const useCart = () => {
       openCartSideBar()
     }
     catch (error: any) {
-      cartError.value = error?.data?.message || error?.message || 'Could not add to cart. Please try again.'
+      cartError.value = errorMessage(error, 'Could not add to cart. Please try again.')
     }
     finally {
       adding.value = false

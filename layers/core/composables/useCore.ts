@@ -26,7 +26,7 @@ export const useCore = () => {
       return true
     }
     catch (error: any) {
-      apiError.value = error?.data?.message || error?.message || 'Something went wrong. Please try again.'
+      apiError.value = errorMessage(error, 'Something went wrong. Please try again.')
       return false
     }
     finally {

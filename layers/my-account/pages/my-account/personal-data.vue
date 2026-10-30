@@ -20,32 +20,6 @@ const editing = ref<'' | 'contact' | 'password'>('')
 const contactMessage = ref<Message | null>(null)
 const passwordMessage = ref<Message | null>(null)
 
-// The thrown error nests the real GraphQL message somewhere under .cause/.data
-// (ofetch wraps the original in `cause`). Recursively find the first meaningful
-// `message` string, skipping the ofetch "[POST] … 500 Server Error" wrapper.
-const isStatusNoise = (s: string) =>
-  /^\[|\b500\b|server error|failed to fetch/i.test(s)
-const findMessage = (obj: any, depth = 0): string => {
-  if (obj == null || depth > 6) return ''
-  if (Array.isArray(obj)) {
-    for (const item of obj) {
-      const m = findMessage(item, depth + 1)
-      if (m) return m
-    }
-    return ''
-  }
-  if (typeof obj !== 'object') return ''
-  const m = obj.message
-  if (typeof m === 'string' && m && !isStatusNoise(m)) return m
-  return (
-    findMessage(obj.data, depth + 1)
-    || findMessage(obj.cause, depth + 1)
-    || findMessage(obj.errors, depth + 1)
-    || findMessage(obj.response?._data, depth + 1)
-  )
-}
-const errorText = (e: any, fallback: string) => findMessage(e) || fallback
-
 const editContact = () => {
   contactMessage.value = null
   editing.value = 'contact'
@@ -73,7 +47,7 @@ const saveContact = async (userData: any) => {
   }
   catch (e) {
     if (await redirectIfSessionExpired()) return
-    contactMessage.value = { type: 'error', text: errorText(e, t('account.accountSettings.personalData.contactUpdateError')) }
+    contactMessage.value = { type: 'error', text: errorMessage(e, t('account.accountSettings.personalData.contactUpdateError')) }
   }
 }
 
@@ -93,7 +67,7 @@ const savePassword = async (passwords: any) => {
   }
   catch (e) {
     if (await redirectIfSessionExpired()) return
-    passwordMessage.value = { type: 'error', text: errorText(e, t('account.accountSettings.personalData.passwordChangeError')) }
+    passwordMessage.value = { type: 'error', text: errorMessage(e, t('account.accountSettings.personalData.passwordChangeError')) }
   }
 }
 
