@@ -28,12 +28,24 @@ const socials = [
       <div class="narrow-container">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.6fr_repeat(3,1fr)] gap-10 py-[72px]">
           <div>
+            <!-- The footer's links are plain anchors (`custom`), without the
+                 router's active classes. Nothing styles those, and the footer
+                 hydrates only once it scrolls into view: by then the shopper
+                 may be on another page than the one the server rendered, and
+                 the classes no longer match it. -->
             <NuxtLink
+              v-slot="{ href, navigate }"
               to="/"
-              :aria-label="$t('core.header.homeLink')"
-              class="inline-block mb-5"
+              custom
             >
-              <AlokaiLogo class="text-[22px]" />
+              <a
+                :href="href"
+                :aria-label="$t('core.header.homeLink')"
+                class="inline-block mb-5"
+                @click="navigate"
+              >
+                <AlokaiLogo class="text-[22px]" />
+              </a>
             </NuxtLink>
             <p class="font-light text-[14px] text-primary-400 max-w-[280px]">
               {{ $t('core.footer.tagline') }}
@@ -53,10 +65,17 @@ const socials = [
                 :key="item.labelKey"
               >
                 <NuxtLink
+                  v-slot="{ href, navigate }"
                   :to="item.link"
-                  class="block py-2.5 text-[16px] md:py-[7px] md:text-[14px] text-primary-500 transition-colors hover:text-black"
+                  custom
                 >
-                  {{ $t(item.labelKey) }}
+                  <a
+                    :href="href"
+                    class="block py-2.5 text-[16px] md:py-[7px] md:text-[14px] text-primary-500 transition-colors hover:text-black"
+                    @click="navigate"
+                  >
+                    {{ $t(item.labelKey) }}
+                  </a>
                 </NuxtLink>
               </li>
             </ul>
