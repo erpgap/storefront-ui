@@ -18,6 +18,7 @@ const SHOULD_BYPASS_ERROR_MUTATIONS = [
   'CartAddItem',
   'UpdatePasswordMutation',
   'CreateUpdatePartner',
+  'SendResetPasswordMutation',
 ]
 
 const avoidErrorThrowForSomeRequests = (options: any) => {

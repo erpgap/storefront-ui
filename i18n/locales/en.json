@@ -456,8 +456,9 @@
       "emailSent": "Email sent",
       "sending": "Sending…",
       "linkSent": "We sent you a reset link (check your inbox).",
-      "serverError": "Server error",
-      "rateLimited": "Email server rate-limited. Try again in a moment or use MailHog locally.",
+      "serverError": "Something went wrong. Please try again.",
+      "sendFailed": "We couldn't send the reset email just now. Please try again later.",
+      "rateLimited": "Too many emails are being sent right now. Please try again in a moment.",
       "invalidEmail": "Invalid email."
     },
     "setNewPassword": {

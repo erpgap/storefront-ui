@@ -58,7 +58,7 @@ const isSubmitting = ref(false)
 
 const { resetPassword } = useAuth()
 const { t } = useI18n()
-const toast = useToast?.() // se tiver um plugin de toast; senão troque por sua UI
+const toast = useToast()
 
 async function resetPasswordWithRetry(email: string, max = 3) {
   for (let i = 0; i < max; i++) {
@@ -67,15 +67,12 @@ async function resetPasswordWithRetry(email: string, max = 3) {
       return
     }
     catch (e: any) {
-      const msg: string = resetPassword
-      e?.response?._data?.message || e?.message || ''
-
-      // erro de concorrência do Postgres (serialize)
+      // Two requests updating the same user at once make Postgres refuse one
+      // of them; it succeeds when sent again after a short pause.
       if (
-        msg.toLowerCase().includes('could not serialize access due to concurrent update')
+        errorMessage(e).toLowerCase().includes('could not serialize access due to concurrent update')
         && i < max - 1
       ) {
-        // pequeno backoff e tenta de novo
         await new Promise(r => setTimeout(r, 300 + i * 200))
         continue
       }
@@ -90,24 +87,26 @@ async function resetPasswordHandler() {
   isSubmitting.value = true
   try {
     await resetPasswordWithRetry(customerEmail.value)
-
-    // sucesso
-    if (toast) toast.success(t('auth.resetPassword.linkSent'))
+    toast.success(t('auth.resetPassword.linkSent'))
   }
   catch (e: any) {
-    const raw = e?.response?._data?.message || e?.message || t('auth.resetPassword.serverError')
+    const raw = errorMessage(e, t('auth.resetPassword.serverError'))
 
-    // mensagem amigável para limite do SMTP (Mailtrap Testing)
+    // The mail server's sending limit (Mailtrap's, in testing) reads better
+    // in our words than in its own.
     if (raw.includes('Too many emails per second')) {
-      if (toast) {
-        toast.error(t('auth.resetPassword.rateLimited'))
-      }
+      toast.error(t('auth.resetPassword.rateLimited'))
     }
     else if (raw.toLowerCase().includes('invalid email')) {
-      if (toast) toast.error(t('auth.resetPassword.invalidEmail'))
+      toast.error(t('auth.resetPassword.invalidEmail'))
+    }
+    // Odoo could not reach its mail server. Its message is a Python tuple
+    // naming the exception, which means nothing to a shopper.
+    else if (/smtp|mail server|connection refused/i.test(raw)) {
+      toast.error(t('auth.resetPassword.sendFailed'))
     }
     else {
-      if (toast) toast.error(raw)
+      toast.error(raw)
     }
   }
   finally {

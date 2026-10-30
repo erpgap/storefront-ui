@@ -176,19 +176,18 @@ export const useAuth = () => {
     }
   }
 
+  // Throws when Odoo refuses: the reset page retries some failures and words
+  // the message itself. Catching here made every failure look like success.
   const resetPassword = async (params: MutationResetPasswordArgs) => {
     try {
       loading.value = true
-      const data = await $sdk().odoo.mutation<
+      await $sdk().odoo.mutation<
         MutationResetPasswordArgs,
         ResetPasswordResponse
       >({ mutationName: MutationName.SendResetPasswordMutation }, { ...params })
 
       router.push('/reset-password-success')
       resetEmail.value = params.email
-    }
-    catch (error: any) {
-      toast.error(error?.data?.message)
     }
     finally {
       loading.value = false
