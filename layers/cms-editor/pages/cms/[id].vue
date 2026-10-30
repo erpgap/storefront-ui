@@ -11,7 +11,7 @@
 // costs roughly two weeks less than the iframe alternative.
 import { useCmsEditorDraft } from '../../composables/useCmsEditorDraft'
 import type { CmsPage } from '#cms/shared/blocks'
-import { CMS_LOCALES, DEFAULT_LOCALE } from '#cms/shared/i18n'
+import { CMS_LOCALES, DEFAULT_LOCALE, isLocaleCode } from '#cms/shared/i18n'
 import type { CmsLocale } from '#cms/shared/i18n'
 import { blockRegistry } from '#cms/blocks'
 
@@ -152,11 +152,18 @@ const selectedIssues = computed<Record<string, string>>(() => {
 
   const prefix = `blocks[${index}].`
   const blockType = blocks.value[index]!.blockType
-  return Object.fromEntries(
-    issues.value
-      .filter(item => item.path.startsWith(prefix))
-      .map(item => [item.path.slice(prefix.length), cmsText.issueMessage(item, blockType)]),
-  )
+  // A translatable field's issue names the language too (`ctas[0].url.en_US`);
+  // the inspector shows it on the field, which is one control for them all.
+  const fieldPath = (path: string) => {
+    const dot = path.lastIndexOf('.')
+    return dot !== -1 && isLocaleCode(path.slice(dot + 1)) ? path.slice(0, dot) : path
+  }
+  const byField: Record<string, string> = {}
+  for (const item of issues.value) {
+    if (!item.path.startsWith(prefix)) continue
+    byField[fieldPath(item.path.slice(prefix.length))] ??= cmsText.issueMessage(item, blockType)
+  }
+  return byField
 })
 
 const blocksWithIssues = computed(() => {

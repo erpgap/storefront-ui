@@ -167,6 +167,19 @@ test.describe('the editor', () => {
     await expect(page.locator('body')).toContainText(marker)
   })
 
+  test('a bad link is flagged on its field', async ({ page }) => {
+    // Its issue's path ends in the language (`linkUrl.en_US`), which the
+    // inspector, addressing fields without one, used to miss entirely.
+    await createPage(page, 'E2E Bad Link')
+    await addBlock(page, /^Category Grid/)
+    const inspector = page.locator('aside[aria-label="Block settings"]')
+
+    await waitForDraftSaved(page, () =>
+      inspector.getByLabel('Corner link target').fill('javascript:alert(1)'))
+
+    await expect(inspector).toContainText('Corner link target must start with / or http.')
+  })
+
   test('a draft never reaches the live page', async ({ page }) => {
     // The guarantee the whole draft/published split exists for.
     await createPage(page, 'E2E Draft')
