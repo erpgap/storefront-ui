@@ -22,23 +22,15 @@ const SHOULD_BYPASS_ERROR_MUTATIONS = [
   'ChangePasswordMutation',
 ]
 
-const avoidErrorThrowForSomeRequests = (options: any) => {
-  if (options.body) {
-    try {
-      const payload = JSON.parse(options.body)?.[0] ?? {}
-
-      if (SHOULD_BYPASS_ERROR_QUERIES?.includes(payload?.queryName)) {
-        return true
-      }
-      if (SHOULD_BYPASS_ERROR_MUTATIONS?.includes(payload?.mutationName)) {
-        return true
-      }
-
-      return false
-    }
-    catch (error) {
-      return false
-    }
+const avoidErrorThrowForSomeRequests = (options: any): boolean => {
+  if (!options.body) return false
+  try {
+    const payload = JSON.parse(options.body)?.[0] ?? {}
+    return SHOULD_BYPASS_ERROR_QUERIES.includes(payload?.queryName)
+      || SHOULD_BYPASS_ERROR_MUTATIONS.includes(payload?.mutationName)
+  }
+  catch {
+    return false
   }
 }
 
@@ -69,7 +61,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
             options.headers.set('cookie', ssrCookie)
           }
         },
-        onResponseError({ request, response, options }) {
+        onResponseError({ response, options }) {
           if (avoidErrorThrowForSomeRequests(options) && response.status === 500) {
             return
           }

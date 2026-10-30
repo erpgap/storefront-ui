@@ -37,7 +37,6 @@ export const useAuth = () => {
 
   const loading = ref(false)
   const authError = useState<string>('auth-error', () => '')
-  const resetEmail = useCookie<string>('reset-email')
 
   const clearUser = () => {
     userCookie.value = null
@@ -193,18 +192,10 @@ export const useAuth = () => {
       >({ mutationName: MutationName.SendResetPasswordMutation }, { ...params })
 
       router.push('/reset-password-success')
-      resetEmail.value = params.email
     }
     finally {
       loading.value = false
     }
-  }
-
-  const successResetEmail = () => {
-    const result = resetEmail.value
-    resetEmail.value = ''
-
-    return result
   }
 
   const updatePassword = async (params: MutationUpdatePasswordArgs) => {
@@ -257,7 +248,6 @@ export const useAuth = () => {
     user,
     loading,
     authError,
-    successResetEmail,
     updatePassword,
     loadUser,
     clearUser,
