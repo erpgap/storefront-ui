@@ -1,11 +1,16 @@
 <template>
   <SfInput :type="isPasswordVisible ? 'text' : 'password'">
     <template #suffix>
+      <!-- Named for screen readers, which otherwise announce just "button". -->
       <button
         type="button"
+        :aria-label="isPasswordVisible ? $t('core.ui.hidePassword') : $t('core.ui.showPassword')"
         @click="isPasswordVisible = !isPasswordVisible"
       >
-        <component :is="isPasswordVisible ? SfIconVisibilityOff : SfIconVisibility" />
+        <component
+          :is="isPasswordVisible ? SfIconVisibilityOff : SfIconVisibility"
+          aria-hidden="true"
+        />
       </button>
     </template>
   </SfInput>

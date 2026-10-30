@@ -543,7 +543,9 @@
     "ui": {
       "pagination": "pagination",
       "emailPlaceholder": "Enter your email here",
-      "applying": "Applying…"
+      "applying": "Applying…",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     },
     "home": {
       "hero": {
@@ -618,8 +620,8 @@
     },
     "category": {
       "filter": "Filter",
-      "facetCategory": "category",
-      "facetPrice": "price",
+      "facetCategory": "Category",
+      "facetPrice": "Price",
       "inStock": "In stock",
       "inStockOnly": "In stock only",
       "availableCount": "{count} available",
