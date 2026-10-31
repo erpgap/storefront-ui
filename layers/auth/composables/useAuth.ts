@@ -119,7 +119,9 @@ export const useAuth = () => {
         { createUpdatePartner: Partner }
       >({ mutationName: MutationName.CreateUpdatePartner }, params)
 
-      user.value = data?.createUpdatePartner
+      // Checkout saves a guest's contact through here too, which does not log
+      // them in: storing it as the user made isAuthenticated true for them.
+      if (userCookie.value) user.value = data?.createUpdatePartner
     }
     finally {
       loading.value = false
