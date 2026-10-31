@@ -18,6 +18,9 @@ import { DEFAULT_AFTER_LOGIN, loginRoute } from '~~/app/utils/authRedirect'
 import { MutationName } from '~~/server/mutations'
 import { QueryName } from '~~/server/queries'
 
+const isBadResetToken = (message: string) =>
+  /token|base64|padding|codec/i.test(message)
+
 export const useAuth = () => {
   const { $sdk } = useNuxtApp()
   const router = useRouter()
@@ -227,7 +230,12 @@ export const useAuth = () => {
       router.push('/')
     }
     catch (error: any) {
-      toast.error(errorMessage(error, t('auth.setNewPassword.error')))
+      const message = errorMessage(error, t('auth.setNewPassword.error'))
+      // A used, expired or mangled link fails on its token, and Odoo words
+      // that for developers ("Unknown token version", a base64 error) or
+      // repeats the token back. Other refusals, such as a password too short
+      // for the policy, are already readable.
+      toast.error(isBadResetToken(message) ? t('auth.setNewPassword.linkInvalid') : message)
     }
     finally {
       loading.value = false
