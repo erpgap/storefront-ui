@@ -97,6 +97,7 @@ orderLines {
 }
 partnerInvoice {
   id
+  isPublic
   name
   street
   city
@@ -114,6 +115,7 @@ partnerInvoice {
 }
 partnerShipping {
   id
+  isPublic
   name
   street
   city

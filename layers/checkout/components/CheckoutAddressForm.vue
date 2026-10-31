@@ -44,17 +44,20 @@ const { countries } = useCountryList()
 const { cart } = useCart()
 const { loadDeliveryMethods } = useDeliveryMethod()
 
+// A guest's address is the website's public partner, which must never be
+// written to: their address is added as a new one instead. Carts cached
+// before addresses carried isPublic fall back to the order's partner.
+const isPublicAddress = (address?: Partner) => address?.isPublic
+  ?? (!!address?.id && address.id === cart.value?.order?.partner?.id && !!cart.value?.order?.partner?.isPublic)
+
 // The recipient name comes from the Contact Information section — we don't ask
 // for it again here. `cart.order.partner.name` is the very object the contact
 // form edits, so this stays in sync as the shopper types their name there.
-const savedName = props.savedAddress?.name
-const contactName = computed(() => {
-  const n = String(cart.value?.order?.partner?.name ?? '').trim()
-  return n && n !== 'Public user' ? n : ''
-})
-const effectiveName = computed(
-  () => contactName.value || (savedName && savedName !== 'Public user' ? savedName : ''),
-)
+// That form blanks the public partner's name on arrival; a guest's partner
+// stays flagged public while they type, so the flag can't be checked here.
+const savedName = isPublicAddress(props.savedAddress) ? '' : props.savedAddress?.name
+const contactName = computed(() => String(cart.value?.order?.partner?.name ?? '').trim())
+const effectiveName = computed(() => contactName.value || savedName || '')
 
 const isBilling = computed(() => props.type === AddressEnum.Billing)
 // Billing defaults to "same as shipping" (checked). Shipping never offers the toggle.
@@ -101,7 +104,7 @@ const save = async () => {
     stateId: Number(stateId.value),
   }
 
-  if (props.savedAddress?.id && props.savedAddress.id !== 4) {
+  if (props.savedAddress?.id && !isPublicAddress(props.savedAddress)) {
     await updateAddress({ ...data, id: props.savedAddress.id, email: null }, props.type)
   }
   else {

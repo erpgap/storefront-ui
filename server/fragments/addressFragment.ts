@@ -1,6 +1,7 @@
 export default `
     id
     addressType
+    isPublic
     name
     street
     street2

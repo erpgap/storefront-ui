@@ -52,6 +52,7 @@ export const reduceCart = (cartData: Cart) => ({
     },
     partnerShipping: {
       id: cartData?.order?.partnerShipping?.id,
+      isPublic: cartData?.order?.partnerShipping?.isPublic,
       city: cartData?.order?.partnerShipping?.city,
       country: { id: cartData?.order?.partnerShipping?.country?.id },
       name: cartData?.order?.partnerShipping?.name,
@@ -62,6 +63,7 @@ export const reduceCart = (cartData: Cart) => ({
     },
     partnerInvoice: {
       id: cartData?.order?.partnerInvoice?.id,
+      isPublic: cartData?.order?.partnerInvoice?.isPublic,
       city: cartData?.order?.partnerInvoice?.city,
       country: { id: cartData?.order?.partnerInvoice?.country?.id },
       name: cartData?.order?.partnerInvoice?.name,

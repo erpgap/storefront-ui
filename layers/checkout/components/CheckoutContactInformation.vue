@@ -12,7 +12,9 @@ const props = defineProps({
 })
 
 const { email, name } = toRefs(props.partnerData)
-if (name.value === 'Public user' || (props.partnerData.isPublic && props.partnerData.id === 4)) {
+// A guest's cart belongs to the website's public partner, whose name is not
+// theirs to see.
+if (props.partnerData.isPublic) {
   name.value = ''
 }
 
