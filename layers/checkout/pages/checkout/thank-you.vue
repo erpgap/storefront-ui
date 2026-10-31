@@ -3,6 +3,9 @@ import { SfButton } from '@storefront-ui/vue'
 
 const { loadCart } = useCart()
 const { getPaymentConfirmation } = usePayment()
+// A guest has no account to see orders in: the button only led them to the
+// login page. (Rendered per request, so server and browser agree on this.)
+const { isAuthenticated } = useAuth()
 
 // The confirmation page is only meaningful when there's a placed order for this
 // session. We key off the order (not the cart): after a successful order the
@@ -80,6 +83,7 @@ else {
 
       <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
         <SfButton
+          v-if="isAuthenticated"
           size="lg"
           @click="navigateTo('/my-account/my-orders')"
         >
