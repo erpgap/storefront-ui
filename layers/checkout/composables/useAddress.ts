@@ -69,10 +69,11 @@ export const useAddresses = () => {
     }
   }
 
-  const addAddress = async (address: AddAddressInput, type: AddressEnum) => {
+  // Resolves to the address Odoo created, or undefined when it failed.
+  const addAddress = async (address: AddAddressInput, type: AddressEnum): Promise<Partner | undefined> => {
     try {
       loading.value = true
-      await $sdk().odoo.mutation<
+      const data = await $sdk().odoo.mutation<
         MutationAddAddressArgs,
         AddAddressResponse
       >(
@@ -81,6 +82,7 @@ export const useAddresses = () => {
       )
 
       await loadAddresses(type)
+      return data?.addAddress
     }
     catch (error: any) {
       toast.error(errorMessage(error, $i18n.t('core.genericError')))

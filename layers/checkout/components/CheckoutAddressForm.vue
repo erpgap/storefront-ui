@@ -104,11 +104,19 @@ const save = async () => {
     stateId: Number(stateId.value),
   }
 
-  if (props.savedAddress?.id && !isPublicAddress(props.savedAddress)) {
-    await updateAddress({ ...data, id: props.savedAddress.id, email: null }, props.type)
+  // A guest's cart starts on the public partner: their first save adds an
+  // address, which the cart then points at, and later saves update that one.
+  // Read from the cart, not the savedAddress prop, which keeps the address the
+  // page opened with and made every edit add yet another address.
+  const order = cart.value?.order
+  const cartKey = isBilling.value ? 'partnerInvoice' : 'partnerShipping'
+  const current = (order?.[cartKey] ?? props.savedAddress) as Partner | undefined
+  if (current?.id && !isPublicAddress(current)) {
+    await updateAddress({ ...data, id: current.id, email: null }, props.type)
   }
   else {
-    await addAddress(data as unknown as AddAddressInput, props.type)
+    const added = await addAddress(data as unknown as AddAddressInput, props.type)
+    if (added && order) order[cartKey] = added
   }
 
   // The available delivery methods depend on the shipping address, so refresh
