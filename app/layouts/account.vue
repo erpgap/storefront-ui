@@ -109,6 +109,11 @@ const { t } = useI18n({ useScope: 'global' })
 const router = useRouter()
 const { logout } = useAuth()
 
+// The account pages need a login: notice it ending while one stays open.
+// Paused during this page's own logout, which redirects by itself.
+const loggingOut = ref(false)
+useSessionGuard(loggingOut)
+
 const path = '/my-account'
 
 const navItems = [
@@ -155,7 +160,13 @@ const breadcrumbs = computed(() => {
 })
 
 const handleLogout = async () => {
-  await logout()
-  router.push('/')
+  loggingOut.value = true
+  try {
+    await logout()
+    await router.push('/')
+  }
+  finally {
+    loggingOut.value = false
+  }
 }
 </script>

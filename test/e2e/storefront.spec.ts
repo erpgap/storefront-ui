@@ -291,6 +291,19 @@ test.describe('accounts', () => {
     await expect(page.getByRole('main')).toContainText(shopper.email)
   })
 
+  test('an open account page notices the session ending', async ({ page, context }) => {
+    await logIn(page, shopper.email, shopper.password)
+    await expect(page).toHaveURL(/\/my-account$/)
+    await open(page, '/my-account/personal-data')
+    await expect(page).toHaveURL(/\/my-account\/personal-data$/)
+    // Odoo's session ends (expired, or a logout elsewhere): no navigation
+    // follows, the next interaction notices.
+    await context.clearCookies({ name: 'session_id' })
+    await page.mouse.click(5, 300)
+    await expect(page).toHaveURL(/\/login\?redirect=\/my-account\/personal-data&expired=1$/)
+    await expect(page.getByTestId('login-page-session-expired')).toBeVisible()
+  })
+
   test('a product can be saved to the wishlist', async ({ page }) => {
     await logIn(page, shopper.email, shopper.password)
     await expect(page).toHaveURL(/\/my-account$/)
