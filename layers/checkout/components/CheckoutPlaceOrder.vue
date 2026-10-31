@@ -3,11 +3,16 @@ import { SfButton } from '@storefront-ui/vue'
 import type { Ref } from 'vue'
 
 const { cart } = useCart()
-const { makeGiftCardPayment, loading: discountLoading } = useDiscount()
+const { makeGiftCardPayment } = useDiscount()
+// On while checkout changes what the order costs (a code being applied, the
+// delivery method being set): an order placed then would be paid at the
+// amount from before the change.
+const { loading: checkoutBusy } = useCheckout()
 
-const giftCards = ref(cart.value?.order?.giftCards)
+// Follows the cart: a copy taken at setup never saw a gift card applied on
+// this page, so the gift card button could not appear without a reload.
 const hasFullPaymentWithGiftCard = computed(
-  () => (giftCards.value?.length ?? 0) > 0 && cart.value?.order?.amountTotal === 0,
+  () => (cart.value?.order?.giftCards?.length ?? 0) > 0 && cart.value?.order?.amountTotal === 0,
 )
 
 // Shared with the payment form (provided by the checkout page) so this button
@@ -61,7 +66,7 @@ const handleGiftCardPayment = async () => {
       v-if="hasFullPaymentWithGiftCard"
       size="lg"
       class="w-full"
-      :disabled="processing || discountLoading"
+      :disabled="processing || checkoutBusy"
       @click.prevent="handleGiftCardPayment"
     >
       {{ processing ? $t('placingOrder') : $t('placeOrder') }}
@@ -70,7 +75,7 @@ const handleGiftCardPayment = async () => {
       v-else
       size="lg"
       class="w-full"
-      :disabled="processing || paymentLoading"
+      :disabled="processing || paymentLoading || checkoutBusy"
       @click="placeOrder"
     >
       {{ processing ? $t('placingOrder') : $t('placeOrder') }}
