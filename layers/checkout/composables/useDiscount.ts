@@ -27,7 +27,7 @@ export const useDiscount = () => {
 
       const data = await $sdk().odoo.mutation<
         MutationApplyCouponArgs,
-        Pick<ApplyDiscountsResponse, 'applyCoupon'>
+        ApplyDiscountsResponse
       >({ mutationName: MutationName.ApplyCouponMutation }, { promo: promoCode })
 
       const refused = data?.applyCoupon?.error

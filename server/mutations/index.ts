@@ -4,7 +4,6 @@ import AdyenPaymentMethods from './AdyenPaymentMethods'
 import AdyenPayments from './AdyenPayments'
 import AdyenProviderInfo from './AdyenProviderInfo'
 import AdyenTransaction from './AdyenTransaction'
-import ApplyGiftCardMutation from './ApplyGiftCardMutation'
 import ApplyCouponMutation from './ApplyCouponMutation'
 import CartAddItem from './CartAddItem'
 import CartRemoveItem from './CartRemoveItem'
@@ -55,7 +54,6 @@ enum MutationName {
   SelectCurrentAddress = 'SelectCurrentAddress',
   DeleteAddress = 'DeleteAddress',
   NewsletterSubscribeMutation = 'NewsletterSubscribeMutation',
-  ApplyGiftCardMutation = 'ApplyGiftCardMutation',
   ApplyCouponMutation = 'ApplyCouponMutation',
   MakeGiftCardPaymentMutation = 'MakeGiftCardPaymentMutation',
   ShippingMethod = 'ShippingMethod',
@@ -89,7 +87,6 @@ const Mutations: Record<MutationName, string> = {
   SelectCurrentAddress,
   DeleteAddress,
   NewsletterSubscribeMutation,
-  ApplyGiftCardMutation,
   ApplyCouponMutation,
   MakeGiftCardPaymentMutation,
   ShippingMethod,

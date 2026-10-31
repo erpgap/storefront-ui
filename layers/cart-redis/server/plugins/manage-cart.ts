@@ -19,7 +19,6 @@ export default defineNitroPlugin((nitro) => {
       await addAddress(event, body)
       await createUpdatePartner(event, body)
       await applyCoupon(event, body)
-      await applyGiftCard(event, body)
       await clearCartAfterCreditCardPaymentConfirmation(event, body)
       await clearCartAfterGiftCardPaymentConfirmation(event, body)
     }
@@ -40,15 +39,6 @@ async function applyCoupon(event: any, body: any) {
   if (requestBody[0]?.mutationName === MutationName.ApplyCouponMutation) {
     await withLineStock(event, body.applyCoupon)
     updateCart(event, body.applyCoupon)
-  }
-}
-
-async function applyGiftCard(event: any, body: any) {
-  const requestBody = await readBody(event)
-
-  if (requestBody[0]?.mutationName === MutationName.ApplyGiftCardMutation) {
-    await withLineStock(event, body.applyGiftCard)
-    updateCart(event, body.applyGiftCard)
   }
 }
 

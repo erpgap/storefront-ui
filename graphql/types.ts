@@ -13,7 +13,6 @@ import type {
   Countries,
   User,
   ApplyCouponList,
-  ApplyGiftCardList,
   OrderLine,
   Lead,
   Scalars,
@@ -69,7 +68,6 @@ export type CartResponse = {
 export type CartAddItemResponse = { cartAddMultipleItems: Cart }
 
 export type ApplyDiscountsResponse = {
-  applyGiftCard: ApplyGiftCardList
   applyCoupon: ApplyCouponList
 }
 export type MakeGiftCardPaymentResponse = {
