@@ -9,6 +9,11 @@ import { defineNuxtPlugin } from 'nuxt/app'
 const SHOULD_BYPASS_ERROR_QUERIES = [
   'LoadUserQuery',
   'LoadCartQuery',
+  'GetDeliveryMethodsQuery',
+  'GetPaymentMethodsQuery',
+  'GetPaymentConfirmation',
+  'GetOrdersQuery',
+  'GetOrderQuery',
 ]
 const SHOULD_BYPASS_ERROR_MUTATIONS = [
   'LoginMutation',
@@ -20,6 +25,15 @@ const SHOULD_BYPASS_ERROR_MUTATIONS = [
   'CreateUpdatePartner',
   'SendResetPasswordMutation',
   'ChangePasswordMutation',
+  'CartUpdateQuantity',
+  'CartRemoveItem',
+  'WishlistAddItem',
+  'WishlistRemoveItem',
+  'AddAddress',
+  'UpdateAddress',
+  'DeleteAddress',
+  'SelectCurrentAddress',
+  'ShippingMethod',
 ]
 
 const avoidErrorThrowForSomeRequests = (options: any): boolean => {

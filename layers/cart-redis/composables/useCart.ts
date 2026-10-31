@@ -61,7 +61,7 @@ export const useCart = () => {
     await refreshCart()
     applyCart(data.value)
     if (error.value && showError) {
-      toast.error((error.value as any)?.data?.message)
+      toast.error(errorMessage(error.value, $i18n.t('core.genericError')))
     }
   }
 
@@ -104,7 +104,7 @@ export const useCart = () => {
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
     }
     catch (error: any) {
-      return toast.error(error.data.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
   }
 
@@ -122,7 +122,7 @@ export const useCart = () => {
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
     }
     catch (error: any) {
-      return toast.error(error.data.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
   }
 
@@ -140,7 +140,7 @@ export const useCart = () => {
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
     }
     catch (error: any) {
-      return toast.error(error.data.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
   }
 

@@ -1,4 +1,3 @@
-import { useToast } from 'vue-toastification'
 import { useAsyncData, useNuxtApp, useState } from 'nuxt/app'
 import { QueryName } from '~~/server/queries'
 
@@ -17,21 +16,16 @@ export const useStateList = (countryId: number) => {
     if (states.value.length > 0) {
       return
     }
-    try {
-      const { data } = await useAsyncData(
-        async () => await $sdk().odoo.query<
-          CountryFilterInput,
-          { country: Country }
-        >({ queryName: QueryName.GetStatesQuery }, param.value), {
-          deep: true,
-        })
-      states.value = data.value?.country.states || []
-    }
-    catch (error: any) {
-      if (error.value) {
-        return useToast().error(error.value.data.message)
-      }
-    }
+    // useAsyncData reports a failure in `error` rather than throwing it, and
+    // the SDK plugin's toast already says why; the list just stays empty.
+    const { data } = await useAsyncData(
+      async () => await $sdk().odoo.query<
+        CountryFilterInput,
+        { country: Country }
+      >({ queryName: QueryName.GetStatesQuery }, param.value), {
+        deep: true,
+      })
+    states.value = data.value?.country?.states || []
   }
 
   return {

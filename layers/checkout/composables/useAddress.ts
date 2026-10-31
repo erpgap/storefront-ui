@@ -22,7 +22,7 @@ import { MutationName } from '~~/server/mutations'
 import { QueryName } from '~~/server/queries'
 
 export const useAddresses = () => {
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
   const hash = objectHash('test')
 
   const loading = ref(false)
@@ -62,7 +62,7 @@ export const useAddresses = () => {
       shippingAddresses.value = data.value.addresses
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false
@@ -83,7 +83,7 @@ export const useAddresses = () => {
       await loadAddresses(type)
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false
@@ -99,7 +99,7 @@ export const useAddresses = () => {
       >({ mutationName: MutationName.DeleteAddress }, { address })
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false
@@ -134,7 +134,7 @@ export const useAddresses = () => {
       }
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false
@@ -156,7 +156,7 @@ export const useAddresses = () => {
       await loadAddresses(type)
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false

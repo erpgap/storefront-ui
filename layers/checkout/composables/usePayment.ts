@@ -11,7 +11,7 @@ import { QueryName } from '~~/server/queries'
 export const SUPPORTED_PAYMENT_PROVIDERS = ['stripe', 'adyen'] as const
 
 export const usePayment = () => {
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
   const toast = useToast()
 
   const loading = ref(false)
@@ -45,7 +45,7 @@ export const usePayment = () => {
         .filter(provider => (SUPPORTED_PAYMENT_PROVIDERS as readonly string[]).includes(provider.code ?? ''))
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false
@@ -65,7 +65,7 @@ export const usePayment = () => {
       return data?.paymentConfirmation
     }
     catch (error: any) {
-      if (showError) toast.error(error?.data?.message)
+      if (showError) toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false

@@ -1,4 +1,3 @@
-import type { FetchError } from 'ofetch'
 import { useToast } from 'vue-toastification'
 import type {
   MutationWishlistAddItemArgs,
@@ -10,7 +9,7 @@ import type {
 import { MutationName } from '~~/server/mutations'
 
 export const useWishlist = () => {
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
   const toast = useToast()
   // Taken here, while the composable runs in the component's setup: the
   // functions below run later, when Nuxt's context may be gone (during SSR
@@ -36,7 +35,7 @@ export const useWishlist = () => {
         || ({ wishlistItems: [] } as unknown as WishlistData)
     }
     catch (error) {
-      toast.error((error as FetchError).data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false
@@ -54,7 +53,7 @@ export const useWishlist = () => {
       wishlist.value = data?.wishlistAddItem
     }
     catch (error) {
-      toast.error((error as FetchError).data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false
@@ -87,7 +86,7 @@ export const useWishlist = () => {
       wishlist.value = data?.wishlistRemoveItem
     }
     catch (error) {
-      toast.error((error as FetchError).data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false

@@ -10,7 +10,7 @@ import { MutationName } from '~~/server/mutations'
 import { QueryName } from '~~/server/queries'
 
 export const useDeliveryMethod = () => {
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
   const { loading, setLoading } = useCheckout()
   const toast = useToast()
   const { loadCart } = useCart()
@@ -36,7 +36,7 @@ export const useDeliveryMethod = () => {
       deliveryMethods.value = data?.deliveryMethods || []
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       setLoading(false)
@@ -53,7 +53,7 @@ export const useDeliveryMethod = () => {
       await loadCart()
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       setLoading(false)

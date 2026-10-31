@@ -7,7 +7,7 @@ import type {
 import { QueryName } from '~~/server/queries'
 
 export const useOrders = () => {
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
   const toast = useToast()
   const { redirectIfSessionExpired } = useAuth()
   const loading = ref(false)
@@ -26,7 +26,7 @@ export const useOrders = () => {
     catch (error: any) {
       orders.value = {} as Orders
       if (await redirectIfSessionExpired()) return
-      toast.error(error?.data?.message || error?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false
@@ -45,7 +45,7 @@ export const useOrders = () => {
     catch (error: any) {
       order.value = {} as Order
       if (await redirectIfSessionExpired()) return
-      toast.error(error?.data?.message || error?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       loading.value = false
