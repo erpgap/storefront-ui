@@ -52,6 +52,17 @@ export type ApplyCoupons = {
   order: Maybe<Order>;
 };
 
+export type ApplyGiftCardList = ApplyGiftCards & {
+  __typename?: 'ApplyGiftCardList';
+  error: Maybe<Scalars['String']['output']>;
+  order: Maybe<Order>;
+};
+
+export type ApplyGiftCards = {
+  error: Maybe<Scalars['String']['output']>;
+  order: Maybe<Order>;
+};
+
 export type Attribute = {
   __typename?: 'Attribute';
   displayType: Maybe<Scalars['String']['output']>;
@@ -529,8 +540,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Add new billing or shipping address and set it on the shopping cart. */
   addAddress: Maybe<Partner>;
-  /** Apply a promo code or gift card */
+  /** Apply Coupon */
   applyCoupon: Maybe<ApplyCouponList>;
+  /** Apply Gift Card */
+  applyGiftCard: Maybe<ApplyGiftCardList>;
   /** Add Multiple Items */
   cartAddMultipleItems: Maybe<CartData>;
   /** Cart Clear */
@@ -606,6 +619,11 @@ export type MutationAddAddressArgs = {
 
 
 export type MutationApplyCouponArgs = {
+  promo: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationApplyGiftCardArgs = {
   promo: InputMaybe<Scalars['String']['input']>;
 };
 
