@@ -6,11 +6,13 @@ const { loadCart } = useCart()
 
 const promo = ref<string>('')
 
+// The cart is reloaded once the code is in: loading it alongside showed the
+// totals from before the discount.
 const handleApplyPromo = async () => {
-  await Promise.all([
-    applyDiscount(promo.value),
-    loadCart(),
-  ])
+  if (await applyDiscount(promo.value)) {
+    promo.value = ''
+    await loadCart()
+  }
 }
 </script>
 

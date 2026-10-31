@@ -147,6 +147,7 @@
     "applePayIconAlt": "Apple Pay Icon",
     "googlePayIconAlt": "Google Pay icon",
     "promoOrGiftcard": "Promo code or gift card",
+    "codeApplied": "Code applied.",
     "loadingPayment": "Loading payment methods…",
     "unavailable": "No payment method is available right now, so the order can't be placed. Please contact us to complete your purchase."
   },

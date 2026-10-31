@@ -4,6 +4,7 @@ export default `
   mutation ($promo: String!) {
     applyCoupon(promo: $promo) {
       ${orderFragment}
+      error
     }
   }
 `

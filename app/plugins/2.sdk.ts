@@ -34,6 +34,8 @@ const SHOULD_BYPASS_ERROR_MUTATIONS = [
   'DeleteAddress',
   'SelectCurrentAddress',
   'ShippingMethod',
+  'ApplyCouponMutation',
+  'MakeGiftCardPaymentMutation',
 ]
 
 const avoidErrorThrowForSomeRequests = (options: any): boolean => {

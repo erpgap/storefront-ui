@@ -4,37 +4,38 @@ import type {
   ApplyDiscountsResponse,
   MakeGiftCardPaymentResponse,
   MutationApplyCouponArgs,
-  MutationApplyGiftCardArgs,
 } from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
 
 export const useDiscount = () => {
-  const { $sdk } = useNuxtApp()
+  const { $sdk, $i18n } = useNuxtApp()
   const { loading, setLoading } = useCheckout()
   const toast = useToast()
 
-  const applyGiftCard: ApplyDiscountsResponse | any = async (promo: MutationApplyGiftCardArgs) => {
-    return $sdk().odoo.mutation<
-      MutationApplyGiftCardArgs,
-      ApplyDiscountsResponse
-    >({ mutationName: MutationName.ApplyGiftCardMutation }, promo)
-  }
-
-  const applyCoupon: ApplyDiscountsResponse | any = async (promo: MutationApplyCouponArgs) => {
-    return $sdk().odoo.mutation<
-      MutationApplyCouponArgs,
-      ApplyDiscountsResponse
-    >({ mutationName: MutationName.ApplyCouponMutation }, promo)
-  }
-
-  const applyDiscount = async (promoCode: string) => {
+  // One box takes both promo codes and gift cards: Odoo's applyCoupon tries
+  // the code against every loyalty program, gift cards included. A code it
+  // cannot use is not an error to GraphQL; the reason comes back in `error`.
+  // Resolves to whether the code was applied.
+  const applyDiscount = async (promoCode: string): Promise<boolean> => {
     try {
       setLoading(true)
 
-      let response = await applyCoupon({ promo: promoCode })
-      if (!response?.applyCoupon) {
-        response = await applyGiftCard({ promo: promoCode })
+      const data = await $sdk().odoo.mutation<
+        MutationApplyCouponArgs,
+        Pick<ApplyDiscountsResponse, 'applyCoupon'>
+      >({ mutationName: MutationName.ApplyCouponMutation }, { promo: promoCode })
+
+      const refused = data?.applyCoupon?.error
+      if (refused) {
+        toast.error(refused)
+        return false
       }
+      toast.success($i18n.t('checkoutPayment.codeApplied'))
+      return true
+    }
+    catch (error: any) {
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+      return false
     }
     finally {
       setLoading(false)
@@ -57,7 +58,7 @@ export const useDiscount = () => {
       return navigateTo('/checkout/thank-you')
     }
     catch (error: any) {
-      toast.error(error?.data?.message)
+      toast.error(errorMessage(error, $i18n.t('core.genericError')))
     }
     finally {
       setLoading(false)
