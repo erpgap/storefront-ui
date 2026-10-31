@@ -26,8 +26,18 @@ export const useCart = () => {
   const cartError = ref('')
 
   const applyCart = (payload?: { cart?: Cart } | null) => {
-    if (!payload?.cart)
+    // No payload: the load failed, keep what we have.
+    if (!payload)
       return
+    // A payload without a cart: the session has none, e.g. once an order is
+    // placed and its cart cleared. Keeping the old one left its items in the
+    // header until the next full page load.
+    if (!payload.cart) {
+      cart.value = {} as Cart
+      cartCounter.value = 0
+      frequentlyTogetherProducts.value = []
+      return
+    }
 
     cart.value = payload.cart
     cartCounter.value = Number(payload.cart?.order?.websiteOrderLine?.length || 0)
