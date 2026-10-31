@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SfButton, SfInput } from '@storefront-ui/vue'
 
-const { applyDiscount, loading } = useDiscount()
+const { applyDiscount, applying } = useDiscount()
 const { loadCart } = useCart()
 
 const promo = ref<string>('')
@@ -26,12 +26,12 @@ const handleApplyPromo = async () => {
     </div>
 
     <SfButton
-      :disabled="!promo || loading"
+      :disabled="!promo || applying"
       variant="secondary"
       class="shrink-0"
       @click="handleApplyPromo"
     >
-      {{ loading ? $t('core.ui.applying') : $t('apply') }}
+      {{ applying ? $t('core.ui.applying') : $t('apply') }}
     </SfButton>
   </div>
 </template>

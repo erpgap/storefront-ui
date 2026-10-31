@@ -11,6 +11,10 @@ export const useDiscount = () => {
   const { $sdk, $i18n } = useNuxtApp()
   const { loading, setLoading } = useCheckout()
   const toast = useToast()
+  // The code box's own state. `loading` is shared by all of checkout (Place
+  // order waits on it), and the box read "Applying…" whenever checkout loaded
+  // anything else, such as the delivery methods.
+  const applying = useState('discount-applying', () => false)
 
   // One box takes both promo codes and gift cards: Odoo's applyCoupon tries
   // the code against every loyalty program, gift cards included. A code it
@@ -18,6 +22,7 @@ export const useDiscount = () => {
   // Resolves to whether the code was applied.
   const applyDiscount = async (promoCode: string): Promise<boolean> => {
     try {
+      applying.value = true
       setLoading(true)
 
       const data = await $sdk().odoo.mutation<
@@ -38,6 +43,7 @@ export const useDiscount = () => {
       return false
     }
     finally {
+      applying.value = false
       setLoading(false)
     }
   }
@@ -67,6 +73,7 @@ export const useDiscount = () => {
 
   return {
     loading,
+    applying,
     applyDiscount,
     makeGiftCardPayment,
   }
