@@ -52,17 +52,6 @@ export type ApplyCoupons = {
   order: Maybe<Order>;
 };
 
-export type ApplyGiftCardList = ApplyGiftCards & {
-  __typename?: 'ApplyGiftCardList';
-  error: Maybe<Scalars['String']['output']>;
-  order: Maybe<Order>;
-};
-
-export type ApplyGiftCards = {
-  error: Maybe<Scalars['String']['output']>;
-  order: Maybe<Order>;
-};
-
 export type Attribute = {
   __typename?: 'Attribute';
   displayType: Maybe<Scalars['String']['output']>;
@@ -540,10 +529,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Add new billing or shipping address and set it on the shopping cart. */
   addAddress: Maybe<Partner>;
-  /** Apply Coupon */
+  /** Apply a promo code or gift card */
   applyCoupon: Maybe<ApplyCouponList>;
-  /** Apply Gift Card */
-  applyGiftCard: Maybe<ApplyGiftCardList>;
   /** Add Multiple Items */
   cartAddMultipleItems: Maybe<CartData>;
   /** Cart Clear */
@@ -619,11 +606,6 @@ export type MutationAddAddressArgs = {
 
 
 export type MutationApplyCouponArgs = {
-  promo: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type MutationApplyGiftCardArgs = {
   promo: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -820,6 +802,8 @@ export type Order = {
   amountUntaxed: Maybe<Scalars['Float']['output']>;
   cartQuantity: Maybe<Scalars['Int']['output']>;
   clientOrderRef: Maybe<Scalars['String']['output']>;
+  /** Whether the customer's emails about this order went out: 'sent', 'failed', or 'pending' (queued, or none sent yet) */
+  confirmationEmail: Maybe<Scalars['String']['output']>;
   coupons: Maybe<Array<Coupon>>;
   currency: Maybe<Currency>;
   currencyRate: Maybe<Scalars['String']['output']>;
@@ -1204,6 +1188,8 @@ export type Query = {
   product: Maybe<Product>;
   productVariant: ProductVariant;
   products: Maybe<Products>;
+  /** The website this request belongs to, resolved from its Request-Host. Lets the storefront show the store's own name rather than one fixed at build time. */
+  website: Maybe<Website>;
   websiteFooter: Maybe<Array<WebsiteMenu>>;
   websiteHomepage: Maybe<Homepage>;
   websiteMegaMenu: Maybe<Array<WebsiteMenu>>;
