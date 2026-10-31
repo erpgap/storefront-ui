@@ -10,7 +10,14 @@ const { getPaymentConfirmation } = usePayment()
 // who just paid. If there's no order to confirm (e.g. the session was lost or
 // the URL was opened directly), send them home instead of showing an error.
 const orderName = ref('')
-let order: { id?: number, name?: string } | null = null
+// Odoo's word on the customer's confirmation email: 'sent', 'failed', or
+// 'pending' (queued, or not sent yet, e.g. while a card payment settles).
+const confirmationEmail = ref('pending')
+const messageKey = computed(() => ({
+  sent: 'thankYou.message',
+  failed: 'thankYou.messageEmailFailed',
+} as Record<string, string>)[confirmationEmail.value] ?? 'thankYou.messageEmailPending')
+let order: { id?: number, name?: string, confirmationEmail?: string | null } | null = null
 try {
   order = (await getPaymentConfirmation(false))?.order ?? null
 }
@@ -23,6 +30,7 @@ if (!order?.id) {
 }
 else {
   orderName.value = order.name || ''
+  confirmationEmail.value = order.confirmationEmail || 'pending'
   // Order placed → the draft cart no longer exists. Refresh quietly to reset
   // the header count (a "Cart does not exist" here is expected, so no toast).
   await loadCart(false)
@@ -57,7 +65,7 @@ else {
         {{ $t('thankYou.heading') }}
       </h1>
       <p class="text-primary-600 leading-relaxed">
-        {{ $t('thankYou.message') }}
+        {{ $t(messageKey) }}
       </p>
 
       <div

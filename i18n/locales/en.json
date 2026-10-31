@@ -108,6 +108,8 @@
     "eyebrow": "Order confirmed",
     "heading": "Thank you for your order",
     "message": "We’ve emailed you a confirmation. Your order is now being prepared — we’ll let you know as soon as it ships.",
+    "messageEmailPending": "We’ll email you a confirmation shortly. Your order is now being prepared — we’ll let you know as soon as it ships.",
+    "messageEmailFailed": "Your order is now being prepared, but we couldn’t email you a confirmation, so please keep the order reference below.",
     "orderReference": "Order reference",
     "viewOrders": "View my orders",
     "continueShopping": "Continue shopping"

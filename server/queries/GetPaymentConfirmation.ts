@@ -4,6 +4,9 @@ export default `
   query {
     paymentConfirmation {
       ${orderFragment}
+      order {
+        confirmationEmail
+      }
     }
   }
 `
