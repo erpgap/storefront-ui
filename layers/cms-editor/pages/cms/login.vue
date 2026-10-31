@@ -40,6 +40,7 @@ async function submit() {
 <template>
   <div class="min-h-screen grid place-items-center bg-primary-50 text-black px-4">
     <form
+      method="post"
       class="w-full max-w-sm bg-white rounded-lg border border-primary-200 p-6 flex flex-col gap-4"
       @submit.prevent="submit"
     >

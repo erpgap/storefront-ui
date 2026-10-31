@@ -71,6 +71,7 @@ onMounted(() => {
     </UiAlert>
 
     <form
+      method="post"
       data-testid="signup-form"
       class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8"
       @submit.prevent="handleSignup"

@@ -40,6 +40,7 @@ const handleSubmit = async () => {
           {{ $t("auth.setNewPassword.pageHeading") }}
         </h1>
         <form
+          method="post"
           data-testid="account-forms-password"
           @submit.prevent="handleSubmit"
         >

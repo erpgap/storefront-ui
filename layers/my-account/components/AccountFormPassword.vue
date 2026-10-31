@@ -33,6 +33,7 @@ const submit = () => {
 
 <template>
   <form
+    method="post"
     data-testid="account-forms-password"
     novalidate
     @submit.prevent="submit"

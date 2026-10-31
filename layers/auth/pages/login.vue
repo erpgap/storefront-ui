@@ -56,6 +56,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     </p>
 
     <form
+      method="post"
       novalidate
       class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8"
       @submit.prevent="handleLogin"
