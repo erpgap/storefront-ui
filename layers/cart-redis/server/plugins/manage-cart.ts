@@ -29,7 +29,7 @@ async function cartAddItem(event: any, body: any) {
 
   if (requestBody[0]?.mutationName === MutationName.CartAddItem) {
     await withLineStock(event, body.cartAddMultipleItems)
-    updateCart(event, body.cartAddMultipleItems)
+    await updateCart(event, body.cartAddMultipleItems)
   }
 }
 
@@ -38,7 +38,7 @@ async function applyCoupon(event: any, body: any) {
 
   if (requestBody[0]?.mutationName === MutationName.ApplyCouponMutation) {
     await withLineStock(event, body.applyCoupon)
-    updateCart(event, body.applyCoupon)
+    await updateCart(event, body.applyCoupon)
   }
 }
 
@@ -46,7 +46,7 @@ async function cartRemoveItem(event: any, body: any) {
   const requestBody = await readBody(event)
   if (requestBody[0]?.mutationName === MutationName.CartRemoveItem) {
     await withLineStock(event, body.cartRemoveMultipleItems)
-    updateCart(event, body.cartRemoveMultipleItems)
+    await updateCart(event, body.cartRemoveMultipleItems)
   }
 }
 
@@ -54,7 +54,7 @@ async function cartUpdateItem(event: any, body: any) {
   const requestBody = await readBody(event)
   if (requestBody[0]?.mutationName === MutationName.CartUpdateQuantity) {
     await withLineStock(event, body.cartUpdateMultipleItems)
-    updateCart(event, body.cartUpdateMultipleItems)
+    await updateCart(event, body.cartUpdateMultipleItems)
   }
 }
 

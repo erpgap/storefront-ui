@@ -86,5 +86,8 @@ export async function updateCart(event: any, updateData: any) {
   const updatedCart = Object.assign({}, currentCart.cart, updateData)
   const reducedCart = reduceCart(updatedCart as Cart)
 
-  useStorage('cart').setItem(keyName, { cart: reducedCart })
+  // Awaited, like its callers: the response must not leave before the cart is
+  // stored, or a cart load right after it reads the previous one (an empty
+  // cart after the first item, which sent checkout back to the home page).
+  await useStorage('cart').setItem(keyName, { cart: reducedCart })
 }
