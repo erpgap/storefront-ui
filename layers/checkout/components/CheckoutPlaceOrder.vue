@@ -7,7 +7,16 @@ const { makeGiftCardPayment } = useDiscount()
 // On while checkout changes what the order costs (a code being applied, the
 // delivery method being set): an order placed then would be paid at the
 // amount from before the change.
-const { loading: checkoutBusy } = useCheckout()
+const { loading: checkoutLoading } = useCheckout()
+// Only once mounted: the browser loads the delivery methods again while the
+// page hydrates, so following the flag from the start disabled the button
+// the server had rendered enabled (a hydration mismatch). Nothing can be
+// clicked before then anyway.
+const mounted = ref(false)
+onMounted(() => {
+  mounted.value = true
+})
+const checkoutBusy = computed(() => mounted.value && checkoutLoading.value)
 
 // Follows the cart: a copy taken at setup never saw a gift card applied on
 // this page, so the gift card button could not appear without a reload.
