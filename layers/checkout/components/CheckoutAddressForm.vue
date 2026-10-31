@@ -89,8 +89,11 @@ const save = async () => {
   // The resolvers skip empty fields, so null is the same as leaving one out.
   const data: Omit<UpdateAddressInput, 'id' | 'email'> = {
     name: effectiveName.value,
-    street: street.value?.split(' ')?.[0] ?? null,
-    street2: street.value?.split(' ')?.[1] ?? null,
+    // One field, saved whole. It used to be split at spaces into street and
+    // street2 with the rest dropped: "Rue de la Loi 16" was stored as "Rue"
+    // and "de", losing the house number.
+    street: street.value?.trim() || null,
+    street2: null,
     city: city.value,
     zip: zip.value,
     phone: phone.value,
