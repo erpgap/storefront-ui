@@ -50,6 +50,10 @@ const placeOrder = async () => {
   }
 }
 const handleGiftCardPayment = async () => {
+  // Odoo confirms the order as soon as it costs nothing, whoever it is for:
+  // without this check an empty form placed an order with no contact or
+  // address.
+  if (!validateCheckout()) return
   processing.value = true
   try {
     await makeGiftCardPayment()
