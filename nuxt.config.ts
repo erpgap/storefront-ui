@@ -143,6 +143,15 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
+  // All CSS goes into the page's HTML, the global CSS (Tailwind, fonts)
+  // included, not only .vue styles as by default. As a separate file it was
+  // a second download every page waited on before it could paint: on mobile
+  // Lighthouse that put the first paint at ~3 s. Production builds only
+  // (Nuxt leaves dev mode alone); the CSS is still written as before.
+  features: {
+    inlineStyles: true,
+  },
+
   experimental: {
     asyncContext: true,
     componentIslands: true,
