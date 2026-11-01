@@ -62,6 +62,20 @@ const effectiveName = computed(() => contactName.value || savedName || '')
 const isBilling = computed(() => props.type === AddressEnum.Billing)
 // Billing defaults to "same as shipping" (checked). Shipping never offers the toggle.
 const sameAsShipping = ref(isBilling.value)
+// SfCheckbox draws its tick from the input's checked state, which it reads
+// only when its value changes - and its first read comes before the input is
+// checked. So a box that starts ticked showed empty while "same as shipping"
+// was on (and the billing fields hidden), until clicked. It is given false
+// until mounted, then the real value: that change makes it read the input
+// again, checked by then. The form itself goes by sameAsShipping throughout.
+const checkboxReady = ref(false)
+onMounted(() => {
+  checkboxReady.value = true
+})
+const sameAsShippingBox = computed({
+  get: () => checkboxReady.value && sameAsShipping.value,
+  set: (value: boolean) => { sameAsShipping.value = value },
+})
 
 const formEl = ref<HTMLElement>()
 const showErrors = ref(false)
@@ -192,7 +206,7 @@ defineExpose({
         class="flex items-center gap-2.5 text-[14px] text-primary-700 cursor-pointer"
         :class="{ 'mb-5': showFields }"
       >
-        <SfCheckbox v-model="sameAsShipping" />
+        <SfCheckbox v-model="sameAsShippingBox" />
         {{ $t("form.sameAsShipping") }}
       </label>
 
