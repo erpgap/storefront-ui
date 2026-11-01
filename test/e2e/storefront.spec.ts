@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import type { Page } from '@playwright/test'
+import type { APIRequestContext, Page } from '@playwright/test'
 
 /**
  * The shopper's path through the storefront: browse, search, add to the cart,
@@ -66,6 +66,34 @@ test.describe('browsing', () => {
     expect(response?.status()).toBe(404)
     await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Back to home' })).toBeVisible()
+  })
+})
+
+test.describe('page cache', () => {
+  // The catalogue is served from the page cache: the SWR rules in nuxt.config
+  // and modules/routes-generator (one rule for all product pages, see
+  // productCacheRules.ts). A page personal to the shopper never is.
+  const cacheControl = async (request: APIRequestContext, path: string) =>
+    (await request.get(path, { maxRedirects: 0 })).headers()['cache-control'] ?? ''
+
+  test('category and product pages are cached', async ({ request }) => {
+    for (const path of ['/women', PRODUCT.split('?')[0]!, PRODUCT]) {
+      expect(await cacheControl(request, path), path).toContain('s-maxage')
+    }
+  })
+
+  test('the home page and the product list are cached', async ({ request }) => {
+    const home = await (await request.get('/')).text()
+    test.skip(home.includes('/@vite/client'), 'their rules are for production builds only (nuxt.config $production)')
+    for (const path of ['/', '/products']) {
+      expect(await cacheControl(request, path), path).toContain('s-maxage')
+    }
+  })
+
+  test('personal pages and unknown products are never cached', async ({ request }) => {
+    for (const path of ['/cart', '/login', '/checkout', '/my-account', '/product/no-such-product-0']) {
+      expect(await cacheControl(request, path), path).not.toContain('s-maxage')
+    }
   })
 })
 

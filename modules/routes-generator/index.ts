@@ -3,6 +3,7 @@ import { defineNuxtModule, extendRouteRules } from 'nuxt/kit'
 import type { NuxtPage } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
 import { withoutTrailingSlash } from '../../shared/url.mjs'
+import { PRODUCT_PREFIX, productCacheRules } from './productCacheRules'
 
 export default defineNuxtModule({
   meta: {
@@ -96,12 +97,22 @@ export default defineNuxtModule({
       extendRouteRules(slug, { swr: swrValue })
     })
 
-    productSlugs.forEach((slug) => {
-      extendRouteRules(slug, { swr: swrValue })
+    // One rule for every product page, when their URLs allow it: see
+    // productCacheRules.ts. The pages themselves stay one per product.
+    const productRules = productCacheRules(productSlugs)
+    if (productRules.mixed) {
+      console.warn(
+        `[routes-generator] Some product URLs do not start with ${PRODUCT_PREFIX}: `
+        + 'caching each product page with a rule of its own, which slows every request.',
+      )
+    }
+    productRules.paths.forEach((path) => {
+      extendRouteRules(path, { swr: swrValue })
     })
 
     console.info(
-      `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products loaded`,
+      `[routes-generator] ✅ ${categorySlugs.length} categories and ${productSlugs.length} products loaded`
+      + ` (${productRules.paths.length} product cache rule${productRules.paths.length === 1 ? '' : 's'})`,
     )
 
     /**
