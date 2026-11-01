@@ -102,12 +102,16 @@ function propsFor(block: BlockInstance): Record<string, unknown> {
 </script>
 
 <template>
+  <!-- The editor's parts (CmsInsertPoint, CmsBlockShell) are Lazy: they only
+       render in edit mode, and imported directly their code and styles came
+       with every page, the styles as a render-blocking stylesheet on the
+       storefront's home page. -->
   <div :class="mode === 'edit' ? 'cms-canvas' : undefined">
     <template
       v-for="(block, index) in blocks"
       :key="block.id"
     >
-      <CmsInsertPoint
+      <LazyCmsInsertPoint
         v-if="mode === 'edit'"
         :index="index"
         :active="insertAt === index"
@@ -122,7 +126,7 @@ function propsFor(block: BlockInstance): Record<string, unknown> {
         v-bind="propsFor(block)"
       />
 
-      <CmsBlockShell
+      <LazyCmsBlockShell
         v-else
         :block="block"
         :index="index"
@@ -153,11 +157,11 @@ function propsFor(block: BlockInstance): Record<string, unknown> {
             </p>
           </template>
         </Suspense>
-      </CmsBlockShell>
+      </LazyCmsBlockShell>
     </template>
 
     <!-- Trailing insert point, so the end of the page is reachable too. -->
-    <CmsInsertPoint
+    <LazyCmsInsertPoint
       v-if="mode === 'edit' && blocks.length"
       :index="blocks.length"
       :active="insertAt === blocks.length"
