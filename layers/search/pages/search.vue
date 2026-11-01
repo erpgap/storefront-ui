@@ -110,7 +110,7 @@ const breadcrumbs = [
               {{ $t('core.search.loadingFilters') }}
             </div>
           </template>
-          <CategoryFilterSidebar
+          <LazyCategoryFilterSidebar
             v-if="$viewport.isGreaterOrEquals('desktopSmall')"
             class="block"
             :attributes="organizedAttributes"
@@ -124,7 +124,7 @@ const breadcrumbs = [
             @close="close"
           >
             <template #default>
-              <CategoryFilterSidebar
+              <LazyCategoryFilterSidebar
                 class="block lg:hidden"
                 :attributes="organizedAttributes"
                 :categories="[]"
