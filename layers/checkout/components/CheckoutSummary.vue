@@ -12,10 +12,5 @@ onMounted(async () => {
   <UiOrderSummary
     show-items
     collapsible
-  >
-    <!-- Desktop: Place Order sits at the foot of the summary. On mobile the
-         summary is collapsed and the button is rendered right after the payment
-         form instead (see the checkout page), so it's hidden here below lg. -->
-    <CheckoutPlaceOrder class="hidden lg:block" />
-  </UiOrderSummary>
+  />
 </template>

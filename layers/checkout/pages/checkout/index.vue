@@ -115,9 +115,9 @@ provide('paymentError', paymentError)
           <LazyCheckoutPayment :step="5" />
         </div>
 
-        <!-- Mobile: Place Order + payment error right after the payment form
-             (on desktop the button lives at the foot of the summary instead). -->
-        <CheckoutPlaceOrder class="lg:hidden mt-8" />
+        <!-- Place Order and its payment error close the form, on every screen
+             size: after the payment, where the shopper finishes filling in. -->
+        <CheckoutPlaceOrder class="mt-8" />
       </div>
     </div>
   </div>
