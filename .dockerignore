@@ -1,3 +1,12 @@
 .git
 .gitignore
 node_modules/
+.nuxt/
+.output/
+.wrangler/
+.env
+.env.*
+!.env.example
+coverage/
+test-results/
+playwright-report/
