@@ -5,6 +5,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 // private Redis URL without changing the upstream storefront repository.
 const marker = 'redis://runtime-redis.invalid:6379';
 const storageUrl = process.env.NUXT_STORAGE_URL;
+const buildTimeStorageUrl = process.env.NUXT_STORAGE_URL_BUILD;
 
 if (!storageUrl) {
   throw new Error('NUXT_STORAGE_URL is required');
@@ -15,8 +16,23 @@ const bundle = await readFile(bundlePath, 'utf8');
 // The marker occurs inside JavaScript string literals. JSON encoding safely
 // escapes credentials containing quotes, slashes, or control characters.
 const escapedStorageUrl = JSON.stringify(storageUrl).slice(1, -1);
-if (bundle.includes(marker)) {
-  await writeFile(bundlePath, bundle.split(marker).join(escapedStorageUrl));
+const replacementCandidates = [
+  marker,
+  buildTimeStorageUrl,
+  'redis://redis:6379',
+].filter((value) => typeof value === 'string' && value.length > 0);
+
+let patched = bundle;
+let replaced = false;
+for (const candidate of replacementCandidates) {
+  if (patched.includes(candidate)) {
+    patched = patched.split(candidate).join(escapedStorageUrl);
+    replaced = true;
+  }
+}
+
+if (replaced) {
+  await writeFile(bundlePath, patched);
 } else if (!bundle.includes(escapedStorageUrl)) {
   throw new Error('Runtime Redis marker was not found in the Nitro bundle');
 }
