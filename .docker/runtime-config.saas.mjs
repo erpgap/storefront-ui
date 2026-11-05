@@ -1,5 +1,15 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
+function log(message, extra = {}) {
+  console.log(`[saas-runtime] ${message}${Object.keys(extra).length ? ` ${JSON.stringify(extra)}` : ''}`);
+}
+
+function safeHost(input) {
+  try { return new URL(input).host; } catch { return 'invalid-url'; }
+}
+
+const runtimeStorageMode = process.env.RUNTIME_NATIVE_STORAGE === '1' ? 'native-runtime (requested)' : 'legacy-patch';
+
 // Nitro serializes storage mounts into its server bundle at build time. Replace
 // only our deliberately invalid marker so a single image can use each trial's
 // private Redis URL without changing the upstream storefront repository.
@@ -9,6 +19,15 @@ const buildTimeStorageUrl = process.env.NUXT_STORAGE_URL_BUILD;
 
 if (!storageUrl) {
   throw new Error('NUXT_STORAGE_URL is required');
+}
+
+log('startup', {
+  mode: runtimeStorageMode,
+  redisHost: safeHost(storageUrl),
+  odooHost: safeHost(process.env.NUXT_PUBLIC_ODOO_BASE_URL || ''),
+});
+if (process.env.RUNTIME_NATIVE_STORAGE === '1') {
+  log('native runtime storage mode is not implemented yet; using legacy patch flow');
 }
 
 const bundlePath = '/src/server/chunks/nitro/nitro.mjs';
@@ -33,8 +52,11 @@ for (const candidate of replacementCandidates) {
 
 if (replaced) {
   await writeFile(bundlePath, patched);
+  log('runtime redis patch applied', { redisHost: safeHost(storageUrl) });
 } else if (!bundle.includes(escapedStorageUrl)) {
   throw new Error('Runtime Redis marker was not found in the Nitro bundle');
+} else {
+  log('runtime redis patch skipped (already set)');
 }
 
 // The upstream application normally generates product/category routes during
@@ -72,6 +94,8 @@ try {
   console.error(`Odoo route indexing failed; starting without dynamic routes: ${error.message}`);
 }
 
+log('odoo route indexing result', { routes: routes.length });
+
 const { default: Redis } = await import('/src/server/node_modules/ioredis/built/index.js');
 const redis = new Redis(storageUrl, { lazyConnect: true, maxRetriesPerRequest: 2 });
 try {
@@ -81,6 +105,7 @@ try {
     pipeline.set(`slug:${encodeURIComponent(slug)}`, model);
   }
   await pipeline.exec();
+  log('slug bootstrap completed', { routes: routes.length, redisHost: safeHost(storageUrl) });
 } finally {
   redis.disconnect();
 }
@@ -92,4 +117,5 @@ const indexingEnabled = process.env.SEO_INDEXING_ENABLED === '1';
 process.env.NUXT_SITE_INDEXABLE = indexingEnabled ? 'true' : 'false';
 process.env.NUXT_SITE_URL = process.env.NUXT_PUBLIC_MIDDLEWARE_URL || 'http://localhost:3000/';
 
+log('starting nitro server');
 await import('/src/server/index.mjs');
