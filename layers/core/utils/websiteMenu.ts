@@ -27,12 +27,11 @@ function toItem(menu: WebsiteMenu): MenuItem | null {
 }
 
 /**
- * The header's entries: what sits under the website's menu root, in Odoo's
- * order, each with its submenu.
+ * The header's entries: the website's top entries (no parent in Odoo), in
+ * Odoo's order, each with its submenu.
  */
-export function websiteMenuItems(roots: WebsiteMenu[] | null | undefined): MenuItem[] {
-  return (roots ?? [])
-    .flatMap(root => root.childs ?? [])
+export function websiteMenuItems(entries: WebsiteMenu[] | null | undefined): MenuItem[] {
+  return (entries ?? [])
     .map(toItem)
     .filter((item): item is MenuItem => item !== null)
 }

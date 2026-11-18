@@ -1259,6 +1259,8 @@ export type Query = {
   /** The website this request belongs to, resolved from its Request-Host. Lets the storefront show the store's own name rather than one fixed at build time. */
   website: Maybe<Website>;
   websiteFooter: Maybe<Array<WebsiteMenu>>;
+  /** The storefront header: the website's top entries (header menus without a parent), each with its submenu in childs. */
+  websiteHeaderMenu: Maybe<Array<WebsiteMenu>>;
   websiteHomepage: Maybe<Homepage>;
   websiteMegaMenu: Maybe<Array<WebsiteMenu>>;
   websiteMenu: Maybe<Array<WebsiteMenu>>;

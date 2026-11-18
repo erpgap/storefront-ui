@@ -142,14 +142,14 @@ test.describe('footer', () => {
 })
 
 test.describe('header menu', () => {
-  // The menu edited in Odoo (Website > Menus). Read from the storefront's own
+  // The menu edited in Odoo (Header Menu). Read from the storefront's own
   // API, so the tests hold for whatever menu the website has, and skip what
   // needs a submenu when none has one.
   type Entry = { name?: string, url?: string, childs?: Entry[] | null }
   const websiteMenu = async (request: APIRequestContext): Promise<Entry[]> => {
     const response = await request.post('/api/odoo/query', { data: [{ queryName: 'GetWebsiteMenuQuery' }, null] })
-    const roots: Entry[] = (await response.json()).websiteMenu ?? []
-    return roots.flatMap(root => root.childs ?? []).filter(entry => entry.name?.trim())
+    const entries: Entry[] = (await response.json()).websiteHeaderMenu ?? []
+    return entries.filter(entry => entry.name?.trim())
   }
   // An entry with a submenu, and one of its links to the storefront.
   const withSubmenu = async (request: APIRequestContext) => {

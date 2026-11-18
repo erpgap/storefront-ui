@@ -3,7 +3,8 @@ import { QueryName } from '~~/server/queries'
 import { type MenuItem, websiteMenuItems } from '../utils/websiteMenu'
 
 /**
- * The header menu, as the merchant edits it in Odoo (Website > Menus).
+ * The header menu, as the merchant edits it in Odoo (Website > Configuration >
+ * Header Menu).
  * Loaded once, in the header's server render; the query is cached like the
  * catalogue's, so an edit shows once that cache and the page cache renew.
  */
@@ -13,9 +14,9 @@ export const useWebsiteMenu = () => {
 
   const loadWebsiteMenu = async () => {
     const { data } = await useAsyncData('website-menu', () =>
-      $sdk().odoo.query<null, { websiteMenu: WebsiteMenu[] }>({ queryName: QueryName.GetWebsiteMenuQuery }),
+      $sdk().odoo.query<null, { websiteHeaderMenu: WebsiteMenu[] }>({ queryName: QueryName.GetWebsiteMenuQuery }),
     )
-    items.value = websiteMenuItems(data.value?.websiteMenu)
+    items.value = websiteMenuItems(data.value?.websiteHeaderMenu)
   }
 
   return { items, loadWebsiteMenu }
