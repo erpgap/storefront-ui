@@ -695,10 +695,11 @@
     "saving": "Saving…",
     "saveFailed": "Could not save.",
     "login": {
-      "pageTitle": "Sign in — CMS",
+      "pageTitle": "Log in — CMS",
+      "heading": "Log in to the CMS",
       "email": "Email",
       "password": "Password",
-      "submit": "Sign in",
+      "submit": "Log in",
       "submitting": "Signing in…",
       "notResponding": "The content system is not responding. Try again shortly.",
       "failed": "Could not sign in."

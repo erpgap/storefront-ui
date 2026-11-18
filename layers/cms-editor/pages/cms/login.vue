@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { SfButton, SfInput } from '@storefront-ui/vue'
+
+// Built like the shop's login (layers/auth/pages/login.vue), from the same
+// form components, so the two read as one product.
 // Editors sign in with their Odoo account. Separate from the customer login so
 // the two session types stay conceptually distinct.
 definePageMeta({ layout: false })
@@ -38,69 +42,54 @@ async function submit() {
 </script>
 
 <template>
-  <div class="min-h-screen grid place-items-center bg-primary-50 text-black px-4">
-    <form
-      method="post"
-      class="w-full max-w-sm bg-white rounded-lg border border-primary-200 p-6 flex flex-col gap-4"
-      @submit.prevent="submit"
-    >
-      <div>
-        <h1 class="text-[15px] font-medium">
-          {{ $t('cmsEditor.brand') }}
-        </h1>
-        <p class="text-[12px] text-primary-400 mt-0.5">
-          {{ $t('cmsEditor.tagline') }}
-        </p>
-      </div>
+  <main class="min-h-screen bg-white text-black px-4 pt-16 pb-20 md:pt-24">
+    <div class="mx-auto max-w-[630px]">
+      <h1 class="font-bold typography-headline-3 md:typography-headline-2">
+        {{ $t('cmsEditor.login.heading') }}
+      </h1>
+      <p class="mt-2 mb-10 text-primary-600">
+        {{ $t('cmsEditor.tagline') }}
+      </p>
 
-      <label class="flex flex-col gap-1.5">
-        <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">{{ $t('cmsEditor.login.email') }}</span>
-        <input
-          v-model="email"
-          type="text"
-          autocomplete="username"
-          required
-          class="editor-input"
-        >
-      </label>
-
-      <label class="flex flex-col gap-1.5">
-        <span class="text-[11px] tracking-[0.12em] uppercase text-primary-500">{{ $t('cmsEditor.login.password') }}</span>
-        <input
-          v-model="password"
-          type="password"
-          autocomplete="current-password"
-          required
-          class="editor-input"
-        >
-      </label>
-
-      <CmsEditorError v-if="error">
-        {{ error }}
-      </CmsEditorError>
-
-      <button
-        type="submit"
-        class="px-4 py-2.5 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm disabled:opacity-50"
-        :disabled="busy"
+      <form
+        method="post"
+        class="flex flex-col gap-5 border border-primary-100 p-6 md:p-8"
+        @submit.prevent="submit"
       >
-        {{ busy ? $t('cmsEditor.login.submitting') : $t('cmsEditor.login.submit') }}
-      </button>
-    </form>
-  </div>
+        <label>
+          <UiFormLabel>{{ $t('cmsEditor.login.email') }}</UiFormLabel>
+          <!-- Text, not email: an Odoo login need not be an address. -->
+          <SfInput
+            v-model="email"
+            name="email"
+            type="text"
+            autocomplete="username"
+            required
+          />
+        </label>
+
+        <label>
+          <UiFormLabel>{{ $t('cmsEditor.login.password') }}</UiFormLabel>
+          <UiFormPasswordInput
+            v-model="password"
+            name="password"
+            autocomplete="current-password"
+            required
+          />
+        </label>
+
+        <UiFormMessage v-if="error">
+          {{ error }}
+        </UiFormMessage>
+
+        <SfButton
+          type="submit"
+          class="mt-2"
+          :disabled="busy"
+        >
+          {{ busy ? $t('cmsEditor.login.submitting') : $t('cmsEditor.login.submit') }}
+        </SfButton>
+      </form>
+    </div>
+  </main>
 </template>
-
-<style scoped>
-.editor-input {
-  width: 100%;
-  padding: 0.5rem 0.6rem;
-  font-size: 14px;
-  border: 1px solid rgb(0 0 0 / 15%);
-  border-radius: 0.25rem;
-}
-
-.editor-input:focus-visible {
-  outline: 2px solid rgb(37 99 235 / 80%);
-  outline-offset: 1px;
-}
-</style>
