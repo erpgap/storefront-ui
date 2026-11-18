@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { SfIconExpandMore } from '@storefront-ui/vue'
 import type { MenuItem } from '../../utils/websiteMenu'
 
 defineProps<{
@@ -104,12 +103,19 @@ onBeforeUnmount(() => clearTimeout(closeTimer))
           @click="onClick($event, item.id)"
         >
           {{ item.label }}
-          <SfIconExpandMore
-            size="sm"
-            class="transition-transform duration-200"
+          <!-- A thin chevron, to match the light uppercase labels; it turns
+               over on an ease that settles, rather than flipping. -->
+          <svg
+            viewBox="0 0 12 12"
+            class="size-2.5 ml-0.5 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
             :class="{ 'rotate-180': openId === item.id }"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
             aria-hidden="true"
-          />
+          ><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
         </button>
         <!-- Rendered hidden rather than left out, so its links are in the page.
              It hangs from the header's bottom line, 1px down to leave it seen. -->
