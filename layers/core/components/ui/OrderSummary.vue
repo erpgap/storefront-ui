@@ -14,11 +14,6 @@ const { cart, totalItemsInCart } = useCart()
 const open = ref(false)
 
 const lines = computed<any[]>(() => cart.value?.order?.websiteOrderLine ?? [])
-// Match the product card's discount logic (combinationInfoVariant.list_price).
-const hasDiscount = (line: any) =>
-  !!line?.product?.combinationInfoVariant?.has_discounted_price
-const oldPrice = (line: any) =>
-  (line?.product?.combinationInfoVariant?.list_price || 0) * (line?.quantity ?? 1)
 const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.price) || 0)
 </script>
 
@@ -43,7 +38,7 @@ const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.p
           v-if="collapsible"
           class="text-[16px] font-medium lg:hidden"
         >
-          {{ $currency(Number(cart?.order?.amountTotal) || 0) }}
+          {{ cart?.order?.formattedAmountTotal }}
         </span>
         <span
           class="text-[13px] text-primary-500"
@@ -117,12 +112,12 @@ const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.p
               </li>
             </ul>
             <span class="mt-2 flex items-baseline gap-2 text-[14px]">
-              <span>{{ $currency(line.priceSubtotal || 0) }}</span>
+              <span>{{ line.formattedCartPrice }}</span>
               <span
-                v-if="hasDiscount(line)"
+                v-if="line.formattedPriceBeforeDiscount"
                 class="text-[12px] text-primary-300 line-through"
               >
-                {{ $currency(oldPrice(line)) }}
+                {{ line.formattedPriceBeforeDiscount }}
               </span>
             </span>
           </span>
@@ -134,15 +129,15 @@ const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.p
 
         <div class="flex justify-between py-1.5">
           <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("itemsSubtotal") }}</span>
-          <span data-testid="special-price">{{ $currency(cart?.order?.amountSubtotal || 0) }}</span>
+          <span data-testid="special-price">{{ cart?.order?.formattedAmountSubtotal }}</span>
         </div>
         <div class="flex justify-between py-1.5">
           <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("delivery") }}</span>
-          <span>{{ shippingPrice > 0 ? $currency(shippingPrice) : $t('free') }}</span>
+          <span>{{ shippingPrice > 0 ? cart?.order?.shippingMethod?.formattedPrice : $t('free') }}</span>
         </div>
         <div class="flex justify-between py-1.5">
           <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("estimatedTax") }}</span>
-          <span>{{ $currency(Number(cart?.order?.amountTax) || 0) }}</span>
+          <span>{{ cart?.order?.formattedAmountTax }}</span>
         </div>
 
         <div
@@ -150,14 +145,14 @@ const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.p
           class="flex justify-between py-1.5"
         >
           <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("discounts", { count: cart.order.coupons.length }) }}</span>
-          <span>{{ $currency(Number(cart.order?.amountDiscounts)) }}</span>
+          <span>{{ cart.order?.formattedAmountDiscounts }}</span>
         </div>
         <div
           v-if="cart.order?.giftCards"
           class="flex justify-between py-1.5"
         >
           <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t("giftCard", { count: cart.order.giftCards.length }) }}</span>
-          <span>{{ $currency(Number(cart.order?.amountGiftCards)) }}</span>
+          <span>{{ cart.order?.formattedAmountGiftCards }}</span>
         </div>
 
         <div class="flex justify-between items-baseline mt-4 pt-4 border-t border-primary-100">
@@ -166,7 +161,7 @@ const shippingPrice = computed(() => Number(cart.value?.order?.shippingMethod?.p
             class="text-[18px] font-medium"
             data-testid="total"
           >
-            {{ $currency(Number(cart?.order?.amountTotal)) }}
+            {{ cart?.order?.formattedAmountTotal }}
           </span>
         </div>
 

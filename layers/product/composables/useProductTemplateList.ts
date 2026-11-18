@@ -169,6 +169,8 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = LISTI
   const productTemplateList = computed(() => data.value?.products?.products ?? [])
   const minPrice = computed(() => data.value?.products?.minPrice ?? null)
   const maxPrice = computed(() => data.value?.products?.maxPrice ?? null)
+  // The currency of minPrice/maxPrice, to format the filter's price bounds.
+  const priceCurrency = computed(() => data.value?.products?.currency ?? null)
   const totalItems = computed(() => data.value?.products?.totalCount ?? 0)
   const loading = computed(() => pending.value)
 
@@ -202,6 +204,7 @@ export const useProductTemplateList = (customIndex = '', defaultPageSize = LISTI
     totalItems,
     minPrice,
     maxPrice,
+    priceCurrency,
     stockCount,
     error,
   }

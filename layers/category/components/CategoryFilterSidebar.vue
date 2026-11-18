@@ -2,6 +2,7 @@
 import { SfButton, SfIconExpandMore, SfIconCheck, SfIconClose } from '@storefront-ui/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUiHelpers } from '~~/layers/category/composables/useUiHelpers'
+import { formatAmount, type AmountCurrency } from '~~/app/utils/formatAmount'
 
 type FacetOption = {
   id: string | number
@@ -32,6 +33,8 @@ const props = defineProps<{
   categories: any[]
   minPrice?: number | null
   maxPrice?: number | null
+  // The currency of the price bounds, as the API sends it.
+  priceCurrency?: AmountCurrency | null
 }>()
 
 const stockCount = inject('stockCount') as number | undefined
@@ -339,7 +342,7 @@ const hasActive = computed(() => activePills.value.length > 0)
         :key="pill.key"
         class="inline-flex items-center gap-2 bg-primary-900 text-white rounded-md text-xs leading-none pl-3 pr-2 py-1.5"
       >
-        <span v-if="pill.type === 'price'">{{ $currency(pill.min || 0) }} – {{ $currency(pill.max || 0) }}</span>
+        <span v-if="pill.type === 'price'">{{ formatAmount(pill.min || 0, priceCurrency) }} – {{ formatAmount(pill.max || 0, priceCurrency) }}</span>
         <span v-else>{{ pill.display }}</span>
         <button
           type="button"
@@ -454,12 +457,12 @@ const hasActive = computed(() => activePills.value.length > 0)
               >
             </div>
             <div class="flex justify-between mt-1.5 text-[11px] text-primary-300 tabular-nums">
-              <span>{{ $currency(bounds.min) }}</span>
-              <span>{{ $currency(bounds.max) }}</span>
+              <span>{{ formatAmount(bounds.min, priceCurrency) }}</span>
+              <span>{{ formatAmount(bounds.max, priceCurrency) }}</span>
             </div>
             <div class="flex items-center gap-2.5 mt-3">
               <label class="flex-1 flex items-center h-[38px] px-2.5 border border-neutral-200 rounded-md focus-within:border-primary-900">
-                <span class="text-primary-300 text-[13px]">{{ $config.public.currencySymbol }}</span>
+                <span class="text-primary-300 text-[13px]">{{ priceCurrency?.symbol }}</span>
                 <input
                   v-model.number="priceMin"
                   inputmode="numeric"
@@ -470,7 +473,7 @@ const hasActive = computed(() => activePills.value.length > 0)
               </label>
               <span class="text-primary-300">–</span>
               <label class="flex-1 flex items-center h-[38px] px-2.5 border border-neutral-200 rounded-md focus-within:border-primary-900">
-                <span class="text-primary-300 text-[13px]">{{ $config.public.currencySymbol }}</span>
+                <span class="text-primary-300 text-[13px]">{{ priceCurrency?.symbol }}</span>
                 <input
                   v-model.number="priceMax"
                   inputmode="numeric"

@@ -77,6 +77,7 @@ export type AttributeValue = {
   __typename?: 'AttributeValue';
   attribute: Maybe<Attribute>;
   displayType: Maybe<Scalars['String']['output']>;
+  formattedPriceExtra: Maybe<Scalars['String']['output']>;
   htmlColor: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   name: Maybe<Scalars['String']['output']>;
@@ -339,9 +340,17 @@ export type Coupon = {
 
 export type Currency = {
   __typename?: 'Currency';
+  decimalPlaces: Maybe<Scalars['Int']['output']>;
+  /** The shop language's decimal separator */
+  decimalSeparator: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   name: Maybe<Scalars['String']['output']>;
+  /** Where the symbol goes: 'before' or 'after' the amount */
+  position: Maybe<Scalars['String']['output']>;
+  rounding: Maybe<Scalars['Float']['output']>;
   symbol: Maybe<Scalars['String']['output']>;
+  /** The shop language's thousands separator */
+  thousandsSeparator: Maybe<Scalars['String']['output']>;
 };
 
 export type DeleteAddress = {
@@ -391,6 +400,10 @@ export type Invoice = {
   amountTotal: Maybe<Scalars['Float']['output']>;
   amountUntaxed: Maybe<Scalars['Float']['output']>;
   currency: Maybe<Currency>;
+  formattedAmountResidual: Maybe<Scalars['String']['output']>;
+  formattedAmountTax: Maybe<Scalars['String']['output']>;
+  formattedAmountTotal: Maybe<Scalars['String']['output']>;
+  formattedAmountUntaxed: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   invoiceDate: Maybe<Scalars['String']['output']>;
   invoiceDateDue: Maybe<Scalars['String']['output']>;
@@ -406,6 +419,9 @@ export type Invoice = {
 
 export type InvoiceLine = {
   __typename?: 'InvoiceLine';
+  formattedPriceSubtotal: Maybe<Scalars['String']['output']>;
+  formattedPriceTotal: Maybe<Scalars['String']['output']>;
+  formattedPriceUnit: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   name: Maybe<Scalars['String']['output']>;
   priceSubtotal: Maybe<Scalars['Float']['output']>;
@@ -826,6 +842,13 @@ export type Order = {
   currency: Maybe<Currency>;
   currencyRate: Maybe<Scalars['String']['output']>;
   dateOrder: Maybe<Scalars['String']['output']>;
+  formattedAmountDelivery: Maybe<Scalars['String']['output']>;
+  formattedAmountDiscounts: Maybe<Scalars['String']['output']>;
+  formattedAmountGiftCards: Maybe<Scalars['String']['output']>;
+  formattedAmountSubtotal: Maybe<Scalars['String']['output']>;
+  formattedAmountTax: Maybe<Scalars['String']['output']>;
+  formattedAmountTotal: Maybe<Scalars['String']['output']>;
+  formattedAmountUntaxed: Maybe<Scalars['String']['output']>;
   giftCards: Maybe<Array<GiftCard>>;
   id: Scalars['Int']['output'];
   invoiceCount: Maybe<Scalars['Int']['output']>;
@@ -853,6 +876,16 @@ export type OrderFilterInput = {
 export type OrderLine = {
   __typename?: 'OrderLine';
   coupon: Maybe<Coupon>;
+  /** The line's price as Odoo's cart shows it: with or without taxes, per the website's setting */
+  formattedCartPrice: Maybe<Scalars['String']['output']>;
+  /** What the discount takes off the line, when it has one */
+  formattedDiscountAmount: Maybe<Scalars['String']['output']>;
+  /** The line's price before its discount (Odoo's cart strikethrough price), when it has one */
+  formattedPriceBeforeDiscount: Maybe<Scalars['String']['output']>;
+  formattedPriceSubtotal: Maybe<Scalars['String']['output']>;
+  formattedPriceTax: Maybe<Scalars['String']['output']>;
+  formattedPriceTotal: Maybe<Scalars['String']['output']>;
+  formattedPriceUnit: Maybe<Scalars['String']['output']>;
   giftCard: Maybe<GiftCard>;
   id: Scalars['Int']['output'];
   name: Maybe<Scalars['String']['output']>;
@@ -941,6 +974,7 @@ export type Partner = {
 export type Payment = {
   __typename?: 'Payment';
   amount: Maybe<Scalars['Float']['output']>;
+  formattedAmount: Maybe<Scalars['String']['output']>;
   id: Maybe<Scalars['Int']['output']>;
   name: Maybe<Scalars['String']['output']>;
   paymentReference: Maybe<Scalars['String']['output']>;
@@ -975,6 +1009,7 @@ export type PaymentTransaction = {
   company: Maybe<Partner>;
   currency: Maybe<Currency>;
   customer: Maybe<Partner>;
+  formattedAmount: Maybe<Scalars['String']['output']>;
   id: Maybe<Scalars['Int']['output']>;
   payment: Maybe<Payment>;
   provider: Maybe<Scalars['String']['output']>;
@@ -1020,6 +1055,9 @@ export type Product = {
   displayName: Maybe<Scalars['String']['output']>;
   /** Specific to use in Product Template */
   firstVariant: Maybe<Product>;
+  formattedPrice: Maybe<Scalars['String']['output']>;
+  formattedVariantPrice: Maybe<Scalars['String']['output']>;
+  formattedVariantPriceAfterDiscount: Maybe<Scalars['String']['output']>;
   frequentlyBoughtTogether: Maybe<Array<Product>>;
   id: Scalars['Int']['output'];
   image: Maybe<Scalars['String']['output']>;
@@ -1101,7 +1139,11 @@ export type ProductInput = {
 export type ProductList = Products & {
   __typename?: 'ProductList';
   attributeValues: Maybe<Array<Maybe<AttributeValue>>>;
+  /** The currency of minPrice and maxPrice */
+  currency: Maybe<Currency>;
   filterCounts: Maybe<Scalars['GenericScalar']['output']>;
+  formattedMaxPrice: Maybe<Scalars['String']['output']>;
+  formattedMinPrice: Maybe<Scalars['String']['output']>;
   maxPrice: Maybe<Scalars['Float']['output']>;
   minPrice: Maybe<Scalars['Float']['output']>;
   products: Maybe<Array<Maybe<Product>>>;
@@ -1131,6 +1173,8 @@ export type ProductTag = {
 export type ProductVariant = {
   displayImage: Maybe<Scalars['Boolean']['output']>;
   displayName: Maybe<Scalars['String']['output']>;
+  formattedListPrice: Maybe<Scalars['String']['output']>;
+  formattedPrice: Maybe<Scalars['String']['output']>;
   hasDiscountedPrice: Maybe<Scalars['Boolean']['output']>;
   isCombinationPossible: Maybe<Scalars['Boolean']['output']>;
   listPrice: Maybe<Scalars['String']['output']>;
@@ -1143,6 +1187,8 @@ export type ProductVariantData = ProductVariant & {
   __typename?: 'ProductVariantData';
   displayImage: Maybe<Scalars['Boolean']['output']>;
   displayName: Maybe<Scalars['String']['output']>;
+  formattedListPrice: Maybe<Scalars['String']['output']>;
+  formattedPrice: Maybe<Scalars['String']['output']>;
   hasDiscountedPrice: Maybe<Scalars['Boolean']['output']>;
   isCombinationPossible: Maybe<Scalars['Boolean']['output']>;
   listPrice: Maybe<Scalars['String']['output']>;
@@ -1153,7 +1199,11 @@ export type ProductVariantData = ProductVariant & {
 
 export type Products = {
   attributeValues: Maybe<Array<Maybe<AttributeValue>>>;
+  /** The currency of minPrice and maxPrice */
+  currency: Maybe<Currency>;
   filterCounts: Maybe<Scalars['GenericScalar']['output']>;
+  formattedMaxPrice: Maybe<Scalars['String']['output']>;
+  formattedMinPrice: Maybe<Scalars['String']['output']>;
   maxPrice: Maybe<Scalars['Float']['output']>;
   minPrice: Maybe<Scalars['Float']['output']>;
   products: Maybe<Array<Maybe<Product>>>;
@@ -1433,6 +1483,7 @@ export type SelectAddressInput = {
 
 export type ShippingMethod = {
   __typename?: 'ShippingMethod';
+  formattedPrice: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   name: Maybe<Scalars['String']['output']>;
   price: Maybe<Scalars['Float']['output']>;

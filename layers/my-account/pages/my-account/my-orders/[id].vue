@@ -98,7 +98,7 @@ onUnmounted(() => {
             {{ $t('account.myOrders.orderDetails.total') }}
           </p>
           <p class="text-[14px] font-medium">
-            {{ $currency(Number(order.amountTotal) || 0) }}
+            {{ order.formattedAmountTotal }}
           </p>
         </div>
       </div>
@@ -141,10 +141,10 @@ onUnmounted(() => {
               </li>
             </ul>
             <p class="mt-1 text-[13px] text-primary-500">
-              {{ $t('account.myOrders.orderDetails.qty', { quantity: line.quantity }) }} <span class="text-primary-300">·</span> {{ $currency(Number(line.priceUnit) || 0) }}
+              {{ $t('account.myOrders.orderDetails.qty', { quantity: line.quantity }) }} <span class="text-primary-300">·</span> {{ line.formattedPriceUnit }}
             </p>
           </div>
-          <span class="font-medium whitespace-nowrap">{{ $currency(Number(line.priceSubtotal) || 0) }}</span>
+          <span class="font-medium whitespace-nowrap">{{ line.formattedPriceSubtotal }}</span>
         </li>
       </ul>
 
@@ -153,19 +153,19 @@ onUnmounted(() => {
         <div class="px-5 md:px-6 py-6 text-[14px]">
           <div class="flex justify-between py-1.5">
             <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t('account.myOrders.orderDetails.subtotal') }}</span>
-            <span>{{ $currency(Number(order.amountSubtotal) || 0) }}</span>
+            <span>{{ order.formattedAmountSubtotal }}</span>
           </div>
           <div class="flex justify-between py-1.5">
             <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t('account.myOrders.orderDetails.delivery') }}</span>
-            <span>{{ $currency(Number(order.amountDelivery) || 0) }}</span>
+            <span>{{ order.formattedAmountDelivery }}</span>
           </div>
           <div class="flex justify-between py-1.5">
             <span class="text-[13px] tracking-[0.08em] uppercase text-primary-500">{{ $t('account.myOrders.orderDetails.tax') }}</span>
-            <span>{{ $currency(Number(order.amountTax) || 0) }}</span>
+            <span>{{ order.formattedAmountTax }}</span>
           </div>
           <div class="flex justify-between items-baseline mt-4 pt-4 border-t border-primary-100">
             <span class="text-[16px] font-medium uppercase tracking-[0.08em]">{{ $t('account.myOrders.orderDetails.total') }}</span>
-            <span class="text-[18px] font-medium">{{ $currency(Number(order.amountTotal) || 0) }}</span>
+            <span class="text-[18px] font-medium">{{ order.formattedAmountTotal }}</span>
           </div>
         </div>
       </div>

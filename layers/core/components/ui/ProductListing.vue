@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { SfButton, SfIconTune, useDisclosure } from '@storefront-ui/vue'
-import { useProductAttributes } from '~~/layers/product/composables/useProductAttributes'
 import { useProductTemplateList } from '~~/layers/product/composables/useProductTemplateList'
 import { useScrollToTopOnListingChange } from '~~/layers/core/composables/useScrollToTopOnListingChange'
 import generateSeo, { type SeoEntity } from '~~/app/utils/buildSEOHelper'
 import { absoluteImageUrl } from '~~/app/utils/odooImage'
-import type { Product } from '~~/graphql'
 import { LISTING_PAGE_SIZE } from '~~/shared/listing.mjs'
 
 type Breadcrumb = { label: string, link: string }
@@ -31,7 +29,6 @@ const props = withDefaults(
 
 const route = useRoute()
 const { isOpen, open, close } = useDisclosure()
-const { getSpecialPrice } = useProductAttributes()
 
 const {
   loadProductTemplateList,
@@ -43,6 +40,7 @@ const {
   stockCount,
   minPrice,
   maxPrice,
+  priceCurrency,
 } = useProductTemplateList(route.fullPath.replace(/\/$/, ''), props.itemsPerPage, props.defaultSort)
 
 useScrollToTopOnListingChange(loading)
@@ -73,7 +71,7 @@ const totalPages = computed(() => Math.ceil(totalItems.value / props.itemsPerPag
 // products' prices so the slider still spans real values instead of 0–2000.
 const derivedPrices = computed(() =>
   productTemplateList.value
-    .map((p: any) => Number(getSpecialPrice((p.firstVariant ?? p) as Product)) || 0)
+    .map((p: any) => Number((p.firstVariant ?? p)?.combinationInfoVariant?.price) || 0)
     .filter((n: number) => n > 0),
 )
 // Use the API range only when it's a valid span; some categories return 0/0
@@ -160,6 +158,7 @@ if (currentPage.value > totalPages.value) {
           :categories="[]"
           :min-price="effectiveMinPrice"
           :max-price="effectiveMaxPrice"
+          :price-currency="priceCurrency"
         />
         <LazyCategoryMobileSidebar
           v-else
@@ -172,6 +171,7 @@ if (currentPage.value > totalPages.value) {
               :categories="[]"
               :min-price="effectiveMinPrice"
               :max-price="effectiveMaxPrice"
+              :price-currency="priceCurrency"
               @close="close"
             />
           </template>

@@ -81,7 +81,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 
           <!-- Total + view -->
           <div class="flex items-center justify-between sm:justify-end gap-5 sm:ml-auto sm:shrink-0">
-            <span class="font-medium">{{ $currency(order?.amountTotal || 0) }}</span>
+            <span class="font-medium">{{ order?.formattedAmountTotal }}</span>
             <span class="inline-flex items-center gap-1.5 text-[13px] text-primary-500 group-hover:text-black transition-colors whitespace-nowrap">
               {{ $t("account.myOrders.details") }}
               <UiIconArrowRight :width="16" />

@@ -69,15 +69,13 @@ export const useProductVariant = (slug: string) => {
     },
   ])
 
+  // As Odoo formats them (combinationInfoVariant).
   const getRegularPrice = computed(
-    () =>
-      productVariant.value?.combinationInfoVariant?.list_price
-      || productVariant.value?.combinationInfo?.list_price
-      || 0,
+    () => productVariant.value?.combinationInfoVariant?.formatted_list_price ?? '',
   )
 
   const getSpecialPrice = computed(
-    () => productVariant.value?.combinationInfoVariant?.price || 0,
+    () => productVariant.value?.combinationInfoVariant?.formatted_price ?? '',
   )
 
   return {

@@ -6,7 +6,6 @@ export default `
     ) {
       product {
         id
-        price
         name
         description
         imageUrl
@@ -35,9 +34,6 @@ export default `
       }
       productTemplateId
       displayName
-      price
-      listPrice
-      hasDiscountedPrice
     }
   }
 `

@@ -5,23 +5,25 @@ export const reduceCart = (cartData: Cart) => ({
   order: {
     id: cartData?.order?.id,
     amountTotal: cartData?.order?.amountTotal,
-    amountTax: cartData?.order?.amountTax,
-    amountDelivery: cartData?.order?.amountDelivery,
-    amountSubtotal: cartData?.order?.amountSubtotal,
-    amountDiscounts: cartData?.order?.amountDiscounts,
-    amountGiftCards: cartData?.order?.amountGiftCards,
+    formattedAmountTotal: cartData?.order?.formattedAmountTotal,
+    formattedAmountTax: cartData?.order?.formattedAmountTax,
+    formattedAmountSubtotal: cartData?.order?.formattedAmountSubtotal,
+    formattedAmountDiscounts: cartData?.order?.formattedAmountDiscounts,
+    formattedAmountGiftCards: cartData?.order?.formattedAmountGiftCards,
     shippingMethod: {
       id: cartData?.order?.shippingMethod?.id,
       name: cartData?.order?.shippingMethod?.name,
       price: cartData?.order?.shippingMethod?.price,
+      formattedPrice: cartData?.order?.shippingMethod?.formattedPrice,
     },
     coupons: cartData?.order?.coupons,
     giftCards: cartData?.order?.giftCards,
     websiteOrderLine: cartData?.order?.websiteOrderLine?.map((line: OrderLine) => ({
       id: line?.id,
       name: line?.product?.name,
-      priceTotal: line?.priceTotal,
-      priceSubtotal: line?.priceSubtotal,
+      formattedCartPrice: line?.formattedCartPrice,
+      formattedPriceBeforeDiscount: line?.formattedPriceBeforeDiscount,
+      formattedDiscountAmount: line?.formattedDiscountAmount,
       quantity: line?.quantity,
       product: {
         id: line?.product?.id,
@@ -36,12 +38,6 @@ export const reduceCart = (cartData: Cart) => ({
             name: attr?.attribute?.name,
           },
         })),
-        combinationInfoVariant: {
-          price: line?.product?.combinationInfoVariant?.price,
-          list_price: line?.product?.combinationInfoVariant?.list_price,
-          has_discounted_price: line?.product?.combinationInfoVariant?.has_discounted_price,
-        },
-
       },
     })),
     partner: {

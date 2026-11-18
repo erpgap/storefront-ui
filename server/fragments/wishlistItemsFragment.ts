@@ -6,7 +6,6 @@ wishlistItems {
       name
       description
       imageUrl
-      price
       ratingAvg
       ratingCount
       isInWishlist

@@ -18,6 +18,13 @@ query(
     totalCount
     minPrice
     maxPrice
+    currency {
+      symbol
+      position
+      decimalPlaces
+      decimalSeparator
+      thousandsSeparator
+    }
     filterCounts
     attributeValues {
       id

@@ -27,14 +27,15 @@ defineProps({
     type: Number,
     required: false,
   },
+  // Formatted by Odoo; empty when the product has no discount.
   regularPrice: {
-    type: Number,
+    type: String,
     required: true,
   },
   specialPrice: {
-    type: Number,
+    type: String,
     required: false,
-    default: null,
+    default: '',
   },
   firstVariant: {
     type: Object as PropType<Product>,
@@ -113,11 +114,11 @@ const toggleWishlist = (variant?: Product) => {
 
       <!-- Price: new (special) on the left, old (regular) struck through on the right -->
       <p class="mt-1.5 flex items-baseline gap-2">
-        <span class="text-[16px] font-medium text-black">{{ $currency(specialPrice) }}</span>
+        <span class="text-[16px] font-medium text-black">{{ specialPrice }}</span>
         <span
           v-if="regularPrice"
           class="text-[14px] text-primary-400 line-through"
-        >{{ $currency(regularPrice) }}</span>
+        >{{ regularPrice }}</span>
       </p>
 
       <!-- Reviews live at the bottom of the card -->

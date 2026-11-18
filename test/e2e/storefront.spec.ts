@@ -58,7 +58,8 @@ test.describe('browsing', () => {
   test('a discounted product shows what you save', async ({ page }) => {
     await open(page, PRODUCT)
     await expect(page.getByRole('heading', { name: 'Evening Clutch', level: 1 })).toBeVisible()
-    await expect(page.getByText(/You save \$\d+\.\d\d/)).toBeVisible()
+    // Formatted by Odoo, which puts a no-break space after the symbol.
+    await expect(page.getByText(/You save \$\s?\d+\.\d\d/)).toBeVisible()
   })
 
   test('an unknown page is a 404 with a way back', async ({ page }) => {

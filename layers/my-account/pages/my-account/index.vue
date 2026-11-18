@@ -114,7 +114,7 @@ onMounted(async () => {
           <span class="text-[13px] text-primary-500 font-light">
             {{ formatDate(latestOrder.dateOrder) }}
             <span class="text-primary-300">·</span> {{ itemCount }} {{ itemCount === 1 ? $t('item') : $t('items') }}
-            <span class="text-primary-300">·</span> <span class="text-primary-700 font-medium">{{ $currency(latestOrder.amountTotal || 0) }}</span>
+            <span class="text-primary-300">·</span> <span class="text-primary-700 font-medium">{{ latestOrder.formattedAmountTotal }}</span>
           </span>
           <span class="inline-flex items-center gap-1.5 text-[13px] text-primary-500 group-hover:text-black transition-colors whitespace-nowrap">
             {{ $t('account.home.viewOrder') }}

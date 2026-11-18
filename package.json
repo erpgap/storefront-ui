@@ -38,7 +38,6 @@
     "@vueuse/core": "^14.4.0",
     "@vueuse/nuxt": "^14.2.1",
     "bowser": "2.14.1",
-    "currency.js": "^2.0.4",
     "h3": "^1.15.11",
     "ioredis": "^5.11.1",
     "lodash-es": "^4.17.21",

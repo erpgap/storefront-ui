@@ -78,9 +78,6 @@ importers:
       bowser:
         specifier: 2.14.1
         version: 2.14.1
-      currency.js:
-        specifier: ^2.0.4
-        version: 2.0.4
       h3:
         specifier: ^1.15.11
         version: 1.15.11
@@ -3438,10 +3435,6 @@ packages:
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
-
-  currency.js@2.0.4:
-    resolution: {integrity: sha512-6/OplJYgJ0RUlli74d93HJ/OsKVBi8lB1+Z6eJYS1YZzBuIp4qKKHpJ7ad+GvTlWmLR/hLJOWTykN5Nm8NJ7+w==}
-    engines: {node: '>=4'}
 
   dargs@8.1.0:
     resolution: {integrity: sha512-wAV9QHOsNbwnWdNW2FYvE1P56wtgSbM+3SZcdGiWQILwVjACCXDCI3Ai8QlCjMDB8YK5zySiXZYBiwGmNY3lnw==}
@@ -10578,8 +10571,6 @@ snapshots:
       postcss-calc: 11.2.3(postcss@8.5.31)
 
   csstype@3.2.3: {}
-
-  currency.js@2.0.4: {}
 
   dargs@8.1.0: {}
 

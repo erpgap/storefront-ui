@@ -1,11 +1,12 @@
 const internalOrderFragment = `id
 name
 amountTotal
-amountTax
-amountDelivery
-amountSubtotal
-amountDiscounts
-amountGiftCards
+formattedAmountTotal
+formattedAmountTax
+formattedAmountDelivery
+formattedAmountSubtotal
+formattedAmountDiscounts
+formattedAmountGiftCards
 coupons {
   id
   code
@@ -23,7 +24,9 @@ transactions {
 websiteOrderLine {
   id
   name
-  priceSubtotal
+  formattedCartPrice
+  formattedPriceBeforeDiscount
+  formattedDiscountAmount
   coupon {
     id
     code
@@ -37,7 +40,6 @@ websiteOrderLine {
     name
     imageUrl
     displayName
-    combinationInfoVariant
     slug
     variantAttributeValues{
       id
@@ -48,19 +50,17 @@ websiteOrderLine {
     }
   }
   quantity
-  priceTotal
 }
 reportOrderLine {
   id
   name
-  priceSubtotal
-  priceUnit
+  formattedPriceSubtotal
+  formattedPriceUnit
   product {
     id
     name
     imageUrl
     displayName
-    combinationInfoVariant
     slug
     variantAttributeValues{
       id
@@ -71,29 +71,6 @@ reportOrderLine {
     }
   }
   quantity
-  priceTotal
-}
-orderLines {
-  id
-  name
-  priceSubtotal
-  product {
-    id
-    name
-    imageUrl
-    displayName
-    combinationInfoVariant
-    slug
-    variantAttributeValues{
-      id
-      name
-      attribute{
-        name
-      }
-    }
-  }
-  quantity
-  priceTotal
 }
 partnerInvoice {
   id
@@ -135,6 +112,7 @@ shippingMethod{
   id
   name
   price
+  formattedPrice
 }
 partner {
   id
@@ -148,14 +126,7 @@ lastTransaction{
   payment{
     id
     name
-    amount
     paymentReference
-  }
-  amount
-  currency{
-    id
-    name
-    symbol
   }
   provider
   providerReference

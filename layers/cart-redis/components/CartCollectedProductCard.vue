@@ -12,16 +12,6 @@ const props = defineProps({
 })
 
 const { updateItemQuantity, removeItemFromCart } = useCart()
-
-const hasDiscount = computed(
-  () => !!props.orderLine.product?.combinationInfoVariant?.has_discounted_price,
-)
-const oldPrice = computed(
-  () => (props.orderLine.product?.combinationInfoVariant?.list_price || 0) * (props.orderLine.quantity ?? 1),
-)
-const savings = computed(
-  () => (hasDiscount.value ? Math.max(0, oldPrice.value - (props.orderLine.priceSubtotal || 0)) : 0),
-)
 </script>
 
 <template>
@@ -88,19 +78,19 @@ const savings = computed(
         />
         <div class="text-right whitespace-nowrap ml-auto">
           <p class="flex items-baseline justify-end gap-2">
-            <span class="text-[16px] font-medium text-black">{{ $currency(orderLine.priceSubtotal || 0) }}</span>
+            <span class="text-[16px] font-medium text-black">{{ orderLine.formattedCartPrice }}</span>
             <span
-              v-if="hasDiscount"
+              v-if="orderLine.formattedPriceBeforeDiscount"
               class="text-[14px] text-primary-300 line-through"
             >
-              {{ $currency(oldPrice) }}
+              {{ orderLine.formattedPriceBeforeDiscount }}
             </span>
           </p>
           <p
-            v-if="savings > 0"
+            v-if="orderLine.formattedDiscountAmount"
             class="mt-0.5 text-[13px] text-primary-500"
           >
-            {{ $t('common.youSaveAmount', { amount: $currency(savings) }) }}
+            {{ $t('common.youSaveAmount', { amount: orderLine.formattedDiscountAmount }) }}
           </p>
         </div>
       </div>

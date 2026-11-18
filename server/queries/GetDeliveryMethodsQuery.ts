@@ -4,6 +4,7 @@ export default `
       id
       name
       price
+      formattedPrice
     }
   }
 `

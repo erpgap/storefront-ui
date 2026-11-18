@@ -1,4 +1,5 @@
 import type {
+  Currency,
   AttributeValue,
   Cart,
   Category,
@@ -40,6 +41,7 @@ export type ProductTemplateListResponse = {
     attributeValues: AttributeValue[]
     maxPrice?: number
     minPrice?: number
+    currency?: Currency | null
     totalCount: number
     filterCounts: any[]
     products: Product[]

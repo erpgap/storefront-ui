@@ -23,9 +23,7 @@ const goTo = (to: string) => {
   navigateTo(to)
 }
 
-const price = (p: any) => Number(p?.combinationInfoVariant?.price ?? p?.price ?? 0)
-const listPrice = (p: any) => Number(p?.combinationInfoVariant?.list_price ?? 0)
-const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price && listPrice(p) > price(p)
+const hasDiscount = (p: any) => !!p?.combinationInfoVariant?.has_discounted_price
 </script>
 
 <template>
@@ -117,12 +115,12 @@ const hasDiscount = (p: any) => p?.combinationInfoVariant?.has_discounted_price 
                 </button>
               </div>
               <p class="mt-1.5 flex items-baseline gap-2">
-                <span class="text-[16px] font-medium text-black">{{ $currency(price(item?.product)) }}</span>
+                <span class="text-[16px] font-medium text-black">{{ (item?.product as any)?.combinationInfoVariant?.formatted_price }}</span>
                 <span
                   v-if="hasDiscount(item?.product)"
                   class="text-[14px] text-primary-300 line-through"
                 >
-                  {{ $currency(listPrice(item?.product)) }}
+                  {{ (item?.product as any)?.combinationInfoVariant?.formatted_list_price }}
                 </span>
               </p>
             </div>

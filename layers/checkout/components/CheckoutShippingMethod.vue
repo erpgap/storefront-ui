@@ -93,7 +93,7 @@ const handleSelectShippingMethod = async (shippingMethodId: number) => {
               v-if="(method as any).price != null"
               class="ml-auto text-[14px] font-medium whitespace-nowrap"
             >
-              {{ Number((method as any).price) > 0 ? $currency(Number((method as any).price)) : $t('free') }}
+              {{ Number((method as any).price) > 0 ? (method as any).formattedPrice : $t('free') }}
             </span>
           </label>
         </li>

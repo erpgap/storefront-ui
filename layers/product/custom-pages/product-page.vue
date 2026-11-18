@@ -171,11 +171,6 @@ const thumbs = computed<ImageGalleryItem[]>(() => getThumbs(200, 200) ?? [])
 const selectedColorLabel = computed(
   () => colorOptions.value.find((c: any) => c.id === selectedColor.value)?.label ?? '',
 )
-const savings = computed(() => {
-  const r = Number((getRegularPrice as any)?.value ?? getRegularPrice ?? 0)
-  const s = Number((getSpecialPrice as any)?.value ?? getSpecialPrice ?? 0)
-  return Math.max(0, r - s)
-})
 const ratingAvg = computed(() => Number((productVariant.value as any)?.ratingAvg ?? (productTemplate.value as any)?.ratingAvg ?? 0))
 const ratingCount = computed(() => Number((productVariant.value as any)?.ratingCount ?? (productTemplate.value as any)?.ratingCount ?? 0))
 const categoryEyebrow = computed(() => {
@@ -256,14 +251,14 @@ const categoryEyebrow = computed(() => {
             <div class="mt-5 min-h-[40px] flex items-baseline flex-wrap gap-x-3 gap-y-1">
               <template v-if="productVariant?.id">
                 <template v-if="productVariant?.combinationInfoVariant?.has_discounted_price">
-                  <span class="text-[24px] font-medium">{{ $currency(getSpecialPrice) }}</span>
-                  <span class="text-[16px] text-primary-300 line-through">{{ $currency(getRegularPrice) }}</span>
-                  <span class="text-[13px] text-primary-500">{{ $t('common.youSaveAmount', { amount: $currency(savings) }) }}</span>
+                  <span class="text-[24px] font-medium">{{ getSpecialPrice }}</span>
+                  <span class="text-[16px] text-primary-300 line-through">{{ getRegularPrice }}</span>
+                  <span class="text-[13px] text-primary-500">{{ $t('common.youSaveAmount', { amount: productVariant?.combinationInfoVariant?.formatted_discount }) }}</span>
                 </template>
                 <span
                   v-else
                   class="text-[24px] font-medium"
-                >{{ $currency(getRegularPrice) }}</span>
+                >{{ getRegularPrice }}</span>
               </template>
               <div
                 v-else
