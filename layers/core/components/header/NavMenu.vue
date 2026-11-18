@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { MenuItem } from '../../utils/websiteMenu'
+import { type MenuItem, estimateEntryWidth, fitEntries } from '../../utils/websiteMenu'
 
 const props = defineProps<{
   items: MenuItem[]
@@ -93,11 +93,32 @@ const linkClass = (link: MenuItem, item: MenuItem) => [
 // (again once the web font is in, and when the menu changes), then each
 // resize only recounts. Until then the row is clipped, so the server-rendered
 // header never pushes the icons out or scrolls the page sideways.
+//
+// The server cannot measure, so it guesses from the labels how many fit, for
+// the row's width at the narrowest screen of each range (the row stops
+// growing at 1440px), and hides the rest by CSS for that range until the
+// browser measures: the page arrives with More already there, and the
+// browser only corrects it, by an entry at most.
 const MORE = Number.MIN_SAFE_INTEGER
 const GAP = 28 // gap-7
+const MORE_WIDTH = 58
+const ROW_FROM_1440 = 956
+const ROW_FROM_1280 = 836
+const ROW_FROM_1024 = 600
+const guess = computed(() => {
+  const widths = props.items.map(estimateEntryWidth)
+  return {
+    from1440: fitEntries(widths, ROW_FROM_1440, MORE_WIDTH, GAP),
+    from1280: fitEntries(widths, ROW_FROM_1280, MORE_WIDTH, GAP),
+    from1024: fitEntries(widths, ROW_FROM_1024, MORE_WIDTH, GAP),
+  }
+})
 const list = ref<HTMLUListElement>()
 const moreEntry = ref<HTMLLIElement>()
-const fitCount = ref(props.items.length)
+const fitCount = ref(guess.value.from1440)
+// The CSS guess, until the browser first measures: off before measuring, or
+// the entries it hides would measure 0px wide.
+const guessing = ref(true)
 const measured = ref(false)
 let widths: number[] = []
 let observer: ResizeObserver | undefined
@@ -108,22 +129,11 @@ const fit = () => {
   const room = available()
   if (!room) return // hidden (below the desktop width): recount once shown
   if (!widths.some(Boolean)) return void remeasure()
-  const all = widths.reduce((sum, width) => sum + width, 0) + GAP * (widths.length - 1)
-  if (all <= room) {
-    fitCount.value = widths.length
-    return
-  }
-  let used = moreEntry.value?.getBoundingClientRect().width ?? 0
-  let count = 0
-  for (const width of widths) {
-    if (used + GAP + width > room) break
-    used += GAP + width
-    count++
-  }
-  fitCount.value = count
+  fitCount.value = fitEntries(widths, room, moreEntry.value?.getBoundingClientRect().width ?? MORE_WIDTH, GAP)
 }
 
 async function remeasure() {
+  guessing.value = false
   fitCount.value = props.items.length
   await nextTick()
   const entries = list.value?.querySelectorAll<HTMLElement>(':scope > li[data-entry]') ?? []
@@ -133,6 +143,24 @@ async function remeasure() {
 }
 
 const overflow = computed(() => props.items.slice(fitCount.value))
+
+// Until measured: an entry hidden below the widths it is guessed not to fit
+// at, and More shown below the widths where something is.
+const guessedEntryClass = (index: number) => {
+  if (!guessing.value) return ''
+  if (index >= guess.value.from1280) return 'max-xxl:hidden'
+  if (index >= guess.value.from1024) return 'max-xl:hidden'
+  return ''
+}
+const MORE_OUT = 'absolute invisible pointer-events-none'
+const moreClass = computed(() => {
+  const count = props.items.length
+  if (!guessing.value) return overflow.value.length ? '' : MORE_OUT
+  if (guess.value.from1440 < count) return ''
+  if (guess.value.from1280 < count) return 'xxl:absolute xxl:invisible xxl:pointer-events-none'
+  if (guess.value.from1024 < count) return 'xl:absolute xl:invisible xl:pointer-events-none'
+  return MORE_OUT
+})
 
 // In More, the entry whose submenu is unfolded: on opening, the one holding
 // the page being shown, if any.
@@ -172,6 +200,7 @@ onBeforeUnmount(() => {
       :key="item.id"
       data-entry
       class="relative flex shrink-0 items-center"
+      :class="guessedEntryClass(index)"
       @pointerenter="onPointerEnter($event, item.id)"
       @pointerleave="onPointerLeave($event, item.id)"
       @focusout="onFocusOut($event, item.id)"
@@ -274,9 +303,9 @@ onBeforeUnmount(() => {
     <li
       ref="moreEntry"
       class="relative flex shrink-0 items-center"
-      :class="{ 'absolute invisible pointer-events-none': !overflow.length }"
-      :aria-hidden="!overflow.length || undefined"
-      :inert="!overflow.length || undefined"
+      :class="moreClass"
+      :aria-hidden="moreClass === MORE_OUT || undefined"
+      :inert="moreClass === MORE_OUT || undefined"
       @pointerenter="onPointerEnter($event, MORE)"
       @pointerleave="onPointerLeave($event, MORE)"
       @focusout="onFocusOut($event, MORE)"

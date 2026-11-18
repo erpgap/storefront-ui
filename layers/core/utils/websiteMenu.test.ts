@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import type { MenuItem } from './websiteMenu'
 import type { WebsiteMenu } from '~~/graphql'
-import { socialLinks, websiteFooterColumns, websiteMenuItems } from './websiteMenu'
+import { estimateEntryWidth, fitEntries, socialLinks, websiteFooterColumns, websiteMenuItems } from './websiteMenu'
 
 const menu = (id: number, name: string | null, url: string | null, childs: WebsiteMenu[] = []) =>
   ({ id, name, url, childs }) as WebsiteMenu
@@ -72,5 +73,22 @@ describe('socialLinks', () => {
   it('ignores anything that is not a web address', () => {
     expect(socialLinks({ socialTwitter: 'javascript:alert(1)', socialGithub: '@shop' })).toEqual([])
     expect(socialLinks(null)).toEqual([])
+  })
+})
+
+describe('fitting the header in one row', () => {
+  it('estimates widths close to the measured ones', () => {
+    // Measured in Chromium: SHOP ALL 71.9, BLOG 39.3, WOMEN (submenu) 73.3, MEN (submenu) 48.5.
+    const entry = (label: string, submenu = false) => ({ label, children: submenu ? [{} as MenuItem] : [] })
+    for (const [label, submenu, measured] of [['Shop all', false, 71.9], ['Blog', false, 39.3], ['Women', true, 73.3], ['Men', true, 48.5]] as const) {
+      expect(Math.abs(estimateEntryWidth(entry(label, submenu)) - measured)).toBeLessThan(measured * 0.1)
+    }
+  })
+
+  it('keeps all entries when they fit, and room for More when not', () => {
+    expect(fitEntries([100, 100, 100], 400, 60, 20)).toBe(3)
+    // 100 + 20 + 100 = 220 fits; adding More (60 + 20) to it needs 300 > 250.
+    expect(fitEntries([100, 100, 100], 250, 60, 20)).toBe(1)
+    expect(fitEntries([], 400, 60, 20)).toBe(0)
   })
 })
