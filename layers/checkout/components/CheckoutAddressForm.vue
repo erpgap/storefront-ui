@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { SfCheckbox, SfInput, SfSelect } from '@storefront-ui/vue'
+import { SfCheckbox, SfInput } from '@storefront-ui/vue'
 import type { PropType, Ref } from 'vue'
 import {
   AddressEnum,
@@ -30,7 +30,7 @@ const { city, country, state, street, phone, zip } = toRefs(props.savedAddress)
 
 const countryId = toRef(country.value?.id)
 const stateId = toRef(state.value?.id)
-// SfSelect's model is a string (Vue warns about anything else), the ids are
+// A select's model is a string (an option's value is one), the ids are
 // numbers: these convert between the two. '' is the placeholder.
 const asSelectModel = (id: Ref<number | undefined>) => computed({
   get: () => (id.value ? String(id.value) : ''),
@@ -241,7 +241,7 @@ defineExpose({
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("form.countryLabel") }}</UiFormLabel>
-          <SfSelect
+          <UiFormCustomSfSelect
             v-model="countryModel"
             name="country"
             autocomplete="country-name"
@@ -260,12 +260,12 @@ defineExpose({
             >
               {{ countryOption?.name }}
             </option>
-          </SfSelect>
+          </UiFormCustomSfSelect>
           <UiFieldError v-if="showErrors && required.country">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("form.stateLabel") }}</UiFormLabel>
-          <SfSelect
+          <UiFormCustomSfSelect
             v-model="stateModel"
             name="state"
             autocomplete="address-level1"
@@ -285,7 +285,7 @@ defineExpose({
             >
               {{ stateOption.name }}
             </option>
-          </SfSelect>
+          </UiFormCustomSfSelect>
           <UiFieldError v-if="showErrors && required.state">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
         <label class="block">
@@ -314,11 +314,3 @@ defineExpose({
     </div>
   </section>
 </template>
-
-<style scoped>
-/* A native <select> can't reliably reflect its open state (the OS popup blocks
-   the control's repaint), so rotate the chevron while the field is focused. */
-:deep([data-testid="select"]:focus-within svg) {
-  transform: rotate(180deg);
-}
-</style>

@@ -3,7 +3,7 @@
 
 <script lang="ts" setup>
 import { type PropType, computed } from 'vue'
-import { SfSelectSize, SfIconExpandMore, useFocusVisible, useDisclosure } from '@storefront-ui/vue'
+import { SfSelectSize, SfIconExpandMore, useFocusVisible } from '@storefront-ui/vue'
 
 defineOptions({
   name: 'CustomSfSelect',
@@ -45,7 +45,6 @@ const emit = defineEmits<{
   (event: 'update:modelValue', param: string): void
 }>()
 
-const { isOpen, close, open } = useDisclosure()
 const { isFocusVisible } = useFocusVisible()
 
 const modelProxy = computed({
@@ -78,10 +77,6 @@ const modelProxy = computed({
       ]"
       data-testid="select-input"
       v-bind="$attrs"
-      @blur="close"
-      @change="close"
-      @click="open"
-      @keydown.space="open"
     >
       <option
         v-if="placeholder"
@@ -101,19 +96,14 @@ const modelProxy = computed({
       </option>
       <slot />
     </select>
+    <!-- A still chevron: a page cannot tell when a native select's list opens
+         or closes (Escape, a second click, picking the same option), so one
+         that turned to follow it ended up pointing the wrong way. -->
     <slot name="chevron">
       <SfIconExpandMore
         :class="[
-          'absolute -translate-y-1 pointer-events-none top-1/3 right-4 transition easy-in-out duration-0.5',
+          'absolute -translate-y-1 pointer-events-none top-1/3 right-4',
           disabled ? 'text-disabled-500' : 'text-neutral-600',
-          isOpen ? 'rotate-180' : '',
-        ]"
-      />
-      <SfIconExpandMore
-        :class="[
-          'absolute -translate-y-1 pointer-events-none top-1/3 right-4 transition easy-in-out duration-0.5',
-          disabled ? 'text-disabled-500' : 'text-neutral-500',
-          isOpen ? 'rotate-180' : '',
         ]"
       />
     </slot>
