@@ -19,8 +19,9 @@ export const useDiscount = () => {
   // One box takes both promo codes and gift cards: Odoo's applyCoupon tries
   // the code against every loyalty program, gift cards included. A code it
   // cannot use is not an error to GraphQL; the reason comes back in `error`.
-  // Resolves to whether the code was applied.
-  const applyDiscount = async (promoCode: string): Promise<boolean> => {
+  // Resolves to why the code was not applied, or null when it was: the box
+  // shows that under the field, not in a toast.
+  const applyDiscount = async (promoCode: string): Promise<string | null> => {
     try {
       applying.value = true
       setLoading(true)
@@ -30,17 +31,10 @@ export const useDiscount = () => {
         ApplyDiscountsResponse
       >({ mutationName: MutationName.ApplyCouponMutation }, { promo: promoCode })
 
-      const refused = data?.applyCoupon?.error
-      if (refused) {
-        toast.error(refused)
-        return false
-      }
-      toast.success($i18n.t('checkoutPayment.codeApplied'))
-      return true
+      return data?.applyCoupon?.error || null
     }
     catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
-      return false
+      return errorMessage(error, $i18n.t('core.genericError'))
     }
     finally {
       applying.value = false
