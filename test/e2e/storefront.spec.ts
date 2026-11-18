@@ -161,14 +161,30 @@ test.describe('header menu', () => {
   }
   const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-  test('shows the website menu from Odoo', async ({ page, request, isMobile }) => {
+  // However many entries Odoo holds: one row, the icons in view, no sideways
+  // scroll, and every entry there, in the row or under More.
+  test('shows the website menu from Odoo, in one row with the rest under More', async ({ page, request, isMobile }) => {
     test.skip(isMobile, 'the desktop header')
     const entries = await websiteMenu(request)
     test.skip(!entries.length, 'the website has no menu in Odoo')
+    await page.setViewportSize({ width: 1100, height: 800 })
     await open(page, '/')
+
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+    await expect(page.getByRole('button', { name: /cart/i }).first()).toBeInViewport()
+
     const nav = page.getByRole('navigation', { name: 'SF Navigation' })
+    const inRow = (await nav.locator(':scope > ul > li[data-entry]:visible').allInnerTexts())
+      .map(text => text.trim().toLowerCase())
+    const more = nav.getByRole('button', { name: 'More', exact: true })
+    let underMore: string[] = []
+    if (await more.isVisible()) {
+      await more.click()
+      underMore = (await page.locator('#header-menu-more').innerText()).toLowerCase().split('\n').map(text => text.trim())
+    }
     for (const entry of entries) {
-      await expect(nav.getByText(entry.name!, { exact: true }).first()).toBeVisible()
+      const name = entry.name!.trim().toLowerCase()
+      expect(inRow.includes(name) || underMore.includes(name), `${entry.name} in the row or under More`).toBe(true)
     }
   })
 

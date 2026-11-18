@@ -73,7 +73,7 @@ onClickOutside(searchPanelRef, () => {
 
         <!-- Center: the website menu -->
         <nav
-          class="hidden lg:flex justify-center self-stretch"
+          class="hidden lg:flex justify-center self-stretch min-w-0"
           :aria-label="$t('core.header.navigation')"
         >
           <HeaderNavMenu :items="menuItems" />

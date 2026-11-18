@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { MenuItem } from '../../utils/websiteMenu'
 
-defineProps<{
+const props = defineProps<{
   items: MenuItem[]
 }>()
 
@@ -36,10 +36,16 @@ const onPointerLeave = (event: PointerEvent, id: number) => {
   closeTimer = setTimeout(close, 150)
 }
 
-const closeAndFocus = (id: number) => {
+// Escape closes whichever panel is open, one opened by hovering too: focus is
+// elsewhere then, so a handler on the entry would never hear the key. Focus
+// goes back to the entry's button only if it was in the entry.
+useEventListener(globalThis.document, 'keydown', (event: KeyboardEvent) => {
+  if (event.key !== 'Escape' || openId.value === null) return
+  const id = openId.value
+  const hadFocus = buttons.value[id]?.closest('li')?.contains(document.activeElement)
   close()
-  buttons.value[id]?.focus()
-}
+  if (hadFocus) buttons.value[id]?.focus()
+})
 
 // Focus moving out of an item (Tab past its last link) closes its panel.
 const onFocusOut = (event: FocusEvent, id: number) => {
@@ -75,21 +81,87 @@ const linkClass = (link: MenuItem, item: MenuItem) => [
   link === currentLinkIn(item) ? 'text-black font-medium shadow-[inset_2px_0_0_black]' : 'text-primary-600',
 ]
 
+// --- One row, whatever Odoo holds --------------------------------------------
+// The entries that fit between the logo and the icons show; the rest go into
+// a More menu at the end. The widths are measured once with every entry shown
+// (again once the web font is in, and when the menu changes), then each
+// resize only recounts. Until then the row is clipped, so the server-rendered
+// header never pushes the icons out or scrolls the page sideways.
+const MORE = Number.MIN_SAFE_INTEGER
+const GAP = 28 // gap-7
+const list = ref<HTMLUListElement>()
+const moreEntry = ref<HTMLLIElement>()
+const fitCount = ref(props.items.length)
+const measured = ref(false)
+let widths: number[] = []
+let observer: ResizeObserver | undefined
+
+const available = () => list.value?.parentElement?.clientWidth ?? 0
+
+const fit = () => {
+  const room = available()
+  if (!room) return // hidden (below the desktop width): recount once shown
+  if (!widths.some(Boolean)) return void remeasure()
+  const all = widths.reduce((sum, width) => sum + width, 0) + GAP * (widths.length - 1)
+  if (all <= room) {
+    fitCount.value = widths.length
+    return
+  }
+  let used = moreEntry.value?.getBoundingClientRect().width ?? 0
+  let count = 0
+  for (const width of widths) {
+    if (used + GAP + width > room) break
+    used += GAP + width
+    count++
+  }
+  fitCount.value = count
+}
+
+async function remeasure() {
+  fitCount.value = props.items.length
+  await nextTick()
+  const entries = list.value?.querySelectorAll<HTMLElement>(':scope > li[data-entry]') ?? []
+  widths = [...entries].map(entry => entry.getBoundingClientRect().width)
+  fit()
+  measured.value = true
+}
+
+const overflow = computed(() => props.items.slice(fitCount.value))
+
+onMounted(() => {
+  remeasure()
+  if (list.value?.parentElement) {
+    observer = new ResizeObserver(fit)
+    observer.observe(list.value.parentElement)
+  }
+  document.fonts?.ready.then(remeasure)
+})
+watch(() => props.items, remeasure)
+
 watch(() => route.fullPath, close)
-onBeforeUnmount(() => clearTimeout(closeTimer))
+onBeforeUnmount(() => {
+  clearTimeout(closeTimer)
+  observer?.disconnect()
+})
 </script>
 
 <template>
-  <!-- Full height of the header, so a submenu opens right at its bottom edge. -->
-  <ul class="flex h-full gap-7">
+  <!-- Full height of the header, so a submenu opens right at its bottom edge.
+       Clipped until the entries are measured (see fit). -->
+  <ul
+    ref="list"
+    class="relative flex h-full min-w-0 gap-7"
+    :class="{ 'overflow-hidden': !measured }"
+  >
     <li
-      v-for="item in items"
+      v-for="(item, index) in items"
+      v-show="index < fitCount"
       :key="item.id"
-      class="relative flex items-center"
+      data-entry
+      class="relative flex shrink-0 items-center"
       @pointerenter="onPointerEnter($event, item.id)"
       @pointerleave="onPointerLeave($event, item.id)"
       @focusout="onFocusOut($event, item.id)"
-      @keydown.escape="item.children.length && closeAndFocus(item.id)"
     >
       <!-- An entry with a submenu opens it; its own page is the first link inside. -->
       <template v-if="item.children.length">
@@ -182,6 +254,101 @@ onBeforeUnmount(() => clearTimeout(closeTimer))
         v-else
         :class="entryClass(item)"
       >{{ item.label }}</span>
+    </li>
+
+    <!-- More: the entries that do not fit. Always rendered, so its width is
+         known; out of the row and of reach while nothing overflows. -->
+    <li
+      ref="moreEntry"
+      class="relative flex shrink-0 items-center"
+      :class="{ 'absolute invisible pointer-events-none': !overflow.length }"
+      :aria-hidden="!overflow.length || undefined"
+      :inert="!overflow.length || undefined"
+      @pointerenter="onPointerEnter($event, MORE)"
+      @pointerleave="onPointerLeave($event, MORE)"
+      @focusout="onFocusOut($event, MORE)"
+    >
+      <button
+        :ref="(el) => { buttons[MORE] = el as HTMLButtonElement | null }"
+        type="button"
+        class="flex items-center gap-1"
+        :class="[ENTRY, overflow.some(isCurrent) ? 'text-black after:w-full' : 'text-primary-600 after:w-0']"
+        :aria-expanded="openId === MORE"
+        aria-controls="header-menu-more"
+        @click="onClick($event, MORE)"
+      >
+        {{ $t('core.header.more') }}
+        <svg
+          viewBox="0 0 12 12"
+          class="size-2.5 ml-0.5 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+          :class="{ 'rotate-180': openId === MORE }"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        ><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
+      </button>
+      <Transition
+        enter-active-class="transition duration-150 ease-out motion-reduce:transition-none"
+        leave-active-class="transition duration-150 ease-in motion-reduce:transition-none"
+        enter-from-class="opacity-0 -translate-y-1"
+        leave-to-class="opacity-0 -translate-y-1"
+      >
+        <!-- At the right edge of More, the last entry, so it stays on screen. -->
+        <div
+          v-show="openId === MORE"
+          id="header-menu-more"
+          class="absolute right-0 top-[calc(100%+1px)] z-50 min-w-[260px] max-h-[70vh] overflow-y-auto bg-white border-x border-b border-primary-100 shadow-[0_18px_40px_-16px_rgb(0_0_0/0.22)]"
+        >
+          <ul class="py-4">
+            <li
+              v-for="item in overflow"
+              :key="item.id"
+            >
+              <!-- An entry with a submenu: its name as a heading over its links. -->
+              <template v-if="item.children.length">
+                <p class="px-6 pt-3 pb-1 text-[11px] tracking-[0.16em] uppercase text-primary-400">
+                  {{ item.label }}
+                </p>
+                <ul>
+                  <template
+                    v-for="link in [...(item.to ? [item] : []), ...item.children]"
+                    :key="link.id"
+                  >
+                    <li v-if="link.to">
+                      <NuxtLink
+                        :to="link.to"
+                        :external="link.external"
+                        :class="linkClass(link, item)"
+                      >
+                        <span>{{ link.label }}</span>
+                      </NuxtLink>
+                    </li>
+                  </template>
+                </ul>
+              </template>
+              <NuxtLink
+                v-else-if="item.to"
+                :to="item.to"
+                :external="item.external"
+                :class="linkClass(item, item)"
+              >
+                <span>{{ item.label }}</span>
+                <span
+                  class="text-sm opacity-0 -translate-x-1.5 transition group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0 motion-reduce:transition-none"
+                  aria-hidden="true"
+                >→</span>
+              </NuxtLink>
+              <span
+                v-else
+                class="block px-6 py-2.5 text-[15px] text-primary-400"
+              >{{ item.label }}</span>
+            </li>
+          </ul>
+        </div>
+      </Transition>
     </li>
   </ul>
 </template>
