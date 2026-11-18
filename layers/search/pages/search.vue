@@ -176,6 +176,7 @@ const breadcrumbs = [
           <section class="grid grid-cols-2 md:grid-cols-3 gap-5 mt-8">
             <LazyUiProductCard
               v-for="product in results"
+              hydrate-on-visible
               :key="product.id"
               v-bind="productCardProps(product)"
               loading="eager"

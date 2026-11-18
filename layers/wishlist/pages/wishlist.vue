@@ -55,6 +55,7 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
     >
       <LazyUiProductCard
         v-for="item in items"
+        hydrate-on-visible
         :key="item?.id"
         :name="item?.product?.name ?? ''"
         :slug="mountUrlSlugForProductVariant(item?.product as Product) || ''"

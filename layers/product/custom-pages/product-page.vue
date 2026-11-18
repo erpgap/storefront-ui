@@ -359,13 +359,16 @@ const categoryEyebrow = computed(() => {
       <!-- Recommendations (separated from the product details area above) -->
       <div class="mt-20 md:mt-32">
         <section v-if="!loadingProductTemplate && productTemplate?.frequentlyBoughtTogether">
+          <!-- Below the details: hydrated once scrolled to. -->
           <LazyProductSlider
+            hydrate-on-visible
             :text="$t('shop.product.frequentlyBoughtTogether')"
             :product-template-list="productTemplate.frequentlyBoughtTogether"
           />
         </section>
         <section v-if="!loadingProductTemplate && productTemplate?.alternativeProducts">
           <LazyProductSlider
+            hydrate-on-visible
             :text="$t('shop.product.similarProducts')"
             :product-template-list="productTemplate.alternativeProducts"
           />

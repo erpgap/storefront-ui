@@ -38,6 +38,7 @@ const props = defineProps({
     >
       <LazyUiProductCard
         v-for="(productTemplate, index) in props.productTemplateList"
+        hydrate-on-visible
         :key="productTemplate?.id || index"
         class="min-w-[300px] max-w-[300px] sm:min-w-[322px] sm:max-w-[322px]"
         v-bind="productCardProps(productTemplate)"

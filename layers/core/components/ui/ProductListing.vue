@@ -214,8 +214,13 @@ if (currentPage.value > totalPages.value) {
             v-if="productTemplateList.length > 0"
             class="grid grid-cols-2 md:grid-cols-3 gap-5"
           >
+            <!-- A card hydrates once it scrolls into view: until then it is
+                 the server's HTML, its links plain links. On a phone a couple
+                 of the cards are on screen; hydrating all of them up front was
+                 most of the page's blocking time. -->
             <LazyUiProductCard
               v-for="(product, i) in productTemplateList"
+              hydrate-on-visible
               :key="product.id"
               v-bind="productCardProps(product)"
               :loading="i < 6 ? 'eager' : 'lazy'"
