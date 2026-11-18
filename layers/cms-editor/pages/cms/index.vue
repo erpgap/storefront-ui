@@ -72,6 +72,22 @@ function startCreating() {
   error.value = ''
 }
 
+// --- logout -----------------------------------------------------------------
+
+const loggingOut = ref(false)
+
+async function logout() {
+  loggingOut.value = true
+  try {
+    await $fetch('/api/cms/logout', { method: 'POST' })
+    await navigateTo('/cms/login', { external: true })
+  }
+  catch (e: any) {
+    alert(cmsText.errorMessage(e, t('cmsEditor.logoutFailed')))
+    loggingOut.value = false
+  }
+}
+
 // --- row actions ------------------------------------------------------------
 
 async function remove(page: PageRow) {
@@ -121,13 +137,24 @@ function formatDate(iso: string) {
             {{ $t('cmsEditor.tagline') }}
           </p>
         </div>
-        <button
-          type="button"
-          class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm hover:bg-blue-600 transition-colors"
-          @click="startCreating"
-        >
-          {{ $t('cmsEditor.pages.newPage') }}
-        </button>
+        <div class="flex items-center gap-3">
+          <!-- Charcoal on hover, as .editor-btn--primary: never blue. -->
+          <button
+            type="button"
+            class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm hover:bg-[#333] transition-colors"
+            @click="startCreating"
+          >
+            {{ $t('cmsEditor.pages.newPage') }}
+          </button>
+          <button
+            type="button"
+            class="editor-btn py-2!"
+            :disabled="loggingOut"
+            @click="logout"
+          >
+            {{ $t('cmsEditor.logout') }}
+          </button>
+        </div>
       </div>
     </header>
 
@@ -168,7 +195,7 @@ function formatDate(iso: string) {
         <div class="flex items-center gap-2">
           <button
             type="submit"
-            class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm disabled:opacity-50"
+            class="px-4 py-2 text-[12px] tracking-[0.08em] uppercase text-white bg-black rounded-sm hover:not-disabled:bg-[#333] transition-colors disabled:opacity-50"
             :disabled="busy || !title.trim()"
           >
             {{ busy ? $t('cmsEditor.pages.creating') : $t('cmsEditor.pages.createAndEdit') }}

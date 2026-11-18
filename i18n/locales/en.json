@@ -690,6 +690,8 @@
     },
     "brand": "CMS",
     "tagline": "Pages you can edit without a developer",
+    "logout": "Log out",
+    "logoutFailed": "Could not log out. Try again.",
     "cancel": "Cancel",
     "save": "Save",
     "saving": "Saving…",
