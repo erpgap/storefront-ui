@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { WebsiteMenu } from '~~/graphql'
-import { websiteMenuItems } from './websiteMenu'
+import { socialLinks, websiteFooterColumns, websiteMenuItems } from './websiteMenu'
 
 const menu = (id: number, name: string | null, url: string | null, childs: WebsiteMenu[] = []) =>
   ({ id, name, url, childs }) as WebsiteMenu
@@ -35,5 +35,42 @@ describe('websiteMenuItems', () => {
     expect(websiteMenuItems([menu(1, 'Top', '#', [menu(2, '  ', '/x'), menu(3, null, '/y')])])).toEqual([])
     expect(websiteMenuItems(null)).toEqual([])
     expect(websiteMenuItems([menu(1, 'Top', '#')])).toEqual([])
+  })
+})
+
+describe('websiteFooterColumns', () => {
+  it('makes each footer entry a column over its links, in order', () => {
+    const columns = websiteFooterColumns([
+      menu(1, 'Shop', '#', [menu(3, 'Women', '/women'), menu(4, 'Men', '/men')]),
+      menu(2, 'Help', '#', [menu(5, 'Contact', '/contact')]),
+    ])
+    expect(columns.map(column => column.label)).toEqual(['Shop', 'Help'])
+    expect(columns[0]!.children.map(link => link.to)).toEqual(['/women', '/men'])
+  })
+
+  it('leaves out a column with no link to show', () => {
+    expect(websiteFooterColumns([
+      menu(1, 'Empty', '#'),
+      menu(2, 'Headings only', '#', [menu(3, 'Group', '#')]),
+    ])).toEqual([])
+    expect(websiteFooterColumns(null)).toEqual([])
+  })
+})
+
+describe('socialLinks', () => {
+  it('lists the accounts that are filled in, in a fixed order', () => {
+    const links = socialLinks({
+      socialYoutube: 'https://youtube.com/@shop',
+      socialTwitter: 'https://x.com/shop',
+      socialFacebook: null,
+      socialInstagram: '   ',
+    })
+    expect(links.map(link => link.label)).toEqual(['X', 'YouTube'])
+    expect(links[1]).toEqual({ label: 'YouTube', url: 'https://youtube.com/@shop', icon: '/img/youtube.svg' })
+  })
+
+  it('ignores anything that is not a web address', () => {
+    expect(socialLinks({ socialTwitter: 'javascript:alert(1)', socialGithub: '@shop' })).toEqual([])
+    expect(socialLinks(null)).toEqual([])
   })
 })

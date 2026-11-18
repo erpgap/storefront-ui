@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { SfIconExpandMore } from '@storefront-ui/vue'
 import type { Category } from '~~/graphql'
+import type { MenuItem } from '../../utils/websiteMenu'
 
 const emit = defineEmits<{
   navigate: []
@@ -27,11 +28,24 @@ const navigate = () => {
   emit('navigate')
 }
 
-const linkGroups = [
-  { titleKey: 'core.siteLinks.shop', links: shopLinks },
-  { titleKey: 'core.siteLinks.company', links: companyLinks },
-  { titleKey: 'core.siteLinks.support', links: supportLinks },
-]
+// The footer's columns from Odoo, so the two list the same links; the
+// storefront's own lists stand in when Odoo has none.
+const { t } = useI18n()
+const { footer } = useWebsiteFooter()
+const fallbackGroups: MenuItem[] = [
+  { labelKey: 'core.siteLinks.shop', links: shopLinks },
+  { labelKey: 'core.siteLinks.company', links: companyLinks },
+  { labelKey: 'core.siteLinks.support', links: supportLinks },
+].map((group, index) => ({
+  id: -(index + 1),
+  label: t(group.labelKey),
+  to: '',
+  external: false,
+  children: group.links.map((link, position) => ({
+    id: -((index + 1) * 100 + position), label: t(link.labelKey), to: link.link, external: false, children: [],
+  })),
+}))
+const linkGroups = computed(() => footer.value.columns.length ? footer.value.columns : fallbackGroups)
 </script>
 
 <template>
@@ -105,24 +119,27 @@ const linkGroups = [
     <div class="px-4 pt-7 pb-4 grid grid-cols-2 gap-x-6 gap-y-7">
       <div
         v-for="group in linkGroups"
-        :key="group.titleKey"
+        :key="group.id"
       >
         <h2 class="text-[12px] font-bold tracking-[0.16em] uppercase text-primary-400 mb-3">
-          {{ $t(group.titleKey) }}
+          {{ group.label }}
         </h2>
         <ul>
-          <li
-            v-for="link in group.links"
-            :key="link.labelKey"
+          <template
+            v-for="link in group.children"
+            :key="link.id"
           >
-            <NuxtLink
-              :to="link.link"
-              class="block py-2 text-[15px] text-primary-600 transition-colors hover:text-black"
-              @click="$emit('navigate')"
-            >
-              {{ $t(link.labelKey) }}
-            </NuxtLink>
-          </li>
+            <li v-if="link.to">
+              <NuxtLink
+                :to="link.to"
+                :external="link.external"
+                class="block py-2 text-[15px] text-primary-600 transition-colors hover:text-black"
+                @click="navigate"
+              >
+                {{ link.label }}
+              </NuxtLink>
+            </li>
+          </template>
         </ul>
       </div>
     </div>

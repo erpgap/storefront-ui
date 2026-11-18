@@ -18,6 +18,7 @@ import WishlistLoadQuery from './WishlistLoadQuery'
 import GetWebsiteHomepageQuery from './GetWebsiteHomepageQuery'
 import GetProductTemplateListQueryForRecentViews from './GetProductTemplateListQueryForRecentViews'
 import GetHomePageData from './GetHomePageData'
+import GetWebsiteFooterQuery from './GetWebsiteFooterQuery'
 import GetWebsiteMenuQuery from './GetWebsiteMenuQuery'
 
 enum QueryName {
@@ -42,6 +43,7 @@ enum QueryName {
   GetWebsiteHomepageQuery = 'GetWebsiteHomepageQuery',
   GetProductTemplateListQueryForRecentViews = 'GetProductTemplateListQueryForRecentViews',
   GetHomePageDataQuery = 'GetHomePageData',
+  GetWebsiteFooterQuery = 'GetWebsiteFooterQuery',
   GetWebsiteMenuQuery = 'GetWebsiteMenuQuery',
 }
 
@@ -66,6 +68,7 @@ const Queries: Record<QueryName, string> = {
   GetWebsiteHomepageQuery,
   GetProductTemplateListQueryForRecentViews,
   GetHomePageData,
+  GetWebsiteFooterQuery,
   GetWebsiteMenuQuery,
 }
 

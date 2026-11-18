@@ -1,24 +1,35 @@
 <script lang="ts" setup>
+import type { MenuItem } from '../utils/websiteMenu'
+
 const NuxtLink = resolveComponent('NuxtLink')
+const { t } = useI18n()
+const { footer, loadWebsiteFooter } = useWebsiteFooter()
+await loadWebsiteFooter()
 
-const linkColumns = [
-  {
-    titleKey: 'core.siteLinks.shop',
-    links: [
-      ...shopLinks,
-      { labelKey: 'core.siteLinks.women', link: '/women' },
-      { labelKey: 'core.siteLinks.men', link: '/men' },
-    ],
-  },
-  { titleKey: 'core.siteLinks.company', links: companyLinks },
-  { titleKey: 'core.siteLinks.support', links: supportLinks },
-]
-
-const socials = [
-  { label: 'X', url: 'https://twitter.com/erpGap', icon: '/img/x.svg' },
-  { label: 'LinkedIn', url: 'https://www.linkedin.com/company/odoogap/', icon: '/img/linkedin.svg' },
-  { label: 'GitHub', url: 'https://github.com/erpgap/storefront-ui', icon: '/img/github.svg' },
-]
+// The columns edited in Odoo; the storefront's own links stand in when Odoo
+// has none to give (the same lists the mobile menu falls back to).
+const fallbackColumns: MenuItem[] = [
+  { labelKey: 'core.siteLinks.shop', links: [
+    ...shopLinks,
+    { labelKey: 'core.siteLinks.women', link: '/women' },
+    { labelKey: 'core.siteLinks.men', link: '/men' },
+  ] },
+  { labelKey: 'core.siteLinks.company', links: companyLinks },
+  { labelKey: 'core.siteLinks.support', links: supportLinks },
+].map((column, index) => ({
+  id: -(index + 1),
+  label: t(column.labelKey),
+  to: '',
+  external: false,
+  children: column.links.map((link, position) => ({
+    id: -((index + 1) * 100 + position),
+    label: t(link.labelKey),
+    to: link.link,
+    external: false,
+    children: [],
+  })),
+}))
+const columns = computed(() => footer.value.columns.length ? footer.value.columns : fallbackColumns)
 </script>
 
 <template>
@@ -53,56 +64,53 @@ const socials = [
           </div>
 
           <div
-            v-for="column in linkColumns"
-            :key="column.titleKey"
+            v-for="column in columns"
+            :key="column.id"
           >
             <h3 class="text-[12px] font-bold tracking-[0.16em] uppercase mb-5">
-              {{ $t(column.titleKey) }}
+              {{ column.label }}
             </h3>
             <ul>
-              <li
-                v-for="item in column.links"
-                :key="item.labelKey"
+              <template
+                v-for="item in column.children"
+                :key="item.id"
               >
-                <NuxtLink
-                  v-slot="{ href, navigate }"
-                  :to="item.link"
-                  custom
-                >
-                  <a
-                    :href="href"
-                    class="block py-2.5 text-[16px] md:py-[7px] md:text-[14px] text-primary-500 transition-colors hover:text-black"
-                    @click="navigate"
+                <li v-if="item.to">
+                  <NuxtLink
+                    v-slot="{ href, navigate }"
+                    :to="item.to"
+                    :external="item.external"
+                    custom
                   >
-                    {{ $t(item.labelKey) }}
-                  </a>
-                </NuxtLink>
-              </li>
+                    <a
+                      :href="href"
+                      class="block py-2.5 text-[16px] md:py-[7px] md:text-[14px] text-primary-500 transition-colors hover:text-black"
+                      v-bind="item.external ? { target: '_blank', rel: 'noopener' } : {}"
+                      @click="item.external || navigate($event)"
+                    >
+                      {{ item.label }}
+                    </a>
+                  </NuxtLink>
+                </li>
+              </template>
             </ul>
           </div>
         </div>
 
         <div class="border-t border-primary-100 py-7 flex flex-col sm:flex-row items-center justify-between gap-4 text-[13px] text-primary-400">
-          <i18n-t
-            scope="global"
-            keypath="core.footer.copyright"
-            tag="span"
+          <!-- The company's name as set in Odoo. -->
+          <span>
+            {{ footer.company
+              ? $t('core.footer.copyright', { year: new Date().getFullYear(), company: footer.company })
+              : $t('core.footer.copyrightNoCompany', { year: new Date().getFullYear() }) }}
+          </span>
+          <!-- The company's social media accounts, as filled in in Odoo. -->
+          <div
+            v-if="footer.socials.length"
+            class="flex items-center gap-3"
           >
-            <template #year>
-              {{ new Date().getFullYear() }}
-            </template>
-            <template #company>
-              <a
-                href="https://www.erpgap.com/alokai/"
-                target="_blank"
-                rel="noopener"
-                class="underline"
-              >ERPGAP</a>
-            </template>
-          </i18n-t>
-          <div class="flex items-center gap-3">
             <a
-              v-for="social in socials"
+              v-for="social in footer.socials"
               :key="social.label"
               :href="social.url"
               :aria-label="social.label"

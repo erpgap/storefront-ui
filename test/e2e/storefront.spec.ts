@@ -108,6 +108,39 @@ test.describe('page cache', () => {
   })
 })
 
+test.describe('footer', () => {
+  // The footer edited in Odoo (Website Footer, and the company's social media
+  // accounts), read from the storefront's own API so the test holds for
+  // whatever the website has.
+  type Entry = { name?: string, url?: string, childs?: Entry[] | null }
+  type Footer = { websiteFooter?: Entry[], website?: { company?: Record<string, string | null> | null } | null }
+
+  test('shows the columns and social accounts set in Odoo', async ({ page, request }) => {
+    const response = await request.post('/api/odoo/query', { data: [{ queryName: 'GetWebsiteFooterQuery' }, null] })
+    const data: Footer = await response.json()
+    const columns = (data.websiteFooter ?? []).filter(column => (column.childs ?? []).some(link => link.url?.startsWith('/')))
+    test.skip(!columns.length, 'no footer menu in Odoo')
+
+    await open(page, '/')
+    const footer = page.locator('footer')
+    await footer.scrollIntoViewIfNeeded()
+    for (const column of columns) {
+      await expect(footer.getByRole('heading', { name: column.name!, exact: true })).toBeVisible()
+      const link = (column.childs ?? []).find(entry => entry.url?.startsWith('/'))!
+      await expect(footer.getByRole('link', { name: link.name!, exact: true }).first()).toHaveAttribute('href', link.url!)
+    }
+
+    // An icon for each account filled in, none for the others.
+    const company = data.website?.company ?? {}
+    const accounts = Object.entries(company).filter(([key, url]) => key.startsWith('social') && url?.startsWith('http'))
+    for (const [, url] of accounts) {
+      await expect(footer.locator(`a[href="${url}"]`)).toHaveCount(1)
+    }
+    await expect(footer.locator('a[target="_blank"] img')).toHaveCount(accounts.length)
+    if (company.name) await expect(footer).toContainText(`© ${new Date().getFullYear()} ${company.name}`)
+  })
+})
+
 test.describe('header menu', () => {
   // The menu edited in Odoo (Website > Menus). Read from the storefront's own
   // API, so the tests hold for whatever menu the website has, and skip what

@@ -528,7 +528,8 @@
     },
     "footer": {
       "tagline": "Considered, timeless fashion in natural fabrics — made to wear well and last.",
-      "copyright": "© {year} Alokai by {company}. All rights reserved."
+      "copyright": "© {year} {company}. All rights reserved.",
+      "copyrightNoCompany": "© {year}. All rights reserved."
     },
     "bottomNav": {
       "account": "account"
