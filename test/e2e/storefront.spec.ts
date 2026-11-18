@@ -106,6 +106,16 @@ test.describe('page cache', () => {
       expect(await cacheControl(request, path), path).not.toContain('s-maxage')
     }
   })
+
+  // A page's data, fetched apart from its HTML, is checked again by the
+  // browser every time, or it may redraw a fresh page with old data
+  // (server/plugins/payload-revalidate.ts); the server still caches it.
+  test('a page\'s data is never reused by the browser unchecked', async ({ request }) => {
+    const header = await cacheControl(request, '/women/_payload.json')
+    expect(header).toContain('max-age=0')
+    expect(header).toContain('must-revalidate')
+    expect(header).toContain('s-maxage')
+  })
 })
 
 test.describe('footer', () => {
