@@ -76,6 +76,12 @@ const LINK = 'group flex items-center justify-between gap-6 px-6 py-2.5 text-[15
 const currentLinkIn = (item: MenuItem) => [item, ...item.children]
   .filter(isCurrentLink)
   .sort((a, b) => b.to.length - a.to.length)[0]
+// A submenu's link unfolded in More: indented under its entry, a size down.
+const SUB_LINK = LINK.replace('px-6', 'pl-10 pr-6').replace('text-[15px]', 'text-[14px]')
+const subLinkClass = (link: MenuItem, item: MenuItem) => [
+  SUB_LINK,
+  link === currentLinkIn(item) ? 'text-black font-medium shadow-[inset_2px_0_0_black]' : 'text-primary-600',
+]
 const linkClass = (link: MenuItem, item: MenuItem) => [
   LINK,
   link === currentLinkIn(item) ? 'text-black font-medium shadow-[inset_2px_0_0_black]' : 'text-primary-600',
@@ -127,6 +133,13 @@ async function remeasure() {
 }
 
 const overflow = computed(() => props.items.slice(fitCount.value))
+
+// In More, the entry whose submenu is unfolded: on opening, the one holding
+// the page being shown, if any.
+const moreOpenId = ref<number | null>(null)
+watch(openId, (id) => {
+  if (id === MORE) moreOpenId.value = overflow.value.find(item => item.children.length && isCurrent(item))?.id ?? null
+})
 
 onMounted(() => {
   remeasure()
@@ -302,17 +315,39 @@ onBeforeUnmount(() => {
           id="header-menu-more"
           class="absolute right-0 top-[calc(100%+1px)] z-50 min-w-[260px] max-h-[70vh] overflow-y-auto bg-white border-x border-b border-primary-100 shadow-[0_18px_40px_-16px_rgb(0_0_0/0.22)]"
         >
-          <ul class="py-4">
+          <ul class="py-3">
             <li
               v-for="item in overflow"
               :key="item.id"
             >
-              <!-- An entry with a submenu: its name as a heading over its links. -->
+              <!-- An entry with a submenu: one row that unfolds its links
+                   beneath it, one at a time, so submenus never pile up. -->
               <template v-if="item.children.length">
-                <p class="px-6 pt-3 pb-1 text-[11px] tracking-[0.16em] uppercase text-primary-400">
-                  {{ item.label }}
-                </p>
-                <ul>
+                <button
+                  type="button"
+                  :class="[LINK, 'w-full text-left', isCurrent(item) ? 'text-black font-medium' : 'text-primary-600']"
+                  :aria-expanded="moreOpenId === item.id"
+                  :aria-controls="`header-more-${item.id}`"
+                  @click="moreOpenId = moreOpenId === item.id ? null : item.id"
+                >
+                  <span>{{ item.label }}</span>
+                  <svg
+                    viewBox="0 0 12 12"
+                    class="size-2.5 shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+                    :class="{ 'rotate-180': moreOpenId === item.id }"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  ><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>
+                </button>
+                <ul
+                  v-show="moreOpenId === item.id"
+                  :id="`header-more-${item.id}`"
+                  class="pb-2"
+                >
                   <template
                     v-for="link in [...(item.to ? [item] : []), ...item.children]"
                     :key="link.id"
@@ -321,7 +356,7 @@ onBeforeUnmount(() => {
                       <NuxtLink
                         :to="link.to"
                         :external="link.external"
-                        :class="linkClass(link, item)"
+                        :class="subLinkClass(link, item)"
                       >
                         <span>{{ link.label }}</span>
                       </NuxtLink>
@@ -341,9 +376,10 @@ onBeforeUnmount(() => {
                   aria-hidden="true"
                 >→</span>
               </NuxtLink>
+              <!-- No page of its own: shown as the others are, not greyed out. -->
               <span
                 v-else
-                class="block px-6 py-2.5 text-[15px] text-primary-400"
+                class="flex px-6 py-2.5 text-[15px] whitespace-nowrap text-primary-600"
               >{{ item.label }}</span>
             </li>
           </ul>
