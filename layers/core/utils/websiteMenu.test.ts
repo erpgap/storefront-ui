@@ -49,11 +49,13 @@ describe('websiteFooterColumns', () => {
     expect(columns[0]!.children.map(link => link.to)).toEqual(['/women', '/men'])
   })
 
-  it('leaves out a column with no link to show', () => {
-    expect(websiteFooterColumns([
+  it('keeps every column made in Odoo, an empty one and links without a page too', () => {
+    const columns = websiteFooterColumns([
       menu(1, 'Empty', '#'),
-      menu(2, 'Headings only', '#', [menu(3, 'Group', '#')]),
-    ])).toEqual([])
+      menu(2, 'Text only', '#', [menu(3, 'Open 9 to 5', '#')]),
+    ])
+    expect(columns.map(column => column.label)).toEqual(['Empty', 'Text only'])
+    expect(columns[1]!.children[0]!.to).toBe('')
     expect(websiteFooterColumns(null)).toEqual([])
   })
 })

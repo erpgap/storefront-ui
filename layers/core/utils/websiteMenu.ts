@@ -38,12 +38,13 @@ export function websiteMenuItems(entries: WebsiteMenu[] | null | undefined): Men
 
 /**
  * The footer's columns: the website's footer entries, each a heading over the
- * links of its submenu. A column without links is left out.
+ * entries of its submenu, as the merchant made them in Odoo (an empty column
+ * too: what is in Odoo shows).
  */
 export function websiteFooterColumns(roots: WebsiteMenu[] | null | undefined): MenuItem[] {
   return (roots ?? [])
     .map(toItem)
-    .filter((item): item is MenuItem => item !== null && item.children.some(child => child.to))
+    .filter((item): item is MenuItem => item !== null)
 }
 
 /** A social media account of the company, for the footer's icons. */

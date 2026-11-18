@@ -37,7 +37,9 @@ const columns = computed(() => footer.value.columns.length ? footer.value.column
     <Newsletter />
     <footer class="bg-white border-t border-primary-100 text-black">
       <div class="narrow-container">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.6fr_repeat(3,1fr)] gap-10 py-[72px]">
+        <!-- The brand, then the columns from Odoo: as many side by side as
+             fit, however many the merchant makes. -->
+        <div class="grid grid-cols-1 lg:grid-cols-[1.6fr_3fr] gap-10 py-[72px]">
           <div>
             <!-- The footer's links are plain anchors (`custom`), without the
                  router's active classes. Nothing styles those, and the footer
@@ -63,37 +65,43 @@ const columns = computed(() => footer.value.columns.length ? footer.value.column
             </p>
           </div>
 
-          <div
-            v-for="column in columns"
-            :key="column.id"
-          >
-            <h3 class="text-[12px] font-bold tracking-[0.16em] uppercase mb-5">
-              {{ column.label }}
-            </h3>
-            <ul>
-              <template
-                v-for="item in column.children"
-                :key="item.id"
-              >
-                <li v-if="item.to">
-                  <NuxtLink
-                    v-slot="{ href, navigate }"
-                    :to="item.to"
-                    :external="item.external"
-                    custom
-                  >
-                    <a
-                      :href="href"
-                      class="block py-2.5 text-[16px] md:py-[7px] md:text-[14px] text-primary-500 transition-colors hover:text-black"
-                      v-bind="item.external ? { target: '_blank', rel: 'noopener' } : {}"
-                      @click="item.external || navigate($event)"
+          <div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-10">
+            <div
+              v-for="column in columns"
+              :key="column.id"
+            >
+              <h3 class="text-[12px] font-bold tracking-[0.16em] uppercase mb-5">
+                {{ column.label }}
+              </h3>
+              <ul>
+                <template
+                  v-for="item in column.children"
+                  :key="item.id"
+                >
+                  <li v-if="!item.to">
+                    <!-- No page of its own in Odoo: its name, as text. -->
+                    <span class="block py-2.5 text-[16px] md:py-[7px] md:text-[14px] text-primary-500">{{ item.label }}</span>
+                  </li>
+                  <li v-else>
+                    <NuxtLink
+                      v-slot="{ href, navigate }"
+                      :to="item.to"
+                      :external="item.external"
+                      custom
                     >
-                      {{ item.label }}
-                    </a>
-                  </NuxtLink>
-                </li>
-              </template>
-            </ul>
+                      <a
+                        :href="href"
+                        class="block py-2.5 text-[16px] md:py-[7px] md:text-[14px] text-primary-500 transition-colors hover:text-black"
+                        v-bind="item.external ? { target: '_blank', rel: 'noopener' } : {}"
+                        @click="item.external || navigate($event)"
+                      >
+                        {{ item.label }}
+                      </a>
+                    </NuxtLink>
+                  </li>
+                </template>
+              </ul>
+            </div>
           </div>
         </div>
 

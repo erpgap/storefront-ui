@@ -129,7 +129,10 @@ const linkGroups = computed(() => footer.value.columns.length ? footer.value.col
             v-for="link in group.children"
             :key="link.id"
           >
-            <li v-if="link.to">
+            <li v-if="!link.to">
+              <span class="block py-2 text-[15px] text-primary-600">{{ link.label }}</span>
+            </li>
+            <li v-else>
               <NuxtLink
                 :to="link.to"
                 :external="link.external"
