@@ -67,6 +67,16 @@ test.describe('browsing', () => {
     await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Back to home' })).toBeVisible()
   })
+
+  // The website's own icon from Odoo, or the storefront's when Odoo has none:
+  // either way an icon, and one browsers may keep (server/routes/favicon.ico.get.ts).
+  test('the favicon is served', async ({ request }) => {
+    const response = await request.get('/favicon.ico')
+    expect(response.status()).toBe(200)
+    expect(response.headers()['content-type']).toMatch(/^image\//)
+    expect(response.headers()['cache-control']).toContain('max-age=86400')
+    expect((await response.body()).length).toBeGreaterThan(0)
+  })
 })
 
 test.describe('page cache', () => {
