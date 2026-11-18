@@ -107,6 +107,85 @@ test.describe('page cache', () => {
   })
 })
 
+test.describe('header menu', () => {
+  // The menu edited in Odoo (Website > Menus). Read from the storefront's own
+  // API, so the tests hold for whatever menu the website has, and skip what
+  // needs a submenu when none has one.
+  type Entry = { name?: string, url?: string, childs?: Entry[] | null }
+  const websiteMenu = async (request: APIRequestContext): Promise<Entry[]> => {
+    const response = await request.post('/api/odoo/query', { data: [{ queryName: 'GetWebsiteMenuQuery' }, null] })
+    const roots: Entry[] = (await response.json()).websiteMenu ?? []
+    return roots.flatMap(root => root.childs ?? []).filter(entry => entry.name?.trim())
+  }
+  // An entry with a submenu, and one of its links to the storefront.
+  const withSubmenu = async (request: APIRequestContext) => {
+    for (const parent of await websiteMenu(request)) {
+      const child = (parent.childs ?? []).find(entry => entry.name?.trim() && entry.url?.startsWith('/'))
+      if (child) return { parent, child }
+    }
+    return null
+  }
+  const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+  test('shows the website menu from Odoo', async ({ page, request, isMobile }) => {
+    test.skip(isMobile, 'the desktop header')
+    const entries = await websiteMenu(request)
+    test.skip(!entries.length, 'the website has no menu in Odoo')
+    await open(page, '/')
+    const nav = page.getByRole('navigation', { name: 'SF Navigation' })
+    for (const entry of entries) {
+      await expect(nav.getByText(entry.name!, { exact: true }).first()).toBeVisible()
+    }
+  })
+
+  test('a submenu opens on hover and keyboard, and leads to its pages', async ({ page, request, isMobile }) => {
+    test.skip(isMobile, 'the desktop header')
+    const found = await withSubmenu(request)
+    test.skip(!found, 'no menu entry in Odoo has a submenu')
+    const { parent, child } = found!
+    await open(page, '/')
+
+    const button = page.getByRole('navigation', { name: 'SF Navigation' }).getByRole('button', { name: parent.name, exact: true })
+    const panel = page.locator(`#${await button.getAttribute('aria-controls')}`)
+    await button.hover()
+    await expect(panel).toBeVisible()
+    // A click after hovering keeps it open.
+    await button.click()
+    await expect(panel).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(panel).toBeHidden()
+    await expect(button).toBeFocused()
+    await page.keyboard.press('Enter')
+    await expect(panel).toBeVisible()
+
+    await panel.getByRole('link', { name: child.name, exact: true }).click()
+    await expect(page).toHaveURL(new RegExp(`${escapeRegExp(child.url!)}$`))
+    await expect(panel).toBeHidden()
+  })
+
+  test.describe('on mobile', () => {
+    test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })
+
+    test('the drawer opens a submenu as an accordion', async ({ page, request }) => {
+      const found = await withSubmenu(request)
+      test.skip(!found, 'no menu entry in Odoo has a submenu')
+      const { parent, child } = found!
+      await open(page, '/')
+
+      await page.getByRole('button', { name: 'Open menu' }).click()
+      const drawer = page.getByRole('dialog')
+      const toggle = drawer.getByRole('button', { name: parent.name, exact: true })
+      const section = page.locator(`#${await toggle.getAttribute('aria-controls')}`)
+      await expect(section).toBeHidden()
+      await toggle.click()
+      await expect(section).toBeVisible()
+      await section.getByRole('link', { name: child.name, exact: true }).click()
+      await expect(page).toHaveURL(new RegExp(`${escapeRegExp(child.url!)}$`))
+      await expect(drawer).toBeHidden()
+    })
+  })
+})
+
 test.describe('search', () => {
   test('on desktop a suggestion opens the product', async ({ page }) => {
     await open(page, '/')
@@ -201,7 +280,7 @@ test.describe('cart and checkout', () => {
     await main.getByRole('textbox', { name: 'ZIP Code' }).fill('1000')
 
     await expect(page.getByTestId('checkout-payment')).toContainText('No payment method is available')
-    // One button in the summary on desktop, one under the payment on mobile.
+    // The one Place order button, at the foot of the form.
     await page.getByRole('button', { name: /Place order/ }).filter({ visible: true }).first().click()
     await expect(page.getByRole('alert').filter({ hasText: 'No payment method is available' }).first()).toBeVisible()
     await expect(page).toHaveURL(/\/checkout$/)

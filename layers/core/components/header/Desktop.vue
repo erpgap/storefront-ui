@@ -9,13 +9,18 @@ import { onClickOutside } from '@vueuse/core'
 
 const { isOpen: isSearchOpen, toggle: toggleSearch, close: closeSearch } = useDisclosure()
 
-// TODO: point each nav item to a real category slug (links handled later)
-const navItems = [
-  { labelKey: 'core.siteLinks.topSellers', link: '/products' },
-  { labelKey: 'core.siteLinks.newArrivals', link: '/products?sort=newest,DESC' },
-  { labelKey: 'core.siteLinks.women', link: '/women' },
-  { labelKey: 'core.siteLinks.men', link: '/men' },
-]
+const { t } = useI18n()
+const { items: websiteMenu } = useWebsiteMenu()
+
+// The menu edited in Odoo (Website > Menus); these links only stand in when
+// Odoo has none to give, so the header is never left empty.
+const fallbackMenu = computed(() => [
+  { labelKey: 'core.siteLinks.topSellers', to: '/products' },
+  { labelKey: 'core.siteLinks.newArrivals', to: '/products?sort=newest,DESC' },
+  { labelKey: 'core.siteLinks.women', to: '/women' },
+  { labelKey: 'core.siteLinks.men', to: '/men' },
+].map((link, index) => ({ id: -1 - index, label: t(link.labelKey), to: link.to, external: false, children: [] })))
+const menuItems = computed(() => websiteMenu.value.length ? websiteMenu.value : fallbackMenu.value)
 
 const menuRef = ref()
 const searchPanelRef = ref<HTMLElement>()
@@ -56,31 +61,23 @@ onClickOutside(searchPanelRef, () => {
 <template>
   <div ref="menuRef">
     <header class="text-black w-full">
-      <div class="narrow-container h-[76px] grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-        <!-- Left: category navigation -->
-        <nav
-          class="hidden lg:flex gap-8"
-          :aria-label="$t('core.header.navigation')"
-        >
-          <NuxtLink
-            v-for="item in navItems"
-            :key="item.labelKey"
-            :to="item.link"
-            class="group relative py-1.5 text-[13px] tracking-[0.08em] uppercase text-primary-600 whitespace-nowrap transition-colors hover:text-black"
-          >
-            {{ $t(item.labelKey) }}
-            <span class="absolute left-0 bottom-0 h-px w-0 bg-black transition-all duration-300 group-hover:w-full" />
-          </NuxtLink>
-        </nav>
-
-        <!-- Center: brand -->
+      <div class="narrow-container h-[76px] grid grid-cols-[auto_1fr_auto] items-center gap-8">
+        <!-- Left: brand -->
         <NuxtLink
           to="/"
           :aria-label="$t('core.header.homeLink')"
-          class="justify-self-center text-[26px] md:text-[28px] text-black"
+          class="text-[26px] md:text-[28px] text-black"
         >
           <AlokaiLogo />
         </NuxtLink>
+
+        <!-- Center: the website menu -->
+        <nav
+          class="hidden lg:flex justify-center self-stretch"
+          :aria-label="$t('core.header.navigation')"
+        >
+          <HeaderNavMenu :items="menuItems" />
+        </nav>
 
         <!-- Right: actions -->
         <div class="flex justify-end items-center gap-1">

@@ -1,12 +1,18 @@
 <script lang="ts" setup>
 const { loadCategoriesForMegaMenu, categoriesForMegaMenu } = useMegaMenuCategories()
+const { loadWebsiteMenu } = useWebsiteMenu()
 
 provide('categoriesForMegaMenu', categoriesForMegaMenu)
 
-await loadCategoriesForMegaMenu({ filter: {
-  parent: true,
-  id: null,
-} })
+// The menu is the one edited in Odoo (Website > Menus). The categories are
+// still loaded: the category filter sidebar reads them.
+await Promise.all([
+  loadWebsiteMenu(),
+  loadCategoriesForMegaMenu({ filter: {
+    parent: true,
+    id: null,
+  } }),
+])
 </script>
 
 <template>
