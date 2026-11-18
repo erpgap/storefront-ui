@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { SfRating } from '@storefront-ui/vue'
 import type { Product } from '~~/graphql'
 
 defineProps({
@@ -126,11 +125,7 @@ const toggleWishlist = (variant?: Product) => {
         v-if="(ratingCount ?? 0) > 0"
         class="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[13px] text-primary-500"
       >
-        <SfRating
-          size="xs"
-          :value="Math.round(rating ?? 0)"
-          :max="5"
-        />
+        <UiStarRating :value="rating ?? 0" />
         <span class="whitespace-nowrap">({{ (rating ?? 0).toFixed(1) }})</span>
         <span class="whitespace-nowrap">{{ $t('reviewsCount', { count: ratingCount }) }}</span>
       </div>

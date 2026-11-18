@@ -11,7 +11,6 @@ import {
   SfIconShoppingCart,
   SfIconShoppingCartCheckout,
   SfIconWarehouse,
-  SfRating,
 } from '@storefront-ui/vue'
 import type { CustomProductWithStockFromRedis, ImageGalleryItem, OrderLine } from '~~/graphql'
 import generateSeo, { type SeoEntity } from '~~/app/utils/buildSEOHelper'
@@ -237,11 +236,7 @@ const categoryEyebrow = computed(() => {
               v-if="ratingCount > 0"
               class="inline-flex items-center gap-2 mt-3 text-[13px] text-primary-500"
             >
-              <SfRating
-                size="xs"
-                :value="Math.round(ratingAvg)"
-                :max="5"
-              />
+              <UiStarRating :value="ratingAvg" />
               <span>({{ ratingAvg.toFixed(1) }})</span>
               <span class="text-primary-200">·</span>
               <span>{{ $t('reviewsCount', { count: ratingCount }) }}</span>

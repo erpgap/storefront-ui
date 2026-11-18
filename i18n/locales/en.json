@@ -550,6 +550,7 @@
       "pagination": "pagination",
       "emailPlaceholder": "Enter your email here",
       "applying": "Applying…",
+      "ratingLabel": "{value} out of {max}",
       "showPassword": "Show password",
       "hidePassword": "Hide password"
     },
