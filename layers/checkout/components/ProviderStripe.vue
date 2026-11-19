@@ -46,7 +46,7 @@ const elements = ref<any>(null)
 onMounted(async () => {
   emit('paymentLoading', true)
 
-  const values = await getStripeInlineFormValues()
+  const values = await getStripeInlineFormValues().catch(() => null)
   if (!values?.publishable_key) {
     emit('paymentError', t('shop.checkout.paymentFormLoadError'))
     emit('paymentLoading', false)

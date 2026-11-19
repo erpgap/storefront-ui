@@ -126,12 +126,15 @@ export const useAuth = () => {
     }
   }
 
+  // Odoo first: the shopper is logged out here only once Odoo has ended the
+  // session. Cleared before, a failed logout left them shown as logged out
+  // (and sent to the login page as "session expired") while still logged in.
   const logout = async () => {
-    userCookie.value = null
-    user.value = {} as Partner
     await $sdk().odoo.mutation<null, null>({
       mutationName: MutationName.LogoutMutation,
     })
+    userCookie.value = null
+    user.value = {} as Partner
   }
 
   const signup = async (params: MutationRegisterArgs) => {

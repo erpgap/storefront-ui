@@ -27,11 +27,14 @@ const emit = defineEmits([
   'isPaymentReady',
   'providerPaymentHandler',
   'paymentLoading',
+  // Shown by the parent under Place order, as for Stripe.
+  'paymentError',
 ])
 
 const adyenDropin = shallowRef<Dropin | null>(null)
 const router = useRouter()
 const loading = ref(false)
+const { t } = useI18n()
 
 const { getPaymentConfirmation } = usePayment()
 const { removeMultipleItemsFromCart } = useCart()
@@ -72,13 +75,23 @@ async function finishPayment() {
 onMounted(async () => {
   loading.value = true
 
-  await openAdyenTransaction()
-  await getAdyenAcquirerInfo()
-  await getAdyenPaymentMethods()
+  // The form cannot be set up without these: say so under Place order rather
+  // than leave the payment step empty.
+  try {
+    await openAdyenTransaction()
+    await getAdyenAcquirerInfo()
+    await getAdyenPaymentMethods()
+  }
+  catch {
+    emit('paymentError', t('shop.checkout.paymentFormLoadError'))
+    loading.value = false
+    return
+  }
 
   const clientKey = acquirerInfo.value?.client_key
   const methods = paymentMethods.value
   if (!clientKey || !methods || Array.isArray(methods) || Object.keys(methods).length === 0) {
+    emit('paymentError', t('shop.checkout.paymentFormLoadError'))
     loading.value = false
     return
   }

@@ -330,6 +330,7 @@
     "navBarBottomHeading": "Account",
     "overview": "Overview",
     "logout": "Logout",
+    "logoutFailed": "We couldn't log you out. Please try again.",
     "back": "Back",
     "accountSettings": {
       "heading": "Account Settings",

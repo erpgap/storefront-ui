@@ -77,6 +77,12 @@
             >
               {{ $t("account.logout") }}
             </button>
+            <UiFieldError
+              v-if="logoutError"
+              class="px-4"
+            >
+              {{ logoutError }}
+            </UiFieldError>
           </nav>
           <div class="flex-1 order-1 md:order-2">
             <section
@@ -159,11 +165,17 @@ const breadcrumbs = computed(() => {
   return crumbs
 })
 
+// Odoo did not end the session: said under the button, to try again.
+const logoutError = ref('')
 const handleLogout = async () => {
   loggingOut.value = true
+  logoutError.value = ''
   try {
     await logout()
     await router.push('/')
+  }
+  catch {
+    logoutError.value = t('account.logoutFailed')
   }
   finally {
     loggingOut.value = false
