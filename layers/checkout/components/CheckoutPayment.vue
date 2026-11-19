@@ -33,6 +33,24 @@
         @payment-error="onPaymentError"
       />
     </div>
+    <!-- The methods could not be loaded: said so, with another try, not
+         "no method available". -->
+    <div
+      v-else-if="loadFailed"
+      class="md:pl-[38px] max-w-[640px]"
+    >
+      <UiFormMessage>
+        {{ $t("checkoutPayment.loadFailed") }}
+      </UiFormMessage>
+      <SfButton
+        variant="secondary"
+        size="sm"
+        class="mt-3"
+        @click="loadPaymentMethods"
+      >
+        {{ $t("core.tryAgain") }}
+      </SfButton>
+    </div>
     <p
       v-else
       class="md:pl-[38px] text-[14px] text-primary-400"
@@ -43,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+import { SfButton } from '@storefront-ui/vue'
 import type { Component, Ref } from 'vue'
 import ProviderStripe from './ProviderStripe.vue'
 import ProviderAdyen from './ProviderAdyen.vue'
@@ -54,6 +73,7 @@ defineProps({
 const { cart } = useCart()
 const {
   loadPaymentMethods,
+  loadFailed,
   paymentProviders,
   selectedProvider,
   updateSelectedProvider,

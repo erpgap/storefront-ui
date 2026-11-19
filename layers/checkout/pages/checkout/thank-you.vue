@@ -22,7 +22,7 @@ const messageKey = computed(() => ({
 } as Record<string, string>)[confirmationEmail.value] ?? 'thankYou.messageEmailPending')
 let order: { id?: number, name?: string, confirmationEmail?: string | null } | null = null
 try {
-  order = (await getPaymentConfirmation(false))?.order ?? null
+  order = (await getPaymentConfirmation())?.order ?? null
 }
 catch {
   order = null

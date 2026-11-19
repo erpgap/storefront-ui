@@ -6,6 +6,7 @@ const {
   loadDeliveryMethods,
   setDeliveryMethod,
   setDeliveryMethodImmediate,
+  error: deliveryError,
 } = useDeliveryMethod()
 
 const radioModel = ref('')
@@ -106,6 +107,13 @@ const handleSelectShippingMethod = async (shippingMethodId: number) => {
         <SfIconBlock />
         <p>{{ $t("shippingMethod.description") }}</p>
       </div>
+      <!-- Loading or choosing a method failed: said here, in its section. -->
+      <UiFormMessage
+        v-if="deliveryError"
+        class="mt-5 max-w-[640px]"
+      >
+        {{ deliveryError }}
+      </UiFormMessage>
     </div>
   </section>
 </template>

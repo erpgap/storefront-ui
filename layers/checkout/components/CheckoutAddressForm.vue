@@ -39,7 +39,7 @@ const asSelectModel = (id: Ref<number | undefined>) => computed({
 const countryModel = asSelectModel(countryId)
 const stateModel = asSelectModel(stateId)
 
-const { addAddress, updateAddress } = useAddresses()
+const { addAddress, updateAddress, error: saveError } = useAddresses()
 const { countries } = useCountryList()
 const { cart } = useCart()
 const { loadDeliveryMethods } = useDeliveryMethod()
@@ -131,6 +131,12 @@ const save = async () => {
   else {
     const added = await addAddress(data as unknown as AddAddressInput, props.type)
     if (added && order) order[cartKey] = added
+  }
+  // Not saved: the message shows under the fields, and leaving a field again
+  // tries once more.
+  if (saveError.value) {
+    lastSaved = ''
+    return
   }
 
   // The available delivery methods depend on the shipping address, so refresh
@@ -311,6 +317,14 @@ defineExpose({
           <UiFieldError v-if="showErrors && required.zip">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
       </div>
+      <!-- The address saves itself as each field is left: a save that
+           failed says so here, under the fields. -->
+      <UiFormMessage
+        v-if="saveError"
+        class="mt-5 max-w-[640px]"
+      >
+        {{ $t('form.addressSaveFailed', { reason: saveError }) }}
+      </UiFormMessage>
     </div>
   </section>
 </template>

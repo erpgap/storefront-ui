@@ -1,4 +1,3 @@
-import { useToast } from 'vue-toastification'
 import objectHash from 'object-hash'
 import {
   AddressEnum,
@@ -10,12 +9,6 @@ import {
   type UpdateAddressInput,
   type MutationUpdateAddressArgs,
   type AddAddressResponse,
-  type SelectAddressInput,
-  type MutationSelectAddressArgs,
-  type SelectCurrentAddressResponse,
-  type DeleteAddressInput,
-  type MutationDeleteAddressArgs,
-  type DeleteAddressResponse,
   type responseAddresses,
 } from '~~/graphql'
 import { MutationName } from '~~/server/mutations'
@@ -26,7 +19,9 @@ export const useAddresses = () => {
   const hash = objectHash('test')
 
   const loading = ref(false)
-  const toast = useToast()
+  // Why the last add or update failed, for the form that made it to show
+  // next to its fields; '' when it went through.
+  const error = ref('')
   const { user } = useAuth()
 
   const billingAddresses = useState<Partner[]>(
@@ -61,8 +56,9 @@ export const useAddresses = () => {
 
       shippingAddresses.value = data.value.addresses
     }
-    catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+    catch {
+      // A refresh of the lists after a save: the save itself went through,
+      // and the lists are loaded again on the next visit.
     }
     finally {
       loading.value = false
@@ -73,6 +69,7 @@ export const useAddresses = () => {
   const addAddress = async (address: AddAddressInput, type: AddressEnum): Promise<Partner | undefined> => {
     try {
       loading.value = true
+      error.value = ''
       const data = await $sdk().odoo.mutation<
         MutationAddAddressArgs,
         AddAddressResponse
@@ -84,24 +81,8 @@ export const useAddresses = () => {
       await loadAddresses(type)
       return data?.addAddress
     }
-    catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
-    }
-    finally {
-      loading.value = false
-    }
-  }
-
-  const deleteAddress = async (address: DeleteAddressInput) => {
-    try {
-      loading.value = true
-      await $sdk().odoo.mutation<
-        MutationDeleteAddressArgs,
-        DeleteAddressResponse
-      >({ mutationName: MutationName.DeleteAddress }, { address })
-    }
-    catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+    catch (e: any) {
+      error.value = errorMessage(e, $i18n.t('core.genericError'))
     }
     finally {
       loading.value = false
@@ -114,6 +95,7 @@ export const useAddresses = () => {
   ) => {
     try {
       loading.value = true
+      error.value = ''
 
       const data = await $sdk().odoo.mutation<
         MutationUpdateAddressArgs,
@@ -135,30 +117,8 @@ export const useAddresses = () => {
         shippingAddresses.value[index] = address
       }
     }
-    catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
-    }
-    finally {
-      loading.value = false
-    }
-  }
-
-  const selectCurrentAddress = async (
-    address: SelectAddressInput,
-    type: AddressEnum,
-  ) => {
-    try {
-      loading.value = true
-
-      await $sdk().odoo.mutation<
-        MutationSelectAddressArgs,
-        SelectCurrentAddressResponse
-      >({ mutationName: MutationName.SelectCurrentAddress }, { address, type })
-
-      await loadAddresses(type)
-    }
-    catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+    catch (e: any) {
+      error.value = errorMessage(e, $i18n.t('core.genericError'))
     }
     finally {
       loading.value = false
@@ -169,10 +129,9 @@ export const useAddresses = () => {
     loadAddresses,
     billingAddresses,
     shippingAddresses,
-    selectCurrentAddress,
     addAddress,
     updateAddress,
-    deleteAddress,
+    error,
     loading,
   }
 }

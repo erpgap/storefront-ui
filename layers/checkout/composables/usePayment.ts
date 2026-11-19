@@ -1,5 +1,4 @@
 import { useNuxtApp, useState } from 'nuxt/app'
-import { useToast } from 'vue-toastification'
 import type { PaymentProvider } from '~~/graphql'
 import { QueryName } from '~~/server/queries'
 
@@ -11,10 +10,12 @@ import { QueryName } from '~~/server/queries'
 export const SUPPORTED_PAYMENT_PROVIDERS = ['stripe', 'adyen'] as const
 
 export const usePayment = () => {
-  const { $sdk, $i18n } = useNuxtApp()
-  const toast = useToast()
+  const { $sdk } = useNuxtApp()
 
   const loading = ref(false)
+  // Loading the payment methods failed: the payment section says so and
+  // offers to try again, rather than "no method available".
+  const loadFailed = ref(false)
   const paymentProviders = useState<PaymentProvider[]>(
     'payment-providers',
     () => [],
@@ -33,6 +34,7 @@ export const usePayment = () => {
   const loadPaymentMethods = async () => {
     try {
       loading.value = true
+      loadFailed.value = false
       const data = await $sdk().odoo.query<any, { paymentProviders: PaymentProvider[] }>({
         queryName: QueryName.GetPaymentMethodsQuery,
       })
@@ -44,18 +46,17 @@ export const usePayment = () => {
       paymentProviders.value = (data?.paymentProviders || [])
         .filter(provider => (SUPPORTED_PAYMENT_PROVIDERS as readonly string[]).includes(provider.code ?? ''))
     }
-    catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+    catch {
+      loadFailed.value = true
     }
     finally {
       loading.value = false
     }
   }
 
-  // `showError` lets callers probe the confirmation silently (e.g. the
-  // thank-you page, which redirects home when there's no order rather than
-  // surfacing a toast).
-  const getPaymentConfirmation = async (showError = true) => {
+  // Undefined when Odoo cannot say: the payment form then shows the failure
+  // page, and the thank-you page sends the shopper home.
+  const getPaymentConfirmation = async () => {
     try {
       loading.value = true
       const data = await $sdk().odoo.query<any, any>({
@@ -64,8 +65,8 @@ export const usePayment = () => {
 
       return data?.paymentConfirmation
     }
-    catch (error: any) {
-      if (showError) toast.error(errorMessage(error, $i18n.t('core.genericError')))
+    catch {
+      return undefined
     }
     finally {
       loading.value = false
@@ -74,6 +75,7 @@ export const usePayment = () => {
 
   return {
     loadPaymentMethods,
+    loadFailed,
     paymentProviders,
     getPaymentConfirmation,
     loading,

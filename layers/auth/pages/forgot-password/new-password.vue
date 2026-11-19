@@ -16,19 +16,30 @@ const changePasswordArgs = ref<MutationChangePasswordArgs>({
 })
 
 const passwordsDoesntMatch = ref(false)
+// Why the password could not be set, shown above the buttons. Once set, the
+// login page says so.
+const error = ref('')
+const submitting = ref(false)
 
 const handleSubmit = async () => {
   passwordsDoesntMatch.value = false
+  error.value = ''
 
   if (changePasswordArgs.value.newPassword !== repeatPassword.value) {
     passwordsDoesntMatch.value = true
     return
   }
 
-  await changeForgottenPassword({
-    newPassword: changePasswordArgs.value.newPassword,
-    token: changePasswordArgs.value.token,
-  })
+  submitting.value = true
+  try {
+    error.value = await changeForgottenPassword({
+      newPassword: changePasswordArgs.value.newPassword,
+      token: changePasswordArgs.value.token,
+    }) ?? ''
+  }
+  finally {
+    submitting.value = false
+  }
 }
 </script>
 
@@ -78,6 +89,12 @@ const handleSubmit = async () => {
           >
             {{ $t("account.accountSettings.personalData.passwordsDontMatch") }}
           </UiFormMessage>
+          <UiFormMessage
+            v-else-if="error"
+            class="mt-3"
+          >
+            {{ error }}
+          </UiFormMessage>
           <div class="mt-6 flex flex-col-reverse md:flex-row md:justify-end gap-4">
             <SfButton
               type="reset"
@@ -89,6 +106,7 @@ const handleSubmit = async () => {
             <SfButton
               type="submit"
               class="min-w-[120px]"
+              :disabled="submitting"
             >
               {{ $t("account.accountSettings.personalData.changePassword") }}
             </SfButton>

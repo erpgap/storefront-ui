@@ -64,8 +64,11 @@ const handleGiftCardPayment = async () => {
   // address.
   if (!validateCheckout()) return
   processing.value = true
+  if (paymentError) paymentError.value = ''
   try {
-    await makeGiftCardPayment()
+    // Why it failed shows under the button (paymentError, below).
+    const failed = await makeGiftCardPayment()
+    if (failed && paymentError) paymentError.value = failed
   }
   finally {
     processing.value = false

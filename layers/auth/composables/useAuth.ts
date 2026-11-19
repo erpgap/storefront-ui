@@ -1,4 +1,3 @@
-import { useToast } from 'vue-toastification'
 import type {
   ChangePasswordResponse,
   MutationChangePasswordArgs,
@@ -31,7 +30,6 @@ export const useAuth = () => {
   })
   const user = useState<Partner>('user', () => ({}) as Partner)
 
-  const toast = useToast()
   // Taken here, while the composable runs in the component's setup: the
   // functions below run later, when Nuxt's context may be gone (during SSR
   // that threw NUXT_E1001 and lost the request's cookies).
@@ -218,9 +216,11 @@ export const useAuth = () => {
     }
   }
 
+  // Resolves to why the password could not be set, for the page to show, or
+  // null once changed: the login page then says so.
   const changeForgottenPassword = async (
     params: MutationChangePasswordArgs,
-  ) => {
+  ): Promise<string | null> => {
     try {
       loading.value = true
       await $sdk().odoo.mutation<
@@ -228,8 +228,8 @@ export const useAuth = () => {
         ChangePasswordResponse
       >({ mutationName: MutationName.ChangePasswordMutation }, params)
 
-      toast.success(t('auth.toast.passwordChanged'))
-      router.push('/')
+      await router.push('/login?passwordChanged=1')
+      return null
     }
     catch (error: any) {
       const message = errorMessage(error, t('auth.setNewPassword.error'))
@@ -237,7 +237,7 @@ export const useAuth = () => {
       // that for developers ("Unknown token version", a base64 error) or
       // repeats the token back. Other refusals, such as a password too short
       // for the policy, are already readable.
-      toast.error(isBadResetToken(message) ? t('auth.setNewPassword.linkInvalid') : message)
+      return isBadResetToken(message) ? t('auth.setNewPassword.linkInvalid') : message
     }
     finally {
       loading.value = false

@@ -1,4 +1,3 @@
-import { useToast } from 'vue-toastification'
 import { useCheckout } from './useCheckout'
 import type {
   ApplyDiscountsResponse,
@@ -10,7 +9,6 @@ import { MutationName } from '~~/server/mutations'
 export const useDiscount = () => {
   const { $sdk, $i18n } = useNuxtApp()
   const { loading, setLoading } = useCheckout()
-  const toast = useToast()
   // The code box's own state. `loading` is shared by all of checkout (Place
   // order waits on it), and the box read "Applying…" whenever checkout loaded
   // anything else, such as the delivery methods.
@@ -42,7 +40,9 @@ export const useDiscount = () => {
     }
   }
 
-  const makeGiftCardPayment = async () => {
+  // Resolves to why the payment could not be made, for Place order to show
+  // under itself, or null once on the way to the thank-you (or failure) page.
+  const makeGiftCardPayment = async (): Promise<string | null> => {
     try {
       setLoading(true)
 
@@ -51,14 +51,11 @@ export const useDiscount = () => {
         MakeGiftCardPaymentResponse
       >({ mutationName: MutationName.MakeGiftCardPaymentMutation })
 
-      if (!data?.makeGiftCardPayment?.done) {
-        return navigateTo('/checkout/payment-fail')
-      }
-
-      return navigateTo('/checkout/thank-you')
+      await navigateTo(data?.makeGiftCardPayment?.done ? '/checkout/thank-you' : '/checkout/payment-fail')
+      return null
     }
     catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+      return errorMessage(error, $i18n.t('core.genericError'))
     }
     finally {
       setLoading(false)

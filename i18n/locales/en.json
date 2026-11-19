@@ -32,6 +32,7 @@
     "asterixHint": "* marked consents are required",
     "sameAsShipping": "Same as shipping address",
     "fieldRequired": "This field is required",
+    "addressSaveFailed": "We couldn't save this address: {reason}",
     "invalidEmail": "Please enter a valid email address"
   },
   "myCart": "My Cart",
@@ -151,6 +152,7 @@
     "promoOrGiftcard": "Promo code or gift card",
     "codeApplied": "Code applied.",
     "loadingPayment": "Loading payment methods…",
+    "loadFailed": "We couldn't load the payment methods.",
     "unavailable": "No payment method is available right now, so the order can't be placed. Please contact us to complete your purchase."
   },
   "shippingMethod": {
@@ -432,6 +434,7 @@
       "createAccountBanner": "First time here? {0}.",
       "createAccountLinkLabel": "Create Account",
       "sessionExpired": "Your session has expired. Please log in again.",
+      "passwordChanged": "Your password has been changed. Log in with your new password.",
       "error": "The email or password you entered is incorrect.",
       "signingIn": "Signing in…"
     },
@@ -473,9 +476,6 @@
       "error": "We couldn't change your password. The link may have expired; please request a new one.",
       "linkInvalid": "This password reset link has expired or is not valid. Please request a new one."
     },
-    "toast": {
-      "passwordChanged": "Password changed successfully"
-    },
     "resetPasswordSuccess": {
       "heading": "Your request has been sent!",
       "info": "You just received a reply in your registered email."
@@ -498,6 +498,7 @@
       "genericMessage": "An unexpected error occurred. Please try again, or head back to the homepage."
     },
     "genericError": "Something went wrong. Please try again.",
+    "tryAgain": "Try again",
     "siteLinks": {
       "shop": "Shop",
       "company": "Company",

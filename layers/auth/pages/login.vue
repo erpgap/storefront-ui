@@ -17,6 +17,8 @@ const route = useRoute()
 
 // Set by the auth guard when a session the user thought they had is gone.
 const sessionExpired = computed(() => route.query.expired === '1')
+// Set by the new-password page once the password is changed.
+const passwordChanged = computed(() => route.query.passwordChanged === '1')
 
 const redirectTo = computed(() => safeRedirect(route.query.redirect))
 
@@ -54,6 +56,14 @@ const NuxtLink = resolveComponent('NuxtLink')
     >
       {{ $t("auth.login.sessionExpired") }}
     </p>
+    <UiFormMessage
+      v-else-if="passwordChanged && !authError"
+      type="success"
+      class="mb-5"
+      data-testid="login-page-password-changed"
+    >
+      {{ $t("auth.login.passwordChanged") }}
+    </UiFormMessage>
 
     <form
       method="post"

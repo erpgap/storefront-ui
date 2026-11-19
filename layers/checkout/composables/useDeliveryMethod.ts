@@ -1,4 +1,3 @@
-import { useToast } from 'vue-toastification'
 import { debounce } from 'lodash-es'
 import { useCheckout } from './useCheckout'
 import type {
@@ -12,8 +11,10 @@ import { QueryName } from '~~/server/queries'
 export const useDeliveryMethod = () => {
   const { $sdk, $i18n } = useNuxtApp()
   const { loading, setLoading } = useCheckout()
-  const toast = useToast()
   const { loadCart } = useCart()
+  // Why loading or choosing a delivery method failed, shown in the delivery
+  // section; shared, as the address form loads the methods too.
+  const error = useState('delivery-method-error', () => '')
   const deliveryMethods = useState<ShippingMethod[]>(
     'delivery-method',
     () => [],
@@ -34,9 +35,10 @@ export const useDeliveryMethod = () => {
       })
 
       deliveryMethods.value = data?.deliveryMethods || []
+      error.value = ''
     }
-    catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+    catch (e: any) {
+      error.value = errorMessage(e, $i18n.t('core.genericError'))
     }
     finally {
       setLoading(false)
@@ -50,10 +52,11 @@ export const useDeliveryMethod = () => {
         MutationSetShippingMethodArgs,
         DeliveryMethodResponse
       >({ mutationName: MutationName.ShippingMethod }, { shippingMethodId })
+      error.value = ''
       await loadCart()
     }
-    catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+    catch (e: any) {
+      error.value = errorMessage(e, $i18n.t('core.genericError'))
     }
     finally {
       setLoading(false)
@@ -66,6 +69,7 @@ export const useDeliveryMethod = () => {
     setDeliveryMethod,
     setDeliveryMethodImmediate: _setDeliveryMethod,
     deliveryMethods,
+    error,
     loading,
   }
 }
