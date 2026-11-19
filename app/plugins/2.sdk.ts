@@ -1,54 +1,7 @@
 import { initSDK, buildModule } from '@vue-storefront/sdk'
 import { OdooModule } from '@erpgap/odoo-sdk'
 import type { $Fetch } from 'ofetch'
-import { useToast } from 'vue-toastification'
 import { defineNuxtPlugin } from 'nuxt/app'
-
-// Requests whose errors are handled inline by their own flow (so the global
-// error toast must NOT also fire — avoids duplicate/clashing feedback).
-const SHOULD_BYPASS_ERROR_QUERIES = [
-  'LoadUserQuery',
-  'LoadCartQuery',
-  'GetDeliveryMethodsQuery',
-  'GetPaymentMethodsQuery',
-  'GetPaymentConfirmation',
-  'GetOrdersQuery',
-  'GetOrderQuery',
-]
-const SHOULD_BYPASS_ERROR_MUTATIONS = [
-  'LoginMutation',
-  'RegisterUserMutation',
-  'ContactUsMutation',
-  'NewsletterSubscribeMutation',
-  'CartAddItem',
-  'UpdatePasswordMutation',
-  'CreateUpdatePartner',
-  'SendResetPasswordMutation',
-  'ChangePasswordMutation',
-  'CartUpdateQuantity',
-  'CartRemoveItem',
-  'WishlistAddItem',
-  'WishlistRemoveItem',
-  'AddAddress',
-  'UpdateAddress',
-  'DeleteAddress',
-  'SelectCurrentAddress',
-  'ShippingMethod',
-  'ApplyCouponMutation',
-  'MakeGiftCardPaymentMutation',
-]
-
-const avoidErrorThrowForSomeRequests = (options: any): boolean => {
-  if (!options.body) return false
-  try {
-    const payload = JSON.parse(options.body)?.[0] ?? {}
-    return SHOULD_BYPASS_ERROR_QUERIES.includes(payload?.queryName)
-      || SHOULD_BYPASS_ERROR_MUTATIONS.includes(payload?.mutationName)
-  }
-  catch {
-    return false
-  }
-}
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const config = useRuntimeConfig()
@@ -75,19 +28,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
           if (import.meta.server && ssrCookie) {
             options.headers = new Headers(options.headers)
             options.headers.set('cookie', ssrCookie)
-          }
-        },
-        onResponseError({ response, options }) {
-          if (avoidErrorThrowForSomeRequests(options) && response.status === 500) {
-            return
-          }
-          if (
-            response.status === 500
-            && response._data
-            && response._data?.data?.length > 0
-          ) {
-            const toast = useToast()
-            toast.error(response?._data?.message)
           }
         },
       }) as $Fetch,

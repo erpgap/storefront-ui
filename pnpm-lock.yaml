@@ -114,9 +114,6 @@ importers:
       vue-router:
         specifier: ^4.3.2
         version: 4.6.4(vue@3.5.44(typescript@5.9.3))
-      vue-toastification:
-        specifier: next
-        version: 2.0.0-rc.5(vue@3.5.44(typescript@5.9.3))
     devDependencies:
       '@commitlint/cli':
         specifier: ^19.3.0
@@ -6476,11 +6473,6 @@ packages:
         optional: true
       vite:
         optional: true
-
-  vue-toastification@2.0.0-rc.5:
-    resolution: {integrity: sha512-q73e5jy6gucEO/U+P48hqX+/qyXDozAGmaGgLFm5tXX4wJBcVsnGp4e/iJqlm9xzHETYOilUuwOUje2Qg1JdwA==}
-    peerDependencies:
-      vue: ^3.0.2
 
   vue-tsc@3.3.13:
     resolution: {integrity: sha512-jE4/bXdOMSHVxEGgQCqNllJy+9N3Gx6tfSAsg0yhFK/MAN6eXqISihupnDEKSCt12VVnjN2gI3AqLYcqoh5x/A==}
@@ -13795,10 +13787,6 @@ snapshots:
       - rollup
       - unloader
       - webpack
-
-  vue-toastification@2.0.0-rc.5(vue@3.5.44(typescript@5.9.3)):
-    dependencies:
-      vue: 3.5.44(typescript@5.9.3)
 
   vue-tsc@3.3.13(typescript@5.9.3):
     dependencies:

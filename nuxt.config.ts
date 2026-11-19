@@ -127,10 +127,6 @@ export default defineNuxtConfig({
     '#layers': path.resolve(__dirname, './layers'),
   },
 
-  build: {
-    transpile: ['vue-toastification'],
-  },
-
   routeRules: {
     '/sitemap_index.xml': { swr: swrCacheTime },
     '/__sitemap__/**': { swr: swrCacheTime },

@@ -49,8 +49,7 @@
     "object-hash": "^3.0.0",
     "ofetch": "^1.5.1",
     "unstorage": "^1.17.5",
-    "vue-router": "^4.3.2",
-    "vue-toastification": "next"
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
