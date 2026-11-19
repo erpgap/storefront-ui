@@ -2,8 +2,6 @@
 defineEmits<{
   navigate: []
 }>()
-
-const { isAuthenticated } = useAuth()
 </script>
 
 <template>
@@ -15,11 +13,10 @@ const { isAuthenticated } = useAuth()
           class="bg-primary-50 h-full w-full py-4 text-center flex items-center justify-center gap-3"
           @click="$emit('navigate')"
         >
-          <Icon
-            :name="isAuthenticated ? 'ion:person' : 'ion:person-outline'"
-            size="22px"
+          <UiLineIcon
+            name="account"
+            :size="22"
             class="text-black!"
-            aria-hidden="true"
           />
           {{ $t('account.navBarBottomHeading') }}
         </NuxtLink>

@@ -36,7 +36,6 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-viewport',
     '@nuxtjs/sitemap',
-    '@nuxt/icon',
   ],
 
   $production: {
@@ -258,19 +257,6 @@ export default defineNuxtConfig({
     ],
     strategy: 'no_prefix',
     defaultLocale: 'en',
-  },
-
-  // The app only uses a handful of `ion:` icons (the rest are inline SVG /
-  // UiLineIcon). Scan templates and bundle just those into the client so the
-  // Icon component doesn't fetch icon data from the Iconify API at runtime.
-  icon: {
-    // Icons' default 1em size in Tailwind's base layer, so that size
-    // utilities (`size-20`) win. Outside any layer it would beat them all.
-    cssLayer: 'base',
-    clientBundle: {
-      scan: true,
-      sizeLimitKb: 256,
-    },
   },
 
   image: {

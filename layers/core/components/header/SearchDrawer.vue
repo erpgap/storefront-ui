@@ -86,9 +86,9 @@ watch(
                       class="rounded-l-none hover:bg-transparent active:bg-transparent"
                       @click="searchInputValue = ''"
                     >
-                      <Icon
-                        name="ion:close"
-                        size="20px"
+                      <UiLineIcon
+                        name="close"
+                        :size="20"
                         class="text-neutral-500"
                       />
                     </SfButton>
@@ -100,9 +100,9 @@ watch(
                       class="rounded-l-none hover:bg-transparent active:bg-transparent"
                       @click="enterPress"
                     >
-                      <Icon
-                        name="ion:search"
-                        size="20px"
+                      <UiLineIcon
+                        name="search"
+                        :size="20"
                       />
                     </SfButton>
                   </span>

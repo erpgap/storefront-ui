@@ -6,9 +6,10 @@
       <div
         class="w-full min-h-[330px] flex flex-col gap-4 items-center justify-center"
       >
-        <Icon
-          name="ion:checkmark-circle"
-          class="size-20 text-primary-700"
+        <UiLineIcon
+          name="check-circle"
+          :size="80"
+          class="text-primary-700"
         />
         <h1 class="text-3xl font-bold">
           {{ $t("auth.resetPasswordSuccess.heading") }}

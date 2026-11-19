@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 // Thin-line header icons matching the redesign (stroke 1.5, 24x24).
 withDefaults(defineProps<{
-  name: 'search' | 'account' | 'cart' | 'heart' | 'lock' | 'returns' | 'shield'
+  name: 'search' | 'account' | 'cart' | 'heart' | 'lock' | 'returns' | 'shield' | 'close' | 'check-circle'
   filled?: boolean
   size?: number | string
 }>(), {
@@ -77,6 +77,24 @@ withDefaults(defineProps<{
       <path
         d="M4 9h9a7 7 0 0 1 0 14h-2"
         stroke-linecap="round"
+      />
+    </template>
+    <template v-else-if="name === 'close'">
+      <path
+        d="M6 6l12 12M18 6 6 18"
+        stroke-linecap="round"
+      />
+    </template>
+    <template v-else-if="name === 'check-circle'">
+      <circle
+        cx="12"
+        cy="12"
+        r="9"
+      />
+      <path
+        d="m8 12.5 2.5 2.5L16 9.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       />
     </template>
     <template v-else-if="name === 'shield'">

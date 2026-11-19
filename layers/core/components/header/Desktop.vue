@@ -138,9 +138,9 @@ onClickOutside(searchPanelRef, () => {
                       class="rounded-l-none hover:bg-transparent active:bg-transparent"
                       @click="handleSearchEnter"
                     >
-                      <Icon
-                        name="ion:search"
-                        size="20px"
+                      <UiLineIcon
+                        name="search"
+                        :size="20"
                         class="text-black"
                       />
                     </SfButton>
