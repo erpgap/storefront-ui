@@ -7,6 +7,8 @@ import tailwindcss from '@tailwindcss/vite'
 import { withoutTrailingSlash } from './shared/url.mjs'
 
 const swrCacheTime = Number(process.env?.NUXT_SWR_CACHE_TIME || 3600)
+// 30 days, the CDN's rule for images.
+const IMAGE_CACHE_SECONDS = 60 * 60 * 24 * 30
 const storageDriver = process.env.NUXT_STORAGE_DRIVER || 'memory'
 const storageUrl = process.env.NUXT_STORAGE_URL
 // Base URLs without a trailing slash: see shared/url.mjs.
@@ -132,6 +134,9 @@ export default defineNuxtConfig({
   routeRules: {
     '/sitemap_index.xml': { swr: swrCacheTime },
     '/__sitemap__/**': { swr: swrCacheTime },
+    // The storefront's own images (public/img), kept 30 days, as the CDN
+    // does. They change only with a deploy.
+    '/img/**': { headers: { 'cache-control': `public, max-age=${IMAGE_CACHE_SECONDS}` } },
   },
 
   future: {
@@ -260,6 +265,11 @@ export default defineNuxtConfig({
   },
 
   image: {
+    // Resized images (/_ipx) are kept 30 days, as the CDN does, not ipx's
+    // 60 seconds.
+    ipx: {
+      maxAge: IMAGE_CACHE_SECONDS,
+    },
     providers: {
       odooProvider: {
         name: 'odooProvider',
