@@ -33,7 +33,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 
         <!-- Brand: intentionally not a link (no distractions out of checkout). -->
         <div class="justify-self-center">
-          <AlokaiLogo />
+          <SiteLogo />
         </div>
 
         <span class="justify-self-end hidden sm:inline-flex items-center gap-1.5 text-[12px] tracking-[0.08em] uppercase text-primary-400">

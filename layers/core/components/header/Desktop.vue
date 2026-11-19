@@ -68,7 +68,7 @@ onClickOutside(searchPanelRef, () => {
           :aria-label="$t('core.header.homeLink')"
           class="text-[26px] md:text-[28px] text-black"
         >
-          <AlokaiLogo />
+          <SiteLogo />
         </NuxtLink>
 
         <!-- Center: the website menu -->

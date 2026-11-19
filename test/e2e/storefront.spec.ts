@@ -78,6 +78,23 @@ test.describe('browsing', () => {
     expect(response.headers()['cache-control']).toContain('max-age=86400')
     expect((await response.body()).length).toBeGreaterThan(0)
   })
+
+  // The website's logo from Odoo (Website > Settings > Logo), sized in the
+  // page so it keeps its place, and an image browsers keep for good.
+  test('the header shows the store\'s logo from Odoo', async ({ page, request }) => {
+    const logo = await (await request.get('/api/website-logo')).json() as { src: string, width: number, height: number } | null
+    test.skip(!logo, 'no logo set for the website in Odoo')
+    await open(page, '/')
+    const img = page.locator(`header img[src="${logo!.src}"]`).first()
+    await expect(img).toBeVisible()
+    await expect(img).toHaveAttribute('width', String(logo!.width))
+    await expect(img).toHaveAttribute('height', String(logo!.height))
+
+    const response = await request.get(logo!.src)
+    expect(response.headers()['content-type']).toMatch(/^image\//)
+    expect(response.headers()['cache-control']).toContain('immutable')
+    expect(response.headers()['content-security-policy']).toContain('sandbox')
+  })
 })
 
 test.describe('page cache', () => {

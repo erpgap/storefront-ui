@@ -45,7 +45,7 @@ watch(isOpen, (open: boolean) => {
         :aria-label="$t('core.header.homeLink')"
         class="text-black"
       >
-        <AlokaiLogo class="text-[17px]" />
+        <SiteLogo class="text-[17px]" />
       </NuxtLink>
 
       <Teleport to="body">
@@ -76,7 +76,7 @@ watch(isOpen, (open: boolean) => {
                 class="text-black"
                 @click="close()"
               >
-                <AlokaiLogo class="text-[18px]" />
+                <SiteLogo class="text-[18px]" />
               </NuxtLink>
               <SfButton
                 variant="tertiary"

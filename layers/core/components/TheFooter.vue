@@ -57,7 +57,7 @@ const columns = computed(() => footer.value.columns.length ? footer.value.column
                 class="inline-block mb-5"
                 @click="navigate"
               >
-                <AlokaiLogo class="text-[22px]" />
+                <SiteLogo class="text-[22px]" />
               </a>
             </NuxtLink>
             <p class="font-light text-[14px] text-primary-400 max-w-[280px]">
