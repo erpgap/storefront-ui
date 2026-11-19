@@ -31,7 +31,7 @@ const handleOpenWishListSidebar = async () => {
 }
 
 onMounted(async () => {
-  await loadCart(true)
+  await loadCart()
   await loadWishlist()
 })
 </script>

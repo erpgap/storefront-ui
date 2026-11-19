@@ -11,7 +11,7 @@ const props = defineProps({
   },
 })
 
-const { updateItemQuantity, removeItemFromCart } = useCart()
+const { updateItemQuantity, removeItemFromCart, lineErrors } = useCart()
 </script>
 
 <template>
@@ -94,6 +94,13 @@ const { updateItemQuantity, removeItemFromCart } = useCart()
           </p>
         </div>
       </div>
+      <!-- Changing or removing this line failed: said under it. -->
+      <UiFieldError
+        v-if="lineErrors[orderLine.id]"
+        class="mt-2"
+      >
+        {{ $t('shop.cart.lineFailed', { reason: lineErrors[orderLine.id] }) }}
+      </UiFieldError>
     </div>
   </div>
 </template>

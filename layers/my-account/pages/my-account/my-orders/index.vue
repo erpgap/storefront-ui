@@ -9,7 +9,7 @@ definePageMeta({
   middleware: ['auth-check'],
 })
 
-const { getOrders, orders } = useOrders()
+const { getOrders, orders, error: loadError } = useOrders()
 
 // Gate the table/empty decision on the first fetch so neither flashes (and an
 // empty table header never shows before data arrives).
@@ -97,6 +97,22 @@ const NuxtLink = resolveComponent('NuxtLink')
     class="col-span-3 flex justify-center py-24"
   >
     <SfLoaderCircular size="xl" />
+  </div>
+
+  <div
+    v-else-if="loadError"
+    class="col-span-3 max-w-[640px]"
+  >
+    <UiFormMessage>
+      {{ $t('account.myOrders.loadFailed') }}
+    </UiFormMessage>
+    <SfButton
+      variant="secondary"
+      class="mt-4"
+      @click="getOrders"
+    >
+      {{ $t('core.tryAgain') }}
+    </SfButton>
   </div>
 
   <div

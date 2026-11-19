@@ -54,7 +54,7 @@ const {
 } = useProductVariant(cleanPath.value)
 
 const { addProductToRecentViews } = useRecentViewProducts()
-const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
+const { wishlistAddItem, isInWishlist, wishlistRemoveItem, itemErrors } = useWishlist()
 const { cart, cartAdd, loading: cartLoading, adding: cartAdding, cartError } = useCart()
 
 await loadProductTemplate({ slug: cleanPath.value })
@@ -335,6 +335,13 @@ const categoryEyebrow = computed(() => {
               class="mt-3"
             >
               {{ cartError }}
+            </UiFormMessage>
+            <!-- The heart beside Add to cart could not add or remove it. -->
+            <UiFormMessage
+              v-if="productVariant?.id && itemErrors[productVariant.id]"
+              class="mt-3"
+            >
+              {{ $t('wishlist.updateFailed', { reason: itemErrors[productVariant.id] }) }}
             </UiFormMessage>
 
             <p

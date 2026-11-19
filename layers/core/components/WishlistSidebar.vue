@@ -10,7 +10,7 @@ import type { Product } from '~~/graphql'
 
 const NuxtLink = resolveComponent('NuxtLink')
 
-const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading } = useWishlist()
+const { wishlist, wishlistRemoveItem, wishlistTotalItems, loading, itemErrors } = useWishlist()
 const { wishlistSidebarIsOpen, closeWishlistSideBar } = useWishlistUiState()
 
 const drawerRef = ref()
@@ -123,6 +123,13 @@ const hasDiscount = (p: any) => !!p?.combinationInfoVariant?.has_discounted_pric
                   {{ (item?.product as any)?.combinationInfoVariant?.formatted_list_price }}
                 </span>
               </p>
+              <!-- Removing it failed: said under it. -->
+              <UiFieldError
+                v-if="itemErrors[(item?.product as any)?.id]"
+                class="mt-2"
+              >
+                {{ $t('wishlist.updateFailed', { reason: itemErrors[(item?.product as any)?.id] }) }}
+              </UiFieldError>
             </div>
           </div>
         </div>

@@ -36,7 +36,7 @@ else {
   confirmationEmail.value = order.confirmationEmail || 'pending'
   // Order placed → the draft cart no longer exists. Refresh quietly to reset
   // the header count (a "Cart does not exist" here is expected, so no toast).
-  await loadCart(false)
+  await loadCart()
 }
 </script>
 

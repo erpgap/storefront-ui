@@ -7,8 +7,8 @@ const { cart, loadCart, totalItemsInCart } = useCart()
 const { loadCountries } = useCountryList()
 const { loadUser } = useAuth()
 
-// Quietly: a missing cart is handled below by redirecting, so no error toast.
-await loadCart(false)
+// A missing cart is handled below by redirecting.
+await loadCart()
 await loadCountries()
 
 onMounted(async () => {

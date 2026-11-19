@@ -1,4 +1,3 @@
-import { useToast } from 'vue-toastification'
 import type {
   Order,
   Orders,
@@ -8,25 +7,28 @@ import { QueryName } from '~~/server/queries'
 
 export const useOrders = () => {
   const { $sdk, $i18n } = useNuxtApp()
-  const toast = useToast()
   const { redirectIfSessionExpired } = useAuth()
   const loading = ref(false)
+  // Why the orders (or the order) could not be loaded: the page shows it in
+  // place of the list, not as "no orders yet".
+  const error = ref('')
   const orders = ref<Orders>()
   const order = ref<Order>()
 
   const getOrders = async () => {
     try {
       loading.value = true
+      error.value = ''
       const data = await $sdk().odoo.query<null, { orders: Orders }>(
         { queryName: QueryName.GetOrdersQuery },
         null,
       )
       orders.value = (data?.orders as Orders) || {}
     }
-    catch (error: any) {
+    catch (e: any) {
       orders.value = {} as Orders
       if (await redirectIfSessionExpired()) return
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+      error.value = errorMessage(e, $i18n.t('core.genericError'))
     }
     finally {
       loading.value = false
@@ -36,16 +38,17 @@ export const useOrders = () => {
   const getOrderById = async (params: QueryOrderArgs) => {
     try {
       loading.value = true
+      error.value = ''
       const data = await $sdk().odoo.query<QueryOrderArgs, { order: Order }>(
         { queryName: QueryName.GetOrderQuery },
         params,
       )
       order.value = data?.order || ({} as Order)
     }
-    catch (error: any) {
+    catch (e: any) {
       order.value = {} as Order
       if (await redirectIfSessionExpired()) return
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+      error.value = errorMessage(e, $i18n.t('core.genericError'))
     }
     finally {
       loading.value = false
@@ -54,6 +57,7 @@ export const useOrders = () => {
 
   return {
     loading,
+    error,
     getOrders,
     getOrderById,
     orders,

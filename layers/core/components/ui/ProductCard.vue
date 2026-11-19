@@ -57,7 +57,7 @@ defineProps({
   },
 })
 
-const { wishlistAddItem, isInWishlist, wishlistRemoveItem } = useWishlist()
+const { wishlistAddItem, isInWishlist, wishlistRemoveItem, itemErrors } = useWishlist()
 
 const toggleWishlist = (variant?: Product) => {
   if (!variant?.id) return
@@ -129,6 +129,14 @@ const toggleWishlist = (variant?: Product) => {
         <span class="whitespace-nowrap">({{ (rating ?? 0).toFixed(1) }})</span>
         <span class="whitespace-nowrap">{{ $t('reviewsCount', { count: ratingCount }) }}</span>
       </div>
+
+      <!-- The heart (over the image) could not add or remove this product. -->
+      <UiFieldError
+        v-if="firstVariant?.id && itemErrors[firstVariant.id]"
+        class="mt-2"
+      >
+        {{ $t('wishlist.updateFailed', { reason: itemErrors[firstVariant.id] }) }}
+      </UiFieldError>
     </div>
   </div>
 </template>

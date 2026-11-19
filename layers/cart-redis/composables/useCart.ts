@@ -1,4 +1,3 @@
-import { useToast } from 'vue-toastification'
 import type {
   Cart,
   CartAddItemResponse,
@@ -14,7 +13,6 @@ import { MutationName } from '~~/server/mutations'
 export const useCart = () => {
   const { $sdk, $i18n } = useNuxtApp()
   const cartCounter = useCookie<number>('cart-counter')
-  const toast = useToast()
   // Taken here, while the composable runs in the component's setup: the
   // functions below run later, when Nuxt's context may be gone (during SSR
   // that threw NUXT_E1001 and lost the request's cookies).
@@ -24,6 +22,13 @@ export const useCart = () => {
   const frequentlyTogetherProducts = useState<Product[]>('frequently-together-products', () => [])
 
   const cartError = ref('')
+  // Why changing a line (its quantity, or removing it) failed, by line id:
+  // the line shows it under itself, in the cart page and the side cart alike.
+  const lineErrors = useState<Record<number, string>>('cart-line-errors', () => ({}))
+  const setLineError = (lineId: number, message = '') => {
+    const { [lineId]: _previous, ...others } = lineErrors.value
+    lineErrors.value = message ? { ...others, [lineId]: message } : others
+  }
 
   const applyCart = (payload?: { cart?: Cart } | null) => {
     // No payload: the load failed, keep what we have.
@@ -62,18 +67,14 @@ export const useCart = () => {
 
   watch(data, value => applyCart(value))
 
-  // `showError` lets post-order pages (thank-you / payment-fail) load the cart
-  // quietly: after an order the draft cart no longer exists and Odoo returns
-  // "Cart does not exist", which is expected there and shouldn't toast. The
-  // error is surfaced here (rather than via a global watcher) so callers can
-  // opt out of it.
-  const loadCart = async (showError = true) => {
+  // Quiet: the header and checkout load the cart in passing, and after an
+  // order Odoo answers "Cart does not exist", which is expected. The cart page
+  // shows `loadError` in place of the cart.
+  const loadCart = async () => {
     await refreshCart()
     applyCart(data.value)
-    if (error.value && showError) {
-      toast.error(errorMessage(error.value, $i18n.t('core.genericError')))
-    }
   }
+  const loadError = computed(() => error.value ? errorMessage(error.value, $i18n.t('core.genericError')) : '')
 
   const cartAdd = async (id: number, quantity: number) => {
     const params: MutationCartAddMultipleItemsArgs = {
@@ -112,9 +113,10 @@ export const useCart = () => {
       )
       cart.value = data.cartUpdateMultipleItems
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
+      setLineError(id)
     }
     catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+      setLineError(id, errorMessage(error, $i18n.t('core.genericError')))
     }
   }
 
@@ -130,12 +132,15 @@ export const useCart = () => {
 
       cart.value = data.cartRemoveMultipleItems
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
+      setLineError(lineId)
     }
     catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+      setLineError(lineId, errorMessage(error, $i18n.t('core.genericError')))
     }
   }
 
+  // Quiet: used once a payment went through, on the way to the thank-you
+  // page, which loads the cart again.
   const removeMultipleItemsFromCart = async (lineIds: number[]) => {
     const params: MutationCartRemoveMultipleItemsArgs = {
       lineIds,
@@ -149,8 +154,8 @@ export const useCart = () => {
       cart.value = data.cartRemoveMultipleItems
       cartCounter.value = Number(cart.value?.order?.websiteOrderLine?.length)
     }
-    catch (error: any) {
-      toast.error(errorMessage(error, $i18n.t('core.genericError')))
+    catch {
+      // The thank-you page loads the cart again.
     }
   }
 
@@ -165,6 +170,8 @@ export const useCart = () => {
 
   return {
     loadCart,
+    loadError,
+    lineErrors,
     cartAdd,
     updateItemQuantity,
     removeItemFromCart,

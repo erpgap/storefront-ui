@@ -267,7 +267,8 @@ defineExpose({
               {{ countryOption?.name }}
             </option>
           </UiFormCustomSfSelect>
-          <UiFieldError v-if="showErrors && required.country">{{ $t("form.fieldRequired") }}</UiFieldError>
+          <UiFieldError v-if="!countries.countries?.length">{{ $t("form.countriesFailed") }}</UiFieldError>
+          <UiFieldError v-else-if="showErrors && required.country">{{ $t("form.fieldRequired") }}</UiFieldError>
         </label>
         <label class="block">
           <UiFormLabel>{{ $t("form.stateLabel") }}</UiFormLabel>

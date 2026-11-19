@@ -9,7 +9,7 @@ definePageMeta({
 })
 
 const { user } = useAuth()
-const { getOrders, orders, loading } = useOrders()
+const { getOrders, orders, loading, error: ordersError } = useOrders()
 const NuxtLink = resolveComponent('NuxtLink')
 
 const firstName = computed(() =>
@@ -122,6 +122,20 @@ onMounted(async () => {
           </span>
         </div>
       </NuxtLink>
+
+      <!-- Could not be loaded: said so, not "no orders yet". -->
+      <div v-else-if="ordersError">
+        <UiFormMessage>
+          {{ $t('account.myOrders.loadFailed') }}
+        </UiFormMessage>
+        <button
+          type="button"
+          class="mt-3 text-[13px] tracking-widest uppercase font-medium border-b border-black pb-1 hover:text-primary-600 transition-colors"
+          @click="getOrders"
+        >
+          {{ $t('core.tryAgain') }}
+        </button>
+      </div>
 
       <div
         v-else

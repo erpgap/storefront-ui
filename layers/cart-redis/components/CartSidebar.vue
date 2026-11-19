@@ -9,7 +9,7 @@ import type { CustomOrderLineWithStockFromRedis, Product } from '~~/graphql'
 
 const NuxtLink = resolveComponent('NuxtLink')
 
-const { cart, removeItemFromCart, updateItemQuantity, totalItemsInCart } = useCart()
+const { cart, removeItemFromCart, updateItemQuantity, totalItemsInCart, lineErrors } = useCart()
 const { cartSidebarIsOpen, closeCartSideBar } = useCartUiState()
 
 const drawerRef = ref()
@@ -123,6 +123,13 @@ const goTo = (to: string) => {
                   @update:model-value="updateItemQuantity(line!.id, Number($event))"
                 />
               </div>
+              <!-- Changing or removing this line failed: said under it. -->
+              <UiFieldError
+                v-if="lineErrors[line!.id]"
+                class="mt-2"
+              >
+                {{ $t('shop.cart.lineFailed', { reason: lineErrors[line!.id] }) }}
+              </UiFieldError>
             </div>
           </div>
         </div>

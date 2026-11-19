@@ -5,7 +5,7 @@ import { useProductAttributes } from '~~/layers/product/composables/useProductAt
 
 const NuxtLink = resolveComponent('NuxtLink')
 
-const { wishlist, loadWishlist, loading } = useWishlist()
+const { wishlist, loadWishlist, loading, loadError } = useWishlist()
 const { getRegularPrice, getSpecialPrice } = useProductAttributes()
 
 const { t } = useI18n()
@@ -45,6 +45,24 @@ const items = computed(() => wishlist.value?.wishlistItems ?? [])
       class="min-h-[40vh] grid place-items-center"
     >
       <SfLoaderCircular size="xl" />
+    </div>
+
+    <!-- Could not be loaded: said so, with another try, rather than "your
+         wishlist is empty". -->
+    <div
+      v-else-if="loadError && !items.length"
+      class="max-w-[640px]"
+    >
+      <UiFormMessage>
+        {{ $t('wishlist.loadFailed') }}
+      </UiFormMessage>
+      <SfButton
+        variant="secondary"
+        class="mt-4"
+        @click="loadWishlist"
+      >
+        {{ $t('core.tryAgain') }}
+      </SfButton>
     </div>
 
     <!-- Items grid -->

@@ -33,6 +33,7 @@
     "sameAsShipping": "Same as shipping address",
     "fieldRequired": "This field is required",
     "addressSaveFailed": "We couldn't save this address: {reason}",
+    "countriesFailed": "We couldn't load the countries. Reload the page to try again.",
     "invalidEmail": "Please enter a valid email address"
   },
   "myCart": "My Cart",
@@ -192,6 +193,8 @@
     "moveToCartSuccess": "Product moved to cart",
     "moveToCartError": "Product could not be moved to cart",
     "removeFromWishlist": "Remove from wishlist",
+    "updateFailed": "We couldn't update your wishlist: {reason}",
+    "loadFailed": "We couldn't load your wishlist.",
     "addToWishlist": "Add to wishlist"
   },
   "addProductToWishlist": "Add {label} to wishlist",
@@ -412,7 +415,8 @@
         "tax": "Tax",
         "loadError": "We couldn't load this order."
       },
-      "noOrdersText": "Once you place an order, it'll show up here so you can track and revisit it."
+      "noOrdersText": "Once you place an order, it'll show up here so you can track and revisit it.",
+      "loadFailed": "We couldn't load your orders."
     },
     "home": {
       "welcomeBack": "Welcome back.",
@@ -602,7 +606,9 @@
       "viewCart": "View cart",
       "yourBag": "Your bag",
       "emptyMessage": "Looks like you haven't added anything yet — let's find something you'll love.",
-      "addToCartError": "Could not add to cart. Please try again."
+      "addToCartError": "Could not add to cart. Please try again.",
+      "lineFailed": "We couldn't change this item: {reason}",
+      "loadFailed": "We couldn't load your cart."
     },
     "wishlist": {
       "savedForLater": "Saved for later",

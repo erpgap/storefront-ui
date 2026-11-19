@@ -3,7 +3,7 @@ import { SfButton, SfIconArrowBack, SfLoaderCircular } from '@storefront-ui/vue'
 import { useCart } from '../composables/useCart'
 
 const NuxtLink = resolveComponent('NuxtLink')
-const { cart, loading, loadCart, frequentlyTogetherProducts } = useCart()
+const { cart, loading, loadCart, loadError, frequentlyTogetherProducts } = useCart()
 
 await loadCart()
 </script>
@@ -93,6 +93,25 @@ await loadCart()
         />
       </ClientOnly>
     </section>
+  </div>
+  <div
+    v-else-if="loadError"
+    class="narrow-container py-[clamp(56px,12vh,150px)] max-w-[640px]"
+    data-testid="cart-page-content"
+  >
+    <h1 class="font-bold typography-headline-3 md:typography-headline-2 mb-6">
+      {{ $t('cart') }}
+    </h1>
+    <UiFormMessage>
+      {{ $t('shop.cart.loadFailed') }}
+    </UiFormMessage>
+    <SfButton
+      variant="secondary"
+      class="mt-4"
+      @click="loadCart"
+    >
+      {{ $t('core.tryAgain') }}
+    </SfButton>
   </div>
   <div
     v-else

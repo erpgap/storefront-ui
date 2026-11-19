@@ -16,8 +16,8 @@ export const useStateList = (countryId: number) => {
     if (states.value.length > 0) {
       return
     }
-    // useAsyncData reports a failure in `error` rather than throwing it, and
-    // the SDK plugin's toast already says why; the list just stays empty.
+    // useAsyncData reports a failure in `error` rather than throwing it: the
+    // list stays empty, and a state is then not asked for.
     const { data } = await useAsyncData(
       async () => await $sdk().odoo.query<
         CountryFilterInput,

@@ -4,7 +4,7 @@ import { SfButton } from '@storefront-ui/vue'
 const { loadCart } = useCart()
 
 // The order wasn't placed, so the cart still holds the items — refresh it.
-await loadCart(false)
+await loadCart()
 </script>
 
 <template>
