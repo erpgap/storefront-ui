@@ -220,8 +220,8 @@ if (currentPage.value > totalPages.value) {
                  most of the page's blocking time. -->
             <LazyUiProductCard
               v-for="(product, i) in productTemplateList"
-              hydrate-on-visible
               :key="product.id"
+              hydrate-on-visible
               v-bind="productCardProps(product)"
               :loading="i < 6 ? 'eager' : 'lazy'"
               :fetch-priority="i < 2 ? 'high' : 'auto'"
